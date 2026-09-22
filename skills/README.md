@@ -1,30 +1,30 @@
-# Skills — índice
+# Skills — index
 
-Skills são **procedimentos**: dizem o que carregar, em que ordem, qual passo seguir e como
-reportar. Elas **não** repetem o texto da regra — roteiam para `knowledge-base/` e citam
-por ID. Cada skill declara sua nota-fonte no frontmatter (`fonte:`), para que uma
-atualização da regra propague sem reescrever a skill.
+Skills are **procedures**: they say what to load, in what order, which step to follow and how to
+report. They do **not** repeat the rule's text — they route to `knowledge-base/` and cite
+by ID. Each skill declares its source note in the frontmatter (`fonte:`), so that an
+update to the rule propagates without rewriting the skill.
 
-Cada skill é um **pacote**: um diretório com `SKILL.md`, `references/` e, quase sempre,
-`scripts/`. O que entra no contexto antes de a skill decidir o que abrir é só o `SKILL.md`.
+Each skill is a **package**: a directory with `SKILL.md`, `references/` and, almost always,
+`scripts/`. What enters the context before the skill decides what to open is only the `SKILL.md`.
 
-Duas fontes, separadas pela pergunta: **superfície de API** (assinatura, opção,
-comportamento por versão) vem do Context7, pelo library ID que a skill declara em `docs:`;
-**regra e ID de citação** vêm de `knowledge-base/`. Skill sem `docs:` não tem biblioteca
-upstream — teste é conceito, HTTP são RFCs.
+Two sources, separated by the question: **API surface** (signature, option,
+per-version behavior) comes from Context7, through the library ID the skill declares in `docs:`;
+**the rule and the citation ID** come from `knowledge-base/`. A skill with no `docs:` has no upstream
+library — testing is a concept, HTTP is RFCs.
 
 ```
-skills/<familia>/
-├── README.md          o índice da família e as decisões dela
+skills/<family>/
+├── README.md          the family's index and its decisions
 └── <skill>/
-    ├── SKILL.md       frontmatter neutro + o procedimento
-    ├── references/    material de apoio, um arquivo por decisão
-    └── scripts/       as sondas, e o gerador do mapa de IDs
+    ├── SKILL.md       neutral frontmatter + the procedure
+    ├── references/    supporting material, one file per decision
+    └── scripts/       the probes, and the ID-map generator
 ```
 
-## Migradas para a fonte neutra
+## The nine families
 
-| Família | Skills | Índice |
+| Family | Skills | Index |
 | --- | --- | --- |
 | **react** | `react-developer` · `react-review` · `react-structure` · `react-hook-form` | [react/](react/README.md) |
 | **tanstack** | `tanstack-query` · `tanstack-router` | [tanstack/](tanstack/README.md) |
@@ -36,9 +36,7 @@ skills/<familia>/
 | **http** | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [http/](http/README.md) |
 | **drizzle** | `drizzle-review` | [drizzle/](drizzle/README.md) |
 
-## Todas migradas
+All 28 are in the neutral source, in English, with `idioma: en` in the frontmatter.
 
-As 9 famílias estão na fonte neutra. Não há mais família no formato antigo do Claude Code.
-
-O importador (`build/importar-do-plugin.py`) fica como registro de proveniência: ele pula
-skill com `idioma: en`, porque o build hermes de origem só tem português.
+The importer (`build/importar-do-plugin.py`) stays as a provenance record: it skips a skill
+with `idioma: en`, because the hermes build it came from is Portuguese-only.
