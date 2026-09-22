@@ -4,6 +4,8 @@ descricao: Transformar story em teste de componente no Storybook — `play`, `st
 tipo: skill
 familia: storybook
 fonte: "[Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md)"
+docs:
+  - /storybookjs/storybook
 tags:
   - skill
   - storybook
@@ -14,6 +16,7 @@ tags:
 
 > **Fonte desta skill:** [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md), com o hub [Storybook](../../../knowledge-base/docs/storybook.md) como roteador.
 > Esta skill **não contém** o texto das regras — ela diz o que descobrir, o que escrever e o que conferir.
+> **Superfície de API:** resolva pelo Context7 — `/storybookjs/storybook`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
 Contrato que esta skill implementa: [Storybook](../../../knowledge-base/docs/storybook.md) § 7.
 

@@ -4,6 +4,8 @@ descricao: Trabalhar com estado do servidor no TanStack Query — ler dado remot
 tipo: skill
 familia: tanstack
 fonte: "[TanStack Query](../../../knowledge-base/docs/tanstack-query.md)"
+docs:
+  - /websites/tanstack_query
 tags:
   - skill
   - tanstack-query
@@ -14,6 +16,7 @@ tags:
 
 > **Fonte desta skill:** [TanStack Query](../../../knowledge-base/docs/tanstack-query.md), com os cinco satélites carregados **um por vez**.
 > Esta skill **não contém** o texto das regras nem a superfície de API — ela roteia por tarefa e diagnostica por sintoma.
+> **Superfície de API:** resolva pelo Context7 — `/websites/tanstack_query`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
 Contrato que esta skill implementa: [TanStack Query](../../../knowledge-base/docs/tanstack-query.md) § 7.
 

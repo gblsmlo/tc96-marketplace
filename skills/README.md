@@ -8,6 +8,11 @@ atualização da regra propague sem reescrever a skill.
 Cada skill é um **pacote**: um diretório com `SKILL.md`, `references/` e, quase sempre,
 `scripts/`. O que entra no contexto antes de a skill decidir o que abrir é só o `SKILL.md`.
 
+Duas fontes, separadas pela pergunta: **superfície de API** (assinatura, opção,
+comportamento por versão) vem do Context7, pelo library ID que a skill declara em `docs:`;
+**regra e ID de citação** vêm de `knowledge-base/`. Skill sem `docs:` não tem biblioteca
+upstream — teste é conceito, HTTP são RFCs.
+
 ```
 skills/<familia>/
 ├── README.md          o índice da família e as decisões dela

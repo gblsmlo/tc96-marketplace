@@ -6,10 +6,10 @@ BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-b
 # a origem continua sendo o vault (passe outro caminho como $1 se preciso).
 PLUGIN="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 DOCS="$BASE/docs"
-HUB="$DOCS/Storybook.md"
+HUB="$DOCS/storybook.md"
 
 scan() {
-  for f in "$DOCS"/Storybook*.md; do
+  for f in "$DOCS"/storybook*.md; do
     base="$(basename "$f" .md)"
     awk -v sat="$base" -v hub="Storybook" '
       /^## / { h2 = $0; sub(/^## /, "", h2) }

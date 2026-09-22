@@ -4,6 +4,8 @@ descricao: Escrever componente, Hook customizado ou feature React nova — três
 tipo: skill
 familia: react
 fonte: "[React - Patterns](../../../knowledge-base/docs/react-patterns.md)"
+docs:
+  - /reactjs/react.dev
 tags:
   - skill
   - react
@@ -15,6 +17,7 @@ tags:
 > Esta skill **não repete** as regras nem a superfície de API — ela define a ordem das decisões e aponta o que abrir em cada ponto. O texto das regras mora nas notas-fonte; atualização lá propaga para cá.
 >
 > Sucessora de `react-developer`, com o mesmo procedimento e as referências internas que faltavam.
+> **Superfície de API:** resolva pelo Context7 — `/reactjs/react.dev`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
 Contrato que esta skill implementa: [React.js](../../../knowledge-base/docs/react-js.md) § 7 ("Contrato de skill").
 

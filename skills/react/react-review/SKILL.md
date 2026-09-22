@@ -4,6 +4,8 @@ descricao: Revisar código React que já existe contra as regras normativas da d
 tipo: skill
 familia: react
 fonte: "[React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.md)"
+docs:
+  - /reactjs/react.dev
 tags:
   - skill
   - react
@@ -13,6 +15,7 @@ tags:
 
 > **Fonte desta skill:** [React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.md), com o hub [React.js](../../../knowledge-base/docs/react-js.md) como roteador.
 > Esta skill **não contém** o conteúdo das regras — ela diz o que rodar, o que carregar, em que ordem varrer e como reportar. Para o texto de uma regra, abra a nota-fonte: atualização da doc propaga sozinha para cá, e qualquer regra reescrita aqui viraria cópia desatualizada.
+> **Superfície de API:** resolva pelo Context7 — `/reactjs/react.dev`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
 Contrato que esta skill implementa: [React.js](../../../knowledge-base/docs/react-js.md) § 7 ("Contrato de skill").
 

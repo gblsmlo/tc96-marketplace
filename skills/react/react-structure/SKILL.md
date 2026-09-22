@@ -4,6 +4,8 @@ descricao: Decidir onde o código React mora e quem pode importar quem numa arqu
 tipo: skill
 familia: react
 fonte: "[Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md)"
+docs:
+  - /reactjs/react.dev
 tags:
   - skill
   - react
@@ -16,6 +18,7 @@ tags:
 > Esta skill **não contém** o texto das regras nem a configuração do Biome — ela diz o que carregar, em que ordem decidir e como reportar. Regra reescrita aqui viraria cópia desatualizada.
 >
 > **Resolvendo os links:** a nota-fonte é `Pages/Feature-Based Architecture.md`. Não a confunda com `Weblink/Feature-Based Architecture in React.md`, que é o artigo externo de origem e **não** é normativo aqui.
+> **Superfície de API:** resolva pelo Context7 — `/reactjs/react.dev`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
 Contrato que esta skill implementa: [Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md) § 10, que por sua vez implementa [React.js](../../../knowledge-base/docs/react-js.md) § 7.
 

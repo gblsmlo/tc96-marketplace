@@ -4,6 +4,9 @@ descricao: Trabalhar com formulários no React Hook Form — triar se RHF é a f
 tipo: skill
 familia: react
 fonte: "[React Hook Form](../../../knowledge-base/docs/react-hook-form.md)"
+docs:
+  - /react-hook-form/documentation
+  - /reactjs/react.dev
 tags:
   - skill
   - react
@@ -14,6 +17,7 @@ tags:
 
 > **Fonte desta skill:** [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) e seus três satélites em `Docs/`.
 > Roteador de **tarefa → nota**, não resumo de API. Não contém o texto das regras `RHF-*`, assinaturas, opções, nem o comportamento do Proxy de `formState`: isso vive nos satélites, e é lá que se lê e se atualiza. Procedimento técnico escrito aqui vira cópia que desatualiza sozinha.
+> **Superfície de API:** resolva pelo Context7 — `/react-hook-form/documentation` · `/reactjs/react.dev`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
 Contrato que esta skill implementa: [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) § 7. As invariantes de lá valem em toda tarefa, sem repetição por seção.
 

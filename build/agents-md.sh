@@ -63,7 +63,8 @@ for skill_dir in sorted((raiz / "skills").glob("*/*/")):
     alvo = dest / "skills" / familia / skill_dir.name
     shutil.copytree(skill_dir, alvo)
     (alvo / "SKILL.md").write_text(sem_frontmatter(campos, corpo), encoding="utf-8")
-    skills.append((familia, skill_dir.name, campos["descricao"], campos.get("fonte", "")))
+    skills.append((familia, skill_dir.name, campos["descricao"],
+                   campos.get("docs__lista", [])))
 
 indice = raiz / "skills/README.md"
 if indice.exists():
@@ -116,7 +117,7 @@ for nome, desc, skills_do_agente in agentes:
 linhas += ["## Procedimentos", "",
            "Carregue **uma** skill por tarefa, e só as referências que ela mandar abrir.", ""]
 familia_atual = None
-for familia, nome, desc, _ in skills:
+for familia, nome, desc, _docs in skills:
     if familia != familia_atual:
         if familia_atual is not None:
             linhas.append("")  # tabela nao cola no proximo heading
@@ -126,6 +127,17 @@ for familia, nome, desc, _ in skills:
                    "", "| Skill | Quando usar |", "| --- | --- |"]
     curta = desc.split("—")[0].strip() if "—" in desc else desc[:120]
     linhas.append(f"| [`{nome}`](skills/{familia}/{nome}/SKILL.md) | {curta} |")
+com_docs = [(n, d) for _f, n, _desc, d in skills if d]
+if com_docs:
+    linhas += ["", "## Superfície de API", "",
+               "Assinatura, opção e comportamento por versão **não** moram neste repositório:",
+               "resolva pelo Context7, com o library ID que a skill declara. A regra e o ID",
+               "de citação continuam vindo de `knowledge-base/`.", "",
+               "| Skill | Library ID |", "| --- | --- |"]
+    linhas += [f"| `{n}` | {' · '.join('`' + i + '`' for i in d)} |" for n, d in com_docs]
+    linhas += ["", "Skill que não declara nada não tem biblioteca upstream — teste e HTTP são",
+               "conceito e RFC, não API de ninguém. Ausência aqui é informação, não lacuna."]
+
 linhas += ["", "## Regra", "",
            "`knowledge-base/docs/` é a regra (IDs canônicos) e `knowledge-base/pages/` são os mapas.",
            "Todo achado cita o ID e o arquivo:linha. Cópia de regra dentro de skill vira",

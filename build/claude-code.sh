@@ -149,7 +149,7 @@ for plugin, cfg in PLUGINS.items():
                 fm = ["---", f"name: {c['nome']}", f"description: {c['descricao']}"]
                 if c.get("fonte"):
                     fm.append(f"fonte: {c['fonte']}")
-                fm += listas(c, ["tags"])
+                fm += listas(c, ["docs", "tags"])
                 fm.append("---\n")
                 t = "\n".join(fm) + corpo_arq
             arq.write_text(t, encoding="utf-8")

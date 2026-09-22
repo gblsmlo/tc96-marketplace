@@ -4,6 +4,8 @@ descricao: Trabalhar com roteamento no TanStack Router — definir e aninhar rot
 tipo: skill
 familia: tanstack
 fonte: "[TanStack Router](../../../knowledge-base/docs/tanstack-router.md)"
+docs:
+  - /websites/tanstack_router
 tags:
   - skill
   - tanstack-router
@@ -14,6 +16,7 @@ tags:
 
 > **Fonte desta skill:** [TanStack Router](../../../knowledge-base/docs/tanstack-router.md) e os dez satélites, carregados **um por tarefa**.
 > Esta skill **não contém** procedimento técnico de API — ela roteia por tarefa, cita a regra e diz o que verificar.
+> **Superfície de API:** resolva pelo Context7 — `/websites/tanstack_router`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
 > **O que mudou nesta versão.** A anterior trazia um "aviso de estado da doc" dizendo que os satélites estavam **em construção**, e por isso **não citava ID nenhum** — emprestava `REACT-*`. Os dez satélites hoje existem e somam **102 regras `TSR-*`**. O aviso saiu; cada tarefa passou a ter família citável, e o mapa é gerado da doc.
 

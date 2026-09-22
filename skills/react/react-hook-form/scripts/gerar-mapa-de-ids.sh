@@ -15,7 +15,7 @@ DOCS="$BASE/docs"
 OUT="$PLUGIN/skills/react-hook-form/references/mapa-de-ids.md"
 
 scan() {
-  for f in "$DOCS"/React\ Hook\ Form*.md; do
+  for f in "$DOCS"/react-hook-form*.md; do
     base="$(basename "$f" .md)"
     awk -v sat="$base" -v hub="React Hook Form" '
       /^## / { h2 = $0; sub(/^## /, "", h2) }
@@ -54,7 +54,7 @@ scan() {
   echo "— uma revisão de React que encosta em formulário, ou o contrário — use o canônico,"
   echo "senão quem for corrigir não acha o texto. Tabelas abaixo extraídas da § 6.2 do hub."
   echo
-  awk '/^### 6\.2/,/^### Fam/' "$DOCS/React Hook Form.md" \
+  awk '/^### 6\.2/,/^### Fam/' "$DOCS/react-hook-form.md" \
     | grep -vE '^#|^Dois princípios' | cat -s || true
   echo
   echo "## Índice completo"

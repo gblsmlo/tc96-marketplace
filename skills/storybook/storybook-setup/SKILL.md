@@ -4,6 +4,8 @@ descricao: Configurar Storybook num projeto ou monorepo — escolher entre os do
 tipo: skill
 familia: storybook
 fonte: "[Storybook - Configuração e Builder](../../../knowledge-base/docs/storybook-configuracao-e-builder.md)"
+docs:
+  - /storybookjs/storybook
 tags:
   - skill
   - storybook
@@ -14,6 +16,7 @@ tags:
 
 > **Fonte desta skill:** [Storybook - Configuração e Builder](../../../knowledge-base/docs/storybook-configuracao-e-builder.md), com o hub [Storybook](../../../knowledge-base/docs/storybook.md) como roteador.
 > Esta skill **não contém** o texto das regras — ela diz o que decidir, em que ordem, e o que conferir.
+> **Superfície de API:** resolva pelo Context7 — `/storybookjs/storybook`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
 Contrato que esta skill implementa: [Storybook](../../../knowledge-base/docs/storybook.md) § 7.
 

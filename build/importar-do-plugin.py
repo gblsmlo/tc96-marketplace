@@ -14,6 +14,7 @@ Tres transformacoes:
 A knowledge-base NAO e tocada aqui: quem a projeta e build/sincronizar.sh, e o
 MANIFESTO dela e a autoridade sobre onde cada nota mora.
 """
+import json
 import re
 import shutil
 import sys
@@ -34,6 +35,8 @@ FAMILIAS = {
              ["http-contract", "http-cache", "http-diagnose", "http-review"], "http"),
 }
 AGENTES = {"frontend-developer": "hermes-core/0.1.10"}
+
+CONTEXT7 = json.loads((RAIZ / "build/context7.json").read_text(encoding="utf-8"))
 
 FERRAMENTA_PARA_CAPACIDADE = {"Read": "ler", "Write": "escrever", "Edit": "editar",
                               "Grep": "buscar", "Glob": "buscar", "Bash": "executar"}
@@ -147,11 +150,48 @@ def ajustar_script(texto):
     return texto
 
 
+def libs_de(skill):
+    """Library IDs do Context7 que esta skill usa, na ordem declarada."""
+    return [CONTEXT7["bibliotecas"][b]["id"]
+            for b in CONTEXT7["skills"].get(skill, [])
+            if b in CONTEXT7["bibliotecas"]]
+
+
+def marcar_superficie(corpo, skill):
+    """Acrescenta a linha de superficie de API ao blockquote de fonte da skill.
+
+    O corte: Context7 responde como a API funciona nesta versao; a
+    knowledge-base responde o que e certo e com que ID se cita num review.
+    Skill sem biblioteca upstream nao ganha linha — a ausencia e informacao.
+    """
+    ids = libs_de(skill)
+    if not ids:
+        return corpo
+    linhas = corpo.splitlines()
+    inicio = next((i for i, l in enumerate(linhas)
+                   if l.startswith("> **Fonte desta skill:")), None)
+    if inicio is None:
+        return corpo
+    fim = inicio
+    while fim + 1 < len(linhas) and linhas[fim + 1].startswith(">"):
+        fim += 1
+    citacao = " · ".join(f"`{i}`" for i in ids)
+    linhas.insert(fim + 1,
+                  f"> **Superfície de API:** resolva pelo Context7 — {citacao}. "
+                  "Assinatura, opção e comportamento por versão vêm de lá; "
+                  "a regra e o ID vêm da knowledge-base.")
+    return "\n".join(linhas) + ("\n" if corpo.endswith("\n") else "")
+
+
 def frontmatter_skill(campos, corpo, nome, familia):
     novo = ["---", f"nome: {nome}", f"descricao: {campos['description']}",
             "tipo: skill", f"familia: {familia}"]
     if campos.get("fonte"):
         novo.append(f"fonte: {campos['fonte']}")
+    ids = libs_de(nome)
+    if ids:
+        novo.append("docs:")
+        novo += [f"  - {i}" for i in ids]
     if campos.get("tags__lista"):
         novo.append("tags:")
         novo += [f"  - {t}" for t in campos["tags__lista"]]
@@ -197,6 +237,7 @@ def importar_familia(familia, por_arquivo, por_origem):
                 texto = resolver_wikilinks(texto, subidas, por_arquivo, por_origem)
                 if arq.name == "SKILL.md":
                     campos, corpo = partir(texto)
+                    corpo = marcar_superficie(corpo, skill)
                     texto = frontmatter_skill(campos, corpo, skill, familia)
                 arq.write_text(texto, encoding="utf-8")
             elif arq.suffix == ".sh":
@@ -212,6 +253,12 @@ def importar_familia(familia, por_arquivo, por_origem):
                                   if m.group(2) in por_arquivo else f"`{m.group(1)}`"), texto)
         texto = re.sub(r"\[([^\]]*)\]\((?:\.\./)+pages/catalogo-de-skills\.md\)",
                        r"[\1](../README.md)", texto)
+        # link entre indices de familia: [familia react](react.md) -> ../react/README.md
+        por_indice = {cfg[2]: fam for fam, cfg in FAMILIAS.items()}
+        texto = re.sub(
+            r"\[([^\]]*)\]\(([a-z0-9-]+)\.md\)",
+            lambda m: (f"[{m.group(1)}](../{por_indice[m.group(2)]}/README.md)"
+                       if m.group(2) in por_indice else m.group(0)), texto)
         texto = resolver_wikilinks(texto, 2, por_arquivo, por_origem)
         (RAIZ / "skills" / familia / "README.md").write_text(texto, encoding="utf-8")
     print(f"familia {familia}: {len(skills)} skills")

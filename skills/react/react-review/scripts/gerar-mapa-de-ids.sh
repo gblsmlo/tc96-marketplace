@@ -20,7 +20,7 @@ OUT_REV="$PLUGIN/skills/react-review/references/mapa-de-ids.md"
 TMP="$(mktemp)"
 
 scan() {
-  for f in "$DOCS"/React*.md; do
+  for f in "$DOCS"/react*.md; do
     base="$(basename "$f" .md)"
     awk -v sat="$base" -v hub="React.js" '
       /^## / { h2 = $0; sub(/^## /, "", h2) }
@@ -58,7 +58,7 @@ scan() {
   echo
   echo "De \`Docs/React.js.md\` § 6.2. Cite sempre o canônico; apelido em achado é achado inválido."
   echo
-  awk '/^### 6\.2/,/^### Fam/' "$DOCS/React.js.md" | grep -E '^\|' || true
+  awk '/^### 6\.2/,/^### Fam/' "$DOCS/react-js.md" | grep -E '^\|' || true
   echo
   echo "## Índice completo"
   echo
