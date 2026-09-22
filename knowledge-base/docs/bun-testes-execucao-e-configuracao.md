@@ -1,4 +1,5 @@
 ---
+titulo: Bun - Testes - Execução e Configuração
 Link: https://bun.com/docs/test
 tags:
  - bun

@@ -1,12 +1,12 @@
 ---
-gerado-por: plugins/hermes-backend/skills/elysia-diagnose/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-17
+gerado-por: skills/elysia/elysia-diagnose/scripts/gerar-mapa-de-ids.sh
+gerado-em: 2026-09-22
 ---
 
 # Mapa de IDs `ELYSIA-*`
 
 > Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> Regenerar com `bash plugins/hermes-backend/skills/elysia-diagnose/scripts/gerar-mapa-de-ids.sh` —
+> Regenerar com `bash skills/elysia/elysia-diagnose/scripts/gerar-mapa-de-ids.sh` —
 > o mesmo arquivo é escrito nas três skills de Elysia.
 
 ## Apelidos parciais — a peculiaridade desta família

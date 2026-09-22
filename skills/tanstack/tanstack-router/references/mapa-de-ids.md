@@ -1,12 +1,12 @@
 ---
-gerado-por: plugins/hermes-frontend/skills/tanstack-router/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-17
+gerado-por: skills/tanstack/tanstack-router/scripts/gerar-mapa-de-ids.sh
+gerado-em: 2026-09-22
 ---
 
 # Mapa de IDs `TSR-*`
 
 > Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> Regenerar com `bash plugins/hermes-frontend/skills/tanstack-router/scripts/gerar-mapa-de-ids.sh`.
+> Regenerar com `bash skills/tanstack/tanstack-router/scripts/gerar-mapa-de-ids.sh`.
 
 | ID | Satélite | Seção |
 | --- | --- | --- |

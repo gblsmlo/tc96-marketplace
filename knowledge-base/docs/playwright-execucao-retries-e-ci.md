@@ -1,4 +1,5 @@
 ---
+titulo: Playwright - Execução, Retries e CI
 Link: https://playwright.dev/docs/test-parallel
 tags:
  - playwright

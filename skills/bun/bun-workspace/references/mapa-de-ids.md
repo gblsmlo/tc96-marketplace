@@ -1,13 +1,13 @@
 ---
-gerado-por: plugins/hermes-backend/skills/bun-runtime/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-17
+gerado-por: skills/bun/bun-runtime/scripts/gerar-mapa-de-ids.sh
+gerado-em: 2026-09-22
 ---
 
 # Mapa de IDs `BUN-CORE/RT/PKG/SYS-*`
 
 > Índice, não cópia. A família `BUN-TEST-*` **não** está aqui — ela tem gerador
 > próprio, em `bun-test-review/scripts/gerar-mapa-de-ids.sh`.
-> Regenerar com `bash plugins/hermes-backend/skills/bun-runtime/scripts/gerar-mapa-de-ids.sh`.
+> Regenerar com `bash skills/bun/bun-runtime/scripts/gerar-mapa-de-ids.sh`.
 
 | ID | Satélite | Seção |
 | --- | --- | --- |

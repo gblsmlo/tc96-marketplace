@@ -1,4 +1,5 @@
 ---
+titulo: Elysia - Lifecycle e Plugins
 Link: https://elysiajs.com/essential/plugin.html
 tags:
  - elysia

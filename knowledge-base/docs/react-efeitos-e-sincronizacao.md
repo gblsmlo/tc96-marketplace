@@ -1,4 +1,5 @@
 ---
+titulo: React - Efeitos e Sincronização
 Link: https://react.dev/reference/react/useEffect
 tags:
  - react

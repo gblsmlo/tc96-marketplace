@@ -1,4 +1,5 @@
 ---
+titulo: React - Suspense e Assincronia
 Link: https://react.dev/reference/react/Suspense
 tags:
  - react

@@ -1,4 +1,5 @@
 ---
+titulo: TanStack Query - Cache e Frescor
 Link: https://tanstack.com/query/latest/docs/framework/react/guides/caching
 tags:
  - tanstack-query

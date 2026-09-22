@@ -1,13 +1,13 @@
 ---
-gerado-por: plugins/hermes-frontend/skills/react-review/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-17
+gerado-por: skills/react/react-review/scripts/gerar-mapa-de-ids.sh
+gerado-em: 2026-09-22
 ---
 
 # Mapa de IDs `REACT-*` — onde cada regra mora
 
 > Roteador, não cópia: este arquivo diz **onde** a regra está declarada, nunca o que ela diz.
 > Para o texto, abra o satélite. Regenerar com:
-> `bash plugins/hermes-frontend/skills/react-review/scripts/gerar-mapa-de-ids.sh`
+> `bash skills/react/react-review/scripts/gerar-mapa-de-ids.sh`
 
 ## Apelidos — nunca citar em revisão
 

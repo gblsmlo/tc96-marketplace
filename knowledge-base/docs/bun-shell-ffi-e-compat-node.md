@@ -1,4 +1,5 @@
 ---
+titulo: Bun - Shell, FFI e Compat Node
 Link: https://bun.com/docs/runtime/nodejs-compat
 tags:
  - bun

@@ -1,4 +1,5 @@
 ---
+titulo: Teste de Software - Técnicas de Design de Caso
 Link: https://www.guru99.com/equivalence-partitioning-boundary-value-analysis.html
 tags:
  - testing

@@ -1,6 +1,6 @@
 ---
-gerado-por: plugins/hermes-frontend/skills/storybook-setup/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-17
+gerado-por: skills/storybook/storybook-setup/scripts/gerar-mapa-de-ids.sh
+gerado-em: 2026-09-22
 ---
 
 # Mapa de IDs `SB-*`
@@ -8,7 +8,7 @@ gerado-em: 2026-09-17
 > Índice, não cópia. **`SB-TS-*` e `SB-RV-*` são mutuamente exclusivas:**
 > citar a família do caminho errado é achado inválido. Descubra o caminho primeiro —
 > `bash ${CLAUDE_PLUGIN_ROOT}/skills/storybook-setup/scripts/descobrir-caminho.sh`.
-> Regenerar com `bash plugins/hermes-frontend/skills/storybook-setup/scripts/gerar-mapa-de-ids.sh`.
+> Regenerar com `bash skills/storybook/storybook-setup/scripts/gerar-mapa-de-ids.sh`.
 
 ## Canônicos, apelidos e os pares por caminho
 

@@ -1,4 +1,5 @@
 ---
+titulo: Playwright - Agents, CLI e MCP
 Link: https://playwright.dev/docs/test-agents
 tags:
  - playwright

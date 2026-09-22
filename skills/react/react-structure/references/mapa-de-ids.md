@@ -1,6 +1,6 @@
 ---
-gerado-por: plugins/hermes-frontend/skills/react-structure/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-17
+gerado-por: skills/react/react-structure/scripts/gerar-mapa-de-ids.sh
+gerado-em: 2026-09-22
 ---
 
 # Mapa de IDs `REACT-ARCH-*`
@@ -8,7 +8,7 @@ gerado-em: 2026-09-17
 > Índice, não cópia: o texto de cada regra mora em `Pages/Feature-Based Architecture.md` § 4.
 > A coluna **Faz valer** diz se o lint pega ou se depende de revisão humana — é o que decide
 > se um achado se repete no próximo PR. Regenerar com:
-> `bash plugins/hermes-frontend/skills/react-structure/scripts/gerar-mapa-de-ids.sh`
+> `bash skills/react/react-structure/scripts/gerar-mapa-de-ids.sh`
 
 | ID | Severidade | Faz valer | Seção do corpo estendido |
 | --- | --- | --- | --- |

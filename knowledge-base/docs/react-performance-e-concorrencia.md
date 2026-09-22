@@ -1,4 +1,5 @@
 ---
+titulo: React - Performance e Concorrência
 Link: https://react.dev/reference/react/memo
 tags:
  - react

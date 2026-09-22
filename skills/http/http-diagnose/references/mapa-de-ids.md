@@ -1,12 +1,12 @@
 ---
-gerado-por: plugins/hermes-core/skills/http-review/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-17
+gerado-por: skills/http/http-review/scripts/gerar-mapa-de-ids.sh
+gerado-em: 2026-09-22
 ---
 
 # Mapa de IDs `HTTP-*`
 
 > Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> Regenerar com `bash plugins/hermes-core/skills/http-review/scripts/gerar-mapa-de-ids.sh` —
+> Regenerar com `bash skills/http/http-review/scripts/gerar-mapa-de-ids.sh` —
 > o mesmo arquivo é escrito nas quatro skills de HTTP.
 
 ## Canônicos e apelidos

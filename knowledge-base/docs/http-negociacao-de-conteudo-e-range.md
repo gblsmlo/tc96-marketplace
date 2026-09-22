@@ -1,4 +1,5 @@
 ---
+titulo: HTTP - Negociação de Conteúdo e Range
 Link: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Content_negotiation
 tags:
  - http

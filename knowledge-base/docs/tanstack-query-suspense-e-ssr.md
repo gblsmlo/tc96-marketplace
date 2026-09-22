@@ -1,4 +1,5 @@
 ---
+titulo: TanStack Query - Suspense e SSR
 Link: https://tanstack.com/query/latest/docs/framework/react/guides/suspense
 tags:
  - tanstack-query

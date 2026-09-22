@@ -1,4 +1,5 @@
 ---
+titulo: Architecture in React
 aliases:
  - Arquitetura em React
 tags:

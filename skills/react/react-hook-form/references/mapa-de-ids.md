@@ -1,12 +1,12 @@
 ---
-gerado-por: plugins/hermes-frontend/skills/react-hook-form/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-17
+gerado-por: skills/react/react-hook-form/scripts/gerar-mapa-de-ids.sh
+gerado-em: 2026-09-22
 ---
 
 # Mapa de IDs `RHF-*`
 
 > Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> Regenerar com `bash plugins/hermes-frontend/skills/react-hook-form/scripts/gerar-mapa-de-ids.sh`.
+> Regenerar com `bash skills/react/react-hook-form/scripts/gerar-mapa-de-ids.sh`.
 
 ## Citação entre docs
 

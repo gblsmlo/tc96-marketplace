@@ -1,4 +1,5 @@
 ---
+titulo: React - Server Components e Diretivas
 Link: https://react.dev/reference/rsc/server-components
 tags:
  - react

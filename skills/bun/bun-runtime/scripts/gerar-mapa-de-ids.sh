@@ -4,16 +4,29 @@
 # próprio, em bun-test-review/scripts/.
 set -euo pipefail
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
-# O mapa é gerado na autoria e vai versionado no plugin: o destino é o repo,
-# a origem continua sendo o vault (passe outro caminho como $1 se preciso).
-PLUGIN="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+# The map is generated at authoring time and committed: source and destination are
+# both this repository (pass another knowledge-base path as $1 if you need to).
+FAMILIA="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DOCS="$BASE/docs"
+
+# Title of each note, from the `titulo:` field in the file itself — the link label.
+titulos() {
+  awk 'FNR == 1 { nome = FILENAME; sub(/.*\//, "", nome); sub(/\.md$/, "", nome) }
+       /^titulo: / { print nome "\t" substr($0, 9); nextfile }' "$DOCS"/*.md
+}
+
+# Rewrites a note's own relative links to how they are seen from
+# <family>/<skill>/references/ — nothing here points outside the project.
+links() {
+  sed -E -e 's#\]\(\.\./pages/#](../../../../knowledge-base/pages/#g' \
+         -e 's#\]\(([^)/]+\.md)#](../../../../knowledge-base/docs/\1#g'
+}
 
 scan() {
   for f in "$DOCS"/bun*.md; do
     base="$(basename "$f" .md)"
     case "$base" in "Bun - Testes"*) continue;; esac
-    awk -v sat="$base" -v hub="Bun" '
+    awk -v sat="$base" -v hub="bun" '
       /^## / { h2 = $0; sub(/^## /, "", h2) }
       /^#{2,4} / { h = $0; sub(/^#+ /, "", h) }
       {
@@ -36,7 +49,7 @@ scan() {
 TMP="$(mktemp)"
 {
   echo "---"
-  echo "gerado-por: plugins/hermes-backend/skills/bun-runtime/scripts/gerar-mapa-de-ids.sh"
+  echo "gerado-por: skills/bun/bun-runtime/scripts/gerar-mapa-de-ids.sh"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
@@ -44,15 +57,18 @@ TMP="$(mktemp)"
   echo
   echo "> Índice, não cópia. A família \`BUN-TEST-*\` **não** está aqui — ela tem gerador"
   echo "> próprio, em \`bun-test-review/scripts/gerar-mapa-de-ids.sh\`."
-  echo "> Regenerar com \`bash plugins/hermes-backend/skills/bun-runtime/scripts/gerar-mapa-de-ids.sh\`."
+  echo "> Regenerar com \`bash skills/bun/bun-runtime/scripts/gerar-mapa-de-ids.sh\`."
   echo
   echo "| ID | Satélite | Seção |"
   echo "| --- | --- | --- |"
-  scan | sort -t$'\t' -k1,1 -k2,2n | awk -F'\t' '!seen[$1]++ { printf "| `%s` | [[%s]] | %s |\n", $1, $3, $4 }'
+  scan | sort -t$'\t' -k1,1 -k2,2n \
+    | awk -F'\t' 'NR == FNR { titulo[$1] = $2; next }
+                  !seen[$1]++ { printf "| `%s` | [%s](../../../../knowledge-base/docs/%s.md) | %s |\n", \
+                                $1, ($3 in titulo ? titulo[$3] : $3), $3, $4 }' <(titulos) -
 } > "$TMP"
 
 for s in runtime workspace migrate; do
-  cp "$TMP" "$PLUGIN/skills/bun-$s/references/mapa-de-ids.md"
+  cp "$TMP" "$FAMILIA/bun-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 3 skills ($(grep -c '^| `BUN' "$PLUGIN/skills/bun-runtime/references/mapa-de-ids.md") IDs)"
+echo "gerado nas 3 skills ($(grep -c '^| `BUN' "$FAMILIA/bun-runtime/references/mapa-de-ids.md") IDs)"

@@ -1,4 +1,5 @@
 ---
+titulo: Playwright - Snapshots e Visual
 Link: https://playwright.dev/docs/aria-snapshots
 tags:
  - playwright

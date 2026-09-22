@@ -1,4 +1,5 @@
 ---
+titulo: Playwright - Rede e Mocking
 Link: https://playwright.dev/docs/network
 tags:
  - playwright

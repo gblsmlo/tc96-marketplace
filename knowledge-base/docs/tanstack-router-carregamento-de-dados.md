@@ -1,4 +1,5 @@
 ---
+titulo: TanStack Router - Carregamento de Dados
 Link: https://tanstack.com/router/latest/docs/framework/react/guide/data-loading
 tags:
  - tanstack-router

@@ -1,4 +1,5 @@
 ---
+titulo: React - Renderização e Entrypoints
 Link: https://react.dev/reference/react-dom/client
 tags:
  - react

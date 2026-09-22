@@ -1,4 +1,5 @@
 ---
+titulo: TanStack Query - O que um Dev Frontend Precisa Saber
 Link: https://tanstack.com/query/latest/docs/framework/react/overview
 tags:
  - tanstack-query

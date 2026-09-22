@@ -1,4 +1,5 @@
 ---
+titulo: TanStack Query - Mutations e Invalidação
 Link: https://tanstack.com/query/latest/docs/framework/react/guides/mutations
 tags:
  - tanstack-query

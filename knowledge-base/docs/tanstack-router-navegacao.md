@@ -1,4 +1,5 @@
 ---
+titulo: TanStack Router - Navegação
 Link: https://tanstack.com/router/latest/docs/framework/react/guide/navigation
 tags:
  - tanstack-router

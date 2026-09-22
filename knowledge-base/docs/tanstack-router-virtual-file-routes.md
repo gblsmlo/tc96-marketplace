@@ -1,4 +1,5 @@
 ---
+titulo: TanStack Router - Virtual File Routes
 Link: https://tanstack.com/router/latest/docs/framework/react/routing/virtual-file-routes
 tags:
  - tanstack-router

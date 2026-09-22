@@ -1,4 +1,5 @@
 ---
+titulo: HTTP - CORS
 Link: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS
 tags:
  - http

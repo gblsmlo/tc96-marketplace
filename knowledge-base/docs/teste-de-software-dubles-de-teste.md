@@ -1,4 +1,5 @@
 ---
+titulo: Teste de Software - Dublês de Teste
 Link: https://martinfowler.com/bliki/TestDouble.html
 tags:
  - testing

@@ -1,4 +1,5 @@
 ---
+titulo: React - Patterns
 Link: https://react.dev/learn
 tags:
  - react

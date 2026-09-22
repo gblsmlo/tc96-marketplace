@@ -1,4 +1,5 @@
 ---
+titulo: TanStack Query - Padrões de Consulta
 Link: https://tanstack.com/query/latest/docs/framework/react/guides/dependent-queries
 tags:
  - tanstack-query

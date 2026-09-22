@@ -1,4 +1,5 @@
 ---
+titulo: HTTP - Status e Redirecionamento
 Link: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
 tags:
  - http

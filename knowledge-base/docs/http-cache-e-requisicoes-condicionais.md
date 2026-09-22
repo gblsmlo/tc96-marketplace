@@ -1,4 +1,5 @@
 ---
+titulo: HTTP - Cache e Requisições Condicionais
 Link: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching
 tags:
  - http

@@ -1,12 +1,12 @@
 ---
-gerado-por: plugins/hermes-backend/skills/drizzle-review/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-17
+gerado-por: skills/drizzle/drizzle-review/scripts/gerar-mapa-de-ids.sh
+gerado-em: 2026-09-22
 ---
 
 # Mapa de IDs `DRZ-*`
 
 > Índice, não cópia. `DRZ-SCHEMA-01` é **apelido** de `DRZ-CORE-02` e não aparece em revisão.
-> Regenerar com `bash plugins/hermes-backend/skills/drizzle-review/scripts/gerar-mapa-de-ids.sh`.
+> Regenerar com `bash skills/drizzle/drizzle-review/scripts/gerar-mapa-de-ids.sh`.
 
 | ID | Declarada em | Corpo no satélite | Seção do corpo |
 | --- | --- | --- | --- |

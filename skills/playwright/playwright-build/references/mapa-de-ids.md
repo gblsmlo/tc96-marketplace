@@ -1,12 +1,12 @@
 ---
-gerado-por: plugins/hermes-e2e/skills/playwright-review/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-17
+gerado-por: skills/playwright/playwright-review/scripts/gerar-mapa-de-ids.sh
+gerado-em: 2026-09-22
 ---
 
 # Mapa de IDs `PW-*`
 
 > Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> Regenerar com `bash plugins/hermes-e2e/skills/playwright-review/scripts/gerar-mapa-de-ids.sh` —
+> Regenerar com `bash skills/playwright/playwright-review/scripts/gerar-mapa-de-ids.sh` —
 > o mesmo arquivo é escrito nas três skills de Playwright.
 
 ## Apelidos e quase-apelidos

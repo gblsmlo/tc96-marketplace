@@ -1,4 +1,5 @@
 ---
+titulo: Playwright - Debug e Trace
 Link: https://playwright.dev/docs/trace-viewer
 tags:
  - playwright

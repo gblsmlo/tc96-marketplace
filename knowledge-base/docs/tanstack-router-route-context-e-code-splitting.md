@@ -1,4 +1,5 @@
 ---
+titulo: TanStack Router - Route Context e Code Splitting
 Link: https://tanstack.com/router/latest/docs/framework/react/guide/router-context
 tags:
  - tanstack-router

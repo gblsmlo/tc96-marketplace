@@ -1,4 +1,5 @@
 ---
+titulo: TanStack Router - Search Params
 Link: https://tanstack.com/router/latest/docs/framework/react/guide/search-params
 tags:
  - tanstack-router

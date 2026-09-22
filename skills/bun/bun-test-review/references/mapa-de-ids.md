@@ -1,6 +1,6 @@
 ---
-gerado-por: plugins/hermes-backend/skills/bun-test-review/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-17
+gerado-por: skills/bun/bun-test-review/scripts/gerar-mapa-de-ids.sh
+gerado-em: 2026-09-22
 ---
 
 # Mapa de IDs `BUN-TEST-*`
@@ -8,7 +8,7 @@ gerado-em: 2026-09-17
 > Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
 > A família inteira mora na § 6 do hub `Bun - Testes`, e o corpo no satélite dono.
 > Vai de `BUN-TEST-01` a `BUN-TEST-29` — **nunca invente ID fora dessa faixa**.
-> Regenerar com `bash plugins/hermes-backend/skills/bun-test-review/scripts/gerar-mapa-de-ids.sh`.
+> Regenerar com `bash skills/bun/bun-test-review/scripts/gerar-mapa-de-ids.sh`.
 
 | ID | Declarada em | Corpo no satélite | Seção do corpo |
 | --- | --- | --- | --- |

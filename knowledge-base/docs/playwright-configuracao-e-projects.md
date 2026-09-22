@@ -1,4 +1,5 @@
 ---
+titulo: Playwright - Configuração e Projects
 Link: https://playwright.dev/docs/test-configuration
 tags:
  - playwright

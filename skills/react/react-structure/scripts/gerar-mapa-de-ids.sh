@@ -4,17 +4,17 @@
 set -euo pipefail
 
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
-# O mapa é gerado na autoria e vai versionado no plugin: o destino é o repo,
-# a origem continua sendo o vault (passe outro caminho como $1 se preciso).
-PLUGIN="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+# The map is generated at authoring time and committed: source and destination are
+# both this repository (pass another knowledge-base path as $1 if you need to).
+FAMILIA="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 FONTE="$BASE/pages/feature-based-architecture.md"
-OUT="$PLUGIN/skills/react-structure/references/mapa-de-ids.md"
+OUT="$FAMILIA/react-structure/references/mapa-de-ids.md"
 
 [ -f "$FONTE" ] || { echo "nota-fonte não encontrada: $FONTE" >&2; exit 1; }
 
 {
   echo "---"
-  echo "gerado-por: plugins/hermes-frontend/skills/react-structure/scripts/gerar-mapa-de-ids.sh"
+  echo "gerado-por: skills/react/react-structure/scripts/gerar-mapa-de-ids.sh"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
@@ -23,7 +23,7 @@ OUT="$PLUGIN/skills/react-structure/references/mapa-de-ids.md"
   echo "> Índice, não cópia: o texto de cada regra mora em \`Pages/Feature-Based Architecture.md\` § 4."
   echo "> A coluna **Faz valer** diz se o lint pega ou se depende de revisão humana — é o que decide"
   echo "> se um achado se repete no próximo PR. Regenerar com:"
-  echo "> \`bash plugins/hermes-frontend/skills/react-structure/scripts/gerar-mapa-de-ids.sh\`"
+  echo "> \`bash skills/react/react-structure/scripts/gerar-mapa-de-ids.sh\`"
   echo
   echo "| ID | Severidade | Faz valer | Seção do corpo estendido |"
   echo "| --- | --- | --- | --- |"
