@@ -335,10 +335,12 @@ Um CI que só roda lint, typecheck e teste **não verifica um monorepo**. Faltam
 
 ### A sonda de fan-in lateral (`MONO-12`)
 
-**O executável não mora aqui.** Ele é `skills/bun-workspace/scripts/fan-in-lateral.sh`, no Hermes, e
-é a skill `bun-workspace` que documenta a invocação — este vault tem o que se **aprende**, o repo tem
-o que **executa**, e copiar o código para cá criaria a segunda cópia que a próxima correção esquece.
-Quem audita chega pela sonda S14 do `monorepo-auditor`.
+**O executável não mora aqui.** Ele é a sonda **S14** do agente `monorepo-auditor`, que mede o fan-in
+de packages e de features numa passada só — a knowledge-base tem o que se **aprende**, o agente tem o
+que **executa**, e copiar o código para cá criaria a segunda cópia que a próxima correção esquece.
+
+> Até 2026-09-22 esta seção prometia `skills/bun-workspace/scripts/fan-in-lateral.sh`. Esse arquivo
+> nunca existiu, em nenhuma versão do plugin: a sonda foi entregue dentro do `monorepo-auditor`.
 
 O que ela faz, e o que esperar:
 

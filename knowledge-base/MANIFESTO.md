@@ -137,6 +137,6 @@ Notas: 129 · `docs/`: 118 · `pages/`: 11
 | `pages/forward-deployed-engineering.md` | Forward Deployed Engineering | `2ae25cf6099b` |
 | `pages/fronteira-do-bff-forma-jornada-e-regra.md` | Fronteira do BFF - forma, jornada e regra | `5fd0a9f57b26` |
 | `pages/frontend-roadmap.md` | Frontend roadmap | `f0e10f9150cd` |
-| `pages/monorepo-com-bun-estrutura-e-tooling.md` | Monorepo com Bun - estrutura e tooling | `153043335498` |
+| `pages/monorepo-com-bun-estrutura-e-tooling.md` | Monorepo com Bun - estrutura e tooling | `8794dbb31368` |
 | `pages/storybook-estruturado-por-atomic-design.md` | Storybook estruturado por Atomic Design | `c5da42f80c67` |
 | `pages/trunk-based-development.md` | Trunk-based development | `d076262b46f0` |

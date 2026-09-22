@@ -10,7 +10,7 @@ set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="${1:-$RAIZ/dist/claude-code}"
-VERSAO="${VERSAO:-0.2.0}"
+VERSAO="${VERSAO:-0.3.0}"   # 0.3.0: hermes -> twincam, nome de plugin e de marketplace
 
 rm -rf "$DEST"
 
@@ -27,7 +27,7 @@ MODELO = {"alto": "opus", "medio": "sonnet", "rapido": "haiku"}
 # Um plugin por recorte habilitavel em projeto. Familia sem plugin declarado
 # nao sai no build.
 PLUGINS = {
-    "hermes-core": {
+    "twincam-core": {
         "familias": ["test", "http"],
         "agentes": ["code-reviewer", "software-architect", "qa-engineer",
                     "product-manager", "product-designer", "project-manager",
@@ -36,7 +36,7 @@ PLUGINS = {
                      "Habilite sempre.",
         "keywords": ["teste", "http", "review", "arquitetura"],
     },
-    "hermes-frontend": {
+    "twincam-frontend": {
         "familias": ["react", "tanstack", "storybook"],
         "agentes": ["frontend-developer"],
         "descricao": "React, TanStack Router e Query, React Hook Form e Storybook no stack "
@@ -44,14 +44,14 @@ PLUGINS = {
                      "Habilite em projeto com frontend.",
         "keywords": ["react", "tanstack", "storybook", "frontend"],
     },
-    "hermes-backend": {
+    "twincam-backend": {
         "familias": ["bun", "elysia", "drizzle"],
         "agentes": ["backend-developer"],
         "descricao": "Runtime Bun, Elysia e Drizzle — serviço HTTP, persistência e "
                      "dependências. Habilite em projeto com backend.",
         "keywords": ["bun", "elysia", "drizzle", "backend"],
     },
-    "hermes-e2e": {
+    "twincam-e2e": {
         "familias": ["playwright"],
         "agentes": [],
         "descricao": "Playwright — escrita, auditoria e diagnóstico de teste E2E. "
@@ -213,7 +213,7 @@ for plugin, cfg in PLUGINS.items():
 
 (dest / ".claude-plugin").mkdir(parents=True, exist_ok=True)
 (dest / ".claude-plugin/marketplace.json").write_text(json.dumps({
-    "name": "hermes",
+    "name": "twincam",
     "owner": {"name": "Gabriel Melo", "email": "gblsmlo@gmail.com"},
     "metadata": {"description": "Agentes, skills e regra do stack desta casa.",
                  "version": versao},

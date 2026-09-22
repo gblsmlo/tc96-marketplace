@@ -2,7 +2,7 @@
 
 Three skills, one directory each. They decide **what**, **at which level** and **whether the
 suite protects** — and they never write tests: that belongs to the tool layer
-(`hermes-e2e: playwright family`, `hermes-backend: bun family`, `storybook-test`).
+(`twincam-e2e: playwright family`, `twincam-backend: bun family`, `storybook-test`).
 
 | Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
@@ -34,7 +34,7 @@ section — the same number § 6.2 of the hub declares, which serves as the chec
 the alias table: `TS-NIV-01`, `TS-DUB-02` and `TS-SUI-02` are **not** cited.
 
 ```bash
-bash plugins/hermes-core/skills/test-design/scripts/gerar-mapa-de-ids.sh
+bash plugins/twincam-core/skills/test-design/scripts/gerar-mapa-de-ids.sh
 bash scripts/instalar.sh
 ```
 
@@ -60,4 +60,4 @@ Regenerate: `bash scripts/medir.sh`
 ## Related
 
 - [Skills index](../README.md) · [Teste de Software](../../knowledge-base/docs/teste-de-software.md) § 7 — the contract all three implement
-- `hermes-e2e: playwright family` · `hermes-backend: bun family` — the tool layer
+- `twincam-e2e: playwright family` · `twincam-backend: bun family` — the tool layer

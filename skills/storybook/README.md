@@ -39,7 +39,7 @@ nine families, with the whole of § 6.2 in the header — including the **pairs 
 (`SB-TS-03`/`SB-RV-05`, `SB-TS-08`/`SB-RV-06`), which are **not** canonical and alias.
 
 ```bash
-bash plugins/hermes-frontend/skills/storybook-setup/scripts/gerar-mapa-de-ids.sh
+bash plugins/twincam-frontend/skills/storybook-setup/scripts/gerar-mapa-de-ids.sh
 bash scripts/instalar.sh
 ```
 
@@ -65,5 +65,5 @@ Regenerate: `bash scripts/medir.sh`
 ## Related
 
 - [Skills index](../README.md) · [Storybook](../../knowledge-base/docs/storybook.md) § 7 — the contract
-- `hermes-core: test family` — decides the level, before these
+- `twincam-core: test family` — decides the level, before these
 - [Storybook - Cobertura e CI](../../knowledge-base/docs/storybook-cobertura-e-ci.md) — the operational side, consulted directly

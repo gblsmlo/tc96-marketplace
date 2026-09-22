@@ -61,7 +61,7 @@ the six satellites carries the reasoning, and in which section. That is the info
 skill needs in order to load **one** satellite instead of six.
 
 ```bash
-bash plugins/hermes-backend/skills/bun-test-review/scripts/gerar-mapa-de-ids.sh
+bash plugins/twincam-backend/skills/bun-test-review/scripts/gerar-mapa-de-ids.sh
 bash scripts/instalar.sh
 ```
 
@@ -89,5 +89,5 @@ Regenerate: `bash scripts/medir.sh`
 ## Related
 
 - [Skills index](../README.md) · [Bun - Testes](../../knowledge-base/docs/bun-testes.md) § 7 — the contract
-- `hermes-core: test family` — decides the level, before these
-- `hermes-e2e: playwright family` — the E2E level
+- `twincam-core: test family` — decides the level, before these
+- `twincam-e2e: playwright family` — the E2E level

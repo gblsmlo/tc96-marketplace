@@ -128,7 +128,7 @@ See the corresponding satellite.
 If the `react*` notes changed since the last review, regenerate the map before citing:
 
 ```bash
-bash plugins/hermes-frontend/skills/react-review/scripts/gerar-mapa-de-ids.sh # rewrites both skills' map
+bash plugins/twincam-frontend/skills/react-review/scripts/gerar-mapa-de-ids.sh # rewrites both skills' map
 bash scripts/instalar.sh # and reinstalls the plugin
 ```
 

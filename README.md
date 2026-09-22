@@ -91,14 +91,14 @@ build.
 
 `dist/claude-code/` é um marketplace: `.claude-plugin/marketplace.json` na raiz e um
 plugin por recorte habilitável em `plugins/` (core, frontend, backend, e2e). Aponte o
-marketplace `hermes` para esse diretório, ou copie `skills/` e `agents/` de um plugin
+marketplace `twincam` para esse diretório, ou copie `skills/` e `agents/` de um plugin
 para `~/.claude/`.
 
-O marketplace `hermes` já aponta para cá desde 2026-09-22:
+O marketplace `twincam` já aponta para cá desde 2026-09-22:
 
 ```bash
-claude plugin marketplace list          # hermes -> Directory (…/Workspaces/dist/claude-code)
-claude plugin install hermes-core@hermes
+claude plugin marketplace list          # twincam -> Directory (…/Workspaces/dist/claude-code)
+claude plugin install twincam-core@twincam
 ```
 
 > `dist/` é ignorado pelo git e todo build o apaga antes de reescrever. O marketplace

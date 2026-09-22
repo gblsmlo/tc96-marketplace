@@ -31,7 +31,7 @@ section — the number the skill itself declares — plus the whole of § 6.2: t
 (`PW-ACT-07`, `PW-LOC-07`) **and** the four rules that *look* like aliases and remain citable.
 
 ```bash
-bash plugins/hermes-e2e/skills/playwright-review/scripts/gerar-mapa-de-ids.sh
+bash plugins/twincam-e2e/skills/playwright-review/scripts/gerar-mapa-de-ids.sh
 bash scripts/instalar.sh
 ```
 
@@ -57,5 +57,5 @@ Regenerate: `bash scripts/medir.sh`
 ## Related
 
 - [Skills index](../README.md) · [Playwright](../../knowledge-base/docs/playwright.md) § 7 — the contract
-- `hermes-core: test family` — the concept layer, which comes first
-- `hermes-backend: bun family` — unit and integration
+- `twincam-core: test family` — the concept layer, which comes first
+- `twincam-backend: bun family` — unit and integration
