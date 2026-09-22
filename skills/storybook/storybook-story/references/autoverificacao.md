@@ -1,27 +1,24 @@
-# Autoverificação antes de entregar
+# Self-check before delivering
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/storybook-story/scripts/autoverificar.sh src
 ```
 
-| # | Confira | Regra |
+| # | Check | Rule |
 | --- | --- | --- |
-| 1 | cada story é um **estado nomeado**, não uma demo | `SB-CSF-04` |
-| 2 | o que distingue as stories é `args` | `SB-CSF-04` |
+| 1 | each story is a **named state**, not a demo | `SB-CSF-04` |
+| 2 | what distinguishes the stories is `args` | `SB-CSF-04` |
 | 3 | `satisfies Meta<…>` + `StoryObj<typeof meta>` | `SB-CSF-02` |
-| 4 | import de `Meta`/`StoryObj` do pacote do framework | `SB-CORE-02` |
-| 5 | `title` literal, e explícito em `packages/ui` | `SB-CSF-03`, `SB-CSF-10` |
-| 6 | nenhum `argTypes` que o docgen já inferiria | `SB-CSF-08` |
-| 7 | descrição de prop só no JSDoc | `SB-DOC-02` |
-| 8 | variação reusada por spread, sem mutar `Story.args` | `SB-CSF-05` |
-| 9 | ambiente por decorator/loader, não por `args` | `SB-CTX-03`, `SB-CTX-05` |
-| 10 | valor não serializável passa por `mapping` | `SB-CSF-06` |
-| 11 | export que não é story saiu ou está em `excludeStories` | `SB-CSF-09` |
-| 12 | corpo do módulo sem efeito colateral | `SB-CORE-06` |
-| 13 | nenhuma story depende de outra ter rodado | `SB-CORE-05` |
-| 14 | estados vazio e de erro existem, ou a ausência foi decidida | `TS-TIPO-02` |
+| 4 | `Meta`/`StoryObj` imported from the framework's package | `SB-CORE-02` |
+| 5 | `title` literal, and explicit in `packages/ui` | `SB-CSF-03`, `SB-CSF-10` |
+| 6 | no `argTypes` that docgen would already infer | `SB-CSF-08` |
+| 7 | prop descriptions only in the JSDoc | `SB-DOC-02` |
+| 8 | variations reused by spread, without mutating `Story.args` | `SB-CSF-05` |
+| 9 | environment through a decorator/loader, not through `args` | `SB-CTX-03`, `SB-CTX-05` |
+| 10 | a non-serializable value goes through `mapping` | `SB-CSF-06` |
+| 11 | a non-story export removed or in `excludeStories` | `SB-CSF-09` |
+| 12 | the module body has no side effects | `SB-CORE-06` |
+| 13 | no story depends on another having run | `SB-CORE-05` |
+| 14 | empty and error states exist, or their absence was decided | `TS-TIPO-02` |
 
-**Depois, suba e olhe a sidebar.** Glob que não casa **não dá erro** — dá sidebar vazia (`SB-CFG-02`). E abra a página de docs: controles vazios são o sintoma de `SB-CSF-04` violada.
-
----
-
+**Then, start it and look at the sidebar.** A glob that does not match **raises no error** — it gives an empty sidebar (`SB-CFG-02`). And open the docs page: empty controls are the symptom of a violated `SB-CSF-04`.

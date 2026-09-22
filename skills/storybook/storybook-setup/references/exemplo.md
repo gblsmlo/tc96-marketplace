@@ -1,12 +1,12 @@
-# Exemplo trabalhado
+# Worked example
 
-Tarefa: *"instalar Storybook no monorepo — `packages/ui` e `apps/web`, que está em React 19 e Vite 7"*.
+Task: *"install Storybook in the monorepo — `packages/ui` and `apps/web`, which is on React 19 and Vite 7"*.
 
-**Passo 1 — o framework.** `apps/web` tem páginas que importam `Link` de `@tanstack/react-router`, e um Storybook único cobre os dois pacotes. React 19 ≥ 18 ✓, Vite 7 ≥ 7 ✓ → **`@storybook/tanstack-react`**, caminho A, família `SB-TS-*`. Registrado.
+**Step 1 — the framework.** `apps/web` has pages importing `Link` from `@tanstack/react-router`, and a single Storybook covers both packages. React 19 ≥ 18 ✓, Vite 7 ≥ 7 ✓ → **`@storybook/tanstack-react`**, path A, family `SB-TS-*`. Recorded.
 
-**Passo 2 — plataforma.** Node 22.12 (exigido de qualquer forma pelo Playwright do addon-vitest). ESM confirmado.
+**Step 2 — platform.** Node 22.12 (required anyway by addon-vitest's Playwright). ESM confirmed.
 
-**Passos 3 e 4 — os arquivos:**
+**Steps 3 and 4 — the files:**
 
 ```ts
 // apps/storybook/.storybook/main.ts
@@ -19,31 +19,27 @@ const config: StorybookConfig = {
  '../../../apps/web/src/**/*.stories.@(ts|tsx)',
  ],
  addons: ['@storybook/addon-docs', '@storybook/addon-a11y'],
- staticDirs: ['../public'],
 };
 export default config;
 ```
 
 ```ts
-// apps/storybook/vite.config.ts — a herança do Passo 4
+// apps/storybook/vite.config.ts — the inheritance from Step 4
 import { defineConfig } from 'vite';
-import { baseConfig } from '@escopo/config/vite.base';
+import { baseConfig } from '@scope/config/vite.base';
 export default defineConfig(baseConfig);
 ```
 
-**O que cada decisão evitou:**
+**What each decision prevented:**
 
-| Decisão | Alternativa que dói | Regra |
+| Decision | Alternative that hurts | Rule |
 | --- | --- | --- |
-| `tanstack-react` decidido pelo pacote mais exigente | escolher por `packages/ui` e descobrir depois que `apps/web` precisa de rota | § 5.1 do hub |
-| globs com `../../../` a partir de `.storybook/` | globs a partir da raiz do pacote — sidebar vazia, sem erro | `SB-CFG-02` |
-| `vite.config.ts` herdando `packages/config` | duplicar alias em três lugares, divergindo no primeiro ajuste | `SB-CFG-06` |
-| versões em lockstep no `package.json` | `addon-docs` numa minor diferente | `SB-CFG-04` |
-| `staticDirs` declarado | MSW sem service worker servido, e mock que falha em silêncio | `SB-CFG-05` |
-| augmentation em `router.ts` | tipos do router genéricos nas stories, e `SB-TS-02` inerte | Passo 6 |
-| runner **depois** da sidebar verde | depurar glob e runner juntos | Passo 3.6 |
+| `tanstack-react` decided by the most demanding package | choosing by `packages/ui` and finding out later that `apps/web` needs routing | § 5.1 of the hub |
+| globs with `../../../` from `.storybook/` | globs from the package root — an empty sidebar, with no error | `SB-CFG-02` |
+| `vite.config.ts` inheriting from `packages/config` | duplicating the alias in three places, diverging on the first adjustment | `SB-CFG-06` |
+| versions in lockstep in `package.json` | `addon-docs` on a different minor | `SB-CFG-04` |
+| `staticDirs` declared | MSW without a served service worker, and a mock that fails silently | `SB-CFG-05` |
+| the augmentation in `router.ts` | generic router types in the stories, and `SB-TS-02` inert | Step 6 |
+| the runner **after** a green sidebar | debugging the glob and the runner together | Step 3.6 |
 
-**O passo que ninguém documenta e que mais rende:** subir e olhar a sidebar antes de ligar o runner. Sidebar vazia com runner ligado produz "0 testes passaram" — que é verde, e não significa nada.
-
----
-
+**The step nobody documents and that pays most:** start it and look at the sidebar before turning on the runner. An empty sidebar with the runner on produces "0 tests passed" — which is green, and means nothing.

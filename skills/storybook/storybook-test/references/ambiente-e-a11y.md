@@ -1,34 +1,31 @@
-# Substituir o ambiente, e acessibilidade
+# Replacing the environment, and accessibility
 
-Só entra quando a story sobe de nível: composição de página, componente que fala com o BFF, módulo server-only.
+It only comes in when the story moves up a level: page composition, a component talking to the BFF, a server-only module.
 
-| Substituir | Como | Regra |
+| Replace | How | Rule |
 | --- | --- | --- |
-| callback observável | `fn` em `meta.args` | `SB-TEST-03` |
-| módulo do projeto ou pacote | `sb.mock` — **só** em `.storybook/preview.*` | `SB-MOCK-01` |
-| comportamento do mock, por story | `mocked` em `beforeEach` | `SB-MOCK-04` |
-| requisição HTTP | MSW, via `mswLoader` + `beforeEach({ msw })` | `SB-MOCK-07` |
-| relógio, aleatoriedade, locale | `beforeEach` que **retorna** a limpeza | `SB-CTX-08` |
+| an observable callback | `fn` in `meta.args` | `SB-TEST-03` |
+| a project or package module | `sb.mock` — **only** in `.storybook/preview.*` | `SB-MOCK-01` |
+| the mock's behavior, per story | `mocked` in `beforeEach` | `SB-MOCK-04` |
+| an HTTP request | MSW, through `mswLoader` + `beforeEach({ msw })` | `SB-MOCK-07` |
+| clock, randomness, locale | a `beforeEach` that **returns** the cleanup | `SB-CTX-08` |
 
-**A divisão que vale memorizar:** o preview decide **o quê** é mockado; a story decide **como se comporta**. `sb.mock` num arquivo de story não funciona, e não falha de forma óbvia.
+**The division worth memorizing:** the preview decides **what** is mocked; the story decides **how it behaves**. `sb.mock` in a story file does not work, and it does not fail in an obvious way.
 
-Dois detalhes que quebram em silêncio: arquivo em `__mocks__` precisa ser **JavaScript com ESM**, não TypeScript (`SB-MOCK-03`); e o tipo da resposta mockada reusa o tipo exportado pelo servidor, nunca redigitado à mão (`SB-MOCK-07`).
+Two details that break silently: a file in `__mocks__` has to be **JavaScript with ESM**, not TypeScript (`SB-MOCK-03`); and the mocked response's type reuses the type exported by the server, never retyped by hand (`SB-MOCK-07`).
 
-**Mocks `fn` não precisam de restauração manual** — o Storybook reseta entre stories. É a exceção declarada de `SB-TEST-07`.
+**`fn` mocks need no manual restoration** — Storybook resets them between stories. It is the declared exception to `SB-TEST-07`.
 
 ---
 
-## Passo 4 — Acessibilidade
+## Step 4 — Accessibility
 
 ```ts
 parameters: { a11y: { test: 'error' } }
 ```
 
-**`'todo'` não produz nada em CI** — nem erro, nem aviso, nem saída. Só `'error'` falha (`SB-TEST-04`). Um projeto inteiro em `'todo'` tem checagem que só existe para quem abre a UI.
+**`'todo'` produces nothing in CI** — no error, no warning, no output. Only `'error'` fails (`SB-TEST-04`). A whole project on `'todo'` has a check that only exists for whoever opens the UI.
 
-A rampa é o problema real: ligar `'error'` num design system existente deixa o CI vermelho no dia 1, e a única válvula produz zero saída. As duas pontas estão documentadas e o meio não — é pendência aberta em [Storybook - Pendências de revisão](../../../../knowledge-base/docs/storybook-pendencias-de-revisao.md). A saída praticável é `'error'` por story ou por componente, avançando em ondas, em vez de global de uma vez.
+The ramp is the real problem: turning on `'error'` in an existing design system leaves CI red on day 1, and the only release valve produces zero output. Both ends are documented and the middle is not — it is an open item in [Storybook - Pendências de revisão](../../../../knowledge-base/docs/storybook-pendencias-de-revisao.md). The workable way out is `'error'` per story or per component, advancing in waves, instead of globally in one go.
 
-O addon desabilita a regra `region` por padrão, para evitar **falso positivo** em componente isolado — um botão fora de landmark é o normal do Storybook, não defeito.
-
----
-
+The addon disables the `region` rule by default, to avoid a **false positive** on an isolated component — a button outside a landmark is Storybook's normal, not a defect.

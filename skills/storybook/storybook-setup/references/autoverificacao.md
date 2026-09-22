@@ -1,34 +1,31 @@
-# Autoverificação, e a armadilha de augmentation de tipo
+# Self-check, and the type-augmentation trap
 
-**Só caminho `tanstack-react`.** Sob `react-vite` esta seção é inerte.
+**`tanstack-react` path only.** Under `react-vite` this section is inert.
 
-O TanStack Router pede `declare module '@tanstack/react-router'` para registrar o tipo do router. Se essa augmentation mora no `main.tsx` do app — o arquivo que monta o DOM — ela **não alcança o programa TS do Storybook**, porque `main.tsx` não pode entrar nesse programa.
+TanStack Router asks for `declare module '@tanstack/react-router'` to register the router's type. If that augmentation lives in the app's `main.tsx` — the file that mounts the DOM — it **does not reach Storybook's TS program**, because `main.tsx` cannot enter that program.
 
-**O conserto:** separar a augmentation num módulo próprio (`router.ts`), exportá-lo, e importar **de tipo** onde precisar.
+**The fix:** separate the augmentation into its own module (`router.ts`), export it, and import it **as a type** wherever needed.
 
-**O sintoma, que não aponta a causa:** os tipos do router caem para o genérico dentro das stories, e `params` deixa de ser checado contra o path — o que faz `SB-TS-02` passar a não pegar nada. Verificado por sabotagem em `Pages/Monorepo com Bun - estrutura e tooling.md` § 5.7.
+**The symptom, which does not point at the cause:** the router's types fall back to the generic one inside the stories, and `params` stops being checked against the path — which makes `SB-TS-02` catch nothing. Verified by sabotage in `Pages/Monorepo com Bun - estrutura e tooling.md` § 5.7.
 
 ---
 
-## Passo 7 — Autoverificação antes de entregar
+## Step 7 — Self-check before delivering
 
-| # | Confira | Regra |
+| # | Check | Rule |
 | --- | --- | --- |
-| 1 | `framework` declarado em `main.ts`, e a escolha registrada | `SB-CFG-01` |
-| 2 | os pisos de versão do framework escolhido são cumpridos | Passo 1 |
-| 3 | Node ≥ 20.19 / 22.12 — e ≥ 22 se houver Playwright | `SB-CORE-04` |
-| 4 | `main.ts` é ESM válido, sem `require` | `SB-CORE-03` |
-| 5 | todo `@storybook/*` na mesma versão de `storybook` | `SB-CFG-04` |
-| 6 | globs de `stories` relativos a `.storybook/` | `SB-CFG-02` |
-| 7 | **a sidebar tem as stories esperadas** | `SB-CFG-02` |
-| 8 | alias/plugin/`define` declarados uma vez e herdados | `SB-CFG-06` |
-| 9 | `apps/storybook` é folha — nenhum pacote depende dele | `SB-CFG-07` |
-| 10 | CSS editável importado em `preview.tsx` | `SB-CFG-03` |
-| 11 | `staticDirs` cobre o service worker, se houver MSW | `SB-CFG-05` |
-| 12 | augmentation de tipo em módulo próprio (só TanStack) | Passo 6 |
-| 13 | nenhum `SB-TS-*` prescrito sob `react-vite`, e vice-versa | § 6.2 do hub |
+| 1 | `framework` declared in `main.ts`, and the choice recorded | `SB-CFG-01` |
+| 2 | the chosen framework's version floors are met | Step 1 |
+| 3 | Node ≥ 20.19 / 22.12 — and ≥ 22 if Playwright is present | `SB-CORE-04` |
+| 4 | `main.ts` is valid ESM, with no `require` | `SB-CORE-03` |
+| 5 | every `@storybook/*` on the same version as `storybook` | `SB-CFG-04` |
+| 6 | `stories` globs relative to `.storybook/` | `SB-CFG-02` |
+| 7 | **the sidebar has the expected stories** | `SB-CFG-02` |
+| 8 | alias/plugin/`define` declared once and inherited | `SB-CFG-06` |
+| 9 | `apps/storybook` is a leaf — no package depends on it | `SB-CFG-07` |
+| 10 | editable CSS imported in `preview.tsx` | `SB-CFG-03` |
+| 11 | `staticDirs` covers the service worker, if MSW is present | `SB-CFG-05` |
+| 12 | type augmentation in its own module (TanStack only) | Step 6 |
+| 13 | no `SB-TS-*` prescribed under `react-vite`, and vice versa | § 6.2 of the hub |
 
-**Rode:** subir o Storybook, abrir uma story de cada pacote coberto, e conferir que o alias resolve e o CSS aplica. Só então o Passo 3.7.
-
----
-
+**Run it:** start Storybook, open one story from each covered package, and confirm the alias resolves and the CSS applies. Only then Step 3.7.

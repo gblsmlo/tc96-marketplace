@@ -1,29 +1,26 @@
-# Autoverificação antes de entregar
+# Self-check before delivering
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/storybook-test/scripts/autoverificar.sh src
 ```
 
-| # | Confira | Regra |
+| # | Check | Rule |
 | --- | --- | --- |
-| 1 | o `framework` foi lido antes de qualquer prescrição de router | `SB-CFG-01` |
-| 2 | nenhum `SB-TS-*` prescrito num projeto `react-vite`, e vice-versa | § 6.2 do hub |
-| 3 | todo `expect` tem `await` | `SB-TEST-01` |
-| 4 | a primeira query de story assíncrona é `findBy…` | `SB-TEST-10` |
-| 5 | callback é `fn` em `args`, não função no `render` | `SB-TEST-03` |
-| 6 | `mount` desestruturado e chamado, se há setup antes do render | `SB-TEST-02` |
-| 7 | nenhuma asserção sobre implementação interna | `SB-TEST-09` |
-| 8 | query por papel/rótulo, não por classe ou test id desnecessário | `SB-TEST-06` |
-| 9 | o que distingue a story é `args` | `SB-CSF-04` |
-| 10 | `sb.mock` só no preview; comportamento em `beforeEach` | `SB-MOCK-01`, `SB-MOCK-04` |
-| 11 | `beforeEach` que altera ambiente retorna a limpeza | `SB-CTX-08` |
-| 12 | utilitários de `storybook/test`, sem `@` | `SB-CORE-01` |
-| 13 | `a11y.test` é `'error'` onde se espera que o CI reprove | `SB-TEST-04` |
-| 14 | import de `Meta`/`StoryObj` é do pacote do framework | `SB-CORE-02` |
+| 1 | the `framework` was read before any router prescription | `SB-CFG-01` |
+| 2 | no `SB-TS-*` prescribed in a `react-vite` project, and vice versa | § 6.2 of the hub |
+| 3 | every `expect` has `await` | `SB-TEST-01` |
+| 4 | the first query of an async story is `findBy…` | `SB-TEST-10` |
+| 5 | the callback is `fn` in `args`, not a function in `render` | `SB-TEST-03` |
+| 6 | `mount` destructured and called, if there is setup before the render | `SB-TEST-02` |
+| 7 | no assertion about internal implementation | `SB-TEST-09` |
+| 8 | queries by role/label, not by class or an unnecessary test id | `SB-TEST-06` |
+| 9 | what distinguishes the story is `args` | `SB-CSF-04` |
+| 10 | `sb.mock` only in the preview; behavior in `beforeEach` | `SB-MOCK-01`, `SB-MOCK-04` |
+| 11 | a `beforeEach` that changes the environment returns the cleanup | `SB-CTX-08` |
+| 12 | utilities from `storybook/test`, without the `@` | `SB-CORE-01` |
+| 13 | `a11y.test` is `'error'` where CI is expected to fail | `SB-TEST-04` |
+| 14 | the `Meta`/`StoryObj` import is from the framework's package | `SB-CORE-02` |
 
-E a verificação que vale mais que as catorze: **quebre o componente de propósito e confirme que a story fica vermelha.** Inverta uma condição, remova o handler. Se nada quebrar, a `play` não afirma nada — `TS-TEC-08` em `Docs/Teste de Software - Técnicas de Design de Caso.md`.
+And the check worth more than the fourteen: **break the component on purpose and confirm the story goes red.** Invert a condition, remove the handler. If nothing breaks, the `play` asserts nothing — `TS-TEC-08` in `Docs/Teste de Software - Técnicas de Design de Caso.md`.
 
-**Depois, rode:** `vitest run --project=storybook`. Não `vitest` — sem `run` entra em watch mode.
-
----
-
+**Then run:** `vitest run --project=storybook`. Not `vitest` — without `run` it enters watch mode.

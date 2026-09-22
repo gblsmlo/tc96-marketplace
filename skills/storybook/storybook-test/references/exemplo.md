@@ -1,77 +1,74 @@
-# Exemplo trabalhado
+# Worked example
 
-Tarefa: *"testar que o formulário de convite envia o e-mail digitado, e que mostra o erro do servidor no campo"*.
+Task: *"test that the invite form sends the typed email, and that it shows the server's error in the field"*.
 
-**Passo 0.** `main.ts` declara `framework: '@storybook/react-vite'` → caminho **B**. O componente não toca rota, então nada de `SB-RV-01`; e `parameters.tanstack.*` seria no-op se alguém tentasse (`SB-RV-04`).
+**Step 0.** `main.ts` declares `framework: '@storybook/react-vite'` → path **B**. The component does not touch routing, so no `SB-RV-01`; and `parameters.tanstack.*` would be a no-op if anyone tried (`SB-RV-04`).
 
-**Passo 1.** A story existe e o que a distingue são `args`. Ok.
+**Step 1.** The story exists and what distinguishes it is `args`. Fine.
 
-**Passo 3 antes do 2** — o componente chama `enviarConvite` de um módulo do projeto, então o mock vem primeiro:
+**Step 3 before 2** — the component calls `sendInvite` from a project module, so the mock comes first:
 
 ```tsx
-//.storybook/preview.tsx — o preview decide O QUÊ é mockado
+//.storybook/preview.tsx — the preview decides WHAT is mocked
 import { sb } from 'storybook/test';
-sb.mock(import('../src/features/convites/api.ts'));
+sb.mock(import('../src/features/invites/api.ts'));
 ```
 
-**Passo 2** — a story decide **como** se comporta:
+**Step 2** — the story decides **how** it behaves:
 
 ```tsx
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, mocked } from 'storybook/test';
-import { enviarConvite } from '../src/features/convites/api';
-import { FormConvite } from './FormConvite';
+import { sendInvite } from '../src/features/invites/api';
+import { InviteForm } from './InviteForm';
 
 const meta = {
- component: FormConvite,
- args: { onEnviado: fn },
-} satisfies Meta<typeof FormConvite>;
+ component: InviteForm,
+ args: { onSent: fn },
+} satisfies Meta<typeof InviteForm>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const EnviaOEmail: Story = {
+export const SendsTheEmail: Story = {
  beforeEach: => {
- mocked(enviarConvite).mockResolvedValue({ id: 'cv_1' });
+ mocked(sendInvite).mockResolvedValue({ id: 'inv_1' });
  },
  play: async ({ args, canvas, userEvent, step }) => {
- await step('preencher', async => {
- await userEvent.type(canvas.getByRole('textbox', { name: 'E-mail' }), 'ada@x.com');
+ await step('fill in', async => {
+ await userEvent.type(canvas.getByRole('textbox', { name: 'Email' }), 'ada@x.com');
  });
- await step('enviar', async => {
- await userEvent.click(canvas.getByRole('button', { name: 'Enviar convite' }));
+ await step('send', async => {
+ await userEvent.click(canvas.getByRole('button', { name: 'Send invite' }));
  });
- await expect(args.onEnviado).toHaveBeenCalledWith({ id: 'cv_1' });
+ await expect(args.onSent).toHaveBeenCalledWith({ id: 'inv_1' });
  },
 };
 
-export const ErroDoServidorNoCampo: Story = {
+export const ServerErrorInTheField: Story = {
  beforeEach: => {
- mocked(enviarConvite).mockRejectedValue(new ConviteDuplicado('ada@x.com'));
+ mocked(sendInvite).mockRejectedValue(new DuplicateInvite('ada@x.com'));
  },
  play: async ({ canvas, userEvent }) => {
- await userEvent.type(canvas.getByRole('textbox', { name: 'E-mail' }), 'ada@x.com');
- await userEvent.click(canvas.getByRole('button', { name: 'Enviar convite' }));
- // a mensagem chega depois da promise rejeitar — findBy, não getBy
- await expect(await canvas.findByRole('alert')).toHaveTextContent(/já foi convidado/i);
+ await userEvent.type(canvas.getByRole('textbox', { name: 'Email' }), 'ada@x.com');
+ await userEvent.click(canvas.getByRole('button', { name: 'Send invite' }));
+ // the message arrives after the promise rejects — findBy, not getBy
+ await expect(await canvas.findByRole('alert')).toHaveTextContent(/already been invited/i);
  },
 };
 ```
 
-**O que cada decisão evitou:**
+**What each decision prevented:**
 
-| Decisão | Alternativa que fica **verde e errada** | Regra |
+| Decision | Alternative that goes **green and wrong** | Rule |
 | --- | --- | --- |
-| `fn` em `meta.args` | função no `render`, e a asserção sem alvo | `SB-TEST-03` |
-| `sb.mock` no preview | no arquivo de story — não funciona, e não avisa | `SB-MOCK-01` |
-| `mocked` em `beforeEach` | comportamento no topo do módulo, vazando entre stories | `SB-MOCK-04`, `SB-CORE-06` |
-| `findByRole('alert')` na story de erro | `getByRole` — passa local, falha em CI | `SB-TEST-10` |
-| `await` em toda `expect` | asserção que passa sempre | `SB-TEST-01` |
-| query por papel e nome acessível | `.form-error` ou `data-testid` | `SB-TEST-06` |
-| **duas** stories, uma por estado | um `play` com `if` cobrindo os dois | `SB-CSF-04` |
-| import de `@storybook/react-vite` | `@storybook/react` | `SB-CORE-02` |
+| `fn` in `meta.args` | a function in `render`, and the assertion with no target | `SB-TEST-03` |
+| `sb.mock` in the preview | in the story file — it does not work, and it does not warn | `SB-MOCK-01` |
+| `mocked` in `beforeEach` | behavior at the top of the module, leaking between stories | `SB-MOCK-04`, `SB-CORE-06` |
+| `findByRole('alert')` in the error story | `getByRole` — passes locally, fails in CI | `SB-TEST-10` |
+| `await` on every `expect` | an assertion that always passes | `SB-TEST-01` |
+| queries by role and accessible name | `.form-error` or `data-testid` | `SB-TEST-06` |
+| **two** stories, one per state | one `play` with an `if` covering both | `SB-CSF-04` |
+| importing from `@storybook/react-vite` | `@storybook/react` | `SB-CORE-02` |
 
-A última linha da tabela é a que mais rende: **o estado de erro é uma story, não um ramo dentro da story de sucesso.** Ele aparece na sidebar, entra na página de docs, e o runner o executa — três coisas que um `if` dentro da `play` não dá.
-
----
-
+The last row of the table pays most: **the error state is a story, not a branch inside the success story.** It appears in the sidebar, enters the docs page, and the runner executes it — three things an `if` inside the `play` does not give.

@@ -1,8 +1,9 @@
 ---
 nome: storybook-story
-descricao: Escrever ou revisar story de componente — anatomia do arquivo, tipagem com `satisfies`, `args` nos três níveis, `argTypes` como exceção, tags e a página de docs — citando IDs `SB-CSF-*` e `SB-CTX-*`, com autoverificação executável — use quando a tarefa for criar story nova, decidir o que é `args` e o que é ambiente, compor variação por spread, oferecer controle para valor não serializável, nomear `title` num design system, ou ligar autodocs. Não use para o teste dentro da story, que é storybook-test, nem para configurar o projeto, que é storybook-setup.
+descricao: Write or review a component story — file anatomy, typing with `satisfies`, `args` at the three levels, `argTypes` as an exception, tags and the docs page — citing `SB-CSF-*` and `SB-CTX-*` IDs, with an executable self-check — use when the task is creating a new story, deciding what is `args` and what is environment, composing a variation by spread, offering a control for a non-serializable value, naming the `title` in a design system, or turning on autodocs. Do not use for the test inside the story, which is storybook-test, nor to configure the project, which is storybook-setup.
 tipo: skill
 familia: storybook
+idioma: en
 fonte: "[Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md)"
 docs:
   - /storybookjs/storybook
@@ -14,115 +15,115 @@ tags:
 
 # storybook-story
 
-> **Fonte desta skill:** [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md), com o hub [Storybook](../../../knowledge-base/docs/storybook.md) como roteador.
-> Esta skill **não contém** o texto das regras — ela diz o que decidir e o que conferir.
-> **Superfície de API:** resolva pelo Context7 — `/storybookjs/storybook`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md), with the [Storybook](../../../knowledge-base/docs/storybook.md) hub as the router.
+> This skill **does not contain** the text of the rules — it says what to decide and what to check.
+> **API surface:** resolve it through Context7 — `/storybookjs/storybook`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contrato que esta skill implementa: [Storybook](../../../knowledge-base/docs/storybook.md) § 7.
+Contract this skill implements: [Storybook](../../../knowledge-base/docs/storybook.md) § 7.
 
 ---
 
-## Passo 0 — Se a story tocar rota, descubra o caminho
+## Step 0 — If the story touches routing, discover the path
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/storybook-setup/scripts/descobrir-caminho.sh
 ```
 
-`SB-TS-*` e `SB-RV-*` são **mutuamente exclusivas**, e prescrever o caminho errado **falha em silêncio**. Se o componente não toca rota, o caminho não muda nada — mas **confirme antes de assumir**.
+`SB-TS-*` and `SB-RV-*` are **mutually exclusive**, and prescribing the wrong path **fails silently**. If the component does not touch routing, the path changes nothing — but **confirm before assuming**.
 
 ---
 
-## Quando usar
+## When to use
 
-Criar ou revisar `*.stories.tsx`.
+Creating or reviewing `*.stories.tsx`.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| a `play` dentro da story | `storybook-test` |
-| configurar o projeto, sidebar vazia, versões | `storybook-setup` |
-| decidir **em que nível** o teste vai | `test-design` |
-| o componente em si | `react-developer` · `react-review` |
+| the `play` inside the story | `storybook-test` |
+| configuring the project, an empty sidebar, versions | `storybook-setup` |
+| deciding **at which level** the test goes | `test-design` |
+| the component itself | `react-developer` · `react-review` |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar |
+| Order | Load |
 | --- | --- |
-| 1 | [Storybook](../../../knowledge-base/docs/storybook.md) § 2 (modelo mental) e § 6 |
+| 1 | [Storybook](../../../knowledge-base/docs/storybook.md) § 2 (mental model) and § 6 |
 | 2 | [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md) |
-| 3 | [Storybook - Decorators e Contexto](../../../knowledge-base/docs/storybook-decorators-e-contexto.md) quando a story precisar de ambiente |
-| 4 | a nota do caminho, **se** a story tocar rota |
+| 3 | [Storybook - Decorators e Contexto](../../../knowledge-base/docs/storybook-decorators-e-contexto.md) when the story needs an environment |
+| 4 | the path note, **if** the story touches routing |
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/anatomia-e-tipagem.md` | a pergunta que decide o arquivo, `satisfies Meta`, `StoryObj<typeof meta>` |
-| `references/args-e-docs.md` | `args` nos três níveis, `argTypes` como exceção, tags e a página de docs |
-| `references/autoverificacao.md` | os 14 itens |
-| `references/antipadroes.md` | a grade com ID |
-| `references/mapa-de-ids.md` | os 75 `SB-*` por satélite e seção |
-| `references/exemplo.md` | caso trabalhado |
-| `scripts/autoverificar.sh` | roda os itens mecânicos e lista os que exigem leitura |
+| `references/anatomia-e-tipagem.md` | the question that decides the file, `satisfies Meta`, `StoryObj<typeof meta>` |
+| `references/args-e-docs.md` | `args` at the three levels, `argTypes` as an exception, tags and the docs page |
+| `references/autoverificacao.md` | the 14 items |
+| `references/antipadroes.md` | the grid, with IDs |
+| `references/mapa-de-ids.md` | the 75 `SB-*` by satellite and section |
+| `references/exemplo.md` | worked case |
+| `scripts/autoverificar.sh` | runs the mechanical items and lists the ones that require reading |
 
 ---
 
-## Passo 1 — A pergunta que decide o arquivo
+## Step 1 — The question that decides the file
 
-**Cada story é um estado nomeado, não uma demo** (`SB-CSF-04`) — e o que distingue duas stories é **`args`**. Se duas stories diferem por outra coisa, ou o componente tem duas responsabilidades, ou o ambiente virou `args`.
-
----
-
-## Passo 2 — Anatomia e tipagem
-
-`satisfies Meta<typeof C>` no `meta`, `StoryObj<typeof meta>` nas stories (`SB-CSF-02`) — é o que faz o autocomplete de `args` existir. Import de `Meta`/`StoryObj` vem do **pacote do framework** (`SB-CORE-02`), não de `@storybook/react`.
+**Each story is a named state, not a demo** (`SB-CSF-04`) — and what distinguishes two stories is **`args`**. If two stories differ by anything else, either the component has two responsibilities, or the environment became `args`.
 
 ---
 
-## Passo 3 — `args`, e o que **não** é `args`
+## Step 2 — Anatomy and typing
 
-Ambiente — router, tema, `QueryClient`, sessão — vai por **decorator ou loader** (`SB-CTX-03`, `SB-CTX-05`), nunca por `args`. Valor não serializável precisa de `mapping` para virar controle (`SB-CSF-06`).
-
-Variação se compõe por **spread**, sem mutar `Story.args` (`SB-CSF-05`).
+`satisfies Meta<typeof C>` on the `meta`, `StoryObj<typeof meta>` on the stories (`SB-CSF-02`) — that is what makes the `args` autocomplete exist. The `Meta`/`StoryObj` import comes from the **framework's package** (`SB-CORE-02`), not from `@storybook/react`.
 
 ---
 
-## Passo 4 — `argTypes` é exceção
+## Step 3 — `args`, and what is **not** `args`
 
-Se o docgen já infere, `argTypes` é ruído (`SB-CSF-08`). Descrição de prop mora no **JSDoc** (`SB-DOC-02`) — duplicá-la em `argTypes` cria segunda fonte.
+The environment — router, theme, `QueryClient`, session — goes through a **decorator or loader** (`SB-CTX-03`, `SB-CTX-05`), never through `args`. A non-serializable value needs `mapping` to become a control (`SB-CSF-06`).
+
+A variation is composed by **spread**, without mutating `Story.args` (`SB-CSF-05`).
 
 ---
 
-## Passo 5 — Autoverificar
+## Step 4 — `argTypes` is an exception
+
+If docgen already infers it, `argTypes` is noise (`SB-CSF-08`). A prop's description lives in the **JSDoc** (`SB-DOC-02`) — duplicating it in `argTypes` creates a second source.
+
+---
+
+## Step 5 — Self-check
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/storybook-story/scripts/autoverificar.sh src
 ```
 
-**Depois, suba e olhe a sidebar.** Glob que não casa **não dá erro** — dá sidebar vazia (`SB-CFG-02`). E abra a página de docs: **controles vazios são o sintoma de `SB-CSF-04` violada**.
+**Then, start it and look at the sidebar.** A glob that does not match **raises no error** — it gives an empty sidebar (`SB-CFG-02`). And open the docs page: **empty controls are the symptom of a violated `SB-CSF-04`**.
 
 ---
 
-## Passo 6 — Fechar
+## Step 6 — Closing
 
-1. **Estados vazio e de erro existem, ou a ausência foi decidida** (`TS-TIPO-02`) — são baratos aqui e caros no E2E.
-2. **Se a story virou teste**, o bastão é de `storybook-test`.
-3. **Se o problema é o componente**, e não a story, é `react-review`.
-
----
-
-## Exemplo
-
-Story de `Botao` num design system: `title` explícito, `satisfies Meta`, quatro estados nomeados por `args`, tema por decorator, e o ícone (não serializável) exposto por `mapping`. O que o hábito produziria: uma story "Playground" com `argTypes` reescrevendo o que o docgen já infere.
-
-Caso completo: `references/exemplo.md`.
+1. **Empty and error states exist, or their absence was decided** (`TS-TIPO-02`) — they are cheap here and expensive in E2E.
+2. **If the story became a test**, the handoff is to `storybook-test`.
+3. **If the problem is the component**, and not the story, it is `react-review`.
 
 ---
 
-## Relacionados
+## Example
 
-- [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md) — fonte desta skill
-- [Storybook - Decorators e Contexto](../../../knowledge-base/docs/storybook-decorators-e-contexto.md) — o ambiente que não é `args`
-- [Storybook - Docs e Autodocs](../../../knowledge-base/docs/storybook-docs-e-autodocs.md) — a página de docs
-- `storybook-setup` · `storybook-test` — as skills irmãs
+A `Button` story in a design system: an explicit `title`, `satisfies Meta`, four states named by `args`, the theme through a decorator, and the icon (non-serializable) exposed through `mapping`. What habit would produce: a "Playground" story with `argTypes` rewriting what docgen already infers.
+
+Full case: `references/exemplo.md`.
+
+---
+
+## Related
+
+- [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md) — source of this skill
+- [Storybook - Decorators e Contexto](../../../knowledge-base/docs/storybook-decorators-e-contexto.md) — the environment that is not `args`
+- [Storybook - Docs e Autodocs](../../../knowledge-base/docs/storybook-docs-e-autodocs.md) — the docs page
+- `storybook-setup` · `storybook-test` — the sibling skills

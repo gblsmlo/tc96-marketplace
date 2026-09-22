@@ -1,49 +1,46 @@
-# Escolher o framework, e a plataforma
+# Choosing the framework, and the platform
 
-A decisão que tudo depois pressupõe. A árvore completa é a § 5.1 do hub:
+The decision everything afterwards presupposes. The full tree is § 5.1 of the hub:
 
 ```
-Alguma story vai importar @tanstack/react-router —
-direta ou transitivamente (um <Link> dentro de um componente conta)?
-├── NÃO, e nunca vai → @storybook/react-vite
-│ piso: React ≥ 16.8 · Vite ≥ 5
-└── SIM, ou provavelmente
- ├── o projeto está em React ≥ 18 E Vite ≥ 7?
- │ ├── SIM → @storybook/tanstack-react
- │ └── NÃO → @storybook/react-vite + router à mão (transição)
+Will any story import @tanstack/react-router —
+directly or transitively (a <Link> inside a component counts)?
+├── NO, and it never will → @storybook/react-vite
+│ floor: React ≥ 16.8 · Vite ≥ 5
+└── YES, or probably
+ ├── is the project on React ≥ 18 AND Vite ≥ 7?
+ │ ├── YES → @storybook/tanstack-react
+ │ └── NO → @storybook/react-vite + a hand-rolled router (transition)
 ```
 
 | | `@storybook/tanstack-react` | `@storybook/react-vite` |
 | --- | --- | --- |
 | React | ≥ **18** | ≥ 16.8 |
 | Vite | ≥ **7** | ≥ 5 |
-| família de regra | `SB-TS-*` | `SB-RV-*` |
-| nota | [Storybook - TanStack React](../../../../knowledge-base/docs/storybook-tanstack-react.md) | [Storybook - React Vite](../../../../knowledge-base/docs/storybook-react-vite.md) |
+| rule family | `SB-TS-*` | `SB-RV-*` |
+| note | [Storybook - TanStack React](../../../../knowledge-base/docs/storybook-tanstack-react.md) | [Storybook - React Vite](../../../../knowledge-base/docs/storybook-react-vite.md) |
 
-Três fatos que mudam a decisão e não são óbvios:
+Three facts that change the decision and are not obvious:
 
-- **`tanstack-react` cobra o piso mais alto de toda a estrutura: Vite ≥ 7.** Adotá-lo num app em Vite 5 ou 6 é agendar uma **migração de Vite antes de qualquer story** — não é detalhe de configuração.
-- **TanStack Start não é requisito.** A fonte declara suporte a SPA usando só `@tanstack/react-router`. Numa SPA com BFF separado, os stubs de server function ficam inertes, e isso é esperado, não sintoma.
-- **O redirecionamento de `@tanstack/react-router` para a camada de mock é global**, não opt-in — vale também para stories de `packages/ui` que não tocam rota. É custo, e entra na conta.
+- **`tanstack-react` demands the highest floor in the whole structure: Vite ≥ 7.** Adopting it in an app on Vite 5 or 6 is scheduling a **Vite migration before any story** — that is not a configuration detail.
+- **TanStack Start is not a requirement.** The source declares SPA support using only `@tanstack/react-router`. In an SPA with a separate BFF, the server-function stubs sit inert, and that is expected, not a symptom.
+- **The redirection of `@tanstack/react-router` to the mock layer is global**, not opt-in — it also applies to stories in `packages/ui` that never touch routing. That is a cost, and it goes into the ledger.
 
-**Num monorepo, a pergunta não é sobre `packages/ui`** — é sobre o pacote mais exigente que o Storybook vai cobrir. Um Storybook que também mostra `apps/web`, onde toda página importa `Link`, precisa do framework que embrulha rota.
+**In a monorepo, the question is not about `packages/ui`** — it is about the most demanding package the Storybook will cover. A Storybook that also shows `apps/web`, where every page imports `Link`, needs the framework that wraps routing.
 
-> **A escolha é praticamente irreversível.** A automigração `react-vite-to-tanstack-react` é unidirecional, e `routeOverrides` não tem substituto direto do lado Vite. Decidir por inércia aqui custa uma migração depois.
+> **The choice is practically irreversible.** The `react-vite-to-tanstack-react` automigration is one-way, and `routeOverrides` has no direct replacement on the Vite side. Deciding by inertia here costs a migration later.
 
-Registre a escolha: ela determina qual nota de caminho carregar pelo resto da vida do projeto, e citar a família do caminho errado é achado inválido ([Storybook](../../../../knowledge-base/docs/storybook.md) § 6.2).
+Record the choice: it determines which path note to load for the rest of the project's life, and citing the wrong path's family is an invalid finding ([Storybook](../../../../knowledge-base/docs/storybook.md) § 6.2).
 
 ---
 
-## Passo 2 — Conferir a plataforma
+## Step 2 — Check the platform
 
-Duas restrições da linha 10 que quebram projeto vindo da 8 ou 9:
+Two line-10 constraints that break a project coming from 8 or 9:
 
-| Restrição | Regra |
+| Constraint | Rule |
 | --- | --- |
-| **ESM-only** — `main.ts` e presets precisam ser ESM válido; `require`/`module.exports` não sobem | `SB-CORE-03` |
-| **Node ≥ 20.19 ou ≥ 22.12** | `SB-CORE-04` |
+| **ESM-only** — `main.ts` and presets have to be valid ESM; `require`/`module.exports` do not start | `SB-CORE-03` |
+| **Node ≥ 20.19 or ≥ 22.12** | `SB-CORE-04` |
 
-> **Atenção ao piso de Node quando há Playwright no projeto:** `Docs/Playwright.md` exige Node **≥ 22** (22.x, 24.x ou 26.x). Um projeto em Node 20.19 roda Storybook e **não** roda Playwright 1.62 — e o addon-vitest usa Playwright. Na prática, o piso efetivo do monorepo é 22.12.
-
----
-
+> **Watch the Node floor when Playwright is in the project:** `Docs/Playwright.md` requires Node **≥ 22** (22.x, 24.x or 26.x). A project on Node 20.19 runs Storybook and does **not** run Playwright 1.62 — and addon-vitest uses Playwright. In practice, the monorepo's effective floor is 22.12.

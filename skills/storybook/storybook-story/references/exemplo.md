@@ -1,10 +1,10 @@
-# Exemplo trabalhado
+# Worked example
 
-Tarefa: *"stories do `Badge` do design system"*.
+Task: *"stories for the design system's `Badge`"*.
 
-**Passo 1 — os estados.** Variante (info, sucesso, alerta, erro), tamanho, rótulo longo, com ícone. Seis estados, e nenhum é "exemplo".
+**Step 1 — the states.** Variant (info, success, warning, error), size, long label, with an icon. Six states, and none of them is "example".
 
-**Passo 2 e 3:**
+**Steps 2 and 3:**
 
 ```tsx
 import type { Meta, StoryObj } from '@storybook/tanstack-react';
@@ -14,13 +14,13 @@ import { Badge } from './Badge';
 const meta = {
  component: Badge,
  title: 'UI/Badge',
- args: { children: 'Novo', variante: 'info' },
+ args: { children: 'New', variant: 'info' },
  argTypes: {
- // só o que o docgen NÃO adivinha: ReactNode não é serializável
- icone: {
+ // only what docgen does NOT guess: ReactNode is not serializable
+ icon: {
  control: 'select',
- options: ['nenhum', 'check', 'alerta'],
- mapping: { nenhum: undefined, check: <CheckIcon />, alerta: <AlertIcon /> },
+ options: ['none', 'check', 'alert'],
+ mapping: { none: undefined, check: <CheckIcon />, alert: <AlertIcon /> },
  },
  },
 } satisfies Meta<typeof Badge>;
@@ -29,33 +29,30 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Info: Story = {};
-export const Sucesso: Story = { args: { variante: 'sucesso' } };
-export const Alerta: Story = { args: { variante: 'alerta' } };
-export const Erro: Story = { args: { variante: 'erro' } };
+export const Success: Story = { args: { variant: 'success' } };
+export const Warning: Story = { args: { variant: 'warning' } };
+export const Error: Story = { args: { variant: 'error' } };
 
-export const Grande: Story = { args: {...Sucesso.args, tamanho: 'lg' } };
+export const Large: Story = { args: {...Success.args, size: 'lg' } };
 
-export const RotuloLongo: Story = {
- args: { children: 'Aguardando aprovação do gerente regional' },
+export const LongLabel: Story = {
+ args: { children: 'Awaiting regional manager approval' },
 };
 
-export const ComIcone: Story = { args: { icone: 'check' } };
+export const WithIcon: Story = { args: { icon: 'check' } };
 ```
 
-**O que as decisões evitaram:**
+**What these decisions prevented:**
 
-| Decisão | Alternativa que dói | Regra |
+| Decision | Alternative that hurts | Rule |
 | --- | --- | --- |
-| `args` distinguindo cada story | `render: => <Badge variante="erro" />` | `SB-CSF-04` |
-| `argTypes` só para `icone` | redeclarar `variante` e `tamanho`, que o tipo já diz | `SB-CSF-08` |
-| `mapping` para o ícone | prop de ícone sem controle usável no painel | `SB-CSF-06` |
-| `Grande` por spread de `Sucesso.args` | duplicar os args, ou mutar `Sucesso.args` | `SB-CSF-05` |
-| `title: 'UI/Badge'` explícito | contar com auto-título em `packages/ui` | `SB-CSF-10` |
-| `satisfies`, não anotação | `const meta: Meta<typeof Badge>` — apaga a inferência | `SB-CSF-02` |
-| `RotuloLongo` como story | descobrir o overflow em produção | `SB-CSF-04` |
-| nenhuma descrição em `argTypes` | segunda fonte de verdade, divergindo do JSDoc | `SB-DOC-02` |
+| `args` distinguishing each story | `render: => <Badge variant="error" />` | `SB-CSF-04` |
+| `argTypes` only for `icon` | redeclaring `variant` and `size`, which the type already states | `SB-CSF-08` |
+| `mapping` for the icon | an icon prop with no usable control in the panel | `SB-CSF-06` |
+| `Large` by spreading `Success.args` | duplicating the args, or mutating `Success.args` | `SB-CSF-05` |
+| an explicit `title: 'UI/Badge'` | relying on auto-titling in `packages/ui` | `SB-CSF-10` |
+| `satisfies`, not an annotation | `const meta: Meta<typeof Badge>` — erases the inference | `SB-CSF-02` |
+| `LongLabel` as a story | discovering the overflow in production | `SB-CSF-04` |
+| no description in `argTypes` | a second source of truth, diverging from the JSDoc | `SB-DOC-02` |
 
-**O ganho que não é óbvio:** essas oito stories são simultaneamente a sidebar, a página de autodocs com tabela de props preenchida, **e** oito smoke tests no runner — sem uma linha de `play`. Escrever story pensando em "demo" paga o custo do runner e não recebe nada disso.
-
----
-
+**The non-obvious gain:** these eight stories are simultaneously the sidebar, the autodocs page with a filled-in props table, **and** eight smoke tests in the runner — without a single line of `play`. Writing a story thinking "demo" pays the runner's cost and receives none of that.

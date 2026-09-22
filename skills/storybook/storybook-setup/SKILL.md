@@ -1,8 +1,9 @@
 ---
 nome: storybook-setup
-descricao: Configurar Storybook num projeto ou monorepo — escolher entre os dois frameworks pelos pisos de versão, `main.ts`, `preview.tsx`, de onde a config do Vite é herdada, CSS e tema — citando IDs `SB-CFG-*` e `SB-CORE-*`, com um script que descobre o caminho e confere os pisos — use quando a tarefa for instalar Storybook do zero, migrar da linha 8 ou 9, decidir o framework, consertar sidebar vazia, alinhar versões de pacote, ou recortar `apps/storybook` num monorepo. Não use para escrever story, que é storybook-story, para o teste dentro dela, que é storybook-test, nem para cobertura e CI, que é o satélite Cobertura e CI.
+descricao: Configure Storybook in a project or monorepo — choosing between the two frameworks by their version floors, `main.ts`, `preview.tsx`, where the Vite config is inherited from, CSS and theming — citing `SB-CFG-*` and `SB-CORE-*` IDs, with a script that discovers the path and checks the floors — use when the task is installing Storybook from scratch, migrating from line 8 or 9, choosing the framework, fixing an empty sidebar, aligning package versions, or carving out `apps/storybook` in a monorepo. Do not use to write a story, which is storybook-story, for the test inside it, which is storybook-test, nor for coverage and CI, which is the Cobertura e CI satellite.
 tipo: skill
 familia: storybook
+idioma: en
 fonte: "[Storybook - Configuração e Builder](../../../knowledge-base/docs/storybook-configuracao-e-builder.md)"
 docs:
   - /storybookjs/storybook
@@ -14,111 +15,111 @@ tags:
 
 # storybook-setup
 
-> **Fonte desta skill:** [Storybook - Configuração e Builder](../../../knowledge-base/docs/storybook-configuracao-e-builder.md), com o hub [Storybook](../../../knowledge-base/docs/storybook.md) como roteador.
-> Esta skill **não contém** o texto das regras — ela diz o que decidir, em que ordem, e o que conferir.
-> **Superfície de API:** resolva pelo Context7 — `/storybookjs/storybook`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [Storybook - Configuração e Builder](../../../knowledge-base/docs/storybook-configuracao-e-builder.md), with the [Storybook](../../../knowledge-base/docs/storybook.md) hub as the router.
+> This skill **does not contain** the text of the rules — it says what to decide, in what order, and what to check.
+> **API surface:** resolve it through Context7 — `/storybookjs/storybook`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contrato que esta skill implementa: [Storybook](../../../knowledge-base/docs/storybook.md) § 7.
+Contract this skill implements: [Storybook](../../../knowledge-base/docs/storybook.md) § 7.
 
 ---
 
-## Quando usar
+## When to use
 
-Instalar, migrar ou reconfigurar Storybook.
+Installing, migrating or reconfiguring Storybook.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| escrever story | `storybook-story` |
-| teste de interação dentro da story | `storybook-test` |
-| cobertura e job de CI | [Storybook - Cobertura e CI](../../../knowledge-base/docs/storybook-cobertura-e-ci.md) |
-| teste de jornada | `playwright-build` · teste de unidade | `bun-test-build` |
+| writing a story | `storybook-story` |
+| an interaction test inside the story | `storybook-test` |
+| coverage and the CI job | [Storybook - Cobertura e CI](../../../knowledge-base/docs/storybook-cobertura-e-ci.md) |
+| a journey test | `playwright-build` · a unit test | `bun-test-build` |
 
 ---
 
-## Passo 1 — Escolher o framework
+## Step 1 — Choose the framework
 
-**A decisão que tudo depois pressupõe**, e é **praticamente irreversível**: a automigração `react-vite-to-tanstack-react` é unidirecional.
+**The decision everything afterwards presupposes**, and it is **practically irreversible**: the `react-vite-to-tanstack-react` automigration is one-way.
 
 ```
-Alguma story vai importar @tanstack/react-router —
-direta ou transitivamente (um <Link> dentro de um componente conta)?
-├── NÃO, e nunca vai → @storybook/react-vite (React ≥ 16.8 · Vite ≥ 5)
-└── SIM, ou provavelmente
- ├── o projeto está em React ≥ 18 E Vite ≥ 7?
- │ ├── SIM → @storybook/tanstack-react
- │ └── NÃO → @storybook/react-vite + router à mão (transição)
+Will any story import @tanstack/react-router —
+directly or transitively (a <Link> inside a component counts)?
+├── NO, and it never will → @storybook/react-vite (React ≥ 16.8 · Vite ≥ 5)
+└── YES, or probably
+ ├── is the project on React ≥ 18 AND Vite ≥ 7?
+ │ ├── YES → @storybook/tanstack-react
+ │ └── NO → @storybook/react-vite + a hand-rolled router (transition)
 ```
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/storybook-setup/scripts/descobrir-caminho.sh
 ```
 
-O script lê o campo `framework`, confere os pisos, e **procura a contradição de caminho no código** — que é o achado que falha em silêncio.
+The script reads the `framework` field, checks the floors, and **looks for the path contradiction in the code** — which is the finding that fails silently.
 
-Três fatos que mudam a decisão: `tanstack-react` cobra **Vite ≥ 7** (adotá-lo em Vite 5/6 é agendar migração de Vite antes de qualquer story); **TanStack Start não é requisito**; e o redirecionamento para a camada de mock é **global**, não opt-in.
+Three facts that change the decision: `tanstack-react` demands **Vite ≥ 7** (adopting it on Vite 5/6 is scheduling a Vite migration before any story); **TanStack Start is not a requirement**; and the redirection to the mock layer is **global**, not opt-in.
 
-**Num monorepo, a pergunta não é sobre `packages/ui`** — é sobre o pacote mais exigente que o Storybook vai cobrir.
+**In a monorepo, the question is not about `packages/ui`** — it is about the most demanding package the Storybook will cover.
 
-Detalhe: `references/escolher-o-framework.md`.
+Detail: `references/escolher-o-framework.md`.
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar |
+| Order | Load |
 | --- | --- |
-| 1 | [Storybook](../../../knowledge-base/docs/storybook.md) § 5.1 (a árvore de framework) e § 6.2 (as famílias mutuamente exclusivas) |
+| 1 | [Storybook](../../../knowledge-base/docs/storybook.md) § 5.1 (the framework tree) and § 6.2 (the mutually exclusive families) |
 | 2 | [Storybook - Configuração e Builder](../../../knowledge-base/docs/storybook-configuracao-e-builder.md) |
-| 3 | a nota do **caminho escolhido**: [Storybook - TanStack React](../../../knowledge-base/docs/storybook-tanstack-react.md) ou [Storybook - React Vite](../../../knowledge-base/docs/storybook-react-vite.md) |
+| 3 | the note for the **chosen path**: [Storybook - TanStack React](../../../knowledge-base/docs/storybook-tanstack-react.md) or [Storybook - React Vite](../../../knowledge-base/docs/storybook-react-vite.md) |
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/escolher-o-framework.md` | a árvore, os pisos, e os três fatos não óbvios |
-| `references/sequencia-e-vite.md` | a sequência de sete passos, e de onde a config do Vite é herdada |
-| `references/autoverificacao.md` | a checklist, e a armadilha de augmentation de tipo |
-| `references/antipadroes.md` | a grade com ID |
-| `references/mapa-de-ids.md` | os 75 `SB-*` por satélite e seção |
-| `references/exemplo.md` | caso trabalhado |
-| `scripts/descobrir-caminho.sh` | lê o `framework`, confere pisos e acha contradição |
-| `scripts/gerar-mapa-de-ids.sh` | regenera o mapa nas três skills |
+| `references/escolher-o-framework.md` | the tree, the floors, and the three non-obvious facts |
+| `references/sequencia-e-vite.md` | the seven-step sequence, and where the Vite config is inherited from |
+| `references/autoverificacao.md` | the checklist, and the type-augmentation trap |
+| `references/antipadroes.md` | the grid, with IDs |
+| `references/mapa-de-ids.md` | the 75 `SB-*` by satellite and section |
+| `references/exemplo.md` | worked case |
+| `scripts/descobrir-caminho.sh` | reads the `framework`, checks floors and finds contradictions |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map across the three skills |
 
 ---
 
-## Passo 2 — A sequência
+## Step 2 — The sequence
 
-`references/sequencia-e-vite.md`: a ordem de sete passos que a doc oficial nunca dá, e **de onde a config do Vite é herdada** — que é a causa da maioria dos "funciona no app e quebra no Storybook".
-
----
-
-## Passo 3 — Autoverificar
-
-`references/autoverificacao.md`, mais a armadilha de **augmentation de tipo**.
-
-**Suba e olhe a sidebar.** Glob que não casa **não dá erro** — dá sidebar vazia (`SB-CFG-02`).
+`references/sequencia-e-vite.md`: the seven-step order the official docs never give, and **where the Vite config is inherited from** — which is the cause of most "works in the app and breaks in Storybook".
 
 ---
 
-## Passo 4 — Fechar, e passar o bastão
+## Step 3 — Self-check
 
-1. **Registre a escolha de framework.** Ela determina qual nota carregar pelo resto da vida do projeto.
-2. **Citar a família do caminho errado é achado inválido** (`SB-TS-*` × `SB-RV-*`).
-3. Story → `storybook-story`; teste dentro dela → `storybook-test`; cobertura e CI → [Storybook - Cobertura e CI](../../../knowledge-base/docs/storybook-cobertura-e-ci.md).
+`references/autoverificacao.md`, plus the **type-augmentation** trap.
 
----
-
-## Exemplo
-
-Monorepo com `packages/ui` e `apps/web`: a pergunta não é sobre `ui`, é sobre `web`, onde toda página importa `Link`. O projeto está em Vite 6 — então `tanstack-react` exige **migração de Vite antes da primeira story**, e a saída de transição é `react-vite` com router à mão.
-
-Caso completo: `references/exemplo.md`.
+**Start it and look at the sidebar.** A glob that does not match **raises no error** — it gives an empty sidebar (`SB-CFG-02`).
 
 ---
 
-## Relacionados
+## Step 4 — Closing, and handing off
 
-- [Storybook - Configuração e Builder](../../../knowledge-base/docs/storybook-configuracao-e-builder.md) — fonte desta skill
+1. **Record the framework choice.** It determines which note to load for the rest of the project's life.
+2. **Citing the wrong path's family is an invalid finding** (`SB-TS-*` × `SB-RV-*`).
+3. A story → `storybook-story`; the test inside it → `storybook-test`; coverage and CI → [Storybook - Cobertura e CI](../../../knowledge-base/docs/storybook-cobertura-e-ci.md).
+
+---
+
+## Example
+
+A monorepo with `packages/ui` and `apps/web`: the question is not about `ui`, it is about `web`, where every page imports `Link`. The project is on Vite 6 — so `tanstack-react` requires **a Vite migration before the first story**, and the transitional way out is `react-vite` with a hand-rolled router.
+
+Full case: `references/exemplo.md`.
+
+---
+
+## Related
+
+- [Storybook - Configuração e Builder](../../../knowledge-base/docs/storybook-configuracao-e-builder.md) — source of this skill
 - [Storybook](../../../knowledge-base/docs/storybook.md) § 5.1, § 6.2, § 7
-- `storybook-story` · `storybook-test` — as skills irmãs
-- [Storybook - TanStack React](../../../knowledge-base/docs/storybook-tanstack-react.md) · [Storybook - React Vite](../../../knowledge-base/docs/storybook-react-vite.md) — as duas notas de caminho
+- `storybook-story` · `storybook-test` — the sibling skills
+- [Storybook - TanStack React](../../../knowledge-base/docs/storybook-tanstack-react.md) · [Storybook - React Vite](../../../knowledge-base/docs/storybook-react-vite.md) — the two path notes

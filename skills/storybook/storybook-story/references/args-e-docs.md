@@ -1,74 +1,71 @@
-# `args`, `argTypes`, tags e docs
+# `args`, `argTypes`, tags and docs
 
-### 3.1 A regra que domina
+### 3.1 The rule that dominates
 
-> **O que distingue uma story de outra é `args`.** Estado embutido em `render` **NEVER** (`SB-CSF-04`).
+> **What distinguishes one story from another is `args`.** State embedded in `render` **NEVER** (`SB-CSF-04`).
 
-Não é estilo. Estado em `render` mata três coisas de uma vez: o leitor não pode editar pelo painel, o runner não pode variar, e a tabela de docs não pode documentar.
+It is not style. State in `render` kills three things at once: the reader cannot edit it through the panel, the runner cannot vary it, and the docs table cannot document it.
 
-### 3.2 Três níveis, merge por chave
+### 3.2 Three levels, merged by key
 
-`preview` → `meta` → story. O mais específico vence, e **sobrescrever uma subchave não derruba as irmãs**.
+`preview` → `meta` → story. The most specific wins, and **overriding a subkey does not knock out its siblings**.
 
-Composição por **spread**, nunca mutação (`SB-CSF-05`):
+Composition by **spread**, never mutation (`SB-CSF-05`):
 
 ```tsx
-export const Padrao: Story = { args: { rotulo: 'Novo' } };
+export const Default: Story = { args: { label: 'New' } };
 
-// ✓ reusa
-export const Grande: Story = { args: {...Padrao.args, tamanho: 'lg' } };
-// ✗ muta
-// Padrao.args.tamanho = 'lg';
+// ✓ reuses
+export const Large: Story = { args: {...Default.args, size: 'lg' } };
+// ✗ mutates
+// Default.args.size = 'lg';
 ```
 
-### 3.3 O que **não** é `args`
+### 3.3 What is **not** `args`
 
-Se o que distingue é **o mundo em volta** — tema, provider, rota, resposta de rede, relógio —, é **ambiente**, e ambiente entra por decorator, `loaders` ou `beforeEach` ([Storybook - Decorators e Contexto](../../../../knowledge-base/docs/storybook-decorators-e-contexto.md)).
+If what distinguishes them is **the world around** — theme, provider, routing, network response, clock —, that is the **environment**, and the environment enters through a decorator, `loaders` or `beforeEach` ([Storybook - Decorators e Contexto](../../../../knowledge-base/docs/storybook-decorators-e-contexto.md)).
 
-E o par que mais se confunde: **`globals` é para variação que o leitor troca pela toolbar** (tema, locale). O que distingue duas stories **nunca** é global — é `args` (`SB-CTX-05`).
+And the pair most often confused: **`globals` is for a variation the reader switches through the toolbar** (theme, locale). What distinguishes two stories is **never** a global — it is `args` (`SB-CTX-05`).
 
-Provider compartilhado por mais de um componente vive em decorator **global** do `preview`, não repetido por arquivo (`SB-CTX-03`).
-
----
-
-## Passo 4 — `argTypes` é exceção
-
-**O default é não escrever `argTypes`** (`SB-CSF-08`). Com `component` declarado, o docgen infere tipo, valores possíveis e controle. Redeclarar o que o tipo já expressa cria uma segunda fonte que envelhece.
-
-Quando entra:
-
-| Caso | O que usar |
-| --- | --- |
-| valor não serializável num controle (função, componente, ícone) | `mapping` (`SB-CSF-06`) |
-| controle que o docgen não adivinha | o tipo de controle explícito |
-| esconder da tabela de docs | `table: { disable: true }` |
-| desligar o controle mantendo a linha | `control: false` |
-
-> **A troca silenciosa:** `control: false` **mantém** a linha na documentação; quem apaga a linha é `table: { disable: true }`. Os dois parecem sinônimos e fazem coisas diferentes.
-
-**Descrição de prop não vai em `argTypes`.** Ela vem do JSDoc no componente, que é fonte única (`SB-DOC-02`).
+A provider shared by more than one component lives in a **global** decorator in `preview`, not repeated per file (`SB-CTX-03`).
 
 ---
 
-## Passo 5 — Tags e a página de docs
+## Step 4 — `argTypes` is an exception
 
-| Tag | Efeito |
+**The default is not to write `argTypes`** (`SB-CSF-08`). With `component` declared, docgen infers the type, the possible values and the control. Redeclaring what the type already expresses creates a second source that ages.
+
+When it does come in:
+
+| Case | What to use |
 | --- | --- |
-| `dev` | aparece na sidebar (aplicada por padrão) |
-| `test` | entra no runner (aplicada por padrão) |
-| `autodocs` | gera a página de docs (**não** é aplicada por padrão) |
-| `'!tag'` | remove uma herdada |
+| a non-serializable value in a control (function, component, icon) | `mapping` (`SB-CSF-06`) |
+| a control docgen cannot guess | the explicit control type |
+| hiding it from the docs table | `table: { disable: true }` |
+| switching off the control while keeping the row | `control: false` |
 
-A forma prescrita de ligar autodocs é **herdar do `preview`**, não arquivo a arquivo (`SB-DOC-01`).
+> **The silent swap:** `control: false` **keeps** the row in the documentation; what removes the row is `table: { disable: true }`. The two look like synonyms and do different things.
 
-E o corte entre os dois papéis de uma story (`SB-DOC-04`):
-
-| A story serve a… | Marque |
-| --- | --- |
-| só documentação | `'!test'` — sai do runner |
-| só teste | `'!autodocs'` — sai da página |
-
-**Num design system, a story alimenta a página de docs por desenho** — é por isso que [Storybook - Docs e Autodocs](../../../../knowledge-base/docs/storybook-docs-e-autodocs.md) entra no carregamento mínimo. E a story que a página exibe precisa expressar seu estado por `args`, senão os controles aparecem vazios (`SB-DOC-05`, que é apelido de `SB-CSF-04` — cite o canônico).
+**A prop's description does not go in `argTypes`.** It comes from the JSDoc on the component, which is the single source (`SB-DOC-02`).
 
 ---
 
+## Step 5 — Tags and the docs page
+
+| Tag | Effect |
+| --- | --- |
+| `dev` | appears in the sidebar (applied by default) |
+| `test` | enters the runner (applied by default) |
+| `autodocs` | generates the docs page (**not** applied by default) |
+| `'!tag'` | removes an inherited one |
+
+The prescribed way to turn on autodocs is to **inherit it from `preview`**, not file by file (`SB-DOC-01`).
+
+And the cut between a story's two roles (`SB-DOC-04`):
+
+| The story serves… | Mark it |
+| --- | --- |
+| documentation only | `'!test'` — out of the runner |
+| testing only | `'!autodocs'` — out of the page |
+
+**In a design system, the story feeds the docs page by design** — that is why [Storybook - Docs e Autodocs](../../../../knowledge-base/docs/storybook-docs-e-autodocs.md) is in the minimum loading. And the story the page displays has to express its state through `args`, otherwise the controls show up empty (`SB-DOC-05`, which is an alias of `SB-CSF-04` — cite the canonical one).

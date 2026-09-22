@@ -1,20 +1,20 @@
-# A pergunta que decide o arquivo, e a anatomia
+# The question that decides the file, and the anatomy
 
-> **Que estados este componente tem?**
+> **What states does this component have?**
 
-Cada resposta é uma story. O nome descreve a **condição**, não o que o leitor deveria aprender:
+Each answer is a story. The name describes the **condition**, not what the reader should learn:
 
 | ✓ | ✗ |
 | --- | --- |
-| `Loading`, `Vazio`, `ComErro`, `Desabilitado`, `RotuloLongo` | `Exemplo`, `Demo`, `ComoUsar`, `Basico2` |
+| `Loading`, `Empty`, `WithError`, `Disabled`, `LongLabel` | `Example`, `Demo`, `HowToUse`, `Basic2` |
 
-Se o nome não descreve um estado, provavelmente não é uma story — é documentação, e o lugar dela é MDX ou `docs.page` (`SB-DOC-03`).
+If the name does not describe a state, it is probably not a story — it is documentation, and its place is MDX or `docs.page` (`SB-DOC-03`).
 
-**Cubra os cinco estados de um fluxo:** carregando, vazio, sucesso, erro, recuperação. É `TS-TIPO-02` em `Docs/Teste de Software - Tipos e Atributos de Qualidade.md`, e no nível de componente eles são baratos — é aqui que se paga menos por cobrir o que o usuário mais sofre.
+**Cover the five states of a flow:** loading, empty, success, error, recovery. That is `TS-TIPO-02` in `Docs/Teste de Software - Tipos e Atributos de Qualidade.md`, and at the component level they are cheap — this is where you pay least to cover what the user suffers most.
 
 ---
 
-## Passo 2 — Anatomia e tipagem
+## Step 2 — Anatomy and typing
 
 ```tsx
 import type { Meta, StoryObj } from '@storybook/tanstack-react';
@@ -29,20 +29,17 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 ```
 
-| Confira | Regra |
+| Check | Rule |
 | --- | --- |
-| um `export default` (o `meta`) e uma story por named export | `SB-CSF-01` |
-| `satisfies Meta<typeof Componente>`, **não** anotação | `SB-CSF-02` |
-| tipo da story derivado por `StoryObj<typeof meta>` | `SB-CSF-02` |
-| `Meta`/`StoryObj` do pacote do **framework**, não do renderer | `SB-CORE-02` |
-| `title` e `id` literais estáticos | `SB-CSF-03` |
-| em `packages/ui`, `title` declarado explicitamente | `SB-CSF-10` |
-| nada no corpo do módulo além de declaração pura | `SB-CORE-06` |
-| named export que não é story sai, ou vai em `excludeStories` | `SB-CSF-09` |
+| one `export default` (the `meta`) and one story per named export | `SB-CSF-01` |
+| `satisfies Meta<typeof Component>`, **not** an annotation | `SB-CSF-02` |
+| the story's type derived through `StoryObj<typeof meta>` | `SB-CSF-02` |
+| `Meta`/`StoryObj` from the **framework's** package, not the renderer's | `SB-CORE-02` |
+| `title` and `id` as static literals | `SB-CSF-03` |
+| in `packages/ui`, `title` declared explicitly | `SB-CSF-10` |
+| nothing in the module body beyond pure declarations | `SB-CORE-06` |
+| a named export that is not a story goes away, or into `excludeStories` | `SB-CSF-09` |
 
-**Por que `satisfies` e não anotação:** o tipo literal do objeto alimenta a inferência depois — `StoryObj<typeof meta>` lê os `args` declarados. Com anotação, essa informação é apagada e os `args` da story deixam de ser checados contra as props.
+**Why `satisfies` and not an annotation:** the object's literal type feeds the inference afterwards — `StoryObj<typeof meta>` reads the declared `args`. With an annotation, that information is erased and the story's `args` stop being checked against the props.
 
-**`title` não reflete a árvore de pastas.** Ele é a hierarquia da sidebar, que é uma decisão de produto — `UI/Badge`, não `packages/ui/src/components/Badge`.
-
----
-
+**`title` does not mirror the folder tree.** It is the sidebar's hierarchy, which is a product decision — `UI/Badge`, not `packages/ui/src/components/Badge`.
