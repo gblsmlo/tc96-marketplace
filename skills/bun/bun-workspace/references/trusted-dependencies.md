@@ -1,22 +1,19 @@
-# A regra que quebra o build inteiro
+# The rule that breaks the whole build
 
-> **`trustedDependencies` SUBSTITUI a lista padrão. Não estende.**
+> **`trustedDependencies` REPLACES the default list. It does not extend it.**
 
-Declarar um pacote ali **desliga os scripts de instalação de todo o resto** — `sharp`, `esbuild`, `better-sqlite3`, tudo. O sintoma não é erro de instalação: é um binário que não foi compilado, e a falha aparece em runtime, longe da causa.
+Declaring one package there **turns off the install scripts of everything else** — `sharp`, `esbuild`, `better-sqlite3`, all of it. The symptom is not an install error: it is a binary that was never compiled, and the failure shows up at runtime, far from the cause.
 
 ```jsonc
-// ✗ acabou de desligar os scripts de sharp, esbuild e de toda a lista padrão
-"trustedDependencies": ["meu-pacote-interno"]
+// ✗ you just turned off the scripts for sharp, esbuild and the whole default list
+"trustedDependencies": ["my-internal-package"]
 
-// ✓ reinclui o que ainda é necessário
-"trustedDependencies": ["meu-pacote-interno", "sharp", "esbuild"]
+// ✓ re-include what is still needed
+"trustedDependencies": ["my-internal-package", "sharp", "esbuild"]
 ```
 
-`BUN-PKG-04`. E `BUN-PKG-03` completa: um PR que adiciona entrada ali **precisa** trazer no corpo a saída de `bun pm untrusted`, que mostra qual comando será executado. Liberar script de instalação é decisão de segurança — o script roda com as permissões de quem instala.
+`BUN-PKG-04`. And `BUN-PKG-03` completes it: a PR that adds an entry there **must** carry the output of `bun pm untrusted` in its body, which shows which command will be executed. Allowing an install script is a security decision — the script runs with the permissions of whoever installs.
 
 ```bash
-bun pm untrusted # o que está bloqueado, e o comando de cada um
+bun pm untrusted # what is blocked, and each one's command
 ```
-
----
-

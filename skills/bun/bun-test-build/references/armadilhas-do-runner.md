@@ -1,36 +1,36 @@
-# Três coisas que não se assumem de memória
+# Three things you do not assume from memory
 
-> Contrariam o hábito trazido de Jest e Vitest, e são a fonte da maioria dos erros em código gerado.
+> They contradict habits brought from Jest and Vitest, and are the source of most errors in generated code.
 
 
-Estas contrariam o hábito trazido de Jest e Vitest, e são a fonte da maioria dos erros em código gerado.
+These contradict habits brought from Jest and Vitest, and are the source of most errors in generated code.
 
-**1. Sem flag, todos os arquivos compartilham um `globalThis`.** Não há isolamento por arquivo. "Vazou" não significa "afetou o próximo teste": significa "afetou o resto da suíte". Escreva como se o próximo arquivo fosse ler tudo que você deixou — porque ele vai.
+**1. Without a flag, every file shares one `globalThis`.** There is no per-file isolation. "Leaked" does not mean "affected the next test": it means "affected the rest of the suite". Write as if the next file were going to read everything you left behind — because it will.
 
-**2. `mock.restore` não desfaz `mock.module`.** As três limpezas fazem coisas diferentes, e a tabela está em [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) § 3. `clearAllMocks` preserva a implementação; `resetAllMocks` a remove mas não restaura o original do spy; só `restore` restaura — e nenhuma das três toca mock de módulo.
+**2. `mock.restore` does not undo `mock.module`.** The three cleanups do different things, and the table is in [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) § 3. `clearAllMocks` preserves the implementation; `resetAllMocks` removes it but does not restore the spy's original; only `restore` restores — and none of the three touches a module mock.
 
-**3. Concorrência dentro do arquivo compartilha estado.** `test.concurrent` (e a suíte sob `--concurrent`) não isola nada: quem depende de ordem ou de estado mutável precisa ser `test.serial` — `BUN-TEST-23`. E `onTestFinished` não funciona em teste concorrente — `BUN-TEST-22`.
-
----
-
+**3. Concurrency inside a file shares state.** `test.concurrent` (and the suite under `--concurrent`) isolates nothing: anything depending on order or mutable state has to be `test.serial` — `BUN-TEST-23`. And `onTestFinished` does not work in a concurrent test — `BUN-TEST-22`.
 
 ---
 
-## Por que estas três, e não outras
 
-As três descrevem **o mesmo tipo de falha**: o teste fica verde e a verificação não aconteceu,
-ou aconteceu em outro lugar. Nenhuma delas produz erro, aviso ou tipo errado — por isso não
-há como descobri-las lendo o código sem saber que existem.
+---
 
-| A memória de Jest/Vitest diz | No Bun |
+## Why these three, and not others
+
+All three describe **the same kind of failure**: the test goes green and the verification did not
+happen, or happened somewhere else. None of them produces an error, a warning or a wrong type —
+which is why there is no way to find them by reading the code without knowing they exist.
+
+| Jest/Vitest memory says | In Bun |
 | --- | --- |
-| cada arquivo tem seu ambiente | um `globalThis` compartilhado por todos, sem flag |
-| `restoreAllMocks` desfaz tudo | `mock.restore` não toca mock de **módulo** (`BUN-TEST-03`) |
-| `test.concurrent` isola | não isola nada; estado mutável exige `test.serial` (`BUN-TEST-23`) |
-| `useFakeTimers` congela `Date` | não troca o construtor; data é `setSystemTime` (`BUN-TEST-20`) |
+| each file has its own environment | one `globalThis` shared by all, without a flag |
+| `restoreAllMocks` undoes everything | `mock.restore` does not touch a **module** mock (`BUN-TEST-03`) |
+| `test.concurrent` isolates | it isolates nothing; mutable state requires `test.serial` (`BUN-TEST-23`) |
+| `useFakeTimers` freezes `Date` | it does not swap the constructor; a date is `setSystemTime` (`BUN-TEST-20`) |
 
-## Relacionados
+## Related
 
-- [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 2 — o modelo de execução
-- [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) § 3 — a tabela das três limpezas
-- [Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md) — escopo, preload, `--isolate`
+- [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 2 — the execution model
+- [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) § 3 — the table of the three cleanups
+- [Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md) — scope, preload, `--isolate`

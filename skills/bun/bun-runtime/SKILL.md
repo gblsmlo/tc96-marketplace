@@ -1,8 +1,9 @@
 ---
 nome: bun-runtime
-descricao: Escrever código que usa as APIs do runtime Bun — arquivo, `.env`, processo, shell, hashing, watch — citando IDs `BUN-RT-*` e `BUN-CORE-*`, com autoverificação executável — use quando a tarefa for ler ou escrever arquivo, carregar e validar variável de ambiente, rodar subprocesso ou comando externo, hashear senha, escolher entre `--watch` e `--hot`, ou decidir entre API do Bun e módulo `node:*`. Não use para instalar pacote e mexer em workspace, que é bun-workspace, para migrar código de Node que não roda, que é bun-migrate, nem para escrever teste, que é bun-test-build.
+descricao: Write code that uses the Bun runtime APIs — file, `.env`, process, shell, hashing, watch — citing `BUN-RT-*` and `BUN-CORE-*` IDs, with an executable self-check — use when the task is reading or writing a file, loading and validating an environment variable, running a subprocess or external command, hashing a password, choosing between `--watch` and `--hot`, or deciding between a Bun API and a `node:*` module. Do not use to install a package or touch the workspace, which is bun-workspace, to migrate Node code that does not run, which is bun-migrate, nor to write tests, which is bun-test-build.
 tipo: skill
 familia: bun
+idioma: en
 fonte: "[Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md)"
 docs:
   - /oven-sh/bun
@@ -14,76 +15,76 @@ tags:
 
 # bun-runtime
 
-> **Fonte desta skill:** [Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md), com o hub [Bun](../../../knowledge-base/docs/bun.md) como roteador.
-> Esta skill **não contém** o texto das regras nem a superfície de API — ela diz o que decidir e o que conferir.
-> **Superfície de API:** resolva pelo Context7 — `/oven-sh/bun`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md), with the [Bun](../../../knowledge-base/docs/bun.md) hub as the router.
+> This skill **does not contain** the text of the rules nor the API surface — it says what to decide and what to check.
+> **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
 ---
 
-## Quando usar
+## When to use
 
-Escrever código de aplicação que usa o runtime.
+Writing application code that uses the runtime.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| dependência, lockfile, workspace, `trustedDependencies` | `bun-workspace` |
-| código que veio do Node e não roda | `bun-migrate` |
-| escrever teste | `bun-test-build` · revisar suíte | `bun-test-review` |
-| rota HTTP | `elysia-build` · persistência | `drizzle-review` |
+| dependency, lockfile, workspace, `trustedDependencies` | `bun-workspace` |
+| code that came from Node and does not run | `bun-migrate` |
+| writing a test | `bun-test-build` · reviewing a suite | `bun-test-review` |
+| HTTP route | `elysia-build` · persistence | `drizzle-review` |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar |
+| Order | Load |
 | --- | --- |
-| 1 | [Bun](../../../knowledge-base/docs/bun.md) § 2 (o binário é runtime, gerenciador, bundler e runner) |
+| 1 | [Bun](../../../knowledge-base/docs/bun.md) § 2 (the binary is runtime, package manager, bundler and runner) |
 | 2 | [Bun](../../../knowledge-base/docs/bun.md) § 6 — `BUN-CORE-*` |
 | 3 | [Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md) |
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/invariantes-do-binario.md` | as cinco invariantes que valem em qualquer tarefa |
-| `references/arquivo-ambiente-processo.md` | arquivo, `.env`, processo e shell |
-| `references/hash-e-watch.md` | hash e senha, e `--watch` × `--hot` |
-| `references/autoverificacao.md` | a checklist |
-| `references/antipadroes.md` | a grade com ID |
-| `references/mapa-de-ids.md` | os 43 `BUN-CORE/RT/PKG/SYS-*` por satélite e seção |
-| `references/exemplo.md` | caso trabalhado |
-| `scripts/autoverificar.sh` | roda os itens mecânicos |
-| `scripts/gerar-mapa-de-ids.sh` | regenera o mapa nas três skills de runtime/pacote/migração |
+| `references/invariantes-do-binario.md` | the five invariants that hold in any task |
+| `references/arquivo-ambiente-processo.md` | file, `.env`, process and shell |
+| `references/hash-e-watch.md` | hashing and passwords, and `--watch` × `--hot` |
+| `references/autoverificacao.md` | the checklist |
+| `references/antipadroes.md` | the grid, with IDs |
+| `references/mapa-de-ids.md` | the 43 `BUN-CORE/RT/PKG/SYS-*` by satellite and section |
+| `references/exemplo.md` | worked case |
+| `scripts/autoverificar.sh` | runs the mechanical items |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map across the three runtime/package/migration skills |
 
 ---
 
-## Passo 1 — As invariantes do binário
+## Step 1 — The invariants of the binary
 
-**`BUN-CORE-02` é a que mais custa:** Bun transpila TypeScript e **não checa tipos**. Sem `tsc --noEmit` no CI, o projeto tem **tipos decorativos** — o erro só aparece quando o valor errado chega em runtime.
+**`BUN-CORE-02` is the one that costs most:** Bun transpiles TypeScript and **does not type-check**. Without `tsc --noEmit` in CI, the project has **decorative types** — the error only shows up when the wrong value arrives at runtime.
 
-E `BUN-CORE-03`: adicionar `jest`, `ts-node`, `nodemon` ou `dotenv` exige **justificar** por que o equivalente embutido não serve.
-
----
-
-## Passo 2 — Arquivo, ambiente, processo e shell
-
-`references/arquivo-ambiente-processo.md`. A decisão recorrente é **API do Bun × módulo `node:*`** — e ela muda quando o código precisa rodar fora do processo `bun` (`BUN-CORE-01`).
+And `BUN-CORE-03`: adding `jest`, `ts-node`, `nodemon` or `dotenv` requires **justifying** why the built-in equivalent does not do the job.
 
 ---
 
-## Passo 3 — Hash e senha
+## Step 2 — File, environment, process and shell
 
-**Senha é `Bun.password`** (argon2id por default), nunca `createHash` — usar hash genérico para senha é achado de **segurança**, não de estilo.
-
----
-
-## Passo 4 — `--watch` × `--hot`
-
-`--hot` **mantém o estado do processo**; `--watch` reinicia. Servidor com estado global muda de comportamento entre os dois, e o sintoma aparece como "só reproduz em dev".
+`references/arquivo-ambiente-processo.md`. The recurring decision is **Bun API × `node:*` module** — and it flips when the code has to run outside the `bun` process (`BUN-CORE-01`).
 
 ---
 
-## Passo 5 — Autoverificar
+## Step 3 — Hashing and passwords
+
+**A password is `Bun.password`** (argon2id by default), never `createHash` — using a generic hash for a password is a **security** finding, not a style one.
+
+---
+
+## Step 4 — `--watch` × `--hot`
+
+`--hot` **keeps process state**; `--watch` restarts. A server with global state behaves differently between the two, and the symptom shows up as "only reproduces in dev".
+
+---
+
+## Step 5 — Self-check
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-runtime/scripts/autoverificar.sh src
@@ -92,25 +93,25 @@ tsc --noEmit
 
 ---
 
-## Passo 6 — Fechar
+## Step 6 — Closing
 
-1. **`tsc --noEmit` roda no CI?** Se não, esse é o primeiro achado.
-2. **Se o código usa o global `Bun`**, ele só roda sob o processo `bun` — declare isso se a lib for publicada.
-3. **Se veio de Node e não roda**, é `bun-migrate` — e "funciona no Node" não é evidência (`BUN-CORE-05`).
-4. **Declare o que não verificou.**
-
----
-
-## Exemplo
-
-Serviço que lê `.env`, escreve arquivo e hasheia senha: `Bun.file`/`Bun.write` no lugar de `fs`, validação de env na inicialização, `Bun.password` para a senha, e `--watch` em vez de `--hot` porque o servidor tem estado global.
-
-Caso completo: `references/exemplo.md`.
+1. **Does `tsc --noEmit` run in CI?** If not, that is the first finding.
+2. **If the code uses the `Bun` global**, it only runs under the `bun` process — declare that if the library is published.
+3. **If it came from Node and does not run**, that is `bun-migrate` — and "it works in Node" is not evidence (`BUN-CORE-05`).
+4. **Declare what you did not verify.**
 
 ---
 
-## Relacionados
+## Example
 
-- [Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md) — fonte desta skill
+A service that reads `.env`, writes a file and hashes a password: `Bun.file`/`Bun.write` instead of `fs`, env validation at startup, `Bun.password` for the password, and `--watch` rather than `--hot` because the server has global state.
+
+Full case: `references/exemplo.md`.
+
+---
+
+## Related
+
+- [Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md) — source of this skill
 - [Bun](../../../knowledge-base/docs/bun.md) § 2, § 6
-- `bun-workspace` · `bun-migrate` · `bun-test-build` · `bun-test-review` — a família
+- `bun-workspace` · `bun-migrate` · `bun-test-build` · `bun-test-review` — the family

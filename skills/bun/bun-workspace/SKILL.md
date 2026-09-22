@@ -1,8 +1,9 @@
 ---
 nome: bun-workspace
-descricao: Gerenciar dependências e workspace com o package manager do Bun — `bun install`, lockfile, `trustedDependencies`, linker, catalogs, `overrides`, `bun patch` — citando IDs `BUN-PKG-*`, com oito sondas executáveis e uma checagem JSON de `trustedDependencies` — use quando a tarefa for adicionar dependência, configurar instalação de CI, liberar script de instalação de um pacote, alinhar versão compartilhada num monorepo, declarar workspace, aplicar patch em pacote, ou montar imagem de produção. Não use para escrever código de aplicação, que é bun-runtime, para migrar código de Node, que é bun-migrate, nem para bundle e build, que é o satélite Bundler e Build.
+descricao: Manage dependencies and the workspace with Bun's package manager — `bun install`, lockfile, `trustedDependencies`, linker, catalogs, `overrides`, `bun patch` — citing `BUN-PKG-*` IDs, with eight executable probes and a JSON check of `trustedDependencies` — use when the task is adding a dependency, configuring a CI install, allowing a package's install script, aligning a shared version in a monorepo, declaring a workspace, patching a package, or assembling a production image. Do not use to write application code, which is bun-runtime, to migrate Node code, which is bun-migrate, nor for bundling and builds, which is the Bundler e Build satellite.
 tipo: skill
 familia: bun
+idioma: en
 fonte: "[Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md)"
 docs:
   - /oven-sh/bun
@@ -14,98 +15,98 @@ tags:
 
 # bun-workspace
 
-> **Fonte desta skill:** [Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md), com o hub [Bun](../../../knowledge-base/docs/bun.md) como roteador.
-> **Superfície de API:** resolva pelo Context7 — `/oven-sh/bun`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md), with the [Bun](../../../knowledge-base/docs/bun.md) hub as the router.
+> **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
 ---
 
-## Quando usar
+## When to use
 
-Dependência, lockfile, workspace, instalação.
+Dependency, lockfile, workspace, install.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| escrever código de aplicação | `bun-runtime` |
-| código de Node que não roda | `bun-migrate` |
-| suíte de teste e portões de CI | `bun-test-review` |
-| bundle e build | [Bun - Bundler e Build](../../../knowledge-base/docs/bun-bundler-e-build.md) |
+| writing application code | `bun-runtime` |
+| Node code that does not run | `bun-migrate` |
+| test suite and CI gates | `bun-test-review` |
+| bundling and builds | [Bun - Bundler e Build](../../../knowledge-base/docs/bun-bundler-e-build.md) |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar |
+| Order | Load |
 | --- | --- |
 | 1 | [Bun](../../../knowledge-base/docs/bun.md) § 6 — `BUN-PKG-*` |
 | 2 | [Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md) |
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/trusted-dependencies.md` | a regra que quebra o build inteiro |
-| `references/lockfile-monorepo-linker.md` | lockfile e CI, monorepo, linker, patch e `bunx` |
-| `references/autoverificacao.md` | a checklist |
-| `references/antipadroes.md` | a grade com ID |
-| `references/mapa-de-ids.md` | os 43 `BUN-CORE/RT/PKG/SYS-*` por satélite e seção |
-| `references/exemplo.md` | caso trabalhado |
-| `scripts/sondas.sh` | oito sondas, com checagem **JSON** de `trustedDependencies` |
+| `references/trusted-dependencies.md` | the rule that breaks the whole build |
+| `references/lockfile-monorepo-linker.md` | lockfile and CI, monorepo, linker, patch and `bunx` |
+| `references/autoverificacao.md` | the checklist |
+| `references/antipadroes.md` | the grid, with IDs |
+| `references/mapa-de-ids.md` | the 43 `BUN-CORE/RT/PKG/SYS-*` by satellite and section |
+| `references/exemplo.md` | worked case |
+| `scripts/sondas.sh` | eight probes, with a **JSON** check of `trustedDependencies` |
 
 ---
 
-## Passo 1 — A regra que quebra o build inteiro
+## Step 1 — The rule that breaks the whole build
 
-> **`trustedDependencies` SUBSTITUI a lista padrão. Não estende.**
+> **`trustedDependencies` REPLACES the default list. It does not extend it.**
 
-Declarar um pacote ali **desliga os scripts de instalação de todo o resto** — `sharp`, `esbuild`, `better-sqlite3`. O sintoma **não é erro de instalação**: é um binário que não foi compilado, e a falha aparece em **runtime**, longe da causa (`BUN-PKG-04`).
+Declaring one package there **turns off the install scripts of everything else** — `sharp`, `esbuild`, `better-sqlite3`. The symptom **is not an install error**: it is a binary that was never compiled, and the failure shows up at **runtime**, far from the cause (`BUN-PKG-04`).
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-workspace/scripts/sondas.sh.
 ```
 
-A sonda S1 lê o `package.json` **como JSON** e diz quais pacotes conhecidos da lista padrão ficaram de fora — é a checagem que um `grep` não faz direito.
+Probe S1 reads `package.json` **as JSON** and says which known packages from the default list were left out — the check a `grep` does not do properly.
 
-E `BUN-PKG-03`: um PR que adiciona entrada ali **precisa** trazer no corpo a saída de `bun pm untrusted`. Liberar script de instalação é **decisão de segurança** — o script roda com as permissões de quem instala.
-
----
-
-## Passo 2 — Lockfile e CI
-
-`bun ci`, não `bun install` (`BUN-PKG-02`): `install` pode atualizar o lockfile no CI; `ci` falha se ele divergir. E a versão do Bun **pinada**, para que local e CI resolvam igual.
+And `BUN-PKG-03`: a PR that adds an entry there **must** carry the output of `bun pm untrusted` in its body. Allowing an install script is a **security decision** — the script runs with the permissions of whoever installs.
 
 ---
 
-## Passo 3 — Monorepo, linker, patch
+## Step 2 — Lockfile and CI
 
-`references/lockfile-monorepo-linker.md`: workspaces, catalogs para versão compartilhada, `overrides` (a chave do Bun — `resolutions` é do Yarn), linker `isolated` × `hoisted`, e `bun patch` versionado.
-
----
-
-## Passo 4 — Autoverificar
-
-`references/autoverificacao.md`, e as sondas acima.
+`bun ci`, not `bun install` (`BUN-PKG-02`): `install` can update the lockfile in CI; `ci` fails if it diverges. And the Bun version **pinned**, so that local and CI resolve alike.
 
 ---
 
-## Passo 5 — Fechar
+## Step 3 — Monorepo, linker, patch
 
-1. **Se `trustedDependencies` existe**, confirme que nada da lista padrão ficou de fora.
-2. **Se o CI usa `bun install`**, troque por `bun ci`.
-3. **Se `bunx` roda sem `@versão`**, o que executa é o que estiver publicado no momento.
-4. **Declare o que não verificou.**
+`references/lockfile-monorepo-linker.md`: workspaces, catalogs for a shared version, `overrides` (Bun's key — `resolutions` is Yarn's), `isolated` × `hoisted` linker, and versioned `bun patch`.
 
 ---
 
-## Exemplo
+## Step 4 — Self-check
 
-Monorepo que adicionou um pacote interno a `trustedDependencies` e passou a ver `sharp` falhando em runtime: a lista padrão foi substituída, e o script de instalação do `sharp` nunca rodou. A correção é **reincluir na mesma lista**, com a saída de `bun pm untrusted` no corpo do PR.
-
-Caso completo: `references/exemplo.md`.
+`references/autoverificacao.md`, and the probes above.
 
 ---
 
-## Relacionados
+## Step 5 — Closing
 
-- [Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md) — fonte desta skill
-- `bun-runtime` · `bun-migrate` · `bun-test-build` · `bun-test-review` — a família
-- [Bun - Bundler e Build](../../../knowledge-base/docs/bun-bundler-e-build.md) — bundle, que fica fora desta skill
+1. **If `trustedDependencies` exists**, confirm nothing from the default list was left out.
+2. **If CI uses `bun install`**, swap it for `bun ci`.
+3. **If `bunx` runs without `@version`**, what executes is whatever is published at that moment.
+4. **Declare what you did not verify.**
+
+---
+
+## Example
+
+A monorepo that added an internal package to `trustedDependencies` and started seeing `sharp` fail at runtime: the default list was replaced, and `sharp`'s install script never ran. The fix is to **re-include it in the same list**, with the output of `bun pm untrusted` in the PR body.
+
+Full case: `references/exemplo.md`.
+
+---
+
+## Related
+
+- [Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md) — source of this skill
+- `bun-runtime` · `bun-migrate` · `bun-test-build` · `bun-test-review` — the family
+- [Bun - Bundler e Build](../../../knowledge-base/docs/bun-bundler-e-build.md) — bundling, which stays outside this skill

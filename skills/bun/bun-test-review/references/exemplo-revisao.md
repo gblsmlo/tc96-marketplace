@@ -1,102 +1,102 @@
-# Exemplo trabalhado — revisão de suíte sob `bun test`
+# Worked example — reviewing a suite under `bun test`
 
-Monorepo, 180 testes, CI verde, e um defeito de pagamento chegou em produção.
+A monorepo, 180 tests, green CI, and a payment defect reached production.
 
 ---
 
-## Passo 1 — as sondas, antes de ler teste nenhum
+## Step 1 — the probes, before reading a single test
 
 ```
 $ bash scripts/sondas.sh --rodar
 
-== S1. Teste que nunca roda
-./apps/api/test/webhookTests.ts ← fora do padrão de descoberta
-== S6. Restauração de mock existe?
+== S1. Test that never runs
+./apps/api/test/webhookTests.ts ← outside the discovery pattern
+== S6. Does mock restoration exist?
  bunfig.toml:4: preload = ["./test/setup.ts"]
- NENHUM mock.restore na suíte
-== S7. Marcas e comandos
- apps/web/test/carrinho.test.ts:12: test.only(
+ NO mock.restore in the suite
+== S7. Marks and commands
+ apps/web/test/cart.test.ts:12: test.only(
 .github/workflows/ci.yml:29: bun test -u
-== S5. O portão de cobertura fecha?
+== S5. Does the coverage gate close?
  bunfig.toml:8: coverageThreshold = { statements = 80 }
-== S2. Dependência de ordem → exit≠0 (FALHOU)
-== S3. Dependência do global → exit=0 (passou)
-== S4. Flaky que não é de ordem → exit=0
+== S2. Order dependence → exit≠0 (FAILED)
+== S3. Dependence on the global → exit=0 (passed)
+== S4. Flakiness that is not about order → exit=0
 ```
 
-**S1 e S5 dispararam parada.** E S2 falhando com S3 passando é a assinatura clássica:
-o estado vaza pelo `globalThis` compartilhado, e `--isolate` esconde o sintoma.
+**S1 and S5 triggered a stop.** And S2 failing with S3 passing is the classic signature:
+state leaks through the shared `globalThis`, and `--isolate` hides the symptom.
 
-## Passo 2 — a leitura, guiada pelas sondas
+## Step 2 — the reading, guided by the probes
 
-`test/setup.ts` não tem `afterEach( => mock.restore)`. Dois arquivos usam `spyOn` sem
-restaurar. E `apps/api/test/pagamento.test.ts:34` tem `expect` dentro de `catch`, sem
-contagem — o teste passa quando `cobrar` **não** lança, que é exatamente o defeito que
-chegou em produção.
+`test/setup.ts` has no `afterEach( => mock.restore)`. Two files use `spyOn` without
+restoring. And `apps/api/test/payment.test.ts:34` has an `expect` inside a `catch`, without
+a count — the test passes when `charge` does **not** throw, which is exactly the defect that
+reached production.
 
-## O relatório
+## The report
 
 ```markdown
-## Revisão de suíte — bun test
+## Suite review — bun test
 
-### Bloqueante (4)
+### Blocking (4)
 
 `BUN-TEST-01` — apps/api/test/webhookTests.ts
-S1: o nome não casa nenhum padrão de descoberta. O arquivo nunca rodou, e nada avisa.
-Correção: renomear para webhook.test.ts. Rodar depois: ele pode estar vermelho há meses.
-Ver Bun - Testes - Execução e Configuração.
+S1: the name matches no discovery pattern. The file never ran, and nothing warns.
+Fix: rename to webhook.test.ts. Run it afterwards: it may have been red for months.
+See Bun - Testes - Execução e Configuração.
 
-`BUN-TEST-06` — apps/api/test/pagamento.test.ts:34
-A asserção vive no catch e o teste passa quando cobrar não lança: nenhuma asserção roda.
-Correção: expect.assertions(1) no topo, ou trocar por
- await expect(cobrar(...)).rejects.toThrow(PagamentoRecusado).
-Ver Bun - Testes - Escrita e Asserções.
+`BUN-TEST-06` — apps/api/test/payment.test.ts:34
+The assertion lives in the catch and the test passes when charge does not throw: no assertion runs.
+Fix: expect.assertions(1) at the top, or switch to
+ await expect(charge(...)).rejects.toThrow(PaymentDeclined).
+See Bun - Testes - Escrita e Asserções.
 
 `BUN-TEST-28` — bunfig.toml:8
-S5: coverageThreshold declarado em `statements`, que não é a métrica avaliada.
-O portão nunca reprovou.
-Correção: usar `lines`/`functions`, e manter o reporter `text` na lista (BUN-TEST-27).
-Ver Bun - Testes - Cobertura e CI.
+S5: coverageThreshold declared on `statements`, which is not the metric evaluated.
+The gate has never failed.
+Fix: use `lines`/`functions`, and keep the `text` reporter in the list (BUN-TEST-27).
+See Bun - Testes - Cobertura e CI.
 
 `BUN-TEST-05` —.github/workflows/ci.yml:29
-S7: `bun test -u` no CI reescreve os snapshots a cada execução: eles nunca falham.
-Correção: remover o -u. Atualizar snapshot é ato local e revisado.
-Ver Bun - Testes - Escrita e Asserções.
+S7: `bun test -u` in CI rewrites the snapshots on every run: they never fail.
+Fix: remove the -u. Updating a snapshot is a local, reviewed act.
+See Bun - Testes - Escrita e Asserções.
 
-### Alta (2)
+### High (2)
 
-`BUN-TEST-02` — test/setup.ts (ausência) + apps/web/test/preco.test.ts:9
-S6 + S2: o preload não restaura mocks, e `bun test --randomize` falha. Dois arquivos usam
- spyOn sem restaurar; o estado vaza pelo globalThis compartilhado (S3 passou, que é a
- assinatura desse vazamento).
-Correção: afterEach( => mock.restore) no preload — uma linha que fecha a classe inteira.
- Depois, rodar --randomize de novo: o que continuar falhando é dependência de ordem real.
-Ver Bun - Testes - Mocks e Tempo.
+`BUN-TEST-02` — test/setup.ts (absence) + apps/web/test/price.test.ts:9
+S6 + S2: the preload does not restore mocks, and `bun test --randomize` fails. Two files use
+ spyOn without restoring; state leaks through the shared globalThis (S3 passed, which is the
+ signature of that leak).
+Fix: afterEach( => mock.restore) in the preload — one line that closes the whole class.
+ Then run --randomize again: whatever still fails is real order dependence.
+See Bun - Testes - Mocks e Tempo.
 
-`BUN-TEST-08` — apps/web/test/carrinho.test.ts:12
-S7: test.only commitado. Se o CI rodar esse arquivo, ele roda 1 teste de N.
-Correção: remover.
-Ver Bun - Testes - Escrita e Asserções.
+`BUN-TEST-08` — apps/web/test/cart.test.ts:12
+S7: test.only committed. If CI runs that file, it runs 1 test out of N.
+Fix: remove it.
+See Bun - Testes - Escrita e Asserções.
 
-### Não é achado (registrado)
+### Not a finding (recorded)
 
-- Cobertura de 61% em apps/api: cobertura baixa não é achado desta skill — o achado é o
- limiar decorativo, acima.
-- "Deveriam usar Vitest": preferência de ferramenta, fora de escopo.
+- 61% coverage in apps/api: low coverage is not a finding of this skill — the finding is the
+ decorative threshold, above.
+- "They should use Vitest": tool preference, out of scope.
 
-### Não verificado
+### Not verified
 
-- S4 rodou com a suíte já quebrada por S2; repetir depois de corrigir o preload.
-- Comportamento sob `--parallel` não foi exercitado: se algum teste usa recurso externo,
- BUN-TEST-10 entra em jogo e exige chave derivada de BUN_TEST_WORKER_ID.
+- S4 ran with the suite already broken by S2; repeat after fixing the preload.
+- Behavior under `--parallel` was not exercised: if any test uses an external resource,
+ BUN-TEST-10 comes into play and requires a key derived from BUN_TEST_WORKER_ID.
 ```
 
-## O que este exemplo demonstra
+## What this example demonstrates
 
-| Decisão | Onde está a regra |
+| Decision | Where the rule is |
 | --- | --- |
-| duas paradas dispararam antes da leitura | `sondas.md` |
-| S2 falhando **com** S3 passando nomeou a causa | `ordem-da-varredura.md` § *Diagnóstico de flaky* |
-| a correção do vazamento é **uma linha no preload**, não arquivo por arquivo | `BUN-TEST-02` |
-| cobertura baixa não virou achado; o limiar decorativo virou | `severidade-e-relatorio.md` |
-| a sonda que rodou sobre suíte quebrada foi declarada como não conclusiva | § *Fechar* |
+| two stops triggered before any reading | `sondas.md` |
+| S2 failing **with** S3 passing named the cause | `ordem-da-varredura.md` § *Flakiness diagnosis* |
+| the fix for the leak is **one line in the preload**, not file by file | `BUN-TEST-02` |
+| low coverage did not become a finding; the decorative threshold did | `severidade-e-relatorio.md` |
+| the probe that ran over a broken suite was declared inconclusive | § *Closing* |

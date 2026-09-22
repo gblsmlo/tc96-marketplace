@@ -1,25 +1,22 @@
-# Hash, senha, e `--watch` × `--hot`
+# Hashing, passwords, and `--watch` × `--hot`
 
 ```
-É senha, token ou segredo?
-├── SIM → Bun.password (argon2id por default)
-└── NÃO → Bun.hash (não criptográfico — cache key, dedup)
+Is it a password, token or secret?
+├── YES → Bun.password (argon2id by default)
+└── NO  → Bun.hash (non-cryptographic — cache key, dedup)
 ```
 
-`BUN-RT-10` é categórica: `Bun.hash` **nunca** toca senha, token ou segredo. Os nomes são parecidos e as garantias são opostas.
+`BUN-RT-10` is categorical: `Bun.hash` **never** touches a password, token or secret. The names look alike and the guarantees are opposite.
 
 ---
 
-## Passo 6 — `--watch` × `--hot`
+## Step 6 — `--watch` × `--hot`
 
-| Flag | O que faz | Quando |
+| Flag | What it does | When |
 | --- | --- | --- |
-| `--watch` | reinicia o processo | quando o estado precisa ser limpo |
-| `--hot` | recarrega **mantendo** o estado do processo | desenvolvimento de servidor |
+| `--watch` | restarts the process | when state has to be clean |
+| `--hot` | reloads **keeping** process state | server development |
 
-`BUN-RT-11`: `--hot` **nunca** onde o resultado depende de estado limpo — teste, job, verificação de inicialização. O sintoma é resultado que muda entre execuções sem o código mudar.
+`BUN-RT-11`: `--hot` **never** where the result depends on clean state — test, job, startup check. The symptom is a result that changes between runs without the code changing.
 
-E em produção, `BUN-RT-12`: `node_modules` presente ou `--no-install`. Sem isso o **auto-install** resolve dependência em runtime, o que faz a imagem depender da rede no boot.
-
----
-
+And in production, `BUN-RT-12`: `node_modules` present, or `--no-install`. Without that, **auto-install** resolves dependencies at runtime, which makes the image depend on the network at boot.

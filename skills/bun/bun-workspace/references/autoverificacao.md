@@ -1,34 +1,31 @@
-# Autoverificação antes de entregar
+# Self-check before delivering
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-workspace/scripts/sondas.sh.
 ```
 
-| # | Confira | Regra |
+| # | Check | Rule |
 | --- | --- | --- |
-| 1 | `bun.lock` está versionado | `BUN-PKG-01` |
-| 2 | CI usa `bun ci` ou `--frozen-lockfile` | `BUN-PKG-02` |
-| 3 | se tocou `trustedDependencies`, a lista padrão necessária foi reincluída | `BUN-PKG-04` |
-| 4 | o PR traz a saída de `bun pm untrusted` | `BUN-PKG-03` |
-| 5 | `--production` não está sendo usado como limpeza | `BUN-PKG-05` |
-| 6 | versão compartilhada vem de catalog | `BUN-PKG-06` |
-| 7 | nenhum `catalog:` num pacote a publicar | `BUN-PKG-07` |
-| 8 | `overrides` está na raiz | `BUN-PKG-08` |
-| 9 | edição em `node_modules` passou por `bun patch` | `BUN-PKG-09` |
-| 10 | `linker` declarado se o build depende do layout | `BUN-PKG-10` |
-| 11 | `bunx` em CI tem versão fixa | `BUN-PKG-11` |
-| 12 | raiz é `"private": true` e não lista dependência de pacote | `BUN-PKG-12` |
+| 1 | `bun.lock` is committed | `BUN-PKG-01` |
+| 2 | CI uses `bun ci` or `--frozen-lockfile` | `BUN-PKG-02` |
+| 3 | if `trustedDependencies` was touched, the needed default list was re-included | `BUN-PKG-04` |
+| 4 | the PR carries the output of `bun pm untrusted` | `BUN-PKG-03` |
+| 5 | `--production` is not being used as cleanup | `BUN-PKG-05` |
+| 6 | a shared version comes from a catalog | `BUN-PKG-06` |
+| 7 | no `catalog:` in a package to be published | `BUN-PKG-07` |
+| 8 | `overrides` is at the root | `BUN-PKG-08` |
+| 9 | edits under `node_modules` went through `bun patch` | `BUN-PKG-09` |
+| 10 | `linker` declared if the build depends on the layout | `BUN-PKG-10` |
+| 11 | `bunx` in CI has a fixed version | `BUN-PKG-11` |
+| 12 | the root is `"private": true` and lists no package dependency | `BUN-PKG-12` |
 
-**As sondas:**
+**The probes:**
 
 ```bash
-bun pm untrusted # o que está bloqueado, e por qual comando
-bun install --frozen-lockfile # o lock corresponde ao package.json?
-bun pm ls # a árvore resolvida é a esperada?
-git status --short bun.lock # o install reescreveu o lock?
+bun pm untrusted # what is blocked, and by which command
+bun install --frozen-lockfile # does the lock match package.json?
+bun pm ls # is the resolved tree the expected one?
+git status --short bun.lock # did the install rewrite the lock?
 ```
 
-A última é a mais reveladora depois de qualquer mexida: se o `bun.lock` mudou e você não esperava, algum `package.json` estava divergente.
-
----
-
+The last one is the most revealing after any change: if `bun.lock` changed and you did not expect it, some `package.json` was diverging.

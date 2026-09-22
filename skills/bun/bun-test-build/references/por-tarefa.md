@@ -1,98 +1,98 @@
-# As seis tarefas
+# The six tasks
 
-> Cada recorte assume que o Carregamento mínimo já aconteceu e **nomeia o satélite que falta**.
-> O conteúdo do satélite não é repetido aqui — é citado.
+> Each cut assumes Minimum loading already happened and **names the satellite that is missing**.
+> The satellite's content is not repeated here — it is cited.
 
-## Mapa de tarefa → nota
+## Task → note map
 
-| A tarefa é… | Satélite | Árvore |
+| The task is… | Satellite | Tree |
 | --- | --- | --- |
-| escrever teste, escolher matcher, modificador, snapshot | [Bun - Testes - Escrita e Asserções](../../../../knowledge-base/docs/bun-testes-escrita-e-assercoes.md) | — |
-| substituir dependência: mock, spy, duplo | [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) | § 5.2 |
-| congelar data, avançar timer, fuso | [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) | § 5.3 |
-| testar componente React, DOM, interação | [Bun - Testes - DOM e Componentes](../../../../knowledge-base/docs/bun-testes-dom-e-componentes.md) | § 5.6 |
-| hooks, preload, escopo de setup | [Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md) | — |
-| `bunfig.toml [test]`, descoberta, filtros | [Bun - Testes - Execução e Configuração](../../../../knowledge-base/docs/bun-testes-execucao-e-configuracao.md) | — |
-| cobertura, reporter, workflow de CI | [Bun - Testes - Cobertura e CI](../../../../knowledge-base/docs/bun-testes-cobertura-e-ci.md) | § 5.5 |
-| vim do Jest ou do Vitest | [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 5.4 (mapa de equivalência) | § 5.4 |
+| writing a test, choosing a matcher, modifier, snapshot | [Bun - Testes - Escrita e Asserções](../../../../knowledge-base/docs/bun-testes-escrita-e-assercoes.md) | — |
+| replacing a dependency: mock, spy, double | [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) | § 5.2 |
+| freezing a date, advancing a timer, timezone | [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) | § 5.3 |
+| testing a React component, DOM, interaction | [Bun - Testes - DOM e Componentes](../../../../knowledge-base/docs/bun-testes-dom-e-componentes.md) | § 5.6 |
+| hooks, preload, setup scope | [Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md) | — |
+| `bunfig.toml [test]`, discovery, filters | [Bun - Testes - Execução e Configuração](../../../../knowledge-base/docs/bun-testes-execucao-e-configuracao.md) | — |
+| coverage, reporter, CI workflow | [Bun - Testes - Cobertura e CI](../../../../knowledge-base/docs/bun-testes-cobertura-e-ci.md) | § 5.5 |
+| a habit from Jest or Vitest | [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 5.4 (equivalence map) | § 5.4 |
 
 ---
 
-Seis recortes. Cada um assume que o Carregamento mínimo já aconteceu e nomeia o satélite que falta — não repita o conteúdo do satélite aqui, cite-o.
+Six cuts. Each one assumes Minimum loading already happened and names the satellite that is missing — do not repeat the satellite's content here, cite it.
 
-### 1. Escrever teste novo
+### 1. Write a new test
 
-1. **Nome do arquivo primeiro.** `*.test.ts`, `*_test.ts`, `*.spec.ts` ou `*_spec.ts` — `BUN-TEST-01`. Arquivo fora do padrão não roda e nada avisa.
-2. **Importe de `bun:test`**, não confie nos globais: é o que passa em `tsc --noEmit` sem declaração global.
-3. **Nomeie o `describe` pela unidade sob teste** — o rótulo dele é o endereço de `-t`.
-4. **Toda asserção condicional declara contagem.** `expect` dentro de `catch`, callback ou `if` exige `expect.assertions(n)` — `BUN-TEST-06`. Para rejeição de Promise, prefira `await expect(fn).rejects.toThrow(X)`.
-5. **Escolha a igualdade:** `toBe` para primitivo e identidade, `toEqual` para objeto, `toStrictEqual` quando a forma exata é o contrato.
-6. **`.toThrow` sempre com classe ou mensagem** — sem argumento, ele aceita o `TypeError` de você ter quebrado a chamada.
-7. **Assíncrono é `async`/`await`.** Nunca `done` — `BUN-TEST-17`.
-8. **Instabilidade declarada usa `{ retry: N }` no teste**, nunca `--retry` global — e `retry` com `repeats` é combinação inválida, `BUN-TEST-16`.
-9. **Bug conhecido é `test.failing`**, nunca `test.skip` — `BUN-TEST-11`. E nenhum `.only` sai do seu terminal — `BUN-TEST-08`.
-10. **Snapshot só com campo determinístico**, ou com property matchers — `BUN-TEST-19`.
+1. **File name first.** `*.test.ts`, `*_test.ts`, `*.spec.ts` or `*_spec.ts` — `BUN-TEST-01`. A file outside the pattern does not run and nothing warns.
+2. **Import from `bun:test`**, do not rely on the globals: that is what passes `tsc --noEmit` without a global declaration.
+3. **Name the `describe` after the unit under test** — its label is the address for `-t`.
+4. **Every conditional assertion declares a count.** An `expect` inside a `catch`, callback or `if` requires `expect.assertions(n)` — `BUN-TEST-06`. For a Promise rejection, prefer `await expect(fn).rejects.toThrow(X)`.
+5. **Pick the equality:** `toBe` for primitives and identity, `toEqual` for objects, `toStrictEqual` when the exact shape is the contract.
+6. **`.toThrow` always with a class or a message** — without an argument, it accepts the `TypeError` you got from breaking the call.
+7. **Async is `async`/`await`.** Never `done` — `BUN-TEST-17`.
+8. **Declared instability uses `{ retry: N }` on the test**, never a global `--retry` — and `retry` with `repeats` is an invalid combination, `BUN-TEST-16`.
+9. **A known bug is `test.failing`**, never `test.skip` — `BUN-TEST-11`. And no `.only` leaves your terminal — `BUN-TEST-08`.
+10. **Snapshot only with deterministic fields**, or with property matchers — `BUN-TEST-19`.
 
-### 2. Substituir uma dependência
+### 2. Replace a dependency
 
-Percorra a árvore da § 5.2 do hub, nesta ordem de preferência:
+Walk the tree in § 5.2 of the hub, in this order of preference:
 
-1. **O código recebe a dependência de fora?** Passe um duplo. Sem mock, sem escopo global, sem restauração — é a saída que não tem o que vazar.
-2. **É método de objeto que o teste tem em mãos?** `spyOn`, **com restauração garantida** no preload — `BUN-TEST-02`.
-3. **É módulo importado?** `mock.module`, e então duas decisões obrigatórias:
- - se o objetivo é impedir efeito colateral do import (conexão, listener, env no topo), o registro vai em `[test] preload` — `BUN-TEST-04`. Não há outra forma: o original já foi avaliado;
- - `mock.restore` **não** desfaz — o módulo fica mockado no resto do processo — `BUN-TEST-03`.
+1. **Does the code receive the dependency from outside?** Pass a double. No mock, no global scope, no restoration — it is the way out with nothing to leak.
+2. **Is it a method on an object the test holds?** `spyOn`, **with guaranteed restoration** in the preload — `BUN-TEST-02`.
+3. **Is it an imported module?** `mock.module`, and then two mandatory decisions:
+ - if the goal is to prevent an import side effect (connection, listener, env at the top), the registration goes in `[test] preload` — `BUN-TEST-04`. There is no other way: the original has already been evaluated;
+ - `mock.restore` does **not** undo it — the module stays mocked for the rest of the process — `BUN-TEST-03`.
 
-Sinal de parada: se três arquivos mockam o mesmo módulo, a dependência queria ser parâmetro. Diga isso em vez de escrever o quarto mock.
+Stop signal: if three files mock the same module, the dependency wanted to be a parameter. Say that instead of writing the fourth mock.
 
-### 3. Controlar data e tempo
+### 3. Control date and time
 
-| Preciso de | API | Regra |
+| I need | API | Rule |
 | --- | --- | --- |
-| data fixa | `setSystemTime(new Date(...))` | `BUN-TEST-20` — `useFakeTimers` **não** troca o construtor `Date` |
-| tempo passar (debounce, polling, retry) | `jest.useFakeTimers` + `advanceTimersByTime(ms)` | — |
-| asserção sobre data **formatada** | fixar `TZ` explicitamente | `BUN-TEST-21` |
+| a fixed date | `setSystemTime(new Date(...))` | `BUN-TEST-20` — `useFakeTimers` does **not** swap the `Date` constructor |
+| time to pass (debounce, polling, retry) | `jest.useFakeTimers` + `advanceTimersByTime(ms)` | — |
+| an assertion about a **formatted** date | set `TZ` explicitly | `BUN-TEST-21` |
 
-`Bun.sleep` para esperar timer não entra em teste.
+`Bun.sleep` to wait on a timer does not belong in a test.
 
-### 4. Testar componente React
+### 4. Test a React component
 
-Verifique a receita completa em [Bun - Testes - DOM e Componentes](../../../../knowledge-base/docs/bun-testes-dom-e-componentes.md) § 2 antes de escrever a primeira linha — ela tem quatro peças, e três falham em silêncio se faltarem:
+Check the full recipe in [Bun - Testes - DOM e Componentes](../../../../knowledge-base/docs/bun-testes-dom-e-componentes.md) § 2 before writing the first line — it has four pieces, and three fail silently if missing:
 
-1. `GlobalRegistrator.register` em preload, nunca no arquivo de teste — `BUN-TEST-07`;
-2. **dois** preloads, nesta ordem: happy-dom, depois `@testing-library/*` — `BUN-TEST-25`;
-3. `expect.extend(matchers)` de `@testing-library/jest-dom/matchers` — o `import` do pacote sozinho **não registra nada**, `BUN-TEST-12`;
-4. `cleanup` em `afterEach` — `BUN-TEST-26`.
+1. `GlobalRegistrator.register` in a preload, never in the test file — `BUN-TEST-07`;
+2. **two** preloads, in this order: happy-dom, then `@testing-library/*` — `BUN-TEST-25`;
+3. `expect.extend(matchers)` from `@testing-library/jest-dom/matchers` — importing the package alone **registers nothing**, `BUN-TEST-12`;
+4. `cleanup` in `afterEach` — `BUN-TEST-26`.
 
-Ao escrever: `await` em todo `userEvent`, `findBy*` para esperar elemento, `waitFor` só para condição que não é "elemento existe". Antes de asserir sobre asset, `import.meta.env` ou CSS, leia § 4 do satélite — é a fronteira com o Vite, e a saída costuma ser receber configuração por prop.
+When writing: `await` on every `userEvent`, `findBy*` to wait for an element, `waitFor` only for a condition that is not "the element exists". Before asserting on an asset, `import.meta.env` or CSS, read § 4 of the satellite — that is the boundary with Vite, and the way out is usually to receive configuration through a prop.
 
-### 5. Configurar a suíte de um projeto
+### 5. Configure a project's suite
 
-1. `bunfig.toml`, seção `[test]` — a superfície completa está em [Bun - Testes - Execução e Configuração](../../../../knowledge-base/docs/bun-testes-execucao-e-configuracao.md) § 5.
-2. Um preload com `afterEach( => mock.restore)`. É a linha que impede que um arquivo escrito por quem não leu a doc vaze spy para a suíte inteira.
-3. Scripts: `test` **sem flag obrigatória** (o resto vai no `bunfig.toml`), `test:watch`, `test:changed`, `test:ci`, `typecheck`.
-4. Se houver componente, os dois preloads de DOM (tarefa 4).
-5. `seed` só com `randomize = true` — `BUN-TEST-14`.
-6. Recorte com `root`/`pathIgnorePatterns`, não com glob no comando — `BUN-TEST-13`.
-7. Setup declarado em preload é **idempotente e barato, ou parametrizado por worker** — `BUN-TEST-24`. Servidor ou migração no preload é o erro que só aparece quando alguém liga `--parallel`.
+1. `bunfig.toml`, `[test]` section — the full surface is in [Bun - Testes - Execução e Configuração](../../../../knowledge-base/docs/bun-testes-execucao-e-configuracao.md) § 5.
+2. A preload with `afterEach( => mock.restore)`. It is the line that stops a file written by someone who did not read the docs from leaking a spy into the whole suite.
+3. Scripts: `test` **with no mandatory flag** (the rest goes in `bunfig.toml`), `test:watch`, `test:changed`, `test:ci`, `typecheck`.
+4. If there are components, the two DOM preloads (task 4).
+5. `seed` only with `randomize = true` — `BUN-TEST-14`.
+6. Scope with `root`/`pathIgnorePatterns`, not with a glob on the command line — `BUN-TEST-13`.
+7. Setup declared in a preload is **idempotent and cheap, or parameterized per worker** — `BUN-TEST-24`. A server or a migration in the preload is the error that only shows up when someone turns on `--parallel`.
 
-### 6. Montar o comando de CI
+### 6. Assemble the CI command
 
-Receita em [Bun - Testes - Cobertura e CI](../../../../knowledge-base/docs/bun-testes-cobertura-e-ci.md) § 5. As decisões que não são negociáveis:
+Recipe in [Bun - Testes - Cobertura e CI](../../../../knowledge-base/docs/bun-testes-cobertura-e-ci.md) § 5. The non-negotiable decisions:
 
-- versão do Bun **pinada** — `BUN-TEST-15`;
-- `bun ci`, não `bun install` — `BUN-PKG-02`;
-- `tsc --noEmit` como passo próprio — `BUN-TEST-18`, porque `expectTypeOf` é no-op em runtime;
-- `--parallel`, e então recurso externo derivado de `BUN_TEST_WORKER_ID` — `BUN-TEST-10`;
-- sem `-u` — `BUN-TEST-05` — e sem `--retry` global;
-- se houver `coverageThreshold`, o reporter `text` fica na lista — `BUN-TEST-27` — e o limiar usa `lines`/`functions`, nunca `statements` — `BUN-TEST-28`;
-- `--reporter=junit` sempre com `--reporter-outfile` — `BUN-TEST-29`;
-- `--changed` no job de PR, **nunca** como portão de merge.
+- the Bun version **pinned** — `BUN-TEST-15`;
+- `bun ci`, not `bun install` — `BUN-PKG-02`;
+- `tsc --noEmit` as its own step — `BUN-TEST-18`, because `expectTypeOf` is a no-op at runtime;
+- `--parallel`, and then external resources derived from `BUN_TEST_WORKER_ID` — `BUN-TEST-10`;
+- no `-u` — `BUN-TEST-05` — and no global `--retry`;
+- if there is a `coverageThreshold`, the `text` reporter stays in the list — `BUN-TEST-27` — and the threshold uses `lines`/`functions`, never `statements` — `BUN-TEST-28`;
+- `--reporter=junit` always with `--reporter-outfile` — `BUN-TEST-29`;
+- `--changed` in the PR job, **never** as a merge gate.
 
 ---
 
-## Relacionados
+## Related
 
-- [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 5 — as árvores de decisão
-- `armadilhas-do-runner.md` — o que não se assume de memória
-- `autoverificacao.md` — o que conferir antes de entregar
+- [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 5 — the decision trees
+- `armadilhas-do-runner.md` — what you do not assume from memory
+- `autoverificacao.md` — what to check before delivering

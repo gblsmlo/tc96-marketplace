@@ -4,6 +4,7 @@
     python3 build/importar-do-plugin.py test
     python3 build/importar-do-plugin.py --agente frontend-developer
     python3 build/importar-do-plugin.py --todas
+    python3 build/importar-do-plugin.py bun --forcar   # sobrescreve tradução
 
 Tres transformacoes:
   1. frontmatter do Claude Code -> frontmatter neutro (chaves em PT, capacidade
@@ -239,12 +240,23 @@ def frontmatter_agente(campos, corpo):
     return "\n".join(novo) + corpo
 
 
-def importar_familia(familia, por_arquivo, por_origem):
+def traduzida(caminho):
+    """A skill ja foi traduzida? O build hermes so tem portugues."""
+    skill_md = caminho / "SKILL.md"
+    return skill_md.exists() and "\nidioma: en\n" in skill_md.read_text(encoding="utf-8")
+
+
+def importar_familia(familia, por_arquivo, por_origem, forcar=False):
     plugin, skills, indice = FAMILIAS[familia]
     origem_plugin = CACHE / plugin
     for skill in skills:
         nome = RENOMEAR.get(skill, skill)
         origem, destino = origem_plugin / "skills" / skill, RAIZ / "skills" / familia / nome
+        if traduzida(destino) and not forcar:
+            # o importador e bootstrap, nao build recorrente: depois de traduzida,
+            # a fonte neutra e a origem, e reimportar reverteria para portugues
+            print(f"  pulando {nome}: já traduzida (use --forcar para sobrescrever)")
+            continue
         if destino.exists():
             shutil.rmtree(destino)
         shutil.copytree(origem, destino)
@@ -308,20 +320,22 @@ def importar_agente(nome, por_arquivo, por_origem):
 
 def main():
     args = sys.argv[1:]
+    forcar = "--forcar" in args
+    args = [a for a in args if a != "--forcar"]
     if not args:
         sys.exit(__doc__)
     por_arquivo, por_origem = indice_kb()
     if args[0] == "--todas":
         for familia in FAMILIAS:
             if (RAIZ / "skills" / familia).exists():
-                importar_familia(familia, por_arquivo, por_origem)
+                importar_familia(familia, por_arquivo, por_origem, forcar)
         for agente in AGENTES:
             importar_agente(agente, por_arquivo, por_origem)
     elif args[0] == "--agente":
         importar_agente(args[1], por_arquivo, por_origem)
     else:
         for familia in args:
-            importar_familia(familia, por_arquivo, por_origem)
+            importar_familia(familia, por_arquivo, por_origem, forcar)
 
 
 main()

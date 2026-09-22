@@ -1,8 +1,9 @@
 ---
 nome: bun-test-build
-descricao: Escrever teste novo sob `bun test` e configurar a suíte de um projeto, seguindo as árvores de decisão e as regras `BUN-TEST-*` da doc do vault, com autoverificação executável — use quando a tarefa for escrever teste de unidade, substituir uma dependência por mock ou duplo, controlar data e tempo, testar componente React, configurar `bunfig.toml` e preloads, ou montar o comando de CI. Não use para revisar suíte existente nem diagnosticar flaky, que é bun-test-review, e não use para decidir *o que* testar e em que nível, que é test-design.
+descricao: Write a new test under `bun test` and configure a project's suite, following the decision trees and the `BUN-TEST-*` rules from the vault docs, with an executable self-check — use when the task is writing a unit test, replacing a dependency with a mock or double, controlling date and time, testing a React component, configuring `bunfig.toml` and preloads, or assembling the CI command. Do not use to review an existing suite or diagnose flakiness, which is bun-test-review, and do not use to decide *what* to test and at which level, which is test-design.
 tipo: skill
 familia: bun
+idioma: en
 fonte: "[Bun - Testes](../../../knowledge-base/docs/bun-testes.md)"
 docs:
   - /oven-sh/bun
@@ -14,130 +15,130 @@ tags:
 
 # bun-test-build
 
-> **Fonte desta skill:** [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — a § 6 normativa (`BUN-TEST-01` a `BUN-TEST-29`), com o corpo de cada regra no satélite dono.
-> Esta skill **não contém** o texto das regras nem a superfície de API — ela diz o que carregar, em que ordem decidir, e o que executar antes de entregar.
-> **Superfície de API:** resolva pelo Context7 — `/oven-sh/bun`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — the normative § 6 (`BUN-TEST-01` to `BUN-TEST-29`), with the body of each rule in the owning satellite.
+> This skill **does not contain** the text of the rules nor the API surface — it says what to load, in what order to decide, and what to run before delivering.
+> **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contrato que esta skill implementa: [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 7 ("Contrato de skill").
 
 ---
 
-## Quando usar
+## When to use
 
-Escrever teste que **vai existir**, ou configurar a suíte de um projeto sob `bun test`.
+Writing a test that **will exist**, or configuring a project's suite under `bun test`.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| revisar suíte existente, diagnosticar flaky | `bun-test-review` |
-| decidir **o quê** testar e **em que nível** | `test-design` — vem antes desta |
-| teste E2E | `playwright-build` |
-| story e teste de interação em browser real | `storybook-test` |
-| revisar o componente, não o teste dele | `react-review` · `react-developer` |
+| reviewing an existing suite, diagnosing flakiness | `bun-test-review` |
+| deciding **what** to test and **at which level** | `test-design` — comes before this one |
+| E2E test | `playwright-build` |
+| story and interaction test in a real browser | `storybook-test` |
+| reviewing the component, not its test | `react-review` · `react-developer` |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-A ordem vem do contrato ([Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 7). Os dois primeiros **não são opcionais**:
+The order comes from the contract ([Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 7). The first two are **not optional**:
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 2 | o default é **um global compartilhado por todos os arquivos** — quem escreve teste sem saber disso produz suíte que passa por acidente |
-| 2 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 6.1 | as sete regras de violação silenciosa, que viajam com qualquer tarefa |
-| 3 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 3 | fronteiras de import: o que vem de `bun:test`, e o que o Bun **não** lê (`vite.config.ts`, `jest.config.js`) |
-| 4 | **um** satélite, pelo mapa em `references/por-tarefa.md` | a superfície que a tarefa toca |
-| 5 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 5 | a árvore de decisão, quando houver dúvida entre duas APIs |
+| 1 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 2 | the default is **one global shared by every file** — whoever writes a test without knowing that produces a suite that passes by accident |
+| 2 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 6.1 | the seven silent-violation rules, which travel with any task |
+| 3 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 3 | import boundaries: what comes from `bun:test`, and what Bun **does not** read (`vite.config.ts`, `jest.config.js`) |
+| 4 | **one** satellite, via the map in `references/por-tarefa.md` | the surface the task touches |
+| 5 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 5 | the decision tree, when in doubt between two APIs |
 
-**Nunca carregue os seis satélites.** Escrever um teste de unidade precisa de 1 + 2 + [Bun - Testes - Escrita e Asserções](../../../knowledge-base/docs/bun-testes-escrita-e-assercoes.md) e nada mais.
+**Never load all six satellites.** Writing a unit test needs 1 + 2 + [Bun - Testes - Escrita e Asserções](../../../knowledge-base/docs/bun-testes-escrita-e-assercoes.md) and nothing else.
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/por-tarefa.md` | o mapa tarefa → satélite, e os seis recortes (escrever, substituir, tempo, componente, suíte, CI) |
-| `references/armadilhas-do-runner.md` | as três coisas que não se assumem de memória, vindas de Jest/Vitest |
-| `references/autoverificacao.md` | a checklist e os três comandos que exigem execução |
-| `references/mapa-de-ids.md` | os 29 `BUN-TEST-*`: onde declarados, e **em qual satélite mora o corpo** |
-| `references/exemplo-sessao-expira.md` | caso trabalhado, com o que foi executado e o que não foi verificado |
-| `scripts/autoverificar.sh` | roda a checklist sobre o arquivo recém-escrito |
+| `references/por-tarefa.md` | the task → satellite map, and the six cuts (write, replace, time, component, suite, CI) |
+| `references/armadilhas-do-runner.md` | the three things you do not assume from memory, coming from Jest/Vitest |
+| `references/autoverificacao.md` | the checklist and the three commands that require execution |
+| `references/mapa-de-ids.md` | the 29 `BUN-TEST-*`: where declared, and **in which satellite the body lives** |
+| `references/exemplo-sessao-expira.md` | worked case, with what was run and what was not verified |
+| `scripts/autoverificar.sh` | runs the checklist over the file you just wrote |
 
-**Nunca invente ID** — a família vai de `BUN-TEST-01` a `BUN-TEST-29`.
-
----
-
-## Passo 1 — Escolher o recorte
-
-`references/por-tarefa.md`: escrever teste novo · substituir uma dependência · controlar data e tempo · testar componente React · configurar a suíte · montar o comando de CI.
-
-Cada recorte nomeia **o satélite que falta** — não o conteúdo dele.
+**Never invent an ID** — the family runs from `BUN-TEST-01` to `BUN-TEST-29`.
 
 ---
 
-## Passo 2 — Não confiar na memória de Jest/Vitest
+## Step 1 — Pick the cut
 
-`references/armadilhas-do-runner.md`. As três que produzem teste **verde e sem verificação**:
+`references/por-tarefa.md`: write a new test · replace a dependency · control date and time · test a React component · configure the suite · assemble the CI command.
 
-1. **Sem flag, todos os arquivos compartilham um `globalThis`.** "Vazou" não significa "afetou o próximo teste": significa "afetou o resto da suíte".
-2. **`mock.restore` não desfaz `mock.module`** (`BUN-TEST-03`). As três limpezas fazem coisas diferentes.
-3. **Concorrência dentro do arquivo não isola nada** — estado mutável exige `test.serial` (`BUN-TEST-23`), e `onTestFinished` não funciona em teste concorrente (`BUN-TEST-22`).
-
-E a quarta, que é de tempo: **`useFakeTimers` não troca o construtor `Date`** — congelar data é `setSystemTime` (`BUN-TEST-20`).
+Each cut names **the satellite that is missing** — not its content.
 
 ---
 
-## Passo 3 — Autoverificar antes de entregar
+## Step 2 — Do not trust Jest/Vitest memory
+
+`references/armadilhas-do-runner.md`. The three that produce a test that is **green and unverified**:
+
+1. **Without a flag, every file shares one `globalThis`.** "Leaked" does not mean "affected the next test": it means "affected the rest of the suite".
+2. **`mock.restore` does not undo `mock.module`** (`BUN-TEST-03`). The three cleanups do different things.
+3. **Concurrency inside a file isolates nothing** — mutable state requires `test.serial` (`BUN-TEST-23`), and `onTestFinished` does not work in a concurrent test (`BUN-TEST-22`).
+
+And the fourth, about time: **`useFakeTimers` does not swap the `Date` constructor** — freezing a date is `setSystemTime` (`BUN-TEST-20`).
+
+---
+
+## Step 3 — Self-check before delivering
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-test-build/scripts/autoverificar.sh test/sessao.test.ts
+bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-test-build/scripts/autoverificar.sh test/session.test.ts
 ```
 
-Depois, **as três que exigem execução**:
+Then, **the three that require execution**:
 
 ```bash
-bun test./caminho/do-novo.test.ts # passa isolado
-bun test --randomize # a suíte ainda passa em ordem aleatória
-tsc --noEmit # o runner não checa tipo — BUN-TEST-18
+bun test./path/to-the-new.test.ts # passes in isolation
+bun test --randomize # the suite still passes in random order
+tsc --noEmit # the runner does not type-check — BUN-TEST-18
 ```
 
-**Rode as três de verdade.** Se `--randomize` quebrou depois do seu teste, você acabou de introduzir dependência de ordem (`BUN-TEST-09`) — e nenhuma flag substitui mover o setup para o próprio arquivo. O diagnóstico completo é `bun-test-review`.
+**Actually run all three.** If `--randomize` broke after your test, you have just introduced order dependence (`BUN-TEST-09`) — and no flag replaces moving the setup into the file itself. The full diagnosis is `bun-test-review`.
 
 ---
 
-## Passo 4 — O que entregar
+## Step 4 — What to deliver
 
-Três partes, e a terceira é a que costuma faltar:
+Three parts, and the third is the one that usually goes missing:
 
-1. **O código**, no padrão que a suíte já usa. Se o repositório tem o padrão certo em outro arquivo, **estenda esse padrão** em vez de introduzir um novo.
-2. **O que foi executado**, com o resultado — cole a saída quando ela for o argumento.
-3. **O que não foi verificado**, nomeado. **"Deve passar" não é resultado**: declarar a lacuna é o que separa entrega verificada de entrega plausível.
-
----
-
-## Exemplo
-
-*"A sessão expira 30 minutos após o último acesso."* A tarefa é sobre **tempo**, então a primeira decisão não é como escrever o teste — é qual API usar: `setSystemTime`, não `useFakeTimers` (`BUN-TEST-20`). Os instantes são 29/30/31 min (valor limite), o relógio é devolvido em `afterEach`, e o spy é restaurado explicitamente.
-
-Caso completo, com o que foi executado e o que ficou por verificar: `references/exemplo-sessao-expira.md`.
+1. **The code**, in the pattern the suite already uses. If the repository has the right pattern in another file, **extend that pattern** rather than introducing a new one.
+2. **What was run**, with the result — paste the output when the output is the argument.
+3. **What was not verified**, named. **"Should pass" is not a result**: declaring the gap is what separates a verified delivery from a plausible one.
 
 ---
 
-## Fronteira com as outras skills
+## Example
 
-| Se a tarefa passar a ser… | Vá para |
+*"The session expires 30 minutes after the last access."* The task is about **time**, so the first decision is not how to write the test — it is which API to use: `setSystemTime`, not `useFakeTimers` (`BUN-TEST-20`). The instants are 29/30/31 min (boundary value), the clock is given back in `afterEach`, and the spy is restored explicitly.
+
+Full case, with what was run and what was left unverified: `references/exemplo-sessao-expira.md`.
+
+---
+
+## Boundary with the other skills
+
+| If the task becomes… | Go to |
 | --- | --- |
-| revisar a suíte inteira, diagnosticar flaky, classificar severidade | `bun-test-review` |
-| a **forma** da suíte entre níveis | `test-review` |
-| revisar a persistência que o teste exercita | `drizzle-review` |
-| escrever ou revisar o componente, não o teste dele | `react-developer` · `react-review` |
-| decidir cache e invalidação que o teste observa | `tanstack-query` |
+| reviewing the whole suite, diagnosing flakiness, classifying severity | `bun-test-review` |
+| the **shape** of the suite across levels | `test-review` |
+| reviewing the persistence the test exercises | `drizzle-review` |
+| writing or reviewing the component, not its test | `react-developer` · `react-review` |
+| deciding the cache and invalidation the test observes | `tanstack-query` |
 
-Quando a fronteira for atravessada, **declare a troca** em vez de opinar fora da sua fonte.
+When the boundary is crossed, **declare the handoff** instead of opining outside your source.
 
 ---
 
-## Relacionados
+## Related
 
-- [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — fonte desta skill: § 2, § 5, § 6, § 7
+- [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — source of this skill: § 2, § 5, § 6, § 7
 - [Bun - Testes - Escrita e Asserções](../../../knowledge-base/docs/bun-testes-escrita-e-assercoes.md) · [Bun - Testes - Mocks e Tempo](../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) · [Bun - Testes - DOM e Componentes](../../../knowledge-base/docs/bun-testes-dom-e-componentes.md) · [Bun - Testes - Ciclo de Vida e Isolamento](../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md) · [Bun - Testes - Execução e Configuração](../../../knowledge-base/docs/bun-testes-execucao-e-configuracao.md) · [Bun - Testes - Cobertura e CI](../../../knowledge-base/docs/bun-testes-cobertura-e-ci.md)
-- `bun-test-review` — a skill irmã
-- `test-design` — decide o nível, antes desta skill começar
+- `bun-test-review` — the sibling skill
+- `test-design` — decides the level, before this skill starts

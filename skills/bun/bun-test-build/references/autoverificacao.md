@@ -1,37 +1,37 @@
-# Autoverificação antes de entregar
+# Self-check before delivering
 
-Não entregue teste sem passar por esta lista. Cada linha é uma falha que fica **verde**:
+Do not deliver a test without going through this list. Every line is a failure that stays **green**:
 
-- [ ] O arquivo casa um padrão de descoberta? → `BUN-TEST-01`
-- [ ] Toda asserção em `catch`, callback ou `if` tem `expect.assertions(n)`? → `BUN-TEST-06`
-- [ ] Todo `spyOn` tem restauração garantida? → `BUN-TEST-02`
-- [ ] Nenhum `mock.module` conta com restauração automática? → `BUN-TEST-03`
-- [ ] Nenhum `.only`, e bug conhecido está em `test.failing`? → `BUN-TEST-08`, `BUN-TEST-11`
-- [ ] Nenhum `Bun.sleep` esperando render ou timer?
-- [ ] Snapshot de objeto com campo variável usa property matchers? → `BUN-TEST-19`
-- [ ] Componente: `cleanup` presente e todo `userEvent` aguardado? → `BUN-TEST-26`
-- [ ] Data formatada tem fuso fixo? → `BUN-TEST-21`
-- [ ] Teste concorrente não compartilha estado mutável? → `BUN-TEST-23`
+- [ ] Does the file match a discovery pattern? → `BUN-TEST-01`
+- [ ] Does every assertion in a `catch`, callback or `if` have `expect.assertions(n)`? → `BUN-TEST-06`
+- [ ] Does every `spyOn` have guaranteed restoration? → `BUN-TEST-02`
+- [ ] Does no `mock.module` rely on automatic restoration? → `BUN-TEST-03`
+- [ ] No `.only`, and is a known bug in `test.failing`? → `BUN-TEST-08`, `BUN-TEST-11`
+- [ ] No `Bun.sleep` waiting on a render or a timer?
+- [ ] Does an object snapshot with a varying field use property matchers? → `BUN-TEST-19`
+- [ ] Component: is `cleanup` present and every `userEvent` awaited? → `BUN-TEST-26`
+- [ ] Does a formatted date have a fixed timezone? → `BUN-TEST-21`
+- [ ] Does a concurrent test avoid sharing mutable state? → `BUN-TEST-23`
 
-E as duas que exigem execução, não leitura:
+And the two that require execution, not reading:
 
 ```bash
-bun test./caminho/do-novo.test.ts # passa isolado
-bun test --randomize # a suíte ainda passa em ordem aleatória
-tsc --noEmit # o runner não checa tipo — BUN-TEST-18
+bun test./path/to-the-new.test.ts # passes in isolation
+bun test --randomize # the suite still passes in random order
+tsc --noEmit # the runner does not type-check — BUN-TEST-18
 ```
 
-**Rode as três de verdade.** "Deve passar" não é verificação: se não rodou, declare que não rodou. Se `--randomize` quebrou depois do seu teste, você acabou de introduzir dependência de ordem (`BUN-TEST-09`): o setup de que ele depende precisa entrar no próprio arquivo, e nenhuma flag substitui isso. O diagnóstico completo é `bun-test-review`.
+**Actually run all three.** "Should pass" is not verification: if you did not run it, declare that you did not. If `--randomize` broke after your test, you have just introduced order dependence (`BUN-TEST-09`): the setup it depends on has to move into the file itself, and no flag replaces that. The full diagnosis is `bun-test-review`.
 
 ---
 
-## O que entregar
+## What to deliver
 
-Três partes, sempre, e a terceira é a que costuma faltar:
+Three parts, always, and the third is the one that usually goes missing:
 
-1. **O código** — o teste ou a configuração, no padrão que a suíte já usa. Se o repositório tem o padrão certo em outro arquivo, estenda esse padrão em vez de introduzir um novo.
-2. **O que foi executado**, com o resultado: quais dos três comandos acima rodaram e o que devolveram. Cole a saída quando ela for o argumento.
-3. **O que não foi verificado**, nomeado. Suíte que não sobe, banco fora do ar, `tsc` não rodado: diga qual e por quê. **"Deve passar" não é resultado** — declarar a lacuna é o que separa entrega verificada de entrega plausível.
+1. **The code** — the test or the configuration, in the pattern the suite already uses. If the repository has the right pattern in another file, extend that pattern rather than introducing a new one.
+2. **What was run**, with the result: which of the three commands above ran and what they returned. Paste the output when the output is the argument.
+3. **What was not verified**, named. A suite that does not start, a database that is down, `tsc` not run: say which and why. **"Should pass" is not a result** — declaring the gap is what separates a verified delivery from a plausible one.
 
 ---
 
@@ -41,8 +41,8 @@ Três partes, sempre, e a terceira é a que costuma faltar:
 ## Script
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-test-build/scripts/autoverificar.sh test/sessao.test.ts
+bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-test-build/scripts/autoverificar.sh test/session.test.ts
 ```
 
-Ele cobre os itens mecânicos e marca como **heurísticos** os quatro que exigem leitura
-(asserção em `catch`, fuso, `cleanup`, `userEvent` aguardado).
+It covers the mechanical items and marks as **heuristic** the four that require reading
+(assertion in `catch`, timezone, `cleanup`, awaited `userEvent`).

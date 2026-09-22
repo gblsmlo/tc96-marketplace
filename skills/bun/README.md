@@ -1,64 +1,64 @@
-# Skills de Bun
+# Bun skills
 
-Cinco skills: duas de teste, três de runtime, pacote e migração.
+Five skills: two about testing, three about runtime, packages and migration.
 
-| Skill | A pergunta que responde | Fonte | Apoio interno |
+| Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
-| `bun-test-build` | como escrevo este teste, e como configuro a suíte? | [Bun - Testes](../../knowledge-base/docs/bun-testes.md) | 4 referências + 1 script |
-| `bun-test-review` | esta suíte tem defeito? por que este teste flakeia? | [Bun - Testes](../../knowledge-base/docs/bun-testes.md) | 5 referências + 2 scripts |
-| `bun-runtime` | como escrevo isto com as APIs do runtime? | [Bun - Runtime e APIs](../../knowledge-base/docs/bun-runtime-e-apis.md) | 6 referências + 2 scripts |
-| `bun-workspace` | dependência, lockfile, workspace, instalação | [Bun - Gerenciador de Pacotes](../../knowledge-base/docs/bun-gerenciador-de-pacotes.md) | 5 referências + 1 script |
-| `bun-migrate` | veio do Node e não roda — é incompatibilidade? | [Bun - Shell, FFI e Compat Node](../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md) | 4 referências + 1 script |
+| `bun-test-build` | how do I write this test, and how do I configure the suite? | [Bun - Testes](../../knowledge-base/docs/bun-testes.md) | 4 references + 1 script |
+| `bun-test-review` | does this suite have defects? why is this test flaky? | [Bun - Testes](../../knowledge-base/docs/bun-testes.md) | 5 references + 2 scripts |
+| `bun-runtime` | how do I write this with the runtime APIs? | [Bun - Runtime e APIs](../../knowledge-base/docs/bun-runtime-e-apis.md) | 6 references + 2 scripts |
+| `bun-workspace` | dependency, lockfile, workspace, install | [Bun - Gerenciador de Pacotes](../../knowledge-base/docs/bun-gerenciador-de-pacotes.md) | 5 references + 1 script |
+| `bun-migrate` | it came from Node and does not run — is it an incompatibility? | [Bun - Shell, FFI e Compat Node](../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md) | 4 references + 1 script |
 
-## As três novas, e o que cada script faz
+## The three newer ones, and what each script does
 
-| Script | O que faz |
+| Script | What it does |
 | --- | --- |
-| `bun-workspace/scripts/sondas.sh` | lê o `package.json` **como JSON** e diz quais pacotes da lista padrão o `trustedDependencies` desligou |
-| `bun-migrate/scripts/enumerar.sh` | enumera `node:*` no código **e nas dependências transitivas** |
-| `bun-runtime/scripts/autoverificar.sh` | invariantes do binário, `tsc --noEmit` no CI, hash de senha, `--watch` × `--hot` |
+| `bun-workspace/scripts/sondas.sh` | reads `package.json` **as JSON** and says which packages from the default list `trustedDependencies` turned off |
+| `bun-migrate/scripts/enumerar.sh` | enumerates `node:*` in the code **and in transitive dependencies** |
+| `bun-runtime/scripts/autoverificar.sh` | binary invariants, `tsc --noEmit` in CI, password hashing, `--watch` × `--hot` |
 
-**A sonda de `trustedDependencies` precisou de JSON, não de grep.** A regra é que a lista
-**substitui** a padrão em vez de estender (`BUN-PKG-04`), e o sintoma aparece em **runtime**
-— binário não compilado, longe da causa. Um `grep` num `package.json` de uma linha responde
-"está lá" para o arquivo inteiro; a checagem correta compara `dependencies` com a lista
-declarada, item a item.
+**The `trustedDependencies` probe needed JSON, not grep.** The rule is that the list
+**replaces** the default one rather than extending it (`BUN-PKG-04`), and the symptom shows up
+at **runtime** — an uncompiled binary, far from the cause. A `grep` over a one-line
+`package.json` answers "it is there" for the whole file; the correct check compares
+`dependencies` against the declared list, item by item.
 
-**A busca 2 de `enumerar.sh` é a que muda o plano.** Uma dependência transitiva que usa
-`async_hooks` — que no Bun é **stub que não lança** — decide a viabilidade da migração, e
-não aparece no código do projeto. Sem `node_modules` instalado, o script **diz que a
-enumeração é parcial** em vez de fingir cobertura.
+**Search 2 in `enumerar.sh` is the one that changes the plan.** A transitive dependency using
+`async_hooks` — which in Bun is a **stub that does not throw** — decides the feasibility of the
+migration, and does not appear in the project's own code. Without `node_modules` installed, the
+script **says the enumeration is partial** rather than faking coverage.
 
-## As duas de teste
+## The two about testing
 
-`bun-test-build` e `bun-test-review` dividem **modo de trabalho**, não fonte: a família
-`BUN-TEST-*` inteira é declarada na § 6 do hub, e o corpo de cada regra mora no satélite dono.
+`bun-test-build` and `bun-test-review` split by **mode of work**, not by source: the whole
+`BUN-TEST-*` family is declared in § 6 of the hub, and the body of each rule lives in the owning satellite.
 
-| Skill | Ganhou | Lacuna que fechou |
+| Skill | Gained | Gap it closed |
 | --- | --- | --- |
-| `bun-test-build` | **`scripts/autoverificar.sh`** | a checklist de 10 itens era leitura; agora aponta arquivo e linha |
-| `bun-test-review` | **`scripts/sondas.sh`** (com `--rodar`) | S2, S3, S4 e S5 exigem a suíte de pé — o script separa o que roda sem ela |
+| `bun-test-build` | **`scripts/autoverificar.sh`** | the 10-item checklist was reading; now it points at file and line |
+| `bun-test-review` | **`scripts/sondas.sh`** (with `--rodar`) | S2, S3, S4 and S5 need the suite up — the script separates what runs without it |
 
-`autoverificar.sh` marca explicitamente os quatro itens **heurísticos** (asserção em
-`catch`, fuso, `cleanup`, `userEvent` aguardado): ele aponta o arquivo, e a confirmação é
-leitura. Sonda que finge certeza é pior que sonda ausente.
+`autoverificar.sh` explicitly marks the four **heuristic** items (assertion in `catch`,
+timezone, `cleanup`, awaited `userEvent`): it points at the file, and confirmation is reading.
+A probe that fakes certainty is worse than an absent probe.
 
-## Os mapas de IDs — dois, e a coluna que só esta família tem
+## The ID maps — two of them, and the column only this family has
 
-São **dois geradores**, porque as famílias não se misturam:
+There are **two generators**, because the families do not mix:
 
-| Gerador | Família | IDs |
+| Generator | Family | IDs |
 | --- | --- | --- |
-| `bun-test-review/scripts/gerar-mapa-de-ids.sh` | `BUN-TEST-*` | **29** — a faixa completa `01`–`29`, conferência contra ID inventado |
+| `bun-test-review/scripts/gerar-mapa-de-ids.sh` | `BUN-TEST-*` | **29** — the full `01`–`29` range, checked against invented IDs |
 | `bun-runtime/scripts/gerar-mapa-de-ids.sh` | `BUN-CORE/RT/PKG/SYS-*` | **43** |
 
-O segundo **exclui** `Docs/Bun - Testes*` de propósito: misturar as duas famílias num mapa
-só faria a coluna de satélite perder sentido.
+The second one **excludes** `Docs/Bun - Testes*` on purpose: mixing the two families into a
+single map would make the satellite column meaningless.
 
-Como a família **inteira** é declarada na § 6 do hub, a coluna "declarada em" seria uniforme
-e inútil. O gerador acrescenta então **"corpo no satélite"**: para cada ID, qual dos seis
-satélites carrega o raciocínio, e em que seção. É a informação que a skill precisa para
-carregar **um** satélite em vez de seis.
+Because the **whole** family is declared in § 6 of the hub, a "declared in" column would be
+uniform and useless. The generator adds **"body in satellite"** instead: for each ID, which of
+the six satellites carries the reasoning, and in which section. That is the information the
+skill needs in order to load **one** satellite instead of six.
 
 ```bash
 bash plugins/hermes-backend/skills/bun-test-review/scripts/gerar-mapa-de-ids.sh
@@ -66,13 +66,13 @@ bash scripts/instalar.sh
 ```
 
 <!-- tokens:inicio -->
-## Orçamento de contexto
+## Context budget
 
-Medido por `skill-validator` (tiktoken), em 2026-09-05. **O número que importa é o da
-coluna `SKILL.md`**: é o que entra no contexto antes de a skill decidir o que abrir.
-As referências carregam sob demanda, uma por vez.
+Measured by `skill-validator` (tiktoken), on 2026-09-05. **The number that matters is the
+`SKILL.md` column**: it is what enters the context before the skill decides what to open.
+References load on demand, one at a time.
 
-| Skill | `SKILL.md` | maior `references/` | total | refs |
+| Skill | `SKILL.md` | largest `references/` | total | refs |
 | --- | ---: | --- | ---: | ---: |
 | `bun-migrate` | 1.036 | `mapa-de-ids.md` (1.772) | 5.365 | 5 |
 | `bun-runtime` | 1.035 | `mapa-de-ids.md` (1.772) | 5.856 | 7 |
@@ -80,14 +80,14 @@ As referências carregam sob demanda, uma por vez.
 | `bun-test-review` | 1.565 | `mapa-de-ids.md` (1.632) | 8.899 | 6 |
 | `bun-workspace` | 973 | `mapa-de-ids.md` (1.772) | 5.436 | 6 |
 
-Carregar as 5 skills deste grupo de uma vez custaria **6.327 tokens** só de `SKILL.md`,
-e **32.900** com todas as referências. É por isso que cada skill declara o que **nunca** carregar.
+Loading all 5 skills in this group at once would cost **6.327 tokens** in `SKILL.md` alone,
+and **32.900** with every reference. That is why each skill declares what it must **never** load.
 
-Regenerar: `bash scripts/medir.sh`
+Regenerate: `bash scripts/medir.sh`
 <!-- tokens:fim -->
 
-## Relacionados
+## Related
 
-- [Skill — Índice](../README.md) · [Bun - Testes](../../knowledge-base/docs/bun-testes.md) § 7 — o contrato
-- `hermes-core: família teste` — decide o nível, antes destas
-- `hermes-e2e: família playwright` — o nível E2E
+- [Skills index](../README.md) · [Bun - Testes](../../knowledge-base/docs/bun-testes.md) § 7 — the contract
+- `hermes-core: test family` — decides the level, before these
+- `hermes-e2e: playwright family` — the E2E level

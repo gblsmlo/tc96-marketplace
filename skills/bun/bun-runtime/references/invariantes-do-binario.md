@@ -1,16 +1,13 @@
-# As invariantes do binário
+# The invariants of the binary
 
-| Confira | Regra |
+| Check | Rule |
 | --- | --- |
-| código que usa o global `Bun` roda sob o processo `bun` | `BUN-CORE-01` |
-| há `tsc --noEmit` no CI — **o runtime transpila sem checar tipo** | `BUN-CORE-02` |
-| módulo com top-level `await` não é carregado por `require` | `BUN-CORE-04` |
-| automação usa `bun run <script>`, na forma explícita | `BUN-CORE-06` |
-| flag de runtime vem **antes** do subcomando | `BUN-CORE-07` |
+| code using the `Bun` global runs under the `bun` process | `BUN-CORE-01` |
+| there is `tsc --noEmit` in CI — **the runtime transpiles without type-checking** | `BUN-CORE-02` |
+| a module with top-level `await` is not loaded by `require` | `BUN-CORE-04` |
+| automation uses `bun run <script>`, in the explicit form | `BUN-CORE-06` |
+| a runtime flag comes **before** the subcommand | `BUN-CORE-07` |
 
-**`BUN-CORE-02` é a que mais custa:** Bun transpila TypeScript e **não checa tipos**. Sem `tsc --noEmit` no CI, o projeto tem tipos decorativos — o erro de tipo só aparece quando o valor errado chega em runtime.
+**`BUN-CORE-02` is the one that costs most:** Bun transpiles TypeScript and **does not type-check**. Without `tsc --noEmit` in CI, the project has decorative types — the type error only shows up when the wrong value arrives at runtime.
 
-**E `BUN-CORE-03`:** adicionar `jest`, `ts-node`, `nodemon` ou `dotenv` exige justificar por que o equivalente embutido não serve. Os quatro já existem no binário.
-
----
-
+**And `BUN-CORE-03`:** adding `jest`, `ts-node`, `nodemon` or `dotenv` requires justifying why the built-in equivalent does not do the job. All four already exist in the binary.

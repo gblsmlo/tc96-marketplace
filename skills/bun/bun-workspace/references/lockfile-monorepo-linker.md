@@ -1,61 +1,58 @@
-# Lockfile, CI, monorepo, linker e patch
+# Lockfile, CI, monorepo, linker and patch
 
-| Regra | O que exige |
+| Rule | What it requires |
 | --- | --- |
-| `BUN-PKG-01` | `bun.lock` **versionado** |
-| `BUN-PKG-02` | CI instala com `bun ci` ou `bun install --frozen-lockfile` |
+| `BUN-PKG-01` | `bun.lock` **committed** |
+| `BUN-PKG-02` | CI installs with `bun ci` or `bun install --frozen-lockfile` |
 
-**`bun install` puro em CI reescreve o lockfile e não falha** — então um `package.json` divergente do lock passa silenciosamente, e a build usa versões que ninguém revisou. É a violação com maior distância entre causa e sintoma desta família.
+**A plain `bun install` in CI rewrites the lockfile and does not fail** — so a `package.json` diverging from the lock passes silently, and the build uses versions nobody reviewed. It is this family's violation with the greatest distance between cause and symptom.
 
 ```bash
 bun ci # CI
-bun install --frozen-lockfile # equivalente explícito
+bun install --frozen-lockfile # explicit equivalent
 ```
 
-E `BUN-PKG-05`, que engana pelo nome: **`--production` não é limpeza.** Ele não remove `devDependencies` já presentes em `node_modules` — para isso é `bun pm`. Numa imagem em camadas, `--production` depois de um install completo não reduz nada.
+And `BUN-PKG-05`, which misleads by its name: **`--production` is not cleanup.** It does not remove `devDependencies` already present in `node_modules` — that is what `bun pm` is for. In a layered image, `--production` after a full install reduces nothing.
 
 ---
 
-## Passo 3 — Monorepo
+## Step 3 — Monorepo
 
-| Regra | O que exige |
+| Rule | What it requires |
 | --- | --- |
-| `BUN-PKG-12` | `package.json` da raiz declara `"private": true`, e **nunca** lista dependência que algum pacote importa |
-| `BUN-PKG-06` | versão compartilhada por mais de um pacote vem de **catalog**, não repetida em cada `package.json` |
-| `BUN-PKG-08` | `overrides`/`resolutions` no `package.json` **raiz** — Bun **ignora** os declarados em workspace |
-| `BUN-PKG-07` | `catalog:` **nunca** chega a pacote publicado — publique por `bun publish` ou `bun pm pack` |
+| `BUN-PKG-12` | the root `package.json` declares `"private": true`, and **never** lists a dependency that some package imports |
+| `BUN-PKG-06` | a version shared by more than one package comes from a **catalog**, not repeated in each `package.json` |
+| `BUN-PKG-08` | `overrides`/`resolutions` in the **root** `package.json` — Bun **ignores** those declared in a workspace |
+| `BUN-PKG-07` | `catalog:` **never** reaches a published package — publish via `bun publish` or `bun pm pack` |
 
-**`BUN-PKG-08` falha em silêncio:** um `overrides` num pacote de workspace é simplesmente ignorado, e a versão que o autor queria fixar continua flutuando.
+**`BUN-PKG-08` fails silently:** an `overrides` in a workspace package is simply ignored, and the version the author meant to pin keeps floating.
 
-**`BUN-PKG-12` é sobre direção de dependência:** dependência na raiz que um pacote importa faz o pacote funcionar por acidente — ele resolve pelo hoisting e quebra quando alguém o move ou publica. Ver `Monorepo com Bun - estrutura e tooling`.
+**`BUN-PKG-12` is about dependency direction:** a root dependency that a package imports makes the package work by accident — it resolves through hoisting and breaks when someone moves or publishes it. See `Monorepo com Bun - estrutura e tooling`.
 
-**`BUN-PKG-07`** é o par de `BUN-PKG-06`: catalog resolve a versão na instalação do workspace, e o protocolo `catalog:` não é entendido por quem instala do registry. `bun publish` reescreve; `npm publish` cru publica o protocolo literal.
+**`BUN-PKG-07`** is the counterpart of `BUN-PKG-06`: a catalog resolves the version at workspace install time, and the `catalog:` protocol is not understood by whoever installs from the registry. `bun publish` rewrites it; a raw `npm publish` publishes the literal protocol.
 
 ---
 
-## Passo 4 — Linker
+## Step 4 — Linker
 
-| Modo | Layout |
+| Mode | Layout |
 | --- | --- |
-| `hoisted` | `node_modules` plano, como npm/yarn clássico |
-| `isolated` | por pacote, sem hoisting |
+| `hoisted` | flat `node_modules`, like classic npm/yarn |
+| `isolated` | per package, no hoisting |
 
-`BUN-PKG-10`: projeto cujo **build depende do layout de `node_modules`** declara `linker` explicitamente em `bunfig.toml`. O default pode mudar, e ferramenta que resolve por caminho — bundler com `resolve.alias`, plugin que faz `require.resolve` — quebra quando ele muda.
+`BUN-PKG-10`: a project whose **build depends on the `node_modules` layout** declares `linker` explicitly in `bunfig.toml`. The default can change, and a tool that resolves by path — a bundler with `resolve.alias`, a plugin doing `require.resolve` — breaks when it does.
 
-Se o build não depende do layout, não declare: é configuração que envelhece sem benefício.
+If the build does not depend on the layout, do not declare it: that is configuration that ages without benefit.
 
 ---
 
-## Passo 5 — Patch e `bunx`
+## Step 5 — Patch and `bunx`
 
-| Regra | O que exige |
+| Rule | What it requires |
 | --- | --- |
-| `BUN-PKG-09` | editar pacote em `node_modules/` **precisa** de `bun patch <pkg>` antes — edição direta **corrompe o cache global** |
-| `BUN-PKG-11` | `bunx` em CI ou script versionado fixa a versão, ou o pacote é devDependency |
+| `BUN-PKG-09` | editing a package under `node_modules/` **requires** `bun patch <pkg>` first — a direct edit **corrupts the global cache** |
+| `BUN-PKG-11` | `bunx` in CI or in a committed script pins the version, or the package is a devDependency |
 
-**`BUN-PKG-09` tem consequência fora do projeto:** o cache é global, então uma edição direta contamina outros projetos da máquina. E o sintoma aparece neles, não neste.
+**`BUN-PKG-09` has consequences outside the project:** the cache is global, so a direct edit contaminates other projects on the machine. And the symptom shows up in them, not in this one.
 
-**`BUN-PKG-11`** é reprodutibilidade: `bunx <pkg>` sem versão resolve o `latest` do dia, e o CI de amanhã roda outra coisa.
-
----
-
+**`BUN-PKG-11`** is reproducibility: `bunx <pkg>` without a version resolves that day's `latest`, and tomorrow's CI runs something else.

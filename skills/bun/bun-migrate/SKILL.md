@@ -1,8 +1,9 @@
 ---
 nome: bun-migrate
-descricao: Migrar código de Node para Bun e diagnosticar o que não roda — matriz de compatibilidade `node:*`, lacunas de cripto, async hooks que são stub, IPC entre runtimes, encerramento em container, Dockerfile — citando IDs `BUN-SYS-*` e `BUN-CORE-*`, com um script que enumera os módulos usados pelo código **e pelas dependências transitivas** — use quando a tarefa for planejar migração de um serviço Node, investigar módulo que se comporta diferente, decidir se uma dependência transitiva é suportada, montar imagem de produção, ou fazer o container encerrar sem derrubar requisição. Não use para escrever código novo com API do Bun, que é bun-runtime, nem para lockfile e workspace, que é bun-workspace.
+descricao: Migrate Node code to Bun and diagnose what does not run — `node:*` compatibility matrix, crypto gaps, async hooks that are stubs, IPC across runtimes, container shutdown, Dockerfile — citing `BUN-SYS-*` and `BUN-CORE-*` IDs, with a script that enumerates the modules used by the code **and by transitive dependencies** — use when the task is planning the migration of a Node service, investigating a module that behaves differently, deciding whether a transitive dependency is supported, assembling a production image, or making the container shut down without dropping a request. Do not use to write new code with Bun APIs, which is bun-runtime, nor for lockfile and workspace, which is bun-workspace.
 tipo: skill
 familia: bun
+idioma: en
 fonte: "[Bun - Shell, FFI e Compat Node](../../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md)"
 docs:
   - /oven-sh/bun
@@ -13,101 +14,101 @@ tags:
 ---
 # bun-migrate
 
-> **Fonte desta skill:** [Bun - Shell, FFI e Compat Node](../../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md), com o hub [Bun](../../../knowledge-base/docs/bun.md) como roteador.
-> **Superfície de API:** resolva pelo Context7 — `/oven-sh/bun`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [Bun - Shell, FFI e Compat Node](../../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md), with the [Bun](../../../knowledge-base/docs/bun.md) hub as the router.
+> **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
 ---
 
-## Quando usar
+## When to use
 
-Código que veio do Node, ou vai vir.
+Code that came from Node, or is about to.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| escrever código novo com API do Bun | `bun-runtime` |
-| dependência, lockfile, workspace | `bun-workspace` |
-| teste que falha só sob Bun | `bun-test-review` |
+| writing new code with Bun APIs | `bun-runtime` |
+| dependency, lockfile, workspace | `bun-workspace` |
+| a test that fails only under Bun | `bun-test-review` |
 
 ---
 
-## Passo 0 — A regra que governa a skill inteira
+## Step 0 — The rule that governs the whole skill
 
-> **Afirmação sobre compatibilidade com Node.js MUST ser conferida na página oficial.** "Funciona no Node" **não** é evidência de que funciona no Bun (`BUN-CORE-05`).
+> **A claim about Node.js compatibility MUST be checked against the official page.** "It works in Node" is **not** evidence that it works in Bun (`BUN-CORE-05`).
 
-A compatibilidade é **parcial e desigual**: alguns módulos são completos, alguns têm lacuna específica, e alguns são **stub que não lança** — o pior caso, porque o código roda e o resultado é **silenciosamente errado**.
+Compatibility is **partial and uneven**: some modules are complete, some have a specific gap, and some are **stubs that do not throw** — the worst case, because the code runs and the result is **silently wrong**.
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar |
+| Order | Load |
 | --- | --- |
-| 1 | [Bun](../../../knowledge-base/docs/bun.md) § 6 — `BUN-CORE-*` e `BUN-SYS-*` |
+| 1 | [Bun](../../../knowledge-base/docs/bun.md) § 6 — `BUN-CORE-*` and `BUN-SYS-*` |
 | 2 | [Bun - Shell, FFI e Compat Node](../../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md) |
-| 3 | a página oficial de compatibilidade, para **cada** módulo enumerado |
+| 3 | the official compatibility page, for **every** enumerated module |
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/enumerar-e-lacunas.md` | o passo que não se pula, e as quatro lacunas que importam |
-| `references/container.md` | imagem, encerramento e Dockerfile |
-| `references/diagnostico-e-relatorio.md` | sintoma → causa, formato do achado, e o que **não** é incompatibilidade |
-| `references/antipadroes.md` | a grade com ID |
-| `references/mapa-de-ids.md` | os 43 `BUN-CORE/RT/PKG/SYS-*` por satélite e seção |
-| `scripts/enumerar.sh` | enumera `node:*` no código **e** nas dependências transitivas |
+| `references/enumerar-e-lacunas.md` | the step you do not skip, and the four gaps that matter |
+| `references/container.md` | image, shutdown and Dockerfile |
+| `references/diagnostico-e-relatorio.md` | symptom → cause, finding format, and what is **not** an incompatibility |
+| `references/antipadroes.md` | the grid, with IDs |
+| `references/mapa-de-ids.md` | the 43 `BUN-CORE/RT/PKG/SYS-*` by satellite and section |
+| `scripts/enumerar.sh` | enumerates `node:*` in the code **and** in transitive dependencies |
 
 ---
 
-## Passo 1 — Enumerar, antes de migrar
+## Step 1 — Enumerate, before migrating
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-migrate/scripts/enumerar.sh src
 ```
 
-`BUN-SYS-07` é o passo que **não se pode pular**. E **a segunda busca é a que muda o plano**: uma dependência que usa `async_hooks` para tracing, ou `crypto` para uma cifra específica, decide a viabilidade da migração — e **não aparece no código do projeto**.
+`BUN-SYS-07` is the step that **cannot be skipped**. And **the second search is the one that changes the plan**: a dependency using `async_hooks` for tracing, or `crypto` for a specific cipher, decides the feasibility of the migration — and it **does not appear in the project's own code**.
 
-Sem `node_modules` instalado, a enumeração é parcial — o script diz isso em vez de fingir cobertura.
+Without `node_modules` installed, the enumeration is partial — the script says so rather than faking coverage.
 
 ---
 
-## Passo 2 — As quatro lacunas que importam
+## Step 2 — The four gaps that matter
 
-| Módulo | Estado | Consequência |
+| Module | State | Consequence |
 | --- | --- | --- |
-| `async_hooks` | **stub que não lança** | o código roda e o resultado é silenciosamente errado |
-| `crypto` | completo em quase tudo, com lacunas por cifra | confira **a cifra que você usa**, não o módulo |
-| `worker_threads` | parcial | |
-| `vm` / `cluster` | parcial ou ausente | |
+| `async_hooks` | **stub that does not throw** | the code runs and the result is silently wrong |
+| `crypto` | complete in almost everything, with gaps per cipher | check **the cipher you use**, not the module |
+| `worker_threads` | partial | |
+| `vm` / `cluster` | partial or absent | |
 
-Detalhe: `references/enumerar-e-lacunas.md`.
-
----
-
-## Passo 3 — Container
-
-`references/container.md`: imagem, `--smol`, e o **encerramento**. Sem tratamento de `SIGTERM`, o container encerra **no meio da requisição** — e o sintoma aparece como erro intermitente de cliente durante o deploy.
+Detail: `references/enumerar-e-lacunas.md`.
 
 ---
 
-## Passo 4 — Diagnosticar e reportar
+## Step 3 — Container
 
-`references/diagnostico-e-relatorio.md`: sintoma → causa, o formato do achado, e **o corte** — o que não é incompatibilidade e sim bug do próprio código.
-
----
-
-## Passo 5 — Fechar
-
-1. **Cada módulo enumerado foi conferido na página oficial?** Se não, o plano está apoiado em suposição (`BUN-CORE-05`).
-2. **Se algum é stub que não lança**, ele é bloqueante — não é "funciona com ressalva".
-3. **Se o container não trata `SIGTERM`**, o deploy derruba requisição.
-4. **Declare o que não foi verificado** — em especial as transitivas, se `node_modules` não estava instalado.
+`references/container.md`: image, `--smol`, and **shutdown**. Without handling `SIGTERM`, the container exits **mid-request** — and the symptom shows up as an intermittent client error during deploy.
 
 ---
 
-## Relacionados
+## Step 4 — Diagnose and report
 
-- [Bun - Shell, FFI e Compat Node](../../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md) — fonte desta skill
+`references/diagnostico-e-relatorio.md`: symptom → cause, the finding format, and **the cut** — what is not an incompatibility but a bug in the code itself.
+
+---
+
+## Step 5 — Closing
+
+1. **Was every enumerated module checked against the official page?** If not, the plan rests on assumption (`BUN-CORE-05`).
+2. **If any is a stub that does not throw**, it is blocking — it is not "works with caveats".
+3. **If the container does not handle `SIGTERM`**, the deploy drops requests.
+4. **Declare what was not verified** — especially the transitive ones, if `node_modules` was not installed.
+
+---
+
+## Related
+
+- [Bun - Shell, FFI e Compat Node](../../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md) — source of this skill
 - [Bun](../../../knowledge-base/docs/bun.md) § 6
-- `bun-runtime` · `bun-workspace` · `bun-test-build` · `bun-test-review` — a família
-- `Docs/Node.js.md` — o de onde se está saindo
+- `bun-runtime` · `bun-workspace` · `bun-test-build` · `bun-test-review` — the family
+- `Docs/Node.js.md` — what is being left behind

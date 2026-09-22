@@ -1,57 +1,54 @@
-# Arquivo, ambiente, processo e shell
+# File, environment, process and shell
 
-A árvore está na § 5 do hub. O resumo, e os quatro erros que ela evita:
+The tree is in § 5 of the hub. The summary, and the four errors it prevents:
 
 ```
-É conteúdo de arquivo (ler, escrever, stream)?
-├── SIM → Bun.file / Bun.write
-└── NÃO — é operação de DIRETÓRIO (mkdir, readdir, rm, stat)
- → node:fs (BUN-RT-01)
+Is it file CONTENT (read, write, stream)?
+├── YES → Bun.file / Bun.write
+└── NO — it is a DIRECTORY operation (mkdir, readdir, rm, stat)
+     → node:fs (BUN-RT-01)
 ```
 
-| Erro | Por quê | Regra |
+| Error | Why | Rule |
 | --- | --- | --- |
-| tratar `Bun.file(path)` como leitura | a referência é **preguiçosa**; nada é lido até `.text`/`.json`/`.bytes` | `BUN-RT-02` |
-| checar existência por `size === 0` | é também o tamanho de um arquivo que não existe — use `await file.exists` | `BUN-RT-03` |
-| esquecer `.end` num `FileSink` | o processo **não termina** | `BUN-RT-04` |
-| usar `Bun.file` para `readdir`/`mkdir` | ele só trata conteúdo | `BUN-RT-01` |
+| treating `Bun.file(path)` as a read | the reference is **lazy**; nothing is read until `.text`/`.json`/`.bytes` | `BUN-RT-02` |
+| checking existence via `size === 0` | that is also the size of a file that does not exist — use `await file.exists` | `BUN-RT-03` |
+| forgetting `.end` on a `FileSink` | the process **never exits** | `BUN-RT-04` |
+| using `Bun.file` for `readdir`/`mkdir` | it only handles content | `BUN-RT-01` |
 
-`BUN-RT-03` é a mais insidiosa: o código parece funcionar, e o ramo de "arquivo ausente" nunca é exercitado.
+`BUN-RT-03` is the most insidious: the code appears to work, and the "missing file" branch is never exercised.
 
 ---
 
-## Passo 3 — Ambiente
+## Step 3 — Environment
 
-| Regra | O que exige |
+| Rule | What it requires |
 | --- | --- |
-| `BUN-RT-05` | segredo de produção **nunca** vem de `.env` carregado pelo runtime |
-| `BUN-RT-06` | variável de ambiente **validada na inicialização**; o tipo por interface merging não é garantia |
-| `BUN-RT-07` | `$` literal num valor de `.env` **precisa** de `\` — Bun expande variáveis por padrão |
+| `BUN-RT-05` | a production secret **never** comes from a `.env` loaded by the runtime |
+| `BUN-RT-06` | an environment variable is **validated at startup**; the type from interface merging is no guarantee |
+| `BUN-RT-07` | a literal `$` in a `.env` value **needs** `\` — Bun expands variables by default |
 
-**`BUN-RT-06` é a que o stack já resolve:** validar com Zod na inicialização — `Zod - Validação de Ambiente` e. Interface merging dá autocomplete e **não** garante que a variável existe; o tipo diz `string` e o valor é `undefined`.
+**`BUN-RT-06` is the one the stack already solves:** validate with Zod at startup — `Zod - Validação de Ambiente`. Interface merging gives autocomplete and does **not** guarantee the variable exists; the type says `string` and the value is `undefined`.
 
-**`BUN-RT-07` produz um bug que ninguém procura no lugar certo:** uma senha com `$` no `.env` chega truncada, e o sintoma é falha de autenticação.
+**`BUN-RT-07` produces a bug nobody looks for in the right place:** a password with `$` in `.env` arrives truncated, and the symptom is an authentication failure.
 
 ---
 
-## Passo 4 — Processo e shell
+## Step 4 — Process and shell
 
 ```
-Preciso rodar algo externo?
-├── comando com valor de runtime → Bun.$ com INTERPOLAÇÃO (BUN-SYS-01)
-├── processo de longa duração → Bun.spawn
-└── e NUNCA em handler HTTP → Bun.spawnSync / *Sync de node:fs (BUN-RT-08)
+Do I need to run something external?
+├── command with a runtime value → Bun.$ with INTERPOLATION (BUN-SYS-01)
+├── long-running process         → Bun.spawn
+└── and NEVER in an HTTP handler → Bun.spawnSync / node:fs *Sync (BUN-RT-08)
 ```
 
-| Regra | O que exige |
+| Rule | What it requires |
 | --- | --- |
-| `BUN-RT-08` | handler de servidor **nunca** chama `Bun.spawnSync` nem `*Sync` de `node:fs` — bloqueia o event loop do processo inteiro |
-| `BUN-RT-09` | subprocesso de duração não garantida recebe `timeout` ou `signal` |
-| `BUN-SYS-01` | comando com valor de runtime usa interpolação de `Bun.$`; `child_process.exec` com string concatenada **nunca** |
+| `BUN-RT-08` | a server handler **never** calls `Bun.spawnSync` nor `node:fs` `*Sync` — it blocks the event loop of the whole process |
+| `BUN-RT-09` | a subprocess of unguaranteed duration gets a `timeout` or `signal` |
+| `BUN-SYS-01` | a command with a runtime value uses `Bun.$` interpolation; `child_process.exec` with a concatenated string **never** |
 
-**A interpolação de `Bun.$` escapa por você** — é o que torna `BUN-SYS-01` uma regra de segurança, não de estilo. Mas as garantias **param** dentro de um `sh -c`/`bash -c` (`BUN-SYS-02`), e argumento de runtime que começa com `-` precisa de `--` ou de rejeição (`BUN-SYS-03`).
+**`Bun.$` interpolation escapes for you** — that is what makes `BUN-SYS-01` a security rule, not a style one. But the guarantees **stop** inside an `sh -c`/`bash -c` (`BUN-SYS-02`), and a runtime argument starting with `-` needs `--` or rejection (`BUN-SYS-03`).
 
-**`BUN-RT-08` é a que mais aparece em código gerado:** um `readFileSync` num handler parece inofensivo e para o servidor inteiro sob carga.
-
----
-
+**`BUN-RT-08` is the one that shows up most in generated code:** a `readFileSync` in a handler looks harmless and stops the whole server under load.

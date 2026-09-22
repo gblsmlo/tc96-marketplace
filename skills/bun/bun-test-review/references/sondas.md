@@ -1,42 +1,42 @@
-# As sete sondas — antes de ler o código
+# The seven probes — before reading the code
 
-> Numa suíte de teste, **os piores defeitos são invisíveis à leitura**: o arquivo parece
-> completo, os testes parecem certos, o CI está verde — e mesmo assim o arquivo nunca rodou,
-> o portão nunca fechou, ou a suíte só passa na ordem de hoje.
+> In a test suite, **the worst defects are invisible to reading**: the file looks complete,
+> the tests look right, CI is green — and even so the file never ran, the gate never closed,
+> or the suite only passes in today's order.
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-test-review/scripts/sondas.sh # só as mecânicas
-bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-test-review/scripts/sondas.sh --rodar # + as que exigem a suíte de pé
+bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-test-review/scripts/sondas.sh # mechanical ones only
+bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-test-review/scripts/sondas.sh --rodar # + the ones needing the suite up
 ```
 
-| Sonda | Como | O que revela |
+| Probe | How | What it reveals |
 | --- | --- | --- |
-| **S1. Teste que nunca roda** | `find. -path./node_modules -prune -o -name '*[Tt]est*' -print \| grep -Ev '\.(test\|spec)\.[cm]?[jt]sx?$\|_(test\|spec)\.[cm]?[jt]sx?$'` | `BUN-TEST-01` — arquivo fora do padrão de descoberta não roda e não gera aviso |
-| **S2. Dependência de ordem** | `bun test --randomize; echo "exit=$?"` — e, se falhar, `bun test --randomize --seed <n>` para reproduzir | `BUN-TEST-09` — a suíte passa na ordem de descoberta e quebra em qualquer outra |
-| **S3. Dependência do global compartilhado** | `bun test --isolate` | quais arquivos só passavam porque outro rodou antes; sob `--parallel` isso é o CI de amanhã |
-| **S4. Flaky que não é de ordem** | `bun test --rerun-each 20` | `await` faltando, timer real, concorrência — falha que a execução única esconde |
-| **S5. O portão de cobertura fecha?** | `grep -nE 'coverageThreshold\|coverageReporter' bunfig.toml` e depois `bun test --coverage; echo "exit=$?"` | `BUN-TEST-27`, `BUN-TEST-28` — limiar sem reporter `text` (fora de `--parallel`), ou declarado em `statements`, **não reprova nada** |
-| **S6. Restauração de mock existe?** | `grep -rn 'mock.restore' $(grep -oE '"[^"]+\.ts"' bunfig.toml \| tr -d '"')` — ou `grep -rn 'preload' bunfig.toml` e ler cada arquivo | `BUN-TEST-02` — sem `mock.restore` num preload, todo `spyOn` da suíte é candidato a vazamento |
-| **S7. Marcas e comandos** | `grep -rn '\.only(\|\.skip(' --include='*.test.*' --include='*.spec.*'.` e `grep -rn 'update-snapshots\|--retry\|tsc --noEmit' package.json.github/` | `BUN-TEST-05`, `BUN-TEST-08`, `BUN-TEST-11`, `BUN-TEST-18` — marcas commitadas, `-u` no CI, retry global, typecheck ausente |
+| **S1. Test that never runs** | `find. -path./node_modules -prune -o -name '*[Tt]est*' -print \| grep -Ev '\.(test\|spec)\.[cm]?[jt]sx?$\|_(test\|spec)\.[cm]?[jt]sx?$'` | `BUN-TEST-01` — a file outside the discovery pattern does not run and raises no warning |
+| **S2. Order dependence** | `bun test --randomize; echo "exit=$?"` — and, if it fails, `bun test --randomize --seed <n>` to reproduce | `BUN-TEST-09` — the suite passes in discovery order and breaks in any other |
+| **S3. Dependence on the shared global** | `bun test --isolate` | which files only passed because another ran first; under `--parallel` that is tomorrow's CI |
+| **S4. Flakiness that is not about order** | `bun test --rerun-each 20` | a missing `await`, a real timer, concurrency — failure that a single run hides |
+| **S5. Does the coverage gate close?** | `grep -nE 'coverageThreshold\|coverageReporter' bunfig.toml` and then `bun test --coverage; echo "exit=$?"` | `BUN-TEST-27`, `BUN-TEST-28` — a threshold without the `text` reporter (outside `--parallel`), or declared on `statements`, **fails nothing** |
+| **S6. Does mock restoration exist?** | `grep -rn 'mock.restore' $(grep -oE '"[^"]+\.ts"' bunfig.toml \| tr -d '"')` — or `grep -rn 'preload' bunfig.toml` and read each file | `BUN-TEST-02` — without `mock.restore` in a preload, every `spyOn` in the suite is a leak candidate |
+| **S7. Marks and commands** | `grep -rn '\.only(\|\.skip(' --include='*.test.*' --include='*.spec.*'.` and `grep -rn 'update-snapshots\|--retry\|tsc --noEmit' package.json.github/` | `BUN-TEST-05`, `BUN-TEST-08`, `BUN-TEST-11`, `BUN-TEST-18` — committed marks, `-u` in CI, global retry, missing typecheck |
 
-S1, S6 e S7 são leitura mecânica e rodam em segundos. S2, S3 e S4 exigem a suíte de pé. S5 exige as duas coisas: ler a configuração **e** conferir o exit code.
+S1, S6 and S7 are mechanical reading and run in seconds. S2, S3 and S4 need the suite up. S5 needs both: reading the configuration **and** checking the exit code.
 
-**Se S1 encontrar arquivo, ou S5 mostrar portão aberto, reporte antes de continuar.** Nos dois casos a revisão de conteúdo perde sentido: um arquivo que nunca rodou não tem defeito de asserção que importe, e um portão que nunca fecha torna qualquer discussão de cobertura decorativa.
+**If S1 finds a file, or S5 shows an open gate, report before continuing.** In both cases reviewing content loses its point: a file that never ran has no assertion defect that matters, and a gate that never closes makes any discussion of coverage decorative.
 
 
 ---
 
-## O que a sonda não pega
+## What the probe does not catch
 
-| Não detectável mecanicamente | Regra | Como achar |
+| Not mechanically detectable | Rule | How to find it |
 | --- | --- | --- |
-| `expect` em `catch`/callback sem contagem | `BUN-TEST-06` | procurar `catch (` no arquivo de teste e conferir se há `expect.assertions(n)` |
-| mock de módulo esperando restauração | `BUN-TEST-03` | ler cada `mock.module` e ver se algo conta com desfazer |
-| preload caro ou não idempotente | `BUN-TEST-24` | ler o preload: servidor ou migração ali só quebra sob `--parallel` |
-| `test.serial` usado para dependência **entre arquivos** | `BUN-TEST-09` | é correção errada: `serial` sequencia dentro do arquivo |
+| `expect` in a `catch`/callback without a count | `BUN-TEST-06` | look for `catch (` in the test file and check for `expect.assertions(n)` |
+| a module mock expecting restoration | `BUN-TEST-03` | read each `mock.module` and see whether anything relies on undoing it |
+| an expensive or non-idempotent preload | `BUN-TEST-24` | read the preload: a server or a migration there only breaks under `--parallel` |
+| `test.serial` used for a dependency **between files** | `BUN-TEST-09` | it is the wrong fix: `serial` sequences within the file |
 
-## Relacionados
+## Related
 
-- `ordem-da-varredura.md` — o que fazer com o que as sondas apontaram
-- `severidade-e-relatorio.md` — classificar e escrever
-- `mapa-de-ids.md` — onde cada `BUN-TEST-*` tem corpo
+- `ordem-da-varredura.md` — what to do with what the probes pointed at
+- `severidade-e-relatorio.md` — classify and write
+- `mapa-de-ids.md` — where each `BUN-TEST-*` has its body

@@ -1,51 +1,48 @@
-# Enumerar antes de migrar, e as quatro lacunas
+# Enumerate before migrating, and the four gaps
 
-`BUN-SYS-07` é o passo que não se pode pular: enumere os módulos `node:*` usados **pelo código e pelas dependências transitivas**.
+`BUN-SYS-07` is the step that cannot be skipped: enumerate the `node:*` modules used **by the code and by transitive dependencies**.
 
 ```bash
-# no próprio código
+# in your own code
 grep -rnoE "from ['\"]node:[a-z_/]+" src/ | sort -u
 grep -rnoE "require\(['\"]node:[a-z_/]+" src/ | sort -u
 
-# e nas dependências — é a metade que costuma faltar
+# and in the dependencies — this is the half that usually gets missed
 grep -rhoE "require\(['\"](node:)?(async_hooks|worker_threads|crypto|vm|cluster|dgram|inspector|perf_hooks|v8|repl)['\"]" node_modules/ 2>/dev/null | sort | uniq -c | sort -rn | head -20
 ```
 
-**A segunda busca é a que muda o plano.** Uma dependência que usa `async_hooks` para tracing, ou `crypto` para uma cifra específica, decide a viabilidade da migração — e ela não aparece no código do projeto.
+**The second search is the one that changes the plan.** A dependency using `async_hooks` for tracing, or `crypto` for a specific cipher, decides the feasibility of the migration — and it does not appear in the project's own code.
 
 ---
 
-## Passo 2 — As quatro lacunas que importam
+## Step 2 — The four gaps that matter
 
-### 2.1 Cripto
+### 2.1 Crypto
 
-`BUN-SYS-08`: código que depende de **`secp256k1`**, **`argon2`**, **`ed448`/`x448`** ou das cifras **CCM/OCB/XTS/`chacha20-poly1305`** não presume suporte — confira antes.
+`BUN-SYS-08`: code that depends on **`secp256k1`**, **`argon2`**, **`ed448`/`x448`** or the **CCM/OCB/XTS/`chacha20-poly1305`** ciphers does not assume support — check first.
 
-Isto elimina migrações inteiras: uma biblioteca de assinatura de blockchain (`secp256k1`) ou de token com curva Edwards de 448 bits para no dia 1. E `argon2` costuma vir por dependência de hash de senha — nesse caso a saída é `Bun.password`, que faz argon2id nativamente (`BUN-RT-10`).
+This rules out entire migrations: a blockchain signing library (`secp256k1`) or a token library with a 448-bit Edwards curve stops on day 1. And `argon2` usually arrives through a password-hashing dependency — in that case the way out is `Bun.password`, which does argon2id natively (`BUN-RT-10`).
 
-### 2.2 Async hooks são stub
+### 2.2 Async hooks are stubs
 
-`BUN-SYS-09`: **observabilidade nunca se apoia em `createHook`, `executionAsyncId` ou `eventLoopUtilization`** em Bun — são stubs que **devolvem valor** em vez de lançar.
+`BUN-SYS-09`: **observability never rests on `createHook`, `executionAsyncId` or `eventLoopUtilization`** in Bun — they are stubs that **return a value** instead of throwing.
 
-Este é o pior tipo de incompatibilidade: o APM instala, roda, não dá erro, e produz trace vazio ou métrica constante. A ausência de exceção é o que faz a falha passar pela migração e aparecer semanas depois, como "perdemos observabilidade".
+This is the worst kind of incompatibility: the APM installs, runs, does not error, and produces an empty trace or a constant metric. The absence of an exception is what lets the failure pass through the migration and show up weeks later, as "we lost observability".
 
-### 2.3 `AsyncLocalStorage` não cruza `Worker`
+### 2.3 `AsyncLocalStorage` does not cross `Worker`
 
-`BUN-SYS-06`: contexto de rastreamento (trace id, request id) **precisa ir explícito na mensagem** ao `Worker`. `AsyncLocalStorage` não atravessa a fronteira.
+`BUN-SYS-06`: tracing context (trace id, request id) **has to go explicitly in the message** to the `Worker`. `AsyncLocalStorage` does not cross the boundary.
 
-Sintoma: o trace some quando o trabalho é delegado a worker, e as duas metades da requisição aparecem desconectadas.
+Symptom: the trace disappears when work is delegated to a worker, and the two halves of the request show up disconnected.
 
-### 2.4 IPC entre runtimes
+### 2.4 IPC across runtimes
 
-`BUN-SYS-10`: IPC entre processo Bun e processo Node **usa JSON**. `serialization: "advanced"` só funciona **entre dois Bun**.
+`BUN-SYS-10`: IPC between a Bun process and a Node process **uses JSON**. `serialization: "advanced"` only works **between two Bun processes**.
 
-Sintoma: mensagem chega deformada ou vazia num pipeline híbrido, sem erro claro.
-
----
-
-## Passo 3 — O que não vai para produção
-
-`BUN-SYS-05`: **`bun:ffi` e `cc` nunca entram em caminho de produção** — a própria doc os declara experimentais e recomenda Node-API. Se a migração depende de FFI, o caminho é Node-API, não `bun:ffi`.
+Symptom: a message arrives malformed or empty in a hybrid pipeline, with no clear error.
 
 ---
 
+## Step 3 — What does not go to production
+
+`BUN-SYS-05`: **`bun:ffi` and `cc` never enter a production path** — the docs themselves declare them experimental and recommend Node-API. If the migration depends on FFI, the way is Node-API, not `bun:ffi`.

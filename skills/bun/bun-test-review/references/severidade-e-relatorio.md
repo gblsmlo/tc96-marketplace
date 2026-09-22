@@ -1,59 +1,56 @@
-# Severidade, formato e o corte
+# Severity, format and the cut
 
-| Severidade | O que entra |
+| Severity | What goes in |
 | --- | --- |
-| **Bloqueante** | teste que **nunca roda** (`BUN-TEST-01`); asserção que nunca executa (`BUN-TEST-06`); portão de cobertura que não reprova (`BUN-TEST-27`, `BUN-TEST-28`); `-u` no CI (`BUN-TEST-05`); typecheck ausente (`BUN-TEST-18`) |
-| **Alta** | vazamento de mock/spy (`BUN-TEST-02`, `BUN-TEST-03`); dependência de ordem entre arquivos (`BUN-TEST-09`); recurso compartilhado sob `--parallel` (`BUN-TEST-10`); matcher de DOM não registrado (`BUN-TEST-12`); `.only` commitado (`BUN-TEST-08`) |
-| **Média** | `cleanup` ausente (`BUN-TEST-26`); `await` faltando em `userEvent`; snapshot sem property matcher (`BUN-TEST-19`); `.skip` de bug conhecido (`BUN-TEST-11`); versão não pinada (`BUN-TEST-15`) |
-| **Baixa** | preferência sem ID — **não é achado**, ver Passo 6 |
+| **Blocking** | a test that **never runs** (`BUN-TEST-01`); an assertion that never executes (`BUN-TEST-06`); a coverage gate that does not fail (`BUN-TEST-27`, `BUN-TEST-28`); `-u` in CI (`BUN-TEST-05`); missing typecheck (`BUN-TEST-18`) |
+| **High** | mock/spy leakage (`BUN-TEST-02`, `BUN-TEST-03`); order dependence between files (`BUN-TEST-09`); a shared resource under `--parallel` (`BUN-TEST-10`); an unregistered DOM matcher (`BUN-TEST-12`); a committed `.only` (`BUN-TEST-08`) |
+| **Medium** | missing `cleanup` (`BUN-TEST-26`); a missing `await` on `userEvent`; a snapshot without a property matcher (`BUN-TEST-19`); a `.skip` on a known bug (`BUN-TEST-11`); an unpinned version (`BUN-TEST-15`) |
+| **Low** | preference without an ID — **not a finding**, see Step 6 |
 
-O critério que decide entre Bloqueante e Alta: **o defeito faz o CI mentir?** Teste que não roda e portão que não fecha produzem verde falso — é outra categoria de problema que "teste frágil".
-
----
-
-## Passo 5 — Formato de saída de um achado
-
-Quatro partes, o mesmo contrato de `react-review` e `drizzle-review`:
-
-```
-`ID-DA-REGRA` — arquivo:linha
-<o que está errado, uma frase>
-Correção: <mudança concreta>
-Ver Satélite correspondente.
-```
-
-### Exemplo
-
-```
-`BUN-TEST-06` — apps/api/test/pagamento.test.ts:34
-A asserção vive no catch e o teste passa quando cobrar não lança: nenhuma asserção roda.
-Correção: expect.assertions(1) no topo, ou trocar por await expect(cobrar(...)).rejects.toThrow(PagamentoRecusado).
-Ver Bun - Testes - Escrita e Asserções.
-```
-
-Regras do formato:
-
-- **ID conferido na § 6** antes de escrever.
-- **`arquivo:linha` sempre.** Para sonda, a evidência é a saída do comando — cole-a, incluindo o exit code quando ele for o achado (S5).
-- **Correção concreta.** Se a suíte já tem o padrão certo em outro arquivo, aponte esse arquivo: estender o padrão estabelecido vale mais que introduzir um novo.
-- **Um link de satélite.**
+The criterion that decides between Blocking and High: **does the defect make CI lie?** A test that does not run and a gate that does not close produce false green — a different category of problem from "fragile test".
 
 ---
 
-## Passo 6 — O corte: achado × opinião
+## Step 5 — Output format of a finding
 
-**Achado sem ID de regra é opinião**, com três saídas:
+Four parts, the same contract as `react-review` and `drizzle-review`:
 
-1. **Existe ID** → achado, cite o ID.
-2. **Não existe ID, mas há nota normativa** (o que testar, política de integração externa, o que asseverar num componente) → cite a nota: "", "". Não invente `BUN-TEST-*`.
-3. **Nem ID nem nota** → seção separada "Sugestões (sem regra)", nunca misturada com os achados.
+```
+`RULE-ID` — file:line
+<what is wrong, one sentence>
+Fix: <concrete change>
+See the corresponding satellite.
+```
 
-Dois casos que **não** são achado, e confundi-los queima a credibilidade do relatório:
+### Example
 
-- **Ausência de teste.** "Este módulo não tem teste" é decisão de estratégia, não violação de regra —. Reporte como pergunta, não como defeito.
-- **Estilo de asserção.** `toEqual` onde você usaria `toStrictEqual` só é achado se a forma exata for o contrato. Sem esse argumento, é preferência.
+```
+`BUN-TEST-06` — apps/api/test/payment.test.ts:34
+The assertion lives in the catch and the test passes when charge does not throw: no assertion runs.
+Fix: expect.assertions(1) at the top, or switch to await expect(charge(...)).rejects.toThrow(PaymentDeclined).
+See Bun - Testes - Escrita e Asserções.
+```
 
-Se a varredura encontrar defeito recorrente e real sem regra correspondente, o produto certo é uma **proposta de regra** para [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 6 — ID sugerido, texto e o caso que a motivou — não uma citação falsa.
+Rules of the format:
+
+- **ID checked against § 6** before writing.
+- **`file:line` always.** For a probe, the evidence is the command's output — paste it, including the exit code when the exit code is the finding (S5).
+- **Concrete fix.** If the suite already has the right pattern in another file, point at that file: extending the established pattern is worth more than introducing a new one.
+- **One satellite link.**
 
 ---
 
+## Step 6 — The cut: finding × opinion
+
+**A finding without a rule ID is an opinion**, with three ways out:
+
+1. **There is an ID** → a finding, cite the ID.
+2. **There is no ID, but there is a normative note** (what to test, external-integration policy, what to assert in a component) → cite the note: "", "". Do not invent `BUN-TEST-*`.
+3. **Neither ID nor note** → a separate "Suggestions (no rule)" section, never mixed with the findings.
+
+Two cases that are **not** findings, and confusing them burns the report's credibility:
+
+- **Absence of a test.** "This module has no test" is a strategy decision, not a rule violation —. Report it as a question, not as a defect.
+- **Assertion style.** `toEqual` where you would use `toStrictEqual` is only a finding if the exact shape is the contract. Without that argument, it is preference.
+
+If the scan finds a recurring, real defect with no matching rule, the right product is a **rule proposal** for [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 6 — suggested ID, text and the case that motivated it — not a fake citation.

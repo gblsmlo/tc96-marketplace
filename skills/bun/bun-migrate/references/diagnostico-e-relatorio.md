@@ -1,65 +1,63 @@
-# Diagnóstico, formato do achado e o corte
+# Diagnosis, finding format and the cut
 
-| Sintoma | Causa provável | Regra |
+| Symptom | Likely cause | Rule |
 | --- | --- | --- |
-| `Bun is not defined` | rodando sob `node`, ou shebang `node` sem `--bun` | `BUN-CORE-01` |
-| erro de tipo só em runtime | não há `tsc --noEmit` no CI | `BUN-CORE-02` |
-| `require` falha num módulo do projeto | top-level `await` no módulo | `BUN-CORE-04` |
-| flag de runtime ignorada | veio depois do subcomando | `BUN-CORE-07` |
-| trace vazio, métrica constante | `async_hooks` é stub | `BUN-SYS-09` |
-| trace some ao entrar em worker | `AsyncLocalStorage` não cruza | `BUN-SYS-06` |
-| mensagem deformada entre processos | IPC "advanced" entre Bun e Node | `BUN-SYS-10` |
-| cifra ou curva não suportada | lacuna de cripto | `BUN-SYS-08` |
-| erro de cliente em todo deploy | sem dreno de `SIGTERM` | `BUN-SYS-11` |
-| container não sobe sem rede | auto-install no boot | `BUN-RT-12` |
-| comando externo com injeção | `child_process.exec` concatenado | `BUN-SYS-01` |
+| `Bun is not defined` | running under `node`, or a `node` shebang without `--bun` | `BUN-CORE-01` |
+| type error only at runtime | there is no `tsc --noEmit` in CI | `BUN-CORE-02` |
+| `require` fails on a project module | top-level `await` in the module | `BUN-CORE-04` |
+| runtime flag ignored | it came after the subcommand | `BUN-CORE-07` |
+| empty trace, constant metric | `async_hooks` is a stub | `BUN-SYS-09` |
+| trace disappears on entering a worker | `AsyncLocalStorage` does not cross | `BUN-SYS-06` |
+| malformed message between processes | "advanced" IPC between Bun and Node | `BUN-SYS-10` |
+| unsupported cipher or curve | crypto gap | `BUN-SYS-08` |
+| client error on every deploy | no `SIGTERM` drain | `BUN-SYS-11` |
+| container does not start without network | auto-install at boot | `BUN-RT-12` |
+| external command with injection | concatenated `child_process.exec` | `BUN-SYS-01` |
 
-**As duas primeiras linhas resolvem a maior parte dos "não roda"**, e nenhuma delas é sobre compatibilidade de módulo.
-
----
-
-## Passo 6 — Formato de saída de um achado
-
-```
-`ID-DA-REGRA` — <onde>
-Sintoma: <como se apresenta>
-Evidência: <a saída do comando de enumeração, ou o log>
-Causa: <uma frase>
-Correção: <mudança concreta, ou "bloqueia a migração">
-Ver Satélite correspondente.
-```
-
-### Exemplo
-
-```
-`BUN-SYS-09` — node_modules/@elastic/apm-node (dependência transitiva)
-Sintoma: após migrar, o APM instala e roda, sem erro, e nenhum trace aparece no painel.
-Evidência: Passo 1, segunda busca — 14 ocorrências de require('async_hooks') dentro de
- @elastic/apm-node; nenhuma no nosso código.
-Causa: createHook e executionAsyncId são stubs em Bun — devolvem valor em vez de lançar,
- então a instrumentação registra e nunca é chamada.
-Correção: não é conserto de configuração. Ou o serviço fica em Node, ou a observabilidade
- passa a ser instrumentação explícita (OpenTelemetry com propagação manual de contexto,
- e o trace id na mensagem ao worker — BUN-SYS-06).
-Ver Bun - Shell, FFI e Compat Node.
-```
-
-Regras do formato: **ID conferido na § 6**; **evidência é a saída da enumeração**, não impressão; e quando a lacuna **bloqueia**, diga isso em vez de propor contorno.
+**The first two rows resolve most "it does not run"**, and neither of them is about module compatibility.
 
 ---
 
-## Passo 7 — O corte: o que não é incompatibilidade
+## Step 6 — Output format of a finding
 
-Quatro casos que se apresentam como "o Bun não suporta" e não são:
+```
+`RULE-ID` — <where>
+Symptom: <how it presents>
+Evidence: <the output of the enumeration command, or the log>
+Cause: <one sentence>
+Fix: <concrete change, or "blocks the migration">
+See the corresponding satellite.
+```
 
-| Sintoma | Não é compatibilidade — é |
+### Example
+
+```
+`BUN-SYS-09` — node_modules/@elastic/apm-node (transitive dependency)
+Symptom: after migrating, the APM installs and runs, with no error, and no trace appears
+ in the dashboard.
+Evidence: Step 1, second search — 14 occurrences of require('async_hooks') inside
+ @elastic/apm-node; none in our code.
+Cause: createHook and executionAsyncId are stubs in Bun — they return a value instead of
+ throwing, so the instrumentation registers and is never called.
+Fix: this is not a configuration fix. Either the service stays on Node, or observability
+ becomes explicit instrumentation (OpenTelemetry with manual context propagation, and the
+ trace id in the message to the worker — BUN-SYS-06).
+See Bun - Shell, FFI e Compat Node.
+```
+
+Rules of the format: **ID checked against § 6**; **evidence is the output of the enumeration**, not an impression; and when the gap **blocks**, say so instead of proposing a workaround.
+
+---
+
+## Step 7 — The cut: what is not an incompatibility
+
+Four cases that present as "Bun does not support it" and are not:
+
+| Symptom | It is not compatibility — it is |
 | --- | --- |
-| erro de tipo em runtime | `tsc --noEmit` ausente (`BUN-CORE-02`) |
-| `Bun is not defined` | processo errado (`BUN-CORE-01`) |
-| dependência não instalou o binário | `trustedDependencies` substituindo a lista padrão — `bun-workspace` (`BUN-PKG-04`) |
-| resultado muda entre execuções | `--hot` onde precisava de `--watch` (`BUN-RT-11`) |
+| type error at runtime | missing `tsc --noEmit` (`BUN-CORE-02`) |
+| `Bun is not defined` | wrong process (`BUN-CORE-01`) |
+| a dependency did not install its binary | `trustedDependencies` replacing the default list — `bun-workspace` (`BUN-PKG-04`) |
+| result changes between runs | `--hot` where `--watch` was needed (`BUN-RT-11`) |
 
-**E o inverso, mais perigoso:** concluir que "funciona" porque não deu erro. Os stubs de `async_hooks` (§ 2.2) são exatamente isso — e é a razão de `BUN-CORE-05` proibir supor.
-
----
-
+**And the inverse, more dangerous:** concluding it "works" because nothing errored. The `async_hooks` stubs (§ 2.2) are exactly that — and it is why `BUN-CORE-05` forbids assuming.

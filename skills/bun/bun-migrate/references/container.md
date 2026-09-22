@@ -1,39 +1,36 @@
 # Container
 
-Dois requisitos que decidem se o deploy é seguro, e que costumam faltar.
+Two requirements that decide whether the deploy is safe, and that are usually missing.
 
-### 4.1 Encerramento
+### 4.1 Shutdown
 
-`BUN-SYS-11`: serviço em container **registra listener de `SIGTERM` (e `SIGINT`)** que drena o servidor.
+`BUN-SYS-11`: a containerized service **registers a `SIGTERM` (and `SIGINT`) listener** that drains the server.
 
 ```ts
 const server = Bun.serve({ /* … */ });
 
-for (const sinal of ['SIGTERM', 'SIGINT'] as const) {
- process.on(sinal, async => {
- await server.stop; // drena: para de aceitar, termina o que está em voo
+for (const signal of ['SIGTERM', 'SIGINT'] as const) {
+ process.on(signal, async => {
+ await server.stop; // drains: stops accepting, finishes what is in flight
  process.exit(0);
  });
 }
 ```
 
-Sem isso, o orquestrador manda `SIGTERM`, o processo morre imediatamente, e **as requisições em voo são cortadas** — o sintoma é erro de cliente durante todo deploy, e ele é atribuído à rede.
+Without it, the orchestrator sends `SIGTERM`, the process dies immediately, and **in-flight requests are cut** — the symptom is a client error on every deploy, and it gets blamed on the network.
 
 ### 4.2 Dockerfile
 
-`BUN-SYS-12`: a imagem de produção **instala com `bun install --frozen-lockfile --production`**, roda como **`USER bun`**, e não usa a tag `latest`.
+`BUN-SYS-12`: the production image **installs with `bun install --frozen-lockfile --production`**, runs as **`USER bun`**, and does not use the `latest` tag.
 
 ```dockerfile
-FROM oven/bun:1.4.0 # tag fixa, nunca latest
+FROM oven/bun:1.4.0 # pinned tag, never latest
 WORKDIR /app
 COPY package.json bun.lock./
 RUN bun install --frozen-lockfile --production
 COPY..
-USER bun # não root
-CMD ["bun", "run", "start"] # forma explícita — BUN-CORE-06
+USER bun # not root
+CMD ["bun", "run", "start"] # explicit form — BUN-CORE-06
 ```
 
-E lembre de `BUN-RT-12`: em produção, `node_modules` presente ou `--no-install`. Sem isso o auto-install resolve dependência **no boot**, e a imagem passa a depender da rede para subir.
-
----
-
+And remember `BUN-RT-12`: in production, `node_modules` present or `--no-install`. Without that, auto-install resolves dependencies **at boot**, and the image starts depending on the network to come up.

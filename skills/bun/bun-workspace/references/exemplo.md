@@ -1,20 +1,20 @@
-# Exemplo trabalhado
+# Worked example
 
-Tarefa: *"adicionar `sharp` ao serviço de imagens, num monorepo onde `@escopo/core` também usa `zod`"*.
+Task: *"add `sharp` to the images service, in a monorepo where `@scope/core` also uses `zod`"*.
 
-**Passo 1 — o script de instalação.** `sharp` compila binário no install. Ele **está** na lista padrão de confiança, então nada a declarar:
+**Step 1 — the install script.** `sharp` compiles a binary on install. It **is** on the default trust list, so there is nothing to declare:
 
 ```bash
-bun add sharp --cwd apps/imagens
-bun pm untrusted # confirma que sharp NÃO ficou bloqueado
+bun add sharp --cwd apps/images
+bun pm untrusted # confirms sharp did NOT end up blocked
 ```
 
-**Se houvesse `trustedDependencies` no projeto**, aí sim: `sharp` teria de ser reincluído, porque a lista declarada substitui a padrão (`BUN-PKG-04`).
+**Had the project had `trustedDependencies`**, then yes: `sharp` would have to be re-included, because the declared list replaces the default one (`BUN-PKG-04`).
 
-**Passo 3 — a versão compartilhada.** `zod` é usado por `apps/imagens` e por `@escopo/core` → catalog:
+**Step 3 — the shared version.** `zod` is used by `apps/images` and by `@scope/core` → catalog:
 
 ```jsonc
-// package.json da raiz
+// root package.json
 {
  "private": true, // BUN-PKG-12
  "workspaces": {
@@ -25,29 +25,26 @@ bun pm untrusted # confirma que sharp NÃO ficou bloqueado
 ```
 
 ```jsonc
-// apps/imagens/package.json
+// apps/images/package.json
 { "dependencies": { "sharp": "^0.34.1", "zod": "catalog:" } }
 ```
 
-E `sharp` **não** vai no catalog: só um pacote o usa.
+And `sharp` does **not** go in the catalog: only one package uses it.
 
-**Passo 2 — CI:**
+**Step 2 — CI:**
 
 ```yaml
-- run: bun ci # não `bun install` — BUN-PKG-02
-- run: tsc --noEmit # o runtime não checa tipo — BUN-CORE-02
+- run: bun ci # not `bun install` — BUN-PKG-02
+- run: tsc --noEmit # the runtime does not type-check — BUN-CORE-02
 ```
 
-**O que as decisões evitaram:**
+**What these decisions prevented:**
 
-| Decisão | Alternativa que dói | Regra |
+| Decision | Alternative that hurts | Rule |
 | --- | --- | --- |
-| conferir `bun pm untrusted` | supor que `sharp` compilou, e descobrir em runtime | `BUN-PKG-03` |
-| não declarar `trustedDependencies` sem necessidade | declarar e desligar os scripts de todo o resto | `BUN-PKG-04` |
-| `zod` em catalog | duas versões divergindo entre pacotes | `BUN-PKG-06` |
-| raiz `"private": true` sem `zod` | pacote funcionando por hoisting, quebrando ao ser movido | `BUN-PKG-12` |
-| `bun ci` no CI | `bun install`, que reescreve o lock e não falha | `BUN-PKG-02` |
-| `sharp` fora do catalog | catalog com entrada de um consumidor só, que envelhece | `BUN-PKG-06` |
-
----
-
+| checking `bun pm untrusted` | assuming `sharp` compiled, and finding out at runtime | `BUN-PKG-03` |
+| not declaring `trustedDependencies` without need | declaring it and turning off everything else's scripts | `BUN-PKG-04` |
+| `zod` in a catalog | two versions diverging across packages | `BUN-PKG-06` |
+| root `"private": true` without `zod` | a package working through hoisting, breaking when moved | `BUN-PKG-12` |
+| `bun ci` in CI | `bun install`, which rewrites the lock and does not fail | `BUN-PKG-02` |
+| `sharp` outside the catalog | a catalog with a single-consumer entry, which ages | `BUN-PKG-06` |

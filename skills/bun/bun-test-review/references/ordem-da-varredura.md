@@ -1,44 +1,44 @@
-# A ordem da varredura, e o diagnóstico de flaky
+# The scan order, and flakiness diagnosis
 
-1. **Asserção que pode não ter rodado** — `BUN-TEST-06`. É o primeiro porque é o defeito que produz teste verde sem verificação nenhuma: `expect` em `catch`, em callback, dentro de `if`. Procure `catch (` em arquivo de teste e confira se há contagem.
-2. **Vazamento de mock e spy** — `BUN-TEST-02`, `BUN-TEST-03`, `BUN-TEST-04`. Todo `spyOn` sem restauração garantida; todo `mock.module` que espera ser desfeito; todo mock que tenta evitar efeito de import fora do preload.
-3. **Isolamento e ordem** — `BUN-TEST-09`, `BUN-TEST-10`, `BUN-TEST-23`, `BUN-TEST-24`. Estado entre arquivos, recurso compartilhado sob `--parallel`, concorrência com estado mutável, preload caro.
-4. **Espera e tempo** — `await` faltando em `userEvent`, `Bun.sleep`, `useFakeTimers` usado para congelar data (`BUN-TEST-20`), data formatada sem fuso (`BUN-TEST-21`).
-5. **Marcas que apagam sinal** — `BUN-TEST-08`, `BUN-TEST-11`. `.only` commitado, `.skip` cobrindo bug conhecido.
-6. **Snapshot** — `BUN-TEST-05`, `BUN-TEST-19`. `-u` no CI, `__snapshots__/` ignorado, campo não determinístico sem property matcher.
-7. **DOM e componente** — `BUN-TEST-07`, `BUN-TEST-12`, `BUN-TEST-25`, `BUN-TEST-26`. Registro fora do preload, matchers não registrados, preload único, `cleanup` ausente.
-8. **Portões de CI** — `BUN-TEST-15`, `BUN-TEST-18`, `BUN-TEST-27`, `BUN-TEST-28`, `BUN-TEST-29`. Versão não pinada, typecheck ausente, limiar decorativo, `junit` sem outfile.
-9. **Configuração** — `BUN-TEST-13`, `BUN-TEST-14`, `BUN-TEST-16`, `BUN-TEST-17`, `BUN-TEST-22`. Glob no comando, `seed` sem `randomize`, `retry` com `repeats`, `done`, `onTestFinished` em concorrente.
+1. **Assertion that may not have run** — `BUN-TEST-06`. It comes first because it is the defect that produces a green test with no verification at all: `expect` in a `catch`, in a callback, inside an `if`. Look for `catch (` in test files and check whether there is a count.
+2. **Mock and spy leakage** — `BUN-TEST-02`, `BUN-TEST-03`, `BUN-TEST-04`. Every `spyOn` without guaranteed restoration; every `mock.module` expecting to be undone; every mock trying to avoid an import side effect outside the preload.
+3. **Isolation and order** — `BUN-TEST-09`, `BUN-TEST-10`, `BUN-TEST-23`, `BUN-TEST-24`. State across files, a shared resource under `--parallel`, concurrency with mutable state, an expensive preload.
+4. **Waiting and time** — a missing `await` on `userEvent`, `Bun.sleep`, `useFakeTimers` used to freeze a date (`BUN-TEST-20`), a formatted date without a timezone (`BUN-TEST-21`).
+5. **Marks that erase signal** — `BUN-TEST-08`, `BUN-TEST-11`. A committed `.only`, a `.skip` covering a known bug.
+6. **Snapshot** — `BUN-TEST-05`, `BUN-TEST-19`. `-u` in CI, `__snapshots__/` ignored, a non-deterministic field without a property matcher.
+7. **DOM and component** — `BUN-TEST-07`, `BUN-TEST-12`, `BUN-TEST-25`, `BUN-TEST-26`. Registration outside the preload, matchers not registered, a single preload, missing `cleanup`.
+8. **CI gates** — `BUN-TEST-15`, `BUN-TEST-18`, `BUN-TEST-27`, `BUN-TEST-28`, `BUN-TEST-29`. Unpinned version, missing typecheck, decorative threshold, `junit` without an outfile.
+9. **Configuration** — `BUN-TEST-13`, `BUN-TEST-14`, `BUN-TEST-16`, `BUN-TEST-17`, `BUN-TEST-22`. A glob on the command line, `seed` without `randomize`, `retry` with `repeats`, `done`, `onTestFinished` in a concurrent test.
 
-Se um passo produz achado que invalida o seguinte (o preload não restaura mock; a suíte não passa com `--randomize`), **pare de revisar o interior** e reporte a mudança de forma, não o detalhe.
+If a step produces a finding that invalidates the next one (the preload does not restore mocks; the suite does not pass with `--randomize`), **stop reviewing the interior** and report the change of shape, not the detail.
 
 ---
 
-## Passo 3 — Diagnóstico de flaky: sintoma → causa
+## Step 3 — Flakiness diagnosis: symptom → cause
 
-A árvore completa é a § 5.1 do hub. A leitura das sondas:
+The full tree is § 5.1 of the hub. The reading of the probes:
 
-| Sintoma | Causa provável | Regra / satélite |
+| Symptom | Likely cause | Rule / satellite |
 | --- | --- | --- |
-| Passa isolado, falha junto, e `--isolate` conserta | estado no global compartilhado: spy, módulo mockado, estado de módulo | `BUN-TEST-02`, `BUN-TEST-03`, `BUN-TEST-09` |
-| Falha só com `--parallel` | recurso externo compartilhado entre workers | `BUN-TEST-10` |
-| Falha só com `--parallel`, e é setup que sobe algo | hooks de preload envolvem **cada arquivo** | `BUN-TEST-24` |
-| Falha dentro do mesmo arquivo, dependendo da ordem | concorrência com estado mutável | `BUN-TEST-23` |
-| Componente encontra elemento de outro teste | `document` compartilhado sem limpeza | `BUN-TEST-26` |
-| Falha intermitente sem padrão de ordem | `await` faltando, ou timer real | [Bun - Testes - DOM e Componentes](../../../../knowledge-base/docs/bun-testes-dom-e-componentes.md) § 3 |
-| Snapshot falha em toda execução | campo não determinístico | `BUN-TEST-19` |
-| Teste "sumiu" do relatório | `.skip`, ou arquivo fora do padrão | `BUN-TEST-11`, `BUN-TEST-01` |
-| Todos os testes verdes e exit ≠ 0 | erro não tratado fora de teste | [Bun - Testes - Execução e Configuração](../../../../knowledge-base/docs/bun-testes-execucao-e-configuracao.md) § 6 |
-| `beforeAll` falhou e o relatório mostra "skip" | erro de hook pula o escopo inteiro | [Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md) § 2 |
+| Passes alone, fails together, and `--isolate` fixes it | state in the shared global: spy, mocked module, module state | `BUN-TEST-02`, `BUN-TEST-03`, `BUN-TEST-09` |
+| Fails only with `--parallel` | an external resource shared across workers | `BUN-TEST-10` |
+| Fails only with `--parallel`, and it is setup that starts something | preload hooks wrap **each file** | `BUN-TEST-24` |
+| Fails within the same file, depending on order | concurrency with mutable state | `BUN-TEST-23` |
+| A component finds an element from another test | shared `document` without cleanup | `BUN-TEST-26` |
+| Intermittent failure with no order pattern | a missing `await`, or a real timer | [Bun - Testes - DOM e Componentes](../../../../knowledge-base/docs/bun-testes-dom-e-componentes.md) § 3 |
+| Snapshot fails on every run | a non-deterministic field | `BUN-TEST-19` |
+| A test "disappeared" from the report | `.skip`, or a file outside the pattern | `BUN-TEST-11`, `BUN-TEST-01` |
+| All tests green and exit ≠ 0 | an unhandled error outside a test | [Bun - Testes - Execução e Configuração](../../../../knowledge-base/docs/bun-testes-execucao-e-configuracao.md) § 6 |
+| `beforeAll` failed and the report shows "skip" | a hook error skips the whole scope | [Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md) § 2 |
 
-**`test.serial` nunca resolve dependência entre arquivos** — ele sequencia dentro do arquivo. Se a correção proposta por alguém (ou por você) for `test.serial` para um teste que depende de outro arquivo, ela está errada: `BUN-TEST-09`.
-
----
+**`test.serial` never resolves a dependency between files** — it sequences within the file. If the fix proposed by someone (or by you) is `test.serial` for a test that depends on another file, it is wrong: `BUN-TEST-09`.
 
 ---
 
-## Relacionados
+---
 
-- [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 5.1 — a árvore de flaky completa
-- `sondas.md` — o que rodar antes
-- `severidade-e-relatorio.md` — classificar e reportar
+## Related
+
+- [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 5.1 — the full flakiness tree
+- `sondas.md` — what to run first
+- `severidade-e-relatorio.md` — classify and report

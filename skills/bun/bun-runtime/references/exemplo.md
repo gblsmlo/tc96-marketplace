@@ -1,44 +1,41 @@
-# Exemplo trabalhado
+# Worked example
 
-Tarefa: *"job que lê um CSV de um diretório, valida, e chama um binário externo para converter"*.
+Task: *"a job that reads a CSV from a directory, validates it, and calls an external binary to convert it"*.
 
 ```ts
-import { readdir } from 'node:fs/promises'; // diretório é node:fs — BUN-RT-01
+import { readdir } from 'node:fs/promises'; // directory is node:fs — BUN-RT-01
 import { z } from 'zod';
 
-const env = z.object({ // validado na inicialização — BUN-RT-06
- ENTRADA_DIR: z.string.min(1),
- CONVERSOR: z.string.min(1),
+const env = z.object({ // validated at startup — BUN-RT-06
+ INPUT_DIR: z.string.min(1),
+ CONVERTER: z.string.min(1),
 }).parse(process.env);
 
-const arquivos = await readdir(env.ENTRADA_DIR);
+const files = await readdir(env.INPUT_DIR);
 
-for (const nome of arquivos) {
- const arquivo = Bun.file(`${env.ENTRADA_DIR}/${nome}`);
+for (const name of files) {
+ const file = Bun.file(`${env.INPUT_DIR}/${name}`);
 
- if (!(await arquivo.exists)) continue; //.exists, não size === 0 — BUN-RT-03
+ if (!(await file.exists)) continue; //.exists, not size === 0 — BUN-RT-03
 
- const texto = await arquivo.text; // só aqui houve leitura — BUN-RT-02
- if (!texto.trim) continue;
+ const text = await file.text; // only here did a read happen — BUN-RT-02
+ if (!text.trim) continue;
 
- // interpolação escapa o valor; nunca concatenação — BUN-SYS-01
- await Bun.$`${env.CONVERSOR} -- ${nome}`.quiet;
+ // interpolation escapes the value; never concatenation — BUN-SYS-01
+ await Bun.$`${env.CONVERTER} -- ${name}`.quiet;
 }
 ```
 
-**O que as decisões evitaram:**
+**What these decisions prevented:**
 
-| Decisão | Alternativa que quebra | Regra |
+| Decision | Alternative that breaks | Rule |
 | --- | --- | --- |
-| `readdir` de `node:fs` | `Bun.file` para listar diretório | `BUN-RT-01` |
-| `await arquivo.exists` | `arquivo.size === 0`, que não distingue vazio de ausente | `BUN-RT-03` |
-| leitura só no `.text` | assumir que `Bun.file` já leu, e ramificar em dado vazio | `BUN-RT-02` |
-| env validado com Zod | interface merging, que dá tipo sem garantia | `BUN-RT-06` |
-| interpolação de `Bun.$` | `exec(\`${conversor} ${nome}\`)`, com injeção por nome de arquivo | `BUN-SYS-01` |
-| `--` antes do argumento | nome começando com `-` interpretado como flag | `BUN-SYS-03` |
-| job com `--watch`, não `--hot` | estado sujo entre execuções | `BUN-RT-11` |
+| `readdir` from `node:fs` | `Bun.file` to list a directory | `BUN-RT-01` |
+| `await file.exists` | `file.size === 0`, which does not tell empty from missing | `BUN-RT-03` |
+| read only at `.text` | assuming `Bun.file` already read, and branching on empty data | `BUN-RT-02` |
+| env validated with Zod | interface merging, which gives a type without a guarantee | `BUN-RT-06` |
+| `Bun.$` interpolation | `exec(\`${converter} ${name}\`)`, with injection through the file name | `BUN-SYS-01` |
+| `--` before the argument | a name starting with `-` read as a flag | `BUN-SYS-03` |
+| job with `--watch`, not `--hot` | dirty state between runs | `BUN-RT-11` |
 
-E o que **não** aparece porque este é um job e não um handler: se fosse rota HTTP, o `Bun.$` síncrono e qualquer `*Sync` estariam proibidos (`BUN-RT-08`).
-
----
-
+And what does **not** appear here because this is a job and not a handler: were it an HTTP route, synchronous `Bun.$` and any `*Sync` would be forbidden (`BUN-RT-08`).

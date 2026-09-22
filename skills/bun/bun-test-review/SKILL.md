@@ -1,8 +1,9 @@
 ---
 nome: bun-test-review
-descricao: Revisar uma suíte `bun test` existente e diagnosticar teste flaky, citando IDs `BUN-TEST-*`, com sete sondas executáveis para os defeitos que a leitura de código não encontra — use quando a tarefa for revisar os testes de um projeto, investigar "passa sozinho e falha na suíte", achar teste que nunca roda, conferir se o portão de cobertura e o de tipo realmente fecham, ou classificar severidade de achado em teste. Não use para escrever teste novo nem configurar suíte do zero, que é bun-test-build, nem para a forma da suíte entre níveis, que é test-review.
+descricao: Review an existing `bun test` suite and diagnose flaky tests, citing `BUN-TEST-*` IDs, with seven executable probes for the defects that reading code does not find — use when the task is reviewing a project's tests, investigating "passes alone and fails in the suite", finding a test that never runs, checking whether the coverage and type gates actually close, or classifying the severity of a test finding. Do not use to write a new test or configure a suite from scratch, which is bun-test-build, nor for the shape of the suite across levels, which is test-review.
 tipo: skill
 familia: bun
+idioma: en
 fonte: "[Bun - Testes](../../../knowledge-base/docs/bun-testes.md)"
 docs:
   - /oven-sh/bun
@@ -15,120 +16,120 @@ tags:
 
 # bun-test-review
 
-> **Fonte desta skill:** [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — a § 6 normativa (`BUN-TEST-01` a `BUN-TEST-29`), a § 6.1 com as sete regras de violação silenciosa, e a § 5.1 com a árvore de flaky.
-> Esta skill **não contém** o texto das regras — ela diz o que executar, em que ordem varrer, como classificar e como reportar.
-> **Superfície de API:** resolva pelo Context7 — `/oven-sh/bun`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — the normative § 6 (`BUN-TEST-01` to `BUN-TEST-29`), § 6.1 with the seven silent-violation rules, and § 5.1 with the flakiness tree.
+> This skill **does not contain** the text of the rules — it says what to run, in what order to scan, how to classify and how to report.
+> **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contrato que esta skill implementa: [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 7 ("Contrato de skill").
 
 ---
 
-## Quando usar
+## When to use
 
-Revisar suíte que **já existe** sob `bun test`, ou diagnosticar um teste que falha de forma intermitente.
+Reviewing a suite that **already exists** under `bun test`, or diagnosing a test that fails intermittently.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| escrever teste novo, configurar a suíte | `bun-test-build` |
-| a **forma** da suíte entre níveis (E2E × unidade × componente) | `test-review` |
-| a suíte como sistema: taxa de flakiness, credibilidade | `test-diagnose` |
-| teste E2E que falha | `playwright-diagnose` |
-| revisar o componente, não o teste dele | `react-review` |
+| writing a new test, configuring the suite | `bun-test-build` |
+| the **shape** of the suite across levels (E2E × unit × component) | `test-review` |
+| the suite as a system: flakiness rate, credibility | `test-diagnose` |
+| an E2E test that fails | `playwright-diagnose` |
+| reviewing the component, not its test | `react-review` |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 2 | um `globalThis` compartilhado por todos os arquivos é o default |
-| 2 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 6 e § 6.1 | as regras, e as sete de violação silenciosa |
-| 3 | `references/mapa-de-ids.md` | antes de citar — e para achar **em qual satélite** mora o corpo |
-| 4 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 5.1 | a árvore de flaky |
-| 5 | o satélite do achado | só depois de ter a causa |
+| 1 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 2 | one `globalThis` shared by every file is the default |
+| 2 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 6 and § 6.1 | the rules, and the seven silent-violation ones |
+| 3 | `references/mapa-de-ids.md` | before citing — and to find **which satellite** holds the body |
+| 4 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 5.1 | the flakiness tree |
+| 5 | the satellite for the finding | only after you have the cause |
 
-**Nunca carregue os seis satélites.** E **nunca invente ID** — a família vai de `BUN-TEST-01` a `BUN-TEST-29`.
+**Never load all six satellites.** And **never invent an ID** — the family runs from `BUN-TEST-01` to `BUN-TEST-29`.
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/sondas.md` | as sete sondas, as paradas, e o que elas não pegam |
-| `references/ordem-da-varredura.md` | os nove passos, e a tabela sintoma → causa de flaky |
-| `references/severidade-e-relatorio.md` | classificação, formato do achado, e o corte achado × opinião |
-| `references/antipadroes.md` | a grade de antipadrões com ID e satélite |
-| `references/mapa-de-ids.md` | os 29 `BUN-TEST-*`: declaração, **satélite do corpo** e seção |
-| `references/exemplo-revisao.md` | revisão inteira, das sondas ao "não verificado" |
-| `scripts/sondas.sh` | roda as mecânicas; com `--rodar`, também as que exigem a suíte de pé |
-| `scripts/gerar-mapa-de-ids.sh` | regenera o mapa nas duas skills |
+| `references/sondas.md` | the seven probes, the stops, and what they do not catch |
+| `references/ordem-da-varredura.md` | the nine steps, and the symptom → cause table for flakiness |
+| `references/severidade-e-relatorio.md` | classification, finding format, and the finding × opinion cut |
+| `references/antipadroes.md` | the antipattern grid with ID and satellite |
+| `references/mapa-de-ids.md` | the 29 `BUN-TEST-*`: declaration, **satellite of the body** and section |
+| `references/exemplo-revisao.md` | a whole review, from the probes to the "not verified" |
+| `scripts/sondas.sh` | runs the mechanical ones; with `--rodar`, also the ones that need the suite up |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map in both skills |
 
 ---
 
-## Passo 1 — Sondar antes de ler
+## Step 1 — Probe before reading
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-test-review/scripts/sondas.sh --rodar
 ```
 
-**Duas paradas obrigatórias:**
+**Two mandatory stops:**
 
-| Sonda | Se mostrar… | Por quê |
+| Probe | If it shows… | Why |
 | --- | --- | --- |
-| S1 | arquivo fora do padrão de descoberta | um arquivo que nunca rodou não tem defeito de asserção que importe |
-| S5 | portão de cobertura que não reprova | qualquer discussão de cobertura vira decorativa |
+| S1 | a file outside the discovery pattern | a file that never ran has no assertion defect that matters |
+| S5 | a coverage gate that does not fail | any discussion of coverage becomes decorative |
 
-E uma leitura que nomeia a causa sozinha: **S2 falha e S3 passa** → estado vazando pelo `globalThis` compartilhado. Com isso ligado, criticar asserção uma por uma é ruído.
-
----
-
-## Passo 2 — Varrer na ordem que falha mais
-
-`references/ordem-da-varredura.md`: asserção que pode não ter rodado → vazamento de mock e spy → isolamento e ordem → espera e tempo → marcas que apagam sinal → snapshot → DOM e componente → portões de CI → configuração.
-
-Se um passo produz achado que invalida o seguinte (o preload não restaura mock; a suíte não passa com `--randomize`), **pare de revisar o interior**.
+And one reading that names the cause by itself: **S2 fails and S3 passes** → state leaking through the shared `globalThis`. With that switched on, criticizing assertions one by one is noise.
 
 ---
 
-## Passo 3 — Diagnosticar flaky por sintoma
+## Step 2 — Scan in the order that fails most
 
-A tabela sintoma → causa está na mesma referência. Duas leituras que decidem sozinhas:
+`references/ordem-da-varredura.md`: assertion that may not have run → mock and spy leakage → isolation and order → waiting and time → marks that erase signal → snapshot → DOM and component → CI gates → configuration.
 
-- **passa isolado, falha junto, e `--isolate` conserta** → estado no global compartilhado (`BUN-TEST-02`, `-03`, `-09`);
-- **falha só com `--parallel`** → recurso externo compartilhado entre workers (`BUN-TEST-10`), ou preload que sobe algo (`BUN-TEST-24`).
-
-**`test.serial` nunca resolve dependência entre arquivos** — ele sequencia dentro do arquivo. Proposta de correção com `serial` para dependência entre arquivos está errada (`BUN-TEST-09`).
+If a step produces a finding that invalidates the next one (the preload does not restore mocks; the suite does not pass with `--randomize`), **stop reviewing the interior**.
 
 ---
 
-## Passo 4 — Classificar e reportar
+## Step 3 — Diagnose flakiness by symptom
 
-`references/severidade-e-relatorio.md`. O critério entre Bloqueante e Alta: **o defeito faz o CI mentir?** Teste que não roda e portão que não fecha produzem verde falso — outra categoria que "teste frágil".
+The symptom → cause table is in the same reference. Two readings that decide on their own:
 
-Formato de quatro partes, com `arquivo:linha` sempre, e **evidência da sonda colada** quando o achado for de forma.
+- **passes alone, fails together, and `--isolate` fixes it** → state in the shared global (`BUN-TEST-02`, `-03`, `-09`);
+- **fails only with `--parallel`** → an external resource shared across workers (`BUN-TEST-10`), or a preload that starts something (`BUN-TEST-24`).
 
----
-
-## Passo 5 — Fechar
-
-1. **Transforme sonda em portão** — `--randomize` no CI, `tsc --noEmit` como passo próprio, limiar em `lines`.
-2. **Ordene por severidade**, não por diretório.
-3. **Declare o que não foi verificado** — sonda que rodou sobre suíte já quebrada não é conclusiva.
-4. **Se a correção for escrever teste**, a fonte passa a ser `bun-test-build`.
+**`test.serial` never resolves a dependency between files** — it sequences within the file. A proposed fix using `serial` for a cross-file dependency is wrong (`BUN-TEST-09`).
 
 ---
 
-## Exemplo
+## Step 4 — Classify and report
 
-Monorepo com 180 testes e CI verde. As sondas encontram um arquivo que **nunca rodou**, `coverageThreshold` em `statements` (que não reprova), `-u` no CI, `.only` commitado, e `--randomize` falhando com `--isolate` passando — a assinatura de vazamento pelo global compartilhado. A correção do vazamento é **uma linha no preload**, não arquivo por arquivo.
+`references/severidade-e-relatorio.md`. The criterion between Blocking and High: **does the defect make CI lie?** A test that does not run and a gate that does not close produce false green — a different category from "fragile test".
 
-Revisão completa: `references/exemplo-revisao.md`.
+Four-part format, with `file:line` always, and **the probe's evidence pasted in** when the finding is about shape.
 
 ---
 
-## Relacionados
+## Step 5 — Closing
 
-- [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — fonte desta skill: § 2, § 5.1, § 6, § 6.1, § 7
-- `bun-test-build` — a skill irmã
-- `test-review` · `test-diagnose` — a camada de conceito
-- `playwright-review` — a auditoria equivalente em E2E
-- `react-review` · `drizzle-review` — de onde vem o formato de achado
+1. **Turn a probe into a gate** — `--randomize` in CI, `tsc --noEmit` as its own step, threshold on `lines`.
+2. **Order by severity**, not by directory.
+3. **Declare what was not verified** — a probe run over an already-broken suite is not conclusive.
+4. **If the fix is writing a test**, the source becomes `bun-test-build`.
+
+---
+
+## Example
+
+A monorepo with 180 tests and green CI. The probes find a file that **never ran**, a `coverageThreshold` on `statements` (which does not fail), `-u` in CI, a committed `.only`, and `--randomize` failing while `--isolate` passes — the signature of leakage through the shared global. The fix for the leakage is **one line in the preload**, not file by file.
+
+Full review: `references/exemplo-revisao.md`.
+
+---
+
+## Related
+
+- [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — source of this skill: § 2, § 5.1, § 6, § 6.1, § 7
+- `bun-test-build` — the sibling skill
+- `test-review` · `test-diagnose` — the concept layer
+- `playwright-review` — the equivalent audit in E2E
+- `react-review` · `drizzle-review` — where the finding format comes from
