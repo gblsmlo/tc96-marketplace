@@ -1,43 +1,43 @@
 #!/usr/bin/env bash
-# Autoverificação do teste recém-escrito sob `bun test`. Uso: bash autoverificar.sh <arquivo>
-# Cada item abaixo é uma falha que fica VERDE se passar despercebida.
+# Self-check of the test you just wrote under `bun test`. Usage: bash autoverificar.sh <file>
+# Every item below is a failure that stays GREEN if it slips through.
 set -uo pipefail
 
 ALVO="${1:-}"
-[ -z "$ALVO" ] && { echo "uso: bash autoverificar.sh <arquivo-de-teste>" >&2; exit 1; }
+[ -z "$ALVO" ] && { echo "usage: bash autoverificar.sh <test-file>" >&2; exit 1; }
 n=0
 check() { n=$((n+1)); saida="$(rg -n --no-messages "$4" "$ALVO" 2>/dev/null)"
   if [ -n "$saida" ]; then printf '\033[1m%2d. ✗ %s\033[0m  (%s)\n' "$n" "$2" "$3"; echo "$saida" | sed 's|^|      |'
   else printf '%2d. ✓ %s\n' "$n" "$2"; fi; }
 
-echo "Autoverificação bun test — $ALVO"
+echo "bun test self-check — $ALVO"
 case "$ALVO" in
-  *.test.ts|*.test.tsx|*.test.js|*_test.ts|*.spec.ts|*.spec.tsx|*_spec.ts) echo " 0. ✓ nome casa o padrão de descoberta (BUN-TEST-01)";;
-  *) printf '\033[1m 0. ✗ NOME FORA DO PADRÃO DE DESCOBERTA\033[0m  (BUN-TEST-01) — o arquivo não roda, e nada avisa\n';;
+  *.test.ts|*.test.tsx|*.test.js|*_test.ts|*.spec.ts|*.spec.tsx|*_spec.ts) echo " 0. ✓ the name matches the discovery pattern (BUN-TEST-01)";;
+  *) printf '\033[1m 0. ✗ NAME OUTSIDE THE DISCOVERY PATTERN\033[0m  (BUN-TEST-01) — the file never runs, and nothing warns\n';;
 esac
-check 1 "asserção em catch/callback/if com expect.assertions" BUN-TEST-06 'catch\s*\(|\.then\(|forEach\('
-check 2 "nenhum done — assíncrono é async/await"              BUN-TEST-17 '\bdone\b\s*\)|\(done\)'
-check 3 "nenhum .only commitado"                              BUN-TEST-08 '\.only\('
-check 4 "bug conhecido em test.failing, não .skip"            BUN-TEST-11 '\.skip\('
-check 5 "nenhum Bun.sleep esperando render ou timer"          "—"         'Bun\.sleep'
-check 6 ".toThrow com classe ou mensagem"                     "—"         'toThrow\(\s*\)'
-check 7 "useFakeTimers não usado para congelar data"          BUN-TEST-20 'useFakeTimers[^)]*\)[\s\S]{0,120}new Date'
-check 8 "data formatada com fuso fixo"                        BUN-TEST-21 'toLocaleDateString|toLocaleString|Intl\.DateTimeFormat'
-check 9 "componente: cleanup() presente"                      BUN-TEST-26 'render\('
-check 10 "todo userEvent aguardado"                           "—"         '[^t] userEvent\.'
+check 1 "assertion in catch/callback/if with expect.assertions" BUN-TEST-06 'catch\s*\(|\.then\(|forEach\('
+check 2 "no done — async means async/await"                    BUN-TEST-17 '\bdone\b\s*\)|\(done\)'
+check 3 "no committed .only"                                   BUN-TEST-08 '\.only\('
+check 4 "a known bug goes in test.failing, not .skip"          BUN-TEST-11 '\.skip\('
+check 5 "no Bun.sleep waiting on a render or a timer"          "—"         'Bun\.sleep'
+check 6 ".toThrow with a class or a message"                   "—"         'toThrow\(\s*\)'
+check 7 "useFakeTimers not used to freeze a date"              BUN-TEST-20 'useFakeTimers[^)]*\)[\s\S]{0,120}new Date'
+check 8 "a formatted date with a fixed time zone"              BUN-TEST-21 'toLocaleDateString|toLocaleString|Intl\.DateTimeFormat'
+check 9 "component: cleanup() present"                         BUN-TEST-26 'render\('
+check 10 "every userEvent awaited"                             "—"         '[^t] userEvent\.'
 
 cat <<'FIM'
 
-Itens 1, 8, 9 e 10 são heurísticos: a sonda aponta o arquivo, você confirma lendo.
-  1  há catch/callback → confira se existe expect.assertions(n)
-  8  há data formatada → confira se TZ está fixado
-  9  há render()       → confira se há cleanup() em afterEach (ou no preload)
- 10  há userEvent      → confira se TODOS estão aguardados
+Items 1, 8, 9 and 10 are heuristic: the probe points at the file, you confirm by reading.
+  1  there is a catch/callback -> check whether expect.assertions(n) exists
+  8  there is a formatted date -> check whether TZ is pinned
+  9  there is a render()       -> check for cleanup() in afterEach (or in the preload)
+ 10  there is a userEvent      -> check that ALL of them are awaited
 
-As três que exigem execução, e não leitura:
-  bun test <arquivo>     # passa isolado
-  bun test --randomize   # a suíte ainda passa em ordem aleatória (BUN-TEST-09)
-  tsc --noEmit           # o runner não checa tipo (BUN-TEST-18)
+The three that require running, not reading:
+  bun test <file>        # it passes in isolation
+  bun test --randomize   # the suite still passes in random order (BUN-TEST-09)
+  tsc --noEmit           # the runner does not check types (BUN-TEST-18)
 
-Rode as três de verdade. "Deve passar" não é verificação.
+Actually run all three. "It should pass" is not verification.
 FIM

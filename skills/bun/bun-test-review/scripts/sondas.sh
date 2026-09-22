@@ -1,66 +1,66 @@
 #!/usr/bin/env bash
-# Sondas de suíte `bun test` — S1 a S7. Uso: bash sondas.sh [--rodar]
+# `bun test` suite probes — S1 to S7. Usage: bash sondas.sh [--rodar]
 #
-# Sem --rodar, executa só as sondas mecânicas (S1, S5-parcial, S6, S7).
-# Com --rodar, executa também as que exigem a suíte de pé (S2, S3, S4, S5-completa).
+# Without --rodar it runs only the mechanical probes (S1, partial S5, S6, S7).
+# With --rodar it also runs the ones that need a working suite (S2, S3, S4, full S5).
 set -uo pipefail
 
 RODAR=0; [ "${1:-}" = "--rodar" ] && RODAR=1
 titulo() { printf '\n\033[1m== %s\033[0m  %s\n' "$1" "${2:-}"; }
-vazio() { echo "   (nada)"; }
-ou_vazio() {  # imprime a entrada; se vier vazia, a mensagem
+vazio() { echo "   (nothing)"; }
+ou_vazio() {  # prints the input; when it comes back empty, the message
   local saida; saida="$(cat)"
   if [ -n "$saida" ]; then printf '%s
-' "$saida"; else echo "   ${1:-(nada)}"; fi
+' "$saida"; else echo "   ${1:-(nothing)}"; fi
 }
 
-titulo "S1. Teste que nunca roda" "BUN-TEST-01 — fora do padrão de descoberta, sem aviso"
+titulo "S1. A test that never runs" "BUN-TEST-01 — outside the discovery pattern, with no warning"
 find . -path ./node_modules -prune -o -name '*[Tt]est*' -print 2>/dev/null \
   | grep -Ev '\.(test|spec)\.[cm]?[jt]sx?$|_(test|spec)\.[cm]?[jt]sx?$|/node_modules/' \
   | grep -E '\.[cm]?[jt]sx?$' | head -10 | sed 's|^|   |' | grep . | ou_vazio
 
-titulo "S6. Restauração de mock existe?" "BUN-TEST-02 — sem isso, todo spyOn é candidato a vazar"
-rg -n --no-messages 'preload' bunfig.toml 2>/dev/null || echo "   sem preload declarado em bunfig.toml"
-rg -rn --no-messages 'mock\.restore\(\)' . -g '!node_modules' 2>/dev/null | head -5 | ou_vazio "NENHUM mock.restore() na suíte"
+titulo "S6. Does mock restoration exist?" "BUN-TEST-02 — without it, every spyOn is a candidate to leak"
+rg -n --no-messages 'preload' bunfig.toml 2>/dev/null || echo "   no preload declared in bunfig.toml"
+rg -rn --no-messages 'mock\.restore\(\)' . -g '!node_modules' 2>/dev/null | head -5 | ou_vazio "NO mock.restore() in the suite"
 
-titulo "S7. Marcas e comandos" "BUN-TEST-05, -08, -11, -18"
-echo "   -- .only / .skip commitados:"
+titulo "S7. Marks and commands" "BUN-TEST-05, -08, -11, -18"
+echo "   -- committed .only / .skip:"
 rg -n --no-messages -g '*.{test,spec}.*' '\.(only|skip)\(' . 2>/dev/null | head -8 | ou_vazio
-echo "   -- -u / --retry global / typecheck no CI:"
+echo "   -- -u / global --retry / typecheck in CI:"
 rg -n --no-messages 'update-snapshots| -u\b|--retry|tsc --noEmit' package.json .github/workflows/*.y*ml 2>/dev/null || vazio
 
-titulo "S5. O portão de cobertura fecha?" "BUN-TEST-27, -28 — limiar sem reporter text não reprova"
-rg -n --no-messages 'coverageThreshold|coverageReporter|coverage' bunfig.toml 2>/dev/null || echo "   sem [test] coverage em bunfig.toml"
+titulo "S5. Does the coverage gate close?" "BUN-TEST-27, -28 — a threshold without the text reporter never fails"
+rg -n --no-messages 'coverageThreshold|coverageReporter|coverage' bunfig.toml 2>/dev/null || echo "   no [test] coverage in bunfig.toml"
 
-titulo "Extra. Configuração que falha em silêncio" "BUN-TEST-13, -14, -24"
+titulo "Extra. Configuration that fails silently" "BUN-TEST-13, -14, -24"
 rg -n --no-messages 'seed|randomize|root|pathIgnorePatterns' bunfig.toml 2>/dev/null || vazio
-echo "   seed sem randomize = true não tem efeito (BUN-TEST-14)"
+echo "   a seed without randomize = true has no effect (BUN-TEST-14)"
 
 if [ "$RODAR" -eq 0 ]; then
   cat <<'FIM'
 
-As quatro sondas que exigem a suíte de pé (rode com --rodar, ou à mão):
-   S2. bun test --randomize        ; echo "exit=$?"   → dependência de ordem (BUN-TEST-09)
-   S3. bun test --isolate          ; echo "exit=$?"   → dependência do global compartilhado
-   S4. bun test --rerun-each 20    ; echo "exit=$?"   → flaky que não é de ordem
-   S5. bun test --coverage         ; echo "exit=$?"   → o portão REPROVA mesmo?
+The four probes that need a working suite (run with --rodar, or by hand):
+   S2. bun test --randomize        ; echo "exit=$?"   -> order dependence (BUN-TEST-09)
+   S3. bun test --isolate          ; echo "exit=$?"   -> dependence on the shared global
+   S4. bun test --rerun-each 20    ; echo "exit=$?"   -> flakiness that is not about order
+   S5. bun test --coverage         ; echo "exit=$?"   -> does the gate actually FAIL?
 FIM
   exit 0
 fi
 
-roda() { titulo "$1" "$2"; printf '   $ %s\n' "$3"; eval "$3" >/dev/null 2>&1 && echo "   → exit=0 (passou)" || echo "   → exit≠0 (FALHOU)"; }
-roda "S2. Dependência de ordem"            "BUN-TEST-09" "bun test --randomize"
-roda "S3. Dependência do global"           "compartilhado por todos os arquivos" "bun test --isolate"
-roda "S4. Flaky que não é de ordem"        "await faltando, timer real, concorrência" "bun test --rerun-each 20"
-roda "S5. O portão de cobertura reprova?"  "BUN-TEST-27, -28" "bun test --coverage"
+roda() { titulo "$1" "$2"; printf '   $ %s\n' "$3"; eval "$3" >/dev/null 2>&1 && echo "   -> exit=0 (passed)" || echo "   -> exit!=0 (FAILED)"; }
+roda "S2. Order dependence"                "BUN-TEST-09" "bun test --randomize"
+roda "S3. Dependence on the global"        "shared by every file" "bun test --isolate"
+roda "S4. Flakiness that is not about order" "a missing await, a real timer, concurrency" "bun test --rerun-each 20"
+roda "S5. Does the coverage gate fail?"    "BUN-TEST-27, -28" "bun test --coverage"
 
 cat <<'FIM'
 
-Leitura:
-  S2 falha ................ a suíte passa só na ordem de descoberta (BUN-TEST-09)
-  S3 conserta o que falhava  estado no globalThis compartilhado: spy, módulo mockado
-  S4 falha ................ await faltando, timer real, ou concorrência (BUN-TEST-23)
-  S5 exit=0 abaixo do limiar  o portão é decorativo (BUN-TEST-27/-28)
+Reading it:
+  S2 fails ................ the suite only passes in discovery order (BUN-TEST-09)
+  S3 fixes what was failing  state on the shared globalThis: a spy, a mocked module
+  S4 fails ................ a missing await, a real timer, or concurrency (BUN-TEST-23)
+  S5 exit=0 below the threshold  the gate is decorative (BUN-TEST-27/-28)
 
-S1 com arquivo, ou S5 com portão aberto: reporte ANTES de revisar conteúdo.
+An S1 with a file, or an S5 with an open gate: report it BEFORE reviewing any content.
 FIM
