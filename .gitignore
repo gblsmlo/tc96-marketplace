@@ -1,0 +1,2 @@
+# saída dos adaptadores — reconstruível com bash build/<alvo>.sh
+dist/

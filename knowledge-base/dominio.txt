@@ -1,0 +1,11 @@
+# Quais notas do vault pertencem a esta knowledge-base.
+# Um glob por linha, relativo a raiz do vault. Linha com # e comentario.
+# Cada familia migrada acrescenta suas linhas aqui.
+
+# --- frontend ---
+Docs/React*
+Docs/TanStack*
+Docs/Storybook*
+Pages/Architecture in React.md
+Pages/Feature-Based Architecture.md
+Pages/Frontend roadmap.md

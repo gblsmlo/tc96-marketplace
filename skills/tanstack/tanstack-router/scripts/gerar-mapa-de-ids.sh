@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Regenera references/mapa-de-ids.md a partir de Docs/TanStack Router*.
+set -euo pipefail
+BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
+# O mapa é gerado na autoria e vai versionado no plugin: o destino é o repo,
+# a origem continua sendo o vault (passe outro caminho como $1 se preciso).
+PLUGIN="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+DOCS="$BASE/docs"
+OUT="$PLUGIN/skills/tanstack-router/references/mapa-de-ids.md"
+
+scan() {
+  PREFIXO="TanStack Router"
+  for f in "$DOCS"/"$PREFIXO"*.md; do
+    base="$(basename "$f" .md)"
+    awk -v sat="$base" -v hub="TanStack Router" '
+      /^## / { h2 = $0; sub(/^## /, "", h2) }
+      /^#{2,4} / { h = $0; sub(/^#+ /, "", h) }
+      {
+        if (match($0, /TSR-[A-Z0-9]+-[0-9]+/) == 0) next
+        id = substr($0, RSTART, RLENGTH)
+        rank = -1
+        if ($0 ~ /^#{2,4} `TSR-[A-Z0-9]+-[0-9]+`/)   rank = 0
+        else if ($0 ~ /^\| `TSR-[A-Z0-9]+-[0-9]+`/) {
+          if ($0 ~ /MUST|NEVER/) rank = (sat == hub ? 2 : 1)
+          else                   rank = 3
+        }
+        if (rank < 0) next
+        sec = (rank == 3 ? h : h2)
+        printf "%s\t%d\t%s\t%s\n", id, rank, sat, (sec == "" ? "—" : sec)
+      }
+    ' "$f"
+  done
+}
+
+{
+  echo "---"
+  echo "gerado-por: plugins/hermes-frontend/skills/tanstack-router/scripts/gerar-mapa-de-ids.sh"
+  echo "gerado-em: $(date +%F)"
+  echo "---"
+  echo
+  echo "# Mapa de IDs \`TSR-*\`"
+  echo
+  echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
+  echo "> Regenerar com \`bash plugins/hermes-frontend/skills/tanstack-router/scripts/gerar-mapa-de-ids.sh\`."
+  echo
+  echo "| ID | Satélite | Seção |"
+  echo "| --- | --- | --- |"
+  scan | sort -t$'\t' -k1,1 -k2,2n | awk -F'\t' '!seen[$1]++ { printf "| `%s` | [[%s]] | %s |\n", $1, $3, $4 }'
+} > "$OUT"
+echo "gerado: $OUT ($(grep -c '^| `TSR' "$OUT") IDs)"
