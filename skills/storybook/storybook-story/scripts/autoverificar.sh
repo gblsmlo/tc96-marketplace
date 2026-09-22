@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Autoverificação de story — os 14 itens do Passo 6. Uso: bash autoverificar.sh <arquivo-ou-dir>
+# Story self-check — the 14 items of Step 6. Usage: bash autoverificar.sh <file-or-dir>
 set -uo pipefail
 ALVO="${1:-src}"
 RG=(rg --type-add 'rx:*.{ts,tsx}' -trx -nU --no-messages)
@@ -12,26 +12,26 @@ semB() { n=$((n+1)); alvos="$("${RG[@]}" -l "$4" "$ALVO" 2>/dev/null)"; falta=""
   if [ -n "$falta" ]; then printf '\033[1m%2d. ✗ %s\033[0m  (%s)\n' "$n" "$2" "$3"; printf "$falta" | sed 's|^|      |'
   else printf '%2d. ✓ %s\n' "$n" "$2"; fi; }
 
-echo "Autoverificação de story — $ALVO"
-semB 1 "satisfies Meta<…> no meta"                    SB-CSF-02 'const meta' 'satisfies Meta'
-semB 2 "StoryObj<typeof meta> nas stories"            SB-CSF-02 'const meta' 'StoryObj<typeof meta>'
-mau  3 "import de Meta/StoryObj do pacote do framework" SB-CORE-02 "from '@storybook/react'"
-mau  4 "title literal (sem interpolação nem variável)" SB-CSF-03 'title:\s*[`$]'
-mau  5 "nenhum argTypes que o docgen já inferiria"    SB-CSF-08 'argTypes:\s*\{'
-mau  6 "nenhuma mutação de Story.args"                SB-CSF-05 '\w+\.args\s*(\.|\[)[^=]*='
-mau  7 "ambiente não passa por args"                  SB-CTX-03 'args:\s*\{[^}]*(router|theme|queryClient|provider)'
-mau  8 "sem efeito colateral no corpo do módulo"      SB-CORE-06 '^(?!.*(export|import|const meta|type ))\s*\w+\([^)]*\)\s*;\s*$'
-mau  9 "nenhuma story dependendo de outra"            SB-CORE-05 'Default\.(play|args)\s*\('
+echo "Story self-check — $ALVO"
+semB 1 "satisfies Meta<…> on the meta"                SB-CSF-02 'const meta' 'satisfies Meta'
+semB 2 "StoryObj<typeof meta> on the stories"         SB-CSF-02 'const meta' 'StoryObj<typeof meta>'
+mau  3 "Meta/StoryObj imported from the framework package" SB-CORE-02 "from '@storybook/react'"
+mau  4 "literal title (no interpolation, no variable)" SB-CSF-03 'title:\s*[`$]'
+mau  5 "no argTypes the docgen would already infer"   SB-CSF-08 'argTypes:\s*\{'
+mau  6 "no mutation of Story.args"                    SB-CSF-05 '\w+\.args\s*(\.|\[)[^=]*='
+mau  7 "environment does not travel through args"     SB-CTX-03 'args:\s*\{[^}]*(router|theme|queryClient|provider)'
+mau  8 "no side effect in the module body"            SB-CORE-06 '^(?!.*(export|import|const meta|type ))\s*\w+\([^)]*\)\s*;\s*$'
+mau  9 "no story depending on another"                SB-CORE-05 'Default\.(play|args)\s*\('
 echo
 cat <<'FIM'
-Itens que exigem leitura:
-  · cada story é um ESTADO NOMEADO, não uma demo ......... SB-CSF-04
-  · o que distingue as stories é `args` .................. SB-CSF-04
-  · descrição de prop só no JSDoc ........................ SB-DOC-02
-  · valor não serializável passa por `mapping` ........... SB-CSF-06
-  · export que não é story está em excludeStories ........ SB-CSF-09
-  · estados vazio e de erro existem, ou a ausência foi decidida  (TS-TIPO-02)
+Items that require reading:
+  · each story is a NAMED STATE, not a demo ............... SB-CSF-04
+  · what tells the stories apart is `args` ................ SB-CSF-04
+  · a prop's description lives only in the JSDoc .......... SB-DOC-02
+  · a non-serializable value goes through `mapping` ....... SB-CSF-06
+  · an export that is not a story is in excludeStories .... SB-CSF-09
+  · empty and error states exist, or their absence was decided  (TS-TIPO-02)
 
-Depois, SUBA e olhe a sidebar: glob que não casa NÃO dá erro — dá sidebar vazia (SB-CFG-02).
-E abra a página de docs: controles vazios são o sintoma de SB-CSF-04 violada.
+Then START it and look at the sidebar: a glob that matches nothing does NOT error — it gives an empty sidebar (SB-CFG-02).
+And open the docs page: empty controls are the symptom of a violated SB-CSF-04.
 FIM

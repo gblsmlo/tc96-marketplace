@@ -1,65 +1,65 @@
 #!/usr/bin/env bash
-# Sondas de TanStack Query — os defeitos que a leitura do componente não mostra.
-# Uso: bash sondas.sh [dir]
+# TanStack Query probes — the defects that reading the component does not show.
+# Usage: bash sondas.sh [dir]
 set -uo pipefail
 DIR="${1:-src}"; [ -d "$DIR" ] || DIR=.
 RG=(rg --type-add 'rx:*.{ts,tsx}' -trx -nU --no-messages)
 titulo() { printf '\n\033[1m== %s\033[0m  %s\n' "$1" "${2:-}"; }
-vazio() { echo "   (nada)"; }
-ou_vazio() {  # imprime a entrada; se vier vazia, a mensagem
+vazio() { echo "   (nothing)"; }
+ou_vazio() {  # prints the input; when it comes back empty, the message
   local saida; saida="$(cat)"
   if [ -n "$saida" ]; then printf '%s
-' "$saida"; else echo "   ${1:-(nada)}"; fi
+' "$saida"; else echo "   ${1:-(nothing)}"; fi
 }
 
-titulo "S1. staleTime declarado?" "TSQ-CACHE-01 — sem ele TODO dado nasce stale"
-"${RG[@]}" 'staleTime' "$DIR" || echo "   NENHUM staleTime na base — rede a cada montagem, foco de aba e reconexão"
+titulo "S1. Is staleTime declared?" "TSQ-CACHE-01 — without it EVERY piece of data is born stale"
+"${RG[@]}" 'staleTime' "$DIR" || echo "   NO staleTime anywhere — a request on every mount, tab focus and reconnect"
 
-titulo "S2. Gatilho desligado como remédio" "TSQ-CACHE-03 — apaga o sintoma e cria política contraditória"
+titulo "S2. A trigger turned off as a cure" "TSQ-CACHE-03 — hides the symptom and creates a contradictory policy"
 "${RG[@]}" 'refetchOnWindowFocus:\s*false|refetchOnMount:\s*false|refetchOnReconnect:\s*false' "$DIR" || vazio
-echo "   → calibre staleTime primeiro; desligar gatilho é ajuste fino, nunca remédio"
+echo "   -> calibrate staleTime first; turning a trigger off is fine-tuning, never a cure"
 
-titulo "S3. Variável fora da queryKey" "TSQ-BASE-03 — as variações disputam a mesma entrada"
+titulo "S3. A variable missing from the queryKey" "TSQ-BASE-03 — the variants fight over the same entry"
 "${RG[@]}" 'queryKey:\s*\[[^\]]*\]' "$DIR" | head -12 | ou_vazio
-echo "   → compare com a queryFn: todo argumento que ela usa precisa estar na key"
+echo "   -> compare against the queryFn: every argument it uses has to be in the key"
 
-titulo "S4. Mutation sem invalidação" "TSQ-MUT-07"
+titulo "S4. Mutation without invalidation" "TSQ-MUT-07"
 "${RG[@]}" 'useMutation\(' "$DIR" -l | while read -r f; do
   rg -q 'invalidateQueries|setQueryData' "$f" || echo "   $f"
 done | grep . || vazio
 
-titulo "S5. Invalidação sem return da Promise" "TSQ-MUT-02 — o botão volta antes da lista mudar"
+titulo "S5. Invalidation without returning the Promise" "TSQ-MUT-02 — the button comes back before the list changes"
 "${RG[@]}" 'onS(uccess|ettled):\s*(\(|async\s*\()[^)]*\)\s*=>\s*\{[^}]*invalidateQueries' "$DIR" \
   | rg -v 'return|await' || vazio
 
-titulo "S6. Update otimista sem ciclo completo" "TSQ-MUT-10, TSQ-MUT-11"
+titulo "S6. Optimistic update without the full cycle" "TSQ-MUT-10, TSQ-MUT-11"
 "${RG[@]}" -l 'onMutate' "$DIR" 2>/dev/null | while read -r f; do
   falta=""
   rg -q 'cancelQueries' "$f" || falta="$falta cancelQueries"
   rg -q 'onError' "$f"       || falta="$falta onError(rollback)"
   rg -q 'onSettled' "$f"     || falta="$falta onSettled(invalidate)"
-  [ -n "$falta" ] && echo "   $f — falta:$falta"
+  [ -n "$falta" ] && echo "   $f — missing:$falta"
 done | grep . || vazio
-echo "   → e confira a assinatura: o retorno de onMutate chega como TERCEIRO argumento (v5)"
+echo "   -> and check the signature: what onMutate returns arrives as the THIRD argument (v5)"
 
-titulo "S7. Snapshot fora do fluxo da mutation" "TSQ-MUT-11 — rollback restaura valor errado"
+titulo "S7. Snapshot outside the mutation flow" "TSQ-MUT-11 — the rollback restores the wrong value"
 "${RG[@]}" -U 'onMutate(?s:.{0,400}?)(useRef|let\s+\w+\s*=|window\.)' "$DIR" || vazio
 
-titulo "S8. Escrita no lugar em vez de imutável" "TSQ-MUT-08 — o React não vê mudança"
+titulo "S8. Writing in place instead of immutably" "TSQ-MUT-08 — React sees no change"
 "${RG[@]}" -U 'setQueryData\((?s:.{0,200}?)\.(push|splice|sort)\(' "$DIR" || vazio
 
-titulo "S9. Tracked properties desligadas" "TSQ-CACHE-05 — re-render a cada isFetching"
+titulo "S9. Tracked properties turned off" "TSQ-CACHE-05 — a re-render on every isFetching"
 "${RG[@]}" 'const\s*\{\s*data\s*,\s*\.\.\.' "$DIR" || vazio
 
-titulo "S10. queryFn ignorando o signal" "TSQ-SSR-10 — N requisições em voo na busca por digitação"
+titulo "S10. queryFn ignoring the signal" "TSQ-SSR-10 — N requests in flight in a type-ahead search"
 "${RG[@]}" -U 'queryFn:\s*(async\s*)?\((?s:.{0,200}?)fetch\(' "$DIR" | rg -v 'signal' || vazio
 
-titulo "S11. Lista infinita sem maxPages" "TSQ-PATTERN-08 — invalidar refaz TODAS as páginas em série"
+titulo "S11. Infinite list without maxPages" "TSQ-PATTERN-08 — invalidating refetches EVERY page, serially"
 "${RG[@]}" -l 'useInfiniteQuery' "$DIR" 2>/dev/null | while read -r f; do
   rg -q 'maxPages' "$f" || echo "   $f"
 done | grep . || vazio
 
-titulo "S12. Router segurando o preload" "TSR-LOAD-14 — dado velho com o Query aparentemente certo"
-"${RG[@]}" 'defaultPreloadStaleTime' "$DIR" router.* 2>/dev/null || echo "   não declarado — com Query no loader, o padrão é 30s de preload"
+titulo "S12. The router holding the preload" "TSR-LOAD-14 — stale data while Query looks correct"
+"${RG[@]}" 'defaultPreloadStaleTime' "$DIR" router.* 2>/dev/null || echo "   not declared — with Query in the loader, the default is a 30s preload"
 
-printf '\n\033[1m== Fim.\033[0m S1 e S6 são as que mais pagam. A correção quase nunca é desligar gatilho.\n'
+printf '\n\033[1m== Done.\033[0m S1 and S6 pay off most. The fix is almost never turning a trigger off.\n'

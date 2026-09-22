@@ -1,67 +1,68 @@
 #!/usr/bin/env bash
-# Sondas da FORMA da suíte — S1 a S9 de test-review. Uso: bash sondas-suite.sh [raiz]
+# Probes of the suite's SHAPE — S1 to S9 of test-review. Usage: bash sondas-suite.sh [root]
 #
-# Medem o conjunto, não os testes. Sonda não é achado: achado de forma exige o NÚMERO
-# colado no relatório. S2 e S4 exigem rodar/ler o CI — este script prepara, não conclui.
+# They measure the set, not the tests. A probe is not a finding: a finding about shape needs
+# the NUMBER pasted into the report. S2 and S4 require running/reading CI — this script
+# prepares, it does not conclude.
 set -uo pipefail
 
 RAIZ="${1:-.}"
-cd "$RAIZ" 2>/dev/null || { echo "raiz inexistente: $RAIZ" >&2; exit 1; }
+cd "$RAIZ" 2>/dev/null || { echo "root does not exist: $RAIZ" >&2; exit 1; }
 titulo() { printf '\n\033[1m== %s\033[0m  %s\n' "$1" "${2:-}"; }
-vazio() { echo "   (nada)"; }
-ou_vazio() {  # imprime a entrada; se vier vazia, a mensagem
+vazio() { echo "   (nothing)"; }
+ou_vazio() {  # prints the input; when it comes back empty, the message
   local saida; saida="$(cat)"
   if [ -n "$saida" ]; then printf '%s
-' "$saida"; else echo "   ${1:-(nada)}"; fi
+' "$saida"; else echo "   ${1:-(nothing)}"; fi
 }
 CASO='^\s*(test|it)\s*[(.]'
 
-titulo "S1. A forma da suíte" "TS-NIV-04 — massa em E2E é ice-cream cone"
+titulo "S1. The shape of the suite" "TS-NIV-04 — mass in E2E is an ice-cream cone"
 total=0
 for d in e2e tests test src packages apps; do
   [ -d "$d" ] || continue
   n=$(rg -c --no-messages -g '*.{spec,test}.*' "$CASO" "$d" 2>/dev/null | awk -F: '{s+=$2} END{print s+0}')
-  [ "$n" -gt 0 ] && { printf '   %-12s %5d casos\n' "$d/" "$n"; total=$((total+n)); }
+  [ "$n" -gt 0 ] && { printf '   %-12s %5d cases\n' "$d/" "$n"; total=$((total+n)); }
 done
-[ "$total" -eq 0 ] && vazio || echo "   ─── total: $total casos"
-echo "   -- arquivos por sufixo:"
+[ "$total" -eq 0 ] && vazio || echo "   ─── total: $total cases"
+echo "   -- files by suffix:"
 rg -l --no-messages -g '*.{spec,test}.*' "$CASO" . 2>/dev/null \
   | sed -E 's|.*/||; s|.*\.(spec\|test)\..*|\1|' | sort | uniq -c | sed 's|^|   |' | head -6
 
-titulo "S2. Duração" "TS-SUI-* — suíte que ninguém roda antes do PR deixou de ser portão"
-echo "   não automatizável sem rodar. Meça CADA nível separadamente:"
-echo "     time bun test            # unidade/integração"
+titulo "S2. Duration" "TS-SUI-* — a suite nobody runs before the PR has stopped being a gate"
+echo "   cannot be automated without running it. Measure EACH level separately:"
+echo "     time bun test            # unit/integration"
 echo "     time bunx playwright test  # e2e"
 
-titulo "S3. A camada estática conta?" "TS-TIPO-08 — a camada mais barata, e frequentemente desligada"
+titulo "S3. Does the static layer count?" "TS-TIPO-08 — the cheapest layer, and often turned off"
 rg -n --no-messages '"strict"|noUncheckedIndexedAccess|noImplicitAny' tsconfig*.json 2>/dev/null || vazio
-echo "   -- no-floating-promises (bloqueante se houver Playwright):"
-rg -n --no-messages 'no-floating-promises|noFloatingPromises' .eslintrc* eslint.config.* biome.json* 2>/dev/null || echo "   AUSENTE"
+echo "   -- no-floating-promises (blocking when Playwright is present):"
+rg -n --no-messages 'no-floating-promises|noFloatingPromises' .eslintrc* eslint.config.* biome.json* 2>/dev/null || echo "   MISSING"
 
-titulo "S4. O portão fecha?" "TS-PROC-03 — passo que roda e não reprova é decorativo"
+titulo "S4. Does the gate close?" "TS-PROC-03 — a step that runs and never fails is decorative"
 rg -n --no-messages 'continue-on-error|\|\| true|exit 0' .github/workflows/*.y*ml 2>/dev/null || vazio
-echo "   -- passos de teste no CI (confira o exit code de cada um, não a presença):"
+echo "   -- test steps in CI (check each one's exit code, not its presence):"
 rg -n --no-messages 'run:.*(test|playwright|coverage)' .github/workflows/*.y*ml 2>/dev/null | head -10 | ou_vazio
 
-titulo "S5. Portão de cobertura como META?" "TS-CORE-05 — meta de cobertura é achado, não virtude"
+titulo "S5. A coverage gate used as a TARGET?" "TS-CORE-05 — a coverage target is a finding, not a virtue"
 rg -n --no-messages 'coverageThreshold|coverageSkipTestFiles|codecov|--coverage' \
    package.json bunfig.toml vitest.config.* jest.config.* .github/workflows/*.y*ml 2>/dev/null || vazio
 
-titulo "S6. Classes de risco sem teste" "TS-TIPO-02 — o estado de erro é o mais ausente"
+titulo "S6. Risk classes with no test" "TS-TIPO-02 — the error state is the one most often missing"
 for termo in loading carregando empty vazio error erro retry recupera; do
   n=$(rg -ilc --no-messages -g '*.{spec,test}.*' "$termo" . 2>/dev/null | wc -l | tr -d ' ')
-  printf '   %-12s %3s arquivos\n' "$termo" "$n"
+  printf '   %-12s %3s files\n' "$termo" "$n"
 done
 
-titulo "S7. Atributo não funcional" "TS-TIPO-05 — requisito sem número não é verificado"
+titulo "S7. Non-functional attribute" "TS-TIPO-05 — a requirement without a number is not verified"
 rg -ln --no-messages 'p95|percentil|lighthouse|\bk6\b|axe-core|@axe|toHaveNoViolations' . 2>/dev/null | head -8 | ou_vazio
 
-titulo "S8. Escape" "TS-CORE-06 — defeito de produção sem teste volta"
+titulo "S8. Escape" "TS-CORE-06 — a production defect with no test comes back"
 git log --oneline -i --grep='fix\|hotfix' --since='6 months ago' 2>/dev/null | wc -l \
-  | sed 's|^|   commits de correção nos últimos 6 meses: |'
-echo "   cruze com: git show --stat <sha> | rg '\\.(spec|test)\\.' — correção sem teste é o achado"
+  | sed 's|^|   fix commits in the last 6 months: |'
+echo "   cross-check with: git show --stat <sha> | rg '\\.(spec|test)\\.' — a fix with no test is the finding"
 
-titulo "S9. skip e dívida" "TS-SUI-11 — skip sem motivo é dívida anônima"
+titulo "S9. skip and debt" "TS-SUI-11 — a skip with no reason is anonymous debt"
 rg -n --no-messages -g '*.{spec,test}.*' '\.(skip|todo|failing)\(|fixme' . 2>/dev/null || vazio
 
-printf '\n\033[1m== Fim.\033[0m S1 invertida ou S4 sem reprovação: reporte ANTES de auditar o interior.\n'
+printf '\n\033[1m== Done.\033[0m An inverted S1 or an S4 that never fails: report it BEFORE auditing the inside.\n'
