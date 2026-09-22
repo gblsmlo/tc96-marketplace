@@ -154,10 +154,14 @@ for plugin, cfg in PLUGINS.items():
                 t = "\n".join(fm) + corpo_arq
             arq.write_text(t, encoding="utf-8")
         for sh in destino.rglob("*.sh"):
+            s = sh.read_text(encoding="utf-8")
             # os scripts sobem ate a raiz do plugin, nao ate a raiz da fonte
-            sh.write_text(sh.read_text(encoding="utf-8").replace(
-                '/../../../.." && pwd)/knowledge-base', '/../../.." && pwd)/referencias'),
-                encoding="utf-8")
+            s = s.replace('/../../../.." && pwd)/knowledge-base',
+                          '/../../.." && pwd)/referencias')
+            # e o link que ELES escrevem tem de ter a mesma profundidade que o
+            # adaptador deu aos .md — senao regenerar o mapa quebra os links
+            s = s.replace("../../../../knowledge-base/", "../../../referencias/")
+            sh.write_text(s, encoding="utf-8")
             sh.chmod(0o755)
 
     for nome, campos, corpo in agentes:
