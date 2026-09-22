@@ -2,16 +2,16 @@
 titulo: Bun - Testes - Mocks e Tempo
 Link: https://bun.com/docs/test/mocks
 tags:
- - bun
- - testing
- - agent-context
+  - bun
+  - testing
+  - agent-context
 source: "Documentação oficial — https://bun.com/docs/test/mocks, /dates-times, reference/bun/test/jest"
 verificado-em: 2026-08-20
 ---
 
 # Bun - Testes - Mocks e Tempo
 
-> `mock`/`jest.fn`, `spyOn`, `mock.module` · a API completa de um mock (`.mock.calls`, `mockReturnValueOnce`, …) · **as três limpezas e o que cada uma não faz** · por que `mock.module` precisa do preload · injeção de dependência como alternativa ao mock · relógio: `setSystemTime`, `useFakeTimers`, avanço de timers, `TZ` · a superfície `vi` do Vitest.
+> `mock()`/`jest.fn()`, `spyOn()`, `mock.module()` · a API completa de um mock (`.mock.calls`, `mockReturnValueOnce`, …) · **as três limpezas e o que cada uma não faz** · por que `mock.module()` precisa do preload · injeção de dependência como alternativa ao mock · relógio: `setSystemTime`, `useFakeTimers`, avanço de timers, `TZ` · a superfície `vi` do Vitest.
 >
 > **Não cobre:** matchers de mock (`.toHaveBeenCalledWith`) — estão em [Bun - Testes - Escrita e Asserções](bun-testes-escrita-e-assercoes.md) § 6 · onde o preload é declarado ([Bun - Testes - Execução e Configuração](bun-testes-execucao-e-configuracao.md) § 5) · o que o escopo do preload faz sob `--parallel` ([Bun - Testes - Ciclo de Vida e Isolamento](bun-testes-ciclo-de-vida-e-isolamento.md) § 3).
 
@@ -35,7 +35,7 @@ A ordem dessa tabela é a ordem de preferência. Quando o código sob teste rece
 
 ---
 
-## 2. `mock` e `spyOn`
+## 2. `mock()` e `spyOn()`
 
 ```ts
 import { mock, spyOn, expect } from "bun:test";
@@ -48,14 +48,14 @@ expect(buscarCotacao).toHaveBeenCalledTimes(1);
 expect(buscarCotacao.mock.lastCall).toEqual(["01310-100"]);
 
 // espiar sem substituir: o método original continua rodando
-const repo = new PedidoRepository;
+const repo = new PedidoRepository();
 const salvar = spyOn(repo, "salvar");
 
 // espiar e substituir
 spyOn(repo, "buscar").mockResolvedValue({ id: "p-1", status: "pago" });
 ```
 
-`jest.fn` e `vi.fn` são equivalentes a `mock`. A escolha entre `mock` e `spyOn` é objetiva: **`spyOn` quando o objeto já existe e você quer observá-lo; `mock` quando você está fabricando a dependência.**
+`jest.fn()` e `vi.fn()` são equivalentes a `mock()`. A escolha entre `mock()` e `spyOn()` é objetiva: **`spyOn` quando o objeto já existe e você quer observá-lo; `mock` quando você está fabricando a dependência.**
 
 ### Superfície de um mock
 
@@ -69,14 +69,14 @@ spyOn(repo, "buscar").mockResolvedValue({ id: "p-1", status: "pago" });
 | `.mockImplementation(fn)` / `.mockImplementationOnce(fn)` | define implementação — permanente / só na próxima chamada |
 | `.mockReturnValue(v)` / `.mockReturnValueOnce(v)` | define retorno |
 | `.mockResolvedValue(v)` / `.mockRejectedValue(e)` | define Promise resolvida / rejeitada |
-| `.mockClear` | limpa histórico, **mantém** implementação |
-| `.mockReset` | limpa histórico **e** remove implementação |
-| `.mockRestore` | restaura a implementação original (spy) |
+| `.mockClear()` | limpa histórico, **mantém** implementação |
+| `.mockReset()` | limpa histórico **e** remove implementação |
+| `.mockRestore()` | restaura a implementação original (spy) |
 
 **`...Once` é a forma de testar sequência**: primeira chamada falha, segunda funciona — é assim que se testa retry sem esperar tempo real.
 
 ```ts
-const cobrar = mock< => Promise<string>>;
+const cobrar = mock<() => Promise<string>>();
 cobrar.mockRejectedValueOnce(new Error("timeout")).mockResolvedValue("aprovado");
 
 expect(await cobrarComRetry(cobrar)).toBe("aprovado");
@@ -89,22 +89,22 @@ expect(cobrar).toHaveBeenCalledTimes(2);
 
 É aqui que "o teste passa sozinho e falha na suíte" nasce. Três chamadas globais, escopos diferentes:
 
-| Chamada | Zera histórico (`.mock.calls`, `.results`, `.instances`, `.contexts`) | Remove implementação de `mockReturnValue`/`mockImplementation` | Restaura a implementação original do spy | Desfaz `mock.module` |
+| Chamada | Zera histórico (`.mock.calls`, `.results`, `.instances`, `.contexts`) | Remove implementação de `mockReturnValue`/`mockImplementation` | Restaura a implementação original do spy | Desfaz `mock.module()` |
 | --- | --- | --- | --- | --- |
-| `mock.clearAllMocks` | sim | **não** | não | não |
-| `jest.resetAllMocks` / `vi.resetAllMocks` | sim | sim | **não** | não |
-| `mock.restore` | sim | sim | **sim** | **não** |
+| `mock.clearAllMocks()` | sim | **não** | não | não |
+| `jest.resetAllMocks()` / `vi.resetAllMocks()` | sim | sim | **não** | não |
+| `mock.restore()` | sim | sim | **sim** | **não** |
 
-A última coluna é a armadilha, e a fonte é literal: `mock.restore` *"does not reset modules overridden with `mock.module`"*.
+A última coluna é a armadilha, e a fonte é literal: `mock.restore()` *"does not reset modules overridden with `mock.module()`"*.
 
 O default correto para quase todo projeto é uma linha, no preload:
 
 ```ts
-// test/setup.ts → bunfig.toml: [test] preload = ["./test/setup.ts"]
+// test/setup.ts  →  bunfig.toml: [test] preload = ["./test/setup.ts"]
 import { afterEach, mock } from "bun:test";
 
-afterEach( => {
- mock.restore;
+afterEach(() => {
+  mock.restore();
 });
 ```
 
@@ -112,15 +112,15 @@ Colocar isso no preload, e não em cada arquivo, é a recomendação da própria
 
 | ID | Regra |
 | --- | --- |
-| `BUN-TEST-02` | `spyOn` **MUST** ter restauração garantida (`mock.restore` em `afterEach` ou no preload) — sem isso o spy vaza para os testes seguintes. |
+| `BUN-TEST-02` | `spyOn` **MUST** ter restauração garantida (`mock.restore()` em `afterEach` ou no preload) — sem isso o spy vaza para os testes seguintes. |
 
 ---
 
-## 4. `mock.module`: escopo de processo e o efeito colateral já ocorrido
+## 4. `mock.module()`: escopo de processo e o efeito colateral já ocorrido
 
 ```ts
-mock.module("./gateway-pagamento", => ({
- cobrar: mock(async => ({ status: "aprovado" as const })),
+mock.module("./gateway-pagamento", () => ({
+  cobrar: mock(async () => ({ status: "aprovado" as const })),
 }));
 ```
 
@@ -129,7 +129,7 @@ O que a fonte declara, e o que decorre de cada afirmação:
 - **Funciona para `import` e para `require`**, e o especificador é resolvido como um import normal: caminho relativo, absoluto ou nome de pacote (`mock.module("pg", …)`).
 - **Atualiza o módulo mesmo se ele já tiver sido importado** — as live bindings do ESM refletem a troca em todos os importadores existentes.
 - **Mas o módulo original já foi avaliado**: *"its side effects have already happened"*. Se ele abre conexão, registra listener, lê env ou instancia cliente no topo do arquivo, isso aconteceu antes do seu mock.
-- **`mock.restore` não desfaz.** O módulo continua mockado pelo resto do processo de teste.
+- **`mock.restore()` não desfaz.** O módulo continua mockado pelo resto do processo de teste.
 
 As duas consequências operacionais são a mesma decisão vista de dois ângulos: **mock de módulo pertence ao preload.**
 
@@ -143,8 +143,8 @@ preload = ["./test/mocks/gateway.ts", "./test/setup.ts"]
 // test/mocks/gateway.ts — roda antes de qualquer arquivo de teste
 import { mock } from "bun:test";
 
-mock.module("./src/gateway-pagamento", => ({
- cobrar: mock(async => ({ status: "aprovado" as const })),
+mock.module("./src/gateway-pagamento", () => ({
+  cobrar: mock(async () => ({ status: "aprovado" as const })),
 }));
 ```
 
@@ -152,26 +152,26 @@ mock.module("./src/gateway-pagamento", => ({
 
 | ID | Regra |
 | --- | --- |
-| `BUN-TEST-03` | `mock.module` **NEVER** é desfeito por `mock.restore`; mock de módulo **MUST** ser registrado em `--preload` ou tratado como estado global do processo de teste. |
+| `BUN-TEST-03` | `mock.module()` **NEVER** é desfeito por `mock.restore()`; mock de módulo **MUST** ser registrado em `--preload` ou tratado como estado global do processo de teste. |
 | `BUN-TEST-04` | Mock cujo objetivo é impedir efeito colateral de import (conexão, listener, leitura de env no topo) **MUST** ser registrado em `--preload` — mockar depois do import não desfaz o que já rodou. |
 
 ### A alternativa que dispensa tudo isso
 
 ```ts
 // em vez de mockar o módulo, receber a dependência
-export function criarServicoDePedidos(deps: { gateway: Gateway; agora: => Date }) {
- return {
- async pagar(pedido: Pedido) {
- const r = await deps.gateway.cobrar(pedido);
- return {...pedido, pagoEm: deps.agora, status: r.status };
- },
- };
+export function criarServicoDePedidos(deps: { gateway: Gateway; agora: () => Date }) {
+  return {
+    async pagar(pedido: Pedido) {
+      const r = await deps.gateway.cobrar(pedido);
+      return { ...pedido, pagoEm: deps.agora(), status: r.status };
+    },
+  };
 }
 
 // no teste: nenhum mock de módulo, nenhum escopo global, nenhuma restauração
 const servico = criarServicoDePedidos({
- gateway: { cobrar: mock(async => ({ status: "aprovado" as const })) },
- agora: => new Date("2026-01-01T00:00:00Z"),
+  gateway: { cobrar: mock(async () => ({ status: "aprovado" as const })) },
+  agora: () => new Date("2026-01-01T00:00:00Z"),
 });
 ```
 
@@ -185,42 +185,42 @@ Duas necessidades distintas, e APIs distintas:
 
 | Preciso de | API |
 | --- | --- |
-| Uma data fixa (`new Date`, `Date.now`, `Intl.DateTimeFormat`) | `setSystemTime(date)` |
-| Fazer o tempo **passar** (`setTimeout`, `setInterval`, debounce, polling) | `jest.useFakeTimers` + `jest.advanceTimersByTime(ms)` |
+| Uma data fixa (`new Date()`, `Date.now()`, `Intl.DateTimeFormat`) | `setSystemTime(date)` |
+| Fazer o tempo **passar** (`setTimeout`, `setInterval`, debounce, polling) | `jest.useFakeTimers()` + `jest.advanceTimersByTime(ms)` |
 
 ```ts
 import { test, expect, jest, setSystemTime } from "bun:test";
 
-test("marca o pedido com a data de pagamento", => {
- setSystemTime(new Date("2026-01-01T00:00:00.000Z"));
- expect(pagar(pedido).pagoEm.toISOString).toBe("2026-01-01T00:00:00.000Z");
- setSystemTime; // sem argumento: volta ao relógio real
+test("marca o pedido com a data de pagamento", () => {
+  setSystemTime(new Date("2026-01-01T00:00:00.000Z"));
+  expect(pagar(pedido).pagoEm.toISOString()).toBe("2026-01-01T00:00:00.000Z");
+  setSystemTime();                                   // sem argumento: volta ao relógio real
 });
 
-test("debounce dispara uma vez após 300 ms", => {
- jest.useFakeTimers;
- const cb = jest.fn;
- const enviar = debounce(cb, 300);
+test("debounce dispara uma vez após 300 ms", () => {
+  jest.useFakeTimers();
+  const cb = jest.fn();
+  const enviar = debounce(cb, 300);
 
- enviar; enviar; enviar;
- expect(cb).not.toHaveBeenCalled;
+  enviar(); enviar(); enviar();
+  expect(cb).not.toHaveBeenCalled();
 
- jest.advanceTimersByTime(300);
- expect(cb).toHaveBeenCalledTimes(1);
+  jest.advanceTimersByTime(300);
+  expect(cb).toHaveBeenCalledTimes(1);
 
- jest.useRealTimers;
+  jest.useRealTimers();
 });
 ```
 
-Superfície verificada: `jest.useFakeTimers` (aceita `'modern'`, `'legacy'` ou `{ now }`), `jest.useRealTimers`, `jest.setSystemTime` / `setSystemTime`, `jest.now`, `jest.advanceTimersByTime(ms)`, `advanceTimersToNextTimer`, `runAllTimers`, `getTimerCount`, `clearAllTimers`.
+Superfície verificada: `jest.useFakeTimers()` (aceita `'modern'`, `'legacy'` ou `{ now }`), `jest.useRealTimers()`, `jest.setSystemTime()` / `setSystemTime()`, `jest.now()`, `jest.advanceTimersByTime(ms)`, `advanceTimersToNextTimer()`, `runAllTimers()`, `getTimerCount()`, `clearAllTimers()`.
 
 ### A diferença em relação ao Jest que muda o código
 
 **Em `bun:test`, `useFakeTimers` não substitui o construtor `Date`.** A fonte declara isso explicitamente, e o motivo é evitar a classe de bug em que `Date !== Date` depois de ligar os fake timers — código que faz `instanceof Date` ou compara construtores quebra sob o Jest e não quebra aqui.
 
-O que decorre: **para fixar uma data, `setSystemTime` é a API, não `useFakeTimers`.** As duas coisas são ortogonais — uma controla *que hora é*, a outra controla *se o tempo anda*. Elas se combinam, e `jest.setSystemTime` funciona junto de `advanceTimersByTime`.
+O que decorre: **para fixar uma data, `setSystemTime` é a API, não `useFakeTimers`.** As duas coisas são ortogonais — uma controla *que hora é*, a outra controla *se o tempo anda*. Elas se combinam, e `jest.setSystemTime()` funciona junto de `advanceTimersByTime()`.
 
-> **Divergência de fonte registrada.** O post de release da 1.4 descreve `jest.useFakeTimers` como controlando *"`setTimeout`, `setInterval`, and `Date`"*, enquanto a página de datas e horas afirma que o construtor `Date` **não** muda com `useFakeTimers`. As duas frases convivem se lidas como planos diferentes — o relógio que `Date.now` consulta passa a ser o falso; a *identidade* do construtor não é trocada — mas a formulação do post é solta. Esta nota segue a página de datas e horas, que é a específica.
+> **Divergência de fonte registrada.** O post de release da 1.4 descreve `jest.useFakeTimers()` como controlando *"`setTimeout`, `setInterval`, and `Date`"*, enquanto a página de datas e horas afirma que o construtor `Date` **não** muda com `useFakeTimers`. As duas frases convivem se lidas como planos diferentes — o relógio que `Date.now()` consulta passa a ser o falso; a *identidade* do construtor não é trocada — mas a formulação do post é solta. Esta nota segue a página de datas e horas, que é a específica.
 
 Detalhe fino verificado: desde a 1.3.6, `advanceTimersByTime(0)` dispara callbacks de `setTimeout(fn, 0)` — que internamente são agendados com 1 ms, conforme a spec HTML. E bibliotecas de teste de componente (`@testing-library/react`) detectam fake timers e avançam o relógio em vez de esperar tempo real.
 
@@ -229,11 +229,11 @@ Detalhe fino verificado: desde a 1.3.6, `advanceTimersByTime(0)` dispara callbac
 O runner define `TZ=Etc/UTC` quando `TZ` não está no ambiente ([Bun - Testes - Execução e Configuração](bun-testes-execucao-e-configuracao.md) § 6). Isso torna a suíte determinística **na sua máquina e no CI** — e deixa uma dependência implícita: o mesmo teste roda diferente num ambiente que define `TZ`.
 
 ```bash
-TZ=America/Sao_Paulo bun test./src/relatorio.test.ts
+TZ=America/Sao_Paulo bun test ./src/relatorio.test.ts
 ```
 
 ```ts
-process.env.TZ = "America/Sao_Paulo"; // vale a partir daqui, no mesmo processo
+process.env.TZ = "America/Sao_Paulo";   // vale a partir daqui, no mesmo processo
 ```
 
 Ao contrário do Jest, o fuso pode ser trocado **várias vezes durante a mesma execução** e o efeito é imediato — o que permite testar formatação em dois fusos no mesmo arquivo. O que não muda: asserção sobre data ou hora *formatada* precisa dizer em que fuso ela vale.
@@ -251,15 +251,15 @@ O objeto `vi` existe como global e imports de `vitest` são reescritos intername
 
 | Vitest | Em `bun:test` | Diferença que importa |
 | --- | --- | --- |
-| `vi.fn` | `vi.fn` / `mock` | — |
-| `vi.spyOn` | `vi.spyOn` / `spyOn` | — |
-| `vi.mock("./mod", factory)` | `vi.mock` existe; a forma nativa é `mock.module` | **não assuma hoisting** — § 4 |
-| `vi.clearAllMocks` | `mock.clearAllMocks` | escopos diferentes dos do Vitest — ler a tabela da § 3 |
-| `vi.resetAllMocks` | `jest.resetAllMocks` / `vi.resetAllMocks` | idem |
-| `vi.restoreAllMocks` | `mock.restore` | **não** desfaz `mock.module` |
-| `vi.useFakeTimers` | `jest.useFakeTimers` | `Date` não é reconstruído — § 5 |
-| `vi.setSystemTime` | `setSystemTime` / `jest.setSystemTime` | — |
-| `vi.advanceTimersByTime` | `jest.advanceTimersByTime` | — |
+| `vi.fn()` | `vi.fn()` / `mock()` | — |
+| `vi.spyOn()` | `vi.spyOn()` / `spyOn()` | — |
+| `vi.mock("./mod", factory)` | `vi.mock` existe; a forma nativa é `mock.module()` | **não assuma hoisting** — § 4 |
+| `vi.clearAllMocks()` | `mock.clearAllMocks()` | escopos diferentes dos do Vitest — ler a tabela da § 3 |
+| `vi.resetAllMocks()` | `jest.resetAllMocks()` / `vi.resetAllMocks()` | idem |
+| `vi.restoreAllMocks()` | `mock.restore()` | **não** desfaz `mock.module()` |
+| `vi.useFakeTimers()` | `jest.useFakeTimers()` | `Date` não é reconstruído — § 5 |
+| `vi.setSystemTime()` | `setSystemTime()` / `jest.setSystemTime()` | — |
+| `vi.advanceTimersByTime()` | `jest.advanceTimersByTime()` | — |
 
 O mapa completo de migração (incluindo configuração, que é a parte que **não** migra) está em [Bun - Testes](bun-testes.md) § 5.4.
 
@@ -269,13 +269,13 @@ O mapa completo de migração (incluindo configuração, que é a parte que **n�
 
 | Antipadrão | Por que falha | O que fazer |
 | --- | --- | --- |
-| `spyOn` sem `mock.restore` em `afterEach` | sem `--isolate` o global é compartilhado por todos os arquivos; o spy vaza para a suíte inteira | `afterEach( => mock.restore)` no preload — `BUN-TEST-02` |
-| Esperar que `mock.restore` desfaça `mock.module` | a fonte é explícita: não desfaz; o módulo segue mockado no processo | registrar no preload e tratar como global — `BUN-TEST-03` |
-| `mock.module` no corpo do teste para evitar a conexão do módulo real | o módulo já foi avaliado no import; a conexão já abriu | `--preload` / `[test] preload` — `BUN-TEST-04` |
+| `spyOn` sem `mock.restore()` em `afterEach` | sem `--isolate` o global é compartilhado por todos os arquivos; o spy vaza para a suíte inteira | `afterEach(() => mock.restore())` no preload — `BUN-TEST-02` |
+| Esperar que `mock.restore()` desfaça `mock.module()` | a fonte é explícita: não desfaz; o módulo segue mockado no processo | registrar no preload e tratar como global — `BUN-TEST-03` |
+| `mock.module()` no corpo do teste para evitar a conexão do módulo real | o módulo já foi avaliado no import; a conexão já abriu | `--preload` / `[test] preload` — `BUN-TEST-04` |
 | Assumir que `mock.module`/`vi.mock` é içado como no Vitest | a fonte não declara hoisting; a chamada roda depois dos imports | preload — `BUN-TEST-04` |
-| `mock.clearAllMocks` esperando que a implementação volte | ela zera histórico e **mantém** a implementação | `mock.restore` — § 3 |
-| `jest.resetAllMocks` esperando restaurar o método original do spy | reset remove implementação, não restaura o original | `mock.restore` — § 3 |
-| `useFakeTimers` para fixar `new Date` | o construtor `Date` não é trocado em `bun:test` | `setSystemTime(date)` — `BUN-TEST-20` |
+| `mock.clearAllMocks()` esperando que a implementação volte | ela zera histórico e **mantém** a implementação | `mock.restore()` — § 3 |
+| `jest.resetAllMocks()` esperando restaurar o método original do spy | reset remove implementação, não restaura o original | `mock.restore()` — § 3 |
+| `useFakeTimers()` para fixar `new Date()` | o construtor `Date` não é trocado em `bun:test` | `setSystemTime(date)` — `BUN-TEST-20` |
 | Asserção sobre data formatada sem declarar fuso | passa por herdar `TZ=Etc/UTC` e quebra em ambiente que define `TZ` | fixar `TZ` — `BUN-TEST-21` |
 | `await Bun.sleep(400)` para esperar um debounce | teste com sleep é lento e flaky | `useFakeTimers` + `advanceTimersByTime` — § 5 |
 | Mockar o mesmo módulo em três arquivos de teste | o mock virou a interface real, sem ninguém ter decidido isso | receber a dependência por parâmetro — § 4 |
@@ -285,8 +285,8 @@ O mapa completo de migração (incluindo configuração, que é a parte que **n�
 
 ## Checklist de revisão
 
-- [ ] Existe `mock.restore` em `afterEach` (de preferência no preload)? → `BUN-TEST-02`
-- [ ] Nenhum `mock.module` conta com restauração automática? → `BUN-TEST-03`
+- [ ] Existe `mock.restore()` em `afterEach` (de preferência no preload)? → `BUN-TEST-02`
+- [ ] Nenhum `mock.module()` conta com restauração automática? → `BUN-TEST-03`
 - [ ] Mocks que evitam efeito de import estão no preload? → `BUN-TEST-04`
 - [ ] Nenhum código depende de hoisting de `mock.module`/`vi.mock`? → `BUN-TEST-04`
 - [ ] Datas fixas usam `setSystemTime`, não `useFakeTimers`? → `BUN-TEST-20`

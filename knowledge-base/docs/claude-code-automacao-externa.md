@@ -2,13 +2,13 @@
 titulo: Claude Code - Automação Externa
 Link: https://code.claude.com/docs/pt/headless
 tags:
- - claude-code
- - ia
- - automacao
- - ci-cd
- - github-actions
- - code-review
- - agent-context
+  - claude-code
+  - ia
+  - automacao
+  - ci-cd
+  - github-actions
+  - code-review
+  - agent-context
 source: "Documentação oficial do Claude Code — Run Claude Code programmatically (headless), Best practices (automate and scale), Code Review (review a diff locally), Claude Code GitHub Actions, Claude Code in Slack, Remote Control, Use Claude Code with Chrome, Launch sessions from links"
 verificado-em: 2026-08-21
 ---
@@ -78,9 +78,9 @@ claude --bare -p "Resuma o README.md" --allowedTools "Read"
 
 ```bash
 claude -p "Extraia os nomes das funções principais de auth.py" \
- --output-format json \
- --json-schema '{"type":"object","properties":{"functions":{"type":"array","items":{"type":"string"}}},"required":["functions"]}' \
- | jq '.structured_output'
+  --output-format json \
+  --json-schema '{"type":"object","properties":{"functions":{"type":"array","items":{"type":"string"}}},"required":["functions"]}' \
+  | jq '.structured_output'
 ```
 
 Se o valor não é um JSON Schema válido, o `claude` sai com `Error: --json-schema is not a valid JSON Schema` seguido do diagnóstico do validador — falha cedo, não silenciosamente.
@@ -116,8 +116,8 @@ liste todos os arquivos Python que precisam de migração e salve a lista em fil
 
 ```bash
 for file in $(cat files.txt); do
- claude -p "Migre $file de React para Vue. Retorne OK ou FAIL." \
- --allowedTools "Edit,Bash(git commit *)"
+  claude -p "Migre $file de React para Vue. Retorne OK ou FAIL." \
+    --allowedTools "Edit,Bash(git commit *)"
 done
 ```
 

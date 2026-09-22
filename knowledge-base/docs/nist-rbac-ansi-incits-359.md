@@ -18,9 +18,9 @@ fonte: https://csrc.nist.gov/projects/role-based-access-control
 > O texto normativo é vendido pelo INCITS. O conteúdo conceitual, porém, está em documentos
 > públicos do NIST — que é o que interessa para vocabulário:
 > - Sandhu, Ferraiolo, Kuhn (2000), *The NIST Model for Role-Based Access Control: Towards a
-> Unified Standard* — [PDF no NIST](https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=916402)
+>   Unified Standard* — [PDF no NIST](https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=916402)
 > - Ferraiolo, Sandhu, Gavrila, Kuhn, Chandramouli, *A Proposed Standard for Role-Based Access
-> Control* — [PDF no CSRC](https://csrc.nist.gov/csrc/media/projects/role-based-access-control/documents/rbac-std-draft.pdf)
+>   Control* — [PDF no CSRC](https://csrc.nist.gov/csrc/media/projects/role-based-access-control/documents/rbac-std-draft.pdf)
 >
 > Ler o padrão comprado só se faz falta em contexto de conformidade formal.
 

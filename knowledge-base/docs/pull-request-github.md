@@ -32,5 +32,3 @@ titulo: Pull Request GitHub
 Para facilitar a criação de PRs, utilize o [Pull Request Template](pull-request-template.md) disponível neste vault.
 
 ## Ver também
--
--

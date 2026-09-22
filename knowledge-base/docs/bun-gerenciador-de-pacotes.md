@@ -2,9 +2,9 @@
 titulo: Bun - Gerenciador de Pacotes
 Link: https://bun.com/docs/pm/cli/install
 tags:
- - bun
- - package-manager
- - agent-context
+  - bun
+  - package-manager
+  - agent-context
 source: "Documentação oficial — https://bun.com/docs"
 verificado-em: 2026-08-15
 ---
@@ -38,14 +38,14 @@ O resto da nota é operacional. Estes dois parágrafos são o que precisa sobrev
 ## 2. `bun install`: o que ele faz, e o que não faz
 
 ```bash
-bun install # instala tudo
-bun add zod # dependência
-bun add -d @types/bun # devDependency (--dev)
-bun add --peer react # peerDependency
-bun add --exact zod # sem ^ no range
+bun install                      # instala tudo
+bun add zod                      # dependência
+bun add -d @types/bun            # devDependency  (--dev)
+bun add --peer react             # peerDependency
+bun add --exact zod              # sem ^ no range
 bun remove lodash
-bun update # respeitando os ranges do package.json
-bun update --latest # cruzando major
+bun update                       # respeitando os ranges do package.json
+bun update --latest              # cruzando major
 ```
 
 O que `bun install` faz, verificado na fonte:
@@ -92,8 +92,8 @@ Documentação de terceiros e respostas antigas ainda falam em `bun.lockb` e no 
 **CI.** Duas formas equivalentes, e nenhuma é o default:
 
 ```bash
-bun ci # atalho
-bun install --frozen-lockfile # idêntico
+bun ci                              # atalho
+bun install --frozen-lockfile       # idêntico
 ```
 
 Com `--frozen-lockfile`, Bun instala as versões exatas do lockfile e falha se o `package.json` divergir.
@@ -115,24 +115,24 @@ Outros detalhes verificados que importam:
 - **Em monorepo completo, `bun ci` instala todos os workspaces.** É o comportamento de `bun install` na raiz — *"installs dependencies for all workspaces in the monorepo, de-duplicating packages if possible"* — e `bun ci` é equivalente a `bun install --frozen-lockfile`. Para restringir, `--filter`.
 
 ```yaml
-#.github/workflows/ci.yml
+# .github/workflows/ci.yml
 steps:
- - uses: actions/checkout@v4
+  - uses: actions/checkout@v4
 
- # Versão do Bun fixada: uma doc cujo argumento é reprodutibilidade não pode
- # instalar o próprio package manager em versão flutuante. `bun-version` aceita
- # uma versão exata, "latest" ou "canary"; sem o input, a action resolve por
- # packageManager/engines.bun do package.json e cai em "latest" se não achar.
- - uses: oven-sh/setup-bun@v2
- with:
- bun-version: 1.3.14 # ou: bun-version-file:.bun-version
+  # Versão do Bun fixada: uma doc cujo argumento é reprodutibilidade não pode
+  # instalar o próprio package manager em versão flutuante. `bun-version` aceita
+  # uma versão exata, "latest" ou "canary"; sem o input, a action resolve por
+  # packageManager/engines.bun do package.json e cai em "latest" se não achar.
+  - uses: oven-sh/setup-bun@v2
+    with:
+      bun-version: 1.3.14        # ou: bun-version-file: .bun-version
 
- # Guarda: --frozen-lockfile NÃO falha quando o lockfile não existe.
- - name: lockfile presente
- run: test -f bun.lock || (echo "bun.lock ausente — build não é reprodutível" && exit 1)
+  # Guarda: --frozen-lockfile NÃO falha quando o lockfile não existe.
+  - name: lockfile presente
+    run: test -f bun.lock || (echo "bun.lock ausente — build não é reprodutível" && exit 1)
 
- - run: bun ci
- - run: bun run build
+  - run: bun ci
+  - run: bun run build
 ```
 
 A alternativa a fixar a versão no YAML é declarar `"packageManager"` (ou `"engines": { "bun": … }`) no `package.json` e usar `bun-version-file`: a versão passa a viver junto do código, versionada, e o YAML deixa de ser um segundo lugar a atualizar.
@@ -165,7 +165,7 @@ O segundo detalhe verificado: **a lista padrão só vale para pacotes vindos do 
 ### O fluxo correto quando um pacote precisa de `postinstall`
 
 ```bash
-bun pm untrusted # lista o que foi bloqueado, com o comando exato de cada script
+bun pm untrusted        # lista o que foi bloqueado, com o comando exato de cada script
 ```
 
 ```txt
@@ -178,8 +178,8 @@ These dependencies had their lifecycle scripts blocked during install.
 Leia o script. Depois, uma das duas:
 
 ```bash
-bun pm trust @biomejs/biome # roda agora e adiciona a trustedDependencies
-bun pm trust --all # ← só com a lista acima inteira revisada
+bun pm trust @biomejs/biome     # roda agora e adiciona a trustedDependencies
+bun pm trust --all              # ← só com a lista acima inteira revisada
 ```
 
 `bun pm untrusted` é a única superfície que mostra **o comando concreto** que você está autorizando. Aprovar sem passar por ele é aprovar às cegas.
@@ -216,7 +216,7 @@ Bun filtra versões publicadas há menos de N segundos, o que neutraliza a janel
 
 ```toml
 [install]
-minimumReleaseAge = 259200 # 3 dias, em segundos
+minimumReleaseAge = 259200                       # 3 dias, em segundos
 minimumReleaseAgeExcludes = ["@types/node", "typescript"]
 ```
 
@@ -240,7 +240,7 @@ Bun tem duas estratégias de linker, e **o default varia** — é o ponto que ma
 Antes da tabela, o termo. `configVersion` é um campo do **`bun.lock`**, escrito pelo **próprio Bun** na primeira instalação (ou na migração de outro package manager). Não é uma configuração que você declara: você o **consulta**, e para isso basta abrir o lockfile — ele é texto desde a 1.2:
 
 ```bash
-grep configVersion bun.lock # ausente ⇒ trate como configVersion 0
+grep configVersion bun.lock      # ausente ⇒ trate como configVersion 0
 ```
 
 Ele não descreve o formato do arquivo (isso é `lockfileVersion`, outro campo, § 7). Ele marca **em que geração de defaults o projeto nasceu**, e hoje seu efeito principal é um só: decidir o linker quando você não declarou nenhum.
@@ -270,7 +270,7 @@ A correção é uma linha, e é a razão de `BUN-PKG-10` existir:
 # bunfig.toml — declare o linker; não herde o default
 [install]
 linker = "isolated"
-hoist = false # isolamento estrito, ver o final desta seção
+hoist = false          # isolamento estrito, ver o final desta seção
 ```
 
 Depois de declarar, `rm -rf node_modules && bun install` para relayoutar. Um `bun install` sobre o `node_modules` antigo não reorganiza o que já está no disco.
@@ -297,7 +297,7 @@ bun install --linker hoisted
 ```toml
 [install]
 linker = "isolated"
-hoist = false # equivalente ao hoist=false do pnpm
+hoist = false          # equivalente ao hoist=false do pnpm
 ```
 
 A ressalva, compartilhada com o pnpm e declarada na fonte: o `node_modules` raiz também é ancestral do store, então suas dependências diretas e os pacotes de workspace continuam resolvíveis de qualquer lugar.
@@ -314,9 +314,9 @@ A ressalva, compartilhada com o pnpm e declarada na fonte: o `node_modules` raiz
 
 ```json
 {
- "name": "loja",
- "private": true,
- "workspaces": ["packages/**", "!packages/**/template/**"]
+  "name": "loja",
+  "private": true,
+  "workspaces": ["packages/**", "!packages/**/template/**"]
 }
 ```
 
@@ -339,7 +339,7 @@ Na publicação, Bun substitui: `workspace:*` → `1.0.1`, `workspace:^` → `^1
 
 ```bash
 cd packages/api
-bun add zod # entra em packages/api/package.json
+bun add zod                      # entra em packages/api/package.json
 ```
 
 Onde o pacote é fisicamente instalado depende do linker (§ 5): em `isolated`, que é o default de monorepo novo, ele vai para o store `node_modules/.bun/` da raiz e é *symlinkado* no `node_modules` do próprio workspace; com `--linker hoisted`, é hoisteado para o `node_modules` da raiz.
@@ -350,20 +350,20 @@ O problema que resolvem: dez `package.json` repetindo `"react": "^19.0.0"`, e um
 
 ```json
 {
- "name": "loja",
- "workspaces": {
- "packages": ["packages/*"],
- "catalog": { "react": "^19.0.0", "react-dom": "^19.0.0" },
- "catalogs": { "testing": { "@testing-library/react": "16.3.0" } }
- }
+  "name": "loja",
+  "workspaces": {
+    "packages": ["packages/*"],
+    "catalog":  { "react": "^19.0.0", "react-dom": "^19.0.0" },
+    "catalogs": { "testing": { "@testing-library/react": "16.3.0" } }
+  }
 }
 ```
 
 ```json
 {
- "name": "@loja/web",
- "dependencies": { "react": "catalog:", "react-dom": "catalog:" },
- "devDependencies": { "@testing-library/react": "catalog:testing" }
+  "name": "@loja/web",
+  "dependencies":    { "react": "catalog:", "react-dom": "catalog:" },
+  "devDependencies": { "@testing-library/react": "catalog:testing" }
 }
 ```
 
@@ -378,10 +378,10 @@ Pontos verificados:
 ### `--filter`
 
 ```bash
-bun install --filter './packages/api' # instala só as deps de um workspace
+bun install --filter './packages/api'       # instala só as deps de um workspace
 bun install --filter 'pkg-*' --filter '!pkg-c'
-bun run --filter 'ba*' build # roda o script em vários pacotes
-bun run --workspaces test # em todos
+bun run --filter 'ba*' build                # roda o script em vários pacotes
+bun run --workspaces test                   # em todos
 ```
 
 O padrão aceita glob de nome de pacote, caminho `./…`, diretório `{dir}` e relação de dependência (`foo...`).
@@ -408,16 +408,16 @@ Metade das perguntas de monorepo é sobre **onde o campo mora**. A fonte respond
 ```jsonc
 // tsconfig.json — a chave é do compilerOptions, não de um campo de topo
 {
- "compilerOptions": {
- "types": ["bun"], // necessário a partir do TypeScript 6.0
- "jsx": "react-jsx",
- "moduleResolution": "bundler",
- "noEmit": true
- }
+  "compilerOptions": {
+    "types": ["bun"],          // necessário a partir do TypeScript 6.0
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "noEmit": true
+  }
 }
 ```
 
-`bun add -d @types/bun` instala os tipos. Em monorepo, **onde** esse `compilerOptions` mora (um tsconfig por pacote? um base na raiz com `extends`? project references?) é decisão de configuração de TypeScript, fora do escopo da doc do Bun — ver e `TypeScript`. O que a doc do Bun **não** oferece é um comando de type check que atravesse workspaces: `bun run --filter '*' typecheck`, com um script `typecheck` em cada pacote, é composição de peças verificadas (`--filter` + script), não uma feature documentada com esse nome.
+`bun add -d @types/bun` instala os tipos. Em monorepo, **onde** esse `compilerOptions` mora (um tsconfig por pacote? um base na raiz com `extends`? project references?) é decisão de configuração de TypeScript, fora do escopo da doc do Bun `TypeScript`. O que a doc do Bun **não** oferece é um comando de type check que atravesse workspaces: `bun run --filter '*' typecheck`, com um script `typecheck` em cada pacote, é composição de peças verificadas (`--filter` + script), não uma feature documentada com esse nome.
 
 | ID | Regra |
 | --- | --- |
@@ -435,12 +435,12 @@ Fixam a versão de uma **metadependência** — dependência de uma dependência
 
 ```json
 {
- "overrides": {
- "semver@<7.5.2": "7.5.2",
- "micromatch>picomatch": "^2.3.2",
- "quux": "npm:@meuorg/quux@^1.0.0",
- "foo": "catalog:"
- }
+  "overrides": {
+    "semver@<7.5.2": "7.5.2",
+    "micromatch>picomatch": "^2.3.2",
+    "quux": "npm:@meuorg/quux@^1.0.0",
+    "foo": "catalog:"
+  }
 }
 ```
 
@@ -457,9 +457,9 @@ Verificado, e não óbvio:
 Alterar um pacote em `node_modules` sem vendorizá-lo.
 
 ```bash
-bun patch react # 1. prepara: clone real, sem symlink/hardlink
-# edite node_modules/react/… # 2. teste localmente
-bun patch --commit react # 3. gera patches/react@19.x.patch + package.json + lockfile
+bun patch react                     # 1. prepara: clone real, sem symlink/hardlink
+# edite node_modules/react/…        # 2. teste localmente
+bun patch --commit react            # 3. gera patches/react@19.x.patch + package.json + lockfile
 ```
 
 O passo 1 não é opcional e o aviso da fonte é explícito: sem ele, *"you might end up editing the package globally in the cache"* — a edição vaza para todos os projetos da máquina. `bun patch` existe justamente para preservar a integridade do cache global; o patch resultante vive em `patches/`, é rastreado em `"patchedDependencies"` e deve ser commitado.
@@ -474,14 +474,14 @@ O passo 1 não é opcional e o aviso da fonte é explícito: sem ele, *"you migh
 ## 8. Inspecionar: `outdated`, `why`, `audit`, `pm`
 
 ```bash
-bun outdated # tabela Current | Update | Latest
-bun outdated 'eslint*' # aceita glob
-bun why react # cadeia que trouxe o pacote
-bun audit # vulnerabilidades conhecidas
-bun pm ls # dependências resolvidas
-bun pm untrusted # lifecycle scripts bloqueados ← § 4
-bun pm cache rm # limpa o cache global
-bun pm migrate # converte lockfile de outro PM sem instalar
+bun outdated                 # tabela Current | Update | Latest
+bun outdated 'eslint*'       # aceita glob
+bun why react                # cadeia que trouxe o pacote
+bun audit                    # vulnerabilidades conhecidas
+bun pm ls                    # dependências resolvidas
+bun pm untrusted             # lifecycle scripts bloqueados  ← § 4
+bun pm cache rm              # limpa o cache global
+bun pm migrate               # converte lockfile de outro PM sem instalar
 ```
 
 Duas leituras que economizam tempo:
@@ -496,10 +496,10 @@ Duas leituras que economizam tempo:
 `bunx` é alias de `bun x`, e é instalado junto com o `bun`. Procura primeiro o pacote instalado localmente e, se não achar, instala no cache global.
 
 ```bash
-bunx prettier --write.
-bunx uglify-js@3.14.0 app.js # versão fixa
-bunx -p @angular/cli ng new app # binário com nome diferente do pacote
-bunx --bun vite # força o runtime do Bun no CLI
+bunx prettier --write .
+bunx uglify-js@3.14.0 app.js       # versão fixa
+bunx -p @angular/cli ng new app    # binário com nome diferente do pacote
+bunx --bun vite                    # força o runtime do Bun no CLI
 ```
 
 Duas coisas em que se erra:
@@ -564,8 +564,7 @@ Duas coisas em que se erra:
 - [Bun](bun.md) — hub, mapa da API, árvores de decisão
 - [Bun - Runtime e APIs](bun-runtime-e-apis.md) · [Bun - Testes](bun-testes.md) · [Bun - Bundler e Build](bun-bundler-e-build.md) · [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md)
 - `Node.js` · `TypeScript`
--
-- `Arquivos.env não substituem secret management` — a fronteira vizinha de segredo em build
+- — a fronteira vizinha de segredo em build
 
 ## Fontes consultadas
 

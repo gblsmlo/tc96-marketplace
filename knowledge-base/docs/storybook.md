@@ -2,12 +2,12 @@
 titulo: Storybook
 Link: https://storybook.js.org/docs
 tags:
- - storybook
- - react
- - frontend
- - testing
- - reference
- - agent-context
+  - storybook
+  - react
+  - frontend
+  - testing
+  - reference
+  - agent-context
 source: "Documentação oficial do Storybook — storybook.js.org/docs, linha 10.x"
 verificado-em: 2026-08-19
 ---
@@ -101,10 +101,10 @@ Termos usados sem redefinição nos satélites:
 | **loader** | função assíncrona que roda **antes** do render e cujo retorno entra no contexto da story |
 | **play** | função assíncrona que roda **depois** do render e interage com o componente. É o corpo do teste |
 | **canvas** | o escopo de queries do Testing Library limitado à raiz da story renderizada |
-| **spy** | função observável criada por `fn`, que registra chamadas para asserção |
+| **spy** | função observável criada por `fn()`, que registra chamadas para asserção |
 | **tag** | rótulo que decide onde a story aparece: sidebar (`dev`), runner (`test`), página de docs (`autodocs`) |
 | **docgen** | extração automática de tipos e JSDoc do componente para alimentar a tabela de props |
-| **automock** | substituição de todos os exports de um módulo por mocks, registrada com `sb.mock` |
+| **automock** | substituição de todos os exports de um módulo por mocks, registrada com `sb.mock()` |
 | **portable story** | story importada e executada fora da UI do Storybook, via `composeStories` |
 | **browser mode** | modo do Vitest que roda o teste num browser real (Playwright), não em JSDOM |
 
@@ -149,7 +149,7 @@ Saber de onde algo é importado evita a maior parte dos erros de import — e aq
 | `@storybook/tanstack-react` | `StorybookConfig`, `Preview`, `Meta`, `StoryObj` — os tipos do framework, **caminho TanStack** |
 | `@storybook/react-vite` | os mesmos tipos, **caminho Vite genérico**. Um projeto usa um ou outro, nunca os dois |
 | `@storybook/tanstack-react/react-router` | APIs de mock do TanStack Router |
-| `@storybook/tanstack-react/start` | mocks do TanStack Start, incluindo `createServerFn` mockado |
+| `@storybook/tanstack-react/start` | mocks do TanStack Start, incluindo `createServerFn()` mockado |
 | `@storybook/addon-vitest/vitest-plugin` | `storybookTest`, o plugin que transforma story em teste |
 | `@storybook/addon-a11y` | o addon; a configuração é por `parameters.a11y` |
 | `@storybook/addon-docs` | doc blocks (`Title`, `Description`, `Controls`, `Stories`…) |
@@ -217,7 +217,7 @@ Valem em `meta` e em story, salvo indicação. A coluna **Nível** diz onde a an
 | `fn` | spy para callback em `args` | [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) |
 | `userEvent` | simular interação do usuário | [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) |
 | `mocked` | acesso tipado ao mock de um módulo | [Storybook - Mocking](storybook-mocking.md) |
-| `sb` | `sb.mock` — registro de automock, **só no preview** | [Storybook - Mocking](storybook-mocking.md) |
+| `sb` | `sb.mock()` — registro de automock, **só no preview** | [Storybook - Mocking](storybook-mocking.md) |
 
 ### 4.4 `parameters` mais usados
 
@@ -255,23 +255,23 @@ Não é API de story, e por isso ficava fora do mapa até 2026-08-21. Cobre-se e
 O Storybook vai renderizar ALGUMA story que importe @tanstack/react-router
 (direta ou transitivamente — um Link dentro de um componente conta)?
 ├── NÃO, e nunca vai
-│ → @storybook/react-vite → [Storybook - React Vite](storybook-react-vite.md)
-│ requisitos menores: React ≥ 16.8, Vite ≥ 5
-│ típico: Storybook exclusivo de packages/ui
+│   → @storybook/react-vite            → [Storybook - React Vite](storybook-react-vite.md)
+│     requisitos menores: React ≥ 16.8, Vite ≥ 5
+│     típico: Storybook exclusivo de packages/ui
 └── SIM, ou muito provavelmente vai
- ├── o projeto está em React ≥ 18 E Vite ≥ 7?
- │ ├── SIM → @storybook/tanstack-react → [Storybook - TanStack React](storybook-tanstack-react.md)
- │ │ ganho: router em memória embrulhando toda story,
- │ │ imports de @tanstack/react-router redirecionados
- │ │ para a camada de mock, navegação virando spy
- │ │ custo: o redirecionamento é GLOBAL, vale também para as
- │ │ stories de packages/ui que não tocam rota
- │ └── NÃO → @storybook/react-vite + decorator de router à mão
- │ → [Storybook - React Vite](storybook-react-vite.md) § 4
- │ é caminho de transição, não destino: sem params
- │ tipados, sem routeOverrides, sem spy de navegação
- └── (a migração de Vite é pré-requisito do caminho TanStack,
- não detalhe de configuração)
+    ├── o projeto está em React ≥ 18 E Vite ≥ 7?
+    │   ├── SIM → @storybook/tanstack-react  → [Storybook - TanStack React](storybook-tanstack-react.md)
+    │   │     ganho: router em memória embrulhando toda story,
+    │   │            imports de @tanstack/react-router redirecionados
+    │   │            para a camada de mock, navegação virando spy
+    │   │     custo: o redirecionamento é GLOBAL, vale também para as
+    │   │            stories de packages/ui que não tocam rota
+    │   └── NÃO → @storybook/react-vite + decorator de router à mão
+    │         → [Storybook - React Vite](storybook-react-vite.md) § 4
+    │           é caminho de transição, não destino: sem params
+    │           tipados, sem routeOverrides, sem spy de navegação
+    └── (a migração de Vite é pré-requisito do caminho TanStack,
+         não detalhe de configuração)
 ```
 
 **Para o monorepo deste vault a resposta é `@storybook/tanstack-react`,** e a razão não é `packages/ui` — é que `apps/storybook` consome também `apps/web`, onde todo componente de página importa `Link`. Um único Storybook cobrindo os dois pacotes precisa do framework que sabe embrulhar rota.
@@ -282,13 +282,13 @@ O Storybook vai renderizar ALGUMA story que importe @tanstack/react-router
 
 ```
 A anotação vale para QUANTOS componentes?
-├── todos →.storybook/preview.tsx
-│ típico: provider de tema, CSS global, decorator de layout,
-│ reset de queryClient, tags: ['autodocs']
+├── todos → .storybook/preview.tsx
+│   típico: provider de tema, CSS global, decorator de layout,
+│           reset de queryClient, tags: ['autodocs']
 ├── todas as stories de UM componente → meta
-│ típico: component, args comuns, argTypes, parameters.layout
+│   típico: component, args comuns, argTypes, parameters.layout
 └── uma story só → a própria story
- típico: args que definem o estado, play, parameters.a11y.test
+    típico: args que definem o estado, play, parameters.a11y.test
 ```
 
 > **Teste de cheiro:** a mesma anotação aparecendo em três arquivos de story pertencia ao `preview`. Como `parameters` fazem merge por chave (`SB-CTX-01`), subir para o projeto **não** impede uma story de sobrescrever um detalhe.
@@ -297,13 +297,13 @@ A anotação vale para QUANTOS componentes?
 
 ```
 O que a story precisa que o componente não recebe por prop?
-├── markup ou provider em volta → decorator
-├── dado assíncrono antes do render → loader
+├── markup ou provider em volta          → decorator
+├── dado assíncrono antes do render      → loader
 ├── setup imperativo com desfazer
-│ (relógio, comportamento de mock) → beforeEach (retorna cleanup)
-├── configuração de addon → parameters
+│   (relógio, comportamento de mock)     → beforeEach (retorna cleanup)
+├── configuração de addon                → parameters
 ├── variação que o LEITOR troca
-│ (tema, locale) → globals + toolbar
+│   (tema, locale)                       → globals + toolbar
 └── resposta de rede ou módulo do servidor → ver 5.4
 ```
 
@@ -312,23 +312,23 @@ O que a story precisa que o componente não recebe por prop?
 ```
 O que precisa ser substituído?
 ├── um callback que a story quer asseverar
-│ → fn em meta.args, asserção via args.onX
+│   → fn() em meta.args, asserção via args.onX
 ├── um módulo do projeto (lib, client de db, sessão)
-│ → sb.mock(import('../src/lib/x.ts')) no preview
-│ comportamento por story em beforeEach, via mocked
-│ precisa manter a implementação real rodando? { spy: true }
+│   → sb.mock(import('../src/lib/x.ts')) no preview
+│     comportamento por story em beforeEach, via mocked()
+│     precisa manter a implementação real rodando? { spy: true }
 ├── uma requisição HTTP que o componente dispara
-│ → MSW (mswLoader + beforeEach({ msw }))
+│   → MSW (mswLoader + beforeEach({ msw }))
 ├── um módulo que só existe no servidor e quebra no browser
-│ → sb.mock, obrigatoriamente. Ver 5.6
+│   → sb.mock, obrigatoriamente. Ver 5.6
 └── loader / beforeLoad de uma rota do TanStack Router
- ├── caminho tanstack-react
- │ → parameters.tanstack.router.routeOverrides
- └── caminho react-vite
- → routeOverrides NÃO existe. Duas saídas:
- monte uma árvore mínima de rotas na story
- (Storybook - React Vite § 4.2), ou mocke o
- módulo que o loader chama
+    ├── caminho tanstack-react
+    │   → parameters.tanstack.router.routeOverrides
+    └── caminho react-vite
+        → routeOverrides NÃO existe. Duas saídas:
+          monte uma árvore mínima de rotas na story
+          (Storybook - React Vite § 4.2), ou mocke o
+          módulo que o loader chama
 ```
 
 ### 5.5 Onde o teste roda
@@ -336,11 +336,11 @@ O que precisa ser substituído?
 ```
 Preciso executar a play function fora da UI do Storybook?
 ├── não, quero rodar no Storybook e em CI
-│ → @storybook/addon-vitest
-│ exige Vitest e browser mode com Playwright
-│ script: vitest --project=storybook
+│   → @storybook/addon-vitest
+│     exige Vitest e browser mode com Playwright
+│     script: vitest --project=storybook
 └── sim, quero a story dentro de um teste que já existe
- → portable stories: composeStories + setProjectAnnotations
+    → portable stories: composeStories + setProjectAnnotations
 ```
 
 > **A restrição do monorepo.** O addon-vitest exige **Vitest**. Ele não roda sob `bun test`, que é o runner do backend em [Bun - Testes](bun-testes.md). O monorepo convive com dois runners por desenho: `bun test` para `apps/server`, `vitest --project=storybook` para as stories. Não é duplicação a resolver — é a fronteira entre teste de runtime Bun e teste de componente em browser real (`SB-TEST-05`).
@@ -350,21 +350,21 @@ Preciso executar a play function fora da UI do Storybook?
 ```
 Qual é o erro?
 ├── "Cannot find module 'node:fs'" ou similar de módulo Node
-│ → algo na árvore de import da story alcança código server-only.
-│ Leia o stack trace para achar QUAL módulo, e sb.mock nele.
-│ Não trate o erro: o módulo não pode existir no bundle do browser.
+│   → algo na árvore de import da story alcança código server-only.
+│     Leia o stack trace para achar QUAL módulo, e sb.mock nele.
+│     Não trate o erro: o módulo não pode existir no bundle do browser.
 ├── hook do router lançando fora de contexto
-│ ├── caminho tanstack-react → RouterProvider manual em decorator
-│ │ competindo com o router do framework (SB-TS-03)
-│ └── caminho react-vite → falta o decorator de router.
-│ É esperado: sob react-vite nada é embrulhado
-│ automaticamente. Ver Storybook - React Vite § 4
+│   ├── caminho tanstack-react → RouterProvider manual em decorator
+│   │     competindo com o router do framework (SB-TS-03)
+│   └── caminho react-vite → falta o decorator de router.
+│         É esperado: sob react-vite nada é embrulhado
+│         automaticamente. Ver Storybook - React Vite § 4
 ├── componente é Server Component
-│ → não há suporte. Extraia a parte cliente e faça story dela
+│   → não há suporte. Extraia a parte cliente e faça story dela
 ├── "title must be statically readable"
-│ → title computado. Use literal, ou remova e deixe o auto-título
+│   → title computado. Use literal, ou remova e deixe o auto-título
 └── a story renderiza, mas o painel de controles está vazio
- → falta component no meta, ou o docgen não achou os tipos
+    → falta component no meta, ou o docgen não achou os tipos
 ```
 
 ---
@@ -404,7 +404,7 @@ As famílias completas vivem nos satélites, mas **estas precisam viajar com o c
 | `SB-TEST-05` | O addon-vitest exige Vitest e browser mode. `bun test` **NEVER** executa stories. | [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) |
 | `SB-TEST-11` | O número de cobertura **MUST** ser lido como cobertura **das stories**, não do código do projeto. Tratá-lo como cobertura de base de código **NEVER**. | [Storybook - Cobertura e CI](storybook-cobertura-e-ci.md) |
 | `SB-TEST-16` | Em CI, o link de depuração **MUST** vir de `storybookUrl` apontando para um Storybook publicado — em CI não há Storybook ativo. | [Storybook - Cobertura e CI](storybook-cobertura-e-ci.md) |
-| `SB-MOCK-01` | `sb.mock` **MUST** ser chamado apenas em `.storybook/preview.*`. Em arquivo de story, **NEVER**. | [Storybook - Mocking](storybook-mocking.md) |
+| `SB-MOCK-01` | `sb.mock()` **MUST** ser chamado apenas em `.storybook/preview.*`. Em arquivo de story, **NEVER**. | [Storybook - Mocking](storybook-mocking.md) |
 | `SB-MOCK-03` | Arquivo em `__mocks__` **MUST** ser JavaScript com ESM. TypeScript ou CJS **NEVER**. | [Storybook - Mocking](storybook-mocking.md) |
 | `SB-DOC-01` | A página de docs **MUST** ter a tag `autodocs` alcançando o arquivo — herdada do `preview` (a forma prescrita), ou declarada no `meta` ou numa story. | [Storybook - Docs e Autodocs](storybook-docs-e-autodocs.md) |
 | `SB-TS-03` | Contexto do router **MUST** ser injetado por `context`/`useRouterContext`. `RouterProvider` manual em decorator **NEVER** sob `@storybook/tanstack-react`. | [Storybook - TanStack React](storybook-tanstack-react.md) |
@@ -431,7 +431,7 @@ As famílias completas vivem nos satélites, mas **estas precisam viajar com o c
 > **Quatro regras que parecem apelido e não são**, e por isso continuam citáveis por ID próprio:
 >
 > - `SB-CTX-05` (globals não é `args`) exprime um achado que `SB-CSF-04` não exprime — "usou global onde devia ser arg" não é "pôs estado no `render`".
-> - `SB-TEST-07` carrega a exceção do `fn`, que `SB-CTX-04` não carrega.
+> - `SB-TEST-07` carrega a exceção do `fn()`, que `SB-CTX-04` não carrega.
 > - `SB-MOCK-04` é a **metade complementar** de `SB-MOCK-01`, não seu sinônimo: uma diz onde registra, a outra onde comporta. E as duas vivem no mesmo satélite, o que já as tira do critério de apelido.
 > - `SB-CTX-06` é **condicional ao framework** e por isso mais ampla que `SB-TS-03`: sob `react-vite` ela continua valendo e simplesmente não é acionada.
 
@@ -452,31 +452,31 @@ Como uma skill de Storybook deve consumir esta doc.
 ### O que carregar
 
 ```
-SEMPRE: docs/Storybook.md § 2 (modelo mental)
- docs/Storybook.md § 5 (árvores de decisão)
- docs/Storybook.md § 6 + § 6.1 (regras normativas e críticas)
+SEMPRE:   docs/Storybook.md § 2 (modelo mental)
+          docs/Storybook.md § 5 (árvores de decisão)
+          docs/Storybook.md § 6 + § 6.1 (regras normativas e críticas)
 
 AO ESCREVER/EDITAR arquivo de stories:
- docs/Storybook - Stories e Args.md
+          docs/Storybook - Stories e Args.md
 
 ANTES DE QUALQUER COISA, para descobrir o caminho do projeto:
- leia o campo `framework` de.storybook/main.ts
+          leia o campo `framework` de .storybook/main.ts
 
 AO CONFIGURAR o projeto, ou em qualquer story que toque rota:
- docs/Storybook - TanStack React.md (se framework = @storybook/tanstack-react)
- docs/Storybook - React Vite.md (se framework = @storybook/react-vite)
+          docs/Storybook - TanStack React.md   (se framework = @storybook/tanstack-react)
+          docs/Storybook - React Vite.md       (se framework = @storybook/react-vite)
 
 SOB DEMANDA, via § 4 (mapa da API):
- o satélite da superfície tocada pela tarefa
+          o satélite da superfície tocada pela tarefa
 
-NUNCA: todos os satélites de uma vez
+NUNCA:    todos os satélites de uma vez
 ```
 
 ### Como citar
 
 Achados de revisão citam o ID da regra e o satélite, não parafraseiam:
 
-> `SB-MOCK-01` — `sb.mock` chamado dentro do arquivo de story. O registro pertence a `.storybook/preview.tsx`; a story só define comportamento, via `mocked` em `beforeEach`.
+> `SB-MOCK-01` — `sb.mock()` chamado dentro do arquivo de story. O registro pertence a `.storybook/preview.tsx`; a story só define comportamento, via `mocked()` em `beforeEach`.
 > Ver [Storybook - Mocking](storybook-mocking.md).
 
 ### Invariantes que a skill deve fazer valer
@@ -514,7 +514,7 @@ O corpo desta doc é Storybook fiel à fonte. Mas no meu stack várias decisões
 | Componente usa `Link` ou `useNavigate` — **caminho react-vite** | esperar `parameters.tanstack` funcionar (é no-op, `SB-RV-04`) | decorator com árvore mínima — [Storybook - React Vite](storybook-react-vite.md) § 4 |
 | Componente lê search param tipado — **caminho tanstack-react** | passar prop fake | `query` + `routeOverrides.validateSearch` — [TanStack Router - Search Params](tanstack-router-search-params.md) |
 | Componente lê search param tipado — **caminho react-vite** | passar prop fake | query string em `initialEntries`; `validateSearch` **não é sobrescrevível** — [Storybook - React Vite](storybook-react-vite.md) § 4.2 |
-| Story de formulário complexo | disparar `change` em cada input | `play` com `userEvent` + `fn` no `onSubmit` — [React Hook Form - Estado e Performance](react-hook-form-estado-e-performance.md) |
+| Story de formulário complexo | disparar `change` em cada input | `play` com `userEvent` + `fn()` no `onSubmit` — [React Hook Form - Estado e Performance](react-hook-form-estado-e-performance.md) |
 | Componente com `useEffect` de fetch | escrever a story em volta do defeito | o defeito é o `useEffect` — `REACT-EFFECT-06` em [React - Efeitos e Sincronização](react-efeitos-e-sincronizacao.md) |
 | Tema e tokens | `style` inline na story | decorator global de tema — `Tailwindcss` |
 | Erro esperado (400 de validação) | lançar para o Error Boundary | é estado, e merece story própria — `REACT-ASYNC-09` |
@@ -559,15 +559,15 @@ Verificadas diretamente em **2026-08-19**:
 - **O framework `tanstack-react` cobra requisito maior que o `react-vite`:** React ≥ 18 e **Vite ≥ 7**, contra React ≥ 16.8 e Vite ≥ 5.
 - **O redirecionamento de `@tanstack/react-router` para a camada de mock é global**, não opt-in por story. Vale também para stories que não tocam rota.
 - **Os utilitários de teste são `storybook/test`, sem `@`.** `useArgs` vive em `storybook/preview-api`.
-- **`sb.mock` só pode ser registrado em `.storybook/preview.*`.** A doc é explícita: o registro é de projeto, "para garantir mocking consistente e performante em todas as stories". A story controla só comportamento.
+- **`sb.mock()` só pode ser registrado em `.storybook/preview.*`.** A doc é explícita: o registro é de projeto, "para garantir mocking consistente e performante em todas as stories". A story controla só comportamento.
 - **Arquivos em `__mocks__` precisam ser JavaScript com ESM** — não TypeScript, não CJS.
 - **O addon de a11y desabilita a regra `region` por padrão**, para evitar falso **positivo** em story de componente isolado — um botão fora de landmark é o normal do Storybook, não defeito.
 - **`parameters.a11y.test: 'todo'` não produz nada em CI** — nem erro, nem warning, nem saída. Só `'error'` falha.
 - **`mount` é obrigatório na `play`** quando há código a rodar antes do render; sem desestruturá-lo, o Storybook já começou a renderizar.
-- **Mocks `fn` não precisam de restauração manual** — o Storybook reseta entre stories.
+- **Mocks `fn()` não precisam de restauração manual** — o Storybook reseta entre stories.
 - **A config do addon-vitest é breaking entre Vitest 3 e 4:** `provider: 'playwright'` (string) virou `provider: playwright({})`, importado de `@vitest/browser-playwright`. O `latest` do npm hoje é Vitest 4.1.11, então o exemplo de string está desatualizado para instalação nova.
 - **O addon-vitest roda em browser real com Playwright**, não em JSDOM — e exige Vitest, logo não roda sob `bun test`.
-- **`msw-storybook-addon` v3 trocou a API:** `mswLoader` de `msw-storybook-addon/csf3` mais `beforeEach({ msw })`, no lugar do antigo `parameters.msw.handlers`.
+- **`msw-storybook-addon` v3 trocou a API:** `mswLoader()` de `msw-storybook-addon/csf3` mais `beforeEach({ msw })`, no lugar do antigo `parameters.msw.handlers`.
 - **Storybook 10 é ESM-only** e exige Node 20.19+/22.12+; `main.ts` com `require` não sobe.
 - **A doc oficial recomenda migrar de `test-runner` para `addon-vitest`** — o test-runner é o caminho legado, ainda documentado.
 - **As tags `dev`, `test` e `manifest` são aplicadas por padrão**; `autodocs` não é. Existem ainda `play-fn` e `test-fn` aplicadas automaticamente.

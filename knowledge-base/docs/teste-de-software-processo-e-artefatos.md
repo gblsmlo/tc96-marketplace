@@ -2,11 +2,11 @@
 titulo: Teste de Software - Processo e Artefatos
 Link: https://www.guru99.com/software-testing-life-cycle.html
 tags:
- - testing
- - process
- - qa
- - defect-management
- - agent-context
+  - testing
+  - process
+  - qa
+  - defect-management
+  - agent-context
 source: "guru99 (STLC, defect life cycle, severidade × prioridade, V-model), ISTQB CTFL v4.0 (atividades de teste)"
 verificado-em: 2026-08-20
 ---
@@ -90,24 +90,24 @@ A segunda pergunta é a mais interessante e quase nunca é feita. Teste que não
 Os estados, no vocabulário clássico:
 
 ```
- ┌─────────────────────────────────────────┐
- ▼ │
- New ──▶ Assigned ──▶ Open ──▶ Fixed ──▶ Pending Retest
- │ │ │
- │ │ ▼
- │ │ Retest
- │ │ │
- │ │ ┌────────┴────────┐
- │ │ ▼ ▼
- │ │ Verified Reopen ──┐
- │ │ │ │
- │ │ ▼ │
- │ │ Closed │
- │ │ │
- └───────────┴──▶ Rejected · Duplicate · │
- Deferred · Not a Bug │
- │
- (Reopen volta para Assigned/Open) ──────────┘
+        ┌─────────────────────────────────────────┐
+        ▼                                         │
+      New ──▶ Assigned ──▶ Open ──▶ Fixed ──▶ Pending Retest
+                 │           │                    │
+                 │           │                    ▼
+                 │           │                 Retest
+                 │           │                    │
+                 │           │           ┌────────┴────────┐
+                 │           │           ▼                 ▼
+                 │           │        Verified          Reopen ──┐
+                 │           │           │                      │
+                 │           │           ▼                      │
+                 │           │        Closed                    │
+                 │           │                                  │
+                 └───────────┴──▶ Rejected · Duplicate ·        │
+                                  Deferred · Not a Bug          │
+                                                                │
+                     (Reopen volta para Assigned/Open) ──────────┘
 ```
 
 Os 13 estados: **New**, **Assigned**, **Open**, **Fixed**, **Pending Retest**, **Retest**, **Verified**, **Reopen**, **Closed**, **Duplicate**, **Rejected**, **Deferred**, **Not a Bug**.
@@ -247,7 +247,6 @@ O outro extremo do erro. Num time que entrega continuamente, produzir plano de t
 - [Playwright - Debug e Trace](playwright-debug-e-trace.md) — o trace como evidência anexável
 - [Github Actions](github-actions.md) · — os portões executáveis
 - [Pull Request](pull-request.md) · [Pull Request Template](pull-request-template.md) — onde o critério de saída vive num repositório
--
 - — as fases comprimidas em prática de time
 
 ## Fontes consultadas

@@ -2,10 +2,10 @@
 titulo: React - Server Components e Diretivas
 Link: https://react.dev/reference/rsc/server-components
 tags:
- - react
- - rsc
- - server-components
- - agent-context
+  - react
+  - rsc
+  - server-components
+  - agent-context
 source: "Documentação oficial do React — RSC, 'use client', 'use server', cache, taint (experimental)"
 verificado-em: 2026-08-14
 ---
@@ -33,15 +33,15 @@ Renderizam **antes**, em ambiente de servidor separado do app cliente — em bui
 
 ```tsx
 // Server Component — sem diretiva; é o padrão em ambiente RSC
-async function Notas {
- const notas = await db.notas.listar // acesso direto ao banco
- return (
- <ul>
- {notas.map((n) => (
- <Expansivel key={n.id}><p>{n.texto}</p></Expansivel>
- ))}
- </ul>
- )
+async function Notas() {
+  const notas = await db.notas.listar()   // acesso direto ao banco
+  return (
+    <ul>
+      {notas.map((n) => (
+        <Expansivel key={n.id}><p>{n.texto}</p></Expansivel>
+      ))}
+    </ul>
+  )
 }
 ```
 
@@ -90,23 +90,23 @@ E, decisivo: **todo o código do subgrafo marcado vai para o cliente** — não 
 ```tsx
 // ERRADO — a página inteira e tudo que ela importa viram cliente
 'use client'
-export default function Pagina {
- const [aberto, setAberto] = useState(false)
- return <><Cabecalho /><ListaEnorme /><Botao onClick={ => setAberto(true)} /></>
+export default function Pagina() {
+  const [aberto, setAberto] = useState(false)
+  return <><Cabecalho /><ListaEnorme /><Botao onClick={() => setAberto(true)} /></>
 }
 
 // CERTO — só o pedaço interativo é cliente
 // Pagina.tsx (Server Component)
-export default async function Pagina {
- const dados = await carregar
- return <><Cabecalho /><ListaEnorme dados={dados} /><BotaoAbrir /></>
+export default async function Pagina() {
+  const dados = await carregar()
+  return <><Cabecalho /><ListaEnorme dados={dados} /><BotaoAbrir /></>
 }
 
 // BotaoAbrir.tsx
 'use client'
-export function BotaoAbrir {
- const [aberto, setAberto] = useState(false)
- return <button onClick={ => setAberto(true)}>Abrir</button>
+export function BotaoAbrir() {
+  const [aberto, setAberto] = useState(false)
+  return <button onClick={() => setAberto(true)}>Abrir</button>
 }
 ```
 
@@ -121,7 +121,7 @@ Um Client Component **pode** renderizar Server Components — desde que recebido
 ```tsx
 // Server Component compõe: conteúdo de servidor dentro de casca interativa
 <Expansivel>
- <ConteudoDeServidor />
+  <ConteudoDeServidor />
 </Expansivel>
 ```
 
@@ -134,7 +134,7 @@ Um Client Component **pode** renderizar Server Components — desde que recebido
 | ✅ Atravessa | ❌ Não atravessa |
 | --- | --- |
 | primitivos: string, number, bigint, boolean, undefined, null | funções comuns |
-| símbolos registrados com `Symbol.for` | instâncias de classe |
+| símbolos registrados com `Symbol.for()` | instâncias de classe |
 | String, Array, Map, Set, TypedArray, ArrayBuffer | objetos com protótipo `null` |
 | `Date` | símbolos não registrados globalmente |
 | objetos simples com propriedades serializáveis | |
@@ -158,12 +158,12 @@ Marca funções de servidor invocáveis pelo cliente. **Não** é o oposto de `'
 'use server'
 
 export async function criarTopico(formData: FormData) {
- const sessao = await autenticar // autenticar
- const dados = topicoSchema.parse({ // validar
- titulo: formData.get('titulo'),
- })
- if (!podeCriar(sessao, dados)) throw new Error('Sem permissão') // autorizar
- return db.topicos.criar({...dados, autorId: sessao.userId })
+  const sessao = await autenticar()                    // autenticar
+  const dados = topicoSchema.parse({                   // validar
+    titulo: formData.get('titulo'),
+  })
+  if (!podeCriar(sessao, dados)) throw new Error('Sem permissão')  // autorizar
+  return db.topicos.criar({ ...dados, autorId: sessao.userId })
 }
 ```
 
@@ -208,8 +208,8 @@ Os exports são `experimental_taintObjectReference` e `experimental_taintUniqueV
 import { experimental_taintObjectReference } from 'react'
 
 experimental_taintObjectReference(
- 'Do not pass ALL environment variables to the client.',
- process.env,
+  'Do not pass ALL environment variables to the client.',
+  process.env,
 )
 ```
 

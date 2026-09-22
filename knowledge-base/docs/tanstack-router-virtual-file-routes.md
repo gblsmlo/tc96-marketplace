@@ -2,10 +2,10 @@
 titulo: TanStack Router - Virtual File Routes
 Link: https://tanstack.com/router/latest/docs/framework/react/routing/virtual-file-routes
 tags:
- - tanstack-router
- - routing
- - build
- - agent-context
+  - tanstack-router
+  - routing
+  - build
+  - agent-context
 source: "Documentação oficial — https://tanstack.com/router/latest/docs/framework/react/"
 verificado-em: 2026-08-14
 ---
@@ -58,28 +58,28 @@ Pacote: `@tanstack/virtual-file-routes`.
 ```ts
 // routes.ts
 import {
- rootRoute,
- route,
- index,
- layout,
- physical,
+  rootRoute,
+  route,
+  index,
+  layout,
+  physical,
 } from '@tanstack/virtual-file-routes'
 
 export const routes = rootRoute('root.tsx', [
- index('index.tsx'),
+  index('index.tsx'),
 
- layout('pathlessLayout.tsx', [
- route('/dashboard', 'app/dashboard.tsx', [
- index('app/dashboard-index.tsx'),
- route('/invoices', 'app/dashboard-invoices.tsx', [
- index('app/invoices-index.tsx'),
- route('$id', 'app/invoice-detail.tsx'),
- ]),
- ]),
- ]),
+  layout('pathlessLayout.tsx', [
+    route('/dashboard', 'app/dashboard.tsx', [
+      index('app/dashboard-index.tsx'),
+      route('/invoices', 'app/dashboard-invoices.tsx', [
+        index('app/invoices-index.tsx'),
+        route('$id', 'app/invoice-detail.tsx'),
+      ]),
+    ]),
+  ]),
 
- // monta posts/ inteiro sob /posts, com convenção file-based
- physical('/posts', 'posts'),
+  // monta posts/ inteiro sob /posts, com convenção file-based
+  physical('/posts', 'posts'),
 ])
 ```
 
@@ -89,8 +89,8 @@ Dois detalhes de assinatura que custam tempo quando passam despercebidos:
 
 ```ts
 route('/hello', [
- route('/world', 'world.tsx'), // /hello/world
- route('/universe', 'universe.tsx'), // /hello/universe
+  route('/world', 'world.tsx'),      // /hello/world
+  route('/universe', 'universe.tsx'), // /hello/universe
 ])
 ```
 
@@ -98,7 +98,7 @@ route('/hello', [
 
 ```ts
 layout('auth', 'auth-layout.tsx', [
- route('/login', 'login.tsx'),
+  route('/login', 'login.tsx'),
 ])
 ```
 
@@ -117,19 +117,19 @@ layout('auth', 'auth-layout.tsx', [
 /routes
 ├── root.tsx
 ├── posts/
-│ ├── index.tsx
-│ └── $postId.tsx
+│   ├── index.tsx
+│   └── $postId.tsx
 └── app/
- └── dashboard.tsx
+    └── dashboard.tsx
 ```
 
 ```ts
 rootRoute('root.tsx', [
- index('index.tsx'),
- physical('/posts', 'posts'),
- layout('app-layout.tsx', [
- physical('/dashboard', 'app'),
- ]),
+  index('index.tsx'),
+  physical('/posts', 'posts'),
+  layout('app-layout.tsx', [
+    physical('/dashboard', 'app'),
+  ]),
 ])
 ```
 
@@ -141,8 +141,8 @@ Sem prefixo de path, o diretório é mesclado onde está:
 
 ```ts
 export const routes = rootRoute('__root.tsx', [
- route('/about', 'about.tsx'),
- physical('features'), // equivalente a physical('', 'features')
+  route('/about', 'about.tsx'),
+  physical('features'), // equivalente a physical('', 'features')
 ])
 ```
 
@@ -173,24 +173,24 @@ O caminho inverso. Um projeto file-based normal pode trocar para virtual em qual
 ├── __root.tsx
 ├── index.tsx
 └── foo/
- ├── bar.tsx
- └── bar/
- ├── __virtual.ts ← daqui para baixo, virtual
- ├── home.tsx
- └── details.tsx
+    ├── bar.tsx
+    └── bar/
+        ├── __virtual.ts    ← daqui para baixo, virtual
+        ├── home.tsx
+        └── details.tsx
 ```
 
 ```ts
 // routes/foo/bar/__virtual.ts
 import {
- defineVirtualSubtreeConfig,
- index,
- route,
+  defineVirtualSubtreeConfig,
+  index,
+  route,
 } from '@tanstack/virtual-file-routes'
 
 export default defineVirtualSubtreeConfig([
- index('home.tsx'), // /foo/bar
- route('$id', 'details.tsx'), // /foo/bar/$id
+  index('home.tsx'),           // /foo/bar
+  route('$id', 'details.tsx'), // /foo/bar/$id
 ])
 ```
 
@@ -201,14 +201,14 @@ export default defineVirtualSubtreeConfig([
 ├── __root.tsx
 ├── posts.tsx
 └── posts/
- ├── __virtual.ts ← virtual
- ├── home.tsx
- ├── details.tsx
- └── lets-go/
- ├── index.tsx ← file-based de novo
- └── deeper/
- ├── __virtual.ts ← virtual de novo
- └── home.tsx
+    ├── __virtual.ts          ← virtual
+    ├── home.tsx
+    ├── details.tsx
+    └── lets-go/
+        ├── index.tsx         ← file-based de novo
+        └── deeper/
+            ├── __virtual.ts  ← virtual de novo
+            └── home.tsx
 ```
 
 Esta é a propriedade que torna virtual file routes uma ferramenta de **migração**, e não uma decisão de tudo-ou-nada: dá para converter uma seção do app por vez.
@@ -228,13 +228,13 @@ Uma única opção liga tudo: `virtualRouteConfig`.
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
- plugins: [
- tanstackRouter({
- target: 'react',
- virtualRouteConfig: './routes.ts',
- }),
- react,
- ],
+  plugins: [
+    tanstackRouter({
+      target: 'react',
+      virtualRouteConfig: './routes.ts',
+    }),
+    react(),
+  ],
 })
 ```
 
@@ -244,8 +244,8 @@ Também aceita a árvore inline, sem arquivo separado:
 import { rootRoute, index, route } from '@tanstack/virtual-file-routes'
 
 const routes = rootRoute('root.tsx', [
- index('index.tsx'),
- route('/about', 'about.tsx'),
+  index('index.tsx'),
+  route('/about', 'about.tsx'),
 ])
 
 tanstackRouter({ target: 'react', virtualRouteConfig: routes })
@@ -273,16 +273,16 @@ A ordem do plugin em relação ao `@vitejs/plugin-react` continua valendo — `T
 **`layout` usado onde se queria segmento de URL**
 
 ```ts
-// ERRADO — /dashboard e /settings ficam em /, sem o prefixo /app
+// ERRADO — /dashboard e /settings ficam em / , sem o prefixo /app
 layout('app-layout.tsx', [
- route('/dashboard', 'dashboard.tsx'),
- route('/settings', 'settings.tsx'),
+  route('/dashboard', 'dashboard.tsx'),
+  route('/settings', 'settings.tsx'),
 ])
 
 // CERTO — route contribui o segmento; o layout continua envolvendo
 route('/app', 'app-layout.tsx', [
- route('/dashboard', 'dashboard.tsx'), // /app/dashboard
- route('/settings', 'settings.tsx'), // /app/settings
+  route('/dashboard', 'dashboard.tsx'),  // /app/dashboard
+  route('/settings', 'settings.tsx'),    // /app/settings
 ])
 ```
 

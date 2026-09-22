@@ -2,11 +2,11 @@
 titulo: Storybook - TanStack React
 Link: https://storybook.js.org/docs/get-started/frameworks/tanstack-react
 tags:
- - storybook
- - tanstack
- - router
- - react
- - agent-context
+  - storybook
+  - tanstack
+  - router
+  - react
+  - agent-context
 source: "Documentação oficial do Storybook — framework TanStack React"
 verificado-em: 2026-08-19
 ---
@@ -24,7 +24,7 @@ verificado-em: 2026-08-19
 Três coisas, e é importante saber que são automáticas:
 
 1. **Embrulha cada story num TanStack Router em memória.** Não há servidor, não há URL de verdade — o router é *memory-backed*.
-2. **Redireciona os imports de `@tanstack/react-router` para uma camada de mock.** `useNavigate`, `useSearch` e `useParams` continuam disponíveis dentro da story, e **tentativas de navegação viram spies do Storybook** — dá para asseverar que um clique tentou navegar.
+2. **Redireciona os imports de `@tanstack/react-router` para uma camada de mock.** `useNavigate()`, `useSearch()` e `useParams()` continuam disponíveis dentro da story, e **tentativas de navegação viram spies do Storybook** — dá para asseverar que um clique tentou navegar.
 3. **Faz stub dos entrypoints de servidor e de runtime do TanStack Start**, para que componente que usa server function consiga renderizar.
 
 O ponto 2 é o que mais muda o dia a dia: uma story de `apps/web` que renderiza um `<Link>` simplesmente funciona, sem decorator, sem provider, sem rota falsa montada à mão.
@@ -65,22 +65,22 @@ npm create storybook@latest
 ```
 
 ```ts
-//.storybook/main.ts
+// .storybook/main.ts
 import type { StorybookConfig } from '@storybook/tanstack-react';
 
 const config: StorybookConfig = {
- framework: '@storybook/tanstack-react',
+  framework: '@storybook/tanstack-react',
 };
 
 export default config;
 ```
 
 ```tsx
-//.storybook/preview.tsx
+// .storybook/preview.tsx
 import type { Preview } from '@storybook/tanstack-react';
 
 const preview = {
- // configuração
+  // configuração
 } satisfies Preview;
 
 export default preview;
@@ -95,7 +95,7 @@ Scripts: `storybook` para desenvolver, `build-storybook` para o build estático 
 | Import | Contém |
 | --- | --- |
 | `@storybook/tanstack-react/react-router` | as APIs de mock do TanStack Router |
-| `@storybook/tanstack-react/start` | os mocks do Start, incluindo `createServerFn` mockado |
+| `@storybook/tanstack-react/start` | os mocks do Start, incluindo `createServerFn()` mockado |
 
 ---
 
@@ -122,16 +122,16 @@ import type { Meta, StoryObj } from '@storybook/tanstack-react';
 import { Route } from './Page';
 
 const meta = {
- parameters: {
- layout: 'fullscreen',
- tanstack: {
- router: {
- route: Route,
- params: { id: '42' },
- query: { tab: 'details' },
- },
- },
- },
+  parameters: {
+    layout: 'fullscreen',
+    tanstack: {
+      router: {
+        route: Route,
+        params: { id: '42' },
+        query: { tab: 'details' },
+      },
+    },
+  },
 } satisfies Meta<typeof Route>;
 
 export default meta;
@@ -150,22 +150,22 @@ O `loader` de uma rota real chama a API. Numa story isso é rede em CI, lentidã
 
 ```tsx
 export const ComDadosCarregados: Story = {
- parameters: {
- tanstack: {
- router: {
- route: Route,
- params: { id: '42' },
- routeOverrides: {
- '/tarefas/$id': {
- loader: async => ({ tarefa: { id: '42', titulo: 'Revisar PR' } }),
- },
- '__root__': {
- beforeLoad: async => ({ usuario: { nome: 'Ada' } }),
- },
- },
- },
- },
- },
+  parameters: {
+    tanstack: {
+      router: {
+        route: Route,
+        params: { id: '42' },
+        routeOverrides: {
+          '/tarefas/$id': {
+            loader: async () => ({ tarefa: { id: '42', titulo: 'Revisar PR' } }),
+          },
+          '__root__': {
+            beforeLoad: async () => ({ usuario: { nome: 'Ada' } }),
+          },
+        },
+      },
+    },
+  },
 };
 ```
 
@@ -184,30 +184,30 @@ Isso substitui um `sb.mock` do módulo de API na maioria dos casos, e é mais di
 O padrão da fonte, adaptado ao vault:
 
 ```tsx
-//.storybook/preview.tsx
+// .storybook/preview.tsx
 import type { Preview } from '@storybook/tanstack-react';
 import { QueryClient } from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
- defaultOptions: {
- queries: {
- retry: false,
- staleTime: Infinity,
- },
- },
+  defaultOptions: {
+    queries: {
+      retry: false,
+      staleTime: Infinity,
+    },
+  },
 });
 
 const preview = {
- beforeEach: => {
- queryClient.clear;
- },
- parameters: {
- tanstack: {
- router: {
- context: { queryClient },
- },
- },
- },
+  beforeEach: () => {
+    queryClient.clear();
+  },
+  parameters: {
+    tanstack: {
+      router: {
+        context: { queryClient },
+      },
+    },
+  },
 } satisfies Preview;
 
 export default preview;
@@ -217,7 +217,7 @@ Três decisões, e nenhuma é cosmética:
 
 - **`retry: false`.** Com o retry default, uma story de erro fica segundos tentando de novo antes de mostrar o estado que ela existe para mostrar — e no runner isso vira teste lento e instável (`SB-TS-05`).
 - **`staleTime: Infinity`.** Elimina refetch por foco de janela e por remontagem. Numa story, refetch é ruído. Ver [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md).
-- **`queryClient.clear` em `beforeEach`.** O client é único para todo o Storybook. Sem limpar, a segunda story renderiza com o cache da primeira, e o resultado depende de uma ordem que não é garantida (`SB-TS-04`, alias de `SB-CTX-04`).
+- **`queryClient.clear()` em `beforeEach`.** O client é único para todo o Storybook. Sem limpar, a segunda story renderiza com o cache da primeira, e o resultado depende de uma ordem que não é garantida (`SB-TS-04`, alias de `SB-CTX-04`).
 
 O `queryClient` entra pelo **contexto do router**, que é onde o app real também o coloca — ver [TanStack Router - Route Context e Code Splitting](tanstack-router-route-context-e-code-splitting.md). Isso mantém story e app com o mesmo formato de injeção.
 
@@ -225,26 +225,26 @@ O `queryClient` entra pelo **contexto do router**, que é onde o app real també
 
 ## 6. Server functions do Start
 
-Só sob TanStack Start. O framework já mocka `createServerFn`; a story define o comportamento:
+Só sob TanStack Start. O framework já mocka `createServerFn()`; a story define o comportamento:
 
 ```tsx
 import { mocked } from 'storybook/test';
 import { atualizarPerfil } from '../lib/atualizarPerfil';
 
 export const Sucesso: Story = {
- beforeEach: async => {
- mocked(atualizarPerfil).mockResolvedValue({ ok: true, nome: 'Ada Lovelace' });
- },
+  beforeEach: async () => {
+    mocked(atualizarPerfil).mockResolvedValue({ ok: true, nome: 'Ada Lovelace' });
+  },
 };
 
 export const Falha: Story = {
- beforeEach: async => {
- mocked(atualizarPerfil).mockRejectedValue(new Error('nome já em uso'));
- },
+  beforeEach: async () => {
+    mocked(atualizarPerfil).mockRejectedValue(new Error('nome já em uso'));
+  },
 };
 ```
 
-Mesmo contrato de [Storybook - Mocking](storybook-mocking.md) § 2.4: comportamento em `beforeEach`, via `mocked`.
+Mesmo contrato de [Storybook - Mocking](storybook-mocking.md) § 2.4: comportamento em `beforeEach`, via `mocked()`.
 
 ---
 
@@ -253,11 +253,11 @@ Mesmo contrato de [Storybook - Mocking](storybook-mocking.md) § 2.4: comportame
 O framework descreve três camadas:
 
 1. **Mocks de framework** — automáticos para módulos `@tanstack/*`.
-2. **Mock de aplicação** — `sb.mock` no preview, com `__mocks__` quando preciso.
+2. **Mock de aplicação** — `sb.mock()` no preview, com `__mocks__` quando preciso.
 3. **Identificação do módulo** — ler o stack trace do erro para achar qual dependência Node foi puxada.
 
 ```tsx
-//.storybook/preview.tsx
+// .storybook/preview.tsx
 import { sb } from 'storybook/test';
 sb.mock(import('../src/db/client.ts'));
 ```
@@ -339,7 +339,7 @@ Trata o sintoma e fixa o acoplamento (`SB-TS-08`).
 
 ### 12.6 Esperar que server function funcione sem Start
 
-Os stubs de `createServerFn` existem para app Start. Numa SPA com BFF, a chamada ao servidor é HTTP, e o mock é MSW — [Storybook - Mocking](storybook-mocking.md) § 3.
+Os stubs de `createServerFn()` existem para app Start. Numa SPA com BFF, a chamada ao servidor é HTTP, e o mock é MSW — [Storybook - Mocking](storybook-mocking.md) § 3.
 
 ---
 

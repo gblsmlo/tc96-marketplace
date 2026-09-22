@@ -2,11 +2,11 @@
 titulo: Playwright - Locators
 Link: https://playwright.dev/docs/locators
 tags:
- - playwright
- - testing
- - locators
- - accessibility
- - agent-context
+  - playwright
+  - testing
+  - locators
+  - accessibility
+  - agent-context
 source: "Documentação oficial do Playwright — Locators, Other locators, Best Practices"
 verificado-em: 2026-08-20
 ---
@@ -27,8 +27,8 @@ verificado-em: 2026-08-20
 const salvar = page.getByRole('button', { name: 'Salvar' });
 // nada foi buscado ainda — nem uma query no DOM
 
-await salvar.click; // busca agora, espera actionability, clica
-await expect(salvar).toBeDisabled; // busca de novo, contra o DOM de agora
+await salvar.click();      // busca agora, espera actionability, clica
+await expect(salvar).toBeDisabled();  // busca de novo, contra o DOM de agora
 ```
 
 O locator é reavaliado a cada uso. Por isso:
@@ -43,7 +43,7 @@ O default é **estrito**: se o locator resolve para mais de um elemento, a açã
 
 ```ts
 // A página tem 4 botões
-await page.getByRole('button').click;
+await page.getByRole('button').click();
 // ✗ Error: strict mode violation: resolved to 4 elements
 ```
 
@@ -52,7 +52,7 @@ Isso é uma feature, não um obstáculo. Um locator ambíguo que "funciona" clic
 Operações que agem sobre o conjunto **não** são estritas, porque o conjunto é o alvo:
 
 ```ts
-await expect(page.getByRole('listitem')).toHaveCount(3); // ok
+await expect(page.getByRole('listitem')).toHaveCount(3);       // ok
 await expect(page.getByRole('listitem')).toHaveText(['a','b','c']); // ok
 ```
 
@@ -67,11 +67,11 @@ Em ordem de preferência, como a fonte a estabelece.
 Busca por papel ARIA (explícito ou implícito) e nome acessível. É o que mais se aproxima de "como o usuário e a tecnologia assistiva percebem a página".
 
 ```ts
-await page.getByRole('button', { name: 'Entrar' }).click;
-await expect(page.getByRole('heading', { name: 'Cadastro', level: 1 })).toBeVisible;
+await page.getByRole('button', { name: 'Entrar' }).click();
+await expect(page.getByRole('heading', { name: 'Cadastro', level: 1 })).toBeVisible();
 await page.getByRole('textbox', { name: 'E-mail' }).fill('a@b.com');
-await page.getByRole('checkbox', { name: 'Aceito os termos' }).check;
-await page.getByRole('link', { name: 'Voltar' }).click;
+await page.getByRole('checkbox', { name: 'Aceito os termos' }).check();
+await page.getByRole('link', { name: 'Voltar' }).click();
 ```
 
 Opções úteis: `name` (aceita string ou `RegExp`), `exact`, `level` (para `heading`), `checked`, `pressed`, `expanded`, `selected`, `disabled`, `includeHidden`.
@@ -94,9 +94,9 @@ O `name` é o **nome acessível**, não o `textContent`. Um botão com `aria-lab
 **`getByText` normaliza espaço em branco** e por default casa **substring**, case-insensitive:
 
 ```ts
-page.getByText('Olá, João'); // substring
-page.getByText('Olá, João', { exact: true }); // exato, case-sensitive
-page.getByText(/olá, [a-z]+$/i); // regex
+page.getByText('Olá, João');                       // substring
+page.getByText('Olá, João', { exact: true });      // exato, case-sensitive
+page.getByText(/olá, [a-z]+$/i);                   // regex
 ```
 
 ### 2.3 `getByTestId` e o `testIdAttribute`
@@ -106,7 +106,7 @@ O atributo default é `data-testid`. Trocar é configuração de projeto, não d
 ```ts
 // playwright.config.ts
 export default defineConfig({
- use: { testIdAttribute: 'data-test' },
+  use: { testIdAttribute: 'data-test' },
 });
 ```
 
@@ -117,10 +117,10 @@ Onde ele é a escolha certa: elemento sem semântica por natureza (um container 
 ### 2.4 CSS e XPath
 
 ```ts
-await page.locator('css=button').click;
-await page.locator('button').click; // css é o default
-await page.locator('xpath=//button').click;
-await page.locator('//button').click; // // implica xpath
+await page.locator('css=button').click();
+await page.locator('button').click();          // css é o default
+await page.locator('xpath=//button').click();
+await page.locator('//button').click();         // // implica xpath
 ```
 
 Último recurso. A fonte é direta: eles "podem quebrar quando a estrutura do DOM muda".
@@ -131,7 +131,7 @@ await page.locator('//button').click; // // implica xpath
 
 ## 3. Filtrar e encadear — a resposta certa à ambiguidade
 
-Esta seção é a que substitui `.first` na maior parte dos casos.
+Esta seção é a que substitui `.first()` na maior parte dos casos.
 
 ### 3.1 `filter`
 
@@ -145,11 +145,11 @@ await expect(page.getByRole('listitem').filter({ hasNotText: 'Esgotado' })).toHa
 
 // por descendente
 page.getByRole('listitem')
-.filter({ has: page.getByRole('heading', { name: 'Produto 2' }) });
+  .filter({ has: page.getByRole('heading', { name: 'Produto 2' }) });
 
 // pela ausência de descendente
 await expect(page.getByRole('listitem')
-.filter({ hasNot: page.getByText('Produto 2') })).toHaveCount(1);
+  .filter({ hasNot: page.getByText('Produto 2') })).toHaveCount(1);
 
 // só os visíveis
 page.locator('button').filter({ visible: true });
@@ -161,10 +161,10 @@ O padrão canônico: estreitar para o container, agir dentro dele.
 
 ```ts
 const produto = page.getByRole('listitem').filter({ hasText: 'Produto 2' });
-await produto.getByRole('button', { name: 'Adicionar ao carrinho' }).click;
+await produto.getByRole('button', { name: 'Adicionar ao carrinho' }).click();
 
 const dialogo = page.getByTestId('dialogo-config');
-await dialogo.getByRole('button', { name: 'Salvar' }).click;
+await dialogo.getByRole('button', { name: 'Salvar' }).click();
 ```
 
 Isso resolve simultaneamente três problemas: ambiguidade, legibilidade e acoplamento — o teste passa a falar de "o botão dentro do produto 2", que é como a pessoa descreveria.
@@ -178,7 +178,7 @@ const botao = page.getByRole('button').and(page.getByTitle('Assinar'));
 // qualquer um dos dois — para caminho que bifurca
 const novoEmail = page.getByRole('button', { name: 'Novo' });
 const dialogo = page.getByText('Confirme as configurações de segurança');
-await expect(novoEmail.or(dialogo).first).toBeVisible;
+await expect(novoEmail.or(dialogo).first()).toBeVisible();
 ```
 
 `or` é a ferramenta certa quando a aplicação legitimamente pode mostrar A **ou** B — não como remendo para incerteza sobre qual dos dois é.
@@ -195,7 +195,7 @@ await expect(page.getByRole('listitem')).toHaveCount(3);
 await expect(page.getByRole('listitem')).toHaveText(['maçã', 'banana', 'laranja']);
 
 // um item específico — preferir identificar pelo conteúdo
-await page.getByRole('listitem').filter({ hasText: 'laranja' }).click;
+await page.getByRole('listitem').filter({ hasText: 'laranja' }).click();
 
 // por posição, quando a posição é o critério
 const segundo = page.getByRole('listitem').nth(1);
@@ -205,21 +205,21 @@ const segundo = page.getByRole('listitem').nth(1);
 
 ```ts
 // forma direta
-for (const linha of await page.getByRole('listitem').all)
- console.log(await linha.textContent);
+for (const linha of await page.getByRole('listitem').all())
+  console.log(await linha.textContent());
 
 // por índice, quando a contagem importa
 const linhas = page.getByRole('listitem');
-const total = await linhas.count;
+const total = await linhas.count();
 for (let i = 0; i < total; ++i)
- console.log(await linhas.nth(i).textContent);
+  console.log(await linhas.nth(i).textContent());
 ```
 
-**A armadilha do `all`:** ele resolve a lista **naquele instante** e não espera. Numa lista que ainda está carregando, `all` devolve o que existe agora — possivelmente vazio, e o `for` não roda, e o teste passa sem verificar nada. Antes de iterar, ancore a contagem:
+**A armadilha do `all()`:** ele resolve a lista **naquele instante** e não espera. Numa lista que ainda está carregando, `all()` devolve o que existe agora — possivelmente vazio, e o `for` não roda, e o teste passa sem verificar nada. Antes de iterar, ancore a contagem:
 
 ```ts
-await expect(page.getByRole('listitem')).toHaveCount(3); // agora a lista existe
-for (const linha of await page.getByRole('listitem').all) { /* … */ }
+await expect(page.getByRole('listitem')).toHaveCount(3);   // agora a lista existe
+for (const linha of await page.getByRole('listitem').all()) { /* … */ }
 ```
 
 Melhor ainda: quase todo laço sobre locators é uma asserção de conjunto disfarçada. `toHaveText([...])` verifica ordem e conteúdo de uma vez, com retry.
@@ -230,7 +230,7 @@ Melhor ainda: quase todo laço sobre locators é uma asserção de conjunto disf
 
 ```ts
 const linha = page.getByRole('row').filter({ hasText: 'NF-2026-0042' })
-.describe('linha da nota fiscal em disputa');
+  .describe('linha da nota fiscal em disputa');
 ```
 
 O rótulo aparece no trace e no relatório. Num teste com locators encadeados longos, é a diferença entre um trace legível e uma parede de seletores — e vale especialmente quando um agente vai ler esse trace depois ([Playwright - Debug e Trace](playwright-debug-e-trace.md) § 3).
@@ -245,11 +245,11 @@ Verificado nas notas de release; código com isso **não roda**:
 | --- | --- | --- |
 | `_react=` e `_vue=` | 1.58 | localizar por papel/texto; se for inevitável, `getByTestId` |
 | engine `:light` | 1.58 | os locators já atravessam Shadow DOM (menos XPath) |
-| `Locator.ariaRef` | 1.60 | `toMatchAriaSnapshot` — [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) |
+| `Locator.ariaRef()` | 1.60 | `toMatchAriaSnapshot` — [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) |
 
 E o que está **deprecado**, ainda funcionando:
 
-- **Seletores de layout** — `:right-of`, `:left-of`, `:above`, `:below`, `:near` (`PW-LOC-05`). Eles amarram o teste ao layout visual, que é a coisa que muda mais.
+- **Seletores de layout** — `:right-of()`, `:left-of()`, `:above()`, `:below()`, `:near()` (`PW-LOC-05`). Eles amarram o teste ao layout visual, que é a coisa que muda mais.
 - **`noWaitAfter`** em ações — "não tem efeito" ([Playwright - Ações e Auto-waiting](playwright-acoes-e-auto-waiting.md) § 6).
 
 ---
@@ -259,22 +259,22 @@ E o que está **deprecado**, ainda funcionando:
 | ID | Regra |
 | --- | --- |
 | `PW-LOC-01` | Locator **MUST** preferir papel e nome acessível (`getByRole`) a CSS ou XPath. |
-| `PW-LOC-02` | `first`/`last`/`nth` **NEVER** são a resposta a uma strict mode violation; a resposta é `filter` ou encadeamento. Posição só quando a posição **é** o critério. |
+| `PW-LOC-02` | `first()`/`last()`/`nth()` **NEVER** são a resposta a uma strict mode violation; a resposta é `filter()` ou encadeamento. Posição só quando a posição **é** o critério. |
 | `PW-LOC-03` | Locator **MUST** ser guardado como valor reutilizável. `ElementHandle` **NEVER** em código novo. |
 | `PW-LOC-04` | `testIdAttribute` **MUST** ser configurado uma vez em `use`. E `getByTestId` **NEVER** é o locator default do projeto — ele é escape hatch, e cada uso desnecessário apaga a verificação de acessibilidade que `getByRole` daria de graça. † |
 | `PW-LOC-05` | Seletores de layout (`:right-of`, `:left-of`, `:above`, `:below`, `:near`) **NEVER** — a fonte os marca como deprecados. |
 | `PW-LOC-06` | `_react`, `_vue` e o engine `:light` **NEVER** — foram removidos na 1.58. |
-| `PW-LOC-07` | Afirmação sobre a UI **MUST** usar asserção web-first (`expect(locator).…`). `expect(await locator.isVisible)` e formas equivalentes **NEVER**. *(apelido de `PW-EXP-01` — cite o canônico)* |
+| `PW-LOC-07` | Afirmação sobre a UI **MUST** usar asserção web-first (`expect(locator).…`). `expect(await locator.isVisible())` e formas equivalentes **NEVER**. *(apelido de `PW-EXP-01` — cite o canônico)* |
 
 ---
 
 ## 8. Antipadrões
 
-### 8.1 `.first` como resposta a strict mode
+### 8.1 `.first()` como resposta a strict mode
 
 ```ts
 // ✗
-await page.getByRole('button').first.click;
+await page.getByRole('button').first().click();
 ```
 
 Silencia o aviso e mantém a ambiguidade. Quando um botão for inserido antes, o teste clica em outra coisa — e continua verde até quebrar por um motivo que não parece relacionado. A correção é `filter` ou encadear (`PW-LOC-02`).
@@ -292,9 +292,9 @@ Com Tailwind isso é especialmente frágil: as classes *são* o estilo, e mudam 
 
 ```ts
 // ✗
-await page.getByText('Salvar').click;
+await page.getByText('Salvar').click();
 // ✓
-await page.getByRole('button', { name: 'Salvar' }).click;
+await page.getByRole('button', { name: 'Salvar' }).click();
 ```
 
 `getByText` casa qualquer elemento com aquele texto — inclusive o `<span>` dentro do botão, uma legenda em outro lugar, ou um item de menu homônimo. E não verifica que o alvo é acionável por teclado.
@@ -313,18 +313,18 @@ Se `getByRole` não alcança, na maior parte dos casos o elemento não tem papel
 ```ts
 // ✗
 const el = await page.$('#total');
-await page.getByRole('button', { name: 'Recalcular' }).click;
-console.log(await el.textContent); // pode apontar para nó morto
+await page.getByRole('button', { name: 'Recalcular' }).click();
+console.log(await el.textContent());   // pode apontar para nó morto
 ```
 
 O clique re-renderiza; o handle antigo aponta para o nó anterior. Locator resolve isso por construção (`PW-LOC-03`).
 
-### 8.6 Iterar com `all` sem ancorar a lista
+### 8.6 Iterar com `all()` sem ancorar a lista
 
 ```ts
 // ✗
-for (const l of await page.getByRole('listitem').all)
- await expect(l).toBeVisible; // lista vazia → laço não roda → teste passa
+for (const l of await page.getByRole('listitem').all())
+  await expect(l).toBeVisible();     // lista vazia → laço não roda → teste passa
 ```
 
 Ver § 4. É um dos poucos antipadrões que produzem teste **verde** e inútil, e por isso o mais difícil de notar em revisão.

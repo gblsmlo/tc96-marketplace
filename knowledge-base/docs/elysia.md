@@ -2,9 +2,9 @@
 titulo: Elysia
 Link: https://elysiajs.com/
 tags:
- - elysia
- - backend
- - agent-context
+  - elysia
+  - backend
+  - agent-context
 source: "Documentação oficial — https://elysiajs.com/"
 verificado-em: 2026-08-15
 ---
@@ -48,12 +48,12 @@ Termos usados sem redefinição nos satélites:
 
 | Termo | Significado nesta doc |
 | --- | --- |
-| **instância** | um objeto `new Elysia`. É simultaneamente app, plugin, controller e unidade de escopo |
+| **instância** | um objeto `new Elysia()`. É simultaneamente app, plugin, controller e unidade de escopo |
 | **tipo acumulado** | o tipo que cada método de encadeamento devolve, carregando tudo que foi registrado até ali |
 | **escopo** (`local`/`scoped`/`global`) | até onde um hook registrado numa instância alcança — ver § 2, afirmação 3, e [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) § 5 |
 | **contexto** | o objeto único por request passado ao handler e a todo hook |
 | **hook local** | hook passado no 3º argumento de uma rota; vale só para aquela rota |
-| **interceptor** | hook registrado com `.onX`; vale para as rotas registradas **depois** dele |
+| **interceptor** | hook registrado com `.onX()`; vale para as rotas registradas **depois** dele |
 | **guard** | bloco que aplica schema e hooks a várias rotas de uma vez |
 | **macro** | hook reutilizável ativado por uma propriedade booleana ou parametrizada no hook local |
 | **schema** | uma declaração `t.*` (ou Standard Schema) que produz validação, tipo, OpenAPI e contrato do Eden |
@@ -68,9 +68,9 @@ Cinco afirmações. Quase todo erro que um agente comete em Elysia viola uma del
 
 **1. Um schema não é validação — é quatro coisas de uma declaração só.** A doc é literal: *"A single Elysia/TypeBox schema can be used for: Runtime validation · Data coercion · TypeScript type · OpenAPI schema"*. E há uma quinta, que a doc trata em outra página: é o contrato que o Eden consome no frontend. Consequência prática: qualquer `interface` TypeScript escrita à mão para descrever um body já validado é duplicação, e vai divergir. O tipo se extrai com `typeof MeuSchema.static`. É a mesma tese de e só que aqui a ferramenta impõe.
 
-**2. O encadeamento de métodos é o que guarda o tipo. Quebrá-lo perde inferência silenciosamente.** Cada método devolve um **novo** tipo de instância. `const app = new Elysia; app.state('build', 1); app.get(...)` compila e roda — mas `store.build` não existe no tipo, e o Eden do frontend não vê a rota. A doc é enfática: *"Elysia code should **ALWAYS** use method chaining"*. Não é estilo, é o mecanismo.
+**2. O encadeamento de métodos é o que guarda o tipo. Quebrá-lo perde inferência silenciosamente.** Cada método devolve um **novo** tipo de instância. `const app = new Elysia(); app.state('build', 1); app.get(...)` compila e roda — mas `store.build` não existe no tipo, e o Eden do frontend não vê a rota. A doc é enfática: *"Elysia code should **ALWAYS** use method chaining"*. Não é estilo, é o mecanismo.
 
-**3. Escopo de plugin é `local` por default, e é a classe de bug mais comum.** Hooks de uma instância **não vazam** para quem faz `.use` dela. A doc compara com `export` em JavaScript: você precisa exportar. Um `onBeforeHandle` de autenticação dentro de um plugin protege as rotas *daquele plugin* e nada mais — o `app` que o consome fica aberto, sem erro, sem aviso. Os três níveis (`local` / `scoped` / `global`) e o `as` estão em [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) § 5.
+**3. Escopo de plugin é `local` por default, e é a classe de bug mais comum.** Hooks de uma instância **não vazam** para quem faz `.use()` dela. A doc compara com `export` em JavaScript: você precisa exportar. Um `onBeforeHandle` de autenticação dentro de um plugin protege as rotas *daquele plugin* e nada mais — o `app` que o consome fica aberto, sem erro, sem aviso. Os três níveis (`local` / `scoped` / `global`) e o `as()` estão em [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) § 5.
 
 **4. A ordem do código é a ordem de aplicação.** Um evento só vale para rotas registradas **depois** dele. `onError` declarado no fim do arquivo não captura nada do que veio antes; um plugin registrado antes de um `onBeforeHandle` não o herda. A única exceção verificada é `onRequest`, que é global por não saber ainda qual rota vai atender.
 
@@ -102,7 +102,7 @@ Saber de onde algo vem evita metade dos erros de import. Lista extraída dos `ex
 | `Cookie`, `serializeCookie` | utilitários de cookie |
 | tipos: `Context`, `PreContext`, `ErrorContext`, `Static`, `TSchema`, … | tipagem |
 
-> **Renomeação confirmada:** `error` **não é mais exportado** por `elysia`, e **não existe mais no contexto**. O nome atual é `status`, tanto como export (`import { status } from 'elysia'`) quanto como propriedade do contexto (`({ status }) => status(418)`). Verificado nos `.d.ts` de 1.4.29 — `Context` lista `status`, não `error`. Alguns exemplos remanescentes na doc oficial ainda usam `error`; são resíduo. `.error` continua existindo, mas é **método da instância** para registrar classes de erro customizadas, coisa diferente.
+> **Renomeação confirmada:** `error` **não é mais exportado** por `elysia`, e **não existe mais no contexto**. O nome atual é `status`, tanto como export (`import { status } from 'elysia'`) quanto como propriedade do contexto (`({ status }) => status(418)`). Verificado nos `.d.ts` de 1.4.29 — `Context` lista `status`, não `error`. Alguns exemplos remanescentes na doc oficial ainda usam `error`; são resíduo. `.error()` continua existindo, mas é **método da instância** para registrar classes de erro customizadas, coisa diferente.
 
 ### Escopos npm: `@elysia/*` e `@elysiajs/*` coexistem
 
@@ -110,7 +110,7 @@ Os plugins oficiais estão publicados **nos dois escopos**. A documentação atu
 
 | Pacote | Contém | Estado |
 | --- | --- | --- |
-| `@elysia/openapi` | `openapi`, `fromTypes`, `withHeader` — documentação em `/openapi` (Scalar por default) | atual |
+| `@elysia/openapi` | `openapi()`, `fromTypes()`, `withHeader` — documentação em `/openapi` (Scalar por default) | atual |
 | `@elysia/eden` | `treaty`, `edenFetch`, `edenTreaty` (legado), `Treaty` (tipos) | atual |
 | `@elysia/cors` | CORS | atual |
 | `@elysia/jwt` | assinar/verificar JWT (sobre `jose`) | atual |
@@ -120,7 +120,7 @@ Os plugins oficiais estão publicados **nos dois escopos**. A documentação atu
 | `@elysia/cron` | cron jobs | atual |
 | `@elysia/opentelemetry` | tracing, `record`, `getCurrentSpan`, `setAttributes` | atual |
 | `@elysia/server-timing` | header `Server-Timing` | atual |
-| `@elysia/node` | adapter Node.js (`node`) | atual |
+| `@elysia/node` | adapter Node.js (`node()`) | atual |
 | `@elysiajs/swagger` | Swagger UI | **descontinuado** — a doc diz *"deprecated and is no longer maintained"* |
 
 ### Runtimes
@@ -128,12 +128,12 @@ Os plugins oficiais estão publicados **nos dois escopos**. A documentação atu
 | Runtime | Como | Estado verificado |
 | --- | --- | --- |
 | **Bun** | default, `.listen(3000)` | alvo primário; `context.server`, `Bun.serve.static`, `Bun.serve.routes` só aqui |
-| **Node.js** | `@elysia/node` + `new Elysia({ adapter: node })` | suportado e documentado |
-| **Deno** | `Deno.serve(app.fetch)` — sem `.listen` | suportado, sem adapter próprio |
-| **Cloudflare Worker** | `new Elysia({ adapter: CloudflareAdapter })` de `elysia/adapter/cloudflare-worker`, com `.compile` antes do export | **experimental**, assim marcado na doc |
+| **Node.js** | `@elysia/node` + `new Elysia({ adapter: node() })` | suportado e documentado |
+| **Deno** | `Deno.serve(app.fetch)` — sem `.listen()` | suportado, sem adapter próprio |
+| **Cloudflare Worker** | `new Elysia({ adapter: CloudflareAdapter })` de `elysia/adapter/cloudflare-worker`, com `.compile()` antes do export | **experimental**, assim marcado na doc |
 | **Vercel / Netlify / Next.js / Astro / Expo / TanStack Start** | via API route, chamando `app.fetch(request)` | documentado |
 
-Limitações declaradas no Cloudflare Worker: `file` e o plugin static não funcionam (sem `fs`), OpenAPI Type Gen não funciona, e **valor inline em rota (`.get('/', 'Hello')`) lança erro** porque não se pode criar `Response` antes do start. Bindings vêm de `import { env } from 'cloudflare:workers'`, **não** do export `env` de `elysia` — ver § 6, `ELYSIA-APP-09`.
+Limitações declaradas no Cloudflare Worker: `file()` e o plugin static não funcionam (sem `fs`), OpenAPI Type Gen não funciona, e **valor inline em rota (`.get('/', 'Hello')`) lança erro** porque não se pode criar `Response` antes do start. Bindings vêm de `import { env } from 'cloudflare:workers'`, **não** do export `env` de `elysia` — ver § 6, `ELYSIA-APP-09`.
 
 Sobre `aot` no Worker: até 1.4.6 era preciso passar `aot: false`, porque o Worker não permitia compilação de função no start. A partir de **1.4.7** isso deixou de ser necessário e a doc recomenda deixar o AoT ligado, *"for better performance and accurate plugin encapsulation"*. O default de `aot` é `true` no pacote publicado, apesar de a página de Config dizer o contrário — ver [Fontes consultadas](#fontes-consultadas).
 
@@ -154,8 +154,8 @@ Superfície verificada nos `.d.ts` de 1.4.29 e nas páginas correspondentes. A c
 | `new Elysia(config)` | cria instância. Opções verificadas: `name`, `seed`, `prefix`, `adapter`, `aot`, `precompile`, `normalize`, `strictPath`, `serve`, `websocket`, `cookie`, `detail`, `tags`, `sanitize`, `encodeSchema`, `nativeStaticResponse`, `systemRouter`, `allowUnsafeValidationDetails` | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) |
 | `.listen(port)` | sobe o servidor (Bun/Node) | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) |
 | `.fetch(request)` / `.handle(request)` | processa um `Request` sem servidor — base dos testes e da integração com API routes | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) |
-| `.compile` | força a compilação do encadeamento sem `listen` — **obrigatório antes de exportar no Cloudflare Worker** (§ 3) | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) |
-| `.onStart`, `.onStop` | ciclo do **servidor**, não do request | — |
+| `.compile()` | força a compilação do encadeamento sem `listen` — **obrigatório antes de exportar no Cloudflare Worker** (§ 3) | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) |
+| `.onStart()`, `.onStop()` | ciclo do **servidor**, não do request | — |
 | `.modules` | promise dos módulos lazy/async carregados | [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) |
 
 ### Rotas
@@ -167,7 +167,7 @@ Superfície verificada nos `.d.ts` de 1.4.29 e nas páginas correspondentes. A c
 | `.route(method, path, handler)` | verbo customizado (case-sensitive, use MAIÚSCULA) | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) |
 | `.group(prefix, [guard], cb)` | prefixo comum, com guard opcional no 2º argumento | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) |
 | `.ws(path, handler)` | WebSocket com schema (`body`, `query`, `params`, `header`, `cookie`, `response`) | [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
-| `.mount` | montar outro app Web Standard | — |
+| `.mount()` | montar outro app Web Standard | — |
 
 ### O objeto de contexto
 
@@ -180,7 +180,7 @@ O que o handler recebe. Lista dos `.d.ts` de `context.d.ts`; a coluna Satélite 
 | `set` | `{ headers, status }` da resposta. `set.status` **não** é checado contra o `response` schema | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) § 4 |
 | `set.headers` | headers de saída, sempre em minúsculas — imutável depois do primeiro `yield` | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) § 4 |
 | `status` | `status(code, valor)` — resposta com status tipado; substitui o antigo `error` | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) § 4 e § 5 |
-| `store` | estado global da instância, criado por `.state`; primitivo não se desestrutura | [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) § 3 |
+| `store` | estado global da instância, criado por `.state()`; primitivo não se desestrutura | [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) § 3 |
 | `redirect` | função de redirect; `set.redirect` está deprecado | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) § 4 |
 | `request` | o `Request` Web Standard — escape hatch | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) § 3 |
 | `server` | instância do servidor — **Bun only**, `null` fora dele | [Bun - HTTP e Servidor](bun-http-e-servidor.md) |
@@ -217,7 +217,7 @@ O que o handler recebe. Lista dos `.d.ts` de `context.d.ts`; a coluna Satélite 
 | `.onAfterResponse(fn)` | logging/analytics após envio | [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) |
 | `.guard(obj, [cb])` | schema + hooks para várias rotas; aceita `as` e `schema: 'standalone'` | [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) |
 | `.as('scoped' \| 'global')` | eleva o escopo de tudo que a instância registrou | [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) |
-| `.use(plugin)` | aplica outra instância, função, promise ou `import` | [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) |
+| `.use(plugin)` | aplica outra instância, função, promise ou `import()` | [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) |
 
 ### `t` — tipos que Elysia acrescenta ao TypeBox
 
@@ -225,20 +225,20 @@ Além de toda a superfície do TypeBox (`t.Object`, `t.String`, `t.Number`, `t.A
 
 | Tipo | O que faz de diferente |
 | --- | --- |
-| `t.Numeric` | aceita string numérica e **transforma em `number`** |
-| `t.Integer`, `t.Date` | inteiro; data com coerção |
-| `t.BooleanString` | aceita `"true"`/`"false"` como boolean |
+| `t.Numeric()` | aceita string numérica e **transforma em `number`** |
+| `t.Integer()`, `t.Date()` | inteiro; data com coerção |
+| `t.BooleanString()` | aceita `"true"`/`"false"` como boolean |
 | `t.ObjectString(props)` | string JSON que vira objeto — para query, header, FormData |
-| `t.ArrayString`, `t.ArrayQuery` | array a partir de string / de query repetida |
+| `t.ArrayString()`, `t.ArrayQuery()` | array a partir de string / de query repetida |
 | `t.File(opts)`, `t.Files(opts)` | upload, com `type`, `minSize`, `maxSize` (sufixos `k`/`m`) |
-| `t.Form(props)` | valida retorno de `form` (FormData) |
+| `t.Form(props)` | valida retorno de `form()` (FormData) |
 | `t.Cookie(props, opts)` | objeto + opções de cookie: `secrets`, `sign`, `httpOnly`, `secure`, … |
 | `t.Nullable(s)` | permite `null` (não `undefined`) |
 | `t.MaybeEmpty(s)` | permite `null` **e** `undefined` |
 | `t.UnionEnum([...])` | união de literais em um único schema |
 | `t.NumericEnum(enum)` | enum numérico |
 | `t.NoValidate(s)` | desliga validação mantendo o tipo |
-| `t.Uint8Array`, `t.ArrayBuffer` | corpo binário |
+| `t.Uint8Array()`, `t.ArrayBuffer()` | corpo binário |
 | `t.String({ trusted: true })` | pula validação de escape JSON no acelerador |
 | `t.Transform(s)` | encode/decode customizado (ver `encodeSchema` no construtor) |
 
@@ -261,21 +261,21 @@ Esta é a decisão que mais gera código errado em Elysia, porque as quatro APIs
 ```
 O valor depende do request (headers, body, query, cookie)?
 ├── NÃO — é constante durante a vida do processo
-│ └── É primitivo e alguém vai MUTAR (contador, flag)?
-│ ├── SIM →.state('k', v) → lê em ctx.store.k
-│ │ ⚠ desestruturar primitivo do store perde a referência
-│ └── NÃO →.decorate('k', v) → lê em ctx.k
-│ (classe, singleton, conexão de banco, logger)
-│ ⚠ decorate NÃO deve ser mutado
+│   └── É primitivo e alguém vai MUTAR (contador, flag)?
+│       ├── SIM → .state('k', v)   → lê em ctx.store.k
+│       │         ⚠ desestruturar primitivo do store perde a referência
+│       └── NÃO → .decorate('k', v)  → lê em ctx.k
+│                 (classe, singleton, conexão de banco, logger)
+│                 ⚠ decorate NÃO deve ser mutado
 │
 └── SIM — precisa ser calculado a cada request
- └── O valor depende de dado que PRECISA estar validado?
- ├── SIM →.resolve(fn) roda em beforeHandle, DEPOIS da validação
- │ → é o caso de auth: sessão, userId, permissões
- │ → o tipo do que você lê é o tipo do schema
- └── NÃO →.derive(fn) roda em transform, ANTES da validação
- → o que você lê é `unknown`-ish: ainda não passou por schema
- → use para coisa que não decide segurança (requestId, IP, timing)
+    └── O valor depende de dado que PRECISA estar validado?
+        ├── SIM → .resolve(fn)     roda em beforeHandle, DEPOIS da validação
+        │         → é o caso de auth: sessão, userId, permissões
+        │         → o tipo do que você lê é o tipo do schema
+        └── NÃO → .derive(fn)      roda em transform, ANTES da validação
+                  → o que você lê é `unknown`-ish: ainda não passou por schema
+                  → use para coisa que não decide segurança (requestId, IP, timing)
 ```
 
 > A doc é explícita sobre o default: *"You might want to use resolve instead of derive in most cases. Resolve is similar to derive but execute after validation. This makes resolve more secure"*. Regra prática: **se o valor decide acesso, é `resolve`**. Tabela completa em [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) § 3.
@@ -284,35 +284,35 @@ O valor depende do request (headers, body, query, cookie)?
 
 ```
 Preciso rejeitar/responder ANTES de qualquer parse (rate limit, IP block, cache)
- → onRequest PreContext: request, set, store, status, redirect, server
- e decorators — e nada mais. É GLOBAL, não respeita ordem
- de rota. `status(...)` está lá: curto-circuita tipado.
+  → onRequest        PreContext: request, set, store, status, redirect, server
+                     e decorators — e nada mais. É GLOBAL, não respeita ordem
+                     de rota. `status(...)` está lá: curto-circuita tipado.
 
 O content-type não é json/text/form-data/urlencoded
- → onParse devolva o body; ou `parse: 'none'` para não parsear
- (necessário ao delegar o Request cru a outra lib)
+  → onParse          devolva o body; ou `parse: 'none'` para não parsear
+                     (necessário ao delegar o Request cru a outra lib)
 
 Preciso mexer no dado para ele PASSAR na validação (coerção manual)
- → onTransform / derive
+  → onTransform / derive
 
 Preciso decidir se o request continua (autenticação, autorização)
- → onBeforeHandle / resolve retorno != undefined pula o handler
- →
+  → onBeforeHandle / resolve      retorno != undefined pula o handler
+                                  →
 
 Preciso transformar o valor de retorno (header por tipo, envelope)
- → onAfterHandle lê ctx.responseValue
- ⚠ retornar aqui NÃO pula os afterHandle seguintes
+  → onAfterHandle    lê ctx.responseValue
+                     ⚠ retornar aqui NÃO pula os afterHandle seguintes
 
 Preciso produzir uma Response Web Standard (gzip, formato binário)
- → mapResponse retornar aqui PULA os mapResponse seguintes
+  → mapResponse      retornar aqui PULA os mapResponse seguintes
 
 Algo falhou
- → onError code: NOT_FOUND | PARSE | VALIDATION |
- INTERNAL_SERVER_ERROR | INVALID_COOKIE_SIGNATURE |
- INVALID_FILE_TYPE | UNKNOWN | <número de status>
+  → onError          code: NOT_FOUND | PARSE | VALIDATION |
+                     INTERNAL_SERVER_ERROR | INVALID_COOKIE_SIGNATURE |
+                     INVALID_FILE_TYPE | UNKNOWN | <número de status>
 
 Já respondi, quero registrar
- → onAfterResponse logging e analytics —
+  → onAfterResponse logging e analytics —
 ```
 
 ### Por que meu plugin não afeta esta rota?
@@ -322,22 +322,22 @@ A árvore que resolve a classe de bug mais comum de Elysia.
 ```
 A rota está registrada DEPOIS do hook/plugin no encadeamento?
 ├── NÃO → é isso. Evento só vale para rota registrada depois.
-│ Mova o.use/.onX para cima. (exceção: onRequest é global)
+│         Mova o .use()/.onX() para cima. (exceção: onRequest é global)
 └── SIM
- └── O hook está numa instância que a rota NÃO pertence?
- ├── NÃO (mesma instância) → deveria funcionar; cheque nome/typo
- └── SIM → é escopo. Default é `local`: não sobe para o pai.
+    └── O hook está numa instância que a rota NÃO pertence?
+        ├── NÃO (mesma instância) → deveria funcionar; cheque nome/typo
+        └── SIM → é escopo. Default é `local`: não sobe para o pai.
 
- Quem precisa ser afetado?
- ├── só esta instância e filhos → local (default, não faça nada)
- ├── + a instância que deu.use → scoped
- └── todas, em qualquer nível → global
+            Quem precisa ser afetado?
+            ├── só esta instância e filhos      → local (default, não faça nada)
+            ├── + a instância que deu .use()    → scoped
+            └── todas, em qualquer nível        → global
 
- Como aplicar:
- ├── um hook só →.onBeforeHandle({ as: 'scoped' }, fn)
- ├── todos de um guard →.guard({ as: 'scoped',... })
- └── todos da instância →.as('scoped') no fim do encadeamento
- (só aceita 'scoped' | 'global')
+            Como aplicar:
+            ├── um hook só          → .onBeforeHandle({ as: 'scoped' }, fn)
+            ├── todos de um guard   → .guard({ as: 'scoped', ... })
+            └── todos da instância  → .as('scoped') no fim do encadeamento
+                                      (só aceita 'scoped' | 'global')
 ```
 
 > `as('scoped')` sobe **um** nível. Para atravessar dois, cada instância intermediária precisa do seu próprio `as('scoped')` — ou use `global`. Exemplo completo, com o caso que falha, em [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) § 5.
@@ -348,25 +348,25 @@ A rota está registrada DEPOIS do hook/plugin no encadeamento?
 É erro ESPERADO do domínio (validação de negócio, 404, 401, 409)?
 │ →
 ├── e eu quero que o TIPO do erro chegue ao frontend pelo Eden
-│ → return status(code, valor) + declare `response: { 200: …, 4xx: … }`
-│ ⚠ RETORNAR não passa por onError. É o caminho recomendado pela doc.
+│   → return status(code, valor)      + declare `response: { 200: …, 4xx: … }`
+│     ⚠ RETORNAR não passa por onError. É o caminho recomendado pela doc.
 ├── e eu quero que o onError central formate/logue
-│ → throw status(code, valor) ⚠ THROW passa por onError
+│   → throw status(code, valor)       ⚠ THROW passa por onError
 └── e é uma condição recorrente com corpo próprio
- → class MinhaErro extends Error { status = 409; toResponse {…} }
- +.error({ MINHA: MinhaErro }) → onError narroweia por code === 'MINHA'
+    → class MinhaErro extends Error { status = 409; toResponse() {…} }
+      + .error({ MINHA: MinhaErro })  → onError narroweia por code === 'MINHA'
 
 É erro INESPERADO (bug, indisponibilidade)?
- → deixe estourar. Vira UNKNOWN / 500 e cai no onError.
- Logue lá — — e devolva mensagem genérica.
+  → deixe estourar. Vira UNKNOWN / 500 e cai no onError.
+    Logue lá — — e devolva mensagem genérica.
 
 É erro de VALIDAÇÃO e quero customizar a mensagem?
- → t.String({ error: 'mensagem' }) por campo
- → onError com code === 'VALIDATION' central; error.all lista todas as causas
- ⚠ em NODE_ENV=production o detalhe é omitido por padrão
+  → t.String({ error: 'mensagem' })     por campo
+  → onError com code === 'VALIDATION'   central; error.all lista todas as causas
+    ⚠ em NODE_ENV=production o detalhe é omitido por padrão
 ```
 
-> **Retornar × lançar** é uma distinção real e citada: *"If a `status` is **throw**, it will be caught by `onError` middleware. If a `status` is **return**, it will be **NOT** caught"*. A doc recomenda a abordagem **never-throw** (retornar) porque só ela dá checagem contra o `response` schema, narrowing por status e tipagem do erro no Eden. Ver.
+> **Retornar × lançar** é uma distinção real e citada: *"If a `status` is **throw**, it will be caught by `onError` middleware. If a `status` is **return**, it will be **NOT** caught"*. A doc recomenda a abordagem **never-throw** (retornar) porque só ela dá checagem contra o `response` schema, narrowing por status e tipagem do erro no Eden..
 
 ---
 
@@ -382,7 +382,7 @@ Regras citáveis por ID. O corpo completo de cada família vive no satélite cor
 | --- | --- |
 | `ELYSIA-APP-01` | Toda construção de instância **MUST** usar method chaining contínuo — atribuir a instância e chamar métodos em statements separados perde a inferência de tipo. |
 | `ELYSIA-APP-02` | Código novo **NEVER** usa `error` do contexto ou de `elysia` — o nome atual é `status`, e `error` não existe mais em 1.4. |
-| `ELYSIA-APP-03` | Handler que precisa do contexto **MUST** ser função inline desestruturando o que usa, e **NEVER** uma função externa anotada com `Context` — valor literal (`.get('/status', 'ok')`) e `file` no lugar do handler seguem válidos e não são handlers. |
+| `ELYSIA-APP-03` | Handler que precisa do contexto **MUST** ser função inline desestruturando o que usa, e **NEVER** uma função externa anotada com `Context` — valor literal (`.get('/status', 'ok')`) e `file()` no lugar do handler seguem válidos e não são handlers. |
 | `ELYSIA-APP-04` | `tsconfig.json` do servidor **e** de todo cliente Eden **MUST** ter `strict: true` e TypeScript >= 5.0. |
 | `ELYSIA-APP-05` | A instância exportada para o Eden **MUST** ser exportada como tipo (`export type App = typeof app`) do módulo onde o encadeamento termina. |
 | `ELYSIA-APP-06` | Código que usa `context.server`, `Bun.*` ou valor inline em rota **MUST** declarar Bun como runtime alvo — nenhum dos três funciona igual fora dele. |
@@ -403,7 +403,7 @@ As famílias completas vivem nos satélites, mas **estas precisam viajar com o c
 | `ELYSIA-CORE-01` | Hook, plugin e `onError` **MUST** ser registrados antes das rotas que devem afetar — evento só se aplica a rota registrada depois dele. | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) |
 | `ELYSIA-CORE-03` | Erro esperado **MUST** ser `return status(...)`, não `throw`, quando o tipo precisa chegar tipado ao Eden. | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) |
 | `ELYSIA-CORE-06` | `set.headers` **NEVER** é alterado depois do primeiro `yield` de um handler generator — a alteração é silenciosamente ignorada. | [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) |
-| `ELYSIA-LIFE-01` | Hook de plugin que precisa valer para quem o consome **MUST** declarar escopo (`{ as: 'scoped' }`, `guard({ as })` ou `.as`) — o default `local` não sobe, e a falha é silenciosa. | [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) |
+| `ELYSIA-LIFE-01` | Hook de plugin que precisa valer para quem o consome **MUST** declarar escopo (`{ as: 'scoped' }`, `guard({ as })` ou `.as()`) — o default `local` não sobe, e a falha é silenciosa. | [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) |
 | `ELYSIA-LIFE-02` | Decisão de autenticação ou autorização **NEVER** usa `derive` — **MUST** usar `resolve` ou `macro.resolve`, que rodam depois da validação. | [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) |
 | `ELYSIA-LIFE-03` | Plugin aplicado por mais de uma instância **MUST** declarar `name` — sem ele o lifecycle roda uma vez por aplicação. | [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) |
 | `ELYSIA-TYPE-01` | Tipo TypeScript de um payload validado **MUST** derivar do schema (`typeof S.static`) — **NEVER** ser reescrito à mão. | [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
@@ -426,7 +426,7 @@ Os dois "só nesta cláusula" são deliberados, porque as duas regras não são 
 
 - **`ELYSIA-TYPE-11` continua citável por si** para o que é só dele: **a paridade de versão de `elysia` entre cliente e servidor**, que `ELYSIA-APP-04` não cobre e é a causa mais comum de o Eden degradar para `any`. É por isso que ele está na § 6.1 — a paridade de versão precisa viajar com o caminho mínimo. Ao citar o requisito de `strict: true` isoladamente, use `ELYSIA-APP-04`.
 - **`ELYSIA-APP-09` não é apelido de nada.** Ele espelha `HONO-APP-03` na estrutura vizinha, mas ali a motivação é outra; aqui existe um export `env` no próprio pacote.
-- **`ELYSIA-APP-03` continua citável por si** para o que é só dele: a legitimidade de valor literal e `file` no lugar do handler. Ao citar a desestruturação do contexto, use `ELYSIA-CORE-02`.
+- **`ELYSIA-APP-03` continua citável por si** para o que é só dele: a legitimidade de valor literal e `file()` no lugar do handler. Ao citar a desestruturação do contexto, use `ELYSIA-CORE-02`.
 
 ### Famílias completas nos satélites
 
@@ -448,27 +448,27 @@ Como uma skill de Elysia deve consumir esta doc.
 ### O que uma skill de Elysia deve carregar
 
 ```
-SEMPRE: docs/Elysia.md § 2 (modelo mental)
- docs/Elysia.md § 5 (árvores de decisão)
- docs/Elysia.md § 6 + § 6.1 (regras normativas e críticas)
+SEMPRE:   docs/Elysia.md § 2 (modelo mental)
+          docs/Elysia.md § 5 (árvores de decisão)
+          docs/Elysia.md § 6 + § 6.1 (regras normativas e críticas)
 
 AO ESCREVER/EDITAR rotas e respostas:
- docs/Elysia - Roteamento e Handler.md
+          docs/Elysia - Roteamento e Handler.md
 
 AO ESCREVER plugin, hook, auth, ou ao investigar
 "o plugin não está sendo aplicado":
- docs/Elysia - Lifecycle e Plugins.md
+          docs/Elysia - Lifecycle e Plugins.md
 
 AO DECLARAR schema, response, OpenAPI,
 ou ao consumir a API no frontend:
- docs/Elysia - Schema e Eden.md
+          docs/Elysia - Schema e Eden.md
 
 EM CONSUMO PELO REACT:
- docs/Elysia.md § 8 + docs/Elysia - Schema e Eden.md § 7
- (§ 7 é Eden, queryFn/mutationFn e envelope paginado.
- § 6 é OpenAPI — só carregue se a tarefa for documentação.)
+          docs/Elysia.md § 8 + docs/Elysia - Schema e Eden.md § 7
+          (§ 7 é Eden, queryFn/mutationFn e envelope paginado.
+           § 6 é OpenAPI — só carregue se a tarefa for documentação.)
 
-NUNCA: todos os satélites de uma vez
+NUNCA:    todos os satélites de uma vez
 ```
 
 ### Como citar
@@ -515,28 +515,28 @@ O stack do vault é [React.js](react-js.md) + [TanStack Router](tanstack-router.
 import { Elysia, t } from 'elysia'
 import { openapi } from '@elysia/openapi'
 
-const app = new Elysia
-.use(openapi)
-.get('/pedidos/:id', ({ params: { id }, status }) => {
- const pedido = repositorio.buscar(id)
- if (!pedido) return status(404, { erro: 'Pedido não encontrado' })
- return pedido
- }, {
- params: t.Object({ id: t.Numeric }),
- response: {
- 200: t.Object({ id: t.Number, total: t.Number, cliente: t.String }),
- 404: t.Object({ erro: t.String })
- }
- })
-.listen(3000)
+const app = new Elysia()
+  .use(openapi())
+  .get('/pedidos/:id', ({ params: { id }, status }) => {
+    const pedido = repositorio.buscar(id)
+    if (!pedido) return status(404, { erro: 'Pedido não encontrado' })
+    return pedido
+  }, {
+    params: t.Object({ id: t.Numeric() }),
+    response: {
+      200: t.Object({ id: t.Number(), total: t.Number(), cliente: t.String() }),
+      404: t.Object({ erro: t.String() })
+    }
+  })
+  .listen(3000)
 
-export type App = typeof app // única coisa que o frontend importa
+export type App = typeof app   // única coisa que o frontend importa
 ```
 
 ```ts
 // client.ts (frontend)
 import { treaty } from '@elysia/eden'
-import type { App } from '../server/server' // import de TIPO — nada vai para o bundle
+import type { App } from '../server/server'   // import de TIPO — nada vai para o bundle
 
 // `parseDate: false` é obrigatório se este cliente alimenta o cache do
 // TanStack Query — ELYSIA-TYPE-10. A armadilha está explicada abaixo.
@@ -550,7 +550,7 @@ Não há build step, não há geração de código, não há schema duplicado. �
 Verificado nos tipos de `@elysia/eden` 1.4.10. Cada chamada devolve uma **união discriminada**:
 
 ```ts
-| { data: T, error: null, response: Response, status: number, headers }
+| { data: T,    error: null,                    response: Response, status: number, headers }
 | { data: null, error: { status: C, value: V }, response: Response, status: number, headers }
 ```
 
@@ -564,7 +564,7 @@ Três consequências que decidem código:
 
 O item 3 acima é o que quebra na integração, e quebra em silêncio. A [Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md) decide sucesso ou falha pelo fato de a `queryFn` **lançar**. Uma `queryFn` que só devolve o envelope do Eden nunca lança — logo a query fica `success` com um `data.data === null` dentro, `isError` é `false`, retry não acontece, e o error boundary não vê nada.
 
-O exemplo oficial de integração com React Query (na página de TanStack Start) é `queryFn: => getTreaty.get` — correto como demonstração mínima, insuficiente como código de produção, porque devolve o envelope e não trata erro. A forma correta desfaz o envelope na fronteira:
+O exemplo oficial de integração com React Query (na página de TanStack Start) é `queryFn: () => getTreaty().get()` — correto como demonstração mínima, insuficiente como código de produção, porque devolve o envelope e não trata erro. A forma correta desfaz o envelope na fronteira:
 
 ```ts
 // api/pedidos.ts — a queryFn desembrulha e lança. Uma vez, num lugar só.
@@ -572,23 +572,23 @@ import { queryOptions } from '@tanstack/react-query'
 import { api } from './client'
 
 export const pedidoOptions = (id: number) =>
- queryOptions({
- queryKey: ['pedidos', 'detalhe', id] as const, // o nível de escopo não é decorativo
- queryFn: async ({ signal }) => {
- const { data, error } = await api.pedidos({ id }).get({ fetch: { signal } })
- if (error) throw error // sem isto a query "tem sucesso" com data: null
- return data // tipo estreitado: sem null
- },
- staleTime: 60_000 // TSQ-CACHE-01
- })
+  queryOptions({
+    queryKey: ['pedidos', 'detalhe', id] as const,   // o nível de escopo não é decorativo
+    queryFn: async ({ signal }) => {
+      const { data, error } = await api.pedidos({ id }).get({ fetch: { signal } })
+      if (error) throw error       // sem isto a query "tem sucesso" com data: null
+      return data                  // tipo estreitado: sem null
+    },
+    staleTime: 60_000              // TSQ-CACHE-01
+  })
 ```
 
 ```tsx
 function Pedido({ id }: { id: number }) {
- const { data, error } = useQuery(pedidoOptions(id))
- // `error` aqui é o { status, value } do Eden — narrowing por status funciona
- if (error && error.status === 404) return <NaoEncontrado />
- return <Total valor={data!.total} />
+  const { data, error } = useQuery(pedidoOptions(id))
+  // `error` aqui é o { status, value } do Eden — narrowing por status funciona
+  if (error && error.status === 404) return <NaoEncontrado />
+  return <Total valor={data!.total} />
 }
 ```
 
@@ -602,13 +602,13 @@ Alternativa: `treaty<App>(url, { throwHttpError: true })` faz o Eden lançar soz
 
 Eden Treaty tem `parseDate` com **default `true`**: ele converte strings de data da resposta em objetos `Date`. Isso é conveniente e colide diretamente com `TSQ-CACHE-04` de [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md): structural sharing só funciona com dado compatível com JSON, e um `Date` parece novo a cada refetch. O efeito é re-render de tudo que consome a query, mesmo quando nada mudou.
 
-Se o dado entra no cache da Query, passe `parseDate: false` e converta no `select` ou no componente. É `ELYSIA-TYPE-10`, e é por isso que o `treaty<App>` do exemplo acima já nasce com a opção — um cliente Eden construído sem ela, num app que usa TanStack Query, é violação mesmo que nada quebre visivelmente.
+Se o dado entra no cache da Query, passe `parseDate: false` e converta no `select` ou no componente. É `ELYSIA-TYPE-10`, e é por isso que o `treaty<App>()` do exemplo acima já nasce com a opção — um cliente Eden construído sem ela, num app que usa TanStack Query, é violação mesmo que nada quebre visivelmente.
 
 ### Eden Treaty × Eden Fetch
 
 | | `treaty` | `edenFetch` |
 | --- | --- | --- |
-| Sintaxe | `api.pedidos({ id }).get` | `fetch('/pedidos/:id', { params: { id } })` |
+| Sintaxe | `api.pedidos({ id }).get()` | `fetch('/pedidos/:id', { params: { id } })` |
 | Custo de tipos | mapeia todas as rotas de uma vez | resolve por rota, sob demanda |
 | Recomendação da doc | **padrão** | acima de ~500 rotas consumidas num só frontend |
 
@@ -622,7 +622,7 @@ A doc é direta: *"Unlike Elysia < 1.0, Eden Fetch is not faster than Eden Treat
 
 ### E o Zod?
 
-Elysia 1.4 aceita Zod via Standard Schema, então a pergunta não é "posso" — é "onde". Resposta calibrada, com os trade-offs verificados, em [Elysia - Schema e Eden](elysia-schema-e-eden.md) § 2. O resumo: `t` na fronteira HTTP (coerção de query/params, validação de arquivo por magic number, OpenAPI sem configuração extra), Zod onde o schema já é compartilhado com o frontend ou com estabelecido — sabendo que com Zod o OpenAPI exige `mapJsonSchema: { zod: z.toJSONSchema }` e a coerção passa a ser sua (`z.coerce.number`).
+Elysia 1.4 aceita Zod via Standard Schema, então a pergunta não é "posso" — é "onde". Resposta calibrada, com os trade-offs verificados, em [Elysia - Schema e Eden](elysia-schema-e-eden.md) § 2. O resumo: `t` na fronteira HTTP (coerção de query/params, validação de arquivo por magic number, OpenAPI sem configuração extra), Zod onde o schema já é compartilhado com o frontend ou com estabelecido — sabendo que com Zod o OpenAPI exige `mapJsonSchema: { zod: z.toJSONSchema }` e a coerção passa a ser sua (`z.coerce.number()`).
 
 ---
 
@@ -656,7 +656,7 @@ Verificadas em **2026-08-15**:
 - **`context.response` em hooks está deprecado em favor de `context.responseValue`.** Os `.d.ts` marcam `response` com `@deprecated use context.responseValue instead` em `AfterHandler`, `MapResponse` e `AfterResponseHandler`. A doc oficial usa os dois nomes em páginas diferentes.
 - **Elysia suporta Zod, Valibot, ArkType, Effect Schema, Yup e Joi** via Standard Schema, e schemas de bibliotecas diferentes podem coexistir no mesmo handler. Isso contraria a suposição corrente de que Elysia obriga TypeBox.
 - **Eden Treaty não lança em erro HTTP por padrão** (`throwHttpError: false`), e **converte strings de data em `Date` por padrão** (`parseDate: true`). As duas defaults têm consequência direta na integração com TanStack Query — § 8.
-- **`.as` só aceita `'scoped'` e `'global'`.** Não há `as('local')` — os `.d.ts` têm exatamente duas sobrecargas. `local` é o default e não se "desce" para ele.
+- **`.as()` só aceita `'scoped'` e `'global'`.** Não há `as('local')` — os `.d.ts` têm exatamente duas sobrecargas. `local` é o default e não se "desce" para ele.
 - **A página de Config diz que `aot` tem default `false`, e o pacote publicado diz `true`.** O construtor de `elysia@1.4.29` (`index.js`) monta a config com `aot: env.ELYSIA_AOT !== 'false'` — ou seja, ligado por padrão, e desligável pela variável de ambiente `ELYSIA_AOT=false`. A página de Cloudflare Worker corrobora o pacote: se o default fosse `false`, não haveria por que a doc dizer que "antes era preciso passar `aot: false`". **Trate o default como `true`.** A anotação `@default false` da página de Config é o que cai, e é a única divergência conhecida entre doc e pacote nesta estrutura.
 - **`normalize` tem default `true`**: propriedades fora do schema são removidas silenciosamente na entrada e na saída. Com `normalize: false` viram erro. Confirmado nos dois lugares — página de Config e `index.js`.
 - **O status default de erro de validação é 422**, e nenhuma página da doc o declara. `ValidationError.status = 422` em `error.js`. Um app **sem `onError`** já responde 422 a payload inválido; o reflexo de esperar 400 vem de outros frameworks. Tabela por classe de erro em [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) § 5.

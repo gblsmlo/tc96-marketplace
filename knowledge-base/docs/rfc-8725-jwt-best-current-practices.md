@@ -14,7 +14,7 @@ fonte: https://www.rfc-editor.org/rfc/rfc8725.html
 
 ## Quando esta nota se aplica
 
-Sempre que **a aplicação valida um JWT por conta própria** — verificação offline de access token via JWKS, tokens internos entre serviços, qualquer coisa em que o código chame `verify`. Se o SDK do provedor de identidade faz a validação inteira e você só lê o resultado, o risco está no SDK; ainda assim vale conhecer as regras para saber **o que perguntar** à documentação dele.
+Sempre que **a aplicação valida um JWT por conta própria** — verificação offline de access token via JWKS, tokens internos entre serviços, qualquer coisa em que o código chame `verify()`. Se o SDK do provedor de identidade faz a validação inteira e você só lê o resultado, o risco está no SDK; ainda assim vale conhecer as regras para saber **o que perguntar** à documentação dele.
 
 O tema central: JWT é um formato, não um protocolo de segurança. Ele não diz para que serve nem para quem — quem decide é o validador. Quase todo ataque da §2 explora essa ambiguidade.
 
@@ -36,20 +36,20 @@ O tema central: JWT é um formato, não um protocolo de segurança. Ele não diz
 
 ## §3 — as regras
 
-| § | Regra |
+| §    | Regra                                                                                                                     |
 | ---- | ------------------------------------------------------------------------------------------------------------------------- |
-| 3.1 | Bibliotecas **devem restringir os algoritmos a um allowlist** e conferir que o header `alg` bate com a operação realizada |
-| 3.2 | Usar algoritmos criptograficamente atuais, adequados ao requisito |
-| 3.3 | **Toda** operação criptográfica é validada; qualquer falha → rejeitar o JWT |
-| 3.4 | Validar entradas criptográficas antes do uso, em especial pontos de curva elíptica |
-| 3.5 | Chaves com entropia suficiente; senha **não** serve como chave de MAC |
-| 3.6 | Evitar compressão antes de cifrar |
-| 3.7 | UTF-8 exclusivamente para o JSON de header e claims |
-| 3.8 | **Verificar a identidade do issuer**; validar o `sub` contra os registros da aplicação |
-| 3.9 | **Incluir e validar `aud`** quando o JWT serve a mais de um relying party |
-| 3.10 | **Sanitizar claims não confiáveis** como `kid` — é entrada de usuário até prova em contrário |
-| 3.11 | Usar `typ` para tipagem explícita do JWT |
-| 3.12 | Regras de validação mutuamente exclusivas para tipos distintos de JWT do mesmo issuer |
+| 3.1  | Bibliotecas **devem restringir os algoritmos a um allowlist** e conferir que o header `alg` bate com a operação realizada |
+| 3.2  | Usar algoritmos criptograficamente atuais, adequados ao requisito                                                         |
+| 3.3  | **Toda** operação criptográfica é validada; qualquer falha → rejeitar o JWT                                               |
+| 3.4  | Validar entradas criptográficas antes do uso, em especial pontos de curva elíptica                                        |
+| 3.5  | Chaves com entropia suficiente; senha **não** serve como chave de MAC                                                     |
+| 3.6  | Evitar compressão antes de cifrar                                                                                         |
+| 3.7  | UTF-8 exclusivamente para o JSON de header e claims                                                                       |
+| 3.8  | **Verificar a identidade do issuer**; validar o `sub` contra os registros da aplicação                                    |
+| 3.9  | **Incluir e validar `aud`** quando o JWT serve a mais de um relying party                                                 |
+| 3.10 | **Sanitizar claims não confiáveis** como `kid` — é entrada de usuário até prova em contrário                              |
+| 3.11 | Usar `typ` para tipagem explícita do JWT                                                                                  |
+| 3.12 | Regras de validação mutuamente exclusivas para tipos distintos de JWT do mesmo issuer                                     |
 
 ---
 

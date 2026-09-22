@@ -2,10 +2,10 @@
 titulo: Storybook - Docs e Autodocs
 Link: https://storybook.js.org/docs/writing-docs/autodocs
 tags:
- - storybook
- - documentacao
- - design-system
- - agent-context
+  - storybook
+  - documentacao
+  - design-system
+  - agent-context
 source: "Documentação oficial do Storybook — Autodocs, Controls, Tags"
 verificado-em: 2026-08-19
 ---
@@ -39,27 +39,27 @@ Daí a consequência que governa este satélite: **melhorar a documentação qua
 Autodocs é controlado por **tag**: a página é gerada quando a tag `autodocs` alcança o arquivo. Como tags acumulam pelos três níveis (ver [Storybook - Stories e Args](storybook-stories-e-args.md) § 6), ligar no `preview` já satisfaz todo o catálogo — e é por isso que `SB-DOC-01` fala em *alcançar*, não em *declarar no arquivo*. Declarar de novo no `meta` de um arquivo que já herda do projeto é duplicação (§ 2).
 
 ```tsx
-//.storybook/preview.tsx — o catálogo inteiro documenta
+// .storybook/preview.tsx — o catálogo inteiro documenta
 const preview = {
- tags: ['autodocs'],
+  tags: ['autodocs'],
 } satisfies Preview;
 ```
 
 ```tsx
 // meta — só este componente
 const meta = {
- title: 'UI/Ações/Button',
- component: Button,
- tags: ['autodocs'],
+  title: 'UI/Ações/Button',
+  component: Button,
+  tags: ['autodocs'],
 } satisfies Meta<typeof Button>;
 ```
 
 ```tsx
 // meta — este componente é interno e não documenta
 const meta = {
- title: 'UI/Interno/BotaoInterno',
- component: BotaoInterno,
- tags: ['!autodocs'],
+  title: 'UI/Interno/BotaoInterno',
+  component: BotaoInterno,
+  tags: ['!autodocs'],
 } satisfies Meta<typeof BotaoInterno>;
 ```
 
@@ -90,10 +90,10 @@ Configuração de projeto, em `main.ts`:
 ```tsx
 // packages/ui/src/button/Button.tsx
 export interface ButtonProps {
- /** Hierarquia visual da ação. `primary` é a ação principal da tela. */
- variant?: 'primary' | 'secondary' | 'ghost';
- /** Desabilita o botão e remove ele da ordem de foco. */
- disabled?: boolean;
+  /** Hierarquia visual da ação. `primary` é a ação principal da tela. */
+  variant?: 'primary' | 'secondary' | 'ghost';
+  /** Desabilita o botão e remove ele da ordem de foco. */
+  disabled?: boolean;
 }
 ```
 
@@ -110,24 +110,24 @@ Prosa — quando usar cada variante, regra de espaçamento, o que não fazer —
 **Template customizado com doc blocks**, para mudar a estrutura de todas as páginas:
 
 ```tsx
-//.storybook/preview.tsx
+// .storybook/preview.tsx
 import { Title, Subtitle, Description, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
 
 const preview = {
- parameters: {
- docs: {
- page: => (
- <>
- <Title />
- <Subtitle />
- <Description />
- <Primary />
- <Controls />
- <Stories />
- </>
- ),
- },
- },
+  parameters: {
+    docs: {
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+          <Primary />
+          <Controls />
+          <Stories />
+        </>
+      ),
+    },
+  },
 } satisfies Preview;
 ```
 
@@ -137,7 +137,7 @@ const preview = {
 
 ```tsx
 parameters: {
- docs: { toc: true },
+  docs: { toc: true },
 }
 ```
 
@@ -151,8 +151,8 @@ Documenta componentes relacionados na mesma página, com abas separadas na tabel
 
 ```tsx
 const meta = {
- component: Lista,
- subcomponents: { ItemDaLista },
+  component: Lista,
+  subcomponents: { ItemDaLista },
 } satisfies Meta<typeof Lista>;
 ```
 
@@ -167,18 +167,18 @@ As duas convivem no mesmo arquivo, e as tags separam:
 ```tsx
 // caso de estresse: precisa rodar no runner, não precisa aparecer na vitrine
 export const DezMilLinhas: Story = {
- tags: ['!dev'],
- args: { linhas: gerarLinhas(10_000) },
+  tags: ['!dev'],
+  args: { linhas: gerarLinhas(10_000) },
 };
 
 // exemplo de composição: aparece na doc, não acrescenta nada ao runner
 export const EmFormulario: Story = {
- tags: ['!test'],
- render: (args) => (
- <Formulario>
- <Campo {...args} />
- </Formulario>
- ),
+  tags: ['!test'],
+  render: (args) => (
+    <Formulario>
+      <Campo {...args} />
+    </Formulario>
+  ),
 };
 ```
 
@@ -210,7 +210,7 @@ Duas fontes, uma delas envelhece calada (`SB-DOC-02`).
 
 ```tsx
 export const Diretrizes: Story = {
- render: => <article><h2>Quando usar</h2>{/* três parágrafos */}</article>,
+  render: () => <article><h2>Quando usar</h2>{/* três parágrafos */}</article>,
 };
 ```
 

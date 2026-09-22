@@ -1,12 +1,12 @@
 ---
 titulo: Feature-Based Architecture
 aliases:
- - FBA
- - Arquitetura baseada em features
+  - FBA
+  - Arquitetura baseada em features
 tags:
- - frontend
- - react
- - architecture
+  - frontend
+  - react
+  - architecture
 ---
 # Feature-Based Architecture
 
@@ -45,7 +45,7 @@ O custo real não é estético. É que **a fronteira do domínio deixa de existi
 
 A causa é um desalinhamento: **arquivos são agrupados por tipo, mas mudam por domínio.** Coisas que
 mudam pela mesma razão devem morar juntas — é coesão, aplicada a diretório em vez de classe.
-Ver e.
+
 
 ---
 
@@ -58,19 +58,19 @@ A estrutura adotada no vault:
 
 ```
 src/
-├── routes/ # árvore de rotas (TanStack Router, file-based). Compõe, não implementa.
-├── features/ # domínios do produto. Cada um é uma fatia vertical fechada.
-│ ├── auth/
-│ └── faturas/
-├── components/ # UI sem domínio
-│ ├── ui/ # primitivos: button, input, dialog
-│ └── layout/ # header, sidebar, footer
-├── hooks/ # hooks genéricos: use-debounce, use-local-storage
-│ └── index.ts
-├── libs/ # infraestrutura: http-client, formatadores, config
-│ └── index.ts
-└── types/ # contratos genéricos: ApiResponse, PaginationParams
- └── index.ts
+├── routes/          # árvore de rotas (TanStack Router, file-based). Compõe, não implementa.
+├── features/        # domínios do produto. Cada um é uma fatia vertical fechada.
+│   ├── auth/
+│   └── faturas/
+├── components/      # UI sem domínio
+│   ├── ui/          # primitivos: button, input, dialog
+│   └── layout/      # header, sidebar, footer
+├── hooks/           # hooks genéricos: use-debounce, use-local-storage
+│   └── index.ts
+├── libs/            # infraestrutura: http-client, formatadores, config
+│   └── index.ts
+└── types/           # contratos genéricos: ApiResponse, PaginationParams
+    └── index.ts
 ```
 
 Cada camada consumida por alias tem seu próprio barrel — é ele que o alias endereça. Sem
@@ -81,17 +81,17 @@ Aliases correspondentes em `tsconfig.json`:
 
 ```json
 {
- "compilerOptions": {
- "paths": {
- "@features/*": ["./src/features/*"],
- "@components/*": ["./src/components/*"],
- "@routes/*": ["./src/routes/*"],
+  "compilerOptions": {
+    "paths": {
+      "@features/*": ["./src/features/*"],
+      "@components/*": ["./src/components/*"],
+      "@routes/*": ["./src/routes/*"],
 
- "@hooks": ["./src/hooks"],
- "@libs": ["./src/libs"],
- "@app-types": ["./src/types"]
- }
- }
+      "@hooks": ["./src/hooks"],
+      "@libs": ["./src/libs"],
+      "@app-types": ["./src/types"]
+    }
+  }
 }
 ```
 
@@ -122,10 +122,10 @@ precisam concordar é uma fonte clássica de "funciona no build, quebra no teste
 Entre camadas, só existe uma direção legal:
 
 ```
-routes/ → features/ → components/ · hooks/ · libs/ · types/
- ╰─ ─ ─ ─╯
- aresta lateral: feature → feature,
- permitida só pelo barrel (ver § 4)
+routes/  →  features/  →  components/ · hooks/ · libs/ · types/
+             ╰─ ─ ─ ─╯
+        aresta lateral: feature → feature,
+        permitida só pelo barrel (ver § 4)
 ```
 
 Nunca de volta. `components/ui/button.tsx` não sabe que faturas existem. `libs/http-client.ts` não
@@ -146,15 +146,15 @@ O vocabulário completo de uma feature **madura** — não o que se cria no dia 
 
 ```
 features/faturas/
-├── api/ # queryOptions, mutations, cliente HTTP do domínio
-├── components/ # UI do domínio, props explícitas
-│ ├── fatura-card.tsx
-│ └── fatura-card.test.tsx # teste colocalizado, ao lado do que ele testa
-├── hooks/ # lógica de interação da feature
-├── stores/ # estado de cliente (quando existir); ver nota abaixo
-├── types/ # schemas Zod e tipos inferidos
-├── utils/ # funções puras do domínio
-└── index.ts # ← a API pública. O resto é privado.
+├── api/            # queryOptions, mutations, cliente HTTP do domínio
+├── components/     # UI do domínio, props explícitas
+│   ├── fatura-card.tsx
+│   └── fatura-card.test.tsx   # teste colocalizado, ao lado do que ele testa
+├── hooks/          # lógica de interação da feature
+├── stores/         # estado de cliente (quando existir); ver nota abaixo
+├── types/          # schemas Zod e tipos inferidos
+├── utils/          # funções puras do domínio
+└── index.ts        # ← a API pública. O resto é privado.
 ```
 
 Nem toda feature precisa das sete pastas. Uma feature nasce com **`index.ts` e mais nada**; cada
@@ -168,7 +168,7 @@ vault segue essa regra — ver `Prompts/Frontend/scaffold-phase-05-fba-directory
 
 Teste fica **colocalizado**, ao lado do arquivo que testa, e nunca entra no barrel. Isso mantém a
 regra "o que muda junto mora junto" válida também para a verificação.
-Ver.
+
 
 ### O barrel é o contrato
 
@@ -200,10 +200,12 @@ O barrel contém **apenas reexports**. Nenhuma lógica, nenhum side effect, nenh
 
 A maior parte do que projetos chamam de "estado global" é cache de servidor mal nomeado. Antes de
 criar `stores/`, verifique se o dado não é remoto — se for, ele pertence a `api/` como
-`queryOptions`. Ver e.
+`queryOptions`.
+.
 
 Quando `stores/` for de fato necessário — estado de cliente compartilhado entre telas, como filtros
-de uma jornada ou passo de um wizard — a escolha da ferramenta não é decidida aqui. Ver. Esta nota decide **onde o arquivo mora**, não com o que ele é
+de uma jornada ou passo de um wizard — a escolha da ferramenta não é decidida aqui. Ver
+. Esta nota decide **onde o arquivo mora**, não com o que ele é
 escrito.
 
 ---
@@ -234,8 +236,8 @@ Importar o próprio barrel de dentro da feature parece inofensivo, mas cria um c
 
 ```
 features/faturas/index.ts
- → features/faturas/components/fatura-card.tsx
- → @features/faturas (= features/faturas/index.ts)
+  → features/faturas/components/fatura-card.tsx
+    → @features/faturas   (= features/faturas/index.ts)
 ```
 
 Por isso a regra não depende de convenção: `noImportCycles` do Biome falha o build. O sintoma em
@@ -253,7 +255,8 @@ revisão; na prática ele é raro, porque arquivo interno que ninguém alcança 
 
 Dois consumidores são coincidência; três são um padrão. Extrair no segundo produz abstração com
 contrato inventado, que depois precisa de flags para servir aos dois casos. Deixe a duplicação viver
-até o terceiro caso revelar a forma real. Esta é a mesma disciplina do Zettel aplicada a extração.
+até o terceiro caso revelar a forma real. Esta é a mesma disciplina do Zettel
+ aplicada a extração.
 
 ### Import entre features irmãs — a decisão adotada
 
@@ -269,7 +272,7 @@ O vault adota a variante **progressiva**:
 - irmã pode importar irmã (`MONO-12`), **desde que pelo barrel** (`REACT-ARCH-05`);
 - deep import continua proibido;
 - quando um terceiro consumidor aparecer (`REACT-ARCH-08`), extraia para `features/core/<capacidade>/`
- e corte as arestas diretas.
+  e corte as arestas diretas.
 
 **Importar, duplicar e extrair são três movimentos diferentes.** Confundi-los é o erro mais comum ao
 ler estas regras juntas:
@@ -334,7 +337,7 @@ A saída é **inversão por slot**, e é sempre a mesma:
 ```tsx
 // src/components/layout/header.tsx — genérico, não sabe o que vai receber
 export function Header({ acoes }: { acoes?: ReactNode }) {
- return <header><Logo />{acoes}</header>
+  return <header><Logo />{acoes}</header>
 }
 
 // src/routes/__root.tsx — o shell compõe as duas camadas
@@ -342,12 +345,12 @@ import { Header } from '@components/layout'
 import { SeletorMoeda } from '@features/core/moedas'
 
 export const Route = createRootRoute({
- component: => <><Header acoes={<SeletorMoeda />} /><Outlet /></>,
+  component: () => <><Header acoes={<SeletorMoeda />} /><Outlet /></>,
 })
 ```
 
 O genérico **recebe** domínio, nunca o busca. E quem tem licença para importar as duas camadas ao
-mesmo tempo é o shell — pela exceção acima. Ver.
+mesmo tempo é o shell — pela exceção acima..
 
 ---
 
@@ -362,18 +365,18 @@ Stack: Vite/TanStack Start · TanStack Router · TanStack Query · Zod · React 
 import { z } from 'zod'
 
 export const faturaSchema = z.object({
- id: z.string.uuid,
- descricao: z.string.min(1),
- valorCentavos: z.number.int.positive,
- vencimento: z.coerce.date,
- status: z.enum(['aberta', 'paga', 'vencida']),
+  id: z.string().uuid(),
+  descricao: z.string().min(1),
+  valorCentavos: z.number().int().positive(),
+  vencimento: z.coerce.date(),
+  status: z.enum(['aberta', 'paga', 'vencida']),
 })
 
 export const faturaListaSchema = z.array(faturaSchema)
 
 export const faturaFiltrosSchema = z.object({
- status: faturaSchema.shape.status.optional,
- busca: z.string.optional,
+  status: faturaSchema.shape.status.optional(),
+  busca: z.string().optional(),
 })
 
 export type Fatura = z.infer<typeof faturaSchema>
@@ -384,7 +387,7 @@ Todo tipo é **derivado** de um schema, não declarado ao lado dele — inclusiv
 entrada e não resposta. Um único lugar define forma e validação, então não existe o estado em que o
 tipo diz uma coisa e o runtime aceita outra. `faturaSchema.shape.status` reaproveita o enum em vez de
 redigitá-lo: se um status novo aparecer, o filtro acompanha sozinho.
-Ver e.
+
 
 ### 5.2 A fronteira HTTP valida
 
@@ -392,22 +395,22 @@ Ver e.
 // src/features/faturas/api/faturas-client.ts
 import { httpClient } from '@libs'
 import {
- faturaSchema,
- faturaListaSchema,
- faturaFiltrosSchema,
- type FaturaFiltros,
+  faturaSchema,
+  faturaListaSchema,
+  faturaFiltrosSchema,
+  type FaturaFiltros,
 } from '../types/fatura-schema'
 
 export async function listarFaturas(filtros: FaturaFiltros) {
- const resposta = await httpClient.get('/faturas', {
- params: faturaFiltrosSchema.parse(filtros),
- })
- return faturaListaSchema.parse(resposta.data)
+  const resposta = await httpClient.get('/faturas', {
+    params: faturaFiltrosSchema.parse(filtros),
+  })
+  return faturaListaSchema.parse(resposta.data)
 }
 
 export async function marcarFaturaComoPaga(id: string) {
- const resposta = await httpClient.post(`/faturas/${id}/pagar`)
- return faturaSchema.parse(resposta.data)
+  const resposta = await httpClient.post(`/faturas/${id}/pagar`)
+  return faturaSchema.parse(resposta.data)
 }
 ```
 
@@ -423,17 +426,17 @@ import { listarFaturas } from './faturas-client'
 import type { FaturaFiltros } from '../types/fatura-schema'
 
 export function faturasQueryOptions(filtros: FaturaFiltros = {}) {
- return queryOptions({
- queryKey: ['faturas', 'lista', filtros],
- queryFn: => listarFaturas(filtros),
- staleTime: 30_000,
- })
+  return queryOptions({
+    queryKey: ['faturas', 'lista', filtros],
+    queryFn: () => listarFaturas(filtros),
+    staleTime: 30_000,
+  })
 }
 ```
 
 `queryOptions` é o formato que serve rota e componente com a mesma definição — o loader pré-carrega e
 o componente consome a mesma chave, sem duplicar a política de frescor.
-Ver.
+
 
 A mutation mora ao lado, e **a invalidação é parte dela**:
 
@@ -442,15 +445,15 @@ A mutation mora ao lado, e **a invalidação é parte dela**:
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { marcarFaturaComoPaga } from './faturas-client'
 
-export function useMarcarComoPaga {
- const queryClient = useQueryClient
+export function useMarcarComoPaga() {
+  const queryClient = useQueryClient()
 
- return useMutation({
- mutationFn: marcarFaturaComoPaga,
- onSuccess: => {
- queryClient.invalidateQueries({ queryKey: ['faturas'] })
- },
- })
+  return useMutation({
+    mutationFn: marcarFaturaComoPaga,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['faturas'] })
+    },
+  })
 }
 ```
 
@@ -458,7 +461,7 @@ Escrever a mutation sem `onSuccess` é o bug mais comum desta camada: o servidor
 tela continua mostrando o valor antigo até um refresh manual. Por isso a chave é hierárquica —
 `['faturas', 'lista', filtros]` no query, `['faturas']` na invalidação — e um prefixo derruba todas
 as listas de uma vez, com qualquer filtro. Quando a espera pela resposta for perceptível, o passo
-seguinte é atualização otimista: ver.
+seguinte é atualização otimista:.
 
 A regra estrutural: **quem invalida é a feature dona da chave.** Uma feature nunca invalida a
 `queryKey` de outra — se precisar disso, a operação pertence à outra feature e deve ser exportada
@@ -472,8 +475,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { FaturasPainel, faturasQueryOptions } from '@features/faturas'
 
 export const Route = createFileRoute('/faturas/')({
- loader: ({ context }) => context.queryClient.ensureQueryData(faturasQueryOptions),
- component: FaturasPainel,
+  loader: ({ context }) => context.queryClient.ensureQueryData(faturasQueryOptions()),
+  component: FaturasPainel,
 })
 ```
 
@@ -497,22 +500,23 @@ const novaFaturaSchema = faturaSchema.omit({ id: true, status: true })
 type NovaFatura = z.infer<typeof novaFaturaSchema>
 
 export function FaturaForm({ onSalvar }: { onSalvar: (dados: NovaFatura) => void }) {
- const { register, handleSubmit, formState } = useForm<NovaFatura>({
- resolver: zodResolver(novaFaturaSchema),
- })
+  const { register, handleSubmit, formState } = useForm<NovaFatura>({
+    resolver: zodResolver(novaFaturaSchema),
+  })
 
- return (
- <form onSubmit={handleSubmit(onSalvar)}>
- <Input {...register('descricao')} aria-invalid={!!formState.errors.descricao} />
- <Button type="submit" disabled={formState.isSubmitting}>Salvar</Button>
- </form>
- )
+  return (
+    <form onSubmit={handleSubmit(onSalvar)}>
+      <Input {...register('descricao')} aria-invalid={!!formState.errors.descricao} />
+      <Button type="submit" disabled={formState.isSubmitting}>Salvar</Button>
+    </form>
+  )
 }
 ```
 
-O schema de criação é **derivado** do schema do domínio com `.omit`, não reescrito. O componente
+O schema de criação é **derivado** do schema do domínio com `.omit()`, não reescrito. O componente
 recebe `onSalvar` por prop em vez de chamar a mutation direto: assim ele é testável sem servidor e a
-orquestração fica em quem compõe. Ver e.
+orquestração fica em quem compõe.
+.
 
 ### 5.6 Nota sobre Next.js App Router
 
@@ -522,15 +526,15 @@ O mapeamento é direto: `app/` ocupa o lugar de `routes/`, e `src/features/` per
 Dois cuidados que só existem em Next e que mudam o desenho do barrel:
 
 - **`'use client'` contamina o barrel.** Um `index.ts` que reexporta um componente cliente junto com
- utilitários de servidor arrasta o módulo inteiro para o bundle do cliente. Em features mistas,
- separe as superfícies: `index.ts` (servidor) e `client.ts` (cliente), e importe de cada uma
- conforme o contexto.
+  utilitários de servidor arrasta o módulo inteiro para o bundle do cliente. Em features mistas,
+  separe as superfícies: `index.ts` (servidor) e `client.ts` (cliente), e importe de cada uma
+  conforme o contexto.
 - **Barrels grandes custam build.** Um `index.ts` que reexporta muita coisa faz o bundler percorrer
- o grafo inteiro mesmo quando o consumidor usa um símbolo só. A mitigação estrutural é manter o
- barrel pequeno — não existe flag que resolva isso para código local. O
- `experimental.optimizePackageImports` do Next é para **pacotes** de `node_modules` que exportam
- centenas de módulos (a lista padrão é toda de bibliotecas de terceiros), é experimental e a própria
- doc não o recomenda para produção. Não conte com ele para barrel de feature.
+  o grafo inteiro mesmo quando o consumidor usa um símbolo só. A mitigação estrutural é manter o
+  barrel pequeno — não existe flag que resolva isso para código local. O
+  `experimental.optimizePackageImports` do Next é para **pacotes** de `node_modules` que exportam
+  centenas de módulos (a lista padrão é toda de bibliotecas de terceiros), é experimental e a própria
+  doc não o recomenda para produção. Não conte com ele para barrel de feature.
 
 Nada disso invalida a estrutura — só significa que a fronteira servidor/cliente é uma segunda
 dimensão que atravessa a fatia vertical.
@@ -564,79 +568,79 @@ Antipadrões de React (não de arquitetura) ficam em [React - Patterns](../docs/
 
 ```json
 {
- "$schema": "https://biomejs.dev/schemas/latest/schema.json",
- "linter": {
- "rules": {
- "correctness": { "noUnusedImports": "error" },
- "suspicious": { "noImportCycles": "error" },
- "style": {
- "noRestrictedImports": {
- "level": "error",
- "options": {
- "patterns": [
- {
- "group": ["@features/*/*", "@features/*/*/**"],
- "message": "REACT-ARCH-05: deep import em feature. Importe pelo barrel: @features/<feature>."
- },
- {
- "group": ["@components/*/*", "@components/*/*/**"],
- "message": "REACT-ARCH-05: deep import em componente compartilhado. Importe @components/ui ou @components/layout."
- }
- ]
- }
- }
- }
- }
- },
- "overrides": [
- {
- "includes": ["src/features/**"],
- "linter": {
- "rules": {
- "style": {
- "noRestrictedImports": {
- "level": "error",
- "options": {
- "patterns": [
- {
- "group": ["@routes/**"],
- "message": "REACT-ARCH-07: feature não importa rota. A rota conhece a feature, nunca o contrário."
- },
- {
- "group": ["@features/*/*", "@features/*/*/**"],
- "message": "REACT-ARCH-05: deep import em feature. Importe pelo barrel: @features/<feature>."
- }
- ]
- }
- }
- }
- }
- }
- },
- {
- "includes": ["src/components/**", "src/hooks/**", "src/libs/**", "src/types/**"],
- "linter": {
- "rules": {
- "style": {
- "noRestrictedImports": {
- "level": "error",
- "options": {
- "patterns": [
- {
- "group": ["@features/**", "@routes/**"],
- "message": "REACT-ARCH-06: camada genérica não conhece domínio nem rota. Inverta a dependência via prop ou parâmetro."
- }
- ]
- }
- }
- }
- }
- }
- }
- ],
- "assist": {
- "actions": { "source": { "organizeImports": "on" } }
- }
+  "$schema": "https://biomejs.dev/schemas/latest/schema.json",
+  "linter": {
+    "rules": {
+      "correctness": { "noUnusedImports": "error" },
+      "suspicious": { "noImportCycles": "error" },
+      "style": {
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "patterns": [
+              {
+                "group": ["@features/*/*", "@features/*/*/**"],
+                "message": "REACT-ARCH-05: deep import em feature. Importe pelo barrel: @features/<feature>."
+              },
+              {
+                "group": ["@components/*/*", "@components/*/*/**"],
+                "message": "REACT-ARCH-05: deep import em componente compartilhado. Importe @components/ui ou @components/layout."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["src/features/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@routes/**"],
+                    "message": "REACT-ARCH-07: feature não importa rota. A rota conhece a feature, nunca o contrário."
+                  },
+                  {
+                    "group": ["@features/*/*", "@features/*/*/**"],
+                    "message": "REACT-ARCH-05: deep import em feature. Importe pelo barrel: @features/<feature>."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/components/**", "src/hooks/**", "src/libs/**", "src/types/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@features/**", "@routes/**"],
+                    "message": "REACT-ARCH-06: camada genérica não conhece domínio nem rota. Inverta a dependência via prop ou parâmetro."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "assist": {
+    "actions": { "source": { "organizeImports": "on" } }
+  }
 }
 ```
 
@@ -664,11 +668,11 @@ override de `src/features/**`, que sobrescreveria a regra inteira.
 Três regras ficam total ou parcialmente em revisão:
 
 - **`REACT-ARCH-06` no sentido inverso completo.** Dá para proibir a camada genérica de importar
- features. Não dá para detectar regra de negócio *escrita* dentro de `libs/`.
+  features. Não dá para detectar regra de negócio *escrita* dentro de `libs/`.
 - **`REACT-ARCH-08`, o terceiro consumidor.** É julgamento sobre duplicação, não sobre grafo.
 - **`REACT-ARCH-04` no caso sem reexportação.** `noImportCycles` só pega o import do próprio alias
- quando ele fecha ciclo — ver a ressalva em § 4. Expressar o caso restante exigiria um override por
- feature, o que não se paga.
+  quando ele fecha ciclo — ver a ressalva em § 4. Expressar o caso restante exigiria um override por
+  feature, o que não se paga.
 
 Além disso, `REACT-ARCH-09` não tem regra de lint, mas tem o teste de bancada da § 4, que é objetivo
 o bastante para uma revisão arbitrar.
@@ -703,17 +707,17 @@ antes de reportá-lo não prova nada.
 Não reorganize o repositório inteiro em um PR. A ordem abaixo mantém o app verde a cada passo.
 
 1. **Aliases primeiro.** Adicione `paths` no `tsconfig.json` e o `resolve.alias` equivalente no
- `vite.config.ts` e no `vitest.config.ts`. Os três precisam concordar, ou os testes quebram sozinhos.
+   `vite.config.ts` e no `vitest.config.ts`. Os três precisam concordar, ou os testes quebram sozinhos.
 2. **Extraia o genuinamente genérico.** Mova para `components/ui/`, `hooks/` e `libs/` só o que já
- não tem domínio hoje. Não "generalize" nada nesta etapa.
+   não tem domínio hoje. Não "generalize" nada nesta etapa.
 3. **Migre uma feature pequena e isolada, inteira.** Uma capacidade com poucas dependências, do
- componente ao schema. O objetivo é ter um exemplo vivo no repositório, não cobertura.
+   componente ao schema. O objetivo é ter um exemplo vivo no repositório, não cobertura.
 4. **Adicione o barrel e conserte os consumidores.** É aqui que a superfície pública fica explícita.
 5. **Ligue o `noImportCycles`.** Ele revela acoplamentos que ninguém tinha visto. Trate como erro
- desde o começo — em modo aviso ele é ignorado.
+   desde o começo — em modo aviso ele é ignorado.
 6. **Ligue o `noRestrictedImports` por camada.** Comece pela camada genérica (`overrides` acima) —
- ela tende a acusar menos violações por ter menos arquivos, mas confirme antes com
- `pnpm biome check src` em vez de assumir.
+   ela tende a acusar menos violações por ter menos arquivos, mas confirme antes com
+   `pnpm biome check src` em vez de assumir.
 7. **Só então considere `features/core/`.** Quando `REACT-ARCH-08` disparar de verdade.
 
 A cada passo, um PR. Migração de estrutura misturada com mudança de comportamento é irrevisável.
@@ -750,29 +754,29 @@ do que está aqui — se as duas divergirem, a skill é que está errada.
 ### Carregamento mínimo
 
 ```
-SEMPRE: § 2 (camadas e direção) + § 4 (regras REACT-ARCH-*)
+SEMPRE:              § 2 (camadas e direção) + § 4 (regras REACT-ARCH-*)
 
-AO CRIAR FEATURE: § 3 (anatomia) + § 5 (exemplos no stack)
-AO MOVER CÓDIGO: § 8 (migração) + REACT-ARCH-08
-AO REVISAR IMPORT: § 6 (antipadrões) + § 7 (o que o lint cobre)
-AO CONFIGURAR REPO: § 7 (biome.json e aliases)
+AO CRIAR FEATURE:    § 3 (anatomia) + § 5 (exemplos no stack)
+AO MOVER CÓDIGO:     § 8 (migração) + REACT-ARCH-08
+AO REVISAR IMPORT:   § 6 (antipadrões) + § 7 (o que o lint cobre)
+AO CONFIGURAR REPO:  § 7 (biome.json e aliases)
 
-TAMBÉM: [React - Patterns](../docs/react-patterns.md) para decisão de componente
- (esta nota decide onde o arquivo mora; ela decide o que há dentro)
+TAMBÉM:              [React - Patterns](../docs/react-patterns.md) para decisão de componente
+                     (esta nota decide onde o arquivo mora; ela decide o que há dentro)
 
-NUNCA: inventar camada nova sem registrar aqui
+NUNCA:               inventar camada nova sem registrar aqui
 ```
 
 ### Ordem das decisões ao criar código novo
 
 1. **Isto é um domínio?** Se não tem vocabulário próprio de produto, não é feature — é `components/`
- ou `libs/`.
+   ou `libs/`.
 2. **O domínio já existe?** Prefira crescer uma feature existente a criar a nona. Feature nova exige
- capacidade nova, não tela nova.
+   capacidade nova, não tela nova.
 3. **O dado é remoto?** Se sim, `api/` com `queryOptions` — não `stores/`.
 4. **Isto é público?** Só entra no barrel o que outra camada realmente consome.
 5. **Quem vai importar isto?** Se a resposta for outra feature, confirme `REACT-ARCH-05` e registre o
- contador de `REACT-ARCH-08`.
+   contador de `REACT-ARCH-08`.
 
 ### Como citar um achado
 
@@ -786,13 +790,13 @@ Cite o ID, o arquivo e a linha. Não parafraseie a regra:
 
 1. **A estrutura não substitui a regra.** Mover arquivo não conserta dependência invertida.
 2. **Direção antes de estética.** Uma violação de `REACT-ARCH-06` ou `-07` tem precedência sobre
- qualquer preferência de organização.
+   qualquer preferência de organização.
 3. **Não extraia sem o terceiro consumidor** (`REACT-ARCH-08`). Duplicação é mais barata que
- abstração errada.
+   abstração errada.
 4. **Verificar antes de afirmar.** Se uma regra do Biome não está na tabela da § 7, ela não foi
- verificada nesta nota — consulte `biomejs.dev` e atualize aqui.
+   verificada nesta nota — consulte `biomejs.dev` e atualize aqui.
 5. **A fonte vence.** Divergência entre esta nota e o comportamento real do Biome ou do TanStack é
- bug desta nota.
+   bug desta nota.
 
 ### Autoverificação antes de entregar
 
@@ -832,19 +836,14 @@ sem `entities/`/`widgets/`, sem numeração de camadas.
 ## Relacionados
 
 - [Fronteira do BFF - forma, jornada e regra](fronteira-do-bff-forma-jornada-e-regra.md) — nota irmã: esta decide onde o código do frontend
- mora; ela decide o que atravessa a fronteira do servidor e quem é dono de cada decisão
+  mora; ela decide o que atravessa a fronteira do servidor e quem é dono de cada decisão
 - [Monorepo com Bun - estrutura e tooling](monorepo-com-bun-estrutura-e-tooling.md) — quando uma camada desta nota vira pacote próprio
 - [Architecture in React](architecture-in-react.md) — nota mãe: os eixos de decisão arquitetural
 - `react-structure` — a skill que implementa o contrato da § 10
 - — a ideia conceitual
--
--
--
 - [React - Patterns](../docs/react-patterns.md) — decisão dentro do componente
 - [React.js](../docs/react-js.md) — hub de React e § 7, o contrato de skill
 - [TanStack Router - Virtual File Routes](../docs/tanstack-router-virtual-file-routes.md) — quando a rota colide com a feature
--
--
 - [Frontend roadmap](frontend-roadmap.md) — trilha de estudos
 
 ## Fontes consultadas

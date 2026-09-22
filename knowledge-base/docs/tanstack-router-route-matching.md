@@ -2,9 +2,9 @@
 titulo: TanStack Router - Route Matching
 Link: https://tanstack.com/router/latest/docs/framework/react/routing/route-matching
 tags:
- - tanstack-router
- - routing
- - agent-context
+  - tanstack-router
+  - routing
+  - agent-context
 source: "Documentação oficial — https://tanstack.com/router/latest/docs/framework/react/"
 verificado-em: 2026-08-14
 ---
@@ -50,28 +50,28 @@ Isto é, `{-$param}` perde para o segmento estático correspondente.
 
 ```
 Root
- - blog
- - $postId
- - /
- - new
- - /
- - *
- - about
- - about/us
+  - blog
+    - $postId
+    - /
+    - new
+  - /
+  - *
+  - about
+  - about/us
 ```
 
 Árvore como o router a ordena:
 
 ```
 Root
- - /
- - about/us
- - about
- - blog
- - /
- - new
- - $postId
- - *
+  - /
+  - about/us
+  - about
+  - blog
+    - /
+    - new
+    - $postId
+  - *
 ```
 
 Três leituras que valem por toda a tabela:
@@ -128,11 +128,11 @@ O quarto caso é o que define o papel do splat: ele não é "uma rota que pega q
 ```
 // ERRADO — resolve um problema que não existe neste router,
 // e vaza um detalhe de implementação para a URL
-routes/blog._new.tsx → /blog/_new (nem é isso que _ faz)
+routes/blog._new.tsx      → /blog/_new  (nem é isso que _ faz)
 
 // CERTO — a estática já vence a dinâmica
-routes/blog.new.tsx → /blog/new
-routes/blog.$postId.tsx → /blog/:postId
+routes/blog.new.tsx       → /blog/new
+routes/blog.$postId.tsx   → /blog/:postId
 ```
 
 **Splat como despachante**
@@ -141,18 +141,18 @@ routes/blog.$postId.tsx → /blog/:postId
 // ERRADO — um único match, um único loader, params sem tipo,
 // e todo o code splitting perdido
 export const Route = createFileRoute('/admin/$')({
- component: => {
- const { _splat } = Route.useParams
- if (_splat === 'users') return <Users />
- if (_splat?.startsWith('reports/')) return <Report />
- return <NotFound />
- },
+  component: () => {
+    const { _splat } = Route.useParams()
+    if (_splat === 'users') return <Users />
+    if (_splat?.startsWith('reports/')) return <Report />
+    return <NotFound />
+  },
 })
 
 // CERTO — cada URL é uma rota, com loader e tipos próprios
 // routes/admin.users.tsx
 // routes/admin.reports.$reportId.tsx
-// routes/admin.$.tsx ← só o fallback de verdade
+// routes/admin.$.tsx        ← só o fallback de verdade
 ```
 
 | Antipadrão | Por que falha | Correção |

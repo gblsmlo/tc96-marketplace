@@ -2,11 +2,11 @@
 titulo: Playwright - Fixtures
 Link: https://playwright.dev/docs/test-fixtures
 tags:
- - playwright
- - testing
- - fixtures
- - architecture
- - agent-context
+  - playwright
+  - testing
+  - fixtures
+  - architecture
+  - agent-context
 source: "Documentação oficial do Playwright — Fixtures, Global setup and teardown, Parameterize tests"
 verificado-em: 2026-08-20
 ---
@@ -44,16 +44,16 @@ import { test as base } from '@playwright/test';
 import { PaginaPedidos } from './pages/pedidos';
 
 type MinhasFixtures = {
- paginaPedidos: PaginaPedidos;
+  paginaPedidos: PaginaPedidos;
 };
 
 export const test = base.extend<MinhasFixtures>({
- paginaPedidos: async ({ page }, use) => {
- const p = new PaginaPedidos(page);
- await p.abrir; // setup
- await use(p); // entrega ao teste
- await p.limpar; // teardown
- },
+  paginaPedidos: async ({ page }, use) => {
+    const p = new PaginaPedidos(page);
+    await p.abrir();              // setup
+    await use(p);                 // entrega ao teste
+    await p.limpar();             // teardown
+  },
 });
 
 export { expect } from '@playwright/test';
@@ -64,8 +64,8 @@ export { expect } from '@playwright/test';
 import { test, expect } from './fixtures';
 
 test('cria um pedido', async ({ paginaPedidos }) => {
- await paginaPedidos.criar({ item: 'Café' });
- await expect(paginaPedidos.lista).toHaveCount(1);
+  await paginaPedidos.criar({ item: 'Café' });
+  await expect(paginaPedidos.lista).toHaveCount(1);
 });
 ```
 
@@ -85,12 +85,12 @@ Setup e teardown por teste. É o certo para qualquer coisa que dependa de `page`
 
 ```ts
 export const test = base.extend<{}, { conta: Conta }>({
- conta: [async ({ browser }, use, workerInfo) => {
- const usuario = `user${workerInfo.workerIndex}`;
- const conta = await provisionarConta(usuario);
- await use(conta);
- await liberarConta(conta);
- }, { scope: 'worker' }],
+  conta: [async ({ browser }, use, workerInfo) => {
+    const usuario = `user${workerInfo.workerIndex}`;
+    const conta = await provisionarConta(usuario);
+    await use(conta);
+    await liberarConta(conta);
+  }, { scope: 'worker' }],
 });
 ```
 
@@ -104,12 +104,12 @@ Note a assinatura de `extend`: **o primeiro parâmetro genérico é o escopo de 
 
 ```ts
 salvarLogs: [async ({}, use, testInfo) => {
- const logs: string[] = [];
- await use;
- if (testInfo.status !== testInfo.expectedStatus) {
- const arquivo = testInfo.outputPath('logs.txt');
- await fs.promises.writeFile(arquivo, logs.join('\n'), 'utf8');
- }
+  const logs: string[] = [];
+  await use();
+  if (testInfo.status !== testInfo.expectedStatus) {
+    const arquivo = testInfo.outputPath('logs.txt');
+    await fs.promises.writeFile(arquivo, logs.join('\n'), 'utf8');
+  }
 }, { auto: true }],
 ```
 
@@ -118,14 +118,14 @@ salvarLogs: [async ({}, use, testInfo) => {
 ```ts
 // beforeEach global
 forEachTest: [async ({ page }, use) => {
- await page.goto('/');
- await use;
+  await page.goto('/');
+  await use();
 }, { auto: true }],
 
 // beforeAll/afterAll global
 forEachWorker: [async ({}, use) => {
- console.log(`worker ${test.info.workerIndex} subindo`);
- await use;
+  console.log(`worker ${test.info().workerIndex} subindo`);
+  await use();
 }, { scope: 'worker', auto: true }],
 ```
 
@@ -140,26 +140,26 @@ Este é o mecanismo que substitui `process.env` espalhado pelos testes.
 ```ts
 // fixtures.ts
 export type MinhasOpcoes = {
- papel: 'admin' | 'operador';
- itemPadrao: string;
+  papel: 'admin' | 'operador';
+  itemPadrao: string;
 };
 
 export const test = base.extend<MinhasOpcoes & MinhasFixtures>({
- papel: ['operador', { option: true }],
- itemPadrao: ['Algo razoável', { option: true }],
+  papel: ['operador', { option: true }],
+  itemPadrao: ['Algo razoável', { option: true }],
 
- paginaPedidos: async ({ page, papel }, use) => {
- const p = new PaginaPedidos(page, papel);
- await use(p);
- },
+  paginaPedidos: async ({ page, papel }, use) => {
+    const p = new PaginaPedidos(page, papel);
+    await use(p);
+  },
 });
 ```
 
 ```ts
 // playwright.config.ts
 projects: [
- { name: 'admin', use: { papel: 'admin' } },
- { name: 'operador', use: { papel: 'operador' } },
+  { name: 'admin',    use: { papel: 'admin' } },
+  { name: 'operador', use: { papel: 'operador' } },
 ],
 ```
 
@@ -173,10 +173,10 @@ O mesmo vale em `test.use({ papel: 'admin' })` para um arquivo.
 
 ```ts
 export const test = base.extend({
- page: async ({ baseURL, page }, use) => {
- await page.goto(baseURL!);
- await use(page);
- },
+  page: async ({ baseURL, page }, use) => {
+    await page.goto(baseURL!);
+    await use(page);
+  },
 });
 ```
 
@@ -245,7 +245,7 @@ Passar dado de `globalSetup` para os testes é por `process.env`:
 import type { FullConfig } from '@playwright/test';
 
 async function globalSetup(config: FullConfig) {
- process.env.TENANT_ID = await criarTenant;
+  process.env.TENANT_ID = await criarTenant();
 }
 export default globalSetup;
 ```
@@ -274,10 +274,10 @@ Isso é untyped e global — mais um motivo para preferir setup project, onde o 
 ```ts
 // ✗ em oito arquivos, com pequenas diferenças em cada
 test.beforeEach(async ({ page }) => {
- await page.goto('/login');
- await page.getByLabel('E-mail').fill('a@b.com');
- await page.getByLabel('Senha').fill('123');
- await page.getByRole('button', { name: 'Entrar' }).click;
+  await page.goto('/login');
+  await page.getByLabel('E-mail').fill('a@b.com');
+  await page.getByLabel('Senha').fill('123');
+  await page.getByRole('button', { name: 'Entrar' }).click();
 });
 ```
 
@@ -288,9 +288,9 @@ Dois defeitos: é fixture não extraída (`PW-FIX-01`) e é login por UI repetid
 ```ts
 // ✗ nunca limpa
 paginaPedidos: async ({ page }) => {
- const p = new PaginaPedidos(page);
- await p.abrir;
- return p;
+  const p = new PaginaPedidos(page);
+  await p.abrir();
+  return p;
 },
 ```
 
@@ -301,8 +301,8 @@ O teardown deixa de existir, e o vazamento aparece como flake em outro teste (`P
 ```ts
 // ✗
 carrinho: [async ({}, use) => {
- const c = new Carrinho; // um só para todos os testes do worker
- await use(c);
+  const c = new Carrinho();      // um só para todos os testes do worker
+  await use(c);
 }, { scope: 'worker' }],
 ```
 
@@ -322,7 +322,7 @@ Sem tipo, sem relatório, e impossível rodar os dois papéis numa execução (`
 
 ```ts
 // ✗
-import { test } from '@playwright/test'; // ← o base
+import { test } from '@playwright/test';        // ← o base
 import { expect } from './fixtures';
 
 test('cria pedido', async ({ paginaPedidos }) => { … });

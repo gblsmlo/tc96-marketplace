@@ -2,11 +2,11 @@
 titulo: Storybook - Stories e Args
 Link: https://storybook.js.org/docs/writing-stories
 tags:
- - storybook
- - react
- - frontend
- - csf
- - agent-context
+  - storybook
+  - react
+  - frontend
+  - csf
+  - agent-context
 source: "Documentação oficial do Storybook — Writing Stories, Args, Controls, Naming, Tags, CSF API"
 verificado-em: 2026-08-19
 ---
@@ -33,12 +33,12 @@ import type { Meta, StoryObj } from '@storybook/tanstack-react';
 import { Button } from './Button';
 
 const meta = {
- title: 'UI/Ações/Button',
- component: Button,
- args: {
- children: 'Salvar',
- variant: 'primary',
- },
+  title: 'UI/Ações/Button',
+  component: Button,
+  args: {
+    children: 'Salvar',
+    variant: 'primary',
+  },
 } satisfies Meta<typeof Button>;
 
 export default meta;
@@ -48,16 +48,16 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {};
 
 export const Secondary: Story = {
- args: { variant: 'secondary' },
+  args: { variant: 'secondary' },
 };
 
 export const Disabled: Story = {
- args: { disabled: true },
+  args: { disabled: true },
 };
 
 export const RotuloLongo: Story = {
- name: 'Rótulo longo',
- args: { children: 'Salvar e continuar editando este registro' },
+  name: 'Rótulo longo',
+  args: { children: 'Salvar e continuar editando este registro' },
 };
 ```
 
@@ -73,7 +73,7 @@ Quatro coisas a notar, porque cada uma é uma decisão:
 O Storybook monta o índice da sidebar **lendo o arquivo estaticamente**, sem executá-lo. Três consequências práticas:
 
 - **`title` precisa ser literal.** Uma template string como ``title: `UI/${grupo}/Button` `` não é legível estaticamente e falha. O mesmo vale para `id`.
-- **Nada de efeito colateral nem de não-determinismo no topo do módulo.** Um `const dados = await carregar` ou um `Math.random` no corpo do arquivo produz índice inconsistente. Dado assíncrono é `loaders`; setup imperativo é `beforeEach`. **Computação pura é permitida** — um `gerarLinhas(10_000)` determinístico no topo do módulo é legítimo, e é o que `SB-CORE-06` deixa passar de propósito. Ver [Storybook - Decorators e Contexto](storybook-decorators-e-contexto.md).
+- **Nada de efeito colateral nem de não-determinismo no topo do módulo.** Um `const dados = await carregar()` ou um `Math.random()` no corpo do arquivo produz índice inconsistente. Dado assíncrono é `loaders`; setup imperativo é `beforeEach`. **Computação pura é permitida** — um `gerarLinhas(10_000)` determinístico no topo do módulo é legítimo, e é o que `SB-CORE-06` deixa passar de propósito. Ver [Storybook - Decorators e Contexto](storybook-decorators-e-contexto.md).
 - **Uma story não pode depender de outra.** Não existe ordem garantida, e o runner pode executar uma story isolada. Estado compartilhado que atravessa stories é bug (`SB-CTX-04`).
 
 ### 1.2 Título, hierarquia e hoisting
@@ -86,15 +86,15 @@ O Storybook monta o índice da sidebar **lendo o arquivo estaticamente**, sem ex
 
 ```tsx
 const preview = {
- parameters: {
- options: {
- storySort: {
- method: 'alphabetical',
- order: ['Introdução', 'Tokens', 'UI', '*'],
- includeNames: true,
- },
- },
- },
+  parameters: {
+    options: {
+      storySort: {
+        method: 'alphabetical',
+        order: ['Introdução', 'Tokens', 'UI', '*'],
+        includeNames: true,
+      },
+    },
+  },
 } satisfies Preview;
 ```
 
@@ -116,8 +116,8 @@ const dadosBase = { id: '1', nome: 'Ada' };
 export const dadosBase = { id: '1', nome: 'Ada' };
 
 const meta = {
- component: Tabela,
- excludeStories: ['dadosBase'],
+  component: Tabela,
+  excludeStories: ['dadosBase'],
 } satisfies Meta<typeof Tabela>;
 ```
 
@@ -141,8 +141,8 @@ const meta = {
 ```tsx
 // ✅ correto
 const meta = {
- component: Button,
- args: { children: 'Salvar', variant: 'primary' },
+  component: Button,
+  args: { children: 'Salvar', variant: 'primary' },
 } satisfies Meta<typeof Button>;
 
 type Story = StoryObj<typeof meta>;
@@ -155,8 +155,8 @@ type Story = StoryObj<typeof meta>;
 ```tsx
 // ❌ anotação em vez de satisfies
 const meta: Meta<typeof Button> = {
- component: Button,
- args: { children: 'Salvar', variant: 'primary' },
+  component: Button,
+  args: { children: 'Salvar', variant: 'primary' },
 };
 // o tipo do meta passa a ser Meta<typeof Button> genérico.
 // StoryObj<typeof meta> perde o conhecimento dos args declarados,
@@ -184,7 +184,7 @@ O sintoma dos dois é idêntico e reconhecível: **`export const Primary: Story 
 `args` existem em projeto (`preview`), componente (`meta`) e story. O mais específico vence, e o merge é **por chave**: definir `variant` na story não apaga `children` do `meta`.
 
 ```tsx
-//.storybook/preview.tsx — vale para tudo
+// .storybook/preview.tsx — vale para tudo
 const preview = { args: { tamanho: 'md' } } satisfies Preview;
 
 // meta — vale para o componente
@@ -203,11 +203,11 @@ args: { variant: 'secondary' }
 
 ```tsx
 export const Secondary: Story = {
- args: { variant: 'secondary' },
+  args: { variant: 'secondary' },
 };
 
 export const SecondaryDisabled: Story = {
- args: {...Secondary.args, disabled: true },
+  args: { ...Secondary.args, disabled: true },
 };
 ```
 
@@ -229,12 +229,12 @@ Aqui está a fronteira que mais rende código errado. `args` são a entrada que 
 ```tsx
 // ❌ estado embutido no render: nada disso é controlável nem documentável
 export const Carregando: Story = {
- render: => <Tabela linhas={[]} carregando={true} />,
+  render: () => <Tabela linhas={[]} carregando={true} />,
 };
 
 // ✅ o estado é arg
 export const Carregando: Story = {
- args: { linhas: [], carregando: true },
+  args: { linhas: [], carregando: true },
 };
 ```
 
@@ -248,16 +248,16 @@ Componente controlado precisa que o valor mude quando o usuário interage. `useA
 import { useArgs } from 'storybook/preview-api';
 
 export const Controlado: Story = {
- render: function Render(args) {
- const [{ marcado }, atualizarArgs] = useArgs;
- return (
- <Checkbox
- {...args}
- marcado={marcado}
- onChange={ => atualizarArgs({ marcado: !marcado })}
- />
- );
- },
+  render: function Render(args) {
+    const [{ marcado }, atualizarArgs] = useArgs();
+    return (
+      <Checkbox
+        {...args}
+        marcado={marcado}
+        onChange={() => atualizarArgs({ marcado: !marcado })}
+      />
+    );
+  },
 };
 ```
 
@@ -304,18 +304,18 @@ Escreva `argTypes` quando a inferência não alcança:
 
 ```tsx
 const meta = {
- title: 'UI/Ações/Button',
- component: Button,
- argTypes: {
- // o docgen já infere um select da union; 'radio' é escolha de APRESENTAÇÃO,
- // não redeclaração do tipo — é o que salva isto de SB-CSF-08
- variant: { control: 'radio' },
- tamanho: { control: { type: 'range', min: 1, max: 5, step: 1 } },
- // control: false, não table.disable — o callback é público e precisa
- // continuar documentado (§ 4.3)
- onClick: { control: false },
- },
- parameters: { controls: { sort: 'requiredFirst' } },
+  title: 'UI/Ações/Button',
+  component: Button,
+  argTypes: {
+    // o docgen já infere um select da union; 'radio' é escolha de APRESENTAÇÃO,
+    // não redeclaração do tipo — é o que salva isto de SB-CSF-08
+    variant: { control: 'radio' },
+    tamanho: { control: { type: 'range', min: 1, max: 5, step: 1 } },
+    // control: false, não table.disable — o callback é público e precisa
+    // continuar documentado (§ 4.3)
+    onClick: { control: false },
+  },
+  parameters: { controls: { sort: 'requiredFirst' } },
 } satisfies Meta<typeof Button>;
 ```
 
@@ -336,15 +336,15 @@ Um controle só transporta valor serializável. Para oferecer um `ReactNode` num
 
 ```tsx
 argTypes: {
- icone: {
- control: { type: 'select' },
- options: ['Nenhum', 'Salvar', 'Excluir'],
- mapping: {
- Nenhum: undefined,
- Salvar: <IconeDisquete />,
- Excluir: <IconeLixeira />,
- },
- },
+  icone: {
+    control: { type: 'select' },
+    options: ['Nenhum', 'Salvar', 'Excluir'],
+    mapping: {
+      Nenhum: undefined,
+      Salvar: <IconeDisquete />,
+      Excluir: <IconeLixeira />,
+    },
+  },
 }
 ```
 
@@ -364,29 +364,29 @@ argTypes: {
 ```tsx
 // 1. o componente precisa de um contexto de composição
 export const DentroDeToolbar: Story = {
- args: { variant: 'ghost' },
- render: (args) => (
- <Toolbar>
- <Button {...args} />
- </Toolbar>
- ),
+  args: { variant: 'ghost' },
+  render: (args) => (
+    <Toolbar>
+      <Button {...args} />
+    </Toolbar>
+  ),
 };
 
 // 2. a story exercita mais de um componente junto
 export const GrupoDeBotoes: Story = {
- render: (args) => (
- <ButtonGroup>
- <Button {...args} variant="primary">Salvar</Button>
- <Button {...args} variant="ghost">Cancelar</Button>
- </ButtonGroup>
- ),
+  render: (args) => (
+    <ButtonGroup>
+      <Button {...args} variant="primary">Salvar</Button>
+      <Button {...args} variant="ghost">Cancelar</Button>
+    </ButtonGroup>
+  ),
 };
 
 // 3. a API do componente não é "props para um elemento"
 export const ComRenderProp: Story = {
- render: (args) => (
- <Combobox {...args}>{(item) => <Opcao item={item} />}</Combobox>
- ),
+  render: (args) => (
+    <Combobox {...args}>{(item) => <Opcao item={item} />}</Combobox>
+  ),
 };
 ```
 
@@ -412,19 +412,19 @@ Duas outras são aplicadas automaticamente por detecção: `play-fn` em story co
 Tags acumulam pelos três níveis, e `'!tag'` remove uma herdada:
 
 ```tsx
-//.storybook/preview.tsx — autodocs para todo o catálogo
+// .storybook/preview.tsx — autodocs para todo o catálogo
 const preview = { tags: ['autodocs'] } satisfies Preview;
 
 // meta — este componente é interno, não documenta
 const meta = {
- component: BotaoInterno,
- tags: ['!autodocs', 'interno'],
+  component: BotaoInterno,
+  tags: ['!autodocs', 'interno'],
 } satisfies Meta<typeof BotaoInterno>;
 
 // story — caso de quebra que serve ao teste, mas polui a sidebar e a doc
 export const CemMilLinhas: Story = {
- tags: ['!dev', '!autodocs'],
- args: { linhas: gerarLinhas(100_000) },
+  tags: ['!dev', '!autodocs'],
+  args: { linhas: gerarLinhas(100_000) },
 };
 ```
 
@@ -443,13 +443,13 @@ Tag própria (`'interno'`, `'experimental'`) serve para filtro na sidebar e para
 ```tsx
 // ❌
 export const ExemploDeUso: Story = {
- render: => (
- <div>
- <h2>Como usar o Button</h2>
- <p>Use variant primary para a ação principal.</p>
- <Button variant="primary">Salvar</Button>
- </div>
- ),
+  render: () => (
+    <div>
+      <h2>Como usar o Button</h2>
+      <p>Use variant primary para a ação principal.</p>
+      <Button variant="primary">Salvar</Button>
+    </div>
+  ),
 };
 ```
 
@@ -476,10 +476,10 @@ Reescrever à mão o que o docgen já inferiu cria duas fontes de verdade. Na pr
 ```tsx
 // ❌ o painel de controles fica dessincronizado do que está na tela
 export const Controlado: Story = {
- render: (args) => {
- const [valor, setValor] = useState(args.valor);
- return <Input {...args} valor={valor} onChange={setValor} />;
- },
+  render: (args) => {
+    const [valor, setValor] = useState(args.valor);
+    return <Input {...args} valor={valor} onChange={setValor} />;
+  },
 };
 ```
 

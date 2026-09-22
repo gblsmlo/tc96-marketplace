@@ -2,12 +2,12 @@
 titulo: Backend no runtime Bun
 Link: https://bun.com/docs/api/http
 tags:
- - bun
- - hono
- - elysia
- - backend
- - decisao
- - agent-context
+  - bun
+  - hono
+  - elysia
+  - backend
+  - decisao
+  - agent-context
 source: "Documentação oficial de Bun, Hono e Elysia — verificação registrada nas notas de cada estrutura"
 verificado-em: 2026-08-15
 ---
@@ -50,44 +50,44 @@ A decisão errada raramente é "escolhi o framework mais lento". É "escolhi uma
 O serviço precisa rodar fora do Bun — Cloudflare Workers, Deno,
 Node em infra existente, Lambda, edge?
 ├── SIM, ou é possibilidade real no horizonte do projeto
-│ └── O alvo precisa só receber Request e devolver Response,
-│ │ ou precisa das capacidades do host (arquivo estático,
-│ │ info de conexão, upgrade de WebSocket)?
-│ ├── Só Request → Response
-│ │ → OS DOIS SERVEM. Elysia expõe app.fetch e roda em
-│ │ Deno, Vercel, Netlify e API routes. Decida pelos
-│ │ eixos seguintes, não por este. Ver § 4.1.
-│ └── Precisa das capacidades do host
-│ → HONO. É quem tem camada de adaptação por runtime
-│ (serveStatic, getConnInfo, upgradeWebSocket por
-│ adaptador — HONO-APP-08). Ver [Hono](hono.md) § 3.2.
-│ Em Elysia o Cloudflare Worker é EXPERIMENTAL e é
-│ justamente aí que as limitações caem: file e o
-│ plugin static não funcionam por não haver filesystem.
+│   └── O alvo precisa só receber Request e devolver Response,
+│       │   ou precisa das capacidades do host (arquivo estático,
+│       │   info de conexão, upgrade de WebSocket)?
+│       ├── Só Request → Response
+│       │   → OS DOIS SERVEM. Elysia expõe app.fetch e roda em
+│       │     Deno, Vercel, Netlify e API routes. Decida pelos
+│       │     eixos seguintes, não por este. Ver § 4.1.
+│       └── Precisa das capacidades do host
+│           → HONO. É quem tem camada de adaptação por runtime
+│             (serveStatic, getConnInfo, upgradeWebSocket por
+│             adaptador — HONO-APP-08). Ver [Hono](hono.md) § 3.2.
+│             Em Elysia o Cloudflare Worker é EXPERIMENTAL e é
+│             justamente aí que as limitações caem: file() e o
+│             plugin static não funcionam por não haver filesystem.
 └── NÃO. É Bun, e vai continuar sendo.
- │
- └── O frontend React consome esta API?
- ├── NÃO (worker, cron, webhook, serviço interno sem cliente próprio)
- │ └── Quantas rotas?
- │ ├── Poucas, contrato estável, sem validação complexa
- │ │ → Bun.serve PURO. Ver [Bun - HTTP e Servidor](bun-http-e-servidor.md).
- │ │ Uma dependência a menos é uma decisão legítima.
- │ └── Muitas, ou validação de entrada não trivial
- │ → HONO ou ELYSIA pelo critério abaixo
- └── SIM — e então o eixo é o contrato tipado
- │
- └── A API precisa de documentação OpenAPI publicada
- (cliente externo, time de mobile, parceiro)?
- ├── SIM → ELYSIA. O schema já é a documentação.
- │ Em Hono isso é pacote e trabalho a mais.
- └── NÃO → o que decide é o schema que você já usa:
- ├── Zod é o padrão do time e da base de código
- │ → HONO + zValidator. Ver.
- │ (Elysia aceita Zod por Standard Schema, mas
- │ aí perde o OpenAPI automático sem mapJsonSchema
- │ — ver ELYSIA-TYPE-07.)
- └── Sem preferência estabelecida
- → ELYSIA. Uma declaração cobre quatro necessidades.
+    │
+    └── O frontend React consome esta API?
+        ├── NÃO (worker, cron, webhook, serviço interno sem cliente próprio)
+        │   └── Quantas rotas?
+        │       ├── Poucas, contrato estável, sem validação complexa
+        │       │   → Bun.serve PURO. Ver [Bun - HTTP e Servidor](bun-http-e-servidor.md).
+        │       │     Uma dependência a menos é uma decisão legítima.
+        │       └── Muitas, ou validação de entrada não trivial
+        │           → HONO ou ELYSIA pelo critério abaixo
+        └── SIM — e então o eixo é o contrato tipado
+            │
+            └── A API precisa de documentação OpenAPI publicada
+                (cliente externo, time de mobile, parceiro)?
+                ├── SIM → ELYSIA. O schema já é a documentação.
+                │         Em Hono isso é pacote e trabalho a mais.
+                └── NÃO → o que decide é o schema que você já usa:
+                    ├── Zod é o padrão do time e da base de código
+                    │ → HONO + zValidator..
+                    │     (Elysia aceita Zod por Standard Schema, mas
+                    │      aí perde o OpenAPI automático sem mapJsonSchema
+                    │      — ver ELYSIA-TYPE-07.)
+                    └── Sem preferência estabelecida
+                        → ELYSIA. Uma declaração cobre quatro necessidades.
 ```
 
 ---
@@ -100,16 +100,16 @@ Node em infra existente, Lambda, edge?
 | --- | --- | --- | --- |
 | Bun | nativo | sim | nativo |
 | Node | não | `@hono/node-server` | `@elysia/node` |
-| Cloudflare Workers | não | sim | `elysia/adapter/cloudflare-worker` + `.compile` — **experimental**, com limitações declaradas |
+| Cloudflare Workers | não | sim | `elysia/adapter/cloudflare-worker` + `.compile()` — **experimental**, com limitações declaradas |
 | Deno | não | sim | `Deno.serve(app.fetch)` — suportado, sem adapter próprio |
 | Vercel / Netlify / Next.js / Astro / TanStack Start | não | sim | via API route, chamando `app.fetch(request)` |
 | Lambda / Fastly / Azure Functions | não | sim | não verificado |
 
-**A diferença não é "roda × não roda" — é a forma do suporte.** Elysia roda fora do Bun mais do que a fama sugere, porque `app.fetch` é uma função Web Standards e qualquer host que aceite `Request → Response` a aceita. O que Hono tem e Elysia não é a **camada de adaptação por runtime**: helpers como `serveStatic`, `getConnInfo` e `upgradeWebSocket` existem por adaptador (`HONO-APP-08`), e é isso que faz o mesmo código servir arquivo estático no Workers e no Node. Em Elysia, as limitações declaradas do Cloudflare Worker são exatamente dessa natureza — `file` e o plugin static não funcionam por não haver filesystem.
+**A diferença não é "roda × não roda" — é a forma do suporte.** Elysia roda fora do Bun mais do que a fama sugere, porque `app.fetch` é uma função Web Standards e qualquer host que aceite `Request → Response` a aceita. O que Hono tem e Elysia não é a **camada de adaptação por runtime**: helpers como `serveStatic`, `getConnInfo` e `upgradeWebSocket` existem por adaptador (`HONO-APP-08`), e é isso que faz o mesmo código servir arquivo estático no Workers e no Node. Em Elysia, as limitações declaradas do Cloudflare Worker são exatamente dessa natureza — `file()` e o plugin static não funcionam por não haver filesystem.
 
 Traduzindo para a decisão: se o alvo alternativo só precisa receber requisição e devolver resposta, os dois servem. Se ele precisa das capacidades do host, Hono é quem tem a camada pronta.
 
-**Uma ressalva verificada que corta contra Elysia aqui.** O export `env` de `elysia`, que existe justamente para dar acesso a variável de ambiente independente de runtime, **devolve `{}` no Cloudflare Worker** — lá os bindings vêm de `import { env } from 'cloudflare:workers'`. Somado às limitações já declaradas (`file`, plugin static e OpenAPI Type Gen fora), o Worker em Elysia exige código consciente do host, que é exatamente o que a portabilidade deveria evitar. Ver [Elysia](elysia.md) § 3.
+**Uma ressalva verificada que corta contra Elysia aqui.** O export `env` de `elysia`, que existe justamente para dar acesso a variável de ambiente independente de runtime, **devolve `{}` no Cloudflare Worker** — lá os bindings vêm de `import { env } from 'cloudflare:workers'`. Somado às limitações já declaradas (`file()`, plugin static e OpenAPI Type Gen fora), o Worker em Elysia exige código consciente do host, que é exatamente o que a portabilidade deveria evitar. Ver [Elysia](elysia.md) § 3.
 
 ### 4.2 O contrato tipado até o React
 
@@ -120,14 +120,14 @@ Os dois frameworks resolvem o mesmo problema — o tipo do handler vira o tipo d
 | Forma do retorno | `Response` do fetch | `{ data, error }` |
 | Lança em status >= 400? | **não** — é "compatible with the fetch Response" | **não** — `throwHttpError` é `false` por padrão |
 | Consequência numa `queryFn` ingênua | query fica `success` com o corpo de erro dentro de `data` | query fica `success` com `data: null` |
-| Saída | `parseResponse`, que lança `DetailedError` | `throwHttpError: true`, ou lançar na `queryFn` |
+| Saída | `parseResponse()`, que lança `DetailedError` | `throwHttpError: true`, ou lançar na `queryFn` |
 
-Este é o achado mais acionável desta nota. Uma `queryFn` que só faz `res.json` (Hono) ou `.get` (Elysia) **nunca aciona o estado de erro do TanStack Query** — `isError` fica `false`, o `retry` não roda, o Error Boundary não pega. O bug some do radar porque a UI mostra um estado vazio em vez de quebrar. Ver `HONO-RPC-*` em [Hono - Validação e RPC](hono-validacao-e-rpc.md) e `ELYSIA-TYPE-08`/`ELYSIA-TYPE-09` em [Elysia - Schema e Eden](elysia-schema-e-eden.md).
+Este é o achado mais acionável desta nota. Uma `queryFn` que só faz `res.json()` (Hono) ou `.get()` (Elysia) **nunca aciona o estado de erro do TanStack Query** — `isError` fica `false`, o `retry` não roda, o Error Boundary não pega. O bug some do radar porque a UI mostra um estado vazio em vez de quebrar. Ver `HONO-RPC-*` em [Hono - Validação e RPC](hono-validacao-e-rpc.md) e `ELYSIA-TYPE-08`/`ELYSIA-TYPE-09` em [Elysia - Schema e Eden](elysia-schema-e-eden.md).
 
 **A falha é a mesma; a saída não é — e aqui Elysia leva vantagem.** Esta linha da tabela esconde a diferença que mais custa na prática:
 
 - **Elysia** devolve `{ status, value }`, uma **união discriminada por código de status**. Um `switch (error.status)` estreita o tipo, e `value` vem tipado pelo `response[409]` que a rota declarou. O erro de domínio chega ao formulário sem trabalho extra.
-- **Hono** oferece `parseResponse`, que lança um `DetailedError` genérico. Ele serve quando o erro é só "falhou" — mas **descarta a discriminação por status**, que é o que um formulário precisa. Para ter o 409 tipado é preciso não usar `parseResponse`, checar `res.status` à mão e ter escrito o handler com `return c.json(corpo, 409)` em vez de `throw new HTTPException` (`HONO-CORE-13`). O narrowing existe; só não vem pronto.
+- **Hono** oferece `parseResponse()`, que lança um `DetailedError` genérico. Ele serve quando o erro é só "falhou" — mas **descarta a discriminação por status**, que é o que um formulário precisa. Para ter o 409 tipado é preciso não usar `parseResponse`, checar `res.status` à mão e ter escrito o handler com `return c.json(corpo, 409)` em vez de `throw new HTTPException` (`HONO-CORE-13`). O narrowing existe; só não vem pronto.
 
 **Este eixo mudou depois da revisão de 2026-08-15.** A assimetria era maior: Hono não tinha nenhuma regra citável para a ponte, e o caminho correto não estava escrito em lugar nenhum. Hoje tem três — `HONO-CORE-13` (erro tipado é `return`, não `throw`), `HONO-RPC-13` (a `queryFn` **MUST** lançar) e `HONO-RPC-14` (o `signal` **MUST** atravessar) — contra `ELYSIA-TYPE-08/09/10` do outro lado, e [Hono - Validação e RPC](hono-validacao-e-rpc.md) § 6.1 traz o `useMutation` completo com o erro chegando ao formulário.
 
@@ -160,7 +160,7 @@ A promessa de "uma declaração, quatro efeitos" do Elysia é real, mas ela é *
 Cada um cobra o aprendizado em um lugar diferente. Vale saber qual antes, porque é onde o time vai perder tempo:
 
 - **`Bun.serve`** — quase nada de framework. A armadilha é de runtime: `idleTimeout` de 10 s que conta **durante** a resposta e derruba SSE (`BUN-HTTP-04`), e autenticação depois do `server.upgrade`, que não tem mais como recusar (`BUN-HTTP-07`).
-- **Hono** — a **cadeia contínua**. `HONO-CORE-01` é o que a nota de origem chama de erro nº 1: quebrar o encadeamento (`const app = new Hono` e depois `app.get(...)` em statements separados) compila, roda e serve as rotas — e o `AppType` exportado é o app **vazio**. Não há erro no servidor; a falha aparece do outro lado, como `unknown`. Depois dele vem o onion model e a fronteira do `await next` (`HONO-MW-01`). E não presuma familiaridade por vir de Express: a nota de origem lista três divergências de hábito — não existe `res.send`, não existe `next(err)`, e extrair o handler para um controller tipado com `Context` faz o path param perder a inferência (`HONO-CORE-06`).
+- **Hono** — a **cadeia contínua**. `HONO-CORE-01` é o que a nota de origem chama de erro nº 1: quebrar o encadeamento (`const app = new Hono()` e depois `app.get(...)` em statements separados) compila, roda e serve as rotas — e o `AppType` exportado é o app **vazio**. Não há erro no servidor; a falha aparece do outro lado, como `unknown`. Depois dele vem o onion model e a fronteira do `await next()` (`HONO-MW-01`). E não presuma familiaridade por vir de Express: a nota de origem lista três divergências de hábito — não existe `res.send()`, não existe `next(err)`, e extrair o handler para um controller tipado com `Context` faz o path param perder a inferência (`HONO-CORE-06`).
 - **Elysia** — o **escopo de plugin**. O default é `local` e não sobe; um plugin de autenticação registrado sem escopo simplesmente não protege as rotas de quem o consome, **sem erro nenhum** (`ELYSIA-LIFE-01`). E `.as('scoped')` sobe exatamente um nível, não "o escopo todo". É a maior fonte de bug da ferramenta e é silenciosa.
 
 ### 4.5 Custo de saída, e sinal de churn
@@ -182,7 +182,7 @@ Nada disso desqualifica a ferramenta. Significa que, com Elysia, **a doc oficial
 
 Declarados para que a ausência não seja lida como equivalência:
 
-- **WebSocket tipado.** Elysia tem `.ws` com schema e cliente (`EdenWS`, `subscribe`); em Hono, WebSocket está **fora do mapa da API** da doc, embora `upgradeWebSocket` apareça na matriz de runtimes e seja governado por `HONO-APP-08`. Se WebSocket é requisito, este eixo pesa e ainda não foi verificado dos dois lados.
+- **WebSocket tipado.** Elysia tem `.ws()` com schema e cliente (`EdenWS`, `subscribe()`); em Hono, WebSocket está **fora do mapa da API** da doc, embora `upgradeWebSocket` apareça na matriz de runtimes e seja governado por `HONO-APP-08`. Se WebSocket é requisito, este eixo pesa e ainda não foi verificado dos dois lados.
 - **Validação de saída.** Elysia valida o retorno em runtime contra o `response` por status (`ELYSIA-TYPE-06`); **Hono não tem equivalente** — o tipo que chega ao `hc` é inferido do que o handler escreve, sem checagem. Pesa quando o dado vem de fonte que você não controla.
 - **OpenAPI em Hono.** `@hono/zod-openapi` existe e não foi verificado. Como o nó de OpenAPI é o que inverte a árvore do § 3, esta é a lacuna que mais pode mudar uma decisão.
 

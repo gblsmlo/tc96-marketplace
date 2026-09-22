@@ -2,11 +2,11 @@
 titulo: Teste de Software - Confiabilidade da Suíte
 Link: https://abseil.io/resources/swe-book/html/ch11.html
 tags:
- - testing
- - flaky-tests
- - coverage
- - maintenance
- - agent-context
+  - testing
+  - flaky-tests
+  - coverage
+  - maintenance
+  - agent-context
 source: "Software Engineering at Google cap. 11, testing.googleblog (flaky tests), Mutation testing, Martin Fowler"
 verificado-em: 2026-08-20
 ---
@@ -93,11 +93,11 @@ Não é útil como meta (`TS-CORE-05`), porque não distingue:
 
 ```ts
 // cobre a função por completo, e não verifica nada
-test('calcula', => { calcularFrete(pedido); });
+test('calcula', () => { calcularFrete(pedido); });
 
 // mesma cobertura, e verifica
-test('frete grátis acima de 200', => {
- expect(calcularFrete({ valor: 250 })).toBe(0);
+test('frete grátis acima de 200', () => {
+  expect(calcularFrete({ valor: 250 })).toBe(0);
 });
 ```
 
@@ -145,8 +145,8 @@ Sintomas de suíte que vai doer, e o que cada um indica:
 
 ```ts
 // ✗ nunca falha
-test('processa o pedido', async => {
- try { await processar(pedido); } catch { /* … */ }
+test('processa o pedido', async () => {
+  try { await processar(pedido); } catch { /* … */ }
 });
 ```
 
@@ -223,8 +223,8 @@ Produz teste escrito para o número (`TS-SUI-04`, `TS-CORE-05`).
 
 ```ts
 // ✗ desativa o teste sem dizer
-test('processa', async => {
- try { await processar(p); } catch {}
+test('processa', async () => {
+  try { await processar(p); } catch {}
 });
 ```
 

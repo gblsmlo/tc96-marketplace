@@ -1,11 +1,11 @@
 ---
 titulo: Frontend roadmap
 aliases:
- - Estudos de Frontend
+  - Estudos de Frontend
 tags:
- - frontend
- - react
- - estudos
+  - frontend
+  - react
+  - estudos
 ---
 # Frontend roadmap
 

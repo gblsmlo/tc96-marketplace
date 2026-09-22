@@ -2,11 +2,11 @@
 titulo: React Hook Form - Registro e Controle
 Link: https://react-hook-form.com/docs/useform/register
 tags:
- - react
- - forms
- - react-hook-form
- - a11y
- - agent-context
+  - react
+  - forms
+  - react-hook-form
+  - a11y
+  - agent-context
 source: "Documentação oficial do React Hook Form — register, Controller, useController, useFormContext"
 verificado-em: 2026-08-15
 ---
@@ -58,9 +58,9 @@ register(name: string, options?: RegisterOptions): UseFormRegisterReturn
 O nome é uma **rota** dentro do objeto de valores, não um rótulo.
 
 ```tsx
-register('email') // { email: … }
-register('endereco.cidade') // { endereco: { cidade: … } }
-register('itens.0.quantidade') // { itens: [{ quantidade: … }] }
+register('email')                  // { email: … }
+register('endereco.cidade')        // { endereco: { cidade: … } }
+register('itens.0.quantidade')     // { itens: [{ quantidade: … }] }
 ```
 
 | Regra da fonte | Consequência |
@@ -79,8 +79,8 @@ Aceitas na forma curta ou com mensagem:
 <input {...register('titulo', { required: true })} />
 
 <input {...register('titulo', {
- required: { value: true, message: 'Título é obrigatório.' },
- minLength: { value: 5, message: 'Mínimo de 5 caracteres.' },
+  required: { value: true, message: 'Título é obrigatório.' },
+  minLength: { value: 5, message: 'Mínimo de 5 caracteres.' },
 })} />
 ```
 
@@ -90,12 +90,12 @@ Disponíveis: `required`, `min`, `max`, `minLength`, `maxLength`, `pattern`, `va
 
 ```tsx
 register('produto', {
- validate: {
- disponivel: async (produto, { categoria }) => {
- if (!categoria) return 'Escolha uma categoria primeiro.'
- return (await temEstoque(categoria, produto)) || 'Produto indisponível.'
- },
- },
+  validate: {
+    disponivel: async (produto, { categoria }) => {
+      if (!categoria) return 'Escolha uma categoria primeiro.'
+      return (await temEstoque(categoria, produto)) || 'Produto indisponível.'
+    },
+  },
 })
 ```
 
@@ -107,9 +107,9 @@ Chamar `register` de novo no mesmo nome **mescla** as opções com as anteriores
 
 ```tsx
 register('idade', { required: true, min: 18 })
-register('idade', { min: 21 }) // resultado: { required: true, min: 21 }
-register('idade', { required: undefined }) // ❌ NÃO remove nada
-register('idade', { required: false }) // ✅ remove
+register('idade', { min: 21 })         // resultado: { required: true, min: 21 }
+register('idade', { required: undefined })  // ❌ NÃO remove nada
+register('idade', { required: false })      // ✅ remove
 ```
 
 Isso morde em componentes que re-registram condicionalmente. Para desligar uma regra, passe `false` explícito.
@@ -127,7 +127,7 @@ Isso morde em componentes que re-registram condicionalmente. Para desligar uma r
 ```tsx
 // ✅ vazio vira undefined em vez de NaN — o schema decide se é obrigatório
 <input type="number" {...register('quantidade', {
- setValueAs: (v) => (v === '' ? undefined : Number(v)),
+  setValueAs: (v) => (v === '' ? undefined : Number(v)),
 })} />
 ```
 
@@ -135,7 +135,7 @@ Isso morde em componentes que re-registram condicionalmente. Para desligar uma r
 >
 > | Situação | Mecanismo |
 > | --- | --- |
-> | Só mudar o tipo, e já existe schema no projeto | `z.coerce.number` — mantém a conversão junto da regra, e o servidor herda a mesma coerção |
+> | Só mudar o tipo, e já existe schema no projeto | `z.coerce.number()` — mantém a conversão junto da regra, e o servidor herda a mesma coerção |
 > | Só mudar o tipo, sem schema | `valueAsNumber` / `setValueAs` |
 > | **Exibir formatado e guardar outro valor** | nem um nem outro: `Controller` com `input`/`output` — § 3.4 · `RHF-CTRL-09` |
 >
@@ -146,8 +146,8 @@ Isso morde em componentes que re-registram condicionalmente. Para desligar uma r
 `disabled: true` faz o valor do campo ser `undefined` na submissão. Isso é comportamento nativo do HTML, e é frequentemente o oposto do que se quer ("mostrar mas não deixar editar").
 
 ```tsx
-<input {...register('cpf', { disabled: true })} /> // some do submit
-<input {...register('cpf')} readOnly /> // ✅ vai no submit
+<input {...register('cpf', { disabled: true })} />   // some do submit
+<input {...register('cpf')} readOnly />              // ✅ vai no submit
 ```
 
 Para congelar um bloco inteiro mantendo os valores, use `<fieldset disabled>` com `readOnly` nos campos, ou a opção `disabled` do `useForm` quando a intenção **for** mesmo excluir tudo da submissão.
@@ -175,12 +175,12 @@ São a mesma coisa: `Controller` é o componente, `useController` é o hook que 
 
 ```tsx
 <Controller
- name="dataNascimento"
- control={control}
- render={({ field, fieldState }) => (
- // espalhe field: name e disabled também fazem parte dele. RHF-CTRL-01
- <DatePicker {...field} aria-invalid={fieldState.invalid || undefined} />
- )}
+  name="dataNascimento"
+  control={control}
+  render={({ field, fieldState }) => (
+    // espalhe field: name e disabled também fazem parte dele. RHF-CTRL-01
+    <DatePicker {...field} aria-invalid={fieldState.invalid || undefined} />
+  )}
 />
 ```
 
@@ -204,7 +204,7 @@ E `fieldState` traz `invalid`, `isTouched`, `isDirty` e `error` **daquele campo*
 **`onChange(undefined)` é inválido.** A fonte é explícita. Limpar um campo controlado com `undefined` faz o React tratar o input como não controlado de novo, e ele passa a avisar no console.
 
 ```tsx
-onChange={(v) => field.onChange(v ?? null)} // ✅ null ou '' — nunca undefined
+onChange={(v) => field.onChange(v ?? null)}   // ✅ null ou '' — nunca undefined
 ```
 
 **Espalhe `field` antes de sobrescrever.** É o erro mais comum ao transformar valores: sobrescrever `onChange` sem espalhar o resto derruba `onBlur`, `name` e `ref` junto — e o campo perde foco automático e estado de *touched* sem dar nenhum sinal.
@@ -226,42 +226,42 @@ O padrão que `useController` existe para servir. O ganho não é estético: é 
 ```tsx
 import { useId } from 'react'
 import {
- useController,
- type Control,
- type FieldValues,
- type FieldPath,
+  useController,
+  type Control,
+  type FieldValues,
+  type FieldPath,
 } from 'react-hook-form'
 
 type CampoTextoProps<T extends FieldValues> = {
- control: Control<T>
- name: FieldPath<T> // ✅ autocompleta e valida contra o shape do form
- label: string
- type?: 'text' | 'email' | 'password'
+  control: Control<T>
+  name: FieldPath<T>          // ✅ autocompleta e valida contra o shape do form
+  label: string
+  type?: 'text' | 'email' | 'password'
 }
 
 export function CampoTexto<T extends FieldValues>({
- control, name, label, type = 'text',
+  control, name, label, type = 'text',
 }: CampoTextoProps<T>) {
- const { field, fieldState } = useController({ control, name })
- const id = useId
- const erroId = `${id}-erro`
+  const { field, fieldState } = useController({ control, name })
+  const id = useId()
+  const erroId = `${id}-erro`
 
- return (
- <div>
- <label htmlFor={id}>{label}</label>
- <input
- {...field}
- id={id}
- type={type}
- value={field.value ?? ''} // nunca undefined
- aria-invalid={fieldState.invalid || undefined}
- aria-describedby={fieldState.error ? erroId : undefined}
- />
- {fieldState.error && (
- <p id={erroId} role="alert">{fieldState.error.message}</p>
- )}
- </div>
- )
+  return (
+    <div>
+      <label htmlFor={id}>{label}</label>
+      <input
+        {...field}
+        id={id}
+        type={type}
+        value={field.value ?? ''}                        // nunca undefined
+        aria-invalid={fieldState.invalid || undefined}
+        aria-describedby={fieldState.error ? erroId : undefined}
+      />
+      {fieldState.error && (
+        <p id={erroId} role="alert">{fieldState.error.message}</p>
+      )}
+    </div>
+  )
 }
 ```
 
@@ -295,42 +295,42 @@ import { Controller, type Control, type FieldPath, type FieldValues } from 'reac
 
 // input — do que guardamos para o que se vê. Centavos → texto formatado.
 const paraExibicao = (centavos: number | null | undefined) =>
- new Intl.NumberFormat('pt-BR', {
- style: 'currency', currency: 'BRL',
- }).format((centavos ?? 0) / 100)
+  new Intl.NumberFormat('pt-BR', {
+    style: 'currency', currency: 'BRL',
+  }).format((centavos ?? 0) / 100)
 
 // output — do que foi digitado para o que guardamos. Só dígitos: nunca toca em float.
 const paraCentavos = (texto: string) => Number(texto.replace(/\D/g, '') || 0)
 
 export function CampoMoeda<T extends FieldValues>({
- control, name, label,
+  control, name, label,
 }: { control: Control<T>; name: FieldPath<T>; label: string }) {
- const id = useId
+  const id = useId()
 
- return (
- <Controller
- control={control}
- name={name}
- render={({ field, fieldState }) => (
- <>
- <label htmlFor={id}>{label}</label>
- <input
- {...field} // RHF-CTRL-01
- id={id}
- type="text" // NÃO type="number"
- inputMode="numeric"
- value={paraExibicao(field.value as number)} // input: guardado → visto
- onChange={(e) => field.onChange(paraCentavos(e.target.value))} // output
- aria-invalid={fieldState.invalid || undefined}
- aria-describedby={fieldState.error ? `${id}-erro` : undefined}
- />
- {fieldState.error && (
- <p id={`${id}-erro`} role="alert">{fieldState.error.message}</p>
- )}
- </>
- )}
- />
- )
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => (
+        <>
+          <label htmlFor={id}>{label}</label>
+          <input
+            {...field}                                   // RHF-CTRL-01
+            id={id}
+            type="text"                                  // NÃO type="number"
+            inputMode="numeric"
+            value={paraExibicao(field.value as number)}  // input:  guardado → visto
+            onChange={(e) => field.onChange(paraCentavos(e.target.value))}  // output
+            aria-invalid={fieldState.invalid || undefined}
+            aria-describedby={fieldState.error ? `${id}-erro` : undefined}
+          />
+          {fieldState.error && (
+            <p id={`${id}-erro`} role="alert">{fieldState.error.message}</p>
+          )}
+        </>
+      )}
+    />
+  )
 }
 ```
 
@@ -350,11 +350,11 @@ export function CampoMoeda<T extends FieldValues>({
 
 ```tsx
 const pedidoSchema = z.object({
- valor: z.number.int.positive('Informe um valor.'),
+  valor: z.number().int().positive('Informe um valor.'),
 })
 ```
 
-Sem `z.coerce`, sem `.transform` — e portanto **sem a exigência dos três generics de `RHF-VAL-02`**. Deslocar a conversão para o `Controller` em vez do schema é o que mantém `z.input` e `z.output` iguais.
+Sem `z.coerce`, sem `.transform()` — e portanto **sem a exigência dos três generics de `RHF-VAL-02`**. Deslocar a conversão para o `Controller` em vez do schema é o que mantém `z.input` e `z.output` iguais.
 
 #### Fechando o laço com dado do servidor
 
@@ -364,9 +364,9 @@ Este é o ponto em que a ponte `RHF-BRIDGE-03` e a formatação se encontram. O 
 const { data } = useQuery({ queryKey: ['pedido', id], queryFn: buscarPedido })
 
 useForm({
- defaultValues: { valor: 0 },
- values: data, // { valor: 123456 } em centavos
- resetOptions: { keepDirtyValues: true },
+  defaultValues: { valor: 0 },
+  values: data,                             // { valor: 123456 } em centavos
+  resetOptions: { keepDirtyValues: true },
 })
 ```
 
@@ -397,21 +397,21 @@ Backend quer `0.15`; o usuário vê `15%`. Duas armadilhas, e a primeira é a me
 ```tsx
 // Guardamos pontos-base: 1500 = 15,00%. Inteiro, como a decisão 1 manda.
 const paraExibicao = (pontosBase: number | null | undefined) =>
- ((pontosBase ?? 0) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })
+  ((pontosBase ?? 0) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })
 
 const paraPontosBase = (texto: string) => Number(texto.replace(/\D/g, '') || 0)
 
 // O sufixo fica FORA do input — pergunta 2
 <div className="flex items-baseline gap-1">
- <input
- {...field}
- id={id}
- type="text"
- inputMode="numeric"
- value={paraExibicao(field.value as number)}
- onChange={(e) => field.onChange(paraPontosBase(e.target.value))}
- />
- <span aria-hidden="true">%</span>
+  <input
+    {...field}
+    id={id}
+    type="text"
+    inputMode="numeric"
+    value={paraExibicao(field.value as number)}
+    onChange={(e) => field.onChange(paraPontosBase(e.target.value))}
+  />
+  <span aria-hidden="true">%</span>
 </div>
 ```
 
@@ -421,15 +421,15 @@ const paraPontosBase = (texto: string) => Number(texto.replace(/\D/g, '') || 0)
 
 ```tsx
 const orcamentoSchema = z.object({
- descontoPontosBase: z.number.int.min(0).max(10000),
+  descontoPontosBase: z.number().int().min(0).max(10000),
 })
 
 const onSubmit = handleSubmit(async (data) => {
- await api.salvar({ desconto: data.descontoPontosBase / 10000 }) // única divisão
+  await api.salvar({ desconto: data.descontoPontosBase / 10000 })  // única divisão
 })
 ```
 
-Se a conversão precisar mesmo morar no formulário, use `.transform` no schema — e aí `RHF-VAL-02` volta a valer: três generics.
+Se a conversão precisar mesmo morar no formulário, use `.transform()` no schema — e aí `RHF-VAL-02` volta a valer: três generics.
 
 > **`aria-hidden` no `%`.** O símbolo fora do input é decoração visual: o leitor de tela deve ouvi-lo pelo `<label>` ("Desconto em porcentagem"), não solto depois do valor. Se o rótulo não deixa a unidade clara, o lugar de dizê-la é o `<label>` ou um `aria-describedby` — não um `<span>` órfão.
 
@@ -441,23 +441,23 @@ O caso que a seção de moeda não cobre: **o formato depende de quantos dígito
 const paraDigitos = (texto: string) => texto.replace(/\D/g, '').slice(0, 11)
 
 const paraMascara = (digitos: string) => {
- const d = digitos ?? ''
- const ddd = d.slice(0, 2)
- const resto = d.slice(2)
+  const d = digitos ?? ''
+  const ddd = d.slice(0, 2)
+  const resto = d.slice(2)
 
- if (d.length <= 2) return ddd // "8", "81" — sem parênteses ainda
- if (d.length <= 6) return `(${ddd}) ${resto}` // "(81) 9999"
- if (d.length <= 10) return `(${ddd}) ${resto.slice(0, 4)}-${resto.slice(4)}` // fixo
- return `(${ddd}) ${resto.slice(0, 5)}-${resto.slice(5)}` // celular
+  if (d.length <= 2) return ddd                    // "8", "81" — sem parênteses ainda
+  if (d.length <= 6) return `(${ddd}) ${resto}`    // "(81) 9999"
+  if (d.length <= 10) return `(${ddd}) ${resto.slice(0, 4)}-${resto.slice(4)}`   // fixo
+  return `(${ddd}) ${resto.slice(0, 5)}-${resto.slice(5)}`                        // celular
 }
 
 <input
- {...field}
- id={id}
- type="text"
- inputMode="tel" // teclado de telefone, não numérico
- value={paraMascara(field.value as string)}
- onChange={(e) => field.onChange(paraDigitos(e.target.value))}
+  {...field}
+  id={id}
+  type="text"
+  inputMode="tel"                                  // teclado de telefone, não numérico
+  value={paraMascara(field.value as string)}
+  onChange={(e) => field.onChange(paraDigitos(e.target.value))}
 />
 ```
 
@@ -468,7 +468,7 @@ Quatro decisões que a moeda não exigiu:
 - **Estados parciais não inventam pontuação.** Com 1 ou 2 dígitos o retorno é `"8"`/`"81"`, sem `(`. Abrir um parêntese que o usuário não digitou faz o campo parecer travado quando ele apaga tudo.
 - **10 × 11 dígitos** decide onde o hífen cai. Fixo agrupa 4-4; celular, 5-4. Um `if` no `input`, porque é apresentação — o `output` continua sendo só dígitos.
 
-**A validação continua no schema**, não na máscara: `z.string.length(11, 'Telefone incompleto.')`. A máscara formata; ela não decide o que é válido.
+**A validação continua no schema**, não na máscara: `z.string().length(11, 'Telefone incompleto.')`. A máscara formata; ela não decide o que é válido.
 
 #### Quando isto é exagero
 
@@ -514,10 +514,10 @@ Para formulários grandes, com campos em componentes profundos, `FormProvider` e
 const methods = useForm<Perfil>({ defaultValues })
 
 <FormProvider {...methods}>
- <form onSubmit={methods.handleSubmit(onSubmit)}>
- <DadosPessoais /> {/* useFormContext<Perfil> lá dentro — § 4.2 */}
- <Endereco />
- </form>
+  <form onSubmit={methods.handleSubmit(onSubmit)}>
+    <DadosPessoais />   {/* useFormContext<Perfil>() lá dentro — § 4.2 */}
+    <Endereco />
+  </form>
 </FormProvider>
 ```
 
@@ -527,10 +527,10 @@ const methods = useForm<Perfil>({ defaultValues })
 
 ```tsx
 // ❌ o valor inicial vem certo — e depois nunca atualiza
-const { formState: { errors } } = useFormContext
+const { formState: { errors } } = useFormContext()
 
 // ✅
-const { control } = useFormContext
+const { control } = useFormContext()
 const { errors } = useFormState({ control })
 ```
 
@@ -544,28 +544,28 @@ Não desfaz, porque são **dois tipos de consumidor com necessidades opostas**.
 
 | Consumidor | Como pega o formulário | Por quê |
 | --- | --- | --- |
-| **Seção deste formulário** — `<DadosPessoais />`, `<Endereco />` | `useFormContext<Perfil>` | Ela existe para *este* formulário. Conhece `Perfil`, e pode declará-lo no generic |
+| **Seção deste formulário** — `<DadosPessoais />`, `<Endereco />` | `useFormContext<Perfil>()` | Ela existe para *este* formulário. Conhece `Perfil`, e pode declará-lo no generic |
 | **Campo reutilizável** — `<CampoTexto />`, `<CampoMoeda />` | `control: Control<T>` por prop | Ele é usado em formulários **diferentes**. Não pode conhecer o tipo — `T` vem de quem o renderiza |
 | **`Controller` inline** no JSX do próprio form | nenhum dos dois: `control` já está em escopo | — |
 
-**O que decide é de onde vem o tipo.** `useFormContext` sem generic devolve `Control<FieldValues>`, e `FieldValues` é `Record<string, any>` — com ele, `FieldPath<T>` aceita qualquer string e `RHF-CTRL-07` deixa de valer na prática. O componente compila, o autocomplete some, e um typo em `name` volta a ser bug de runtime.
+**O que decide é de onde vem o tipo.** `useFormContext()` sem generic devolve `Control<FieldValues>`, e `FieldValues` é `Record<string, any>` — com ele, `FieldPath<T>` aceita qualquer string e `RHF-CTRL-07` deixa de valer na prática. O componente compila, o autocomplete some, e um typo em `name` volta a ser bug de runtime.
 
 ```tsx
 // ✅ Seção: conhece o formulário, declara o tipo, não recebe prop
-function DadosPessoais {
- const { control } = useFormContext<Perfil> // ← o generic é o ponto
- return (
- <>
- <CampoTexto control={control} name="nome" label="Nome" />
- <CampoTexto control={control} name="email" label="E-mail" />
- </>
- )
+function DadosPessoais() {
+  const { control } = useFormContext<Perfil>()      // ← o generic é o ponto
+  return (
+    <>
+      <CampoTexto control={control} name="nome" label="Nome" />
+      <CampoTexto control={control} name="email" label="E-mail" />
+    </>
+  )
 }
 
 // ✅ Campo reutilizável: T é inferido do control que chega
 function CampoTexto<T extends FieldValues>({ control, name }: {
- control: Control<T>
- name: FieldPath<T> // autocompleta com os campos de Perfil no call site acima
+  control: Control<T>
+  name: FieldPath<T>      // autocompleta com os campos de Perfil no call site acima
 }) { /* … */ }
 ```
 
@@ -590,7 +590,7 @@ Padrão da própria documentação (*Advanced Usage*), útil quando um component
 
 ```tsx
 export const ConnectForm = ({ children }: { children: (m: UseFormReturn) => ReactNode }) =>
- children(useFormContext)
+  children(useFormContext())
 
 // uso
 <ConnectForm>{({ register }) => <input {...register('cep')} />}</ConnectForm>
@@ -602,10 +602,10 @@ export const ConnectForm = ({ children }: { children: (m: UseFormReturn) => Reac
 | --- | --- |
 | `RHF-CTX-01` | Dentro de `FormProvider`, `formState` **MUST** vir de `useFormState`, **NEVER** de destructuring de `useFormContext`. Apelido de `RHF-STATE-01`. |
 | `RHF-CTX-02` | O retorno de `useFormContext`/`useForm` **NEVER** entra inteiro em array de dependências de `useEffect` — desestruture o método específico. |
-| `RHF-CTX-03` | `useFormContext` **MUST** ser chamado com o generic do formulário (`useFormContext<Perfil>`) sempre que o componente conhecer o tipo. Sem ele o retorno é `Control<FieldValues>` e `RHF-CTRL-07` deixa de ter efeito. |
+| `RHF-CTX-03` | `useFormContext` **MUST** ser chamado com o generic do formulário (`useFormContext<Perfil>()`) sempre que o componente conhecer o tipo. Sem ele o retorno é `Control<FieldValues>` e `RHF-CTRL-07` deixa de ter efeito. |
 | `RHF-CTX-04` | Componente de campo **reutilizável entre formulários** **MUST** receber `control` por prop, **NEVER** lê-lo do contexto — é a prop que carrega o tipo `T`. Componente de **seção** faz o oposto: lê do contexto com generic. |
 
-> `RHF-CTX-02` vem de um aviso explícito da fonte: o objeto retornado por `useForm` passará a ser memoizado, e depender dele inteiro é frágil. `useEffect( => reset(x), [reset])`, não `[methods]`.
+> `RHF-CTX-02` vem de um aviso explícito da fonte: o objeto retornado por `useForm` passará a ser memoizado, e depender dele inteiro é frágil. `useEffect(() => reset(x), [reset])`, não `[methods]`.
 
 ---
 
@@ -614,15 +614,15 @@ export const ConnectForm = ({ children }: { children: (m: UseFormReturn) => Reac
 A doc oficial dedica a abertura de *Advanced Usage* a isto, e é a parte que código gerado mais omite. O alvo é o leitor de tela anunciar `"Nome, editar, entrada inválida, Este campo é obrigatório"` — o que exige três coisas ligadas entre si.
 
 ```tsx
-const id = useId
+const id = useId()
 const erro = errors.nome
 
 <label htmlFor={id}>Nome</label>
 <input
- id={id}
- {...register('nome', { required: 'Este campo é obrigatório.' })}
- aria-invalid={erro ? true : undefined}
- aria-describedby={erro ? `${id}-erro` : undefined}
+  id={id}
+  {...register('nome', { required: 'Este campo é obrigatório.' })}
+  aria-invalid={erro ? true : undefined}
+  aria-describedby={erro ? `${id}-erro` : undefined}
 />
 {erro && <p id={`${id}-erro`} role="alert">{erro.message}</p>}
 ```
@@ -660,11 +660,11 @@ const erro = errors.nome
 | `onChange` sobrescrito sem espalhar `field` | espalhar antes · `RHF-CTRL-01` |
 | `field.onChange(undefined)` para limpar | `null` ou `''` · `RHF-CTRL-02` |
 | `setValue` para editar campo sob `Controller` | `field.onChange` · `RHF-CTRL-04` |
-| `errors` lido de `useFormContext` | `useFormState({ control })` · `RHF-CTX-01` |
-| `useFormContext` sem generic em componente que conhece o form | `useFormContext<Perfil>` · `RHF-CTX-03` |
+| `errors` lido de `useFormContext()` | `useFormState({ control })` · `RHF-CTX-01` |
+| `useFormContext()` sem generic em componente que conhece o form | `useFormContext<Perfil>()` · `RHF-CTX-03` |
 | Campo reutilizável lendo `control` do contexto | receber por prop; a prop carrega o tipo · `RHF-CTX-04` |
 | `register('itens[0].nome')` | dot notation · `RHF-REG-01` |
-| `<input type="number">` sem coerção | `valueAsNumber` / `z.coerce.number` · `RHF-REG-03` |
+| `<input type="number">` sem coerção | `valueAsNumber` / `z.coerce.number()` · `RHF-REG-03` |
 | `setValueAs` tentando exibir valor formatado | é mão dupla: `Controller` com `input`/`output` · `RHF-CTRL-09` |
 | Moeda ou taxa guardada como `float` | inteiro na menor unidade · `RHF-CTRL-10` |
 | Telefone/CPF guardado como número | string de dígitos · `RHF-CTRL-10` |
@@ -672,7 +672,7 @@ const erro = errors.nome
 | `%` ou `kg` dentro do `value` do input | fora, como texto adjacente · `RHF-CTRL-12` |
 | Máscara truncando só na exibição | truncar no `output` · `RHF-CTRL-13` |
 | Máscara decidindo o que é válido | a validação é do schema; a máscara só formata |
-| `z.coerce`/`.transform` num campo que já tem `Controller` com `output` | conversão duplicada; deixe só no `output` |
+| `z.coerce`/`.transform()` num campo que já tem `Controller` com `output` | conversão duplicada; deixe só no `output` |
 | `disabled` para "mostrar sem editar" | `readOnly` · `RHF-REG-05` |
 | `placeholder` no lugar de `<label>` | `label` + `htmlFor` · `RHF-A11Y-03` |
 | Mensagem de erro sem `aria-describedby` | ligar por `id` · `RHF-A11Y-01` |
@@ -687,7 +687,6 @@ const erro = errors.nome
 - [React - Refs e DOM](react-refs-e-dom.md) — `ref` como prop no React 19
 - [React - Hooks Utilitários](react-hooks-utilitarios.md) — `useId` e `REACT-UTIL-01`
 - [React - Formulários e Actions](react-formularios-e-actions.md) — o mesmo critério de `role="alert"` / `role="status"`
--
 
 ## Fontes consultadas
 

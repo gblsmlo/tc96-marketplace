@@ -2,13 +2,13 @@
 titulo: Auth e cripto — siglas da decisão de framework
 type: Page
 tags:
- - auth
- - criptografia
- - oauth
- - jwt
- - glossario
- - arquitetura
- - hono
+  - auth
+  - criptografia
+  - oauth
+  - jwt
+  - glossario
+  - arquitetura
+  - hono
 source: "[WorkOS - AuthKit](../docs/workos-authkit.md)"
 ---
 
@@ -24,33 +24,33 @@ A frase é um argumento de **camadas**: ela lista dez coisas e afirma que nenhum
 
 ```mermaid
 flowchart TB
- subgraph T["TRANSPORTE — o que Hono ocupa"]
- R["Roteamento<br/>match de path e método"]
- MW["Composição de middleware<br/>ordem, next, contexto"]
- IO["Request/Response<br/>parse de body, headers, streams"]
- end
+    subgraph T["TRANSPORTE — o que Hono ocupa"]
+        R["Roteamento<br/>match de path e método"]
+        MW["Composição de middleware<br/>ordem, next(), contexto"]
+        IO["Request/Response<br/>parse de body, headers, streams"]
+    end
 
- subgraph P["POLÍTICA — decisão de quem pode o quê"]
- PROBE["Probe de tenant<br/>org_id do token × ambiente"]
- RBAC["Checagem de role/permission"]
- STRIP["Stripping de headers<br/>x-bai-* · authorization · cookie"]
- end
+    subgraph P["POLÍTICA — decisão de quem pode o quê"]
+        PROBE["Probe de tenant<br/>org_id do token × ambiente"]
+        RBAC["Checagem de role/permission"]
+        STRIP["Stripping de headers<br/>x-bai-* · authorization · cookie"]
+    end
 
- subgraph C["CRIPTOGRAFIA — primitivas e segredos"]
- JWKS["Verificação JWKS<br/>assinatura do access token"]
- PKCE["PKCE<br/>code_verifier / S256"]
- HMAC["HMAC de state<br/>integridade sem estado"]
- SEAL["Selagem da sessão<br/>AEAD sobre o cookie"]
- KEYS["Cookie password por estágio<br/>separação de chaves"]
- end
+    subgraph C["CRIPTOGRAFIA — primitivas e segredos"]
+        JWKS["Verificação JWKS<br/>assinatura do access token"]
+        PKCE["PKCE<br/>code_verifier / S256"]
+        HMAC["HMAC de state<br/>integridade sem estado"]
+        SEAL["Selagem da sessão<br/>AEAD sobre o cookie"]
+        KEYS["Cookie password por estágio<br/>separação de chaves"]
+    end
 
- IO --> P
- MW --> P
- P --> C
- T -. "substituível: ~40–50% de index.ts + adapter.ts".-> T
- C -. "não muda: server/auth/".-> C
+    IO --> P
+    MW --> P
+    P --> C
+    T -. "substituível: ~40–50% de index.ts + adapter.ts" .-> T
+    C -. "não muda: server/auth/" .-> C
 
- style T stroke-dasharray: 5 5
+    style T stroke-dasharray: 5 5
 ```
 
 A tese da frase: a seta de substituição só toca a caixa de cima. **Ortogonal** aqui é usado no sentido geométrico emprestado à arquitetura — dois eixos independentes, em que mover um não desloca o outro. Trocar quem faz o `match` de rota não altera qual chave assina o quê.
@@ -89,7 +89,7 @@ import * as jose from 'jose';
 
 const JWKS = jose.createRemoteJWKSet(new URL(jwksUrl)); // cacheia as chaves
 const { payload } = await jose.jwtVerify(accessToken, JWKS, {
- issuer: 'https://api.workos.com',
+  issuer: 'https://api.workos.com',
 });
 ```
 
@@ -132,15 +132,15 @@ Fluxo em que o cliente gera um `code_verifier` aleatório de alta entropia, mand
 
 ```mermaid
 sequenceDiagram
- participant C as Cliente
- participant AS as Authorization Server
- C->>C: verifier = random(43..128)
- C->>C: challenge = BASE64URL(SHA-256(verifier))
- C->>AS: /authorize?code_challenge=…&code_challenge_method=S256
- AS-->>C: redirect com ?code=…
- C->>AS: /token { code, code_verifier }
- AS->>AS: SHA-256(verifier) == challenge ?
- AS-->>C: tokens
+    participant C as Cliente
+    participant AS as Authorization Server
+    C->>C: verifier = random(43..128)
+    C->>C: challenge = BASE64URL(SHA-256(verifier))
+    C->>AS: /authorize?code_challenge=…&code_challenge_method=S256
+    AS-->>C: redirect com ?code=…
+    C->>AS: /token { code, code_verifier }
+    AS->>AS: SHA-256(verifier) == challenge ?
+    AS-->>C: tokens
 ```
 
 No AuthKit, `code_verifier` é *obrigatório* **quando não há client secret** — os dois são caminhos alternativos de prova do cliente ([WorkOS - AuthKit](../docs/workos-authkit.md) #11.1 PKCE — quando é obrigatório). Para um BFF confidencial a doc não exige; a [RFC 9700 - OAuth 2.0 Security BCP](../docs/rfc-9700-oauth-2-0-security-bcp.md) §2.1.1 recomenda de todo modo, como defesa em profundidade contra injeção de code.

@@ -2,10 +2,10 @@
 titulo: HTTP - Negociação de Conteúdo e Range
 Link: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Content_negotiation
 tags:
- - http
- - content-negotiation
- - range
- - agent-context
+  - http
+  - content-negotiation
+  - range
+  - agent-context
 source: "MDN Web Docs — https://developer.mozilla.org/en-US/docs/Web/HTTP"
 verificado-em: 2026-08-15
 ---
@@ -120,7 +120,7 @@ Content-Type: multipart/form-data; boundary=ExampleBoundaryString
 
 **`boundary` é obrigatório em multipart** — *"For multipart entities, the `boundary` parameter is required."* Detalhe em e.
 
-**O browser pode ignorar o seu `Content-Type`.** *"This value may be ignored if browsers perform MIME sniffing (or content sniffing) on responses. To prevent browsers from using MIME sniffing, set the `X-Content-Type-Options` header value to `nosniff`."* Isto é relevante para qualquer rota que devolva arquivo enviado por usuário: sem `nosniff`, um `.txt` com HTML dentro pode ser interpretado como HTML — ver.
+**O browser pode ignorar o seu `Content-Type`.** *"This value may be ignored if browsers perform MIME sniffing (or content sniffing) on responses. To prevent browsers from using MIME sniffing, set the `X-Content-Type-Options` header value to `nosniff`."* Isto é relevante para qualquer rota que devolva arquivo enviado por usuário: sem `nosniff`, um `.txt` com HTML dentro pode ser interpretado como HTML.
 
 ### `415` e `406`: erros de formato nas duas pontas
 
@@ -297,7 +297,7 @@ Servir o recurso inteiro com `200` quando o intervalo é inválido é o antipadr
 
 **Seek em mídia.** O `<video>` do browser depende de `Range` para arrastar a barra de progresso. Um servidor que responde sempre `200` com o arquivo inteiro força o browser a baixar tudo antes de qualquer salto — o vídeo "não busca" e ninguém entende por quê.
 
-**Você provavelmente não precisa implementar isso.** [Bun - HTTP e Servidor](bun-http-e-servidor.md) serve `Range`, `ETag` e `304` sozinho ao devolver `Bun.file(caminho)` numa `Response`, com `Content-Range` e `Content-Length` preenchidos — inclusive em `Bun.file(p).slice(start, end)`. Escrever o parser à mão é onde os erros desta seção aparecem. Para gerar corpo em pedaços a partir de outra fonte, ver e.
+**Você provavelmente não precisa implementar isso.** [Bun - HTTP e Servidor](bun-http-e-servidor.md) serve `Range`, `ETag` e `304` sozinho ao devolver `Bun.file(caminho)` numa `Response`, com `Content-Range` e `Content-Length` preenchidos — inclusive em `Bun.file(p).slice(start, end)`. Escrever o parser à mão é onde os erros desta seção aparecem. Para gerar corpo em pedaços a partir de outra fonte.
 
 | ID | Regra |
 | --- | --- |
@@ -327,7 +327,7 @@ Os dois parâmetros de nome existem por causa de acentuação:
 
 > "It's recommended to include both for maximum compatibility, and you can convert `filename*` to `filename` by substituting non-ASCII characters with ASCII equivalents (such as converting `é` to `e`)."
 
-O mesmo header aparece **dentro** de um corpo `multipart/form-data`, com outro papel: *"The first directive is always `form-data`, and the header must also include a `name` parameter to identify the relevant field."* — `Content-Disposition: form-data; name="arquivo"; filename="nota.pdf"`. É a mesma sintaxe em dois contextos distintos; ver e.
+O mesmo header aparece **dentro** de um corpo `multipart/form-data`, com outro papel: *"The first directive is always `form-data`, and the header must also include a `name` parameter to identify the relevant field."* — `Content-Disposition: form-data; name="arquivo"; filename="nota.pdf"`. É a mesma sintaxe em dois contextos distintos.
 
 | ID | Regra |
 | --- | --- |

@@ -2,12 +2,12 @@
 titulo: Playwright - Execução, Retries e CI
 Link: https://playwright.dev/docs/test-parallel
 tags:
- - playwright
- - testing
- - ci
- - parallelism
- - sharding
- - agent-context
+  - playwright
+  - testing
+  - ci
+  - parallelism
+  - sharding
+  - agent-context
 source: "Documentação oficial do Playwright — Parallelism, Retries, Sharding, Timeouts, Reporters, Annotations, Command line, Setting up CI"
 verificado-em: 2026-08-20
 ---
@@ -30,7 +30,7 @@ O default:
 - **testes dentro de um arquivo** rodam em ordem, no mesmo worker.
 
 ```ts
-workers: process.env.CI ? 2 : undefined, // undefined = metade dos núcleos lógicos
+workers: process.env.CI ? 2 : undefined,   // undefined = metade dos núcleos lógicos
 ```
 
 ```bash
@@ -69,18 +69,18 @@ test.describe.configure({ mode: 'serial' });
 
 `'serial'` é a admissão de dependência de ordem. Legítimo quando o custo de recriar o estado é proibitivo (um wizard longo, uma sessão de pagamento). Ilegítimo como conserto de flake — aí ele só esconde o acoplamento (`PW-CORE-06`).
 
-> **`test.describe.serial` e `test.describe.parallel` estão marcados como descontinuados** na referência de API, em favor de `test.describe.configure`. A página-guia de retries ainda os usa em exemplo — é divergência interna da fonte. Use `configure` (`PW-RUN-05`).
+> **`test.describe.serial` e `test.describe.parallel` estão marcados como descontinuados** na referência de API, em favor de `test.describe.configure()`. A página-guia de retries ainda os usa em exemplo — é divergência interna da fonte. Use `configure` (`PW-RUN-05`).
 
 ### 1.4 Isolar dado entre workers
 
 ```ts
 test('cria pedido', async ({ page }, testInfo) => {
- const ref = `PED-${testInfo.workerIndex}-${testInfo.testId}`;
- // …
+  const ref = `PED-${testInfo.workerIndex}-${testInfo.testId}`;
+  // …
 });
 ```
 
-`testInfo.workerIndex`, `testInfo.parallelIndex`, `testInfo.testId` e `testInfo.outputPath` são as ferramentas. Para conta de usuário, o padrão é `parallelIndex` ([Playwright - Autenticação e Isolamento](playwright-autenticacao-e-isolamento.md) § 3).
+`testInfo.workerIndex`, `testInfo.parallelIndex`, `testInfo.testId` e `testInfo.outputPath()` são as ferramentas. Para conta de usuário, o padrão é `parallelIndex` ([Playwright - Autenticação e Isolamento](playwright-autenticacao-e-isolamento.md) § 3).
 
 ---
 
@@ -92,11 +92,11 @@ npx playwright test tests/pedidos.spec.ts:42
 npx playwright test --grep @smoke
 npx playwright test --grep-invert @lento
 npx playwright test --grep "@smoke|@critico"
-npx playwright test --grep "(?=.*@smoke)(?=.*@critico)" # AND
+npx playwright test --grep "(?=.*@smoke)(?=.*@critico)"   # AND
 npx playwright test --project=chromium --project=firefox
 npx playwright test --last-failed
 npx playwright test --only-changed=origin/main
-npx playwright test --repeat-each=20 --grep @flaky # caçar flake
+npx playwright test --repeat-each=20 --grep @flaky        # caçar flake
 npx playwright test --list
 ```
 
@@ -106,7 +106,7 @@ Tags:
 
 ```ts
 test('login funciona', { tag: '@smoke' }, async ({ page }) => { … });
-test.describe('relatórios', { tag: ['@lento', '@relatorio'] }, => { … });
+test.describe('relatórios', { tag: ['@lento', '@relatorio'] }, () => { … });
 ```
 
 ---
@@ -114,28 +114,28 @@ test.describe('relatórios', { tag: ['@lento', '@relatorio'] }, => { … });
 ## 3. Anotações
 
 ```ts
-test.skip; // não roda
-test.skip(browserName === 'webkit', 'bug #1234'); // condicional, com motivo
-test.fixme; // não roda; intenção de consertar
-test.fail; // RODA, e exige que falhe
-test.slow; // triplica o timeout
-test.only; // foca (perigoso — ver PW-CFG-01)
+test.skip();                                        // não roda
+test.skip(browserName === 'webkit', 'bug #1234');   // condicional, com motivo
+test.fixme();                                       // não roda; intenção de consertar
+test.fail();                                        // RODA, e exige que falhe
+test.slow();                                        // triplica o timeout
+test.only();                                        // foca (perigoso — ver PW-CFG-01)
 ```
 
-> **`fail` e `fixme` fazem o oposto do que o nome sugere.** `test.fail` **executa** o teste e o considera bem-sucedido **se ele falhar** — é o marcador de bug conhecido e reproduzível, e ele avisa quando o bug for corrigido. `test.fixme` **não executa**. Trocar um pelo outro produz ou um teste que não roda quando devia, ou um que falha por passar (`PW-RUN-04`).
+> **`fail` e `fixme` fazem o oposto do que o nome sugere.** `test.fail()` **executa** o teste e o considera bem-sucedido **se ele falhar** — é o marcador de bug conhecido e reproduzível, e ele avisa quando o bug for corrigido. `test.fixme()` **não executa**. Trocar um pelo outro produz ou um teste que não roda quando devia, ou um que falha por passar (`PW-RUN-04`).
 
 Anotação customizada:
 
 ```ts
 test('exporta relatório', {
- annotation: { type: 'issue', description: 'https://github.com/org/repo/issues/42' },
+  annotation: { type: 'issue', description: 'https://github.com/org/repo/issues/42' },
 }, async ({ page }) => { … });
 ```
 
 Em runtime:
 
 ```ts
-test.info.annotations.push({ type: 'versão do browser', description: browser.version });
+test.info().annotations.push({ type: 'versão do browser', description: browser.version() });
 ```
 
 **`skip` e `fixme` sem motivo textual são dívida anônima** — em seis meses ninguém sabe se ainda se aplica (`PW-STR-05`).
@@ -146,7 +146,7 @@ test.info.annotations.push({ type: 'versão do browser', description: browser.ve
 
 ```ts
 retries: process.env.CI ? 2 : 0,
-retryStrategy: 'immediate', // ou 'isolated' — novo na 1.62
+retryStrategy: 'immediate',    // ou 'isolated' — novo na 1.62
 ```
 
 ```bash
@@ -165,7 +165,7 @@ Classificação no relatório:
 
 ```ts
 test('meu teste', async ({ page }, testInfo) => {
- if (testInfo.retry) await limparCacheDoServidor;
+  if (testInfo.retry) await limparCacheDoServidor();
 });
 ```
 
@@ -207,9 +207,9 @@ Reporter customizado implementa a interface:
 import type { Reporter, TestCase, TestResult } from '@playwright/test/reporter';
 
 class MeuReporter implements Reporter {
- onTestEnd(test: TestCase, result: TestResult) {
- if (result.status === 'failed') enviarParaObservabilidade(test, result);
- }
+  onTestEnd(test: TestCase, result: TestResult) {
+    if (result.status === 'failed') enviarParaObservabilidade(test, result);
+  }
 }
 export default MeuReporter;
 ```
@@ -227,7 +227,7 @@ npx playwright test --shard=1/4
 Com `blob` + `merge-reports` os shards viram um relatório só:
 
 ```bash
-npx playwright merge-reports --reporter html./all-blob-reports
+npx playwright merge-reports --reporter html ./all-blob-reports
 ```
 
 Os blobs saem em `blob-report`, nomeados `report-<hash>-<n>.zip` — sem colisão entre shards.
@@ -239,31 +239,31 @@ Este é o arquivo que a fonte gera:
 ```yaml
 name: Playwright Tests
 on:
- push:
- branches: [ main, master ]
- pull_request:
- branches: [ main, master ]
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
 jobs:
- test:
- timeout-minutes: 60
- runs-on: ubuntu-latest
- steps:
- - uses: actions/checkout@v6
- - uses: actions/setup-node@v6
- with:
- node-version: lts/*
- - name: Install dependencies
- run: npm ci
- - name: Install Playwright Browsers
- run: npx playwright install --with-deps
- - name: Run Playwright tests
- run: npx playwright test
- - uses: actions/upload-artifact@v4
- if: ${{ !cancelled }}
- with:
- name: playwright-report
- path: playwright-report/
- retention-days: 30
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    - name: Run Playwright tests
+      run: npx playwright test
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
 ```
 
 Quatro ajustes que ele **não** traz e que valem:
@@ -277,28 +277,28 @@ Com shard:
 
 ```yaml
 jobs:
- test:
- strategy:
- fail-fast: false
- matrix:
- shard: [1, 2, 3, 4]
- steps:
- # …
- - run: npx playwright test --shard=${{ matrix.shard }}/4
- - uses: actions/upload-artifact@v4
- if: ${{ !cancelled }}
- with:
- name: blob-report-${{ matrix.shard }}
- path: blob-report/
- retention-days: 1
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      # …
+      - run: npx playwright test --shard=${{ matrix.shard }}/4
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: blob-report-${{ matrix.shard }}
+          path: blob-report/
+          retention-days: 1
 
- merge:
- if: ${{ !cancelled }}
- needs: [test]
- runs-on: ubuntu-latest
- steps:
- # … download-artifact com pattern blob-report-* …
- - run: npx playwright merge-reports --reporter html./all-blob-reports
+  merge:
+    if: ${{ !cancelled() }}
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      # … download-artifact com pattern blob-report-* …
+      - run: npx playwright merge-reports --reporter html ./all-blob-reports
 ```
 
 ### 6.3 A checklist de CI
@@ -321,7 +321,7 @@ A última é recomendação explícita da página de boas práticas, e é o úni
 ## 7. Timeout da execução
 
 ```ts
-timeout: 30_000, // por teste
+timeout: 30_000,          // por teste
 globalTimeout: 3_600_000, // a suíte inteira
 maxFailures: process.env.CI ? 10 : 0,
 ```
@@ -339,8 +339,8 @@ A tabela completa de timeouts está na § 0 de [Playwright](playwright.md), e a 
 | `PW-RUN-01` | `fullyParallel: true` **MUST** estar ligado para que `--shard` distribua por teste. Sem ele o shard distribui por **arquivo**, e a divisão fica desigual. |
 | `PW-RUN-02` | `retries` > 0 **MUST** vir acompanhado de `trace` que capture a retry (`'on-first-retry'` no mínimo). |
 | `PW-RUN-03` | Teste flaky **NEVER** é considerado resolvido por aumento de `retries`. |
-| `PW-RUN-04` | `test.fail` e `test.fixme` **NEVER** são sinônimos: `fail` **roda** o teste e exige que ele falhe; `fixme` **não roda**. |
-| `PW-RUN-05` | `test.describe.serial` e `test.describe.parallel` **NEVER** em código novo — a fonte os marca como descontinuados em favor de `test.describe.configure`. |
+| `PW-RUN-04` | `test.fail()` e `test.fixme()` **NEVER** são sinônimos: `fail` **roda** o teste e exige que ele falhe; `fixme` **não roda**. |
+| `PW-RUN-05` | `test.describe.serial` e `test.describe.parallel` **NEVER** em código novo — a fonte os marca como descontinuados em favor de `test.describe.configure()`. |
 | `PW-RUN-06` | Execução com `--shard` **MUST** publicar `blob` e ser unida por `merge-reports`. † |
 | `PW-RUN-07` | `mode: 'serial'` **MUST** ter o motivo escrito — ele declara dependência de ordem, e não é conserto de flake. † |
 
@@ -375,11 +375,11 @@ test.describe.configure({ mode: 'serial' });
 
 (`PW-RUN-07`)
 
-### 9.4 `test.fail` no lugar de `test.fixme`
+### 9.4 `test.fail()` no lugar de `test.fixme()`
 
 ```ts
 // ✗ o teste roda, passa, e é reportado como falha ("expected to fail")
-test.fail;
+test.fail();
 test('feature que ainda não existe', async ({ page }) => { … });
 ```
 
@@ -389,7 +389,7 @@ test('feature que ainda não existe', async ({ page }) => { … });
 
 ```ts
 // ✗
-test.skip;
+test.skip();
 ```
 
 Dívida anônima. Em seis meses, ninguém remove porque ninguém sabe se ainda vale.

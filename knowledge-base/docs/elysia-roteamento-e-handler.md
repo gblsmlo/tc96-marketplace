@@ -2,9 +2,9 @@
 titulo: Elysia - Roteamento e Handler
 Link: https://elysiajs.com/essential/handler.html
 tags:
- - elysia
- - http
- - agent-context
+  - elysia
+  - http
+  - agent-context
 source: "Documentação oficial — https://elysiajs.com/"
 verificado-em: 2026-08-15
 ---
@@ -25,20 +25,20 @@ O handler recebe um objeto só. A tentação é tratá-lo como um `req`/`res` de
 
 O contexto de Elysia tem uma parte fixa (`body`, `query`, `params`, `headers`, `cookie`, `set`, `store`, `request`, `path`, `route`, `status`, `redirect`, `server`) e uma parte **que foi colocada ali** por `decorate`, `derive`, `resolve` e macros registrados antes desta rota. O tipo de `params.id` é `string` ou `number` dependendo de haver schema. O tipo de `body` é `unknown` sem schema e exato com schema. Se um plugin com `resolve` está no encadeamento, `ctx.usuario` existe; se o escopo dele for `local` e a rota estiver na instância pai, não existe — e o TypeScript avisa.
 
-Isso tem uma consequência prática direta: **desestruturar no parâmetro é a forma canônica**, não açúcar sintático. `({ params: { id }, status }) =>...` documenta exatamente o que a rota consome e é o que a doc usa em todos os exemplos. E é também o que a doc recomenda ao delegar para uma camada de serviço: *"it's recommended to destructure properties from inline function to prevent unnecessary type inference"* — passar o `Context` inteiro para uma classe controller é explicitamente desaconselhado, porque o tipo é dinâmico demais para ser anotado à mão.
+Isso tem uma consequência prática direta: **desestruturar no parâmetro é a forma canônica**, não açúcar sintático. `({ params: { id }, status }) => ...` documenta exatamente o que a rota consome e é o que a doc usa em todos os exemplos. E é também o que a doc recomenda ao delegar para uma camada de serviço: *"it's recommended to destructure properties from inline function to prevent unnecessary type inference"* — passar o `Context` inteiro para uma classe controller é explicitamente desaconselhado, porque o tipo é dinâmico demais para ser anotado à mão.
 
 ```ts
 import { Elysia, t } from 'elysia'
 
-new Elysia
-.get('/pedidos/:id', ({ params: { id }, status }) => {
- const pedido = pedidos.buscar(id) // id é number: o schema coagiu
- if (!pedido) return status(404, { erro: 'Pedido não encontrado' })
- return pedido
- }, {
- params: t.Object({ id: t.Numeric })
- })
-.listen(3000)
+new Elysia()
+  .get('/pedidos/:id', ({ params: { id }, status }) => {
+    const pedido = pedidos.buscar(id)      // id é number: o schema coagiu
+    if (!pedido) return status(404, { erro: 'Pedido não encontrado' })
+    return pedido
+  }, {
+    params: t.Object({ id: t.Numeric() })
+  })
+  .listen(3000)
 ```
 
 | ID | Regra |
@@ -49,15 +49,15 @@ new Elysia
 
 ## 2. Instância, rotas e precedência de caminho
 
-`new Elysia` cria a instância; `.listen(port)` sobe o servidor. Toda rota aceita três argumentos: caminho, handler, e um objeto opcional de metadados (schema + hooks locais).
+`new Elysia()` cria a instância; `.listen(port)` sobe o servidor. Toda rota aceita três argumentos: caminho, handler, e um objeto opcional de metadados (schema + hooks locais).
 
 ```ts
 new Elysia({ prefix: '/v1' })
-.get('/status', 'ok') // valor literal, sem função
-.post('/pedidos', ({ body }) => criar(body))
-.all('/webhook', ({ request }) => aceitar(request))
-.route('M-SEARCH', '/discover', 'ok') // verbo customizado, MAIÚSCULO
-.listen(3000)
+  .get('/status', 'ok')                       // valor literal, sem função
+  .post('/pedidos', ({ body }) => criar(body))
+  .all('/webhook', ({ request }) => aceitar(request))
+  .route('M-SEARCH', '/discover', 'ok')       // verbo customizado, MAIÚSCULO
+  .listen(3000)
 ```
 
 Um valor literal no lugar da função é uma otimização real: a doc explica que permite compilar a resposta antecipadamente, e com `nativeStaticResponse` em Bun ela vira `Bun.serve.static`. **Não funciona no Cloudflare Worker** (não se pode construir `Response` antes do start).
@@ -79,26 +79,26 @@ Duas armadilhas de comportamento que a tabela oficial deixa explícitas:
 - `/pedidos/:id` **não** casa com `/pedidos` (é Not Found) nem com `/pedidos/1/itens`.
 - Barra final é tolerada por padrão. `strictPath: false` (default) faz `/nome` e `/nome/` resolverem igual; `strictPath: true` segue a RFC 3986 e separa os dois.
 
-Sem schema de `params`, todo path param é `string`. Com `t.Number` no schema de rota, Elysia converte para `t.Numeric` e coage — detalhe em [Elysia - Schema e Eden](elysia-schema-e-eden.md) § 3.
+Sem schema de `params`, todo path param é `string`. Com `t.Number()` no schema de rota, Elysia converte para `t.Numeric()` e coage — detalhe em [Elysia - Schema e Eden](elysia-schema-e-eden.md) § 3.
 
 ### `group` e `guard`
 
 `group` aplica prefixo. Aceita um guard opcional no segundo argumento, o que evita aninhar `group` dentro de `guard`:
 
 ```ts
-new Elysia
-.group('/usuarios', (app) => app
-.post('/entrar', ({ body }) => entrar(body))
-.post('/registrar', ({ body }) => registrar(body))
- )
- // com guard no 2º argumento: schema aplicado às duas rotas de uma vez
-.group('/admin', { headers: t.Object({ authorization: t.String }) }, (app) => app
-.get('/metricas', => metricas)
-.delete('/cache', => limparCache)
- )
+new Elysia()
+  .group('/usuarios', (app) => app
+    .post('/entrar', ({ body }) => entrar(body))
+    .post('/registrar', ({ body }) => registrar(body))
+  )
+  // com guard no 2º argumento: schema aplicado às duas rotas de uma vez
+  .group('/admin', { headers: t.Object({ authorization: t.String() }) }, (app) => app
+    .get('/metricas', () => metricas())
+    .delete('/cache', () => limparCache())
+  )
 ```
 
-A alternativa sem aninhamento é `new Elysia({ prefix: '/usuarios' })` como instância separada, aplicada com `.use`. É o que a organização por feature da doc recomenda: uma instância por módulo, cada uma com seu prefixo. Cuidado: instância separada traz junto a semântica de **escopo** — ver [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) § 5.
+A alternativa sem aninhamento é `new Elysia({ prefix: '/usuarios' })` como instância separada, aplicada com `.use()`. É o que a organização por feature da doc recomenda: uma instância por módulo, cada uma com seu prefixo. Cuidado: instância separada traz junto a semântica de **escopo** — ver [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) § 5.
 
 | ID | Regra |
 | --- | --- |
@@ -118,7 +118,7 @@ Lista verificada em `context.d.ts` de 1.4.29.
 | `headers` | headers do request | **sempre em minúsculas** |
 | `cookie` | cookie jar reativo | é um Proxy: nunca `undefined`, só `.value` pode ser |
 | `set` | `{ headers, status }` da resposta | `set.redirect` está deprecado |
-| `store` | estado global da instância | criado por `.state` |
+| `store` | estado global da instância | criado por `.state()` |
 | `status` | função de resposta com status tipado | substitui o antigo `error` |
 | `redirect` | função de redirect | também exportada por `elysia` |
 | `request` | `Request` Web Standard | escape hatch para o que não está no contexto |
@@ -127,7 +127,7 @@ Lista verificada em `context.d.ts` de 1.4.29.
 | `route` | caminho **registrado** no router | ex.: `/pedidos/:id` — útil para métrica e log |
 | — | `decorate`, `derive`, `resolve` | tudo que plugins e hooks anteriores acrescentaram |
 
-`route` é a propriedade que quase ninguém conhece e resolve um problema real: agrupar métricas e logs por rota em vez de por URL concreta, sem cardinalidade explodindo. Ver.
+`route` é a propriedade que quase ninguém conhece e resolve um problema real: agrupar métricas e logs por rota em vez de por URL concreta, sem cardinalidade explodindo..
 
 `onRequest` recebe um `PreContext` reduzido — só `request`, `set`, `store`, `status`, `redirect`, `server` e decorators. Não tem `body`, `query`, `params`, `headers`, `cookie`, `path`, `route` nem nada de `derive`/`resolve`, porque roda antes de tudo isso existir. `status` está lá, e é o que permite curto-circuitar tipado: `return status(429, { erro: 'Limite excedido' })`. Enumeração canônica e a lista do que fica de fora em [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) § 2.
 
@@ -140,15 +140,15 @@ O valor retornado pelo handler é convertido automaticamente. Não é preciso se
 ```ts
 import { Elysia, file, form, sse } from 'elysia'
 
-new Elysia
-.get('/texto', => 'ok') // text/plain
-.get('/json', => ({ id: 1, nome: 'Ana' })) // application/json
-.get('/arquivo', file('public/manual.pdf')) // arquivo
-.get('/pacote', => form({ // FormData
- titulo: 'Relatório',
- anexos: [file('a.pdf'), file('b.pdf')]
- }))
-.get('/bruto', => new Response('...', { status: 202 })) // Response passa direto
+new Elysia()
+  .get('/texto', () => 'ok')                         // text/plain
+  .get('/json', () => ({ id: 1, nome: 'Ana' }))      // application/json
+  .get('/arquivo', file('public/manual.pdf'))        // arquivo
+  .get('/pacote', () => form({                       // FormData
+    titulo: 'Relatório',
+    anexos: [file('a.pdf'), file('b.pdf')]
+  }))
+  .get('/bruto', () => new Response('...', { status: 202 }))  // Response passa direto
 ```
 
 ### Status e headers
@@ -156,13 +156,13 @@ new Elysia
 Duas APIs, e a escolha entre elas importa:
 
 ```ts
-new Elysia
-.get('/a', ({ status }) => status(418, 'Sou um bule')) // tipado, checado contra o response schema
-.get('/b', ({ set }) => {
- set.status = 418 // NÃO é checado contra o schema
- set.headers['x-powered-by'] = 'Elysia'
- return 'Sou um bule'
- })
+new Elysia()
+  .get('/a', ({ status }) => status(418, 'Sou um bule'))   // tipado, checado contra o response schema
+  .get('/b', ({ set }) => {
+    set.status = 418                                        // NÃO é checado contra o schema
+    set.headers['x-powered-by'] = 'Elysia'
+    return 'Sou um bule'
+  })
 ```
 
 A doc é explícita sobre a diferença: *"Unlike the `status` function, `set.status` cannot infer the return value type, therefore it can't check if the return value is correctly typed to the response schema"*. `set.status` serve para o caso em que um plugin quer definir um status padrão e deixar o usuário retornar o valor. Para tudo mais, `status`.
@@ -176,26 +176,26 @@ O cookie jar é um Proxy. Não há `getCookie`/`setCookie`: você lê e escreve 
 `ELYSIA-CORE-05` é conjuntivo: **assinado e `httpOnly`**. `httpOnly` sozinho impede o JavaScript do cliente de *ler* o cookie, mas não impede ninguém de *forjar* um. Por isso o bloco canônico de sessão declara as duas coisas, e a assinatura vive no construtor:
 
 ```ts
-import { Elysia, env } from 'elysia' // `env`, não `process.env` — ELYSIA-APP-09
+import { Elysia, env } from 'elysia'      // `env`, não `process.env` — ELYSIA-APP-09
 
 new Elysia({
- cookie: {
- secrets: [env.COOKIE_SECRET_ATUAL!, env.COOKIE_SECRET_ANTIGO!],
- sign: ['sessao'] // assina na primeira chave, verifica em todas
- }
+  cookie: {
+    secrets: [env.COOKIE_SECRET_ATUAL!, env.COOKIE_SECRET_ANTIGO!],
+    sign: ['sessao']            // assina na primeira chave, verifica em todas
+  }
 })
-.get('/entrar', ({ cookie: { sessao } }) => {
- sessao.value = { usuarioId: 42 } // objeto: encode/decode automático
- sessao.httpOnly = true // as duas metades de ELYSIA-CORE-05:
- sessao.secure = true // `sign` acima + `httpOnly` aqui
- sessao.sameSite = 'lax'
- sessao.maxAge = 7 * 86400
- return 'ok'
- })
-.get('/sair', ({ cookie: { sessao } }) => {
- sessao.remove // ou: delete cookie.sessao
- return 'ok'
- })
+  .get('/entrar', ({ cookie: { sessao } }) => {
+    sessao.value = { usuarioId: 42 }          // objeto: encode/decode automático
+    sessao.httpOnly = true                    // as duas metades de ELYSIA-CORE-05:
+    sessao.secure = true                      // `sign` acima + `httpOnly` aqui
+    sessao.sameSite = 'lax'
+    sessao.maxAge = 7 * 86400
+    return 'ok'
+  })
+  .get('/sair', ({ cookie: { sessao } }) => {
+    sessao.remove()                            // ou: delete cookie.sessao
+    return 'ok'
+  })
 ```
 
 O mesmo par pode ser declarado de uma vez no schema da rota, com `t.Cookie(props, { secrets, sign, httpOnly, secure })` — é a forma que também documenta o cookie no OpenAPI. Ver [Elysia - Schema e Eden](elysia-schema-e-eden.md) § 3.
@@ -209,39 +209,39 @@ Colocar `null` no array de `secrets` deixa cookies não assinados passarem — a
 ### Redirect
 
 ```ts
-new Elysia
-.get('/antigo', ({ redirect }) => redirect('/novo'))
-.get('/externo', ({ redirect }) => redirect('https://exemplo.com', 302))
+new Elysia()
+  .get('/antigo', ({ redirect }) => redirect('/novo'))
+  .get('/externo', ({ redirect }) => redirect('https://exemplo.com', 302))
 ```
 
 O valor retornado depois de `redirect` é ignorado. `set.redirect` ainda existe, mas está marcado `@deprecated` nos tipos.
 
 ### Stream e SSE
 
-Um handler `function*` vira streaming. Envolver o valor em `sse` liga `text/event-stream` e o formato de evento.
+Um handler `function*` vira streaming. Envolver o valor em `sse()` liga `text/event-stream` e o formato de evento.
 
 ```ts
 import { Elysia, sse } from 'elysia'
 
-new Elysia
-.get('/progresso', function* ({ set }) {
- set.headers['x-job'] = 'importacao' // headers só valem ANTES do primeiro yield
- for (const etapa of etapas) {
- yield sse({ event: 'progresso', data: { etapa: etapa.nome, pct: etapa.pct } })
- }
- yield sse({ event: 'fim' })
- })
-.get('/talvez', function* {
- if (cacheQuente) return respostaCompleta // sem yield: vira resposta normal
- yield* pedacos
- })
+new Elysia()
+  .get('/progresso', function* ({ set }) {
+    set.headers['x-job'] = 'importacao'   // headers só valem ANTES do primeiro yield
+    for (const etapa of etapas) {
+      yield sse({ event: 'progresso', data: { etapa: etapa.nome, pct: etapa.pct } })
+    }
+    yield sse({ event: 'fim' })
+  })
+  .get('/talvez', function* () {
+    if (cacheQuente) return respostaCompleta   // sem yield: vira resposta normal
+    yield* pedacos()
+  })
 ```
 
 Três comportamentos verificados que mudam código:
 
 1. **Headers depois do primeiro `yield` não fazem nada.** Uma vez enviado o primeiro chunk, os headers já foram.
 2. **Retornar sem `yield` converte para resposta normal**, o que permite decidir entre stream e resposta única em runtime.
-3. **Cancelamento é automático**: se o cliente aborta, Elysia para o generator. Ver.
+3. **Cancelamento é automático**: se o cliente aborta, Elysia para o generator..
 
 No cliente, o Eden interpreta o stream como `AsyncGenerator` — `for await (const chunk of data)`.
 
@@ -275,21 +275,21 @@ O **422** de validação é o número que mais surpreende, porque o reflexo de q
 ```ts
 import { Elysia } from 'elysia'
 
-new Elysia
-.onError(({ code, error, status, route, path }) => {
- switch (code) {
- case 'NOT_FOUND':
- return status(404, { erro: 'Recurso não encontrado' })
- case 'VALIDATION':
- // error é ValidationError; error.all lista todas as causas
- return status(422, { erro: 'Payload inválido', causas: error.all })
- default:
- // inesperado: logue com contexto e devolva mensagem genérica
- logger.error({ code, route, path, err: error })
- return status(500, { erro: 'Erro interno' })
- }
- })
-.get('/pedidos/:id', /*... */)
+new Elysia()
+  .onError(({ code, error, status, route, path }) => {
+    switch (code) {
+      case 'NOT_FOUND':
+        return status(404, { erro: 'Recurso não encontrado' })
+      case 'VALIDATION':
+        // error é ValidationError; error.all lista todas as causas
+        return status(422, { erro: 'Payload inválido', causas: error.all })
+      default:
+        // inesperado: logue com contexto e devolva mensagem genérica
+        logger.error({ code, route, path, err: error })
+        return status(500, { erro: 'Erro interno' })
+    }
+  })
+  .get('/pedidos/:id', /* ... */)
 ```
 
 O `switch` acima segue: esperado vira resposta com significado, inesperado vira 500 opaco **com log**. Não devolva `error.message` de um erro desconhecido ao cliente.
@@ -309,7 +309,7 @@ Isso não é detalhe de implementação — é uma escolha de arquitetura:
 | Tipo chega ao Eden com narrowing por status | sim | não |
 | Usar quando | o erro faz parte do contrato da API | erro atravessa camadas e um handler central formata |
 
-A doc recomenda a abordagem **never-throw** para o caso normal, e lista as três razões: checagem contra o schema, autocomplete por status, e narrowing do erro no Eden. Ver.
+A doc recomenda a abordagem **never-throw** para o caso normal, e lista as três razões: checagem contra o schema, autocomplete por status, e narrowing do erro no Eden..
 
 Há um caso legítimo de `throw`: uma camada de serviço, longe do handler, que precisa abortar. A própria doc faz isso no exemplo de Best Practice — `throw status(400, '...')` dentro de um `Auth.signIn` que não conhece o contexto Elysia.
 
@@ -317,20 +317,20 @@ Há um caso legítimo de `throw`: uma camada de serviço, longe do handler, que 
 
 ```ts
 class EstoqueInsuficiente extends Error {
- status = 409
- constructor(public sku: string) { super(`Sem estoque para ${sku}`) }
- toResponse { return Response.json({ erro: 'estoque', sku: this.sku }, { status: 409 }) }
+  status = 409
+  constructor(public sku: string) { super(`Sem estoque para ${sku}`) }
+  toResponse() { return Response.json({ erro: 'estoque', sku: this.sku }, { status: 409 }) }
 }
 
-new Elysia
-.error({ ESTOQUE: EstoqueInsuficiente }) // registra o código
-.onError(({ code, error, status }) => {
- if (code === 'ESTOQUE') return status(409, { sku: error.sku }) // error é tipado
- })
-.post('/carrinho', ({ body }) => adicionar(body))
+new Elysia()
+  .error({ ESTOQUE: EstoqueInsuficiente })     // registra o código
+  .onError(({ code, error, status }) => {
+    if (code === 'ESTOQUE') return status(409, { sku: error.sku })  // error é tipado
+  })
+  .post('/carrinho', ({ body }) => adicionar(body))
 ```
 
-`status` na classe define o status padrão; `toResponse` define a resposta inteira. Registrar em `.error` é o que dá narrowing por `code` no `onError`.
+`status` na classe define o status padrão; `toResponse()` define a resposta inteira. Registrar em `.error()` é o que dá narrowing por `code` no `onError`.
 
 ### Mensagem de validação
 
@@ -352,37 +352,37 @@ Por campo, com `error` no schema; ou centralizado, narroweando `code === 'VALIDA
 import { describe, it, expect } from 'bun:test'
 import { Elysia, t } from 'elysia'
 
-const app = new Elysia
-.post('/pedidos', ({ body, status }) => status(201, { id: 1,...body }), {
- body: t.Object({ sku: t.String, quantidade: t.Number })
- })
+const app = new Elysia()
+  .post('/pedidos', ({ body, status }) => status(201, { id: 1, ...body }), {
+    body: t.Object({ sku: t.String(), quantidade: t.Number() })
+  })
 
-describe('POST /pedidos', => {
- it('cria e devolve 201', async => {
- const res = await app.fetch(new Request('http://localhost/pedidos', {
- method: 'POST',
- headers: { 'content-type': 'application/json' },
- body: JSON.stringify({ sku: 'ABC', quantidade: 2 })
- }))
+describe('POST /pedidos', () => {
+  it('cria e devolve 201', async () => {
+    const res = await app.fetch(new Request('http://localhost/pedidos', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ sku: 'ABC', quantidade: 2 })
+    }))
 
- expect(res.status).toBe(201)
- expect(await res.json).toEqual({ id: 1, sku: 'ABC', quantidade: 2 })
- })
+    expect(res.status).toBe(201)
+    expect(await res.json()).toEqual({ id: 1, sku: 'ABC', quantidade: 2 })
+  })
 
- it('rejeita payload inválido', async => {
- const res = await app.fetch(new Request('http://localhost/pedidos', {
- method: 'POST',
- headers: { 'content-type': 'application/json' },
- body: JSON.stringify({ sku: 'ABC' }) // falta quantidade
- }))
+  it('rejeita payload inválido', async () => {
+    const res = await app.fetch(new Request('http://localhost/pedidos', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ sku: 'ABC' })         // falta quantidade
+    }))
 
- // 422 é o status default de ValidationError — esta app não tem onError. Ver § 5.
- expect(res.status).toBe(422)
- })
+    // 422 é o status default de ValidationError — esta app não tem onError. Ver § 5.
+    expect(res.status).toBe(422)
+  })
 })
 ```
 
-Se a app usa plugin assíncrono ou `import` lazy, espere `await app.modules` antes de assertar — módulos deferidos registram-se depois do start.
+Se a app usa plugin assíncrono ou `import()` lazy, espere `await app.modules` antes de assertar — módulos deferidos registram-se depois do start.
 
 A mesma função é o que torna Elysia embutível: `app.fetch(request)` é literalmente o que os guias de Next.js, Astro, Expo, Vercel e TanStack Start usam para montar Elysia numa API route.
 
@@ -391,7 +391,7 @@ Para teste com tipos ponta a ponta, `treaty(app)` recebe a instância direta e n
 | ID | Regra |
 | --- | --- |
 | `ELYSIA-CORE-09` | Teste de rota **MUST** usar `app.fetch`/`app.handle` — **NEVER** subir servidor e requisitar por rede. |
-| `ELYSIA-CORE-10` | App com plugin assíncrono ou `import` lazy **MUST** aguardar `app.modules` antes das asserções. |
+| `ELYSIA-CORE-10` | App com plugin assíncrono ou `import()` lazy **MUST** aguardar `app.modules` antes das asserções. |
 
 ---
 
@@ -413,10 +413,10 @@ Para teste com tipos ponta a ponta, `treaty(app)` recebe a instância direta e n
 
 ## Checklist de revisão
 
-- [ ] Todo `onError`, `guard` e `.use` aparece antes das rotas que deve afetar? → `ELYSIA-CORE-01`
+- [ ] Todo `onError`, `guard` e `.use()` aparece antes das rotas que deve afetar? → `ELYSIA-CORE-01`
 - [ ] Nenhum handler recebe `Context` inteiro para repassar? → `ELYSIA-CORE-02`
 - [ ] `return` × `throw` de `status` está coerente com quem deve formatar o erro? → `ELYSIA-CORE-03`
-- [ ] Onde há `response` schema, o status sai por `status` e não por `set.status`? → `ELYSIA-CORE-04`
+- [ ] Onde há `response` schema, o status sai por `status()` e não por `set.status`? → `ELYSIA-CORE-04`
 - [ ] Cookies de sessão têm `sign` + `httpOnly`, com segredo vindo do ambiente? → `ELYSIA-CORE-05`
 - [ ] Handlers generator definem headers antes do primeiro `yield`? → `ELYSIA-CORE-06`
 - [ ] O ramo `default` do `onError` loga o detalhe e devolve mensagem genérica? → `ELYSIA-CORE-07`
@@ -450,7 +450,7 @@ Verificadas em **2026-08-15**:
 - **`error` do contexto não existe mais**; foi renomeado para `status`. Exemplos remanescentes na doc oficial (Lifecycle § Local Error) ainda usam o nome antigo.
 - **`context.route` existe** e traz o caminho **registrado** (`/pedidos/:id`), separado de `context.path` (a URL concreta). É o valor certo para rótulo de métrica e log.
 - **`set.redirect` está deprecado** nos tipos, com o próprio JSDoc indicando a migração para o `redirect` inline.
-- **`return status` não passa pelo `onError`** — só `throw` passa. É a fonte da confusão mais comum sobre tratamento de erro em Elysia.
+- **`return status()` não passa pelo `onError`** — só `throw` passa. É a fonte da confusão mais comum sobre tratamento de erro em Elysia.
 - **Detalhes de erro de validação são omitidos em produção por padrão**, deliberadamente, para não vazar a forma do schema.
 - **`strictPath` tem default `false`**: `/nome` e `/nome/` resolvem para a mesma rota a menos que se peça o contrário.
 - **Body é ignorado em GET e HEAD por padrão**, seguindo a RFC 2616 — um GET com corpo não chega em `body`.

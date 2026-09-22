@@ -30,7 +30,7 @@ gerado-em: 2026-09-22
 > **Quatro regras que parecem apelido e não são**, e por isso continuam citáveis por ID próprio:
 >
 > - `SB-CTX-05` (globals não é `args`) exprime um achado que `SB-CSF-04` não exprime — "usou global onde devia ser arg" não é "pôs estado no `render`".
-> - `SB-TEST-07` carrega a exceção do `fn`, que `SB-CTX-04` não carrega.
+> - `SB-TEST-07` carrega a exceção do `fn()`, que `SB-CTX-04` não carrega.
 > - `SB-MOCK-04` é a **metade complementar** de `SB-MOCK-01`, não seu sinônimo: uma diz onde registra, a outra onde comporta. E as duas vivem no mesmo satélite, o que já as tira do critério de apelido.
 > - `SB-CTX-06` é **condicional ao framework** e por isso mais ampla que `SB-TS-03`: sob `react-vite` ela continua valendo e simplesmente não é acionada.
 
@@ -75,11 +75,11 @@ gerado-em: 2026-09-22
 | `SB-DOC-03` | [Storybook - Docs e Autodocs](../../../../knowledge-base/docs/storybook-docs-e-autodocs.md) | 5. Story de documentação × story de teste |
 | `SB-DOC-04` | [Storybook - Docs e Autodocs](../../../../knowledge-base/docs/storybook-docs-e-autodocs.md) | 5. Story de documentação × story de teste |
 | `SB-DOC-05` | [Storybook - Docs e Autodocs](../../../../knowledge-base/docs/storybook-docs-e-autodocs.md) | 2. Ligar |
-| `SB-MOCK-01` | [Storybook - Mocking](../../../../knowledge-base/docs/storybook-mocking.md) | 2. `sb.mock` — automock de módulo |
-| `SB-MOCK-02` | [Storybook - Mocking](../../../../knowledge-base/docs/storybook-mocking.md) | 2. `sb.mock` — automock de módulo |
-| `SB-MOCK-03` | [Storybook - Mocking](../../../../knowledge-base/docs/storybook-mocking.md) | 2. `sb.mock` — automock de módulo |
-| `SB-MOCK-04` | [Storybook - Mocking](../../../../knowledge-base/docs/storybook-mocking.md) | 2. `sb.mock` — automock de módulo |
-| `SB-MOCK-05` | [Storybook - Mocking](../../../../knowledge-base/docs/storybook-mocking.md) | 2. `sb.mock` — automock de módulo |
+| `SB-MOCK-01` | [Storybook - Mocking](../../../../knowledge-base/docs/storybook-mocking.md) | 2. `sb.mock()` — automock de módulo |
+| `SB-MOCK-02` | [Storybook - Mocking](../../../../knowledge-base/docs/storybook-mocking.md) | 2. `sb.mock()` — automock de módulo |
+| `SB-MOCK-03` | [Storybook - Mocking](../../../../knowledge-base/docs/storybook-mocking.md) | 2. `sb.mock()` — automock de módulo |
+| `SB-MOCK-04` | [Storybook - Mocking](../../../../knowledge-base/docs/storybook-mocking.md) | 2. `sb.mock()` — automock de módulo |
+| `SB-MOCK-05` | [Storybook - Mocking](../../../../knowledge-base/docs/storybook-mocking.md) | 2. `sb.mock()` — automock de módulo |
 | `SB-MOCK-06` | [Storybook - Mocking](../../../../knowledge-base/docs/storybook-mocking.md) | 4. Módulos server-only |
 | `SB-MOCK-07` | [Storybook - Mocking](../../../../knowledge-base/docs/storybook-mocking.md) | 3. Rede, com MSW |
 | `SB-RV-01` | [Storybook - React Vite](../../../../knowledge-base/docs/storybook-react-vite.md) | 4. O router à mão |

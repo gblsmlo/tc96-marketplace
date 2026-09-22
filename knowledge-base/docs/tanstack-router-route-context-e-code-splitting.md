@@ -2,18 +2,18 @@
 titulo: TanStack Router - Route Context e Code Splitting
 Link: https://tanstack.com/router/latest/docs/framework/react/guide/router-context
 tags:
- - tanstack-router
- - context
- - code-splitting
- - agent-context
+  - tanstack-router
+  - context
+  - code-splitting
+  - agent-context
 source: "Documentação oficial — https://tanstack.com/router/latest/docs/framework/react/"
 verificado-em: 2026-08-14
 ---
 
 # TanStack Router - Route Context e Code Splitting
 
-> Contexto: `createRootRouteWithContext` · opção `context` do `createRouter` · `beforeLoad` retornando contexto · herança e merge pai→filho · `useRouteContext` · injeção de `queryClient` e de auth · `router.invalidate` após mudança de contexto.
-> Splitting: `.lazy.tsx` · `createLazyFileRoute` · `createLazyRoute` + `.lazy` · `autoCodeSplitting` · `codeSplittingOptions` (`defaultBehavior`, `splitBehavior`) · configuração crítica vs. não-crítica · `getRouteApi`.
+> Contexto: `createRootRouteWithContext` · opção `context` do `createRouter` · `beforeLoad` retornando contexto · herança e merge pai→filho · `useRouteContext` · injeção de `queryClient` e de auth · `router.invalidate()` após mudança de contexto.
+> Splitting: `.lazy.tsx` · `createLazyFileRoute` · `createLazyRoute` + `.lazy()` · `autoCodeSplitting` · `codeSplittingOptions` (`defaultBehavior`, `splitBehavior`) · configuração crítica vs. não-crítica · `getRouteApi`.
 >
 > Não cobre: `loader`, `loaderDeps`, preloading e integração com TanStack Query — [TanStack Router - Carregamento de Dados](tanstack-router-carregamento-de-dados.md); convenções de nome de arquivo — [TanStack Router - File-Based Routing](tanstack-router-file-based-routing.md); rotas virtuais definidas em código — [TanStack Router - Virtual File Routes](tanstack-router-virtual-file-routes.md).
 
@@ -49,21 +49,21 @@ import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
 
 export interface MyRouterContext {
- queryClient: QueryClient
+  queryClient: QueryClient
 }
 
-export const Route = createRootRouteWithContext<MyRouterContext>({
- component: => <Outlet />,
+export const Route = createRootRouteWithContext<MyRouterContext>()({
+  component: () => <Outlet />,
 })
 ```
 
-Note a **dupla chamada**: `createRootRouteWithContext<T>(options)`. O primeiro par de parênteses fecha o genérico; o segundo recebe as opções. Escrever `createRootRouteWithContext<T>(options)` não compila.
+Note a **dupla chamada**: `createRootRouteWithContext<T>()(options)`. O primeiro par de parênteses fecha o genérico; o segundo recebe as opções. Escrever `createRootRouteWithContext<T>(options)` não compila.
 
 ```tsx
 // src/router.tsx
 const router = createRouter({
- routeTree,
- context: { queryClient },
+  routeTree,
+  context: { queryClient },
 })
 ```
 
@@ -77,7 +77,7 @@ Sobre a obrigatoriedade: propriedades obrigatórias na interface fazem o TypeScr
 
 | ID | Regra |
 | --- | --- |
-| `TSR-CTX-02` | Projeto que passa `context` ao `createRouter` **MUST** declarar a raiz com `createRootRouteWithContext<T>`, **NEVER** com `createRootRoute`. |
+| `TSR-CTX-02` | Projeto que passa `context` ao `createRouter` **MUST** declarar a raiz com `createRootRouteWithContext<T>()`, **NEVER** com `createRootRoute()`. |
 | `TSR-CTX-03` | A interface do contexto raiz **MUST** conter apenas o que é passado no `createRouter`; o que `beforeLoad` acrescenta **NEVER** é declarado ali (é inferido). |
 
 ---
@@ -87,14 +87,14 @@ Sobre a obrigatoriedade: propriedades obrigatórias na interface fazem o TypeScr
 O retorno de `beforeLoad` é **mesclado** ao contexto do pai. Não substitui, não precisa de spread.
 
 ```tsx
-// __root.tsx → context: { foo: true }
+// __root.tsx  →  context: { foo: true }
 
 export const Route = createFileRoute('/posts')({
- beforeLoad: => ({ bar: true }),
- loader: ({ context }) => {
- context.foo // true — herdado da raiz
- context.bar // true — desta rota
- },
+  beforeLoad: () => ({ bar: true }),
+  loader: ({ context }) => {
+    context.foo // true — herdado da raiz
+    context.bar // true — desta rota
+  },
 })
 ```
 
@@ -102,18 +102,18 @@ E um exemplo com função:
 
 ```tsx
 export const Route = createFileRoute('/posts')({
- beforeLoad: => ({
- fetchPosts: => console.info('foo'),
- }),
- loader: ({ context: { fetchPosts } }) => {
- fetchPosts // 'foo'
- },
+  beforeLoad: () => ({
+    fetchPosts: () => console.info('foo'),
+  }),
+  loader: ({ context: { fetchPosts } }) => {
+    fetchPosts() // 'foo'
+  },
 })
 ```
 
 O merge é o que torna o contexto tipado útil: uma rota pathless `_authed` pode fazer `beforeLoad` devolver `{ user }`, e **toda** rota filha passa a ter `context.user` tipado, sem repetir nada. Ver [TanStack Router - Routing Concepts](tanstack-router-routing-concepts.md) para rotas pathless.
 
-Devolver `{...context, bar: true }` de dentro do `beforeLoad` não é só redundante — infla o objeto de contexto e confunde a inferência sobre o que aquela rota realmente contribui.
+Devolver `{ ...context, bar: true }` de dentro do `beforeLoad` não é só redundante — infla o objeto de contexto e confunde a inferência sobre o que aquela rota realmente contribui.
 
 | ID | Regra |
 | --- | --- |
@@ -129,19 +129,19 @@ Lembrete de [TanStack Router - Carregamento de Dados](tanstack-router-carregamen
 
 ```tsx
 export interface MyRouterContext {
- queryClient: QueryClient
+  queryClient: QueryClient
 }
 
 const router = createRouter({
- routeTree,
- context: { queryClient },
- defaultPreloadStaleTime: 0,
+  routeTree,
+  context: { queryClient },
+  defaultPreloadStaleTime: 0,
 })
 ```
 
 ```tsx
 export const Route = createFileRoute('/posts')({
- loader: ({ context }) => context.queryClient.ensureQueryData(postsQueryOptions),
+  loader: ({ context }) => context.queryClient.ensureQueryData(postsQueryOptions),
 })
 ```
 
@@ -153,29 +153,29 @@ Aqui o contexto não é opcional, é a única saída. O estado de auth vem de um
 
 ```tsx
 // __root.tsx
-export const Route = createRootRouteWithContext<{ auth: AuthState }>({
- component: => <Outlet />,
+export const Route = createRootRouteWithContext<{ auth: AuthState }>()({
+  component: () => <Outlet />,
 })
 ```
 
 ```tsx
 // main.tsx
 const router = createRouter({
- routeTree,
- context: { auth: undefined! }, // preenchido no InnerApp
+  routeTree,
+  context: { auth: undefined! }, // preenchido no InnerApp
 })
 
-function InnerApp {
- const auth = useAuth
- return <RouterProvider router={router} context={{ auth }} />
+function InnerApp() {
+  const auth = useAuth()
+  return <RouterProvider router={router} context={{ auth }} />
 }
 
-function App {
- return (
- <AuthProvider>
- <InnerApp />
- </AuthProvider>
- )
+function App() {
+  return (
+    <AuthProvider>
+      <InnerApp />
+    </AuthProvider>
+  )
 }
 ```
 
@@ -185,11 +185,11 @@ Com isso no lugar, a guarda vira o que já está em [TanStack Router - Carregame
 
 ```tsx
 export const Route = createFileRoute('/_authed')({
- beforeLoad: ({ context, location }) => {
- if (!context.auth.isAuthenticated) {
- throw redirect({ to: '/login', search: { redirect: location.href } })
- }
- },
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.isAuthenticated) {
+      throw redirect({ to: '/login', search: { redirect: location.href } })
+    }
+  },
 })
 ```
 
@@ -207,29 +207,29 @@ E o limite, citado da fonte: guardas de rota protegem **UI**; endpoints precisam
 
 O contexto do router é lido em `beforeLoad`/`loader`, que rodam fora do ciclo de render. Trocar o valor no `RouterProvider` **não** reexecuta nada por si só.
 
-> Call `router.invalidate` when context state changes, triggering router recomputation across all routes.
+> Call `router.invalidate()` when context state changes, triggering router recomputation across all routes.
 
 ```tsx
-function InnerApp {
- const auth = useAuth
+function InnerApp() {
+  const auth = useAuth()
 
- useEffect( => {
- router.invalidate
- }, [auth.isAuthenticated])
+  useEffect(() => {
+    router.invalidate()
+  }, [auth.isAuthenticated])
 
- return <RouterProvider router={router} context={{ auth }} />
+  return <RouterProvider router={router} context={{ auth }} />
 }
 ```
 
-O caso clássico: logout. Sem `invalidate`, as rotas já casadas continuam com o contexto antigo, os guards não reavaliam e a tela protegida permanece.
+O caso clássico: logout. Sem `invalidate()`, as rotas já casadas continuam com o contexto antigo, os guards não reavaliam e a tela protegida permanece.
 
 | ID | Regra |
 | --- | --- |
-| `TSR-CTX-08` | Mudança de valor no contexto do router (login, logout, troca de tenant) **MUST** ser seguida de `router.invalidate`. |
+| `TSR-CTX-08` | Mudança de valor no contexto do router (login, logout, troca de tenant) **MUST** ser seguida de `router.invalidate()`. |
 
 ### Contexto acumulado
 
-Como cada match guarda o próprio contexto, dá para percorrer `router.state.matches` e coletar contribuições — o uso citado na fonte é breadcrumbs e títulos de página dinâmicos, filtrando matches que expõem algo como `getTitle` no contexto.
+Como cada match guarda o próprio contexto, dá para percorrer `router.state.matches` e coletar contribuições — o uso citado na fonte é breadcrumbs e títulos de página dinâmicos, filtrando matches que expõem algo como `getTitle()` no contexto.
 
 ---
 
@@ -263,26 +263,26 @@ A lista de não-críticos é fechada: são quatro componentes. Tudo o mais é cr
 O route file guarda o crítico; o irmão `.lazy.tsx` guarda os componentes.
 
 ```tsx
-// src/routes/posts.tsx — crítico
+// src/routes/posts.tsx  — crítico
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts')({
- loaderDeps: ({ search: { page } }) => ({ page }),
- loader: ({ deps: { page } }) => fetchPosts({ page }),
+  loaderDeps: ({ search: { page } }) => ({ page }),
+  loader: ({ deps: { page } }) => fetchPosts({ page }),
 })
 ```
 
 ```tsx
-// src/routes/posts.lazy.tsx — não-crítico
+// src/routes/posts.lazy.tsx  — não-crítico
 import { createLazyFileRoute } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/posts')({
- component: Posts,
+  component: Posts,
 })
 
-function Posts {
- const posts = Route.useLoaderData
- return <PostList posts={posts} />
+function Posts() {
+  const posts = Route.useLoaderData()
+  return <PostList posts={posts} />
 }
 ```
 
@@ -308,10 +308,10 @@ import { getRouteApi } from '@tanstack/react-router'
 
 const route = getRouteApi('/posts/$postId')
 
-export function PostBody {
- const post = route.useLoaderData
- const { postId } = route.useParams
- return <article id={postId}>{post.body}</article>
+export function PostBody() {
+  const post = route.useLoaderData()
+  const { postId } = route.useParams()
+  return <article id={postId}>{post.body}</article>
 }
 ```
 
@@ -319,26 +319,26 @@ Métodos disponíveis, verificados: `useLoaderData`, `useLoaderDeps`, `useMatch`
 
 ---
 
-## 8. Code-based routing: `createLazyRoute` + `.lazy`
+## 8. Code-based routing: `createLazyRoute` + `.lazy()`
 
 Quando as rotas são definidas em código, não há sufixo de arquivo para o plugin ler — o link é explícito.
 
 ```tsx
 // posts.lazy.tsx
 export const Route = createLazyRoute('/posts')({
- component: MyComponent,
+  component: MyComponent,
 })
 ```
 
 ```tsx
 // app.tsx
 const postsRoute = createRoute({
- getParentRoute: => rootRoute,
- path: '/posts',
-}).lazy( => import('./posts.lazy').then((d) => d.Route))
+  getParentRoute: () => rootRoute,
+  path: '/posts',
+}).lazy(() => import('./posts.lazy').then((d) => d.Route))
 ```
 
-`.lazy` recebe uma função que devolve a `Route` lazy — o `.then((d) => d.Route)` não é opcional, o import default não serve.
+`.lazy()` recebe uma função que devolve a `Route` lazy — o `.then((d) => d.Route)` não é opcional, o import default não serve.
 
 ---
 
@@ -352,11 +352,11 @@ import { defineConfig } from 'vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
- plugins: [
- tanstackRouter({
- autoCodeSplitting: true,
- }),
- ],
+  plugins: [
+    tanstackRouter({
+      autoCodeSplitting: true,
+    }),
+  ],
 })
 ```
 
@@ -368,23 +368,23 @@ Aqui está a diferença que a verificação revelou: no modo automático, **as p
 
 ```ts
 tanstackRouter({
- autoCodeSplitting: true,
- codeSplittingOptions: {
- defaultBehavior: [
- ['component', 'pendingComponent', 'errorComponent', 'notFoundComponent'],
- ], // um único chunk com toda a UI
- },
+  autoCodeSplitting: true,
+  codeSplittingOptions: {
+    defaultBehavior: [
+      ['component', 'pendingComponent', 'errorComponent', 'notFoundComponent'],
+    ], // um único chunk com toda a UI
+  },
 })
 ```
 
 ```ts
 codeSplittingOptions: {
- splitBehavior: ({ routeId }) => {
- if (routeId.startsWith('/posts')) {
- return `'loader', 'component'`
- }
- // demais rotas caem no defaultBehavior
- },
+  splitBehavior: ({ routeId }) => {
+    if (routeId.startsWith('/posts')) {
+      return `'loader', 'component'`
+    }
+    // demais rotas caem no defaultBehavior
+  },
 }
 ```
 
@@ -409,7 +409,7 @@ Note que ``'loader', 'component'`` **não** é o mesmo que separar o loader: agr
 | ID | Regra |
 | --- | --- |
 | `TSR-SPLIT-06` | `loader` **NEVER** vai para um chunk isolado — nem via `codeSplittingOptions`, nem via `lazyFn`. Agrupá-lo junto com `component` no mesmo chunk é permitido. |
-| `TSR-SPLIT-07` | Em code-based routing, splitting **MUST** usar `createLazyRoute` + `.lazy` — `autoCodeSplitting` só funciona com file-based routing. |
+| `TSR-SPLIT-07` | Em code-based routing, splitting **MUST** usar `createLazyRoute` + `.lazy()` — `autoCodeSplitting` só funciona com file-based routing. |
 
 ---
 
@@ -418,38 +418,38 @@ Note que ``'loader', 'component'`` **não** é o mesmo que separar o loader: agr
 ```tsx
 // ERRADO — hook em beforeLoad. Não roda em contexto de render.
 export const Route = createFileRoute('/_authed')({
- beforeLoad: => {
- const { user } = useAuth // inválido
- if (!user) throw redirect({ to: '/login' })
- },
+  beforeLoad: () => {
+    const { user } = useAuth()   // inválido
+    if (!user) throw redirect({ to: '/login' })
+  },
 })
 
 // CERTO — o hook roda no componente; o valor entra pelo contexto
-function InnerApp {
- const auth = useAuth
- return <RouterProvider router={router} context={{ auth }} />
+function InnerApp() {
+  const auth = useAuth()
+  return <RouterProvider router={router} context={{ auth }} />
 }
 export const Route = createFileRoute('/_authed')({
- beforeLoad: ({ context }) => {
- if (!context.auth.user) throw redirect({ to: '/login' })
- },
+  beforeLoad: ({ context }) => {
+    if (!context.auth.user) throw redirect({ to: '/login' })
+  },
 })
 ```
 
 ```tsx
 // ERRADO — spread do contexto do pai: redundante e ofusca a contribuição da rota
-beforeLoad: ({ context }) => ({...context, permissions: getPermissions })
+beforeLoad: ({ context }) => ({ ...context, permissions: getPermissions() })
 
 // CERTO — só o delta; o router faz o merge
-beforeLoad: => ({ permissions: getPermissions })
+beforeLoad: () => ({ permissions: getPermissions() })
 ```
 
 ```tsx
 // ERRADO — loader no arquivo lazy: o router precisa dele antes de renderizar
 // posts.lazy.tsx
 export const Route = createLazyFileRoute('/posts')({
- loader: => fetchPosts, // não é export suportado em.lazy
- component: Posts,
+  loader: () => fetchPosts(),   // não é export suportado em .lazy
+  component: Posts,
 })
 
 // CERTO — crítico em posts.tsx, componente em posts.lazy.tsx
@@ -457,11 +457,11 @@ export const Route = createLazyFileRoute('/posts')({
 
 | Antipadrão | Por que falha | Correção |
 | --- | --- | --- |
-| `createRootRoute` com `context` no `createRouter` | contexto sem tipo; `context.x` vira `any` ou erro | `createRootRouteWithContext<T>` (`TSR-CTX-02`) |
+| `createRootRoute()` com `context` no `createRouter` | contexto sem tipo; `context.x` vira `any` ou erro | `createRootRouteWithContext<T>()` (`TSR-CTX-02`) |
 | Interface de contexto declarando o que vem de `beforeLoad` | duplica o que o TS já infere e obriga a passar valores falsos no `createRouter` | declarar só o injetado (`TSR-CTX-03`) |
 | `undefined!` sem `context` no `RouterProvider` | o `!` remove a checagem: quebra em runtime, não em build | passar `context={{ auth }}` (`TSR-CTX-06`) |
 | `queryClient` importado de módulo global | singleton vaza cache entre requests em SSR | injetar por contexto (`TSR-CTX-05`) |
-| Troca de auth sem `router.invalidate` | matches mantêm o contexto antigo; guards não reavaliam | `invalidate` na mudança (`TSR-CTX-08`) |
+| Troca de auth sem `router.invalidate()` | matches mantêm o contexto antigo; guards não reavaliam | `invalidate()` na mudança (`TSR-CTX-08`) |
 | `validateSearch` em `.lazy.tsx` | search é validado durante o match, antes do chunk existir | manter no route file (`TSR-SPLIT-01`) |
 | `createFileRoute` dentro de `.lazy.tsx` | duplica a definição crítica em vez de estendê-la | `createLazyFileRoute` (`TSR-SPLIT-03`) |
 | Route file crítico vazio mantido | ruído; a rota virtual já ancora o lazy | deletar o arquivo (`TSR-SPLIT-05`) |
@@ -472,20 +472,20 @@ export const Route = createLazyFileRoute('/posts')({
 ## Checklist de revisão
 
 - [ ] Algum hook do React sendo chamado em `beforeLoad`/`loader`? → `TSR-CTX-01`
-- [ ] Raiz usa `createRootRouteWithContext<T>` quando há `context` no router? → `TSR-CTX-02`
+- [ ] Raiz usa `createRootRouteWithContext<T>()` quando há `context` no router? → `TSR-CTX-02`
 - [ ] A interface do contexto raiz declara só o que é injetado no `createRouter`? → `TSR-CTX-03`
 - [ ] `beforeLoad` retorna só o delta, sem espalhar o contexto do pai? → `TSR-CTX-04`
 - [ ] Valores vindos de hook chegam pelo `context` do `RouterProvider`? → `TSR-CTX-05`
 - [ ] Todo `undefined!` no contexto tem o `context` correspondente no `RouterProvider`? → `TSR-CTX-06`
 - [ ] Existe autorização no backend além do guard de rota? → `TSR-CTX-07`
-- [ ] Login/logout/troca de tenant chamam `router.invalidate`? → `TSR-CTX-08`
+- [ ] Login/logout/troca de tenant chamam `router.invalidate()`? → `TSR-CTX-08`
 - [ ] Nenhum `loader`/`beforeLoad`/`validateSearch` em arquivo `.lazy.tsx`? → `TSR-SPLIT-01`
 - [ ] O `.lazy.tsx` exporta só os quatro componentes permitidos? → `TSR-SPLIT-02`
 - [ ] O `.lazy.tsx` usa `createLazyFileRoute`? → `TSR-SPLIT-03`
 - [ ] Os paths do arquivo crítico e do lazy são idênticos? → `TSR-SPLIT-04`
 - [ ] Route file crítico ficou vazio e continua no repo? → `TSR-SPLIT-05`
 - [ ] `codeSplittingOptions` isola o `loader` em chunk próprio? → `TSR-SPLIT-06`
-- [ ] Code-based routing usa `createLazyRoute` + `.lazy`? → `TSR-SPLIT-07`
+- [ ] Code-based routing usa `createLazyRoute` + `.lazy()`? → `TSR-SPLIT-07`
 
 ---
 
@@ -493,7 +493,7 @@ export const Route = createLazyFileRoute('/posts')({
 
 - [TanStack Router](tanstack-router.md) · [TanStack Router - Routing Concepts](tanstack-router-routing-concepts.md) · [TanStack Router - Carregamento de Dados](tanstack-router-carregamento-de-dados.md)
 - [TanStack Router - Search Params](tanstack-router-search-params.md) — `validateSearch` fica na parte crítica, nunca no chunk lazy
-- [TanStack Router - Navegação](tanstack-router-navegacao.md) — `redirect` a partir de `beforeLoad`, onde o contexto é montado
+- [TanStack Router - Navegação](tanstack-router-navegacao.md) — `redirect()` a partir de `beforeLoad`, onde o contexto é montado
 - [TanStack Router - File-Based Routing](tanstack-router-file-based-routing.md) · [TanStack Router - Route Trees](tanstack-router-route-trees.md) · [TanStack Router - Virtual File Routes](tanstack-router-virtual-file-routes.md) · [TanStack Router - Route Matching](tanstack-router-route-matching.md)
 - · [TanStack Query - O que um Dev Frontend Precisa Saber](tanstack-query-o-que-um-dev-frontend-precisa-saber.md)
 - [React.js](react-js.md) · [React - Efeitos e Sincronização](react-efeitos-e-sincronizacao.md)
@@ -514,6 +514,6 @@ Verificadas em 2026-08-14:
 - **O `loader` é splittável — mas só no modo automático.** A página de Code Splitting lista quatro exports permitidos em `.lazy.tsx` (`component`, `errorComponent`, `pendingComponent`, `notFoundComponent`) e classifica o `loader` como crítico. Já a página de Automatic Code Splitting lista **cinco** propriedades splittáveis, incluindo `loader`. As duas listas não coincidem: o que `.lazy.tsx` não aceita, o plugin aceita — e desaconselha explicitamente.
 - **`codeSplittingOptions` é agrupamento, não flags.** `defaultBehavior`/`splitBehavior` recebem arrays de arrays; cada array interno é um chunk. ``'loader','component'`` **junta** os dois num chunk, o oposto de separar o loader.
 - **O nome do plugin Vite é `tanstackRouter`, importado de `@tanstack/router-plugin/vite`** — não `TanStackRouterVite`, forma comum em material mais antigo.
-- **`createRootRouteWithContext` é chamada dupla:** `createRootRouteWithContext<T>({... })`.
+- **`createRootRouteWithContext` é chamada dupla:** `createRootRouteWithContext<T>()({ ... })`.
 - **O contexto tipado não deve descrever o app inteiro.** A fonte é explícita: só o que vai direto para o `createRouter`; o resto é inferido a partir dos `beforeLoad`.
 - **Não verificado:** o comportamento de combinar `autoCodeSplitting: true` com arquivos `.lazy.tsx` escritos à mão no mesmo projeto não é abordado nas páginas consultadas.

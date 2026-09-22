@@ -2,16 +2,16 @@
 titulo: Bun - Shell, FFI e Compat Node
 Link: https://bun.com/docs/runtime/nodejs-compat
 tags:
- - bun
- - nodejs
- - infraestrutura
- - agent-context
+  - bun
+  - nodejs
+  - infraestrutura
+  - agent-context
 source: "Documentação oficial — https://bun.com/docs"
 verificado-em: 2026-08-15
 ---
 # Bun - Shell, FFI e Compat Node
 
-> `Bun.$` (Shell — interpolação segura, `.text`/`.json`/`.quiet`/`.nothrow`, `cwd`/`env`, redirecionamento) · `bun:ffi` (`dlopen`, `cc`) e quando **não** usar · `Worker` e paralelismo · **a matriz de compatibilidade com Node**: o que é completo, parcial e ausente · comportamento de `process` · deploy (imagem `oven/bun`, `--smol`, sinais, graceful shutdown, variáveis de ambiente).
+> `Bun.$` (Shell — interpolação segura, `.text()`/`.json()`/`.quiet()`/`.nothrow()`, `cwd`/`env`, redirecionamento) · `bun:ffi` (`dlopen`, `cc`) e quando **não** usar · `Worker` e paralelismo · **a matriz de compatibilidade com Node**: o que é completo, parcial e ausente · comportamento de `process` · deploy (imagem `oven/bun`, `--smol`, sinais, graceful shutdown, variáveis de ambiente).
 >
 > **Não cobre:** APIs `Bun.*` de I/O e utilidade ([Bun - Runtime e APIs](bun-runtime-e-apis.md)) · `Bun.serve` e o ciclo de vida do servidor HTTP ([Bun - HTTP e Servidor](bun-http-e-servidor.md)) · `--compile` e o binário único ([Bun - Bundler e Build](bun-bundler-e-build.md)) · drivers de banco ([Bun - Dados e Persistência](bun-dados-e-persistencia.md)).
 
@@ -35,7 +35,7 @@ A frase da doc é uma promessa de suporte, não uma descrição de estado: *"If 
 
 O estado real, contado pela própria matriz: de todos os módulos `node:*` listados, **exatamente um está marcado 🔴** (`node:sea`). Todo o resto é 🟢 ou 🟡. Isso é excelente — e é precisamente o que torna a migração perigosa.
 
-Um módulo 🔴 falha na primeira linha e você descobre em dois minutos. Um módulo 🟡 importa, instancia, roda o happy path, e falha **na condição específica que você não testou**: a curva EC que a lib de assinatura usa, a resumption de sessão TLS entre processos, o `AsyncLocalStorage` que não atravessa um `Worker`, o `eventLoopUtilization` que devolve zero e faz o painel mentir.
+Um módulo 🔴 falha na primeira linha e você descobre em dois minutos. Um módulo 🟡 importa, instancia, roda o happy path, e falha **na condição específica que você não testou**: a curva EC que a lib de assinatura usa, a resumption de sessão TLS entre processos, o `AsyncLocalStorage` que não atravessa um `Worker`, o `eventLoopUtilization()` que devolve zero e faz o painel mentir.
 
 **O valor desta nota não é dizer que Bun é compatível. É dizer exatamente onde a compatibilidade termina.** A § 5 é a seção mais importante do satélite.
 
@@ -61,31 +61,31 @@ Compare com o hábito de `child_process`: `exec("ls " + entrada)` entrega a stri
 | Chamada | Devolve |
 | --- | --- |
 | `` await $`cmd` `` | `{ stdout, stderr }` como `Buffer`; a saída também vai para o terminal |
-| `.quiet` | mesma coisa, sem escrever no terminal |
-| `.text` | `string` — **já chama `.quiet` sozinho** |
-| `.json` | valor parseado |
-| `.lines` | async iterator, linha a linha |
-| `.blob` | `Blob` |
+| `.quiet()` | mesma coisa, sem escrever no terminal |
+| `.text()` | `string` — **já chama `.quiet()` sozinho** |
+| `.json()` | valor parseado |
+| `.lines()` | async iterator, linha a linha |
+| `.blob()` | `Blob` |
 
-**Erro.** Exit code diferente de zero **lança** por default, com um `ShellError` que carrega `exitCode`, `stdout` e `stderr`. `.nothrow` desliga por comando; `$.nothrow` / `$.throws(false)` mudam o default global do processo — mudança global que obriga a checar `exitCode` em **todo** comando dali em diante.
+**Erro.** Exit code diferente de zero **lança** por default, com um `ShellError` que carrega `exitCode`, `stdout` e `stderr`. `.nothrow()` desliga por comando; `$.nothrow()` / `$.throws(false)` mudam o default global do processo — mudança global que obriga a checar `exitCode` em **todo** comando dali em diante.
 
-**Contexto.** `.cwd(caminho)` e `.env(obj)` por comando; `$.cwd(...)` e `$.env(...)` mudam o default. Sem `.env`, os comandos herdam `process.env`.
+**Contexto.** `.cwd(caminho)` e `.env(obj)` por comando; `$.cwd(...)` e `$.env(...)` mudam o default. Sem `.env()`, os comandos herdam `process.env`.
 
 ```ts
 import { $ } from "bun";
 
 // diretório e ambiente por comando, sem tocar no processo
-const versao = await $`git rev-parse --short HEAD`.cwd(repo).text;
+const versao = await $`git rev-parse --short HEAD`.cwd(repo).text();
 
 // checagem explícita em vez de exceção
-const { exitCode, stderr } = await $`bun test`.cwd(repo).nothrow.quiet;
+const { exitCode, stderr } = await $`bun test`.cwd(repo).nothrow().quiet();
 if (exitCode !== 0) {
- throw new Error(`testes falharam:\n${stderr.toString}`);
+  throw new Error(`testes falharam:\n${stderr.toString()}`);
 }
 
 // redirecionamento para objetos JavaScript
 const resposta = await fetch("https://exemplo.com/dados.csv");
-const linhas = await $`wc -l < ${resposta}`.text; // Response como stdin
+const linhas = await $`wc -l < ${resposta}`.text(); // Response como stdin
 ```
 
 Redirecionamento aceita os operadores de bash (`<`, `>`, `>>`, `2>`, `&>`, `2>&1`, `1>&2`) e também objetos JavaScript nos dois sentidos: `Buffer`/TypedArray/`ArrayBuffer`, `Bun.file(path)`, e `Response` como entrada. Pipe (`|`) e substituição (`$(...)`) funcionam.
@@ -120,7 +120,7 @@ Nem todo programa respeita `--`, então a rejeição por `-` inicial é a guarda
 | `BUN-SYS-01` | Comando externo com valor de runtime **MUST** usar interpolação de `Bun.$`; `child_process.exec` com string concatenada **NEVER** em código novo. |
 | `BUN-SYS-02` | Valor de entrada externa **NEVER** é interpolado dentro de um `sh -c` / `bash -c` disparado por `Bun.$` — ali as garantias de escaping não valem. |
 | `BUN-SYS-03` | Argumento de runtime passado a um programa externo **MUST** ser rejeitado quando começa com `-`, ou ser precedido do separador `--` na linha de comando — sem uma das duas guardas, o valor é entregue com segurança e o programa alvo o obedece como flag. |
-| `BUN-SYS-04` | `$.nothrow` / `$.throws(false)` **NEVER** é chamado em escopo global de aplicação — use `.nothrow` no comando específico. |
+| `BUN-SYS-04` | `$.nothrow()` / `$.throws(false)` **NEVER** é chamado em escopo global de aplicação — use `.nothrow()` no comando específico. |
 
 ---
 
@@ -139,7 +139,7 @@ import { dlopen, FFIType, suffix } from "bun:ffi";
 
 // suffix é "dylib" | "so" | "dll" conforme a plataforma
 const { symbols } = dlopen(`libminhalib.${suffix}`, {
- somar: { args: [FFIType.i32, FFIType.i32], returns: FFIType.i32 },
+  somar: { args: [FFIType.i32, FFIType.i32], returns: FFIType.i32 },
 });
 
 symbols.somar(1, 2);
@@ -147,7 +147,7 @@ symbols.somar(1, 2);
 
 Performance verificada: cerca de **2 a 6x mais rápido que FFI de Node.js via Node-API**, porque `dlopen`, `linkSymbols`, `CFunction` e `JSCallback` são implementados dentro do JavaScriptCore — conversão de argumento e boxing do retorno acontecem na engine, e sites de chamada quentes compilam para chamada nativa direta pelos tiers DFG/FTL.
 
-`cc` compila e roda C em runtime, embutindo o TinyCC; a página do compilador C também declara suporte **experimental**. `JSCallback` tem suporte **experimental** a callbacks thread-safe, necessário quando o callback cruza threads (`threadsafe: true`).
+`cc()` compila e roda C em runtime, embutindo o TinyCC; a página do compilador C também declara suporte **experimental**. `JSCallback` tem suporte **experimental** a callbacks thread-safe, necessário quando o callback cruza threads (`threadsafe: true`).
 
 **A árvore de decisão é curta:**
 
@@ -160,7 +160,7 @@ Preciso chamar código nativo?
 
 | ID | Regra |
 | --- | --- |
-| `BUN-SYS-05` | `bun:ffi` e `cc` **NEVER** entram em caminho de produção — a doc os declara experimentais e recomenda Node-API. |
+| `BUN-SYS-05` | `bun:ffi` e `cc()` **NEVER** entram em caminho de produção — a doc os declara experimentais e recomenda Node-API. |
 
 ---
 
@@ -175,13 +175,13 @@ Pontos verificados que mudam o código:
 - **Mensagens são enfileiradas até o worker estar pronto** — não é preciso esperar o evento `"open"` (que é extensão do Bun, não existe no browser) para chamar `postMessage`.
 - **`preload`** (string ou array) carrega módulos antes do código do worker; a doc cita OpenTelemetry, Sentry e DataDog como o caso de uso.
 - **`smol: true`** no construtor reduz memória à custa de performance (define `JSC::HeapSize` como `Small`).
-- Especificadores são resolvidos **relativos à raiz do projeto**, como `bun./caminho/arquivo.js`.
+- Especificadores são resolvidos **relativos à raiz do projeto**, como `bun ./caminho/arquivo.js`.
 - Falha ao resolver o script emite evento `"error"` no objeto `Worker`.
 
 ```ts
 const worker = new Worker("./workers/relatorio.ts", {
- preload: ["./instrumentacao.ts"], // roda antes do código do worker
- smol: true,
+  preload: ["./instrumentacao.ts"], // roda antes do código do worker
+  smol: true,
 });
 
 worker.postMessage({ pedidoId }); // enfileirado se o worker ainda não subiu
@@ -209,8 +209,8 @@ worker.onmessage = (e) => salvarRelatorio(e.data);
 rg -o --no-filename 'node:[a-z_]+' src | sort -u
 
 # 1b. os nomes legados sem prefixo, que o Node ainda aceita.
-# O ponto no padrão casa a aspa, simples ou dupla.
-rg -n -e 'from.(assert|async_hooks|buffer|child_process|cluster|crypto|dgram|dns|events|fs|http|http2|https|module|net|os|path|perf_hooks|readline|stream|timers|tls|tty|url|util|v8|vm|worker_threads|zlib).' src
+#     O ponto no padrão casa a aspa, simples ou dupla.
+rg -n -e 'from .(assert|async_hooks|buffer|child_process|cluster|crypto|dgram|dns|events|fs|http|http2|https|module|net|os|path|perf_hooks|readline|stream|timers|tls|tty|url|util|v8|vm|worker_threads|zlib).' src
 
 # 2. as dependências, incluindo transitivas — o passo que ninguém faz
 rg -o --no-filename 'node:[a-z_]+' node_modules | sort -u
@@ -238,24 +238,24 @@ Mesmo entre os 🟢 há ressalvas nominais que quebram bibliotecas específicas:
 | `node:buffer` | um `Buffer` é limitado a **4 GiB** |
 | `node:http` | `http.Server` **não estende** `net.Server`; `listen(handle)` e as opções `fd`, `ipv6Only`, `signal` são ignoradas; `keepAlive` no servidor é no-op |
 | `node:stream` | `isReadable`/`isWritable`/`isErrored`/`Readable.isDisturbed` só entendem streams de Node, não web streams |
-| `node:path` | `matchesGlob` usa a semântica de `Bun.Glob`, não minimatch (`*` casa dotfiles, sem extglob) |
+| `node:path` | `matchesGlob()` usa a semântica de `Bun.Glob`, não minimatch (`*` casa dotfiles, sem extglob) |
 | `node:fs` | `Stats` não tem os getters `Temporal.Instant` (`atimeInstant` e afins) |
 
 ### O que é 🟡 parcial — e a parte que falta importa
 
 | Módulo | O que falta, e o sintoma |
 | --- | --- |
-| **`node:crypto`** | BoringSSL: faltam os tipos de chave `ed448`, `x448`, `rsa-pss`, `dsa`, `dh`; **curvas EC além de P-224/256/384/521 — não há `secp256k1`**; cifras CCM, OCB, XTS e `chacha20-poly1305`. `argon2` e `setEngine` lançam. → **quebra assinatura de blockchain e hashing Argon2** |
+| **`node:crypto`** | BoringSSL: faltam os tipos de chave `ed448`, `x448`, `rsa-pss`, `dsa`, `dh`; **curvas EC além de P-224/256/384/521 — não há `secp256k1`**; cifras CCM, OCB, XTS e `chacha20-poly1305`. `argon2()` e `setEngine()` lançam. → **quebra assinatura de blockchain e hashing Argon2** |
 | **`node:async_hooks`** | `AsyncLocalStorage` e `AsyncResource` funcionam. `createHook`, `executionAsyncId`, `triggerAsyncId`, `executionAsyncResource` são **stubs**; async ids são sempre `0`. Contexto não propaga para `MessagePort`/`BroadcastChannel`/`Worker` → **instrumentação APM baseada em hooks não vê nada** |
-| **`node:tls`** | Faltam `pskCallback`, OCSP stapling (`requestOCSP`), os eventos de servidor `newSession`/`resumeSession` e as chaves de ticket de sessão (`ticketKeys` é ignorado) → **resumption de sessão não funciona entre processos**. Por causa do BoringSSL, `tlsSocket.renegotiate` sempre falha e `getEphemeralKeyInfo`/`getSharedSigalgs` não devolvem informação |
-| **`node:https`** | `request`, `get`, `Agent` e `globalAgent` são implementados, incluindo pooling de conexão. `https.Server` é um `http.Server` com opções de TLS, não um `tls.Server`. Sockets de request **não** são `TLSSocket`: `encrypted`, `authorized` e `servername` funcionam, mas `getPeerCertificate` e `getCipher` **faltam**. `setSecureContext`, `addContext`, **`SNICallback`** e `handshakeTimeout` **não são suportados** → quebra autenticação por certificado de cliente, e quebra TLS multi-domínio por callback de SNI |
+| **`node:tls`** | Faltam `pskCallback`, OCSP stapling (`requestOCSP`), os eventos de servidor `newSession`/`resumeSession` e as chaves de ticket de sessão (`ticketKeys` é ignorado) → **resumption de sessão não funciona entre processos**. Por causa do BoringSSL, `tlsSocket.renegotiate()` sempre falha e `getEphemeralKeyInfo()`/`getSharedSigalgs()` não devolvem informação |
+| **`node:https`** | `request`, `get`, `Agent` e `globalAgent` são implementados, incluindo pooling de conexão. `https.Server` é um `http.Server` com opções de TLS, não um `tls.Server`. Sockets de request **não** são `TLSSocket`: `encrypted`, `authorized` e `servername` funcionam, mas `getPeerCertificate()` e `getCipher()` **faltam**. `setSecureContext()`, `addContext()`, **`SNICallback`** e `handshakeTimeout` **não são suportados** → quebra autenticação por certificado de cliente, e quebra TLS multi-domínio por callback de SNI |
 | **`node:child_process`** | `serialization: "advanced"` **só funciona entre processos Bun** — para IPC Bun↔Node use JSON. Não dá para passar `stdout`/`stderr` de um filho como `stdio` de outro |
 | **`node:cluster`** | `net` e `dgram` são compartilhados pelo primário como no Node. **Servidores `node:http`/`node:https` em workers fazem bind próprio — balanceamento HTTP entre processos só em Linux** (`SO_REUSEPORT`). A doc diz "implementado, mas não testado em batalha" |
-| **`node:perf_hooks`** | **`eventLoopUtilization` sempre devolve zeros**; não há entradas `gc`, `dns` nem `resource`; `performance.nodeTiming` é placeholder → **painel de event loop lag mente** |
+| **`node:perf_hooks`** | **`eventLoopUtilization()` sempre devolve zeros**; não há entradas `gc`, `dns` nem `resource`; `performance.nodeTiming` é placeholder → **painel de event loop lag mente** |
 | **`node:v8`** | `serialize`/`deserialize` usam o formato de fio do **JavaScriptCore, não o do V8** → payload serializado não atravessa entre Node e Bun. Sem `Serializer`/`Deserializer`, `queryObjects`, `promiseHooks` |
 | **`node:module`** | `module.register` é **no-op** (a doc recomenda `Bun.plugin`); `syncBuiltinESMExports`, `module._load`, `module._pathCache` também. `findSourceMap` sempre devolve `undefined` → **loaders/hooks de instrumentação por `module.register` não rodam** |
-| **`node:test`** | parcialmente implementado; a maioria das opções de `run` lança `ERR_NOT_IMPLEMENTED`, `test.only` não filtra. A doc recomenda **`bun:test`** ([Bun - Testes](bun-testes.md)) |
-| **`node:worker_threads`** | `resourceLimits` e `trackUnmanagedFds` ignorados; `execArgv` só define `process.execArgv`; `eventLoopUtilization` é stub |
+| **`node:test`** | parcialmente implementado; a maioria das opções de `run()` lança `ERR_NOT_IMPLEMENTED`, `test.only()` não filtra. A doc recomenda **`bun:test`** ([Bun - Testes](bun-testes.md)) |
+| **`node:worker_threads`** | `resourceLimits` e `trackUnmanagedFds` ignorados; `execArgv` só define `process.execArgv`; `eventLoopUtilization()` é stub |
 | **`node:util`** | faltam `diff`, `transferableAbortSignal`, `transferableAbortController` |
 | **`node:vm`**, `node:wasi`, `node:inspector`, `node:repl`, `node:domain`, `node:diagnostics_channel` | parciais, com ressalvas na página |
 
@@ -268,8 +268,8 @@ Mesmo entre os 🟢 há ressalvas nominais que quebram bibliotecas específicas:
 `process` é 🟡. Verificado:
 
 - **`process.title` é no-op em macOS e Linux.**
-- `getActiveResourcesInfo`, `_getActiveHandles`, `_getActiveRequests` **sempre devolvem array vazio**.
-- `setSourceMapsEnabled` é no-op; `process.report.writeReport` **não escreve nada**.
+- `getActiveResourcesInfo()`, `_getActiveHandles()`, `_getActiveRequests()` **sempre devolvem array vazio**.
+- `setSourceMapsEnabled()` é no-op; `process.report.writeReport()` **não escreve nada**.
 - `process.binding` é parcial: `buffer`, `config`, `constants`, `fs`, `natives`, `tty_wrap`, `util`, `uv` existem; o resto lança.
 
 Nos globais web, três detalhes que produzem bug silencioso:
@@ -282,7 +282,7 @@ Nos globais web, três detalhes que produzem bug silencioso:
 | --- | --- |
 | `BUN-SYS-07` | Migração de Node **MUST** enumerar os módulos `node:*` usados pelo código **e pelas dependências transitivas** (grep no fonte e em `node_modules`, `bun why` para achar quem trouxe cada um) e conferir cada um na matriz oficial — 🟡 significa "importa e roda o happy path", não "compatível". |
 | `BUN-SYS-08` | Código que depende de `secp256k1`, `argon2`, `ed448`/`x448` ou das cifras CCM/OCB/XTS/`chacha20-poly1305` **NEVER** presume `node:crypto` em Bun — BoringSSL não os tem. |
-| `BUN-SYS-09` | Observabilidade **NEVER** se apoia em `createHook`, `executionAsyncId` ou `eventLoopUtilization` em Bun — são stubs que devolvem `0`. Use `AsyncLocalStorage`, que é implementado. |
+| `BUN-SYS-09` | Observabilidade **NEVER** se apoia em `createHook`, `executionAsyncId` ou `eventLoopUtilization()` em Bun — são stubs que devolvem `0`. Use `AsyncLocalStorage`, que é implementado. |
 | `BUN-SYS-10` | IPC entre um processo Bun e um processo Node **MUST** usar serialização JSON — `serialization: "advanced"` só funciona entre processos Bun. |
 
 ---
@@ -297,7 +297,7 @@ FROM oven/bun:1 AS base
 WORKDIR /usr/src/app
 
 # 1. dependências em stage separado: cacheia entre builds
-# dois installs, porque teste e build precisam das devDependencies
+#    dois installs, porque teste e build precisam das devDependencies
 FROM base AS install
 RUN mkdir -p /temp/dev
 COPY package.json bun.lock /temp/dev/
@@ -312,7 +312,7 @@ RUN cd /temp/prod && bun install --frozen-lockfile --production
 # 2. stage com o fonte completo: é aqui que teste e build rodam
 FROM base AS prerelease
 COPY --from=install /temp/dev/node_modules node_modules
-COPY..
+COPY . .
 ENV NODE_ENV=production
 RUN bun test
 RUN bun run build
@@ -320,13 +320,13 @@ RUN bun run build
 # 3. imagem final: dependências de produção + o que o prerelease produziu
 FROM base AS release
 COPY --from=install /temp/prod/node_modules node_modules
-COPY --from=prerelease /usr/src/app/index.ts.
-COPY --from=prerelease /usr/src/app/package.json.
+COPY --from=prerelease /usr/src/app/index.ts .
+COPY --from=prerelease /usr/src/app/package.json .
 
 # 4. usuário não-root já existe na imagem
 USER bun
 EXPOSE 3000/tcp
-# --no-env-file: a configuração vem do orquestrador, nunca de um.env na imagem
+# --no-env-file: a configuração vem do orquestrador, nunca de um .env na imagem
 ENTRYPOINT [ "bun", "run", "--no-env-file", "index.ts" ]
 ```
 
@@ -338,41 +338,41 @@ Acompanhe com um `.dockerignore` — a doc lista `.env` entre as entradas, junto
 
 **Sinais e shutdown.** `process.on("SIGTERM" | "SIGINT", …)` funciona. O ponto que decide se o shutdown é limpo está na doc de sinais, e contraria o hábito:
 
-> Nem `"beforeExit"` nem `"exit"` são emitidos quando o processo é morto por um sinal para o qual **não há listener**. Para rodar limpeza em um sinal, registre o listener daquele sinal e chame `process.exit` a partir dele.
+> Nem `"beforeExit"` nem `"exit"` são emitidos quando o processo é morto por um sinal para o qual **não há listener**. Para rodar limpeza em um sinal, registre o listener daquele sinal e chame `process.exit()` a partir dele.
 
 Ou seja: sem listener de `SIGTERM`, o container recebe o sinal do orquestrador e morre **sem** passar por `beforeExit`. Conexões em voo são cortadas.
 
-**E o inverso, que é a metade esquecida:** registrar o listener **suprime a ação padrão do sinal**. O default de `SIGTERM` é terminar o processo; ao registrar um handler, você assume essa responsabilidade. Um listener que faz a limpeza e **não** chama `process.exit` deixa o processo vivo — o orquestrador espera o `terminationGracePeriod` inteiro e manda `SIGKILL`. O sintoma é um container que demora exatamente 30 segundos para morrer em todo deploy, e ninguém liga isso a uma linha faltando. **`process.exit` não é limpeza cosmética; é o que faz o processo sair.** Esta é a razão de `BUN-SYS-11` nomear as duas coisas.
+**E o inverso, que é a metade esquecida:** registrar o listener **suprime a ação padrão do sinal**. O default de `SIGTERM` é terminar o processo; ao registrar um handler, você assume essa responsabilidade. Um listener que faz a limpeza e **não** chama `process.exit()` deixa o processo vivo — o orquestrador espera o `terminationGracePeriod` inteiro e manda `SIGKILL`. O sintoma é um container que demora exatamente 30 segundos para morrer em todo deploy, e ninguém liga isso a uma linha faltando. **`process.exit()` não é limpeza cosmética; é o que faz o processo sair.** Esta é a razão de `BUN-SYS-11` nomear as duas coisas.
 
 ```ts
 const server = Bun.serve({ /* … */ });
 
 async function desligar(sinal: string) {
- console.log({ msg: "shutdown iniciado", sinal });
+  console.log({ msg: "shutdown iniciado", sinal });
 
- // para de aceitar; espera as requisições em voo terminarem
- await server.stop;
- await sql.close({ timeout: 5 });
+  // para de aceitar; espera as requisições em voo terminarem
+  await server.stop();
+  await sql.close({ timeout: 5 });
 
- process.exit(0); // sem isto, o listener impede a saída padrão do sinal
+  process.exit(0); // sem isto, o listener impede a saída padrão do sinal
 }
 
 // sem estes listeners, beforeExit/exit não rodam quando o sinal chega
-process.on("SIGTERM", => desligar("SIGTERM")); // orquestrador
-process.on("SIGINT", => desligar("SIGINT")); // Ctrl+C
+process.on("SIGTERM", () => desligar("SIGTERM")); // orquestrador
+process.on("SIGINT", () => desligar("SIGINT"));   // Ctrl+C
 ```
 
-`await server.stop` é o par correto: fecha keep-alive ociosas, espera as requisições em voo e resolve quando toda conexão fechou ([Bun - HTTP e Servidor](bun-http-e-servidor.md) § 6).
+`await server.stop()` é o par correto: fecha keep-alive ociosas, espera as requisições em voo e resolve quando toda conexão fechou ([Bun - HTTP e Servidor](bun-http-e-servidor.md) § 6).
 
-**Se o servidor não for `Bun.serve`.** `server.stop` é API de `Bun.serve`, e vale separar o que na regra é dela do que não é:
+**Se o servidor não for `Bun.serve`.** `server.stop()` é API de `Bun.serve`, e vale separar o que na regra é dela do que não é:
 
 | Parte de `BUN-SYS-11` | Depende de `Bun.serve`? |
 | --- | --- |
 | Registrar listener de `SIGTERM`/`SIGINT` | **não** — é `process`, vale em qualquer servidor rodando sob Bun |
-| Chamar `process.exit` ao fim do handler | **não** — é a ação padrão suprimida, mesma coisa em qualquer app |
-| `await server.stop` como forma de drenar | **sim** — é a instância `Bun.serve` do passo "pare de aceitar e espere o que está em voo" |
+| Chamar `process.exit()` ao fim do handler | **não** — é a ação padrão suprimida, mesma coisa em qualquer app |
+| `await server.stop()` como forma de drenar | **sim** — é a instância `Bun.serve` do passo "pare de aceitar e espere o que está em voo" |
 
-Num app em `node:http` (Express, Fastify e o que mais rodar em cima dele), o passo do meio é `server.close`, que na semântica do Node para de aceitar conexões novas e chama o callback quando as existentes terminam. A matriz marca `node:http` como 🟢 e **não** lista `close` entre as lacunas — mas lista que `keepAlive` e `keepAliveInitialDelay` **no servidor são no-op**, e keep-alive ociosa é justamente o que costuma fazer um `close` pendurar em Node. **Não verificado nesta sessão:** o comportamento de `server.closeIdleConnections` e `server.closeAllConnections` sob Bun — a matriz não os menciona em nenhum dos sentidos. Se o seu shutdown depende deles, meça antes de confiar.
+Num app em `node:http` (Express, Fastify e o que mais rodar em cima dele), o passo do meio é `server.close()`, que na semântica do Node para de aceitar conexões novas e chama o callback quando as existentes terminam. A matriz marca `node:http` como 🟢 e **não** lista `close()` entre as lacunas — mas lista que `keepAlive` e `keepAliveInitialDelay` **no servidor são no-op**, e keep-alive ociosa é justamente o que costuma fazer um `close()` pendurar em Node. **Não verificado nesta sessão:** o comportamento de `server.closeIdleConnections()` e `server.closeAllConnections()` sob Bun — a matriz não os menciona em nenhum dos sentidos. Se o seu shutdown depende deles, meça antes de confiar.
 
 ```ts
 // equivalente em node:http — a estrutura é a mesma, o meio muda
@@ -380,24 +380,24 @@ import { createServer } from "node:http";
 const server = createServer(app);
 
 function desligar(sinal: string) {
- console.log({ msg: "shutdown iniciado", sinal });
- server.close(async => { // para de aceitar; espera as em voo
- await sql.close({ timeout: 5 });
- process.exit(0); // continua obrigatório, pela mesma razão
- });
+  console.log({ msg: "shutdown iniciado", sinal });
+  server.close(async () => {          // para de aceitar; espera as em voo
+    await sql.close({ timeout: 5 });
+    process.exit(0);                  // continua obrigatório, pela mesma razão
+  });
 }
 
-process.on("SIGTERM", => desligar("SIGTERM"));
-process.on("SIGINT", => desligar("SIGINT"));
+process.on("SIGTERM", () => desligar("SIGTERM"));
+process.on("SIGINT", () => desligar("SIGINT"));
 ```
 
 O que fazer com um servidor `node:http` que já existe — manter, embrulhar ou migrar para `Bun.serve` — é decisão, não API, e está em [Backend no runtime Bun](backend-no-runtime-bun.md). [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7.2 declara o mesmo limite do lado do HTTP.
 
-**Variáveis de ambiente.** Bun lê `.env` automaticamente, em ordem **crescente** de precedência: `.env` → `.env.production` / `.env.development` / `.env.test` (conforme `NODE_ENV`) → `.env.local`. `--env-file=...` (repetível) troca a lista; **`--no-env-file` desliga o carregamento automático**, e a doc aponta produção e CI/CD como o caso de uso — o container deve receber variáveis do orquestrador, não de um arquivo que vazou para a imagem. Contexto em `Arquivos.env não substituem secret management` e.
+**Variáveis de ambiente.** Bun lê `.env` automaticamente, em ordem **crescente** de precedência: `.env` → `.env.production` / `.env.development` / `.env.test` (conforme `NODE_ENV`) → `.env.local`. `--env-file=...` (repetível) troca a lista; **`--no-env-file` desliga o carregamento automático**, e a doc aponta produção e CI/CD como o caso de uso — o container deve receber variáveis do orquestrador, não de um arquivo que vazou para a imagem. Contexto em e.
 
 | ID | Regra |
 | --- | --- |
-| `BUN-SYS-11` | Serviço em container **MUST** registrar listener de `SIGTERM` (e `SIGINT`) que drene o servidor — `await server.stop` em `Bun.serve`, `server.close` em `node:http` — e **MUST** terminar chamando `process.exit`: sem o listener, `beforeExit`/`exit` não são emitidos e as conexões em voo são cortadas; com o listener e sem o `process.exit`, a saída padrão do sinal fica **suprimida** e o processo só morre no `SIGKILL` do orquestrador. |
+| `BUN-SYS-11` | Serviço em container **MUST** registrar listener de `SIGTERM` (e `SIGINT`) que drene o servidor — `await server.stop()` em `Bun.serve`, `server.close()` em `node:http` — e **MUST** terminar chamando `process.exit()`: sem o listener, `beforeExit`/`exit` não são emitidos e as conexões em voo são cortadas; com o listener e sem o `process.exit()`, a saída padrão do sinal fica **suprimida** e o processo só morre no `SIGKILL` do orquestrador. |
 | `BUN-SYS-12` | Imagem de produção **MUST** instalar com `bun install --frozen-lockfile --production`, **MUST** rodar como `USER bun` e **MUST** receber configuração pelo ambiente do orquestrador, com `--no-env-file` no `ENTRYPOINT` — arquivo `.env` **NEVER** vai para a imagem. |
 
 ---
@@ -409,19 +409,19 @@ O que fazer com um servidor `node:http` que já existe — manter, embrulhar ou 
 | `child_process.exec("ls " + entrada)` | o `/bin/sh` reparseia a string; `;` separa comandos | `` $`ls ${entrada}` `` — `BUN-SYS-01` |
 | `` $`bash -c "echo ${entrada}"` `` | você abriu um shell explicitamente; o escaping de Bun não vale lá dentro | passar o valor como argumento, sem shell aninhado — `BUN-SYS-02` |
 | `` $`git ls-remote origin ${branch}` `` com `branch` do usuário | `--upload-pack=...` é passado com segurança e o `git` obedece | rejeitar valor iniciado por `-`, ou usar `--` — `BUN-SYS-03` |
-| Container que só morre no `SIGKILL`, 30 s depois de todo deploy | há listener de `SIGTERM`, mas ele não chama `process.exit`; o listener suprimiu a saída padrão do sinal | `process.exit` no fim do handler — `BUN-SYS-11` |
+| Container que só morre no `SIGKILL`, 30 s depois de todo deploy | há listener de `SIGTERM`, mas ele não chama `process.exit()`; o listener suprimiu a saída padrão do sinal | `process.exit()` no fim do handler — `BUN-SYS-11` |
 | `ENTRYPOINT [ "bun", "run", "index.ts" ]` sem `--no-env-file` | um `.env` que escapou do `.dockerignore` sobrescreve o que o orquestrador injetou, em silêncio | `bun run --no-env-file index.ts` — `BUN-SYS-12` |
 | Copiar o Dockerfile da doc sem o stage `prerelease` | `COPY --from=prerelease` referencia stage inexistente; o build falha | manter os quatro stages — § 6 |
 | "Conferi os `node:*` que eu importo" | o `node:crypto` que quebra quase sempre está numa dependência transitiva | enumerar `node_modules` também — `BUN-SYS-07` |
-| `$.nothrow` no boot da aplicação | todo comando dali em diante passa a falhar em silêncio | `.nothrow` pontual — `BUN-SYS-04` |
+| `$.nothrow()` no boot da aplicação | todo comando dali em diante passa a falhar em silêncio | `.nothrow()` pontual — `BUN-SYS-04` |
 | `bun:ffi` para uma dependência de produção | declarado experimental, com bugs conhecidos, pela própria doc | módulo Node-API — `BUN-SYS-05` |
 | Assumir `secp256k1` em `node:crypto` | BoringSSL não implementa a curva; falha só quando a assinatura é chamada | biblioteca em JS/WASM, ou verificar antes — `BUN-SYS-08` |
-| Painel de saúde lendo `eventLoopUtilization` | sempre devolve zeros em Bun; o gráfico fica reto e ninguém percebe | métrica própria — `BUN-SYS-09` |
+| Painel de saúde lendo `eventLoopUtilization()` | sempre devolve zeros em Bun; o gráfico fica reto e ninguém percebe | métrica própria — `BUN-SYS-09` |
 | APM baseado em `createHook`/`executionAsyncId` | stubs; async ids sempre `0` | `AsyncLocalStorage`, que é implementado — `BUN-SYS-09` |
 | `AsyncLocalStorage` esperando atravessar um `Worker` | contexto não propaga por `MessagePort`/`Worker`; o trace id some | enviar na mensagem — `BUN-SYS-06` |
 | `serialization: "advanced"` em IPC com processo Node | só funciona entre processos Bun; a mensagem não chega | JSON — `BUN-SYS-10` |
 | Substituir `process.stdout.write` para capturar log em teste | Bun escreve direto no file descriptor; nada é capturado | usar o mecanismo de captura de `bun:test` |
-| Container sem listener de `SIGTERM` | `beforeExit`/`exit` não são emitidos; conexões em voo morrem no meio | listener + `server.stop` + `process.exit` — `BUN-SYS-11` |
+| Container sem listener de `SIGTERM` | `beforeExit`/`exit` não são emitidos; conexões em voo morrem no meio | listener + `server.stop()` + `process.exit()` — `BUN-SYS-11` |
 | `.env` copiado para a imagem Docker | segredo versionado na camada da imagem, legível por quem puxar | variáveis do orquestrador + `--no-env-file` — `BUN-SYS-12` |
 | `--smol` esperando reduzir uso de memória em container | a flag aumenta a frequência de GC; Bun já ajusta o heap por cgroup com e sem ela | ajustar o limite do container; usar `--smol` só para conter crescimento do heap |
 | `node:cluster` para balancear HTTP em macOS | servidores HTTP em workers fazem bind próprio; só Linux balanceia (`SO_REUSEPORT`) | `reusePort` em Linux — [Bun - HTTP e Servidor](bun-http-e-servidor.md) |
@@ -433,14 +433,14 @@ O que fazer com um servidor `node:http` que já existe — manter, embrulhar ou 
 - [ ] Nenhum `child_process.exec` com string concatenada? → `BUN-SYS-01`
 - [ ] Nenhuma interpolação dentro de `bash -c` / `sh -c`? → `BUN-SYS-02`
 - [ ] Argumentos de runtime são rejeitados quando começam por `-`, ou vêm depois de `--`? → `BUN-SYS-03`
-- [ ] `$.nothrow` global ausente? → `BUN-SYS-04`
-- [ ] Nenhum `bun:ffi` / `cc` em caminho de produção? → `BUN-SYS-05`
+- [ ] `$.nothrow()` global ausente? → `BUN-SYS-04`
+- [ ] Nenhum `bun:ffi` / `cc()` em caminho de produção? → `BUN-SYS-05`
 - [ ] Trace id enviado explicitamente ao `Worker`? → `BUN-SYS-06`
 - [ ] A lista de `node:*` inclui `node_modules`, não só o `src`, e cada um foi conferido na matriz? → `BUN-SYS-07`
 - [ ] Nenhum algoritmo ausente do BoringSSL em uso? → `BUN-SYS-08`
-- [ ] Observabilidade sem `createHook` / `eventLoopUtilization`? → `BUN-SYS-09`
+- [ ] Observabilidade sem `createHook` / `eventLoopUtilization()`? → `BUN-SYS-09`
 - [ ] IPC Bun↔Node em JSON? → `BUN-SYS-10`
-- [ ] Listener de `SIGTERM` que drena (`server.stop` / `server.close`) **e** chama `process.exit`? → `BUN-SYS-11`
+- [ ] Listener de `SIGTERM` que drena (`server.stop()` / `server.close()`) **e** chama `process.exit()`? → `BUN-SYS-11`
 - [ ] `--frozen-lockfile --production`, `USER bun`, `--no-env-file` no `ENTRYPOINT` e nenhum `.env` na imagem? → `BUN-SYS-12`
 - [ ] O Dockerfile tem os quatro stages, e todo `COPY --from=` aponta para um que existe? → § 6
 
@@ -452,7 +452,7 @@ O que fazer com um servidor `node:http` que já existe — manter, embrulhar ou 
 - [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Bun - Runtime e APIs](bun-runtime-e-apis.md) · [Bun - Bundler e Build](bun-bundler-e-build.md) · [Bun - Dados e Persistência](bun-dados-e-persistencia.md) · [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) · [Bun - Testes](bun-testes.md)
 - [Backend no runtime Bun](backend-no-runtime-bun.md) — o que fazer com um servidor `node:http` que já existe, e a decisão `Bun.serve` × [Hono](hono.md) × [Elysia](elysia.md)
 - `Node.js` · · ·
-- · `Arquivos.env não substituem secret management`
+- ·
 - · ·
 
 ## Fontes consultadas
@@ -471,21 +471,21 @@ Verificadas em **2026-08-15**:
 
 - **Apenas `node:sea` está marcado 🔴 na matriz inteira.** Todo o resto é 🟢 ou 🟡 — o que torna o risco de migração ser de *comportamento parcial*, não de módulo faltando.
 - **A matriz é aferida contra Node.js v26**, declarado no topo da página.
-- **`node:crypto` não tem `secp256k1`** nem as outras curvas fora de P-224/256/384/521, porque Bun usa BoringSSL. `argon2` lança.
-- **`eventLoopUtilization` sempre devolve zeros**, e `createHook`/`executionAsyncId` são stubs com id `0` — instrumentação baseada neles não observa nada.
+- **`node:crypto` não tem `secp256k1`** nem as outras curvas fora de P-224/256/384/521, porque Bun usa BoringSSL. `argon2()` lança.
+- **`eventLoopUtilization()` sempre devolve zeros**, e `createHook`/`executionAsyncId` são stubs com id `0` — instrumentação baseada neles não observa nada.
 - **`AsyncLocalStorage` não propaga para `MessagePort`, `BroadcastChannel` nem eventos de `Worker`.**
 - **`node:v8` `serialize`/`deserialize` usam o formato do JavaScriptCore, não o do V8** — payload não é intercambiável com Node.
 - **Substituir `process.stdout.write` não captura a saída do `console`**: Bun escreve direto no file descriptor.
-- **`process.title` é no-op em macOS e Linux**, e `process.report.writeReport` não escreve nada.
+- **`process.title` é no-op em macOS e Linux**, e `process.report.writeReport()` não escreve nada.
 - **Resumption de sessão TLS não funciona entre processos** (sem `newSession`/`resumeSession`, `ticketKeys` ignorado).
 - **`module.register` é no-op** — a doc recomenda `Bun.plugin` no lugar.
 - **`Request` aceita e ignora** `credentials`, `integrity`, `referrer` e `referrerPolicy` em vez de lançar.
 - **Um `Error` passado por `structuredClone` perde o `cause`**; streams web não são transferíveis.
 - **`--smol` não é um "modo container"**: ele aumenta a frequência do GC. Bun já dimensiona o heap por cgroup com e sem a flag.
-- **Sem listener explícito de um sinal, `beforeExit` e `exit` não são emitidos** quando o processo é morto por ele. E o inverso é igualmente contraintuitivo: **registrar o listener suprime a ação padrão do sinal**, então um handler sem `process.exit` deixa o processo vivo até o `SIGKILL`. As duas metades estão em `BUN-SYS-11`.
+- **Sem listener explícito de um sinal, `beforeExit` e `exit` não são emitidos** quando o processo é morto por ele. E o inverso é igualmente contraintuitivo: **registrar o listener suprime a ação padrão do sinal**, então um handler sem `process.exit()` deixa o processo vivo até o `SIGKILL`. As duas metades estão em `BUN-SYS-11`.
 - **O Dockerfile oficial tem quatro stages**, não três: `base`, `install`, `prerelease` e `release`. O `install` roda **dois** installs (com e sem `--production`), e o `prerelease` é o que carrega o fonte e roda `bun test` / `bun run build`.
-- **A matriz nomeia `SNICallback` sob `node:https`, não sob `node:tls`.** A linha completa de `node:https` é 🟡 e diz que `request`, `get`, `Agent` e `globalAgent` são implementados com pooling, que `https.Server` é um `http.Server` com opções de TLS, que os sockets de request não são `TLSSocket` (`encrypted`/`authorized`/`servername` funcionam; `getPeerCertificate`/`getCipher` faltam) e que `setSecureContext`, `addContext`, `SNICallback` e `handshakeTimeout` não são suportados.
+- **A matriz nomeia `SNICallback` sob `node:https`, não sob `node:tls`.** A linha completa de `node:https` é 🟡 e diz que `request`, `get`, `Agent` e `globalAgent` são implementados com pooling, que `https.Server` é um `http.Server` com opções de TLS, que os sockets de request não são `TLSSocket` (`encrypted`/`authorized`/`servername` funcionam; `getPeerCertificate()`/`getCipher()` faltam) e que `setSecureContext()`, `addContext()`, `SNICallback` e `handshakeTimeout` não são suportados.
 - **`bun why` não enumera módulos `node:*`.** Ele explica por que um *pacote* está instalado, mostrando a cadeia de dependências. Não existe comando de Bun que produza a lista de `node:*` de uma árvore de dependências — `BUN-SYS-07` depende de grep.
 - **O `llms-full.txt` do Bun está desatualizado em relação à página de compatibilidade ao vivo.** No arquivo consolidado, `node:crypto` aparece como *"Missing `secureHeapUsed` `setEngine` `setFips`"* e `node:https` como 🟢; a página ao vivo traz o texto completo do BoringSSL e marca `node:https` como 🟡. **A página ao vivo vence** — foi ela que este satélite seguiu.
-- **`bun:ffi`, `cc`, `Worker` e os callbacks thread-safe de `JSCallback` estão todos marcados como experimentais** nas respectivas páginas.
+- **`bun:ffi`, `cc()`, `Worker` e os callbacks thread-safe de `JSCallback` estão todos marcados como experimentais** nas respectivas páginas.
 - **`node:cluster` balanceia HTTP entre processos apenas em Linux**; em outros sistemas cada worker faz bind do próprio socket.

@@ -2,9 +2,9 @@
 titulo: Bun - Dados e Persistência
 Link: https://bun.com/docs/runtime/sql
 tags:
- - bun
- - database
- - agent-context
+  - bun
+  - database
+  - agent-context
 source: "Documentação oficial — https://bun.com/docs"
 verificado-em: 2026-08-15
 ---
@@ -41,7 +41,7 @@ Isso resolve exatamente um problema: **a dependência**. Não resolve nenhum dos
 
 A última linha é a que mais custa. `bun:sqlite` e `Bun.sql` oferecem parametrização segura e, no caso da tagged template, **segura por default**. Mas nada impede escrever `db.query("SELECT * FROM users WHERE id = " + id)`. É o bug número um desta nota, tem seção própria (§ 3), e é o único item cuja violação é sempre vulnerabilidade, nunca só estilo.
 
-Sobre migração: a ausência é literal. Bun não tem sistema de migração. `sql.file(...)` e `` sql`...`.simple `` executam scripts de migração; **decidir a ordem, registrar o que já rodou e reverter é seu**, ou de uma ferramenta externa. Ver.
+Sobre migração: a ausência é literal. Bun não tem sistema de migração. `sql.file(...)` e `` sql`...`.simple() `` executam scripts de migração; **decidir a ordem, registrar o que já rodou e reverter é seu**, ou de uma ferramenta externa..
 
 ---
 
@@ -49,7 +49,7 @@ Sobre migração: a ausência é literal. Bun não tem sistema de migração. `s
 
 **Conceito.** A API é síncrona e modelada em `better-sqlite3`. Síncrona não é ressalva: para SQLite local, uma leitura é uma leitura de página em disco/cache, e o custo de fazer isso assíncrono seria maior que o de fazer.
 
-**`.query` × `.prepare`** — a diferença é o cache, não o comportamento:
+**`.query()` × `.prepare()`** — a diferença é o cache, não o comportamento:
 
 | | `db.query(sql)` | `db.prepare(sql)` |
 | --- | --- | --- |
@@ -58,7 +58,7 @@ Sobre migração: a ausência é literal. Bun não tem sistema de migração. `s
 | Dono do statement | a `Database` (finalizado no `close`) | você |
 | Serve para | SQL fixo, repetido | SQL gerado dinamicamente, uso único |
 
-O cache guarda a **bytecode compilada**, não os resultados. Reutilizar um statement cacheado com parâmetros diferentes é seguro — os valores são religados a cada execução. Gerar SQL dinâmico e passar por `.query` enche o cache de entradas de uso único e evicta as quentes; é para isso que existe `.prepare`.
+O cache guarda a **bytecode compilada**, não os resultados. Reutilizar um statement cacheado com parâmetros diferentes é seguro — os valores são religados a cada execução. Gerar SQL dinâmico e passar por `.query()` enche o cache de entradas de uso único e evicta as quentes; é para isso que existe `.prepare()`.
 
 **Os executores:**
 
@@ -67,19 +67,19 @@ O cache guarda a **bytecode compilada**, não os resultados. Reutilizar um state
 | `.get(params?)` | primeira linha como objeto, ou **`null`** | busca por id |
 | `.all(params?)` | array de objetos | listagem |
 | `.run(params?)` | `{ lastInsertRowid, changes }` | escrita, DDL |
-| `.iterate` / `for..of` | uma linha por vez | resultado grande, sem carregar tudo em memória |
+| `.iterate()` / `for..of` | uma linha por vez | resultado grande, sem carregar tudo em memória |
 | `.values(params?)` | array de arrays | export, CSV |
 
-`.get` devolvendo `null` é o detalhe que produz `TypeError: cannot read property of null` em produção. O tipo do retorno não força o tratamento.
+`.get()` devolvendo `null` é o detalhe que produz `TypeError: cannot read property of null` em produção. O tipo do retorno não força o tratamento.
 
-**`strict: true` — ligue.** O default de `bun:sqlite` exige o prefixo (`$`, `:`, `@`) no objeto de bind **e não lança quando um parâmetro falta**. Um typo em `{ messag:... }` passa silenciosamente e a query roda com o valor faltando. Com `strict: true`, o prefixo vira opcional e o parâmetro ausente vira erro.
+**`strict: true` — ligue.** O default de `bun:sqlite` exige o prefixo (`$`, `:`, `@`) no objeto de bind **e não lança quando um parâmetro falta**. Um typo em `{ messag: ... }` passa silenciosamente e a query roda com o valor faltando. Com `strict: true`, o prefixo vira opcional e o parâmetro ausente vira erro.
 
 ```ts
 import { Database } from "bun:sqlite";
 
 const db = new Database("pedidos.sqlite", {
- create: true,
- strict: true, // erro em parâmetro faltando; bind sem prefixo
+  create: true,
+  strict: true, // erro em parâmetro faltando; bind sem prefixo
 });
 
 // WAL: recomendado pela doc para praticamente toda aplicação
@@ -87,25 +87,25 @@ db.run("PRAGMA journal_mode = WAL;");
 
 // statement criado UMA vez, reutilizado
 const buscarPedido = db.query<
- { id: string; cliente_id: string; total: number },
- { id: string }
+  { id: string; cliente_id: string; total: number },
+  { id: string }
 >("SELECT id, cliente_id, total FROM pedidos WHERE id = $id");
 
 export function obterPedido(id: string) {
- const pedido = buscarPedido.get({ id }); // strict: sem prefixo no objeto
- if (pedido === null) return null; //.get devolve null, não undefined
- return pedido;
+  const pedido = buscarPedido.get({ id }); // strict: sem prefixo no objeto
+  if (pedido === null) return null;         // .get() devolve null, não undefined
+  return pedido;
 }
 ```
 
 **Inteiros.** SQLite guarda inteiros de 64 bits; JavaScript representa com segurança até 2^53. Por default `bun:sqlite` devolve `number` — valores maiores perdem precisão **em silêncio**. `safeIntegers: true` na `Database` faz o retorno vir como `bigint` e valida que `bigint` de entrada cabe em 64 bits.
 
-**Fechar.** `db.close(false)` (default) mantém vivos os statements de `.prepare` até serem finalizados; `db.close(true)` finaliza tudo e lança se o SQLite reportar erro. `using db = new Database(...)` chama `close(true)` na saída do bloco.
+**Fechar.** `db.close(false)` (default) mantém vivos os statements de `.prepare()` até serem finalizados; `db.close(true)` finaliza tudo e lança se o SQLite reportar erro. `using db = new Database(...)` chama `close(true)` na saída do bloco.
 
 | ID | Regra |
 | --- | --- |
 | `BUN-DATA-01` | `new Database(...)` **MUST** ser aberta com `strict: true`, e com `safeIntegers: true` quando alguma coluna puder exceder 2^53 — os defaults não lançam em parâmetro ausente e truncam inteiros grandes em silêncio. |
-| `BUN-DATA-02` | Statement usado repetidamente **MUST** ser criado uma vez fora do caminho quente; SQL gerado dinamicamente **MUST** usar `.prepare` para não evictar o cache de 20 entradas. |
+| `BUN-DATA-02` | Statement usado repetidamente **MUST** ser criado uma vez fora do caminho quente; SQL gerado dinamicamente **MUST** usar `.prepare()` para não evictar o cache de 20 entradas. |
 
 ---
 
@@ -115,11 +115,11 @@ export function obterPedido(id: string) {
 
 ```ts
 // ❌ SQL injection. `id` vem do request; `'; DROP TABLE pedidos; --` é uma string válida.
-db.query(`SELECT * FROM pedidos WHERE id = '${id}'`).get;
+db.query(`SELECT * FROM pedidos WHERE id = '${id}'`).get();
 
 // ❌ mesma falha, escondida por um helper "só de formatação"
 const where = `status = '${statusDoUsuario}'`;
-db.query(`SELECT * FROM pedidos WHERE ${where}`).all;
+db.query(`SELECT * FROM pedidos WHERE ${where}`).all();
 
 // ✅ parâmetro: o valor nunca é parseado como SQL
 db.query("SELECT * FROM pedidos WHERE id = $id").get({ id });
@@ -139,12 +139,12 @@ await sql.unsafe(`SELECT * FROM usuarios WHERE email = '${email}'`);
 
 `sql.unsafe` existe para casos legítimos (script de migração com múltiplos comandos, SQL vindo de arquivo confiável) e a doc é explícita: *"it does not escape user input"*. Ele **aceita** parâmetros posicionais — `sql.unsafe("SELECT … WHERE id = $1", [id])` — e essa é a única forma aceitável quando há valor de runtime envolvido.
 
-**O caso que confunde: identificador não é valor.** Nome de tabela e de coluna não podem ser parâmetro em SQL nenhum. `Bun.sql` resolve com o helper `sql`, que **escapa identificadores**:
+**O caso que confunde: identificador não é valor.** Nome de tabela e de coluna não podem ser parâmetro em SQL nenhum. `Bun.sql` resolve com o helper `sql()`, que **escapa identificadores**:
 
 ```ts
-await sql`SELECT * FROM ${sql("public.pedidos")}`; // identificador escapado
+await sql`SELECT * FROM ${sql("public.pedidos")}`;                 // identificador escapado
 await sql`UPDATE usuarios SET ${sql(dados, "nome", "email")} WHERE id = ${id}`;
-await sql`SELECT * FROM pedidos WHERE id IN ${sql([1, 2, 3])}`; // lista de valores
+await sql`SELECT * FROM pedidos WHERE id IN ${sql([1, 2, 3])}`;    // lista de valores
 ```
 
 Escapado não é o mesmo que validado. Passar um nome de coluna vindo do usuário direto para `sql(...)` continua sendo superfície de ataque — o correto é validar contra uma allowlist antes.
@@ -165,19 +165,19 @@ Escapado não é o mesmo que validado. Passar um nome de coluna vindo do usuári
 
 ```ts
 const inserirItem = db.query("INSERT INTO itens (pedido_id, sku, qtd) VALUES ($pedido, $sku, $qtd)");
-const marcarPago = db.query("UPDATE pedidos SET status = 'pago' WHERE id = $id");
+const marcarPago  = db.query("UPDATE pedidos SET status = 'pago' WHERE id = $id");
 
 // db.transaction devolve uma função; nada executou ainda
 const registrarPagamento = db.transaction((pedidoId: string, itens: Item[]) => {
- for (const item of itens) inserirItem.run({ pedido: pedidoId, sku: item.sku, qtd: item.qtd });
- marcarPago.run({ id: pedidoId });
- return itens.length;
+  for (const item of itens) inserirItem.run({ pedido: pedidoId, sku: item.sku, qtd: item.qtd });
+  marcarPago.run({ id: pedidoId });
+  return itens.length;
 });
 
 const total = registrarPagamento("ped_123", itens); // aqui roda, atômico
 ```
 
-Chamar uma função de transação **dentro** de outra transforma a interna em `SAVEPOINT`. Há variantes de modo: `.deferred`, `.immediate`, `.exclusive`.
+Chamar uma função de transação **dentro** de outra transforma a interna em `SAVEPOINT`. Há variantes de modo: `.deferred()`, `.immediate()`, `.exclusive()`.
 
 **`Bun.sql`:** `sql.begin(async tx => { … })` reserva uma conexão dedicada do pool para PostgreSQL. **Todas as queries da transação têm de sair do `tx`** — usar o `sql` global lá dentro pega outra conexão do pool, e essa query fica fora da transação. É o erro mais caro desta seção, porque o código funciona e só perde a atomicidade.
 
@@ -185,16 +185,16 @@ Chamar uma função de transação **dentro** de outra transforma a interna em `
 import { sql } from "bun";
 
 await sql.begin(async (tx) => {
- const [pedido] = await tx`
- INSERT INTO pedidos (cliente_id, total) VALUES (${clienteId}, ${total}) RETURNING *
- `;
+  const [pedido] = await tx`
+    INSERT INTO pedidos (cliente_id, total) VALUES (${clienteId}, ${total}) RETURNING *
+  `;
 
- await tx.savepoint(async (sp) => {
- // pode falhar sem abortar a transação inteira
- await sp`UPDATE estoque SET qtd = qtd - ${qtd} WHERE sku = ${sku}`;
- });
+  await tx.savepoint(async (sp) => {
+    // pode falhar sem abortar a transação inteira
+    await sp`UPDATE estoque SET qtd = qtd - ${qtd} WHERE sku = ${sku}`;
+  });
 
- await tx`INSERT INTO auditoria (acao, pedido_id) VALUES ('criado', ${pedido.id})`;
+  await tx`INSERT INTO auditoria (acao, pedido_id) VALUES ('criado', ${pedido.id})`;
 });
 ```
 
@@ -214,7 +214,7 @@ Na prática:
 
 Ficar de fora é legítimo (fila que já é idempotente, evento cuja perda é aceitável) — mas **`BUN-DATA-06` exige que a exceção esteja escrita como comentário**, nomeando o estado intermediário aceito. Uma exceção não comentada é indistinguível de um esquecimento, que é exatamente o que a regra existe para pegar.
 
-**WAL em SQLite.** A doc recomenda para a maioria das aplicações: `db.run("PRAGMA journal_mode = WAL;")` no boot, porque melhora muito o caso de muitos leitores com um escritor. O detalhe operacional verificado: em **macOS**, Bun usa o SQLite do sistema, que a Apple compila com WAL persistente, então os arquivos `-wal` e `-shm` **permanecem** após o `close`. Em Linux e Windows, o SQLite estaticamente linkado costuma removê-los. Para uniformizar, `db.fileControl(constants.SQLITE_FCNTL_PERSIST_WAL, 0)` seguido de `PRAGMA wal_checkpoint(TRUNCATE)` antes de fechar.
+**WAL em SQLite.** A doc recomenda para a maioria das aplicações: `db.run("PRAGMA journal_mode = WAL;")` no boot, porque melhora muito o caso de muitos leitores com um escritor. O detalhe operacional verificado: em **macOS**, Bun usa o SQLite do sistema, que a Apple compila com WAL persistente, então os arquivos `-wal` e `-shm` **permanecem** após o `close()`. Em Linux e Windows, o SQLite estaticamente linkado costuma removê-los. Para uniformizar, `db.fileControl(constants.SQLITE_FCNTL_PERSIST_WAL, 0)` seguido de `PRAGMA wal_checkpoint(TRUNCATE)` antes de fechar.
 
 | ID | Regra |
 | --- | --- |
@@ -269,29 +269,29 @@ Há ainda um flag de runtime relacionado: `bun --sql-preconnect index.js` estabe
 import { SQL } from "bun";
 
 const sql = new SQL({
- // ou a URL: postgres://user:senha@host/db?sslmode=verify-full
- max: 20, // conexões simultâneas
- idleTimeout: 30, // s até fechar conexão ociosa
- maxLifetime: 3600, // s de vida máxima de uma conexão
- connectionTimeout: 10, // s para estabelecer
- ssl: "verify-full", // disable | prefer | require | verify-ca | verify-full
+  // ou a URL: postgres://user:senha@host/db?sslmode=verify-full
+  max: 20,                // conexões simultâneas
+  idleTimeout: 30,        // s até fechar conexão ociosa
+  maxLifetime: 3600,      // s de vida máxima de uma conexão
+  connectionTimeout: 10,  // s para estabelecer
+  ssl: "verify-full",     // disable | prefer | require | verify-ca | verify-full
 });
 
 // encerramento ordenado: espera as queries em voo
-await sql.close;
+await sql.close();
 await sql.close({ timeout: 5 }); // ou com prazo; { timeout: 0 } fecha na hora
 ```
 
 **`ssl` tem default `"disable"`.** A tabela da doc é literal: *"Default mode if none specified"*. Conexão a banco gerenciado sem declarar `sslmode` falha ou trafega em claro — nunca deixe implícito em produção.
 
-**Conexão reservada.** `sql.reserve` tira uma conexão do pool para uso isolado (`SET LOCAL`, advisory lock, `LISTEN`). **Precisa ser devolvida**: `reserved.release` no `finally`, ou `using reserved = await sql.reserve`. Esquecer vaza uma conexão do pool por chamada, e o serviço trava quando `max` é atingido.
+**Conexão reservada.** `sql.reserve()` tira uma conexão do pool para uso isolado (`SET LOCAL`, advisory lock, `LISTEN`). **Precisa ser devolvida**: `reserved.release()` no `finally`, ou `using reserved = await sql.reserve()`. Esquecer vaza uma conexão do pool por chamada, e o serviço trava quando `max` é atingido.
 
 **Outras primitivas verificadas:**
 
-- **Queries são lazy** — só executam no `await` ou em `.execute`. `query.cancel` cancela uma em andamento.
-- **`` sql`…`.simple ``** roda múltiplos statements num único comando (protocolo simples do PostgreSQL) e **não aceita parâmetros**. É o caminho para migração.
+- **Queries são lazy** — só executam no `await` ou em `.execute()`. `query.cancel()` cancela uma em andamento.
+- **`` sql`…`.simple() ``** roda múltiplos statements num único comando (protocolo simples do PostgreSQL) e **não aceita parâmetros**. É o caminho para migração.
 - **`sql.file(caminho, params?)`** lê e executa SQL de arquivo.
-- **`LISTEN`/`NOTIFY`** com `sql.listen` / `sql.notify` — barramento leve entre processos que compartilham o banco (invalidação de cache, acordar worker).
+- **`LISTEN`/`NOTIFY`** com `sql.listen()` / `sql.notify()` — barramento leve entre processos que compartilham o banco (invalidação de cache, acordar worker).
 - **`sql.array([...])`** gera literal de array do PostgreSQL. A doc ressalva: **PostgreSQL apenas**, e *"multi-dimensional arrays and NULL elements may not be supported yet"*.
 
 Ver `PostgreSQL` para o lado do servidor e para o desenho das listagens.
@@ -299,7 +299,7 @@ Ver `PostgreSQL` para o lado do servidor e para o desenho das listagens.
 | ID | Regra |
 | --- | --- |
 | `BUN-DATA-09` | Conexão a banco remoto **MUST** declarar `ssl` explicitamente — o default de `Bun.sql` é `"disable"`. |
-| `BUN-DATA-10` | Conexão obtida por `sql.reserve` **MUST** ser liberada por `release` em `finally` ou pelo `using` — caso contrário vaza do pool. |
+| `BUN-DATA-10` | Conexão obtida por `sql.reserve()` **MUST** ser liberada por `release()` em `finally` ou pelo `using` — caso contrário vaza do pool. |
 
 ---
 
@@ -311,7 +311,7 @@ Cobertura verificada: strings (`get`/`set`/`getBuffer`/`del`/`exists`/`expire`/`
 
 **Pub/Sub entrou em Bun 1.2.23 e está marcado experimental** — a doc diz esperar que seja estável, mas ainda coletando feedback. Não é base para entrega crítica de mensagem hoje.
 
-**S3.** `Bun.s3` é um singleton equivalente a `new Bun.S3Client`. `client.file(chave)` devolve uma **referência preguiçosa**: nenhuma rede acontece até você chamar algo. `S3File` estende `Blob`, então `.text`, `.json`, `.arrayBuffer`, `.slice(a, b)` e `.stream` funcionam. Upload multipart de arquivo grande é automático; `.writer({ retry, queueSize, partSize })` dá controle.
+**S3.** `Bun.s3` é um singleton equivalente a `new Bun.S3Client()`. `client.file(chave)` devolve uma **referência preguiçosa**: nenhuma rede acontece até você chamar algo. `S3File` estende `Blob`, então `.text()`, `.json()`, `.arrayBuffer()`, `.slice(a, b)` e `.stream()` funcionam. Upload multipart de arquivo grande é automático; `.writer({ retry, queueSize, partSize })` dá controle.
 
 Três pontos que mudam arquitetura:
 
@@ -325,26 +325,26 @@ import { S3Client } from "bun";
 const bucket = new S3Client({ bucket: "uploads-app", endpoint: process.env.S3_ENDPOINT });
 
 Bun.serve({
- routes: {
- // o cliente envia direto ao S3; o servidor só assina
- "/uploads/:chave": {
- POST: (req) => {
- const url = bucket.presign(req.params.chave, {
- expiresIn: 300, // 5 min — o default de 24 h é longo demais
- method: "PUT", // sem isto, seria GET
- type: "application/pdf",
- });
- return Response.json({ url });
- },
+  routes: {
+    // o cliente envia direto ao S3; o servidor só assina
+    "/uploads/:chave": {
+      POST: (req) => {
+        const url = bucket.presign(req.params.chave, {
+          expiresIn: 300,        // 5 min — o default de 24 h é longo demais
+          method: "PUT",         // sem isto, seria GET
+          type: "application/pdf",
+        });
+        return Response.json({ url });
+      },
 
- // 302 para URL presignada, sem passar os bytes pelo servidor
- GET: (req) => new Response(bucket.file(req.params.chave)),
- },
- },
+      // 302 para URL presignada, sem passar os bytes pelo servidor
+      GET: (req) => new Response(bucket.file(req.params.chave)),
+    },
+  },
 });
 ```
 
-O terceiro ponto é exatamente o que descreve, e o motivo de `Arquivos.env não substituem secret management` importar em produção.
+O terceiro ponto é exatamente o que descreve, e o motivo de importar em produção.
 
 | ID | Regra |
 | --- | --- |
@@ -363,20 +363,20 @@ import { z } from "zod";
 import { sql } from "bun";
 
 const Pedido = z.object({
- id: z.string.uuid,
- cliente_id: z.string.uuid,
- total: z.number.nonnegative,
- criado_em: z.coerce.date,
+  id: z.string().uuid(),
+  cliente_id: z.string().uuid(),
+  total: z.number().nonnegative(),
+  criado_em: z.coerce.date(),
 });
-type Pedido = z.infer<typeof Pedido>; // tipo derivado do schema, fonte única
+type Pedido = z.infer<typeof Pedido>;   // tipo derivado do schema, fonte única
 
 export async function listarPedidos(clienteId: string): Promise<Pedido[]> {
- const linhas = await sql`SELECT * FROM pedidos WHERE cliente_id = ${clienteId}`;
- return z.array(Pedido).parse(linhas); // erro aqui, não três camadas adiante
+  const linhas = await sql`SELECT * FROM pedidos WHERE cliente_id = ${clienteId}`;
+  return z.array(Pedido).parse(linhas); // erro aqui, não três camadas adiante
 }
 ```
 
-Ver e.
+
 
 | ID | Regra |
 | --- | --- |
@@ -393,7 +393,7 @@ Com drivers embutidos, a pergunta "ainda preciso de ORM?" tem resposta por eixo,
 | Executar SQL, tipado por declaração | **suficiente** | overhead |
 | **Migração versionada e reversível** | não existe em Bun | **é o motivo principal** |
 | Tipos gerados a partir do schema real | não | **sim** |
-| Query builder componível para filtro dinâmico | `sql` cobre casos simples | **melhor** em filtros combinatórios |
+| Query builder componível para filtro dinâmico | `sql()` cobre casos simples | **melhor** em filtros combinatórios |
 | Relacionamento com carga em uma query | você escreve o JOIN | **sim** |
 | Um schema, vários bancos | `Bun.sql` já unifica PG/MySQL/SQLite | equivalente |
 | Latência mínima, controle total do SQL | **melhor** | camada a mais |
@@ -412,10 +412,10 @@ Leitura curta: **migração e geração de tipos são o que se compra com um ORM
 | Nome de coluna do usuário direto em `sql(coluna)` | escapar identificador não é validar; a coluna pode ser qualquer uma da tabela | allowlist antes — `BUN-DATA-05` |
 | `new Database(path)` sem `strict: true` | parâmetro nomeado com typo não lança; a query roda errada em silêncio | `strict: true` — `BUN-DATA-01` |
 | `db.query(...)` dentro do loop | recompila/consulta o cache a cada iteração e evicta entradas quentes (cache de 20) | statement fora do loop — `BUN-DATA-02` |
-| Usar `.get` sem testar `null` | `.get` devolve `null` quando não há linha; o acesso seguinte lança | checar antes de acessar propriedade |
+| Usar `.get()` sem testar `null` | `.get()` devolve `null` quando não há linha; o acesso seguinte lança | checar antes de acessar propriedade |
 | Ler `bigint` do banco sem `safeIntegers` | acima de 2^53 a precisão some sem erro nenhum | `safeIntegers: true` — `BUN-DATA-01` |
 | `sql` global dentro de `sql.begin` | a query pega outra conexão do pool e fica fora da transação; o rollback não a alcança | usar o `tx` — `BUN-DATA-07` |
-| `sql.reserve` sem `release` | vaza uma conexão por chamada até `max`; o serviço trava | `finally` ou `using` — `BUN-DATA-10` |
+| `sql.reserve()` sem `release()` | vaza uma conexão por chamada até `max`; o serviço trava | `finally` ou `using` — `BUN-DATA-10` |
 | SQLite em arquivo sem WAL | leitores bloqueiam o escritor e vice-versa | `PRAGMA journal_mode = WAL` — `BUN-DATA-08` |
 | Conectar em Postgres gerenciado sem `sslmode` | o default de `Bun.sql` é `"disable"`, e o de `PGSSLMODE` também | `ssl: "verify-full"` — `BUN-DATA-09` |
 | Tratar `Bun.sql` como "o driver Postgres do Bun" | a mesma API cobre MySQL e SQLite; o adapter sai do **formato da URL** | reconhecer que trocar `DATABASE_URL` troca o dialeto — § 1 |
@@ -434,12 +434,12 @@ Leitura curta: **migração e geração de tipos são o que se compra com um ORM
 - [ ] Identificadores dinâmicos validados por allowlist? → `BUN-DATA-05`
 - [ ] `strict: true` (e `safeIntegers` onde couber) em toda `Database`? → `BUN-DATA-01`
 - [ ] Statements fora dos loops quentes? → `BUN-DATA-02`
-- [ ] Todo `.get` trata `null`?
+- [ ] Todo `.get()` trata `null`?
 - [ ] Toda função com duas ou mais escritas está em transação (ou tem a exceção comentada), e todas as queries saem do `tx`? → `BUN-DATA-06`, `BUN-DATA-07`
 - [ ] A conexão vem de **uma** variável de ambiente definida, e o adapter resolvido é o esperado? → § 5
 - [ ] WAL habilitado no SQLite em arquivo? → `BUN-DATA-08`
 - [ ] `ssl` declarado na conexão remota? → `BUN-DATA-09`
-- [ ] Toda `reserve` tem `release`? → `BUN-DATA-10`
+- [ ] Toda `reserve()` tem `release()`? → `BUN-DATA-10`
 - [ ] Presign explícito e credenciais no ambiente antes do boot? → `BUN-DATA-11`
 - [ ] Resultado validado antes de sair pela API? → `BUN-DATA-12`
 - [ ] Existe uma ferramenta de migração escolhida? (Bun não tem uma)
@@ -452,7 +452,7 @@ Leitura curta: **migração e geração de tipos são o que se compra com um ORM
 - [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Bun - Runtime e APIs](bun-runtime-e-apis.md) · [Bun - Bundler e Build](bun-bundler-e-build.md) · [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) · [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) · [Bun - Testes](bun-testes.md)
 - `PostgreSQL` · [Drizzle ORM](drizzle-orm.md) · `Prisma` · ·
 - · ·
-- · `Arquivos.env não substituem secret management`
+- ·
 - ·
 
 ## Fontes consultadas
@@ -475,12 +475,12 @@ Verificadas em **2026-08-15**:
 - **Existe `bun --sql-preconnect`**, que abre a conexão PostgreSQL antes do código da aplicação rodar; falha de conexão ali não derruba o processo.
 - **O default de `ssl` em `Bun.sql` é `"disable"`**, declarado literalmente na tabela de SSL modes.
 - **O default de `bun:sqlite` NÃO lança quando um parâmetro nomeado falta.** Só com `strict: true`. É a razão de `strict` ser regra e não sugestão.
-- **`db.query` cacheia o statement compilado; o cache tem 20 entradas** (`Database.MAX_QUERY_CACHE_SIZE`). `.prepare` não cacheia — é a opção certa para SQL dinâmico.
-- **`.get` devolve `null`** (não `undefined`) quando não há linha.
+- **`db.query()` cacheia o statement compilado; o cache tem 20 entradas** (`Database.MAX_QUERY_CACHE_SIZE`). `.prepare()` não cacheia — é a opção certa para SQL dinâmico.
+- **`.get()` devolve `null`** (não `undefined`) quando não há linha.
 - **Credenciais de S3 são lidas na inicialização e não de `process.env`** — a doc afirma isso explicitamente.
 - **`new Response(s3File)` produz um `302`** para URL presignada, não o conteúdo do arquivo.
 - **Redis Pub/Sub é experimental**, adicionado em Bun 1.2.23. O restante do cliente Redis não tem essa marcação.
 - **`sql.array` é exclusivo de PostgreSQL**, e a doc ressalva que arrays multidimensionais e elementos `NULL` podem não funcionar.
-- **Em macOS os arquivos `-wal` e `-shm` persistem após `close`** porque Bun usa o SQLite do sistema, que a Apple compila com WAL persistente. Em Linux e Windows costumam ser removidos.
-- **Bun não tem sistema de migração.** `sql.file` e `.simple` executam scripts; versionamento e rollback são externos.
-- Transações de `bun:sqlite` aninhadas viram **savepoints**, e há variantes `.deferred`, `.immediate`, `.exclusive`.
+- **Em macOS os arquivos `-wal` e `-shm` persistem após `close()`** porque Bun usa o SQLite do sistema, que a Apple compila com WAL persistente. Em Linux e Windows costumam ser removidos.
+- **Bun não tem sistema de migração.** `sql.file` e `.simple()` executam scripts; versionamento e rollback são externos.
+- Transações de `bun:sqlite` aninhadas viram **savepoints**, e há variantes `.deferred()`, `.immediate()`, `.exclusive()`.

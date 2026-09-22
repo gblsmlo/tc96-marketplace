@@ -2,11 +2,11 @@
 titulo: HTTP - Status e Redirecionamento
 Link: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
 tags:
- - http
- - status
- - redirecionamento
- - api
- - agent-context
+  - http
+  - status
+  - redirecionamento
+  - api
+  - agent-context
 source: "MDN Web Docs — https://developer.mozilla.org/en-US/docs/Web/HTTP"
 verificado-em: 2026-08-15
 ---
@@ -27,7 +27,7 @@ Um cache decide se guarda olhando o número. Um cliente decide se retenta olhand
 
 Por isso errar o status quebra coisas na ordem inversa da que se espera: **quebra cache, retry e monitoramento antes de quebrar a UI** — e a UI costuma continuar funcionando, porque o frontend lê o corpo. É o que torna o erro invisível em desenvolvimento e caro em produção.
 
-O caso canônico é o `200` com `{"erro":...}` dentro. Ele funciona na tela, e simultaneamente: diz ao cache compartilhado que aquela resposta é reutilizável; diz ao cliente que não há nada a retentar; conta como sucesso na taxa de erro; e faz o Error Boundary do frontend nunca disparar.
+O caso canônico é o `200` com `{"erro": ...}` dentro. Ele funciona na tela, e simultaneamente: diz ao cache compartilhado que aquela resposta é reutilizável; diz ao cliente que não há nada a retentar; conta como sucesso na taxa de erro; e faz o Error Boundary do frontend nunca disparar.
 
 ### As cinco classes, e o que cada uma autoriza o cliente a fazer
 
@@ -63,7 +63,7 @@ A implicação prática de `4xx` × `5xx` é a que mais se ignora: **é o status
 
 **`201` sem `Location` é meio-status.** RFC 9110 § 15.3.2: o recurso criado é identificado *"by either a Location header field in the response or, if no Location header field is received, by the target URI"* — ou seja, sem `Location`, o cliente é obrigado a supor que o recurso está na URL para onde ele fez `POST`, o que é falso sempre que o servidor gera o ID.
 
-**`202` é deliberadamente não comprometido.** A spec avisa: *"There is no facility in HTTP for re-sending a status code from an asynchronous operation."* Devolver `202` sem devolver junto um caminho para consultar o resultado deixa o cliente sem nenhuma forma de descobrir o desfecho. É o par natural de fila e job — ver e.
+**`202` é deliberadamente não comprometido.** A spec avisa: *"There is no facility in HTTP for re-sending a status code from an asynchronous operation."* Devolver `202` sem devolver junto um caminho para consultar o resultado deixa o cliente sem nenhuma forma de descobrir o desfecho. É o par natural de fila e job.
 
 **`204` não pode ter corpo.** É estrutural, não estilo: *"A 204 response is terminated by the end of the header section; it cannot contain content or trailers."* Um framework que serializa `{}` num `204` produz uma mensagem que alguns clientes leem como corpo da resposta seguinte na mesma conexão.
 
@@ -123,14 +123,14 @@ Para `307`, o texto é `MUST NOT`: *"the user agent MUST NOT change the request 
 ```
 Preciso apontar o cliente para outra URI.
 ├── A mudança é PERMANENTE (a antiga URI nunca mais vale)?
-│ ├── SIM
-│ │ ├── existe alguma operação não-GET nessa URI → 308
-│ │ └── só leitura (páginas, canonical, SEO) → 301
-│ └── NÃO
-│ ├── preciso que método e corpo cheguem intactos → 307
-│ ├── só leitura → 302
-│ └── é a resposta de um POST/PUT bem-sucedido, e quero
-│ que a próxima requisição seja um GET → 303
+│   ├── SIM
+│   │   ├── existe alguma operação não-GET nessa URI → 308
+│   │   └── só leitura (páginas, canonical, SEO) → 301
+│   └── NÃO
+│       ├── preciso que método e corpo cheguem intactos → 307
+│       ├── só leitura → 302
+│       └── é a resposta de um POST/PUT bem-sucedido, e quero
+│           que a próxima requisição seja um GET → 303
 └── Em qualquer ramo: Location é obrigatório.
 ```
 
@@ -174,7 +174,7 @@ Retry-After: Fri, 15 Aug 2026 12:00:00 GMT
 
 Os usos documentados: em `503`, quanto tempo o serviço deve ficar indisponível; em `429`, quanto esperar antes de nova requisição; em resposta `3xx`, o tempo mínimo antes de emitir a requisição redirecionada.
 
-Sem ele, um cliente com backoff exponencial adivinha — e uma frota de clientes adivinhando ao mesmo tempo produz o thundering herd que derrubou o serviço de novo. Ver.
+Sem ele, um cliente com backoff exponencial adivinha — e uma frota de clientes adivinhando ao mesmo tempo produz o thundering herd que derrubou o serviço de novo..
 
 | ID | Regra |
 | --- | --- |

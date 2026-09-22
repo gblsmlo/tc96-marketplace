@@ -1,10 +1,10 @@
 ---
 titulo: Backend - Pendências de revisão
 tags:
- - bun
- - hono
- - elysia
- - manutencao
+  - bun
+  - hono
+  - elysia
+  - manutencao
 source: "Teste de leitura com agentes sem contexto + auditoria adversarial, 2026-08-15"
 verificado-em: 2026-08-15
 ---
@@ -25,7 +25,7 @@ Cinco classes de defeito, todas encontradas por leitura e nenhuma por releitura 
 
 **1. Exemplo que viola a regra da própria nota** — a classe mais grave, sete ocorrências. O único exemplo de 409 de Hono usava `throw new HTTPException`, que por `HONO-RPC-09` **não chega tipado ao cliente RPC**; as duas únicas construções de cliente Eden do vault omitiam o `parseDate: false` que `ELYSIA-TYPE-10` declara `MUST`; o exemplo marcado ✅ da § 8 de Lifecycle usava `derive` para resolver sessão, que `ELYSIA-LIFE-02` declara `NEVER`; o exemplo canônico de WebSocket de Bun roteava por `URL(req.url).pathname` dentro de `fetch`, que `BUN-HTTP-01` proíbe; e o Dockerfile "que vale reproduzir" referenciava um stage inexistente.
 
-**2. Duas fontes de verdade divergindo** — o texto de regra existia no hub **e** no satélite, e as cópias derivaram. A pior perdeu o `process.exit` de `BUN-SYS-11` e prescrevia um shutdown que deixa o container pendurado até o `SIGKILL`. Corrigido por construção: a § 6.1 dos três hubs agora reproduz o satélite **verbatim**, com o satélite declarado canônico.
+**2. Duas fontes de verdade divergindo** — o texto de regra existia no hub **e** no satélite, e as cópias derivaram. A pior perdeu o `process.exit()` de `BUN-SYS-11` e prescrevia um shutdown que deixa o container pendurado até o `SIGKILL`. Corrigido por construção: a § 6.1 dos três hubs agora reproduz o satélite **verbatim**, com o satélite declarado canônico.
 
 **3. Rota que não entrega** — a § 4 prometia rotear API → satélite e metade dela estava em granularidade de área, não de assinatura. Um leitor procurando o diagnóstico de um SSE que caía não achava nada e chegou à resposta por leitura linear da tabela de 34 regras.
 
@@ -54,7 +54,7 @@ Hoje Hono tem `HONO-CORE-13`, `HONO-RPC-13` e `HONO-RPC-14`, a § 6.1 os carrega
 
 ## O que continua aberto
 
-**1. WebSocket em Hono.** Só a origem do import está verificada (`HONO-APP-08` e a matriz da § 3.2). Assinatura de `upgradeWebSocket`, formato de `ConnInfo` e opções **não** foram conferidos, e o hub declara isso nominalmente. Elysia tem `.ws` com schema e cliente `EdenWS` documentados. Se WebSocket virar requisito, este eixo pesa e falta metade.
+**1. WebSocket em Hono.** Só a origem do import está verificada (`HONO-APP-08` e a matriz da § 3.2). Assinatura de `upgradeWebSocket`, formato de `ConnInfo` e opções **não** foram conferidos, e o hub declara isso nominalmente. Elysia tem `.ws()` com schema e cliente `EdenWS` documentados. Se WebSocket virar requisito, este eixo pesa e falta metade.
 
 **2. `@hono/zod-openapi` não verificado.** É a lacuna que mais pode mudar uma decisão: o nó de OpenAPI é o que inverte a árvore do § 3 de [Backend no runtime Bun](backend-no-runtime-bun.md). A fonte indica que o pacote muda a forma de escrever as rotas, o que não é detalhe.
 

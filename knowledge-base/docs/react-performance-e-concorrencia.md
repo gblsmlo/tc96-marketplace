@@ -2,10 +2,10 @@
 titulo: React - Performance e Concorrência
 Link: https://react.dev/reference/react/memo
 tags:
- - react
- - performance
- - concurrency
- - agent-context
+  - react
+  - performance
+  - concurrency
+  - agent-context
 source: "Documentação oficial do React — memo, useMemo, useCallback, useTransition, useDeferredValue, Activity, Profiler, React Compiler"
 verificado-em: 2026-08-14
 ---
@@ -63,9 +63,9 @@ Medir antes de otimizar. `<Profiler>` mede programaticamente uma subárvore.
 
 ```tsx
 <Profiler id="Lista" onRender={(id, phase, actualDuration) => {
- console.log(id, phase, actualDuration)
+  console.log(id, phase, actualDuration)
 }}>
- <Lista items={items} />
+  <Lista items={items} />
 </Profiler>
 ```
 
@@ -78,14 +78,14 @@ Medir antes de otimizar. `<Profiler>` mede programaticamente uma subárvore.
 ### `memo`
 
 ```tsx
-const Row = memo(function Row({ item }: { item: Item }) { /*... */ })
+const Row = memo(function Row({ item }: { item: Item }) { /* ... */ })
 ```
 
 Pula o re-render quando as props são **rasamente iguais** às anteriores. Só funciona se as props forem estáveis — daí a dependência de `useCallback`/`useMemo` no pai.
 
 ```tsx
 // memo INÚTIL: onSelect é nova a cada render do pai
-<Row item={item} onSelect={ => select(item.id)} />
+<Row item={item} onSelect={() => select(item.id)} />
 
 // memo efetivo
 const onSelect = useCallback((id: string) => select(id), [select])
@@ -97,11 +97,11 @@ const onSelect = useCallback((id: string) => select(id), [select])
 ### `useMemo` × `useCallback`
 
 ```tsx
-const value = useMemo( => computeExpensive(a, b), [a, b]) // cacheia o RESULTADO
+const value  = useMemo(() => computeExpensive(a, b), [a, b])   // cacheia o RESULTADO
 const handler = useCallback((x: string) => doSomething(x, a), [a]) // cacheia a FUNÇÃO
 ```
 
-`useCallback(fn, deps)` é equivalente a `useMemo( => fn, deps)`.
+`useCallback(fn, deps)` é equivalente a `useMemo(() => fn, deps)`.
 
 Casos legítimos:
 
@@ -130,19 +130,19 @@ Concorrência não deixa o trabalho mais rápido — deixa a UI **responsiva** d
 ### `useTransition`
 
 ```tsx
-const [isPending, startTransition] = useTransition
+const [isPending, startTransition] = useTransition()
 
 function selectTab(tab: Tab) {
- startTransition( => setTab(tab)) // não urgente: pode ser interrompida
+  startTransition(() => setTab(tab))   // não urgente: pode ser interrompida
 }
 
 return (
- <>
- <TabBar onSelect={selectTab} />
- <div style={{ opacity: isPending ? 0.6 : 1 }}>
- <TabPanel tab={tab} />
- </div>
- </>
+  <>
+    <TabBar onSelect={selectTab} />
+    <div style={{ opacity: isPending ? 0.6 : 1 }}>
+      <TabPanel tab={tab} />
+    </div>
+  </>
 )
 ```
 
@@ -156,15 +156,15 @@ A função passada a `startTransition` **pode ser `async`** — os `await` dentr
 
 ```tsx
 // ERRADO — o setState após o await não é tratado como Transition
-startTransition(async => {
- await salvar
- setPagina('/pronto')
+startTransition(async () => {
+  await salvar()
+  setPagina('/pronto')
 })
 
 // CERTO
-startTransition(async => {
- await salvar
- startTransition( => setPagina('/pronto'))
+startTransition(async () => {
+  await salvar()
+  startTransition(() => setPagina('/pronto'))
 })
 ```
 
@@ -179,7 +179,7 @@ A própria documentação chama isso de limitação conhecida a ser corrigida. O
 
 ```tsx
 const deferredQuery = useDeferredValue(query)
-const results = useMemo( => search(deferredQuery), [deferredQuery])
+const results = useMemo(() => search(deferredQuery), [deferredQuery])
 ```
 
 Quando você **não controla** o `setState` — só recebe o valor. O React renderiza primeiro com o valor antigo e depois com o novo, em background.
@@ -223,7 +223,7 @@ Alternativa a montar/desmontar condicionalmente, **preservando estado**.
 
 ```tsx
 <Activity mode={isShowingSidebar ? 'visible' : 'hidden'}>
- <Sidebar />
+  <Sidebar />
 </Activity>
 ```
 
@@ -269,14 +269,14 @@ Opções principais de configuração, conforme a referência:
 Diretivas por função:
 
 ```tsx
-function Heavy {
- 'use memo' // opta por compilar — útil em compilationMode: 'annotation'
- //...
+function Heavy() {
+  'use memo'      // opta por compilar — útil em compilationMode: 'annotation'
+  // ...
 }
 
-function Legacy {
- 'use no memo' // opta por NÃO compilar — depuração ou código incompatível
- //...
+function Legacy() {
+  'use no memo'   // opta por NÃO compilar — depuração ou código incompatível
+  // ...
 }
 ```
 

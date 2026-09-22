@@ -24,7 +24,7 @@ git checkout -b minha-feature
 ### 2. Fazer as alterações e commitar
 
 ```bash
-git add.
+git add .
 git commit -m "Descrição das alterações"
 ```
 

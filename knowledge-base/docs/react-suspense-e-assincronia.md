@@ -2,10 +2,10 @@
 titulo: React - Suspense e Assincronia
 Link: https://react.dev/reference/react/Suspense
 tags:
- - react
- - suspense
- - async
- - agent-context
+  - react
+  - suspense
+  - async
+  - agent-context
 source: "Documentação oficial do React — Suspense, lazy, use"
 verificado-em: 2026-08-14
 ---
@@ -34,7 +34,7 @@ Suspense inverte isso: o componente **declara o que precisa** e **suspende** se 
 
 ```tsx
 <Suspense fallback={<PerfilSkeleton />}>
- <Perfil userId={userId} />
+  <Perfil userId={userId} />
 </Suspense>
 ```
 
@@ -43,7 +43,7 @@ A consequência de projeto é a que importa: **onde você coloca o boundary defi
 ```tsx
 // Um boundary na raiz: a página inteira vira skeleton por causa de um comentário lento
 <Suspense fallback={<PageSkeleton />}>
- <Header /><Article /><Comments />
+  <Header /><Article /><Comments />
 </Suspense>
 
 // Boundaries por região: header e artigo aparecem imediatamente
@@ -79,30 +79,30 @@ Apenas fontes integradas a ele:
 ```tsx
 import { lazy, Suspense } from 'react'
 
-const Settings = lazy( => import('./Settings'))
+const Settings = lazy(() => import('./Settings'))
 
 <Suspense fallback={<Spinner />}>
- <Settings />
+  <Settings />
 </Suspense>
 ```
 
 Adia o carregamento do código até o primeiro render. Duas regras práticas:
 
-**Declare no escopo do módulo.** Chamar `lazy` dentro de um componente cria um tipo novo a cada render, o que remonta a subárvore e descarta seu estado.
+**Declare no escopo do módulo.** Chamar `lazy()` dentro de um componente cria um tipo novo a cada render, o que remonta a subárvore e descarta seu estado.
 
 ```tsx
 // ERRADO — novo componente a cada render
-function Page {
- const Settings = lazy( => import('./Settings'))
- //...
+function Page() {
+  const Settings = lazy(() => import('./Settings'))
+  // ...
 }
 ```
 
 **O módulo precisa de `export default`** — ou o carregador deve mapear para um named export explicitamente:
 
 ```tsx
-const Settings = lazy( =>
- import('./Settings').then((m) => ({ default: m.Settings })),
+const Settings = lazy(() =>
+  import('./Settings').then((m) => ({ default: m.Settings })),
 )
 ```
 
@@ -127,13 +127,13 @@ Lê uma Promise ou um contexto. É uma **API, não um Hook** — e por isso é a
 
 ```tsx
 function Comments({ commentsPromise }: { commentsPromise: Promise<Comment[]> }) {
- const comments = use(commentsPromise) // suspende até resolver
- return <ul>{comments.map((c) => <li key={c.id}>{c.text}</li>)}</ul>
+  const comments = use(commentsPromise)   // suspende até resolver
+  return <ul>{comments.map((c) => <li key={c.id}>{c.text}</li>)}</ul>
 }
 
 // O pai fornece a Promise e o boundary
 <Suspense fallback={<CommentsSkeleton />}>
- <Comments commentsPromise={fetchComments} />
+  <Comments commentsPromise={fetchComments()} />
 </Suspense>
 ```
 
@@ -143,8 +143,8 @@ function Comments({ commentsPromise }: { commentsPromise: Promise<Comment[]> }) 
 
 ```tsx
 // ERRADO — nova Promise a cada render
-function Comments {
- const comments = use(fetch('/api/comments').then((r) => r.json))
+function Comments() {
+  const comments = use(fetch('/api/comments').then((r) => r.json()))
 }
 ```
 
@@ -155,17 +155,17 @@ A Promise deve vir de fora: de um Server Component, de um cache, ou de uma bibli
 | `REACT-ASYNC-06` | A Promise passada a `use` **NEVER** é criada durante o render do componente que a consome. |
 | `REACT-ASYNC-07` | `use` **MUST** ser chamado de dentro de um componente ou Hook, mesmo podendo ser condicional. |
 
-Em uma SPA sem RSC, essa restrição é o motivo pelo qual `use` raramente é a ferramenta certa para data fetching — o cache estável é justamente o que TanStack Query fornece. Ver.
+Em uma SPA sem RSC, essa restrição é o motivo pelo qual `use` raramente é a ferramenta certa para data fetching — o cache estável é justamente o que TanStack Query fornece..
 
 ### `use` para contexto
 
 ```tsx
 function Item({ compact }: { compact: boolean }) {
- if (compact) {
- const theme = use(ThemeContext) // condicional — impossível com useContext
- return <span className={theme}>…</span>
- }
- return <Full />
+  if (compact) {
+    const theme = use(ThemeContext)   // condicional — impossível com useContext
+    return <span className={theme}>…</span>
+  }
+  return <Full />
 }
 ```
 
@@ -177,9 +177,9 @@ Suspense trata **espera**; Error Boundary trata **falha**. As duas fronteiras s�
 
 ```tsx
 <ErrorBoundary fallback={<ErroAoCarregar />}>
- <Suspense fallback={<Skeleton />}>
- <Perfil userId={userId} />
- </Suspense>
+  <Suspense fallback={<Skeleton />}>
+    <Perfil userId={userId} />
+  </Suspense>
 </ErrorBoundary>
 ```
 
@@ -193,17 +193,17 @@ Não existe `<ErrorBoundary>` embutido. Ele é **obrigatoriamente um componente 
 import { ErrorBoundary } from 'react-error-boundary'
 
 <ErrorBoundary
- fallbackRender={({ error, resetErrorBoundary }) => (
- <div role="alert">
- <p>Não foi possível carregar o perfil.</p>
- <button onClick={resetErrorBoundary}>Tentar de novo</button>
- </div>
- )}
- onError={(error, info) => reportarErro(error, info)}
+  fallbackRender={({ error, resetErrorBoundary }) => (
+    <div role="alert">
+      <p>Não foi possível carregar o perfil.</p>
+      <button onClick={resetErrorBoundary}>Tentar de novo</button>
+    </div>
+  )}
+  onError={(error, info) => reportarErro(error, info)}
 >
- <Suspense fallback={<Skeleton />}>
- <Perfil userId={userId} />
- </Suspense>
+  <Suspense fallback={<Skeleton />}>
+    <Perfil userId={userId} />
+  </Suspense>
 </ErrorBoundary>
 ```
 
@@ -214,19 +214,19 @@ type Props = { fallback: React.ReactNode; children: React.ReactNode }
 type State = { error: Error | null }
 
 export class ErrorBoundary extends React.Component<Props, State> {
- state: State = { error: null }
+  state: State = { error: null }
 
- static getDerivedStateFromError(error: Error): State {
- return { error } // atualiza o estado para renderizar o fallback
- }
+  static getDerivedStateFromError(error: Error): State {
+    return { error }               // atualiza o estado para renderizar o fallback
+  }
 
- componentDidCatch(error: Error, info: React.ErrorInfo) {
- reportarErro(error, info) // efeito colateral: log, telemetria
- }
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    reportarErro(error, info)      // efeito colateral: log, telemetria
+  }
 
- render {
- return this.state.error ? this.props.fallback : this.props.children
- }
+  render() {
+    return this.state.error ? this.props.fallback : this.props.children
+  }
 }
 ```
 
@@ -238,7 +238,7 @@ Os dois métodos têm papéis distintos: `getDerivedStateFromError` decide **o q
 
 Conceito desenvolvido em. Dois pontos operacionais:
 
-**Nem todo erro vai para o boundary.** Erros esperados — validação falhou, item não encontrado, sem permissão — são **estado da UI**, não exceções. Ver.
+**Nem todo erro vai para o boundary.** Erros esperados — validação falhou, item não encontrado, sem permissão — são **estado da UI**, não exceções..
 
 **Boundaries não capturam** erros em event handlers, código assíncrono fora do render, nem erros do próprio boundary. Handlers precisam de `try/catch` próprio.
 
@@ -255,7 +255,7 @@ Sem transição, atualizar um estado que suspende **substitui** o conteúdo vis�
 
 ```tsx
 // Mantém o conteúdo atual visível enquanto o novo carrega
-startTransition( => setTab('comments'))
+startTransition(() => setTab('comments'))
 ```
 
 Regra geral: **navegação e troca de conteúdo já visível devem ser transições.** Ver [React - Performance e Concorrência](react-performance-e-concorrencia.md) § 4.
@@ -272,7 +272,7 @@ Regra geral: **navegação e troca de conteúdo já visível devem ser transiç�
 | --- | --- |
 | `<Suspense>` ao redor de fetch em Effect | biblioteca com suporte a Suspense · `REACT-ASYNC-03` |
 | Um único boundary na raiz | boundaries por região · `REACT-ASYNC-01` |
-| `lazy` dentro de componente | escopo do módulo · `REACT-ASYNC-04` |
+| `lazy()` dentro de componente | escopo do módulo · `REACT-ASYNC-04` |
 | Promise criada no render passada a `use` | Promise estável de fora · `REACT-ASYNC-06` |
 | Fallback de altura diferente do conteúdo | skeleton dimensionado · `REACT-ASYNC-02` |
 | Suspense sem Error Boundary | par obrigatório · `REACT-ASYNC-08` |

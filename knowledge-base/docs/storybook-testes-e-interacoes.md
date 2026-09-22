@@ -2,11 +2,11 @@
 titulo: Storybook - Testes e Interações
 Link: https://storybook.js.org/docs/writing-tests
 tags:
- - storybook
- - testing
- - vitest
- - acessibilidade
- - agent-context
+  - storybook
+  - testing
+  - vitest
+  - acessibilidade
+  - agent-context
 source: "Documentação oficial do Storybook — Writing Tests, Interaction testing, Accessibility testing, Vitest addon, Portable stories"
 verificado-em: 2026-08-19
 ---
@@ -62,34 +62,34 @@ import { expect, fn } from 'storybook/test';
 import { CampoBusca } from './CampoBusca';
 
 const meta = {
- component: CampoBusca,
- args: {
- onBuscar: fn,
- },
+  component: CampoBusca,
+  args: {
+    onBuscar: fn(),
+  },
 } satisfies Meta<typeof CampoBusca>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const BuscaPorTexto: Story = {
- play: async ({ args, canvas, userEvent, step }) => {
- await step('digitar o termo', async => {
- await userEvent.type(canvas.getByRole('searchbox'), 'ada');
- });
+  play: async ({ args, canvas, userEvent, step }) => {
+    await step('digitar o termo', async () => {
+      await userEvent.type(canvas.getByRole('searchbox'), 'ada');
+    });
 
- await step('submeter', async => {
- await userEvent.click(canvas.getByRole('button', { name: 'Buscar' }));
- });
+    await step('submeter', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: 'Buscar' }));
+    });
 
- await expect(args.onBuscar).toHaveBeenCalledWith('ada');
- },
+    await expect(args.onBuscar).toHaveBeenCalledWith('ada');
+  },
 };
 ```
 
 Quatro pontos normativos nesse exemplo:
 
 1. **Todo `expect` é `await`.** Não é estilo — é a diferença entre a asserção participar do teste e o teste terminar antes dela (`SB-TEST-01`).
-2. **`onBuscar` é `fn` no `meta.args`.** O spy fica visível para o painel de ações, para a documentação e para a asserção. Declarar o spy dentro da `play` esconde ele das outras camadas (`SB-TEST-03`).
+2. **`onBuscar` é `fn()` no `meta.args`.** O spy fica visível para o painel de ações, para a documentação e para a asserção. Declarar o spy dentro da `play` esconde ele das outras camadas (`SB-TEST-03`).
 3. **As queries são por papel acessível.** `getByRole('searchbox')`, `getByRole('button', { name: … })`. Isso faz o teste falhar quando a acessibilidade quebra, o que é exatamente o que se quer de um design system (`SB-TEST-06`).
 4. **`step` é rótulo, não estrutura.** Ele agrupa o log do painel de interações; a falha passa a dizer em qual etapa ocorreu.
 
@@ -99,11 +99,11 @@ Sem desestruturar `mount`, o Storybook **já começou a renderizar** quando a `p
 
 ```tsx
 export const NoDiaDosNamorados: Story = {
- play: async ({ mount, canvas }) => {
- MockDate.set('2026-06-12'); // antes do render
- await mount; // agora renderiza
- await expect(canvas.getByText('12 de junho')).toBeInTheDocument;
- },
+  play: async ({ mount, canvas }) => {
+    MockDate.set('2026-06-12');   // antes do render
+    await mount();                 // agora renderiza
+    await expect(canvas.getByText('12 de junho')).toBeInTheDocument();
+  },
 };
 ```
 
@@ -119,9 +119,9 @@ A forma correta é a query assíncrona:
 
 ```tsx
 play: async ({ canvas, userEvent }) => {
- // espera o botão aparecer depois que a requisição resolve
- const botao = await canvas.findByRole('button', { name: 'Concluir' });
- await userEvent.click(botao);
+  // espera o botão aparecer depois que a requisição resolve
+  const botao = await canvas.findByRole('button', { name: 'Concluir' });
+  await userEvent.click(botao);
 },
 ```
 
@@ -141,11 +141,11 @@ play: async ({ canvas, userEvent }) => {
 export const FormularioPreenchido: Story = { play: async ({ canvas, userEvent }) => { /* … */ } };
 
 export const FormularioEnviado: Story = {
- play: async (context) => {
- const { canvas, userEvent } = context;
- await FormularioPreenchido.play?.(context);
- await userEvent.click(canvas.getByRole('button', { name: 'Enviar' }));
- },
+  play: async (context) => {
+    const { canvas, userEvent } = context;
+    await FormularioPreenchido.play?.(context);
+    await userEvent.click(canvas.getByRole('button', { name: 'Enviar' }));
+  },
 };
 ```
 
@@ -163,7 +163,7 @@ Isso recria fluxo completo sem repetir passo. Dois detalhes que o exemplo torna 
 
 O import é **`storybook/test`, sem `@`** (`SB-CORE-01`).
 
-Mocks criados por `fn` **não precisam de restauração manual**: a fonte afirma que o Storybook já os reseta entre stories.
+Mocks criados por `fn()` **não precisam de restauração manual**: a fonte afirma que o Storybook já os reseta entre stories.
 
 ### 2.6 Regras — `SB-TEST-01` a `SB-TEST-03`, `SB-TEST-06` a `SB-TEST-10`
 
@@ -171,9 +171,9 @@ Mocks criados por `fn` **não precisam de restauração manual**: a fonte afirma
 | --- | --- |
 | `SB-TEST-01` | Toda chamada a `expect` dentro de `play` **MUST** ser aguardada com `await`. |
 | `SB-TEST-02` | `play` que precisa rodar código **antes** do render **MUST** desestruturar `mount` e chamá-lo. |
-| `SB-TEST-03` | Callback recebido por **prop** **MUST** ser `fn` declarado em `args`; a asserção lê `args.onX`. Função importada de módulo é outro caso — [Storybook - Mocking](storybook-mocking.md) § 2.4.1. |
+| `SB-TEST-03` | Callback recebido por **prop** **MUST** ser `fn()` declarado em `args`; a asserção lê `args.onX`. Função importada de módulo é outro caso — [Storybook - Mocking](storybook-mocking.md) § 2.4.1. |
 | `SB-TEST-06` | Query de DOM **MUST** usar papel ou rótulo acessível quando existir. † |
-| `SB-TEST-07` | Estado de teste compartilhado **MUST** ser restaurado na limpeza de `beforeEach`. `fn` é a exceção: o Storybook reseta. |
+| `SB-TEST-07` | Estado de teste compartilhado **MUST** ser restaurado na limpeza de `beforeEach`. `fn()` é a exceção: o Storybook reseta. |
 | `SB-TEST-08` | Interação de usuário **MUST** ser simulada por `userEvent`. † |
 | `SB-TEST-09` | `play` **NEVER** assevera implementação interna — só o que o usuário observa. † |
 | `SB-TEST-10` | Em story que depende de operação assíncrona, a primeira query **MUST** ser `findBy…`. `getBy…` **NEVER**. † |
@@ -185,21 +185,21 @@ Mocks criados por `fn` **não precisam de restauração manual**: a fonte afirma
 ### 3.1 O parâmetro
 
 ```tsx
-//.storybook/preview.tsx
+// .storybook/preview.tsx
 const preview = {
- parameters: {
- a11y: {
- test: 'error',
- },
- },
+  parameters: {
+    a11y: {
+      test: 'error',
+    },
+  },
 } satisfies Preview;
 ```
 
 | Campo | Default | O que faz |
 | --- | --- | --- |
 | `context` | `'body'` | seletor CSS do que analisar |
-| `config` | ver abaixo | vai para `axe.configure` |
-| `options` | `{}` | vai para `axe.run` |
+| `config` | ver abaixo | vai para `axe.configure()` |
+| `options` | `{}` | vai para `axe.run()` |
 | `test` | `undefined` | `'off'` · `'todo'` · `'error'` |
 
 **O default de `config` desabilita a regra `region`**, para não gerar falso **positivo** em story de componente isolado — um botão fora de landmark é o normal do Storybook, não defeito.
@@ -223,24 +223,24 @@ Num design system, o default deveria ser `'error'` no `preview`, com `'todo'` po
 ```tsx
 // desabilitar uma regra específica
 parameters: {
- a11y: {
- config: {
- rules: [
- { id: 'image-alt', enabled: false },
- { id: 'autocomplete-valid', selector: '*:not([autocomplete="nope"])' },
- ],
- },
- },
+  a11y: {
+    config: {
+      rules: [
+        { id: 'image-alt', enabled: false },
+        { id: 'autocomplete-valid', selector: '*:not([autocomplete="nope"])' },
+      ],
+    },
+  },
 }
 
 // excluir parte da árvore
 parameters: {
- a11y: { context: { include: ['body'], exclude: ['.sem-verificacao-a11y'] } },
+  a11y: { context: { include: ['body'], exclude: ['.sem-verificacao-a11y'] } },
 }
 
 // suspender a análise automática de uma story
 export const SoParaVisual: Story = {
- globals: { a11y: { manual: true } },
+  globals: { a11y: { manual: true } },
 };
 ```
 
@@ -288,32 +288,32 @@ import viteConfig from './vite.config';
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default mergeConfig(
- viteConfig,
- defineConfig({
- test: {
- projects: [
- {
- extends: true,
- plugins: [
- storybookTest({
- configDir: path.join(dirname, '.storybook'),
- storybookScript: 'bun run storybook --no-open',
- }),
- ],
- test: {
- name: 'storybook',
- browser: {
- enabled: true,
- provider: playwright({}),
- headless: true,
- instances: [{ browser: 'chromium' }],
- },
- setupFiles: ['./.storybook/vitest.setup.ts'],
- },
- },
- ],
- },
- }),
+  viteConfig,
+  defineConfig({
+    test: {
+      projects: [
+        {
+          extends: true,
+          plugins: [
+            storybookTest({
+              configDir: path.join(dirname, '.storybook'),
+              storybookScript: 'bun run storybook --no-open',
+            }),
+          ],
+          test: {
+            name: 'storybook',
+            browser: {
+              enabled: true,
+              provider: playwright({}),
+              headless: true,
+              instances: [{ browser: 'chromium' }],
+            },
+            setupFiles: ['./.storybook/vitest.setup.ts'],
+          },
+        },
+      ],
+    },
+  }),
 );
 ```
 
@@ -338,9 +338,9 @@ O `setupFiles` da config aponta para esse arquivo, e ele é **gerado pelo `npx s
 
 ```json
 {
- "scripts": {
- "test-storybook": "vitest run --project=storybook"
- }
+  "scripts": {
+    "test-storybook": "vitest run --project=storybook"
+  }
 }
 ```
 
@@ -354,12 +354,12 @@ Na UI do Storybook há um painel de teste na sidebar, com caixas para cobertura,
 
 ```ts
 storybookTest({
- configDir: path.join(dirname, '.storybook'),
- tags: {
- include: ['test'],
- exclude: ['experimental'],
- skip: [],
- },
+  configDir: path.join(dirname, '.storybook'),
+  tags: {
+    include: ['test'],
+    exclude: ['experimental'],
+    skip: [],
+  },
 })
 ```
 
@@ -398,8 +398,8 @@ beforeAll(annotations.beforeAll);
 
 const { Primary } = composeStories(stories);
 
-test('renderiza o botão primário', async => {
- await Primary.run;
+test('renderiza o botão primário', async () => {
+  await Primary.run();
 });
 ```
 
@@ -419,9 +419,9 @@ import * as stories from './Button.stories';
 
 const { Primary } = composeStories(stories);
 
-test('snapshot do botão primário', async => {
- await Primary.run;
- expect(document.body.firstChild).toMatchSnapshot;
+test('snapshot do botão primário', async () => {
+  await Primary.run();
+  expect(document.body.firstChild).toMatchSnapshot();
 });
 ```
 
@@ -441,7 +441,7 @@ O critério que sobra: snapshot de markup vale para o que **não é visual** —
 
 ```tsx
 play: async ({ canvas }) => {
- expect(canvas.getByRole('alert')).toBeInTheDocument; // ❌
+  expect(canvas.getByRole('alert')).toBeInTheDocument(); // ❌
 },
 ```
 
@@ -451,9 +451,9 @@ O teste pode terminar antes da asserção resolver, e passa sem ter verificado n
 
 ```tsx
 play: async ({ canvas, userEvent }) => {
- const aoClicar = fn; // ❌ não é o handler do componente
- await userEvent.click(canvas.getByRole('button'));
- await expect(aoClicar).toHaveBeenCalled;
+  const aoClicar = fn();               // ❌ não é o handler do componente
+  await userEvent.click(canvas.getByRole('button'));
+  await expect(aoClicar).toHaveBeenCalled();
 },
 ```
 
@@ -462,8 +462,8 @@ Esse spy nunca foi passado ao componente. A asserção testa a variável local. 
 ### 6.3 Query por classe ou `data-testid` quando existe papel
 
 ```tsx
-canvasElement.querySelector('.btn-primary') // ❌
-canvas.getByRole('button', { name: 'Salvar' }) // ✅
+canvasElement.querySelector('.btn-primary')  // ❌
+canvas.getByRole('button', { name: 'Salvar' })  // ✅
 ```
 
 A segunda quebra quando o botão perde o nome acessível — que é o defeito que o design system deveria pegar (`SB-TEST-06`).
@@ -490,7 +490,7 @@ O componente roda sem decorator global. Falha por falta de provider, e o rastro 
 
 - [Storybook](storybook.md) — hub
 - [Storybook - Stories e Args](storybook-stories-e-args.md) — tags, e o que entra no runner
-- [Storybook - Mocking](storybook-mocking.md) — `mocked`, `sb.mock` e MSW dentro do teste
+- [Storybook - Mocking](storybook-mocking.md) — `mocked()`, `sb.mock` e MSW dentro do teste
 - [Storybook - Decorators e Contexto](storybook-decorators-e-contexto.md) — `beforeEach` e limpeza
 - [Bun - Testes](bun-testes.md) — o outro runner do monorepo
 - [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) — o comportamento de `--filter` em CI
@@ -509,7 +509,7 @@ Verificadas diretamente em **2026-08-19**:
 **Notas de verificação:**
 
 - **`mount` é obrigatório** quando há código antes do render; sem desestruturá-lo, o Storybook já começou a renderizar. A fonte lista três casos, incluindo builder que transpila para ES2017+.
-- **Mocks `fn` não precisam de restauração manual** — o Storybook reseta entre stories.
+- **Mocks `fn()` não precisam de restauração manual** — o Storybook reseta entre stories.
 - **O default do addon de a11y desabilita a regra `region`.**
 - **`a11y.test: 'todo'` não produz nada em CI** — nem erro, nem aviso, nem saída. Afirmação literal da fonte.
 - **Suspender a análise de a11y de uma story é `globals: { a11y: { manual: true } }`**, não `parameters`.
@@ -518,7 +518,7 @@ Verificadas diretamente em **2026-08-19**:
 - **O addon roda em browser real com Playwright**, não em JSDOM.
 - **Em `tags`, `exclude` vence `include`** quando a mesma tag aparece nos dois.
 - **`disableAddonDocs` é `true` por default** no plugin: MDX não é parseado durante os testes.
-- **`run` de portable story executa a `play`**, não só o render.
+- **`run()` de portable story executa a `play`**, não só o render.
 - **A doc recomenda migrar de `test-runner` para `addon-vitest`.**
 - **Queries assíncronas existem e são `findBy…`/`findAllBy…`** — a fonte mostra `await canvas.findByRole('button', { name: 'Submit' })` e marca só esses dois prefixos como aguardados. `waitFor` não aparece em `play` na página verificada.
 - **`vitest run` é a forma de CI**; `vitest` puro entra em watch mode.

@@ -2,9 +2,9 @@
 titulo: TanStack Query - Padrões de Consulta
 Link: https://tanstack.com/query/latest/docs/framework/react/guides/dependent-queries
 tags:
- - tanstack-query
- - patterns
- - agent-context
+  - tanstack-query
+  - patterns
+  - agent-context
 source: "Documentação oficial — https://tanstack.com/query/latest/docs/framework/react"
 verificado-em: 2026-08-14
 ---
@@ -44,16 +44,16 @@ A query só roda quando o insumo existe:
 
 ```tsx
 const { data: user } = useQuery({
- queryKey: ['user', email],
- queryFn: => getUserByEmail(email),
+  queryKey: ['user', email],
+  queryFn: () => getUserByEmail(email),
 })
 
 const userId = user?.id
 
 const { data: projects } = useQuery({
- queryKey: ['projects', userId],
- queryFn: => getProjectsByUser(userId!),
- enabled: !!userId, // não executa até userId existir
+  queryKey: ['projects', userId],
+  queryFn: () => getProjectsByUser(userId!),
+  enabled: !!userId,     // não executa até userId existir
 })
 ```
 
@@ -85,10 +85,10 @@ Quando a quantidade muda entre renders, empilhar hooks viola `REACT-HOOK-01` (Ho
 
 ```tsx
 const userQueries = useQueries({
- queries: users.map((user) => ({
- queryKey: ['user', user.id],
- queryFn: => fetchUserById(user.id),
- })),
+  queries: users.map((user) => ({
+    queryKey: ['user', user.id],
+    queryFn: () => fetchUserById(user.id),
+  })),
 })
 ```
 
@@ -124,17 +124,17 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 const [page, setPage] = useState(0)
 
 const { data, isPlaceholderData, isFetching } = useQuery({
- queryKey: ['projects', { page }],
- queryFn: => fetchProjects(page),
- placeholderData: keepPreviousData,
+  queryKey: ['projects', { page }],
+  queryFn: () => fetchProjects(page),
+  placeholderData: keepPreviousData,
 })
 
 <button
- onClick={ => setPage((p) => p + 1)}
- // sem isso, o clique avança sobre dados da página anterior
- disabled={isPlaceholderData || !data?.hasMore}
+  onClick={() => setPage((p) => p + 1)}
+  // sem isso, o clique avança sobre dados da página anterior
+  disabled={isPlaceholderData || !data?.hasMore}
 >
- Próxima
+  Próxima
 </button>
 ```
 
@@ -155,18 +155,18 @@ O estado de página, note, é candidato natural a viver na URL em vez de em `use
 
 ```tsx
 const {
- data,
- fetchNextPage,
- hasNextPage,
- isFetchingNextPage,
+  data,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
 } = useInfiniteQuery({
- queryKey: ['projects'],
- queryFn: ({ pageParam, signal }) => fetchProjects(pageParam, signal),
- initialPageParam: 0, // obrigatório
- getNextPageParam: (lastPage) => lastPage.nextCursor, // undefined = acabou
+  queryKey: ['projects'],
+  queryFn: ({ pageParam, signal }) => fetchProjects(pageParam, signal),
+  initialPageParam: 0,                                   // obrigatório
+  getNextPageParam: (lastPage) => lastPage.nextCursor,   // undefined = acabou
 })
 
-// data.pages — array com as páginas buscadas
+// data.pages    — array com as páginas buscadas
 // data.pageParams — array com os params usados
 ```
 
@@ -189,10 +189,10 @@ Comportamento correto e caro: uma lista com 30 páginas carregadas faz 30 requis
 Um `IntersectionObserver` que dispara `fetchNextPage` a cada evento de scroll, sem guarda, atropela o próprio carregamento.
 
 ```tsx
-useEffect( => {
- if (inView && hasNextPage && !isFetchingNextPage) {
- fetchNextPage
- }
+useEffect(() => {
+  if (inView && hasNextPage && !isFetchingNextPage) {
+    fetchNextPage()
+  }
 }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 ```
 
@@ -216,7 +216,7 @@ Comportamento de uma query desabilitada, verificado:
 - sem dado em cache, inicia em `status === 'pending'` e `fetchStatus === 'idle'`;
 - não busca ao montar e não faz refetch em segundo plano;
 - *"The query will ignore query client `invalidateQueries` and `refetchQueries` calls"*;
-- `refetch` manual continua funcionando.
+- `refetch()` manual continua funcionando.
 
 O terceiro item é o que surpreende: uma mutation que invalida um prefixo **não** faz nada com as queries desabilitadas dele. O dado volta stale quando ela for reabilitada, o que geralmente é o comportamento desejado — mas não é o comportamento que se assume.
 
@@ -228,20 +228,20 @@ O terceiro item é o que surpreende: uma mutation que invalida um prefixo **não
 import { skipToken, useQuery } from '@tanstack/react-query'
 
 const { data } = useQuery({
- queryKey: ['todos', filtro],
- queryFn: filtro ? => fetchTodos(filtro) : skipToken,
+  queryKey: ['todos', filtro],
+  queryFn: filtro ? () => fetchTodos(filtro) : skipToken,
 })
 ```
 
 E o caveat literal:
 
-> "`refetch` from `useQuery` will not work with `skipToken`. Calling `refetch` on a query that uses `skipToken` will result in a `Missing queryFn` error"
+> "`refetch` from `useQuery` will not work with `skipToken`. Calling `refetch()` on a query that uses `skipToken` will result in a `Missing queryFn` error"
 
 O critério é direto: precisa de disparo manual → `enabled: false`. Não precisa → `skipToken`, pela tipagem.
 
 | ID | Regra |
 | --- | --- |
-| `TSQ-PATTERN-09` | Query que precisa de disparo manual **MUST** usar `enabled: false` — `refetch` com `skipToken` lança `Missing queryFn`. |
+| `TSQ-PATTERN-09` | Query que precisa de disparo manual **MUST** usar `enabled: false` — `refetch()` com `skipToken` lança `Missing queryFn`. |
 | `TSQ-PATTERN-10` | Query desabilitada **NEVER** é usada para dado que uma mutation precisa manter fresco — ela ignora `invalidateQueries`. |
 
 ---
@@ -264,10 +264,10 @@ Padrões de aplicação listados na fonte: em event handlers, em componentes, vi
 ```tsx
 // Event handler: a rede começa no hover, não no clique
 <Link
- to="/todos/$id"
- params={{ id }}
- onMouseEnter={ => queryClient.prefetchQuery(todoOptions(id))}
- onFocus={ => queryClient.prefetchQuery(todoOptions(id))}
+  to="/todos/$id"
+  params={{ id }}
+  onMouseEnter={() => queryClient.prefetchQuery(todoOptions(id))}
+  onFocus={() => queryClient.prefetchQuery(todoOptions(id))}
 />
 ```
 
@@ -275,10 +275,10 @@ Padrões de aplicação listados na fonte: em event handlers, em componentes, vi
 // Componente: dispara a query do filho junto com a do pai.
 // Sem `await` e sem uso do retorno — só aquece o cache.
 function Article({ id }: { id: string }) {
- const queryClient = useQueryClient
- queryClient.prefetchQuery(commentsOptions(id)) // paralelo ao artigo
- const { data } = useQuery(articleOptions(id))
- //...
+  const queryClient = useQueryClient()
+  queryClient.prefetchQuery(commentsOptions(id))   // paralelo ao artigo
+  const { data } = useQuery(articleOptions(id))
+  // ...
 }
 ```
 
@@ -308,8 +308,8 @@ O caminho mais robusto, quando há roteador, é o `loader` da rota: o prefetch c
 ```tsx
 // O cache guarda Todo[]; este componente só re-renderiza quando a contagem muda.
 const contagem = useQuery({
-...todosOptions,
- select: (todos) => todos.length,
+  ...todosOptions(),
+  select: (todos) => todos.length,
 })
 ```
 
@@ -332,11 +332,11 @@ Sobre estabilidade: a fonte recomenda envolver `select` em `useCallback` para ev
 
 ```tsx
 // ERRADO — Hook em loop
-{users.map((u) => useQuery({ queryKey: ['user', u.id], queryFn:... }))}
+{users.map((u) => useQuery({ queryKey: ['user', u.id], queryFn: ... }))}
 
 // CERTO
 const results = useQueries({
- queries: users.map((u) => ({ queryKey: ['user', u.id], queryFn: => fetchUser(u.id) })),
+  queries: users.map((u) => ({ queryKey: ['user', u.id], queryFn: () => fetchUser(u.id) })),
 })
 ```
 
@@ -344,8 +344,8 @@ const results = useQueries({
 // ERRADO — waterfall por hábito: o backend já poderia devolver os dois
 const { data: user } = useQuery(userOptions(email))
 const { data: settings } = useQuery({
-...settingsOptions(user?.id),
- enabled: !!user?.id,
+  ...settingsOptions(user?.id),
+  enabled: !!user?.id,
 })
 
 // CERTO — uma viagem
@@ -357,7 +357,7 @@ const { data } = useQuery(userWithSettingsOptions(email))
 select: (raw) => todoSchema.parse(raw)
 
 // CERTO — validação na queryFn
-queryFn: async => todoSchema.parse(await res.json),
+queryFn: async () => todoSchema.parse(await res.json()),
 select: (todos) => todos.filter((t) => !t.done),
 ```
 
@@ -367,7 +367,7 @@ select: (todos) => todos.filter((t) => !t.done),
 | Botão "próxima" ativo com `isPlaceholderData` | decide sobre dados da página anterior; pula ou ultrapassa | `disabled={isPlaceholderData}` — `TSQ-PATTERN-05` |
 | `fetchNextPage` no observer sem guarda | só há um fetch em voo por infinite query; a chamada atropela o refresh | checar `isFetchingNextPage` — `TSQ-PATTERN-07` |
 | Infinite query sem `maxPages` | invalidar refaz todas as páginas em série | `maxPages` — `TSQ-PATTERN-08` |
-| `skipToken` + botão "buscar" com `refetch` | `Missing queryFn` | `enabled: false` — `TSQ-PATTERN-09` |
+| `skipToken` + botão "buscar" com `refetch()` | `Missing queryFn` | `enabled: false` — `TSQ-PATTERN-09` |
 | `prefetchQuery` antes de renderizar dado obrigatório | não devolve dado e não lança; a tela quebra sem erro | `fetchQuery` — `TSQ-PATTERN-11` |
 | `select` inline recriado a cada render | reexecuta o cálculo em todo render | função estável — `TSQ-PATTERN-14` |
 | Queries paralelas lado a lado sob `<Suspense>` | a primeira suspende antes de as outras rodarem | `useSuspenseQueries` — `TSQ-PATTERN-03` |

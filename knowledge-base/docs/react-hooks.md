@@ -2,10 +2,10 @@
 titulo: React - Hooks
 Link: https://react.dev/reference/react/hooks
 tags:
- - react
- - hooks
- - reference
- - agent-context
+  - react
+  - hooks
+  - reference
+  - agent-context
 source: "Documentação oficial do React — react.dev/reference/react/hooks"
 verificado-em: 2026-08-14
 ---
@@ -33,16 +33,16 @@ O motivo de `REACT-HOOK-01`: o React identifica cada Hook pela **ordem da chamad
 ```tsx
 // ERRADO — REACT-HOOK-01
 function Profile({ userId }: { userId?: string }) {
- if (!userId) return null // early return antes dos Hooks
- const [name, setName] = useState('')
- //...
+  if (!userId) return null          // early return antes dos Hooks
+  const [name, setName] = useState('')
+  // ...
 }
 
 // CERTO — Hooks no topo, condicional depois
 function Profile({ userId }: { userId?: string }) {
- const [name, setName] = useState('')
- if (!userId) return null
- //...
+  const [name, setName] = useState('')
+  if (!userId) return null
+  // ...
 }
 ```
 
@@ -87,7 +87,7 @@ Assinaturas conforme o reference oficial. A coluna **Detalhe** aponta o satélit
 | --- | --- | --- |
 | `useMemo` | `const cached = useMemo(calculateValue, dependencies)` | [React - Performance e Concorrência](react-performance-e-concorrencia.md) |
 | `useCallback` | `const cachedFn = useCallback(fn, dependencies)` | [React - Performance e Concorrência](react-performance-e-concorrencia.md) |
-| `useTransition` | `const [isPending, startTransition] = useTransition` | [React - Performance e Concorrência](react-performance-e-concorrencia.md) |
+| `useTransition` | `const [isPending, startTransition] = useTransition()` | [React - Performance e Concorrência](react-performance-e-concorrencia.md) |
 | `useDeferredValue` | `const deferred = useDeferredValue(value, initialValue?)` | [React - Performance e Concorrência](react-performance-e-concorrencia.md) |
 
 ### Formulários e Actions
@@ -96,13 +96,13 @@ Assinaturas conforme o reference oficial. A coluna **Detalhe** aponta o satélit
 | --- | --- | --- |
 | `useActionState` | `const [state, formAction, isPending] = useActionState(action, initialState, permalink?)` | [React - Formulários e Actions](react-formularios-e-actions.md) |
 | `useOptimistic` | `const [optimistic, setOptimistic] = useOptimistic(value, reducer?)` | [React - Formulários e Actions](react-formularios-e-actions.md) |
-| `useFormStatus` | `const { pending, data, method, action } = useFormStatus` — de `react-dom` | [React - Formulários e Actions](react-formularios-e-actions.md) |
+| `useFormStatus` | `const { pending, data, method, action } = useFormStatus()` — de `react-dom` | [React - Formulários e Actions](react-formularios-e-actions.md) |
 
 ### Utilitários
 
 | Hook | Assinatura | Detalhe |
 | --- | --- | --- |
-| `useId` | `const id = useId` | [React - Hooks Utilitários](react-hooks-utilitarios.md) |
+| `useId` | `const id = useId()` | [React - Hooks Utilitários](react-hooks-utilitarios.md) |
 | `useSyncExternalStore` | `const snap = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot?)` | [React - Hooks Utilitários](react-hooks-utilitarios.md) |
 | `useDebugValue` | `useDebugValue(value, format?)` | [React - Hooks Utilitários](react-hooks-utilitarios.md) |
 
@@ -118,7 +118,7 @@ Quando a dúvida é entre dois Hooks próximos. As árvores completas estão em 
 | --- | --- |
 | `useState` × `useReducer` | Transições independentes → `useState`. Várias transições relacionadas, ou estados mutuamente exclusivos → `useReducer`. |
 | `useState` × `useRef` | Mudar deve redesenhar? → `useState`. Não deve? → `useRef`. |
-| `useMemo` × `useCallback` | Cachear o **resultado** → `useMemo`. Cachear a **função** → `useCallback`. `useCallback(fn, d)` ≡ `useMemo( => fn, d)`. |
+| `useMemo` × `useCallback` | Cachear o **resultado** → `useMemo`. Cachear a **função** → `useCallback`. `useCallback(fn, d)` ≡ `useMemo(() => fn, d)`. |
 | `useTransition` × `useDeferredValue` | Controlo o `setState` → `useTransition`. Só recebo o valor pronto → `useDeferredValue`. |
 | `useTransition` × `startTransition` | Preciso da flag `isPending` → `useTransition`. Estou fora de um componente → `startTransition`. |
 | `useEffect` × `useLayoutEffect` | Preciso medir layout antes do paint → `useLayoutEffect` (bloqueia o paint, use com parcimônia). Caso geral → `useEffect`. |
@@ -133,19 +133,19 @@ Quando a dúvida é entre dois Hooks próximos. As árvores completas estão em 
 Um Hook customizado é uma função cujo nome começa com `use` e que chama outros Hooks. Ele **compartilha lógica com estado, não o estado em si**: dois componentes que usam o mesmo Hook customizado têm instâncias de estado independentes.
 
 ```tsx
-function useOnlineStatus {
- return useSyncExternalStore(
- (callback) => {
- window.addEventListener('online', callback)
- window.addEventListener('offline', callback)
- return => {
- window.removeEventListener('online', callback)
- window.removeEventListener('offline', callback)
- }
- },
- => navigator.onLine,
- => true, // snapshot do servidor
- )
+function useOnlineStatus() {
+  return useSyncExternalStore(
+    (callback) => {
+      window.addEventListener('online', callback)
+      window.addEventListener('offline', callback)
+      return () => {
+        window.removeEventListener('online', callback)
+        window.removeEventListener('offline', callback)
+      }
+    },
+    () => navigator.onLine,
+    () => true, // snapshot do servidor
+  )
 }
 ```
 
@@ -168,29 +168,29 @@ function useOnlineStatus {
 
 ```tsx
 // ERRADO — a lista mente sobre o que o Effect lê
-useEffect( => {
- setFiltered(items.filter((i) => i.status === status))
+useEffect(() => {
+  setFiltered(items.filter((i) => i.status === status))
 }, [items]) // eslint desabilitado, `status` omitido
 
 // CERTO — não é um Effect. É estado derivado.
 const filtered = items.filter((i) => i.status === status)
 ```
 
-A array de dependências **descreve** o que o Effect lê; ela não é um controle de quando rodar. Se remover uma dependência "conserta" um loop, o Effect é o problema. Ver.
+A array de dependências **descreve** o que o Effect lê; ela não é um controle de quando rodar. Se remover uma dependência "conserta" um loop, o Effect é o problema..
 
 ### Estado espelhando props
 
 ```tsx
 // ERRADO — dessincroniza na primeira mudança de prop
 function Total({ items }: { items: Item[] }) {
- const [total, setTotal] = useState(0)
- useEffect( => setTotal(items.length), [items])
- return <span>{total}</span>
+  const [total, setTotal] = useState(0)
+  useEffect(() => setTotal(items.length), [items])
+  return <span>{total}</span>
 }
 
 // CERTO
 function Total({ items }: { items: Item[] }) {
- return <span>{items.length}</span>
+  return <span>{items.length}</span>
 }
 ```
 
@@ -202,11 +202,11 @@ Envolver tudo em `useCallback` não é otimização: adiciona custo de comparaç
 
 ```tsx
 // ERRADO — viola REACT-HOOK-01 mesmo indiretamente
-const value = condition ? useA : useB
+const value = condition ? useA() : useB()
 
 // CERTO — chame ambos, escolha depois
-const a = useA
-const b = useB
+const a = useA()
+const b = useB()
 const value = condition ? a : b
 ```
 

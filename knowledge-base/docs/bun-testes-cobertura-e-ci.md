@@ -2,10 +2,10 @@
 titulo: Bun - Testes - Cobertura e CI
 Link: https://bun.com/docs/test/code-coverage
 tags:
- - bun
- - testing
- - ci
- - agent-context
+  - bun
+  - testing
+  - ci
+  - agent-context
 source: "Documentação oficial — https://bun.com/docs/test/code-coverage, /reporters"
 verificado-em: 2026-08-20
 ---
@@ -54,7 +54,7 @@ Default: `["text"]`. Configuração persistente:
 coverage = true
 coverageReporter = ["text", "lcov"]
 coverageDir = "coverage"
-coverageSkipTestFiles = true # default
+coverageSkipTestFiles = true                 # default
 coveragePathIgnorePatterns = ["**/*.gen.ts", "src/mocks/**"]
 ```
 
@@ -68,12 +68,12 @@ coveragePathIgnorePatterns = ["**/*.gen.ts", "src/mocks/**"]
 
 ```toml
 [test]
-coverageThreshold = 0.9 # escalar: linhas e funções
+coverageThreshold = 0.9                                  # escalar: linhas e funções
 ```
 
 ```toml
 [test]
-coverageThreshold = { lines = 0.9, functions = 0.85 } # por métrica
+coverageThreshold = { lines = 0.9, functions = 0.85 }    # por métrica
 ```
 
 Valores são **fração** (`0.9`), não percentual (`90`). Declarar qualquer chave liga a falha: `bun test --coverage` sai com código diferente de zero quando a cobertura fica abaixo do limiar.
@@ -135,16 +135,16 @@ name: CI
 on: [push, pull_request]
 
 jobs:
- test:
- runs-on: ubuntu-latest
- steps:
- - uses: actions/checkout@v4
- - uses: oven-sh/setup-bun@v2
- with:
- bun-version: 1.4.0 # pinado — BUN-TEST-15
- - run: bun ci # lockfile congelado — BUN-PKG-02
- - run: bun run typecheck # tsc --noEmit; bun test NÃO checa tipo
- - run: bun test --parallel --coverage
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0          # pinado — BUN-TEST-15
+      - run: bun ci                   # lockfile congelado — BUN-PKG-02
+      - run: bun run typecheck        # tsc --noEmit; bun test NÃO checa tipo
+      - run: bun test --parallel --coverage
 ```
 
 Quatro decisões, e cada uma tem um ID por trás:
@@ -159,22 +159,22 @@ Sem `-u` em nenhuma linha (`BUN-TEST-05`), e sem `--retry` global.
 ### 5.2 Suíte grande: shard por máquina
 
 ```yaml
- test:
- runs-on: ubuntu-latest
- strategy:
- fail-fast: false
- matrix:
- shard: [1, 2, 3, 4]
- steps:
- - uses: actions/checkout@v4
- - uses: oven-sh/setup-bun@v2
- with: { bun-version: 1.4.0 }
- - run: bun ci
- - uses: actions/cache@v4
- with:
- path:.bun-timings.json
- key: bun-timings-${{ github.ref_name }}
- - run: bun test --shard=${{ matrix.shard }}/4 --timings=.bun-timings.json --parallel
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with: { bun-version: 1.4.0 }
+      - run: bun ci
+      - uses: actions/cache@v4
+        with:
+          path: .bun-timings.json
+          key: bun-timings-${{ github.ref_name }}
+      - run: bun test --shard=${{ matrix.shard }}/4 --timings=.bun-timings.json --parallel
 ```
 
 `fail-fast: false` porque você quer o resultado de todos os shards, não o do primeiro que quebrou. O cache do arquivo de timings é o que faz `--timings` valer: sem persistência, cada execução divide por contagem de arquivos ([Bun - Testes - Ciclo de Vida e Isolamento](bun-testes-ciclo-de-vida-e-isolamento.md) § 7).
@@ -182,7 +182,7 @@ Sem `-u` em nenhuma linha (`BUN-TEST-05`), e sem `--retry` global.
 ### 5.3 Job rápido de PR
 
 ```yaml
- - run: bun test --changed=origin/${{ github.base_ref }} --parallel
+      - run: bun test --changed=origin/${{ github.base_ref }} --parallel
 ```
 
 Roda só os arquivos cujo grafo de import alcança o diff. **Isso acelera o feedback; não substitui a suíte inteira no portão de merge** — o grafo de import não vê variável de ambiente, migração, fixture nem ordem de execução (`BUN-TEST-15` e [Bun - Testes - Execução e Configuração](bun-testes-execucao-e-configuracao.md) § 3.4).

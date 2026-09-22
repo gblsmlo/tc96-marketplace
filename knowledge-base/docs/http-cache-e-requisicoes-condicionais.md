@@ -2,9 +2,9 @@
 titulo: HTTP - Cache e Requisições Condicionais
 Link: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching
 tags:
- - http
- - cache
- - agent-context
+  - http
+  - cache
+  - agent-context
 source: "MDN Web Docs — https://developer.mozilla.org/en-US/docs/Web/HTTP"
 verificado-em: 2026-08-15
 ---
@@ -180,8 +180,8 @@ Quando os dois estão presentes, a precedência é definida: *"if both `If-Modif
 ### `ETag` forte × fraco
 
 ```http
-ETag: "33a64df5" ← forte: byte a byte idêntico
-ETag: W/"33a64df5" ← fraco: semanticamente equivalente
+ETag: "33a64df5"        ← forte: byte a byte idêntico
+ETag: W/"33a64df5"      ← fraco: semanticamente equivalente
 ```
 
 > "W/ (case-sensitive) indicates that a weak validator is used."
@@ -251,29 +251,29 @@ No servidor, o `ETag` costuma ser a coluna de versão que o ORM já mantém:
 ```ts
 // Concorrência otimista sem inventar protocolo: o ETag É a versão da linha.
 async function atualizarPedido(id: string, ifMatch: string | null, patch: PatchPedido) {
- if (!ifMatch) {
- return { status: 400 as const, body: { error: 'header If-Match obrigatório' } }
- }
- const versaoEsperada = Number(ifMatch.replaceAll('"', '').split('-v').at(-1))
- const linhas = await db
-.update(pedidos)
-.set({...patch, versao: sql`${pedidos.versao} + 1` })
-.where(and(eq(pedidos.id, id), eq(pedidos.versao, versaoEsperada)))
-.returning
+  if (!ifMatch) {
+    return { status: 400 as const, body: { error: 'header If-Match obrigatório' } }
+  }
+  const versaoEsperada = Number(ifMatch.replaceAll('"', '').split('-v').at(-1))
+  const linhas = await db
+    .update(pedidos)
+    .set({ ...patch, versao: sql`${pedidos.versao} + 1` })
+    .where(and(eq(pedidos.id, id), eq(pedidos.versao, versaoEsperada)))
+    .returning()
 
- if (linhas.length === 0) {
- const atual = await db.query.pedidos.findFirst({ where: eq(pedidos.id, id) })
- return atual
- ? { status: 412 as const, body: { error: 'conflito de versão', etagAtual: etagDe(atual) } }
- : { status: 404 as const, body: { error: 'pedido não encontrado' } }
- }
- return { status: 200 as const, etag: etagDe(linhas[0]), body: linhas[0] }
+  if (linhas.length === 0) {
+    const atual = await db.query.pedidos.findFirst({ where: eq(pedidos.id, id) })
+    return atual
+      ? { status: 412 as const, body: { error: 'conflito de versão', etagAtual: etagDe(atual) } }
+      : { status: 404 as const, body: { error: 'pedido não encontrado' } }
+  }
+  return { status: 200 as const, etag: etagDe(linhas[0]), body: linhas[0] }
 }
 
 const etagDe = (p: { id: string; versao: number }) => `"pedido-${p.id}-v${p.versao}"`
 ```
 
-Repare que o `UPDATE... WHERE versao = ?` faz o trabalho atômico: não há janela entre ler e escrever. O `412` é derivado do número de linhas afetadas, não de uma leitura anterior.
+Repare que o `UPDATE ... WHERE versao = ?` faz o trabalho atômico: não há janela entre ler e escrever. O `412` é derivado do número de linhas afetadas, não de uma leitura anterior.
 
 **`If-None-Match: *` é a variante para criação.** *"by adding `If-None-Match` with the special value of `*`, representing any ETag. The request will succeed, only if the resource didn't exist before"* — é um `PUT` que não sobrescreve, e resolve o mesmo problema que uma chave de idempotência resolve para `POST`.
 
@@ -335,7 +335,7 @@ Ou seja: **o que saiu com `max-age` longo saiu.** *"responses will remain in the
 
 Isso produz duas estratégias, e a escolha entre elas é a decisão de cache mais consequente de um deploy:
 
-**Subrecurso (JS, CSS, imagem, fonte): URL versionada + `max-age` longo + `immutable`.** *"Since the cache distinguishes resources from one another based on their URLs, the cache will not be reused again if the URL changes when a resource is updated."* Não há invalidação porque não há o que invalidar — a URL nova nunca esteve em cache. Ver.
+**Subrecurso (JS, CSS, imagem, fonte): URL versionada + `max-age` longo + `immutable`.** *"Since the cache distinguishes resources from one another based on their URLs, the cache will not be reused again if the URL changes when a resource is updated."* Não há invalidação porque não há o que invalidar — a URL nova nunca esteve em cache..
 
 **Recurso principal (HTML, JSON de API): `no-cache` + `ETag`.** *"Unlike subresources, main resources cannot be cache busted because their URLs can't be decorated in the same way."* A MDN prescreve:
 

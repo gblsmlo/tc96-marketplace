@@ -2,13 +2,13 @@
 titulo: Drizzle ORM
 Link: https://orm.drizzle.team/docs/overview
 tags:
- - typescript
- - backend
- - database
- - orm
- - postgresql
- - reference
- - agent-context
+  - typescript
+  - backend
+  - database
+  - orm
+  - postgresql
+  - reference
+  - agent-context
 source: "Documentação oficial do Drizzle ORM — orm.drizzle.team, cruzada com o snapshot do monorepo na tag npm estável"
 verificado-em: 2026-08-16
 ---
@@ -78,7 +78,7 @@ Quatro afirmações.
 
 **1. Drizzle não é um framework de dados — é uma camada fina sobre SQL.** A frase da própria doc é literal: *"se você sabe SQL, você sabe Drizzle"*. Ele não introduz uma linguagem de query própria (como o `where: { AND: [...] }` do Prisma) — o que se escreve é composição de funções que geram SQL, e o resultado é previsível porque é **quase SQL com tipos**. Isso é o oposto do Prisma: lá se aprende a API do Prisma além de SQL; aqui, o conhecimento de SQL transfere direto.
 
-**2. Existem duas APIs, e elas resolvem problemas diferentes.** (A partir daqui, **RQB** = Relational Queries — a sigla que os IDs `DRZ-RQB-*` usam.) O *query builder* (`db.select.from(...)`) é SQL explícito — controle total, um `JOIN` por vez, visível na query gerada. As *Relational Queries* (`db.query.tabela.findMany({ with: {...} })`) resolvem o caso comum de buscar uma entidade com suas relações aninhadas, **sempre em uma única query SQL** — mesmo que o resultado pareça N tabelas aninhadas em JSON. A doc chama isso de propriedade central para banco serverless, onde cada round-trip custa latência de rede.
+**2. Existem duas APIs, e elas resolvem problemas diferentes.** (A partir daqui, **RQB** = Relational Queries — a sigla que os IDs `DRZ-RQB-*` usam.) O *query builder* (`db.select().from(...)`) é SQL explícito — controle total, um `JOIN` por vez, visível na query gerada. As *Relational Queries* (`db.query.tabela.findMany({ with: {...} })`) resolvem o caso comum de buscar uma entidade com suas relações aninhadas, **sempre em uma única query SQL** — mesmo que o resultado pareça N tabelas aninhadas em JSON. A doc chama isso de propriedade central para banco serverless, onde cada round-trip custa latência de rede.
 
 **3. O schema TypeScript é a fonte da verdade — e migração é uma escolha, não uma obrigação.** `drizzle-kit generate` compara o schema declarado contra o histórico de migrações e escreve SQL; `drizzle-kit push` aplica a diferença direto, sem arquivo. São dois fluxos legítimos para momentos diferentes do projeto, não um certo e um errado. Ver § 5.3.
 
@@ -90,7 +90,7 @@ Quatro afirmações.
 
 | Pacote | Contém | Nota |
 | --- | --- | --- |
-| `drizzle-orm` | schema, query builder, RQB, `relations`, transactions — o runtime | zero dependências; import por dialeto (`drizzle-orm/pg-core`) e por driver (`drizzle-orm/node-postgres`) |
+| `drizzle-orm` | schema, query builder, RQB, `relations()`, transactions — o runtime | zero dependências; import por dialeto (`drizzle-orm/pg-core`) e por driver (`drizzle-orm/node-postgres`) |
 | `drizzle-kit` | CLI de migração: `generate`, `migrate`, `push`, `pull`, `studio`, `check`, `up` | dev dependency; não entra no bundle de produção |
 | `drizzle-zod` | `createSelectSchema`/`createInsertSchema`/`createUpdateSchema` a partir de uma tabela | **pacote separado, com aviso de depreciação para a v1** — ver § 0.1 e [Drizzle - Queries e Relations](drizzle-queries-e-relations.md) § 6 |
 
@@ -109,11 +109,11 @@ Este comando instala a linha estável. **`@rc`/`@beta` instalam a v1** e a API d
 | --- | --- | --- |
 | Conexão | `drizzle(url)`, `drizzle({ connection })`, `drizzle({ client })` | esta nota § 8, logo abaixo |
 | Declaração de schema | `pgTable`, tipos de coluna, modificadores, índices, enums, multi-schema | [Drizzle - Schema e Migrations](drizzle-schema-e-migrations.md) |
-| Migração | `drizzle-kit generate`/`migrate`/`push`/`pull`, `drizzle.config.ts`, `migrate` em runtime | [Drizzle - Schema e Migrations](drizzle-schema-e-migrations.md) |
+| Migração | `drizzle-kit generate`/`migrate`/`push`/`pull`, `drizzle.config.ts`, `migrate()` em runtime | [Drizzle - Schema e Migrations](drizzle-schema-e-migrations.md) |
 | Query builder | `select`/`insert`/`update`/`delete`, `where`, joins, agregação, CTE, upsert | [Drizzle - Queries e Relations](drizzle-queries-e-relations.md) |
-| Relações | `relations`, `one`/`many`, muitos-para-muitos, `relationName` | [Drizzle - Queries e Relations](drizzle-queries-e-relations.md) |
+| Relações | `relations()`, `one`/`many`, muitos-para-muitos, `relationName` | [Drizzle - Queries e Relations](drizzle-queries-e-relations.md) |
 | Relational Queries | `db.query.tabela.findMany`/`findFirst`, `with`, `columns`, `where` callback, `extras` | [Drizzle - Queries e Relations](drizzle-queries-e-relations.md) |
-| Transactions | `db.transaction`, `tx.rollback`, savepoints, isolamento | [Drizzle - Queries e Relations](drizzle-queries-e-relations.md) |
+| Transactions | `db.transaction`, `tx.rollback()`, savepoints, isolamento | [Drizzle - Queries e Relations](drizzle-queries-e-relations.md) |
 | Validação de fronteira | `drizzle-zod` | [Drizzle - Queries e Relations](drizzle-queries-e-relations.md) § 6 |
 
 ---
@@ -126,30 +126,30 @@ Este comando instala a linha estável. **`@rc`/`@beta` instalam a v1** e a API d
 A busca precisa de dados de MAIS DE UMA tabela relacionada
 (post + autor + comentários, por exemplo)?
 ├── NÃO → query builder simples. select/insert/update/delete
-│ resolvem sozinhos; RQB (Relational Queries, § 2 item 2)
-│ não ganha nada aqui.
+│         resolvem sozinhos; RQB (Relational Queries, § 2 item 2)
+│         não ganha nada aqui.
 └── SIM
- └── Você precisa controlar exatamente a forma do JOIN
- (semi-join, self-join, agregação complexa por linha)?
- ├── SIM → query builder com leftJoin/innerJoin explícito
- └── NÃO → db.query.tabela.findMany({ with: {...} })
- Uma query só, resultado já aninhado.
- DRZ-RQB-01
+    └── Você precisa controlar exatamente a forma do JOIN
+        (semi-join, self-join, agregação complexa por linha)?
+        ├── SIM → query builder com leftJoin/innerJoin explícito
+        └── NÃO → db.query.tabela.findMany({ with: {...} })
+                  Uma query só, resultado já aninhado.
+                  DRZ-RQB-01
 ```
 
 ### 5.2 Insert simples ou upsert?
 
 ```
 A chave já pode existir?
-├── NÃO → insert.values(...) simples
+├── NÃO → insert().values(...) simples
 └── SIM
- └── Ao colidir, o que fazer?
- ├── Ignorar e manter o que já existe
- │ → onConflictDoNothing({ target: coluna })
- ├── Atualizar campos específicos
- │ → onConflictDoUpdate({ target, set: {...} })
- └── Atualizar só se uma condição valer
- → onConflictDoUpdate + targetWhere/setWhere
+    └── Ao colidir, o que fazer?
+        ├── Ignorar e manter o que já existe
+        │   → onConflictDoNothing({ target: coluna })
+        ├── Atualizar campos específicos
+        │   → onConflictDoUpdate({ target, set: {...} })
+        └── Atualizar só se uma condição valer
+            → onConflictDoUpdate + targetWhere/setWhere
 ```
 
 ### 5.3 Como migrar: generate+migrate ou push?
@@ -159,18 +159,18 @@ Esta é a decisão mais mal-entendida da ferramenta — as duas vias são legít
 ```
 O schema muda várias vezes por dia, sozinho, em protótipo/local?
 ├── SIM → drizzle-kit push
-│ Aplica a diferença direto no banco. Sem arquivo de
-│ migração, sem histórico. Rápido, mas sem trilha
-│ auditável. DRZ-MIG-01
+│         Aplica a diferença direto no banco. Sem arquivo de
+│         migração, sem histórico. Rápido, mas sem trilha
+│         auditável.                                DRZ-MIG-01
 └── NÃO — vai para staging/produção, ou tem mais de um dev
- → drizzle-kit generate, depois:
- ├── CI/CD roda `drizzle-kit migrate` DRZ-MIG-02
- └── Deploy serverless/monolito
- → migrate chamado no boot da aplicação,
- programaticamente, a partir do runtime. DRZ-MIG-03
+    → drizzle-kit generate, depois:
+      ├── CI/CD roda `drizzle-kit migrate`             DRZ-MIG-02
+      └── Deploy serverless/monolito
+          → migrate() chamado no boot da aplicação,
+            programaticamente, a partir do runtime.   DRZ-MIG-03
 
 Nunca os dois no mesmo ambiente para o mesmo schema — push
-e generate divergem sobre o que é "o estado atual". DRZ-MIG-04
+e generate divergem sobre o que é "o estado atual".   DRZ-MIG-04
 ```
 
 ### 5.4 Preciso validar dado que entra ou sai do banco. Onde?
@@ -178,12 +178,12 @@ e generate divergem sobre o que é "o estado atual". DRZ-MIG-04
 ```
 O shape a validar já EXISTE como tabela Drizzle?
 ├── SIM → createInsertSchema/createSelectSchema/createUpdateSchema
-│ de drizzle-zod. Não duplique o shape à mão. DRZ-ZOD-01
-│ Precisa refinar uma regra (min, regex)?
-│ → segundo argumento da função create*Schema
+│         de drizzle-zod. Não duplique o shape à mão.  DRZ-ZOD-01
+│         Precisa refinar uma regra (min, regex)?
+│         → segundo argumento da função create*Schema
 └── NÃO — é um shape que não é tabela (DTO, filtro de query,
- payload de webhook)
- → Zod puro, como em [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md)
+    payload de webhook)
+    → Zod puro, como em [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md)
 ```
 
 ---
@@ -212,7 +212,7 @@ Regras citáveis por ID. `MUST`/`NEVER` são normativos.
 | --- | --- |
 | `DRZ-MIG-01` | `push` **MUST** ficar restrito a ambiente local/protótipo sem histórico auditável exigido. |
 | `DRZ-MIG-02` | Staging e produção **MUST** usar `generate` + `migrate`, **NEVER** `push`. |
-| `DRZ-MIG-03` | Em deploy serverless, a migração **MUST** rodar via `migrate` programático no boot. |
+| `DRZ-MIG-03` | Em deploy serverless, a migração **MUST** rodar via `migrate()` programático no boot. |
 | `DRZ-MIG-04` | `push` e `generate`/`migrate` **NEVER** convivem no mesmo ambiente para o mesmo schema. |
 
 ### `DRZ-ZOD-*` — fronteira de validação
@@ -231,19 +231,19 @@ Regras citáveis por ID. `MUST`/`NEVER` são normativos.
 ## 7. Contrato de skill
 
 ```
-SEMPRE: docs/Drizzle ORM.md § 0 (qual versão) — NÃO É OPCIONAL
- § 2 (modelo mental)
- § 5 (árvores de decisão)
- § 6 (regras)
+SEMPRE:   docs/Drizzle ORM.md § 0 (qual versão) — NÃO É OPCIONAL
+                              § 2 (modelo mental)
+                              § 5 (árvores de decisão)
+                              § 6 (regras)
 
 AO DECLARAR SCHEMA ou RODAR drizzle-kit:
- docs/Drizzle - Schema e Migrations.md
+          docs/Drizzle - Schema e Migrations.md
 
 AO ESCREVER QUERY, RELAÇÃO ou TRANSACTION:
- docs/Drizzle - Queries e Relations.md
+          docs/Drizzle - Queries e Relations.md
 
-NUNCA: seguir um link para orm.drizzle.team sem confirmar
- que o projeto não está em @rc/@beta primeiro
+NUNCA:    seguir um link para orm.drizzle.team sem confirmar
+          que o projeto não está em @rc/@beta primeiro
 ```
 
 ### Invariantes que a skill deve fazer valer
@@ -266,7 +266,7 @@ const db = drizzle(process.env.DATABASE_URL!)
 
 // 2 — objeto de configuração, quando precisa de opção extra (ssl, por exemplo)
 const db = drizzle({
- connection: { connectionString: process.env.DATABASE_URL!, ssl: true },
+  connection: { connectionString: process.env.DATABASE_URL!, ssl: true },
 })
 
 // 3 — driver já instanciado por fora (pool próprio, reuso entre módulos)
@@ -308,13 +308,13 @@ Verificadas em **2026-08-16**:
 
 - [Overview](https://orm.drizzle.team/docs/overview) · [Get Started PostgreSQL](https://orm.drizzle.team/docs/get-started-postgresql) — **conteúdo ao vivo já na linha v1-rc**, ver § 0
 - `npm view drizzle-orm dist-tags`, `npm view drizzle-kit dist-tags`, `npm view drizzle-zod dist-tags` — versões estáveis publicadas
-- `unpkg.com/drizzle-orm@0.45.2/relations.d.ts` — confirma que o export estável é `relations`, não `defineRelations`
+- `unpkg.com/drizzle-orm@0.45.2/relations.d.ts` — confirma que o export estável é `relations()`, não `defineRelations`
 - Snapshot do repositório `drizzle-team/drizzle-orm-docs`, commit `3e7fe1b3` (2026-03-21, mais próximo da tag `0.45.2` de 2026-03-27): `overview.mdx`, `get-started-postgresql.mdx`, `sql-schema-declaration.mdx`, `relations.mdx`, `rqb.mdx`, `select.mdx`, `insert.mdx`, `update.mdx`, `delete.mdx`, `transactions.mdx`, `migrations.mdx`, `kit-overview.mdx`, `zod.mdx`, `relations-v1-v2.mdx` (guia oficial de migração v1→v2, confirma a reescrita da API de relations)
 
 ## Notas de verificação
 
-- **A doc ao vivo não é a doc estável.** `orm.drizzle.team/docs/rqb` e `/docs/get-started-postgresql`, acessadas em 2026-08-16, mostram `defineRelations` e `npm i drizzle-orm@rc` — conteúdo da linha `1.0.0-rc.5`. O `npm view drizzle-orm dist-tags` na mesma data mostra `latest: 0.45.2`. O site reescreve as URLs no lugar, sem versionamento por caminho; a única forma confiável de obter o conteúdo estável foi o snapshot do repositório de docs numa tag anterior à mudança.
-- **`relations` (minúsculo, com `one`/`many` na callback) é a API que o pacote publicado exporta**, confirmado lendo `relations.d.ts` de `drizzle-orm@0.45.2` via unpkg. `defineRelations` não existe nesse pacote.
+- **A doc ao vivo não é a doc estável.** `orm.drizzle.team/docs/rqb` e `/docs/get-started-postgresql`, acessadas em 2026-08-16, mostram `defineRelations()` e `npm i drizzle-orm@rc` — conteúdo da linha `1.0.0-rc.5`. O `npm view drizzle-orm dist-tags` na mesma data mostra `latest: 0.45.2`. O site reescreve as URLs no lugar, sem versionamento por caminho; a única forma confiável de obter o conteúdo estável foi o snapshot do repositório de docs numa tag anterior à mudança.
+- **`relations()` (minúsculo, com `one`/`many` na callback) é a API que o pacote publicado exporta**, confirmado lendo `relations.d.ts` de `drizzle-orm@0.45.2` via unpkg. `defineRelations()` não existe nesse pacote.
 - **`drizzle-zod` está marcado como deprecado a partir de `1.0.0-beta.15`**, a favor de geração de schema nativa dentro do próprio `drizzle-orm`. Isso **não afeta o pacote estável hoje** (`drizzle-zod@0.8.3` continua sendo a resposta correta) — é um aviso do que muda quando o projeto migrar para v1.
 - **Precedente do mesmo padrão:** a estrutura de Bun já registrou "a doc está à frente do binário publicado" para exemplos rotulados `1.4.0` com `latest` em `1.3.14`. Aqui a divergência é maior — não é atraso de changelog, é a página ativa documentando por padrão uma API com breaking change ainda não publicada como `latest`.
 - **Não verificado nesta rodada:** dialetos MySQL, SQLite, SingleStore, MSSQL, CockroachDB; drivers gerenciados (Neon, Supabase, PlanetScale, Xata, Vercel Postgres); `drizzle-kit studio`/`check`/`up` em detalhe; `drizzle-seed`. Fora do escopo de fundamentos combinado.

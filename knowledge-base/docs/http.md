@@ -2,10 +2,10 @@
 titulo: HTTP
 Link: https://developer.mozilla.org/en-US/docs/Web/HTTP
 tags:
- - http
- - protocolo
- - backend
- - agent-context
+  - http
+  - protocolo
+  - backend
+  - agent-context
 source: "MDN Web Docs — https://developer.mozilla.org/en-US/docs/Web/HTTP"
 verificado-em: 2026-08-15
 ---
@@ -75,7 +75,7 @@ Cinco afirmações. Quase todo erro de HTTP que um agente comete viola uma delas
 
 **5. Extensibilidade por header significa que o desconhecido é ignorado, não rejeitado.** RFC 9110 § 5.1: *"A proxy MUST forward unrecognized header fields... Other recipients SHOULD ignore unrecognized header and trailer fields."* É o que permitiu CORS, `Retry-After` e tracing distribuído existirem sem mudar a versão do protocolo. A leitura prática para quem escreve servidor: um header a mais nunca é motivo de `400`, e um header seu que o cliente não conhece nunca quebra o cliente — mas também **nunca é garantido que chegou**, porque um intermediário pode ter sido configurado para removê-lo.
 
-> **O erro que junta as cinco.** Um `POST /pedidos` que responde `200` com `{"erro": "estoque insuficiente"}`. Sem estado no protocolo, o cliente não sabe se a chamada anterior passou; o status diz "deu certo" a todo intermediário que só lê a status line; o retry automático fica proibido porque `POST` não é idempotente; e o monitoramento conta como sucesso. Nada disso é visível na UI, que exibe a mensagem corretamente. Ver.
+> **O erro que junta as cinco.** Um `POST /pedidos` que responde `200` com `{"erro": "estoque insuficiente"}`. Sem estado no protocolo, o cliente não sabe se a chamada anterior passou; o status diz "deu certo" a todo intermediário que só lê a status line; o retry automático fica proibido porque `POST` não é idempotente; e o monitoramento conta como sucesso. Nada disso é visível na UI, que exibe a mensagem corretamente..
 
 ---
 
@@ -176,45 +176,45 @@ Todo ponteiro de seção abaixo foi verificado contra o satélite. Uma linha da 
 
 | Item | Onde |
 | --- | --- |
-| `Cache-Control` e suas diretivas de request e de response | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) § 3 |
-| Cache privado × compartilhado (`private`, `public`, `s-maxage`) | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) § 2 |
-| `ETag` forte e fraco | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) § 4 |
-| `Last-Modified` e a granularidade de um segundo | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) § 4 |
-| `If-None-Match`, `If-Modified-Since`, `If-Match`, `If-Unmodified-Since` | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) § 4 e § 5 |
-| Revalidação e o ciclo `304` | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) § 4 |
-| Frescor heurístico — o que o cache faz sem `Cache-Control` | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) § 3 |
-| `Vary` e a chave do cache | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) § 6 |
-| `Age` e `Expires`, e a precedência entre eles | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) § 3 |
+| `Cache-Control` e suas diretivas de request e de response | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md)  § 3 |
+| Cache privado × compartilhado (`private`, `public`, `s-maxage`) | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md)  § 2 |
+| `ETag` forte e fraco | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md)  § 4 |
+| `Last-Modified` e a granularidade de um segundo | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md)  § 4 |
+| `If-None-Match`, `If-Modified-Since`, `If-Match`, `If-Unmodified-Since` | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md)  § 4 e § 5 |
+| Revalidação e o ciclo `304` | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md)  § 4 |
+| Frescor heurístico — o que o cache faz sem `Cache-Control` | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md)  § 3 |
+| `Vary` e a chave do cache | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md)  § 6 |
+| `Age` e `Expires`, e a precedência entre eles | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md)  § 3 |
 
 ### CORS
 
 | Item | Onde |
 | --- | --- |
-| Origem, e por que a mesma-origem é o default | [HTTP - CORS](http-cors.md) § 2 |
-| Requisição simples × preflight `OPTIONS` | [HTTP - CORS](http-cors.md) § 3 |
-| `Access-Control-Allow-Origin` e a incompatibilidade do `*` com credenciais | [HTTP - CORS](http-cors.md) § 4 |
-| `Access-Control-Allow-Methods` / `-Headers` / `-Max-Age` | [HTTP - CORS](http-cors.md) § 3 |
-| `Access-Control-Expose-Headers` — por que o cliente não lê seu header | [HTTP - CORS](http-cors.md) § 5 |
-| O modelo de falha: o browser bloqueia a **leitura**, não necessariamente o envio | [HTTP - CORS](http-cors.md) § 6 |
-| `Vary: Origin` e o cache envenenado | [HTTP - CORS](http-cors.md) § 4 |
+| Origem, e por que a mesma-origem é o default | [HTTP - CORS](http-cors.md)  § 2 |
+| Requisição simples × preflight `OPTIONS` | [HTTP - CORS](http-cors.md)  § 3 |
+| `Access-Control-Allow-Origin` e a incompatibilidade do `*` com credenciais | [HTTP - CORS](http-cors.md)  § 4 |
+| `Access-Control-Allow-Methods` / `-Headers` / `-Max-Age` | [HTTP - CORS](http-cors.md)  § 3 |
+| `Access-Control-Expose-Headers` — por que o cliente não lê seu header | [HTTP - CORS](http-cors.md)  § 5 |
+| O modelo de falha: o browser bloqueia a **leitura**, não necessariamente o envio | [HTTP - CORS](http-cors.md)  § 6 |
+| `Vary: Origin` e o cache envenenado | [HTTP - CORS](http-cors.md)  § 4 |
 
 ### Negociação de conteúdo e range
 
 | Item | Onde |
 | --- | --- |
-| `Accept`, `Accept-Language`, `Accept-Encoding` e os fatores `q` | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) § 2 |
-| `Content-Type`, media type e parâmetro `charset` | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) § 3 |
-| `Content-Encoding` e compressão | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) § 4 |
-| `Content-Language`, `Content-Location` | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) § 3 |
-| `406` e quando não emiti-lo | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) § 3 |
-| `Range`, `Accept-Ranges`, `Content-Range`, `206` e `416` | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) § 6 |
+| `Accept`, `Accept-Language`, `Accept-Encoding` e os fatores `q` | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md)  § 2 |
+| `Content-Type`, media type e parâmetro `charset` | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md)  § 3 |
+| `Content-Encoding` e compressão | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md)  § 4 |
+| `Content-Language`, `Content-Location` | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md)  § 3 |
+| `406` e quando não emiti-lo | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md)  § 3 |
+| `Range`, `Accept-Ranges`, `Content-Range`, `206` e `416` | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md)  § 6 |
 
 ### Specs
 
 | Item | Onde |
 | --- | --- |
-| Mapa spec → o que ela rege → nota do vault | [HTTP - Specs e RFCs](http-specs-e-rfcs.md) § 3 |
-| Onde um status ou header está definido, quando a dúvida é normativa | [HTTP - Specs e RFCs](http-specs-e-rfcs.md) § 4 |
+| Mapa spec → o que ela rege → nota do vault | [HTTP - Specs e RFCs](http-specs-e-rfcs.md)  § 3 |
+| Onde um status ou header está definido, quando a dúvida é normativa | [HTTP - Specs e RFCs](http-specs-e-rfcs.md)  § 4 |
 
 ---
 
@@ -229,24 +229,24 @@ Decida por **semântica**, não por hábito. A primeira pergunta é a única que
 ```
 A operação muda estado no servidor?
 ├── NÃO → GET
-│ └── precisa só dos metadados (tamanho, validador, existência)?
-│ → HEAD
-│ └── precisa saber quais métodos o recurso aceita? → OPTIONS
-│ └── "mas os parâmetros não cabem na URL"
-│ → ainda não é POST por isso. Ver § 5.1 nota, abaixo.
+│         └── precisa só dos metadados (tamanho, validador, existência)?
+│             → HEAD
+│         └── precisa saber quais métodos o recurso aceita? → OPTIONS
+│         └── "mas os parâmetros não cabem na URL"
+│             → ainda não é POST por isso. Ver § 5.1 nota, abaixo.
 └── SIM
- └── Repetir a MESMA requisição N vezes deve deixar o
- recurso no MESMO estado que uma vez?
- ├── SIM
- │ ├── o corpo é a representação INTEIRA do recurso,
- │ │ e o cliente escolhe a URI → PUT
- │ └── remoção do recurso → DELETE
- └── NÃO
- ├── modificação PARCIAL de um recurso existente
- │ (o corpo é um conjunto de instruções) → PATCH
- └── processamento específico do recurso: criar sob
- URI escolhida pelo servidor, enfileirar, executar
- ação, submeter formulário → POST
+    └── Repetir a MESMA requisição N vezes deve deixar o
+        recurso no MESMO estado que uma vez?
+        ├── SIM
+        │   ├── o corpo é a representação INTEIRA do recurso,
+        │   │   e o cliente escolhe a URI → PUT
+        │   └── remoção do recurso → DELETE
+        └── NÃO
+            ├── modificação PARCIAL de um recurso existente
+            │   (o corpo é um conjunto de instruções) → PATCH
+            └── processamento específico do recurso: criar sob
+                URI escolhida pelo servidor, enfileirar, executar
+                ação, submeter formulário → POST
 ```
 
 **A pergunta que decide `PUT` × `PATCH` não é "envio tudo ou parte".** É *"o corpo é o novo estado ou é uma instrução?"*. `PUT` substitui; `PATCH` instrui. Um `PATCH` que incrementa um contador não é idempotente, e um `PUT` que envia o objeto inteiro é — mesmo que o objeto tenha um contador dentro, porque ele sobrescreve o valor em vez de somar.
@@ -258,27 +258,27 @@ A operação muda estado no servidor?
 ```
 A requisição foi processada com sucesso?
 ├── SIM
-│ ├── criou recurso → 201 + Location
-│ ├── aceitou para processar depois (fila, job) → 202
-│ ├── sucesso sem nada a devolver (DELETE, PUT de update) → 204
-│ └── caso geral → 200
+│   ├── criou recurso → 201 + Location
+│   ├── aceitou para processar depois (fila, job) → 202
+│   ├── sucesso sem nada a devolver (DELETE, PUT de update) → 204
+│   └── caso geral → 200
 ├── NÃO, e a culpa é do cliente (4xx)
-│ ├── não autenticado → 401 + WWW-Authenticate
-│ ├── autenticado, sem permissão → 403
-│ ├── recurso inexistente → 404
-│ ├── recurso removido em definitivo → 410
-│ ├── método conhecido, recurso não aceita → 405 + Allow
-│ ├── sintaxe do corpo quebrada / JSON inválido → 400
-│ ├── media type que o servidor não processa → 415
-│ ├── sintaxe válida, regra de negócio reprovou → 422
-│ ├── conflito com o estado atual → 409
-│ ├── precondição (If-Match) falhou → 412
-│ └── excedeu limite de taxa → 429 + Retry-After
+│   ├── não autenticado → 401 + WWW-Authenticate
+│   ├── autenticado, sem permissão → 403
+│   ├── recurso inexistente → 404
+│   ├── recurso removido em definitivo → 410
+│   ├── método conhecido, recurso não aceita → 405 + Allow
+│   ├── sintaxe do corpo quebrada / JSON inválido → 400
+│   ├── media type que o servidor não processa → 415
+│   ├── sintaxe válida, regra de negócio reprovou → 422
+│   ├── conflito com o estado atual → 409
+│   ├── precondição (If-Match) falhou → 412
+│   └── excedeu limite de taxa → 429 + Retry-After
 └── NÃO, e a culpa é do servidor (5xx)
- ├── o próprio código falhou → 500
- ├── upstream devolveu resposta inválida → 502
- ├── indisponível temporariamente / manutenção → 503 + Retry-After
- └── upstream não respondeu a tempo → 504
+    ├── o próprio código falhou → 500
+    ├── upstream devolveu resposta inválida → 502
+    ├── indisponível temporariamente / manutenção → 503 + Retry-After
+    └── upstream não respondeu a tempo → 504
 ```
 
 Subárvore de redirect — é onde mais se erra:
@@ -286,14 +286,14 @@ Subárvore de redirect — é onde mais se erra:
 ```
 Preciso mandar o cliente para outra URI.
 ├── A mudança é PERMANENTE?
-│ ├── SIM
-│ │ ├── e existe operação não-GET nessa URI → 308
-│ │ └── só há GET (páginas, SEO) → 301
-│ └── NÃO
-│ ├── quero PRESERVAR método e corpo → 307
-│ ├── só há GET → 302
-│ └── quero DELIBERADAMENTE virar GET
-│ (POST-redirect-GET, para o refresh não reenviar) → 303
+│   ├── SIM
+│   │   ├── e existe operação não-GET nessa URI → 308
+│   │   └── só há GET (páginas, SEO) → 301
+│   └── NÃO
+│       ├── quero PRESERVAR método e corpo → 307
+│       ├── só há GET → 302
+│       └── quero DELIBERADAMENTE virar GET
+│           (POST-redirect-GET, para o refresh não reenviar) → 303
 └── Em todos os casos: Location é obrigatório.
 ```
 
@@ -304,26 +304,26 @@ Preciso mandar o cliente para outra URI.
 ```
 A resposta contém dado específico de um usuário autenticado?
 ├── SIM
-│ ├── e não pode nem tocar disco (token, dado sensível)
-│ │ → Cache-Control: no-store
-│ └── pode ficar no browser dele, nunca num cache compartilhado
-│ → Cache-Control: private, max-age=<n>
+│   ├── e não pode nem tocar disco (token, dado sensível)
+│   │   → Cache-Control: no-store
+│   └── pode ficar no browser dele, nunca num cache compartilhado
+│       → Cache-Control: private, max-age=<n>
 └── NÃO
- └── O conteúdo tem URL versionada / hash no nome?
- ├── SIM → Cache-Control: public, max-age=31536000, immutable
- └── NÃO
- └── Muda com que frequência?
- ├── nunca durante a sessão (enums, flags)
- │ → max-age alto + ETag
- ├── de vez em quando, e servir velho é aceitável por
- │ alguns segundos → s-maxage curto + stale-while-revalidate
- └── a cada escrita → max-age=0, must-revalidate + ETag
- (o cliente pergunta sempre; o 304 é barato)
+    └── O conteúdo tem URL versionada / hash no nome?
+        ├── SIM → Cache-Control: public, max-age=31536000, immutable
+        └── NÃO
+            └── Muda com que frequência?
+                ├── nunca durante a sessão (enums, flags)
+                │   → max-age alto + ETag
+                ├── de vez em quando, e servir velho é aceitável por
+                │   alguns segundos → s-maxage curto + stale-while-revalidate
+                └── a cada escrita → max-age=0, must-revalidate + ETag
+                    (o cliente pergunta sempre; o 304 é barato)
 
 E, em qualquer ramo: a resposta varia por header de request
 (Accept, Accept-Encoding, Accept-Language, Origin)?
- → Vary com esses headers, senão o cache compartilhado
- serve a representação errada para outro cliente.
+  → Vary com esses headers, senão o cache compartilhado
+    serve a representação errada para outro cliente.
 ```
 
 Diretivas, sintaxe e a mecânica do `304` em [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md). Política de frescor como decisão de produto em e.
@@ -333,22 +333,22 @@ Diretivas, sintaxe e a mecânica do `304` em [HTTP - Cache e Requisições Condi
 ```
 O erro aparece no console do browser e menciona "CORS policy"?
 ├── NÃO → não é CORS. É rede, TLS, DNS ou o servidor caiu.
-│ Confira se a requisição saiu (aba Network / log do servidor).
+│         Confira se a requisição saiu (aba Network / log do servidor).
 └── SIM
- └── A requisição chegou ao servidor (aparece no log)?
- ├── NÃO → o preflight falhou ou nem foi respondido.
- │ ├── há um OPTIONS no log? → o handler de OPTIONS não
- │ │ devolve os Access-Control-Allow-*
- │ └── não há → a rota não trata OPTIONS
- │ (framework devolvendo 404/405 no preflight)
- └── SIM, respondeu 2xx, e ainda assim falhou
- ├── usa cookie/credencial? → Allow-Origin: * é inválido
- │ com credenciais; ecoe a origem + Allow-Credentials: true
- ├── o header que preciso ler vem undefined
- │ → falta Access-Control-Expose-Headers
- └── funciona num usuário e falha noutro, ou funciona
- depois de hard refresh → cache compartilhado sem
- Vary: Origin servindo a resposta de outra origem
+    └── A requisição chegou ao servidor (aparece no log)?
+        ├── NÃO → o preflight falhou ou nem foi respondido.
+        │   ├── há um OPTIONS no log? → o handler de OPTIONS não
+        │   │   devolve os Access-Control-Allow-*
+        │   └── não há → a rota não trata OPTIONS
+        │       (framework devolvendo 404/405 no preflight)
+        └── SIM, respondeu 2xx, e ainda assim falhou
+            ├── usa cookie/credencial? → Allow-Origin: * é inválido
+            │   com credenciais; ecoe a origem + Allow-Credentials: true
+            ├── o header que preciso ler vem undefined
+            │   → falta Access-Control-Expose-Headers
+            └── funciona num usuário e falha noutro, ou funciona
+                depois de hard refresh → cache compartilhado sem
+                Vary: Origin servindo a resposta de outra origem
 ```
 
 O modelo de falha completo em [HTTP - CORS](http-cors.md), e o conceito em. **CORS não é autorização:** ele restringe o que um script de outra origem pode **ler**, e não impede o request de chegar ao servidor.
@@ -358,18 +358,18 @@ O modelo de falha completo em [HTTP - CORS](http-cors.md), e o conceito em. **CO
 ```
 Que status o servidor devolveu?
 ├── 415 → o servidor não processa o Content-Type que VOCÊ enviou.
-│ Erro está no request. Confira Content-Type e charset.
+│         Erro está no request. Confira Content-Type e charset.
 ├── 406 → o servidor não tem representação que satisfaça o seu Accept.
-│ Frequentemente o Accept é restritivo demais no cliente.
+│         Frequentemente o Accept é restritivo demais no cliente.
 ├── 200, mas o corpo veio no formato errado
-│ ├── o servidor ignora Accept e sempre devolve o mesmo
-│ │ → é falha de implementação do servidor, não sua
-│ └── um cache serviu a representação de outro cliente
-│ → falta Vary no servidor
+│   ├── o servidor ignora Accept e sempre devolve o mesmo
+│   │   → é falha de implementação do servidor, não sua
+│   └── um cache serviu a representação de outro cliente
+│       → falta Vary no servidor
 └── 200, mas os acentos vieram quebrados
- → charset. Content-Type: application/json é UTF-8 por
- definição do media type; text/* não é — declare
- `; charset=utf-8` explicitamente.
+    → charset. Content-Type: application/json é UTF-8 por
+      definição do media type; text/* não é — declare
+      `; charset=utf-8` explicitamente.
 ```
 
 Detalhe, fatores `q` e o caso do `Range` em [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md).
@@ -426,7 +426,7 @@ As famílias completas vivem nos satélites, mas estas viajam com o caminho mín
 | `HTTP-NEG-03` | `Content-Encoding` **NEVER** é definido manualmente sem que o corpo tenha sido de fato comprimido naquele formato — e `Content-Length`, quando presente, **MUST** ser o tamanho comprimido. | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) |
 | `HTTP-NEG-11` | `Range` fora dos limites do recurso **MUST** produzir `416` — **NEVER** `200` com o recurso inteiro. | [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) |
 | `HTTP-SPEC-02` | Texto do projeto **NEVER** cita RFC 7230, 7231, 7232, 7233, 7234, 7235, 7538, 7540, 7807 ou 2818 como fonte vigente — os substitutos estão na § 2. | [HTTP - Specs e RFCs](http-specs-e-rfcs.md) |
-| `HTTP-SPEC-04` | Regra de CORS, preflight, `fetch` ou `Cross-Origin-Resource-Policy` **NEVER** é atribuída a um número de RFC — a fonte é o Fetch Standard (WHATWG). | [HTTP - Specs e RFCs](http-specs-e-rfcs.md) |
+| `HTTP-SPEC-04` | Regra de CORS, preflight, `fetch()` ou `Cross-Origin-Resource-Policy` **NEVER** é atribuída a um número de RFC — a fonte é o Fetch Standard (WHATWG). | [HTTP - Specs e RFCs](http-specs-e-rfcs.md) |
 ### 6.2 IDs canônicos
 
 Dois princípios aparecem em mais de um arquivo, com IDs diferentes, porque cada satélite precisa se sustentar sozinho. **Para citar, use o ID canônico.**
@@ -474,24 +474,24 @@ Como uma skill de backend ou de cliente HTTP deve consumir esta doc.
 ### O que carregar
 
 ```
-SEMPRE: docs/HTTP.md § 2 (modelo mental)
- docs/HTTP.md § 5 (árvores de decisão)
- docs/HTTP.md § 6 + § 6.1 (regras normativas e críticas)
+SEMPRE:   docs/HTTP.md § 2 (modelo mental)
+          docs/HTTP.md § 5 (árvores de decisão)
+          docs/HTTP.md § 6 + § 6.1 (regras normativas e críticas)
 
 AO DESENHAR OU ALTERAR ENDPOINT:
- docs/HTTP - Métodos e Semântica.md
- docs/HTTP - Status e Redirecionamento.md
+          docs/HTTP - Métodos e Semântica.md
+          docs/HTTP - Status e Redirecionamento.md
 
 SOB DEMANDA, via § 4 (mapa da superfície):
- o satélite do mecanismo tocado
+          o satélite do mecanismo tocado
 
 ANTES DE IMPLEMENTAR À MÃO:
- docs/HTTP.md § 8 (pontes com o stack)
+          docs/HTTP.md § 8 (pontes com o stack)
 
 EM DÚVIDA NORMATIVA ("a spec obriga?"):
- docs/HTTP - Specs e RFCs.md
+          docs/HTTP - Specs e RFCs.md
 
-NUNCA: todos os satélites de uma vez
+NUNCA:    todos os satélites de uma vez
 ```
 
 ### Como citar
@@ -525,7 +525,7 @@ O corpo desta doc é HTTP puro. Mas quase tudo que os satélites descrevem, o st
 
 | Mecanismo | O que `Bun.serve` faz |
 | --- | --- |
-| Requisição condicional em arquivo | `new Response(await file.bytes)` responde `304` a `If-None-Match` via `ETag`; `new Response(Bun.file(p))` responde `304` a `If-Modified-Since` via `Last-Modified` |
+| Requisição condicional em arquivo | `new Response(await file.bytes())` responde `304` a `If-None-Match` via `ETag`; `new Response(Bun.file(p))` responde `304` a `If-Modified-Since` via `Last-Modified` |
 | `Range` | suportado ao servir `Bun.file` diretamente, com `Content-Range`; `Bun.file(p).slice(a, b)` preenche `Content-Range` e `Content-Length` |
 | Transferência | `sendfile(2)` quando possível — cópia zero no kernel |
 
@@ -554,7 +554,7 @@ Hono traz built-ins no próprio pacote, em subcaminhos, verificados em [Hono - M
 
 Elysia tem `@elysia/cors`, cujos defaults são ainda mais permissivos — `origin: true` (equivalente a `*`) **e** `credentials: true`, combinação que os browsers recusam (`ELYSIA-LIFE-12`, [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) § 8). Equivalentes de `etag`, `cache` e `compress` em Elysia **não foram verificados** neste vault; ver [Elysia](elysia.md) antes de assumir que existem.
 
-**A leitura que interessa.** O que o framework embute não isenta você da decisão — ele embute o *mecanismo*, não a *política*. `cors` sabe montar o preflight; ele não sabe quais origens você aceita. `etag` sabe calcular o validador; ele não sabe se aquela resposta pode ser cacheada por um cache compartilhado. Os defaults permissivos de CORS nos dois frameworks são a prova: o mecanismo veio pronto e errado para produção.
+**A leitura que interessa.** O que o framework embute não isenta você da decisão — ele embute o *mecanismo*, não a *política*. `cors()` sabe montar o preflight; ele não sabe quais origens você aceita. `etag()` sabe calcular o validador; ele não sabe se aquela resposta pode ser cacheada por um cache compartilhado. Os defaults permissivos de CORS nos dois frameworks são a prova: o mecanismo veio pronto e errado para produção.
 
 ### 8.3 Onde o cache HTTP e o cache do TanStack Query se sobrepõem — e onde não
 
@@ -588,7 +588,7 @@ Regra prática de divisão: **o servidor decide por quanto tempo a resposta é v
 | --- | --- |
 | Validar corpo e devolver `400`/`422` com formato próprio | `zValidator` + `hook` — [Hono - Validação e RPC](hono-validacao-e-rpc.md) § 4 |
 | Status literal chegando tipado ao cliente | `c.json(body, status)` + `hc` — [Hono - Validação e RPC](hono-validacao-e-rpc.md) § 5 |
-| `hc` não lança em `4xx`/`5xx` e a query fica em `success` | `parseResponse` — [Hono - Validação e RPC](hono-validacao-e-rpc.md) § 6.1 |
+| `hc` não lança em `4xx`/`5xx` e a query fica em `success` | `parseResponse()` — [Hono - Validação e RPC](hono-validacao-e-rpc.md) § 6.1 |
 | `AbortSignal` do cliente chegando à rede | `{ init: { signal } }` — |
 | Correlacionar requisição em log | `hono/request-id` — |
 | Cache de borda e invalidação | |

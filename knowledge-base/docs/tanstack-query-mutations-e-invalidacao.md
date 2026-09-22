@@ -2,9 +2,9 @@
 titulo: TanStack Query - Mutations e Invalidação
 Link: https://tanstack.com/query/latest/docs/framework/react/guides/mutations
 tags:
- - tanstack-query
- - mutations
- - agent-context
+  - tanstack-query
+  - mutations
+  - agent-context
 source: "Documentação oficial — https://tanstack.com/query/latest/docs/framework/react"
 verificado-em: 2026-08-14
 ---
@@ -42,11 +42,11 @@ O raciocínio conceitual está em — a nota vale a leitura antes de escrever a 
 Estados verificados: `idle`, `pending`, `error`, `success` (com os espelhos `isIdle`, `isPending`, `isError`, `isSuccess`). As variáveis chegam *"by calling the mutate function with a single variable or object"* — um argumento só.
 
 ```tsx
-const queryClient = useQueryClient
+const queryClient = useQueryClient()
 
 const criarTodo = useMutation({
- mutationFn: (novo: NovoTodo) => api.post('/todos', novo),
- onSuccess: => queryClient.invalidateQueries({ queryKey: ['todos'] }),
+  mutationFn: (novo: NovoTodo) => api.post('/todos', novo),
+  onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
 })
 
 criarTodo.mutate({ title: 'Lavar roupa' })
@@ -64,13 +64,13 @@ Escrita passa por `useMutation`. Usar `useQuery` para disparar um POST quebra tu
 
 ```tsx
 useMutation({
- mutationFn: updateTodo,
- onMutate: (variables, context) => {
- return { id: 1 } // vira `onMutateResult`
- },
- onError: (error, variables, onMutateResult, context) => {},
- onSuccess: (data, variables, onMutateResult, context) => {},
- onSettled: (data, error, variables, onMutateResult, context) => {},
+  mutationFn: updateTodo,
+  onMutate: (variables, context) => {
+    return { id: 1 }                       // vira `onMutateResult`
+  },
+  onError: (error, variables, onMutateResult, context) => {},
+  onSuccess: (data, variables, onMutateResult, context) => {},
+  onSettled: (data, error, variables, onMutateResult, context) => {},
 })
 ```
 
@@ -92,7 +92,7 @@ Consequência prática:
 
 Ou seja: quem quebra não é quem escreveu a forma antiga — é quem adota `context.client` num projeto travado numa versão anterior da própria v5. Como `TSQ-BASE-10` manda travar patch exato, esse cenário é o comum, não o excepcional.
 
-> **Não verificado:** a partir de qual release da v5 `onMutateResult` e `context.client` passaram a existir. Antes de usar `context.client`, confira a assinatura nos tipos da versão instalada (`node_modules/@tanstack/react-query`). Se não estiver lá, use `useQueryClient` no escopo do componente — funciona em qualquer versão.
+> **Não verificado:** a partir de qual release da v5 `onMutateResult` e `context.client` passaram a existir. Antes de usar `context.client`, confira a assinatura nos tipos da versão instalada (`node_modules/@tanstack/react-query`). Se não estiver lá, use `useQueryClient()` no escopo do componente — funciona em qualquer versão.
 
 ### Promise devolvida por callback
 
@@ -102,10 +102,10 @@ Ou seja: quem quebra não é quem escreveu a forma antiga — é quem adota `con
 
 ```tsx
 // ERRADO — a mutation "termina" antes de a lista atualizar
-onSuccess: => { queryClient.invalidateQueries({ queryKey: ['todos'] }) }
+onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['todos'] }) }
 
 // CERTO
-onSuccess: => queryClient.invalidateQueries({ queryKey: ['todos'] })
+onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] })
 ```
 
 A fonte reforça no guia de optimistic updates: *"make sure to return the Promise from the query invalidation so that the mutation stays in `pending` state until the refetch is finished."*
@@ -122,14 +122,14 @@ Os callbacks do `useMutation` rodam sempre. Os do `mutate` rodam se o componente
 
 ```tsx
 const salvar = useMutation({
- mutationFn: updateTodo,
- // obrigatório: precisa acontecer mesmo se o usuário sair da tela
- onSettled: => queryClient.invalidateQueries({ queryKey: ['todos'] }),
+  mutationFn: updateTodo,
+  // obrigatório: precisa acontecer mesmo se o usuário sair da tela
+  onSettled: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
 })
 
 salvar.mutate(valores, {
- // opcional: só faz sentido se a tela ainda estiver montada
- onSuccess: => { fecharModal; toast('Salvo') },
+  // opcional: só faz sentido se a tela ainda estiver montada
+  onSuccess: () => { fecharModal(); toast('Salvo') },
 })
 ```
 
@@ -189,7 +189,7 @@ queryClient.invalidateQueries({ queryKey: ['todos', 'list'], exact: true })
 
 // controle total
 queryClient.invalidateQueries({
- predicate: (query) => query.queryKey[0] === 'todos' && algumCriterio(query),
+  predicate: (query) => query.queryKey[0] === 'todos' && algumCriterio(query),
 })
 ```
 
@@ -212,11 +212,11 @@ Também aceita `cancelRefetch` (default `true`) e `throwOnError`.
 
 ### Invalidar sem filtro
 
-`queryClient.invalidateQueries` sem argumento marca **o cache inteiro** como stale. Funciona, e é por isso que aparece: resolve o bug de "esqueci de invalidar alguma coisa" ao custo de refazer toda query ativa da aplicação a cada escrita. Se você não sabe o que uma mutation afeta, o problema é a hierarquia de keys.
+`queryClient.invalidateQueries()` sem argumento marca **o cache inteiro** como stale. Funciona, e é por isso que aparece: resolve o bug de "esqueci de invalidar alguma coisa" ao custo de refazer toda query ativa da aplicação a cada escrita. Se você não sabe o que uma mutation afeta, o problema é a hierarquia de keys.
 
 | ID | Regra |
 | --- | --- |
-| `TSQ-MUT-07` | `invalidateQueries` sem filtro **NEVER** entra em código novo — invalide pelo prefixo mais específico que cobre o efeito da escrita. |
+| `TSQ-MUT-07` | `invalidateQueries()` sem filtro **NEVER** entra em código novo — invalide pelo prefixo mais específico que cobre o efeito da escrita. |
 
 ---
 
@@ -232,18 +232,18 @@ Mutar no lugar quebra structural sharing e o `Object.is` de que o React depende 
 
 ```tsx
 const editar = useMutation({
- mutationFn: editTodo,
- onSuccess: (todoAtualizado, variables, onMutateResult, context) => {
- // grava o detalhe
- context.client.setQueryData(
- todoOptions(todoAtualizado.id).queryKey, // key tipada, vinda do queryOptions
- todoAtualizado,
- )
- // e reconcilia a listagem, imutavelmente
- context.client.setQueryData<Todo[]>(['todos', 'list'], (old) =>
- old?.map((t) => (t.id === todoAtualizado.id ? todoAtualizado : t)),
- )
- },
+  mutationFn: editTodo,
+  onSuccess: (todoAtualizado, variables, onMutateResult, context) => {
+    // grava o detalhe
+    context.client.setQueryData(
+      todoOptions(todoAtualizado.id).queryKey,   // key tipada, vinda do queryOptions
+      todoAtualizado,
+    )
+    // e reconcilia a listagem, imutavelmente
+    context.client.setQueryData<Todo[]>(['todos', 'list'], (old) =>
+      old?.map((t) => (t.id === todoAtualizado.id ? todoAtualizado : t)),
+    )
+  },
 })
 ```
 
@@ -266,31 +266,31 @@ O ciclo completo, na forma que a documentação apresenta hoje:
 
 ```tsx
 const alternar = useMutation({
- mutationFn: updateTodo,
+  mutationFn: updateTodo,
 
- onMutate: async (novoTodo, context) => {
- // 1. cancelar refetches em voo: uma resposta antiga a caminho
- // sobrescreveria o update otimista
- await context.client.cancelQueries({ queryKey: ['todos'] })
+  onMutate: async (novoTodo, context) => {
+    // 1. cancelar refetches em voo: uma resposta antiga a caminho
+    //    sobrescreveria o update otimista
+    await context.client.cancelQueries({ queryKey: ['todos'] })
 
- // 2. snapshot ANTES de mexer
- const previousTodos = context.client.getQueryData<Todo[]>(['todos'])
+    // 2. snapshot ANTES de mexer
+    const previousTodos = context.client.getQueryData<Todo[]>(['todos'])
 
- // 3. aplicar o otimismo, imutavelmente
- context.client.setQueryData<Todo[]>(['todos'], (old) =>
- old?.map((t) => (t.id === novoTodo.id ? novoTodo : t)),
- )
+    // 3. aplicar o otimismo, imutavelmente
+    context.client.setQueryData<Todo[]>(['todos'], (old) =>
+      old?.map((t) => (t.id === novoTodo.id ? novoTodo : t)),
+    )
 
- // 4. o snapshot viaja pelo retorno — vira `onMutateResult`
- return { previousTodos }
- },
+    // 4. o snapshot viaja pelo retorno — vira `onMutateResult`
+    return { previousTodos }
+  },
 
- onError: (err, novoTodo, onMutateResult, context) => {
- context.client.setQueryData(['todos'], onMutateResult.previousTodos)
- },
+  onError: (err, novoTodo, onMutateResult, context) => {
+    context.client.setQueryData(['todos'], onMutateResult.previousTodos)
+  },
 
- onSettled: (data, error, variables, onMutateResult, context) =>
- context.client.invalidateQueries({ queryKey: ['todos'] }),
+  onSettled: (data, error, variables, onMutateResult, context) =>
+    context.client.invalidateQueries({ queryKey: ['todos'] }),
 })
 ```
 
@@ -302,7 +302,7 @@ Cada passo cobre uma falha específica:
 - **`invalidateQueries` em `onSettled`, não em `onSuccess`** — em sucesso, o servidor pode ter derivado coisas que a resposta não traz (`updatedAt`, contadores, ordenação). Em erro, o rollback restaurou um valor local que também precisa ser confirmado contra a fonte.
 - **`return` no `onSettled`** — mantém `isPending` até o refetch terminar (`TSQ-MUT-02`).
 
-Falha esperada e falha inesperada não se tratam igual aqui: `409 Conflict` é resultado de negócio e vira mensagem no formulário; timeout é defeito e vai para o boundary. Ver e `REACT-ASYNC-09` em [React - Suspense e Assincronia](react-suspense-e-assincronia.md).
+Falha esperada e falha inesperada não se tratam igual aqui: `409 Conflict` é resultado de negócio e vira mensagem no formulário; timeout é defeito e vai para o boundary. `REACT-ASYNC-09` em [React - Suspense e Assincronia](react-suspense-e-assincronia.md).
 
 ### A alternativa mais barata: otimismo pela UI
 
@@ -310,18 +310,18 @@ Para um único ponto na interface, a fonte oferece um caminho sem tocar o cache 
 
 ```tsx
 const adicionar = useMutation({
- mutationFn: (texto: string) => api.post('/todos', { texto }),
- onSettled: => queryClient.invalidateQueries({ queryKey: ['todos'] }),
+  mutationFn: (texto: string) => api.post('/todos', { texto }),
+  onSettled: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
 })
 
 const { isPending, variables, isError } = adicionar
 
 return (
- <ul>
- {todos.map((t) => <Item key={t.id} todo={t} />)}
- {isPending && <li className="opacity-50">{variables}</li>}
- {isError && <li>Falhou. <button onClick={ => adicionar.mutate(variables!)}>Tentar de novo</button></li>}
- </ul>
+  <ul>
+    {todos.map((t) => <Item key={t.id} todo={t} />)}
+    {isPending && <li className="opacity-50">{variables}</li>}
+    {isError && <li>Falhou. <button onClick={() => adicionar.mutate(variables!)}>Tentar de novo</button></li>}
+  </ul>
 )
 ```
 
@@ -345,13 +345,13 @@ Para ler mutations disparadas por **outro** componente, existe `useMutationState
 // FRÁGIL — funciona, mas o nome mente: o terceiro argumento é o retorno
 // de onMutate, não o `context` novo. Quem for editar depois vai confundir.
 onError: (err, novo, context) => {
- queryClient.setQueryData(['todos'], context.previous)
+  queryClient.setQueryData(['todos'], context.previous)
 },
 
 // CERTO — nomeie o terceiro pelo que ele é, e guarde contra onMutate que falhou
 onError: (err, novo, onMutateResult) => {
- if (!onMutateResult?.previousTodos) return // onMutate lançou antes do return
- queryClient.setQueryData(['todos'], onMutateResult.previousTodos)
+  if (!onMutateResult?.previousTodos) return   // onMutate lançou antes do return
+  queryClient.setQueryData(['todos'], onMutateResult.previousTodos)
 },
 ```
 
@@ -360,30 +360,30 @@ A guarda não é preciosismo: se `onMutate` lançar antes do `return` — `cance
 ```tsx
 // ERRADO — mutação no lugar: o cache muda, a tela não
 onSuccess: (todo) => {
- const lista = queryClient.getQueryData<Todo[]>(['todos'])
- lista!.push(todo)
+  const lista = queryClient.getQueryData<Todo[]>(['todos'])
+  lista!.push(todo)
 }
 
 // CERTO
 onSuccess: (todo) => {
- queryClient.setQueryData<Todo[]>(['todos'], (old) => (old ? [...old, todo] : old))
+  queryClient.setQueryData<Todo[]>(['todos'], (old) => (old ? [...old, todo] : old))
 }
 ```
 
 ```tsx
 // ERRADO — mutateAsync sem catch: unhandled rejection mesmo com onError definido
-const salvar = async => {
- await mutation.mutateAsync(valores)
- navegar('/todos')
+const salvar = async () => {
+  await mutation.mutateAsync(valores)
+  navegar('/todos')
 }
 
 // CERTO — ou mutate com callback, ou try/catch
-const salvar = => mutation.mutate(valores, { onSuccess: => navegar('/todos') })
+const salvar = () => mutation.mutate(valores, { onSuccess: () => navegar('/todos') })
 ```
 
 | Antipadrão | Por que falha | Correção |
 | --- | --- | --- |
-| `invalidateQueries` sem filtro após toda escrita | refaz toda query ativa da app por qualquer mutation | invalidar pelo prefixo — `TSQ-MUT-07` |
+| `invalidateQueries()` sem filtro após toda escrita | refaz toda query ativa da app por qualquer mutation | invalidar pelo prefixo — `TSQ-MUT-07` |
 | Update otimista sem `cancelQueries` | refetch em voo chega depois e reverte o otimismo; bug intermitente | `await cancelQueries` em `onMutate` — `TSQ-MUT-10` |
 | Snapshot em `useRef` | mutations concorrentes sobrescrevem o snapshot; rollback restaura estado errado | retorno de `onMutate` — `TSQ-MUT-11` |
 | Invalidar só em `onSuccess` | rollback deixa valor local não confirmado contra o servidor | `onSettled` — `TSQ-MUT-12` |
@@ -400,7 +400,7 @@ const salvar = => mutation.mutate(valores, { onSuccess: => navegar('/todos') })
 - [ ] Todo `mutateAsync` tem tratamento de erro? → `TSQ-MUT-04`
 - [ ] Nenhum `retry` em mutation não idempotente? → `TSQ-MUT-05`
 - [ ] Mutations concorrentes sobre o mesmo recurso têm `scope`? → `TSQ-MUT-06`
-- [ ] Nenhum `invalidateQueries` sem filtro? → `TSQ-MUT-07`
+- [ ] Nenhum `invalidateQueries()` sem filtro? → `TSQ-MUT-07`
 - [ ] Todo `setQueryData` é imutável? → `TSQ-MUT-08`
 - [ ] Updater devolve `undefined` quando não há entrada? → `TSQ-MUT-09`
 - [ ] Update otimista tem os cinco passos? → `TSQ-MUT-10`
@@ -432,7 +432,7 @@ Verificadas em **2026-08-14**:
 **O que a verificação contrariou:**
 
 - **As assinaturas dos callbacks mudaram e a nota anterior estava implicitamente desatualizada.** Hoje: `onError: (error, variables, onMutateResult, context)`. O retorno de `onMutate` é o **terceiro** argumento (`onMutateResult`); o quarto (`context`) é um objeto com `client`. A mudança é **aditiva**: código antigo que lê o terceiro parâmetro chamando-o de `context` continua correto em runtime — o risco está em adotar `context.client` numa versão que ainda não tem o quarto argumento. Ver § 2.
-- **Os exemplos oficiais de optimistic update agora usam `context.client`** em vez de `useQueryClient` — o `QueryClient` chega pelo callback.
+- **Os exemplos oficiais de optimistic update agora usam `context.client`** em vez de `useQueryClient()` — o `QueryClient` chega pelo callback.
 - **`invalidateQueries` tem `refetchType`, default `'active'`.** A nota anterior tratava invalidação como se refizesse tudo que casa com o filtro; por padrão, inativas são só marcadas.
 - **`setQueryData` tem semântica documentada para `undefined`**: updater que devolve `undefined` não atualiza e não cria entrada — não é um no-op acidental.
 - **A `predicate` de filtro recebe a instância de `Query`**, não a key — dá acesso a `query.state`.

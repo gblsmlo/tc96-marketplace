@@ -2,9 +2,9 @@
 titulo: TanStack Router - Route Trees
 Link: https://tanstack.com/router/latest/docs/framework/react/routing/route-trees
 tags:
- - tanstack-router
- - routing
- - agent-context
+  - tanstack-router
+  - routing
+  - agent-context
 source: "Documentação oficial — https://tanstack.com/router/latest/docs/framework/react/"
 verificado-em: 2026-08-14
 ---
@@ -29,15 +29,15 @@ Roteadores tradicionais tratam a URL como uma chave de um mapa plano: `/blog/pos
 URL: /blog/posts/123
 
 ├── blog
-│ ├── posts
-│ │ ├── $postId
+│   ├── posts
+│   │   ├── $postId
 ```
 
 ```tsx
 <Blog>
- <Posts>
- <Post postId="123" />
- </Posts>
+  <Posts>
+    <Post postId="123" />
+  </Posts>
 </Blog>
 ```
 
@@ -72,9 +72,9 @@ routes/
 ├── __root.tsx
 ├── index.tsx
 ├── about.tsx
-├── posts.index.tsx → /posts
-├── posts.$postId.tsx → /posts/$postId
-└── posts.$postId.edit.tsx → /posts/$postId/edit
+├── posts.index.tsx          → /posts
+├── posts.$postId.tsx        → /posts/$postId
+└── posts.$postId.edit.tsx   → /posts/$postId/edit
 ```
 
 O `.` é literalmente o separador de nível:
@@ -88,9 +88,9 @@ routes/
 ├── __root.tsx
 ├── index.tsx
 └── settings/
- ├── route.tsx ← o layout de /settings
- ├── profile.tsx → /settings/profile
- └── notifications.tsx → /settings/notifications
+    ├── route.tsx           ← o layout de /settings
+    ├── profile.tsx         → /settings/profile
+    └── notifications.tsx   → /settings/notifications
 ```
 
 O ponto que mais confunde: **uma pasta sozinha não é um layout.** Ela contribui o segmento de path e nada mais. Só existe componente de layout para `/settings` se houver `settings/route.tsx` (ou o irmão flat `settings.tsx`).
@@ -107,17 +107,17 @@ Combinar é suportado e normal. O exemplo da própria documentação mistura os 
 ├── index.tsx
 ├── about.tsx
 ├── posts/
-│ ├── index.tsx
-│ ├── $postId.tsx
+│   ├── index.tsx
+│   ├── $postId.tsx
 ├── posts.$postId.edit.tsx
 ├── settings/
-│ ├── profile.tsx
-│ ├── notifications.tsx
+│   ├── profile.tsx
+│   ├── notifications.tsx
 ├── _pathlessLayout/
-│ ├── route-a.tsx
-│ ├── route-b.tsx
+│   ├── route-a.tsx
+│   ├── route-b.tsx
 ├── files/
-│ ├── $.tsx
+│   ├── $.tsx
 ```
 
 O risco do misto é definir a mesma rota duas vezes — `posts.index.tsx` e `posts/index.tsx` coexistindo. O gerador não tem como escolher entre eles.
@@ -136,15 +136,15 @@ O artefato gerado (`routeTree.gen.ts`) e a configuração do gerador são assunt
 ```tsx
 import { useRouter, useMatches } from '@tanstack/react-router'
 
-function Breadcrumbs {
- const matches = useMatches // do root até a folha, em ordem
- return <nav>{matches.map((m) => m.pathname).join(' / ')}</nav>
+function Breadcrumbs() {
+  const matches = useMatches() // do root até a folha, em ordem
+  return <nav>{matches.map((m) => m.pathname).join(' / ')}</nav>
 }
 ```
 
-`useMatches` devolve exatamente o caminho da árvore que casou — é a leitura direta do modelo mental da § 1, e a base natural de breadcrumbs e de UI que depende de "estou dentro de qual seção".
+`useMatches()` devolve exatamente o caminho da árvore que casou — é a leitura direta do modelo mental da § 1, e a base natural de breadcrumbs e de UI que depende de "estou dentro de qual seção".
 
-> **Não verificado:** a versão anterior desta nota descrevia uma API `router.routeTree` com `getRoute(id)`, `getRoutes` e `findRouteByPath(path)`. Essas funções não foram encontradas na documentação nesta verificação; foram removidas do corpo da nota. Se precisar navegar a árvore programaticamente, confirme na fonte antes de usar.
+> **Não verificado:** a versão anterior desta nota descrevia uma API `router.routeTree` com `getRoute(id)`, `getRoutes()` e `findRouteByPath(path)`. Essas funções não foram encontradas na documentação nesta verificação; foram removidas do corpo da nota. Se precisar navegar a árvore programaticamente, confirme na fonte antes de usar.
 
 ---
 
@@ -158,43 +158,43 @@ Ainda assim é o que sustenta o modelo mental: file-based é açúcar que gera e
 
 ```tsx
 import {
- createRootRoute,
- createRoute,
- createRouter,
- Outlet,
+  createRootRoute,
+  createRoute,
+  createRouter,
+  Outlet,
 } from '@tanstack/react-router'
 
 const rootRoute = createRootRoute({
- component: => <Outlet />,
+  component: () => <Outlet />,
 })
 
 const indexRoute = createRoute({
- getParentRoute: => rootRoute,
- path: '/',
- component: HomeComponent,
+  getParentRoute: () => rootRoute,
+  path: '/',
+  component: HomeComponent,
 })
 
 const postsRoute = createRoute({
- getParentRoute: => rootRoute,
- path: '/posts',
- component: PostsLayout,
+  getParentRoute: () => rootRoute,
+  path: '/posts',
+  component: PostsLayout,
 })
 
 const postsIndexRoute = createRoute({
- getParentRoute: => postsRoute,
- path: '/', // índice de /posts
- component: PostsIndex,
+  getParentRoute: () => postsRoute,
+  path: '/', // índice de /posts
+  component: PostsIndex,
 })
 
 const postDetailRoute = createRoute({
- getParentRoute: => postsRoute,
- path: '$postId',
- component: PostDetail,
+  getParentRoute: () => postsRoute,
+  path: '$postId',
+  component: PostDetail,
 })
 
 const routeTree = rootRoute.addChildren([
- indexRoute,
- postsRoute.addChildren([postsIndexRoute, postDetailRoute]),
+  indexRoute,
+  postsRoute.addChildren([postsIndexRoute, postDetailRoute]),
 ])
 
 export const router = createRouter({ routeTree })
@@ -203,22 +203,22 @@ export const router = createRouter({ routeTree })
 Quatro pontos que não são negociáveis:
 
 - **`getParentRoute` é obrigatório** e é uma *função* que devolve o pai. É por ela que o TypeScript liga a rota ao ancestral e infere `params`, `search` e `context` acumulados.
-- **A raiz vem de `createRootRoute` ou `createRootRouteWithContext<T>`**, nunca de `createRoute` com um `id` inventado.
+- **A raiz vem de `createRootRoute()` ou `createRootRouteWithContext<T>()()`**, nunca de `createRoute` com um `id` inventado.
 - **Index route é `path: '/'`**, não um `id` chamado `index`.
 - **Pathless layout usa `id` no lugar de `path`** — é o equivalente code-based do prefixo `_`.
 
 ```tsx
 const authLayoutRoute = createRoute({
- getParentRoute: => rootRoute,
- id: '_auth', // sem path: não contribui segmento à URL
- component: AuthLayout,
+  getParentRoute: () => rootRoute,
+  id: '_auth', // sem path: não contribui segmento à URL
+  component: AuthLayout,
 })
 ```
 
 | ID | Regra |
 | --- | --- |
 | `TSR-TREE-04` | Code-based routing **NEVER** entra em projeto novo sem decisão registrada — a fonte o desaconselha explicitamente para a maioria das aplicações. |
-| `TSR-TREE-05` | Toda `createRoute` **MUST** declarar `getParentRoute: => pai`; sem isso não há inferência de tipo do ancestral. |
+| `TSR-TREE-05` | Toda `createRoute` **MUST** declarar `getParentRoute: () => pai`; sem isso não há inferência de tipo do ancestral. |
 | `TSR-TREE-06` | A raiz **MUST** vir de `createRootRoute` / `createRootRouteWithContext`, **NEVER** de `createRoute`. |
 | `TSR-TREE-07` | Index route em code-based **MUST** ser `path: '/'`. |
 | `TSR-TREE-08` | Pathless layout em code-based **MUST** usar `id` e omitir `path`. |
@@ -259,7 +259,7 @@ routes/settings/profile.tsx
 routes/settings/notifications.tsx
 
 // CERTO
-routes/settings/route.tsx ← layout com <Outlet />
+routes/settings/route.tsx        ← layout com <Outlet />
 routes/settings/profile.tsx
 routes/settings/notifications.tsx
 ```
@@ -307,7 +307,7 @@ Verificadas em 2026-08-14:
 **Correções aplicadas nesta revisão:**
 
 - **`createVirtualFileRoute` não existe.** A versão anterior ensinava `createVirtualFileRoute('/admin')({...})` importado de `@tanstack/react-router` e passado ao router numa opção `virtualRoutes`. Nada disso existe. A API real é `rootRoute`/`route`/`index`/`layout`/`physical` do pacote `@tanstack/virtual-file-routes`, consumida pela opção `virtualRouteConfig` do plugin — ver [TanStack Router - Virtual File Routes](tanstack-router-virtual-file-routes.md).
-- **Raiz em code-based estava errada.** A versão anterior mostrava `createRoute({ id: '__root__' })`. O correto é `createRootRoute`.
+- **Raiz em code-based estava errada.** A versão anterior mostrava `createRoute({ id: '__root__' })`. O correto é `createRootRoute()`.
 - **Exemplo de pathless layout estava com URLs erradas.** A versão anterior mostrava `_dashboard/analytics.tsx → /dashboard/analytics`. Um diretório com prefixo `_` **não** contribui segmento: a URL resultante é `/analytics`.
 - **Removidas as implementações internas em JavaScript** — `class RouteTree`, `class RouteNode`, `generateRouteTree`, `buildTreeFromDirectory`, `parseFlatRoute`, `matchRoutes`, `generateTypes`, `calculatePriority` e a tabela `PRIORITIES`. Eram invenções; a ordem de precedência real está documentada e vive em [TanStack Router - Route Matching](tanstack-router-route-matching.md).
 - **Removida a API `RouteTreeAPI`** (`getRoute`, `getRoutes`, `findRouteByPath`) — não encontrada na documentação. Ver a nota de "Não verificado" na § 3.

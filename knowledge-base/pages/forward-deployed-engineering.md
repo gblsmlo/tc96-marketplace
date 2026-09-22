@@ -2,11 +2,11 @@
 titulo: Forward Deployed Engineering
 type: Page
 tags:
- - engineering
- - product
- - ai
- - careers
- - forward-deployed-engineering
+  - engineering
+  - product
+  - ai
+  - careers
+  - forward-deployed-engineering
 source: "Pragmatic Engineer — What are Forward Deployed Engineers, and why are they so in demand?; FDE Academy — How Palantir Invented the Forward Deployed Engineer Model"
 ---
 
@@ -66,15 +66,6 @@ Na OpenAI, o trabalho de FDE se divide em três fases — **scoping** (dias no c
 
 ## Relacionados
 
--
--
--
--
--
--
--
--
--
 
 ## Fonte
 

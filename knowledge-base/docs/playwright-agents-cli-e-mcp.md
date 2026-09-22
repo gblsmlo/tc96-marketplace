@@ -2,12 +2,12 @@
 titulo: Playwright - Agents, CLI e MCP
 Link: https://playwright.dev/docs/test-agents
 tags:
- - playwright
- - testing
- - agents
- - mcp
- - cli
- - agent-context
+  - playwright
+  - testing
+  - agents
+  - mcp
+  - cli
+  - agent-context
 source: "Documentação oficial do Playwright — Test Agents, Coding agents, Agent CLI (introduction/skills), MCP getting started"
 verificado-em: 2026-08-20
 ---
@@ -62,13 +62,13 @@ O `--loop` escolhe o cliente. Para VS Code, a fonte declara requisito **v1.105+*
 
 ```
 repo/
-.github/ # definições dos agentes
- specs/ # planos de teste
- basic-operations.md
- tests/ # testes gerados
- seed.spec.ts
- create/add-valid-todo.spec.ts
- playwright.config.ts
+  .github/                        # definições dos agentes
+  specs/                          # planos de teste
+    basic-operations.md
+  tests/                          # testes gerados
+    seed.spec.ts
+    create/add-valid-todo.spec.ts
+  playwright.config.ts
 ```
 
 Três convenções:
@@ -81,8 +81,8 @@ Três convenções:
 
 ```
 seed.spec.ts ──▶ planner ──▶ specs/*.md ──▶ generator ──▶ tests/**/*.spec.ts
- ▲ │
- └────────── healer ◀───────────┘
+                                 ▲                              │
+                                 └────────── healer ◀───────────┘
 ```
 
 **A spec em Markdown é a peça que faz isso valer.** Ela é o que um humano revisa (é mais rápido ler um plano do que 300 linhas de teste), e é a entrada do healer — quando um teste quebra, o healer tem a *intenção* declarada, não só o código que falhou. Sem a spec versionada, o healer só sabe que uma linha falhou, e "consertar" pode significar deletar a asserção (`PW-AGT-05`).
@@ -100,7 +100,7 @@ Um teste gerado por agente é código de terceiro entrando no repositório. A re
 | Ordem | Verificar | Regra |
 | --- | --- | --- |
 | 1 | locator por papel, não CSS estrutural | `PW-LOC-01` |
-| 2 | `.first` usado para calar strict mode | `PW-LOC-02` |
+| 2 | `.first()` usado para calar strict mode | `PW-LOC-02` |
 | 3 | asserção web-first, com `await` | `PW-EXP-01`, `PW-CORE-04` |
 | 4 | `waitForTimeout` | `PW-CORE-05` |
 | 5 | título que descreve comportamento | `PW-STR-04` |
@@ -150,7 +150,7 @@ playwright-cli console [min-level]
 playwright-cli eval <func> [ref]
 playwright-cli tracing-start / video-start
 playwright-cli tab-list
-playwright-cli show # dashboard das sessões ativas
+playwright-cli show                      # dashboard das sessões ativas
 playwright-cli --help
 ```
 
@@ -186,7 +186,7 @@ Integram com **Claude Code**, **GitHub Copilot**, **Cursor** e qualquer agente q
 
 > **Nota de verificação.** A página de skills **não documenta os caminhos de arquivo criados** por `install --skills`, nem nomes de arquivo. Verifique localmente antes de versionar ou ignorar no `.gitignore`.
 
-> **Ponte com este vault.** As skills do `playwright-cli` são *skills de operação de browser*: elas ensinam o agente a **dirigir** o Playwright. As skills de `Skill` são *skills de decisão*: elas dizem o que carregar, o que verificar e como citar. As duas são complementares e não se substituem — um agente com as skills do CLI sabe clicar, e não sabe que `.first` é achado. A § 5 fecha essa lacuna.
+> **Ponte com este vault.** As skills do `playwright-cli` são *skills de operação de browser*: elas ensinam o agente a **dirigir** o Playwright. As skills de `Skill` são *skills de decisão*: elas dizem o que carregar, o que verificar e como citar. As duas são complementares e não se substituem — um agente com as skills do CLI sabe clicar, e não sabe que `.first()` é achado. A § 5 fecha essa lacuna.
 
 ---
 
@@ -212,12 +212,12 @@ code --add-mcp '{"name":"playwright","command":"npx","args":["@playwright/mcp@la
 
 ```json
 {
- "mcpServers": {
- "playwright": {
- "command": "npx",
- "args": ["@playwright/mcp@latest"]
- }
- }
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    }
+  }
 }
 ```
 
@@ -296,9 +296,9 @@ O trabalho acontece no loop e não fica no repositório: sem spec, sem arquivo, 
 
 ```ts
 // ✗ gerado, mesclado, e agora é dívida de todo mundo
-await page.locator('div.card > div:nth-child(2) button').first.click;
+await page.locator('div.card > div:nth-child(2) button').first().click();
 await page.waitForTimeout(2000);
-expect(await page.locator('.total').textContent).toBe('R$ 42,00');
+expect(await page.locator('.total').textContent()).toBe('R$ 42,00');
 ```
 
 Quatro violações numa tela: `PW-LOC-01`, `PW-LOC-02`, `PW-CORE-05`, `PW-EXP-01`. Geração automática amplia tanto acerto quanto erro (`PW-AGT-04`).
@@ -306,7 +306,7 @@ Quatro violações numa tela: `PW-LOC-01`, `PW-LOC-02`, `PW-CORE-05`, `PW-EXP-01
 ### 7.3 Healer que apaga asserção
 
 ```diff
-- await expect(page.getByText('Pedido confirmado')).toBeVisible;
+- await expect(page.getByText('Pedido confirmado')).toBeVisible();
 + // asserção removida: elemento não encontrado
 ```
 

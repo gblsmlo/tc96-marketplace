@@ -82,7 +82,7 @@ Servidores devem escrever o prefixo com case exato; user agents comparam sem dif
 ## Decisão prática para app + API em hosts distintos
 
 ```
-app.exemplo.com ←→ api.exemplo.com
+app.exemplo.com  ←→  api.exemplo.com
 ```
 
 | Opção | Cookie | Custo |

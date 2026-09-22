@@ -2,9 +2,9 @@
 titulo: TanStack Router - Routing Concepts
 Link: https://tanstack.com/router/latest/docs/framework/react/routing/routing-concepts
 tags:
- - tanstack-router
- - routing
- - agent-context
+  - tanstack-router
+  - routing
+  - agent-context
 source: "Documentação oficial — https://tanstack.com/router/latest/docs/framework/react/"
 verificado-em: 2026-08-14
 ---
@@ -63,12 +63,12 @@ Em file-based ela mora em um arquivo com nome fixo:
 import { Outlet, createRootRoute } from '@tanstack/react-router'
 
 export const Route = createRootRoute({
- component: => (
- <>
- <nav>…</nav>
- <Outlet />
- </>
- ),
+  component: () => (
+    <>
+      <nav>…</nav>
+      <Outlet />
+    </>
+  ),
 })
 ```
 
@@ -79,17 +79,17 @@ import { createRootRouteWithContext } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
 
 interface RouterContext {
- queryClient: QueryClient
+  queryClient: QueryClient
 }
 
-export const Route = createRootRouteWithContext<RouterContext>({
- component: RootComponent,
+export const Route = createRootRouteWithContext<RouterContext>()({
+  component: RootComponent,
 })
 ```
 
-Repare na **dupla chamada**: `createRootRouteWithContext<T>(routeOptions)`. A fonte é explícita:
+Repare na **dupla chamada**: `createRootRouteWithContext<T>()(routeOptions)`. A fonte é explícita:
 
-> "you must use the `createRootRouteWithContext<YourContextTypeHere>(routeOptions)` function to create a new router context instead of the `createRootRoute` function."
+> "you must use the `createRootRouteWithContext<YourContextTypeHere>()(routeOptions)` function to create a new router context instead of the `createRootRoute()` function."
 
 E a consequência prática, também citada:
 
@@ -100,7 +100,7 @@ O contexto em si — como flui, como `beforeLoad` o estende, como o `loader` o c
 | ID | Regra |
 | --- | --- |
 | `TSR-ROUTE-02` | O arquivo de rota raiz **MUST** se chamar `__root.tsx` e ficar na raiz de `routesDirectory`. |
-| `TSR-ROUTE-03` | Contexto tipado no router **MUST** ser declarado por `createRootRouteWithContext<T>(...)`, nunca por `createRootRoute` com cast. |
+| `TSR-ROUTE-03` | Contexto tipado no router **MUST** ser declarado por `createRootRouteWithContext<T>()(...)`, nunca por `createRootRoute()` com cast. |
 
 ---
 
@@ -109,9 +109,9 @@ O contexto em si — como flui, como `beforeLoad` o estende, como o `loader` o c
 Uma **basic route** casa um path exato:
 
 ```tsx
-// src/routes/about.tsx → /about
+// src/routes/about.tsx  →  /about
 export const Route = createFileRoute('/about')({
- component: AboutComponent,
+  component: AboutComponent,
 })
 ```
 
@@ -122,17 +122,17 @@ Uma **index route** é o que preenche o pai quando a URL para exatamente nele:
 A sintaxe é a barra final no path e o token `index` no arquivo:
 
 ```tsx
-// src/routes/posts.index.tsx → /posts (quando nenhum filho casa)
+// src/routes/posts.index.tsx  →  /posts (quando nenhum filho casa)
 export const Route = createFileRoute('/posts/')({
- component: PostsIndexComponent,
+  component: PostsIndexComponent,
 })
 ```
 
 Isto é a fonte de um bug recorrente: `posts.tsx` com filhos **não renderiza conteúdo próprio** quando a URL é `/posts`. Ele renderiza seu layout e um `<Outlet />` vazio. Quem preenche o `<Outlet />` em `/posts` é `posts.index.tsx`.
 
 ```
-/posts → PostsLayout (posts.tsx) + PostsIndex (posts.index.tsx)
-/posts/123 → PostsLayout (posts.tsx) + PostDetail (posts.$postId.tsx)
+/posts        → PostsLayout (posts.tsx) + PostsIndex (posts.index.tsx)
+/posts/123    → PostsLayout (posts.tsx) + PostDetail (posts.$postId.tsx)
 ```
 
 | ID | Regra |
@@ -152,13 +152,13 @@ E, citando a página de conceitos: *"Dynamic segments work at **each** segment o
 ```tsx
 // src/routes/posts.$postId.tsx
 export const Route = createFileRoute('/posts/$postId')({
- loader: ({ params }) => fetchPost(params.postId),
- component: PostComponent,
+  loader: ({ params }) => fetchPost(params.postId),
+  component: PostComponent,
 })
 
-function PostComponent {
- const { postId } = Route.useParams // postId: string
- return <h1>Post {postId}</h1>
+function PostComponent() {
+  const { postId } = Route.useParams() // postId: string
+  return <h1>Post {postId}</h1>
 }
 ```
 
@@ -177,14 +177,14 @@ const { postId } = useParams({ from: '/posts/$postId' })
 Sintaxe `{-$nome}`:
 
 ```tsx
-// src/routes/posts.{-$category}.tsx → casa /posts E /posts/tech
+// src/routes/posts.{-$category}.tsx  →  casa /posts E /posts/tech
 export const Route = createFileRoute('/posts/{-$category}')({
- component: PostsComponent,
+  component: PostsComponent,
 })
 
-function PostsComponent {
- const { category } = Route.useParams // string | undefined
- return <h1>{category ? `Posts em ${category}` : 'Todos os posts'}</h1>
+function PostsComponent() {
+  const { category } = Route.useParams() // string | undefined
+  return <h1>{category ? `Posts em ${category}` : 'Todos os posts'}</h1>
 }
 ```
 
@@ -210,7 +210,7 @@ Isso torna `[...]` (escape de caractere literal) menos necessário do que parece
 
 | ID | Regra |
 | --- | --- |
-| `TSR-ROUTE-05` | Params lidos fora do arquivo da própria rota **MUST** informar `from` (ou usar `getRouteApi`) — `useParams` sem `from` nem `strict: false` não é tipado para aquela rota. |
+| `TSR-ROUTE-05` | Params lidos fora do arquivo da própria rota **MUST** informar `from` (ou usar `getRouteApi`) — `useParams()` sem `from` nem `strict: false` não é tipado para aquela rota. |
 | `TSR-ROUTE-06` | Consumidor de `{-$param}` **MUST** tratar `undefined`; o tipo é `string \| undefined`, não `string`. |
 | `TSR-ROUTE-07` | Caractere especial que deve aparecer literalmente na URL **MUST** ser escapado com `[x]` no nome do arquivo (`script[.]js.tsx` → `/script.js`). |
 
@@ -223,7 +223,7 @@ Um segmento `$` sozinho captura **todo o resto** da URL:
 ```tsx
 // src/routes/files.$.tsx
 export const Route = createFileRoute('/files/$')({
- loader: ({ params }) => fetchFile(params._splat),
+  loader: ({ params }) => fetchFile(params._splat),
 })
 // URL /files/documents/2024/report.pdf → params._splat === 'documents/2024/report.pdf'
 ```
@@ -256,29 +256,29 @@ Uma **layout route** é uma rota que tem filhos e envolve todos eles. Ela existe
 Duas grafias, mesmo resultado — flat ou diretório:
 
 ```
-routes/ routes/
-├── app.tsx └── app/
-├── app.dashboard.tsx ├── route.tsx ← o layout
-└── app.settings.tsx ├── dashboard.tsx
- └── settings.tsx
+routes/                        routes/
+├── app.tsx                    └── app/
+├── app.dashboard.tsx              ├── route.tsx      ← o layout
+└── app.settings.tsx               ├── dashboard.tsx
+                                   └── settings.tsx
 ```
 
 ```tsx
 // src/routes/app.tsx
 export const Route = createFileRoute('/app')({
- loader: => fetchUserData,
- component: AppLayout,
+  loader: () => fetchUserData(),
+  component: AppLayout,
 })
 
-function AppLayout {
- return (
- <div className="app-layout">
- <nav>App</nav>
- <main>
- <Outlet />
- </main>
- </div>
- )
+function AppLayout() {
+  return (
+    <div className="app-layout">
+      <nav>App</nav>
+      <main>
+        <Outlet />
+      </main>
+    </div>
+  )
 }
 ```
 
@@ -292,15 +292,15 @@ Quando você quer o wrapper mas **não** quer um segmento na URL:
 
 ```
 routes/
-├── _pathlessLayout.tsx ← o wrapper
-├── _pathlessLayout.a.tsx → /a
-└── _pathlessLayout.b.tsx → /b
+├── _pathlessLayout.tsx      ← o wrapper
+├── _pathlessLayout.a.tsx    → /a
+└── _pathlessLayout.b.tsx    → /b
 ```
 
 ```
-/ → <Index />
-/a → <PathlessLayout><A /></PathlessLayout>
-/b → <PathlessLayout><B /></PathlessLayout>
+/     → <Index />
+/a    → <PathlessLayout><A /></PathlessLayout>
+/b    → <PathlessLayout><B /></PathlessLayout>
 ```
 
 O caso de uso canônico é o guard de autenticação: `_authenticated.tsx` com `beforeLoad` que redireciona, e as rotas protegidas como filhas — sem que `/authenticated/` apareça na URL.
@@ -310,8 +310,8 @@ Restrição citada da fonte:
 > "Pathless Layout Routes do not match based on URL path segments, this means that these routes do not support Dynamic Route Segments as part of their path"
 
 ```
-❌ routes/_$postId/ ← não funciona: pathless não casa segmento
-✅ routes/$postId/route.tsx ← layout com path, aí sim pode ser dinâmico
+❌ routes/_$postId/          ← não funciona: pathless não casa segmento
+✅ routes/$postId/route.tsx  ← layout com path, aí sim pode ser dinâmico
 ```
 
 ### Non-nested route (`_` sufixo)
@@ -322,9 +322,9 @@ O mesmo caractere, na outra ponta do nome, faz o oposto:
 
 ```
 routes/
-├── posts.tsx ← layout
-├── posts.$postId.tsx → /posts/123 (dentro do layout)
-└── posts_.$postId.edit.tsx → /posts/123/edit (SEM o layout)
+├── posts.tsx                 ← layout
+├── posts.$postId.tsx         → /posts/123   (dentro do layout)
+└── posts_.$postId.edit.tsx   → /posts/123/edit (SEM o layout)
 ```
 
 A URL continua idêntica; o que muda é a árvore de componentes. É como se faz a tela de edição em full screen sem o sidebar da listagem.
@@ -353,11 +353,11 @@ Dois mecanismos que existem só para arrumar o diretório.
 ```
 routes/
 ├── (app)/
-│ ├── dashboard.tsx → /dashboard
-│ └── settings.tsx → /settings
+│   ├── dashboard.tsx   → /dashboard
+│   └── settings.tsx    → /settings
 └── (auth)/
- ├── login.tsx → /login
- └── register.tsx → /register
+    ├── login.tsx       → /login
+    └── register.tsx    → /register
 ```
 
 A página de conceitos é categórica: grupos são *"purely organizational and do not affect the route tree or component tree in any way"*. Se você quer layout compartilhado, precisa de um pathless layout (`_auth.tsx`), não de um grupo — o grupo não renderiza nada.
@@ -369,9 +369,9 @@ A página de conceitos é categórica: grupos são *"purely organizational and d
 ```
 routes/
 ├── posts.tsx
-├── -posts-table.tsx ← ignorado
-└── -components/ ← pasta inteira ignorada
- └── header.tsx
+├── -posts-table.tsx    ← ignorado
+└── -components/        ← pasta inteira ignorada
+    └── header.tsx
 ```
 
 ```tsx
@@ -412,18 +412,18 @@ O prefixo é o default de `routeFileIgnorePrefix` — configurável, ver [TanSta
 
 ```tsx
 // ERRADO — a URL casa, o loader roda, e o filho nunca aparece
-function AppLayout {
- return <div className="app"><nav>App</nav></div>
+function AppLayout() {
+  return <div className="app"><nav>App</nav></div>
 }
 
 // CERTO
-function AppLayout {
- return (
- <div className="app">
- <nav>App</nav>
- <Outlet />
- </div>
- )
+function AppLayout() {
+  return (
+    <div className="app">
+      <nav>App</nav>
+      <Outlet />
+    </div>
+  )
 }
 ```
 
@@ -435,7 +435,7 @@ routes/(auth)/login.tsx
 routes/(auth)/register.tsx
 
 // CERTO — pathless layout cria de fato um nó na árvore
-routes/_auth.tsx (beforeLoad + <Outlet />)
+routes/_auth.tsx            (beforeLoad + <Outlet />)
 routes/_auth.login.tsx
 routes/_auth.register.tsx
 ```
@@ -446,7 +446,7 @@ routes/_auth.register.tsx
 | `posts.tsx` com filhos e sem `posts.index.tsx` | `/posts` renderiza o layout com `<Outlet />` vazio | Crie a index route (`TSR-ROUTE-04`) |
 | `_$postId/` como pathless layout dinâmico | Pathless não casa segmento de URL; o param nunca é capturado | Layout com path: `$postId/route.tsx` (`TSR-ROUTE-10`) |
 | `params['*']` para ler splat | Chave legada de v1 | `params._splat` (`TSR-ROUTE-08`) |
-| `const { id } = useParams` em componente compartilhado | Sem `from`, não há tipagem da rota | `useParams({ from: '/posts/$postId' })` (`TSR-ROUTE-05`) |
+| `const { id } = useParams()` em componente compartilhado | Sem `from`, não há tipagem da rota | `useParams({ from: '/posts/$postId' })` (`TSR-ROUTE-05`) |
 | `{-$category}` usado como se sempre existisse | O tipo inclui `undefined`; quebra em `/posts` | Tratar o ramo ausente (`TSR-ROUTE-06`) |
 | `components/Header.tsx` dentro de `routes/` | Vira a rota `/components/Header` | Prefixo `-` (`TSR-ROUTE-13`) |
 
@@ -456,7 +456,7 @@ routes/_auth.register.tsx
 
 - [ ] O literal de `createFileRoute` bate com o nome do arquivo e não foi editado à mão? → `TSR-ROUTE-01`
 - [ ] Existe exatamente um `__root.tsx`, na raiz de `routesDirectory`? → `TSR-ROUTE-02`
-- [ ] Contexto tipado usa `createRootRouteWithContext<T>(...)`? → `TSR-ROUTE-03`
+- [ ] Contexto tipado usa `createRootRouteWithContext<T>()(...)`? → `TSR-ROUTE-03`
 - [ ] Toda rota com filhos tem index route quando a URL exata do pai é navegável? → `TSR-ROUTE-04`
 - [ ] `useParams` fora do arquivo da rota informa `from`? → `TSR-ROUTE-05`
 - [ ] Param opcional tem o ramo `undefined` tratado? → `TSR-ROUTE-06`
@@ -490,7 +490,7 @@ Verificadas em 2026-08-14:
 - **Removidas todas as "implementações técnicas" em JavaScript** — `createFileRoute` interno, `inferParamsFromPath`, `matchRoute`, `parseSplatRoute`, `calculateRouteScore`, `generateTypes`, `executeLoaders`. Nenhuma delas existe na documentação; eram reconstruções inventadas do interno do router e induziam a raciocinar sobre um algoritmo que não é o real.
 - **Removida a forma inventada do tipo gerado** (`interface FileRoutesByPath` com campos `params`/`search`/`loaderData`/`preLoaderRoute`). O formato do `routeTree.gen.ts` é artefato do gerador e não é API pública documentada.
 - **Adicionado `__root.tsx`** como nome obrigatório do arquivo de raiz — a versão anterior descrevia a root route sem dizer onde ela mora.
-- **Adicionada a dupla chamada** de `createRootRouteWithContext<T>(...)`; a versão anterior mostrava `createRootRouteWithContext<T>` sem o segundo par de parênteses, o que não compila com opções.
+- **Adicionada a dupla chamada** de `createRootRouteWithContext<T>()(...)`; a versão anterior mostrava `createRootRouteWithContext<T>()` sem o segundo par de parênteses, o que não compila com opções.
 - **Adicionados prefixo/sufixo de segmento** (`post-{$postId}`, `{$fileName}.txt`) e o **escape `[x]`** — ausentes na versão anterior.
 - **Corrigida a afirmação sobre `*`**: a fonte documenta `*` como grafia alternativa em v1, mas não anuncia remoção na v2.
 - **Cortado por redundância:** a explicação de ordem de precedência entre rotas (agora só em [TanStack Router - Route Matching](tanstack-router-route-matching.md)), a configuração do plugin e a tabela de tokens (agora só em [TanStack Router - File-Based Routing](tanstack-router-file-based-routing.md)), e o exemplo de `validateSearch` com Zod (agora em [TanStack Router - Search Params](tanstack-router-search-params.md)).

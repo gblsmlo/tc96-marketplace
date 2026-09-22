@@ -2,9 +2,9 @@
 titulo: TanStack Query - Cache e Frescor
 Link: https://tanstack.com/query/latest/docs/framework/react/guides/caching
 tags:
- - tanstack-query
- - cache
- - agent-context
+  - tanstack-query
+  - cache
+  - agent-context
 source: "Documentação oficial — https://tanstack.com/query/latest/docs/framework/react"
 verificado-em: 2026-08-14
 ---
@@ -99,18 +99,18 @@ A diferença é decisiva: `'static'` remove a query do alcance da invalidação.
 ```tsx
 // Base sã para uma app CRUD: default conservador, exceções explícitas.
 new QueryClient({
- defaultOptions: {
- queries: {
- staleTime: 60_000,
- gcTime: 10 * 60_000,
- },
- },
+  defaultOptions: {
+    queries: {
+      staleTime: 60_000,
+      gcTime: 10 * 60_000,
+    },
+  },
 })
 
 export const featureFlagsOptions = queryOptions({
- queryKey: ['feature-flags'],
- queryFn: fetchFlags,
- staleTime: 'static', // não muda em runtime, e nada invalida
+  queryKey: ['feature-flags'],
+  queryFn: fetchFlags,
+  staleTime: 'static',   // não muda em runtime, e nada invalida
 })
 ```
 
@@ -129,7 +129,7 @@ A rota errada quando o app requisita demais é `refetchOnWindowFocus: false`. El
 
 A ordem correta é: calibrar `staleTime` primeiro. Se depois disso um gatilho específico ainda incomoda (janela de dashboard que fica aberta o dia inteiro, por exemplo), desligue esse gatilho — como ajuste fino, não como remédio.
 
-Para casos fora do browser, a fonte documenta o `focusManager`: `focusManager.setEventListener` substitui o listener padrão (`visibilitychange` + `document.visibilityState === 'visible'`), e `focusManager.setFocused(true | false | undefined)` força o estado. Em React Native o gancho é o módulo `AppState`.
+Para casos fora do browser, a fonte documenta o `focusManager`: `focusManager.setEventListener()` substitui o listener padrão (`visibilitychange` + `document.visibilityState === 'visible'`), e `focusManager.setFocused(true | false | undefined)` força o estado. Em React Native o gancho é o módulo `AppState`.
 
 | ID | Regra |
 | --- | --- |
@@ -164,10 +164,10 @@ E o jeito de perder isso:
 ```tsx
 // ERRADO — rest destructuring toca todas as propriedades:
 // o componente passa a re-renderizar por isFetching, isStale, dataUpdatedAt...
-const { data,...rest } = useQuery(todosOptions)
+const { data, ...rest } = useQuery(todosOptions())
 
 // CERTO — só as propriedades realmente lidas entram no tracking
-const { data, isLoading } = useQuery(todosOptions)
+const { data, isLoading } = useQuery(todosOptions())
 ```
 
 Ajuste explícito, quando necessário: `notifyOnChangeProps`.
@@ -175,7 +175,7 @@ Ajuste explícito, quando necessário: `notifyOnChangeProps`.
 | ID | Regra |
 | --- | --- |
 | `TSQ-CACHE-04` | `queryFn` **MUST** devolver dado compatível com JSON — `Date`, `Map`, `Set` e instâncias de classe quebram structural sharing. Converta no consumidor ou em `select`. |
-| `TSQ-CACHE-05` | O resultado de `useQuery` **NEVER** é desestruturado com rest (`const { data,...rest }`) — isso desliga tracked properties. |
+| `TSQ-CACHE-05` | O resultado de `useQuery` **NEVER** é desestruturado com rest (`const { data, ...rest }`) — isso desliga tracked properties. |
 
 ---
 
@@ -201,13 +201,13 @@ O uso legítimo é aproveitar o que já está em outro ponto do cache: o item qu
 
 ```tsx
 const todo = useQuery({
-...todoOptions(todoId),
- initialData: =>
- queryClient
-.getQueryData<Todo[]>(['todos', 'list'])
- ?.find((t) => t.id === todoId),
- initialDataUpdatedAt: =>
- queryClient.getQueryState(['todos', 'list'])?.dataUpdatedAt,
+  ...todoOptions(todoId),
+  initialData: () =>
+    queryClient
+      .getQueryData<Todo[]>(['todos', 'list'])
+      ?.find((t) => t.id === todoId),
+  initialDataUpdatedAt: () =>
+    queryClient.getQueryState(['todos', 'list'])?.dataUpdatedAt,
 })
 ```
 
@@ -223,13 +223,13 @@ Aceita função com dois parâmetros, `previousData` e `previousQuery`, que é a
 
 ```tsx
 const { data, isPlaceholderData } = useQuery({
-...todoOptions(todoId),
- placeholderData: { id: todoId, title: '', done: false }, // esqueleto
+  ...todoOptions(todoId),
+  placeholderData: { id: todoId, title: '', done: false }, // esqueleto
 })
 
 // O dado provisório não pode alimentar decisão nem escrita.
-<button disabled={isPlaceholderData} onClick={ => concluir(data)}>
- Concluir
+<button disabled={isPlaceholderData} onClick={() => concluir(data)}>
+  Concluir
 </button>
 ```
 
@@ -252,7 +252,7 @@ Ignorar `isPlaceholderData` é o que transforma a otimização em bug: o usuári
 | `staleTime: 'static'` em dado que uma mutation altera | `invalidateQueries` roda, não falha, e não surte efeito | `Infinity` (invalidação continua funcionando) — `TSQ-CACHE-02` |
 | `staleTime: Infinity` + `gcTime` default | não revalida enquanto ativa, mas perde tudo 5 min depois de sair da tela | subir `gcTime` junto |
 | `queryFn` convertendo ISO em `Date` | objeto inteiro parece novo a cada refetch; structural sharing desligado | converter em `select` ou no componente — `TSQ-CACHE-04` |
-| `const { data,...rest } = useQuery(...)` | rest toca todas as props do Proxy; re-render por `isFetching`, `isStale`, `dataUpdatedAt` | desestruturar só o que usa — `TSQ-CACHE-05` |
+| `const { data, ...rest } = useQuery(...)` | rest toca todas as props do Proxy; re-render por `isFetching`, `isStale`, `dataUpdatedAt` | desestruturar só o que usa — `TSQ-CACHE-05` |
 | `initialData` com objeto de esqueleto | esqueleto é gravado no cache e servido a todas as instâncias da key | `placeholderData` — `TSQ-CACHE-06` |
 | `initialData` de outro cache sem timestamp | dado antigo entra como recém-buscado e o `staleTime` protege o obsoleto | `initialDataUpdatedAt` — `TSQ-CACHE-07` |
 
@@ -264,7 +264,7 @@ Ignorar `isPlaceholderData` é o que transforma a otimização em bug: o usuári
 - [ ] Algum `staleTime: 'static'` cobre dado que uma mutation altera? → `TSQ-CACHE-02`
 - [ ] Há gatilho de refetch desligado sem `staleTime` calibrado antes? → `TSQ-CACHE-03`
 - [ ] A `queryFn` devolve só valores compatíveis com JSON? → `TSQ-CACHE-04`
-- [ ] Nenhum `const { data,...rest }` no resultado de `useQuery`? → `TSQ-CACHE-05`
+- [ ] Nenhum `const { data, ...rest }` no resultado de `useQuery`? → `TSQ-CACHE-05`
 - [ ] `initialData` só recebe dado real e completo? → `TSQ-CACHE-06`
 - [ ] `initialData` vindo do cache traz `initialDataUpdatedAt`? → `TSQ-CACHE-07`
 - [ ] `isPlaceholderData` bloqueia ações sobre dado provisório? → `TSQ-CACHE-08`
@@ -294,7 +294,7 @@ Verificadas em **2026-08-14**:
 
 **O que a verificação contrariou:**
 
-- **Tracked properties não estavam na nota anterior**, e o caveat é o mais fácil de violar de toda a biblioteca: `const { data,...rest }` desliga a otimização inteira em silêncio.
+- **Tracked properties não estavam na nota anterior**, e o caveat é o mais fácil de violar de toda a biblioteca: `const { data, ...rest }` desliga a otimização inteira em silêncio.
 - **A página de Placeholder Query Data não menciona `keepPreviousData`.** Ele aparece no guia de Paginated Queries. A associação "placeholderData = keepPreviousData" é derivada, não literal da página do conceito.
 - **`initialDataUpdatedAt` existe e é o que impede dado velho de entrar como fresco.** A nota anterior tratava `initialData` apenas como "pré-popular o cache", sem o problema de timestamp.
 - **A página de Window Focus Refetching não documenta `'always'`** para `refetchOnWindowFocus`; o valor aparece indiretamente no guia de defaults, ao explicar o que `staleTime: 'static'` bloqueia.

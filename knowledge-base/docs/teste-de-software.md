@@ -2,11 +2,11 @@
 titulo: Teste de Software
 Link: https://www.guru99.com/software-testing.html
 tags:
- - testing
- - software-quality
- - qa
- - reference
- - agent-context
+  - testing
+  - software-quality
+  - qa
+  - reference
+  - agent-context
 source: "guru99.com/software-testing (taxonomia clássica), ISTQB CTFL v4.0, Martin Fowler (test pyramid, test doubles), Kent C. Dodds (testing trophy), Software Engineering at Google cap. 11"
 verificado-em: 2026-08-20
 ---
@@ -110,19 +110,19 @@ Esta nota decide o nível. A partir daí, o "como" está aqui — e este mapa é
 O que exatamente pode dar errado? (escreva a frase antes de escolher)
 │
 ├─ regra de cálculo, transformação, parse, validação, invariante de domínio
-│ → UNIDADE. Barato, rápido, determinístico. É onde a maior parte deveria estar
+│  → UNIDADE. Barato, rápido, determinístico. É onde a maior parte deveria estar
 │
 ├─ duas ou mais peças minhas conversando (caso de uso + repositório, handler + schema)
-│ → INTEGRAÇÃO com dependência real controlada (Postgres local, servidor em memória)
+│  → INTEGRAÇÃO com dependência real controlada (Postgres local, servidor em memória)
 │
 ├─ o formato do que atravessa a fronteira com um sistema que não é meu
-│ → CONTRATO. E se o tipo vem do servidor, o compilador já é metade do teste
+│  → CONTRATO. E se o tipo vem do servidor, o compilador já é metade do teste
 │
 ├─ o estado visual/interativo de um componente (loading, vazio, erro, desabilitado)
-│ → COMPONENTE (story). Um estado nomeado por story
+│  → COMPONENTE (story). Um estado nomeado por story
 │
 └─ a jornada crítica funciona de ponta a ponta, no browser, com sessão real
- → E2E. Poucos. Só jornada crítica, nunca regra de negócio
+   → E2E. Poucos. Só jornada crítica, nunca regra de negócio
 
 Não sei responder "o que pode dar errado"?
 → o teste ainda não deveria ser escrito. Essa frase É o teste
@@ -142,18 +142,18 @@ Pirâmide e Trophy discordam sobre **onde fica a massa** — unidade ou integra�
 
 ```
 Se a dependência real divergisse do meu dublê, este teste deveria quebrar?
-├─ SIM → NÃO substitua. Use a coisa real (ou um ambiente controlado dela).
-│ Substituir aqui é falsa confiança (TS-CORE-03)
-└─ NÃO → substitua, e escolha o dublê certo:
- ├─ só preciso preencher um parâmetro → dummy
- ├─ preciso de uma resposta pronta → stub
- ├─ preciso de uma implementação que funcione → fake
- ├─ preciso verificar QUE foi chamado → mock ou spy
- └─ é relógio, aleatoriedade, ou terceiro que não possuo → substitua sempre
+├─ SIM  → NÃO substitua. Use a coisa real (ou um ambiente controlado dela).
+│         Substituir aqui é falsa confiança (TS-CORE-03)
+└─ NÃO  → substitua, e escolha o dublê certo:
+   ├─ só preciso preencher um parâmetro          → dummy
+   ├─ preciso de uma resposta pronta             → stub
+   ├─ preciso de uma implementação que funcione   → fake
+   ├─ preciso verificar QUE foi chamado          → mock ou spy
+   └─ é relógio, aleatoriedade, ou terceiro que não possuo → substitua sempre
 
 Legítimo substituir mesmo em E2E (são bordas, não o miolo):
- relógio e aleatoriedade · terceiro que não possuo · condição de erro
- difícil de provocar (500, timeout) · autenticação como andaime
+  relógio e aleatoriedade · terceiro que não possuo · condição de erro
+  difícil de provocar (500, timeout) · autenticação como andaime
 ```
 
 A taxonomia completa está em [Teste de Software - Dublês de Teste](teste-de-software-dubles-de-teste.md). O ponto de vocabulário que mais confunde: um "mock server" que tem `store` e funciona é um **fake**, não um mock — e chamá-lo pelo nome certo já revela a pergunta seguinte, que é *ele honra o contrato real?*
@@ -163,18 +163,18 @@ A taxonomia completa está em [Teste de Software - Dublês de Teste](teste-de-so
 ```
 Tenho a especificação, e não preciso olhar o código?
 └─ CAIXA-PRETA (specification-based)
- ├─ entrada tem faixas/classes? → partição de equivalência
- ├─ tem limite numérico ou de tamanho? → análise de valor limite ← o mais rentável
- ├─ a saída depende de combinação de condições? → tabela de decisão
- └─ o comportamento depende do estado anterior? → transição de estado
+   ├─ entrada tem faixas/classes?          → partição de equivalência
+   ├─ tem limite numérico ou de tamanho?    → análise de valor limite  ← o mais rentável
+   ├─ a saída depende de combinação de condições? → tabela de decisão
+   └─ o comportamento depende do estado anterior? → transição de estado
 
 Preciso garantir que o código foi exercitado?
 └─ CAIXA-BRANCA (structure-based)
- → cobertura de instrução, de ramo; complexidade ciclomática como sinal de risco
+   → cobertura de instrução, de ramo; complexidade ciclomática como sinal de risco
 
 Tenho experiência no domínio e tempo limitado?
 └─ BASEADO EM EXPERIÊNCIA
- → error guessing, teste exploratório, checklist
+   → error guessing, teste exploratório, checklist
 ```
 
 Se for para aprender **uma** técnica: **análise de valor limite**. Defeito se concentra em fronteira, e ela transforma "testei o caminho feliz" em quatro ou cinco casos que pegam a classe de bug mais comum que existe. Detalhe em [Teste de Software - Técnicas de Design de Caso](teste-de-software-tecnicas-de-design-de-caso.md).
@@ -182,11 +182,11 @@ Se for para aprender **uma** técnica: **análise de valor limite**. Defeito se 
 ### 4.4 Quando parar de escrever teste
 
 ```
-As jornadas críticas têm um E2E cada? não → escreva
-As regras de negócio têm teste de unidade? não → escreva
-As fronteiras (limite, vazio, nulo, erro) têm caso? não → escreva
-Todo defeito de produção que voltou tem um teste que o pega? não → escreva ESSE primeiro
-Quebrando o código de propósito, algo fica vermelho? não → as asserções são fracas
+As jornadas críticas têm um E2E cada?                          não → escreva
+As regras de negócio têm teste de unidade?                     não → escreva
+As fronteiras (limite, vazio, nulo, erro) têm caso?            não → escreva
+Todo defeito de produção que voltou tem um teste que o pega?   não → escreva ESSE primeiro
+Quebrando o código de propósito, algo fica vermelho?           não → as asserções são fracas
 
 Tudo acima resolvido, e ainda quero subir cobertura?
 → pare. Cobertura acima do necessário compra pouco e custa manutenção (TS-CORE-05)
@@ -198,24 +198,25 @@ O gatilho de maior retorno da lista é o quarto: **teste que nasce de defeito re
 
 ```
 1. Alguma falha é intermitente?
- → flakiness. É o problema nº 1, e ele contamina todo o resto
- (TS-CORE-04 · [Teste de Software - Confiabilidade da Suíte](teste-de-software-confiabilidade-da-suite.md))
+   → flakiness. É o problema nº 1, e ele contamina todo o resto
+     (TS-CORE-04 · [Teste de Software - Confiabilidade da Suíte](teste-de-software-confiabilidade-da-suite.md))
 
 2. Quando falha, dá para saber o motivo em menos de um minuto?
- → não: diagnóstico ruim. Nome de teste, granularidade, ou instrumentação
- (trace, step) — [Playwright - Debug e Trace](playwright-debug-e-trace.md)
+   → não: diagnóstico ruim. Nome de teste, granularidade, ou instrumentação
+     (trace, step) — [Playwright - Debug e Trace](playwright-debug-e-trace.md)
 
 3. Quebrando o código de propósito, algo fica vermelho?
- → não: asserção fraca ou dublê no lugar errado (TS-CORE-03)
+   → não: asserção fraca ou dublê no lugar errado (TS-CORE-03)
 
 4. Um refactor sem mudança de comportamento quebra muitos testes?
- → os testes observam implementação, não comportamento
+   → os testes observam implementação, não comportamento
+
 
 5. A suíte demora tanto que ninguém roda antes de abrir PR?
- → forma invertida (ice-cream cone): massa no nível errado (§ 4.1)
+   → forma invertida (ice-cream cone): massa no nível errado (§ 4.1)
 
 6. Passa tudo e defeito chega em produção?
- → cobertura de CLASSE de risco, não de linha. Que tipo de teste falta? (§ 5)
+   → cobertura de CLASSE de risco, não de linha. Que tipo de teste falta? (§ 5)
 ```
 
 ---
@@ -307,22 +308,22 @@ Caminho mínimo (§ 6 + § 6.1, sem abrir satélite): **24 regras**.
 
 ```
 SEMPRE, ao decidir ou revisar ESTRATÉGIA de teste:
- docs/Teste de Software.md § 0, § 2, § 4, § 6
+          docs/Teste de Software.md § 0, § 2, § 4, § 6
 
 AO DECIDIR o nível de um teste novo:
- § 4.1 (e § 3 para saber qual ferramenta é aquele nível)
+          § 4.1  (e § 3 para saber qual ferramenta é aquele nível)
 
 AO DECIDIR o que substituir:
- § 4.2 + docs/Teste de Software - Dublês de Teste.md
+          § 4.2 + docs/Teste de Software - Dublês de Teste.md
 
 AO DIAGNOSTICAR suíte em que ninguém confia:
- § 4.5 + docs/Teste de Software - Confiabilidade da Suíte.md
+          § 4.5 + docs/Teste de Software - Confiabilidade da Suíte.md
 
 DEPOIS de decidido o nível, para o "como":
- a nota de FERRAMENTA da § 3 — Bun - Testes, Storybook, ou Playwright
+          a nota de FERRAMENTA da § 3 — Bun - Testes, Storybook, ou Playwright
 
-NUNCA: esta estrutura inteira para uma tarefa de escrever um teste
- cujo nível já está decidido
+NUNCA:    esta estrutura inteira para uma tarefa de escrever um teste
+          cujo nível já está decidido
 ```
 
 ### Como citar
@@ -387,7 +388,6 @@ NUNCA: esta estrutura inteira para uma tarefa de escrever um teste
 - **Ferramentas:** [Bun - Testes](bun-testes.md) · [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) · [Playwright](playwright.md) · `TypeScript`
 - [Github Actions](github-actions.md) · · [Trunk-based development](../pages/trunk-based-development.md)
 - — causa raiz de defeito recorrente
--
 
 ## Fontes consultadas
 

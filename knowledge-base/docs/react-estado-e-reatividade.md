@@ -2,10 +2,10 @@
 titulo: React - Estado e Reatividade
 Link: https://react.dev/reference/react/useState
 tags:
- - react
- - state
- - hooks
- - agent-context
+  - react
+  - state
+  - hooks
+  - agent-context
 source: "Documentação oficial do React — useState, useReducer, useContext, createContext"
 verificado-em: 2026-08-14
 ---
@@ -25,16 +25,16 @@ Entrada: [React.js](react-js.md) · Base normativa: [React - Rules of React](rea
 Estado não é uma variável que você altera — é um **valor associado a uma posição na árvore**, do qual cada render enxerga um snapshot congelado.
 
 ```tsx
-function Counter {
- const [count, setCount] = useState(0)
+function Counter() {
+  const [count, setCount] = useState(0)
 
- function handleClick {
- setCount(count + 1) // count é 0 neste snapshot
- setCount(count + 1) // ainda 0 → resultado final: 1
- console.log(count) // 0 — não mudou nesta execução
- }
+  function handleClick() {
+    setCount(count + 1)   // count é 0 neste snapshot
+    setCount(count + 1)   // ainda 0 → resultado final: 1
+    console.log(count)    // 0 — não mudou nesta execução
+  }
 
- return <button onClick={handleClick}>{count}</button>
+  return <button onClick={handleClick}>{count}</button>
 }
 ```
 
@@ -45,8 +45,8 @@ O `console.log` imprime `0` porque `count` é uma constante deste render. `setCo
 Quando o próximo valor depende do anterior, passe uma função. O React aplica a fila de updaters em ordem sobre o valor pendente:
 
 ```tsx
-setCount((c) => c + 1) // 0 → 1
-setCount((c) => c + 1) // 1 → 2
+setCount((c) => c + 1)   // 0 → 1
+setCount((c) => c + 1)   // 1 → 2
 ```
 
 | ID | Regra |
@@ -62,11 +62,11 @@ Múltiplos `setState` na mesma interação produzem **um** render. Isso vale par
 ### Inicialização preguiçosa
 
 ```tsx
-// ERRADO — createInitialState roda em TODO render, e o retorno é descartado
+// ERRADO — createInitialState() roda em TODO render, e o retorno é descartado
 const [state, setState] = useState(createInitialState(items))
 
 // CERTO — a função é chamada apenas na montagem
-const [state, setState] = useState( => createInitialState(items))
+const [state, setState] = useState(() => createInitialState(items))
 ```
 
 | ID | Regra |
@@ -91,26 +91,26 @@ Migre para `useReducer` quando:
 
 ```tsx
 type State =
- | { status: 'idle' }
- | { status: 'uploading'; sent: number }
- | { status: 'error'; message: string }
- | { status: 'done'; url: string }
+  | { status: 'idle' }
+  | { status: 'uploading'; sent: number }
+  | { status: 'error'; message: string }
+  | { status: 'done'; url: string }
 
 type Action =
- | { type: 'start' }
- | { type: 'progress'; sent: number }
- | { type: 'fail'; message: string }
- | { type: 'succeed'; url: string }
+  | { type: 'start' }
+  | { type: 'progress'; sent: number }
+  | { type: 'fail'; message: string }
+  | { type: 'succeed'; url: string }
 
 function reducer(state: State, action: Action): State {
- switch (action.type) {
- case 'start': return { status: 'uploading', sent: 0 }
- case 'progress': return state.status === 'uploading'
- ? {...state, sent: action.sent }
- : state
- case 'fail': return { status: 'error', message: action.message }
- case 'succeed': return { status: 'done', url: action.url }
- }
+  switch (action.type) {
+    case 'start':    return { status: 'uploading', sent: 0 }
+    case 'progress': return state.status === 'uploading'
+                       ? { ...state, sent: action.sent }
+                       : state
+    case 'fail':     return { status: 'error', message: action.message }
+    case 'succeed':  return { status: 'done', url: action.url }
+  }
 }
 ```
 
@@ -138,17 +138,17 @@ type Theme = 'light' | 'dark'
 const ThemeContext = createContext<Theme>('light')
 
 // React 19: o próprio contexto é o provider
-function App {
- return (
- <ThemeContext value="dark">
- <Page />
- </ThemeContext>
- )
+function App() {
+  return (
+    <ThemeContext value="dark">
+      <Page />
+    </ThemeContext>
+  )
 }
 
-function Button {
- const theme = useContext(ThemeContext)
- return <button className={theme}>OK</button>
+function Button() {
+  const theme = useContext(ThemeContext)
+  return <button className={theme}>OK</button>
 }
 ```
 
@@ -167,7 +167,7 @@ Todo consumidor re-renderiza quando o `value` do provider muda por identidade. U
 <AuthContext value={{ user, login, logout }}>
 
 // CERTO — identidade estável
-const auth = useMemo( => ({ user, login, logout }), [user, login, logout])
+const auth = useMemo(() => ({ user, login, logout }), [user, login, logout])
 <AuthContext value={auth}>
 ```
 
@@ -184,7 +184,7 @@ const auth = useMemo( => ({ user, login, logout }), [user, login, logout])
 | Granularidade | subárvore inteira re-renderiza | seleção por fatia |
 | Dependência de árvore | sim — precisa de provider | não |
 
-Regra prática: Context para **dependências ambientais**; store para **estado que muda muito**. Para dado remoto, nenhum dos dois — ver.
+Regra prática: Context para **dependências ambientais**; store para **estado que muda muito**. Para dado remoto, nenhum dos dois.
 
 ---
 
@@ -196,21 +196,21 @@ Regra prática: Context para **dependências ambientais**; store para **estado q
 // ERRADO — duas fontes de verdade, um render extra, dessincronização garantida
 const [items, setItems] = useState<Item[]>([])
 const [total, setTotal] = useState(0)
-useEffect( => setTotal(items.length), [items])
+useEffect(() => setTotal(items.length), [items])
 
 // CERTO
 const [items, setItems] = useState<Item[]>([])
 const total = items.length
 ```
 
-Ver e.
+
 
 ### Estado espelhando props
 
 ```tsx
 // ERRADO — só lê a prop na montagem; mudanças posteriores são ignoradas
 function Form({ initialName }: { initialName: string }) {
- const [name, setName] = useState(initialName)
+  const [name, setName] = useState(initialName)
 }
 ```
 

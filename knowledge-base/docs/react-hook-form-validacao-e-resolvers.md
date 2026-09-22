@@ -2,12 +2,12 @@
 titulo: React Hook Form - Validação e Resolvers
 Link: https://react-hook-form.com/docs/useform
 tags:
- - react
- - forms
- - react-hook-form
- - zod
- - validation
- - agent-context
+  - react
+  - forms
+  - react-hook-form
+  - zod
+  - validation
+  - agent-context
 source: "Documentação oficial do React Hook Form — useForm, setError, trigger, resolvers"
 verificado-em: 2026-08-15
 ---
@@ -88,48 +88,48 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 const cadastroSchema = z.object({
- nome: z.string.min(2, 'Informe ao menos 2 caracteres.'),
- email: z.email('E-mail inválido.'),
- senha: z.string.min(8, 'Mínimo de 8 caracteres.'),
- confirmacao: z.string,
+  nome: z.string().min(2, 'Informe ao menos 2 caracteres.'),
+  email: z.email('E-mail inválido.'),
+  senha: z.string().min(8, 'Mínimo de 8 caracteres.'),
+  confirmacao: z.string(),
 }).refine((d) => d.senha === d.confirmacao, {
- message: 'As senhas não coincidem.',
- path: ['confirmacao'], // ✅ sem isto o erro vira erro de raiz
+  message: 'As senhas não coincidem.',
+  path: ['confirmacao'],          // ✅ sem isto o erro vira erro de raiz
 })
 
-type Cadastro = z.infer<typeof cadastroSchema> // ✅ tipo derivado, não escrito
+type Cadastro = z.infer<typeof cadastroSchema>   // ✅ tipo derivado, não escrito
 
-export function FormCadastro {
- const {
- register,
- handleSubmit,
- formState: { errors, isSubmitting },
- } = useForm<Cadastro>({
- resolver: zodResolver(cadastroSchema),
- mode: 'onTouched',
- defaultValues: { nome: '', email: '', senha: '', confirmacao: '' },
- })
+export function FormCadastro() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<Cadastro>({
+    resolver: zodResolver(cadastroSchema),
+    mode: 'onTouched',
+    defaultValues: { nome: '', email: '', senha: '', confirmacao: '' },
+  })
 
- const id = useId
+  const id = useId()
 
- return (
- <form onSubmit={handleSubmit(async (data) => { await criarConta(data) })}>
- <label htmlFor={`${id}-nome`}>Nome</label>
- <input
- {...register('nome')}
- id={`${id}-nome`}
- aria-invalid={errors.nome ? true : undefined}
- aria-describedby={errors.nome ? `${id}-nome-erro` : undefined}
- />
- {errors.nome && (
- <p id={`${id}-nome-erro`} role="alert">{errors.nome.message}</p>
- )}
- {/* demais campos seguem o mesmo par label/aria-describedby.
- Em produção, extraia isto para um componente de campo:
- [React Hook Form - Registro e Controle](react-hook-form-registro-e-controle.md) § 3.3 */}
- <button disabled={isSubmitting}>Criar conta</button>
- </form>
- )
+  return (
+    <form onSubmit={handleSubmit(async (data) => { await criarConta(data) })}>
+      <label htmlFor={`${id}-nome`}>Nome</label>
+      <input
+        {...register('nome')}
+        id={`${id}-nome`}
+        aria-invalid={errors.nome ? true : undefined}
+        aria-describedby={errors.nome ? `${id}-nome-erro` : undefined}
+      />
+      {errors.nome && (
+        <p id={`${id}-nome-erro`} role="alert">{errors.nome.message}</p>
+      )}
+      {/* demais campos seguem o mesmo par label/aria-describedby.
+          Em produção, extraia isto para um componente de campo:
+          [React Hook Form - Registro e Controle](react-hook-form-registro-e-controle.md) § 3.3 */}
+      <button disabled={isSubmitting}>Criar conta</button>
+    </form>
+  )
 }
 ```
 
@@ -139,14 +139,14 @@ Três decisões:
 - **`z.infer` em vez de uma `interface` escrita à mão** — `RHF-VAL-04`. Duas declarações do mesmo shape divergem no primeiro campo adicionado.
 - **`defaultValues` completo** — `RHF-CORE-01`. O schema define o que é válido; `defaultValues` define o que existe.
 
-### 3.1 A pegadinha de `.transform` e `.default`
+### 3.1 A pegadinha de `.transform()` e `.default()`
 
 Se o schema transforma, o tipo de **entrada** e o de **saída** deixam de ser o mesmo. `z.infer` devolve o de saída — e o formulário trabalha com o de entrada.
 
 ```tsx
 const schema = z.object({
- idade: z.string.transform(Number), // entra string, sai number
- ativo: z.boolean.default(true), // pode não existir na entrada
+  idade: z.string().transform(Number),        // entra string, sai number
+  ativo: z.boolean().default(true),           // pode não existir na entrada
 })
 
 // ❌ um generic só: os tipos brigam e handleSubmit fica com o tipo errado
@@ -154,7 +154,7 @@ useForm<z.infer<typeof schema>>({ resolver: zodResolver(schema) })
 
 // ✅ os três generics: entrada, contexto, saída
 useForm<z.input<typeof schema>, unknown, z.output<typeof schema>>({
- resolver: zodResolver(schema),
+  resolver: zodResolver(schema),
 })
 ```
 
@@ -190,10 +190,10 @@ Este é o ponto da doc em que a leitura desatenta produz código que nunca roda.
 
 ```tsx
 const cadastroSchema = z.object({
- email: z.email('E-mail inválido.').refine(
- async (email) => await emailDisponivel(email),
- { message: 'Este e-mail já está em uso.' },
- ),
+  email: z.email('E-mail inválido.').refine(
+    async (email) => await emailDisponivel(email),
+    { message: 'Este e-mail já está em uso.' },
+  ),
 })
 ```
 
@@ -203,8 +203,8 @@ const cadastroSchema = z.object({
 
 ```tsx
 <input {...register('email', {
- validate: async (email) =>
- (await emailDisponivel(email)) || 'Este e-mail já está em uso.',
+  validate: async (email) =>
+    (await emailDisponivel(email)) || 'Este e-mail já está em uso.',
 })} />
 ```
 
@@ -229,16 +229,16 @@ await trigger('confirmacao')
 const podeAvancar = await trigger(['nome', 'email'])
 ```
 
-> **Custo de `trigger`.** A fonte é específica: o isolamento de render só vale ao passar **um único nome como string**. Passar array, ou chamar `trigger` sem argumento, re-renderiza o estado do formulário inteiro. Num wizard isso é aceitável — acontece uma vez por passo. Dentro de um `onChange`, não é.
+> **Custo de `trigger`.** A fonte é específica: o isolamento de render só vale ao passar **um único nome como string**. Passar array, ou chamar `trigger()` sem argumento, re-renderiza o estado do formulário inteiro. Num wizard isso é aceitável — acontece uma vez por passo. Dentro de um `onChange`, não é.
 
 ### 3.4 Regras — `RHF-VAL-*` (schema)
 
 | ID | Regra |
 | --- | --- |
-| `RHF-VAL-02` | Schema com `.transform` ou `.default` **MUST** declarar os três generics: `useForm<z.input<S>, unknown, z.output<S>>`. |
+| `RHF-VAL-02` | Schema com `.transform()` ou `.default()` **MUST** declarar os três generics: `useForm<z.input<S>, unknown, z.output<S>>`. |
 | `RHF-VAL-04` | O tipo do formulário **MUST** derivar do schema (`z.infer`/`z.input`); **NEVER** ser escrito em paralelo. |
-| `RHF-VAL-05` | Regra que cruza campos **MUST** usar `.refine`/`.superRefine` com `path`, **NEVER** `validate` duplicado nos dois campos. |
-| `RHF-VAL-06` | Com `resolver` ativo, `rules` do `register` — `validate` e `deps` inclusive — **NEVER** são usadas. Regra que exige I/O **MUST** ir para o schema (`.refine` assíncrono) ou para a submissão (`setError`). |
+| `RHF-VAL-05` | Regra que cruza campos **MUST** usar `.refine()`/`.superRefine()` com `path`, **NEVER** `validate` duplicado nos dois campos. |
+| `RHF-VAL-06` | Com `resolver` ativo, `rules` do `register` — `validate` e `deps` inclusive — **NEVER** são usadas. Regra que exige I/O **MUST** ir para o schema (`.refine()` assíncrono) ou para a submissão (`setError`). |
 | `RHF-VAL-10` | Validação assíncrona por campo **MUST** ter debounce e cancelamento, ou ser movida para a submissão. |
 | `RHF-VAL-07` | `trigger` com array ou sem argumento **MUST** ser restrito a transições de passo; **NEVER** em handler de digitação. |
 
@@ -249,11 +249,11 @@ const podeAvancar = await trigger(['nome', 'email'])
 ### 4.1 A estrutura
 
 ```ts
-errors.email // FieldError → { type, message, types?, ref? }
-errors.endereco?.cidade // aninhado segue o shape do formulário
-errors.itens?.[0]?.nome // arrays por índice
-errors.itens?.root // erro das rules do próprio field array (v7.34.0)
-errors.root?.serverError // erro global — não pertence a campo nenhum
+errors.email                 // FieldError    → { type, message, types?, ref? }
+errors.endereco?.cidade      // aninhado segue o shape do formulário
+errors.itens?.[0]?.nome      // arrays por índice
+errors.itens?.root           // erro das rules do próprio field array (v7.34.0)
+errors.root?.serverError     // erro global — não pertence a campo nenhum
 ```
 
 `errors.campo.types` só é preenchido com `criteriaMode: 'all'`.
@@ -280,22 +280,22 @@ Duas coisas que a fonte declara e que mudam o desenho do código:
 
 ```tsx
 const onSubmit = handleSubmit(async (data) => {
- try {
- await api.criarConta(data)
- } catch (e) {
- if (e instanceof ApiError && e.fieldErrors) {
- // 422 com detalhamento por campo → cada erro no seu campo
- for (const [campo, mensagem] of Object.entries(e.fieldErrors)) {
- setError(campo as FieldPath<Cadastro>, { type: 'server', message: mensagem })
- }
- return
- }
- // esperado, mas sem campo: vai para a raiz
- setError('root.serverError', {
- type: String(e instanceof ApiError ? e.status : 'unknown'),
- message: 'Não foi possível criar a conta. Tente novamente.',
- })
- }
+  try {
+    await api.criarConta(data)
+  } catch (e) {
+    if (e instanceof ApiError && e.fieldErrors) {
+      // 422 com detalhamento por campo → cada erro no seu campo
+      for (const [campo, mensagem] of Object.entries(e.fieldErrors)) {
+        setError(campo as FieldPath<Cadastro>, { type: 'server', message: mensagem })
+      }
+      return
+    }
+    // esperado, mas sem campo: vai para a raiz
+    setError('root.serverError', {
+      type: String(e instanceof ApiError ? e.status : 'unknown'),
+      message: 'Não foi possível criar a conta. Tente novamente.',
+    })
+  }
 })
 ```
 
@@ -303,7 +303,7 @@ E na UI:
 
 ```tsx
 {errors.root?.serverError && (
- <p role="alert">{errors.root.serverError.message}</p>
+  <p role="alert">{errors.root.serverError.message}</p>
 )}
 ```
 
@@ -327,7 +327,7 @@ useForm({ errors: errosDoServidor })
 
 ```tsx
 handleSubmit(onValid, (errors) => {
- analytics.track('form_invalid', { campos: Object.keys(errors) })
+  analytics.track('form_invalid', { campos: Object.keys(errors) })
 })
 ```
 
@@ -384,12 +384,12 @@ Duas opções distintas que costumam ser confundidas — e que a fonte declara *
 | --- | --- |
 | `resolver` e `validate` no mesmo `useForm` | escolher um · `RHF-VAL-01` |
 | `interface FormData` escrita ao lado do schema | `z.infer` · `RHF-VAL-04` |
-| `z.infer` com schema que usa `.transform` | três generics · `RHF-VAL-02` |
+| `z.infer` com schema que usa `.transform()` | três generics · `RHF-VAL-02` |
 | `refine` sem `path` | o erro some na raiz · `RHF-VAL-05` |
-| Mesma regra cruzada duplicada em dois `validate` | `.refine` · `RHF-VAL-05` |
-| `validate` no `register` com resolver ativo — nunca roda | `.refine` assíncrono ou `setError` no submit · `RHF-VAL-06` |
+| Mesma regra cruzada duplicada em dois `validate` | `.refine()` · `RHF-VAL-05` |
+| `validate` no `register` com resolver ativo — nunca roda | `.refine()` assíncrono ou `setError` no submit · `RHF-VAL-06` |
 | Validação assíncrona por tecla, sem debounce nem cancelamento | debounce + `AbortController`, ou mover para o submit · `RHF-VAL-10` |
-| `trigger` sem argumento a cada digitação | alvo único, ou só na transição · `RHF-VAL-07` |
+| `trigger()` sem argumento a cada digitação | alvo único, ou só na transição · `RHF-VAL-07` |
 | `throw` de erro de validação no `onSubmit` | `setError` · `RHF-ERR-03` |
 | Erro de servidor em `toast` e não no formulário | `setError` · `RHF-ERR-02` |
 | `setError` em campo com regras, esperando persistência | `root.serverError` · `RHF-ERR-04` |

@@ -2,12 +2,12 @@
 titulo: Claude Code
 Link: https://code.claude.com/docs/pt/overview
 tags:
- - claude-code
- - ia
- - agentes
- - produtividade
- - contexto
- - agent-context
+  - claude-code
+  - ia
+  - agentes
+  - produtividade
+  - contexto
+  - agent-context
 source: "Documentação oficial do Claude Code — overview, best-practices, context-window, prompt-caching, memory, features-overview, model-config, agents, workflows, large-codebases, costs, headless, hooks-guide, goal, skills, commands"
 verificado-em: 2026-08-21
 ---
@@ -159,10 +159,10 @@ O mesmo gatilho diz quando **atualizar** o que já existe: erro repetido ou come
 O diff cabe em uma frase?
 ├── sim ──────────────────────────► vá direto (plan mode só adiciona overhead)
 └── não
- ├── você conhece o código e a abordagem? ──► vá direto, com verificação no prompt
- └── incerteza de abordagem, vários arquivos,
- ou código desconhecido ────────────────► plan mode
- └── feature grande, escopo aberto ─────► entrevista → SPEC.md → sessão nova
+    ├── você conhece o código e a abordagem? ──► vá direto, com verificação no prompt
+    └── incerteza de abordagem, vários arquivos,
+        ou código desconhecido ────────────────► plan mode
+        └── feature grande, escopo aberto ─────► entrevista → SPEC.md → sessão nova
 ```
 
 ### 4.3 Qual forma de paralelismo
@@ -176,7 +176,7 @@ Quem coordena?
 └── você, em sessões separadas ────────────────────► worktrees (+ cross-session messaging)
 
 As tarefas tocam os mesmos arquivos? ──► isole em worktree
-Uma mudança grande e divisível? ──► /batch (5 a 30 subagentes, cada um abre PR)
+Uma mudança grande e divisível?      ──► /batch (5 a 30 subagentes, cada um abre PR)
 ```
 
 Detalhe decisivo: em subagente e skill, os resultados intermediários vivem **no contexto do Claude**. Em workflow, vivem em **variáveis do script** — o contexto guarda só a resposta final. É isso que faz workflow escalar para dezenas ou centenas de agentes, e o que o torna resumível. Procedimento em [Claude Code - Paralelismo e Escala](claude-code-paralelismo-e-escala.md).
@@ -300,4 +300,3 @@ A doc anota comportamento por versão de patch (`v2.1.198`, `v2.1.211`, `v2.1.23
 
 - [Claude API Docs](claude-api-docs.md) — tool use na API da Anthropic; é a camada de baixo, não o Claude Code
 - `Skill` — índice das skills do vault, que consomem as notas de `docs/` como fonte
--

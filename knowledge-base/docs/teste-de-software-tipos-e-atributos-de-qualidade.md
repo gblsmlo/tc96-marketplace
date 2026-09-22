@@ -2,10 +2,10 @@
 titulo: Teste de Software - Tipos e Atributos de Qualidade
 Link: https://www.guru99.com/software-testing.html
 tags:
- - testing
- - software-quality
- - non-functional
- - agent-context
+  - testing
+  - software-quality
+  - non-functional
+  - agent-context
 source: "guru99 (tipos de teste, performance), ISTQB CTFL v4.0 (tipos e change-related testing), Software Engineering at Google cap. 11"
 verificado-em: 2026-08-20
 ---

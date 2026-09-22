@@ -2,10 +2,10 @@
 titulo: HTTP - CORS
 Link: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS
 tags:
- - http
- - cors
- - browser
- - agent-context
+  - http
+  - cors
+  - browser
+  - agent-context
 source: "MDN Web Docs — https://developer.mozilla.org/en-US/docs/Web/HTTP"
 verificado-em: 2026-08-15
 ---
@@ -75,7 +75,7 @@ Fora dessa lista, qualquer header seu preflighta — inclusive `Authorization`, 
 
 **`application/json` não está na lista.** Este é o item que explica quase todo preflight que aparece sem que ninguém tenha pedido: um `POST` de JSON — a chamada mais banal de qualquer SPA — **não é** uma requisição simples.
 
-**4. Não há listener em `XMLHttpRequest.upload`.** *"no code has called `xhr.upload.addEventListener` to add an event listener to monitor the upload."* Relevante para: instrumentar progresso torna a requisição preflighted.
+**4. Não há listener em `XMLHttpRequest.upload`.** *"no code has called `xhr.upload.addEventListener()` to add an event listener to monitor the upload."* Relevante para: instrumentar progresso torna a requisição preflighted.
 
 **5. Nenhum `ReadableStream` é usado no request.**
 
@@ -102,7 +102,7 @@ Access-Control-Max-Age: 86400
 Vary: Origin
 ```
 
-**O preflight nunca carrega credenciais.** A fonte é categórica: *"CORS-preflight requests must never include credentials."* Consequência direta e frequentemente violada: **um middleware de autenticação que responde `401` a requisição sem sessão vai responder `401` ao `OPTIONS`** — e o browser trata isso como preflight falho (`CORSPreflightDidNotSucceed`). O `OPTIONS` precisa passar antes da auth. Em [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) isso é uma questão de ordem: `cors` antes de `auth`.
+**O preflight nunca carrega credenciais.** A fonte é categórica: *"CORS-preflight requests must never include credentials."* Consequência direta e frequentemente violada: **um middleware de autenticação que responde `401` a requisição sem sessão vai responder `401` ao `OPTIONS`** — e o browser trata isso como preflight falho (`CORSPreflightDidNotSucceed`). O `OPTIONS` precisa passar antes da auth. Em [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) isso é uma questão de ordem: `cors()` antes de `auth`.
 
 **Depois do preflight, a requisição real acontece.** *"Once the preflight request is complete, the real request is sent."* Não são duas tentativas — são duas requisições, e a segunda é a que grava.
 
@@ -130,7 +130,7 @@ O `*` não é "permissivo demais mas funciona". Com credenciais, ele **não func
 
 > "When responding to a credentialed request, the server **must** specify an origin in the value of the `Access-Control-Allow-Origin` header, instead of specifying the `*` wildcard."
 
-Isto é decisivo porque `origin: '*'` é o **default** de vários middlewares — `cors` do Hono entre eles ([Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) § 4, `HONO-MW-08`). A combinação `origin: '*'` + `credentials: true` é a configuração que o navegador recusa, e o sintoma (*"blocked by CORS policy"*) não menciona qual das duas está errada.
+Isto é decisivo porque `origin: '*'` é o **default** de vários middlewares — `cors()` do Hono entre eles ([Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) § 4, `HONO-MW-08`). A combinação `origin: '*'` + `credentials: true` é a configuração que o navegador recusa, e o sintoma (*"blocked by CORS policy"*) não menciona qual das duas está errada.
 
 A restrição vale para os outros três headers também. Em requisição com credenciais, o servidor *"must not specify the `*` wildcard"* para `Access-Control-Allow-Methods`, `Access-Control-Allow-Headers` nem `Access-Control-Expose-Headers` — cada um precisa da lista explícita.
 
@@ -149,10 +149,10 @@ O par que funciona é **`credentials: 'include'` no cliente + origem explícita 
 ```ts
 // Cliente: sessão por cookie exige include explícito.
 const res = await fetch('https://api.exemplo.com/pedidos', {
- method: 'POST',
- credentials: 'include',
- headers: { 'Content-Type': 'application/json' }, // <- isto já preflighta
- body: JSON.stringify({ clienteId, itens }),
+  method: 'POST',
+  credentials: 'include',
+  headers: { 'Content-Type': 'application/json' },   // <- isto já preflighta
+  body: JSON.stringify({ clienteId, itens }),
 })
 ```
 
@@ -169,14 +169,14 @@ Sem isso, o mecanismo de [HTTP - Cache e Requisições Condicionais](http-cache-
 const ORIGENS = new Set(['https://app.exemplo.com', 'http://localhost:5173'])
 
 function headersCors(origin: string | null): Record<string, string> {
- const base = { Vary: 'Origin' }
- if (!origin || !ORIGENS.has(origin)) return base
- return {
-...base,
- 'Access-Control-Allow-Origin': origin,
- 'Access-Control-Allow-Credentials': 'true',
- 'Access-Control-Expose-Headers': 'ETag, X-Request-Id',
- }
+  const base = { Vary: 'Origin' }
+  if (!origin || !ORIGENS.has(origin)) return base
+  return {
+    ...base,
+    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Expose-Headers': 'ETag, X-Request-Id',
+  }
 }
 ```
 
@@ -260,8 +260,8 @@ A última linha merece atenção em stack com proxy reverso, CDN ou dev server: 
 
 | Antipadrão | Por que falha | O que fazer |
 | --- | --- | --- |
-| `cors` com `origin` default (`*`) e `credentials: true` | a especificação proíbe curinga com credenciais; o browser recusa a resposta | allowlist explícita por ambiente — `HTTP-CORS-01` / `HTTP-CORS-02` |
-| Middleware de auth antes do CORS | o `OPTIONS` de preflight não leva credenciais e leva `401`; toda chamada JSON quebra | `cors` primeiro na cadeia — `HTTP-CORS-05` |
+| `cors()` com `origin` default (`*`) e `credentials: true` | a especificação proíbe curinga com credenciais; o browser recusa a resposta | allowlist explícita por ambiente — `HTTP-CORS-01` / `HTTP-CORS-02` |
+| Middleware de auth antes do CORS | o `OPTIONS` de preflight não leva credenciais e leva `401`; toda chamada JSON quebra | `cors()` primeiro na cadeia — `HTTP-CORS-05` |
 | Ecoar `Origin` sem `Vary: Origin` | a CDN serve a resposta com o `Allow-Origin` da primeira origem que passou; o segundo cliente é bloqueado | `Vary: Origin` sempre — `HTTP-CORS-03` |
 | Emitir `Vary: Origin` só quando a origem é aceita | a resposta negativa cacheada envenena a URL igual | `Vary: Origin` também na recusa — `HTTP-CORS-03` |
 | Ler `res.headers.get('ETag')` cross-origin sem `Expose-Headers` | só sete headers são visíveis por default; a leitura devolve `null` sem erro | `Access-Control-Expose-Headers` — `HTTP-CORS-04` |
@@ -295,7 +295,7 @@ A última linha merece atenção em stack com proxy reverso, CDN ou dev server: 
 - [HTTP](http.md) — hub; § 5 tem a árvore "minha requisição foi bloqueada pelo browser — é CORS?"
 - [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) · [HTTP - Métodos e Semântica](http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) · [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) · [HTTP - Specs e RFCs](http-specs-e-rfcs.md)
 - — Zettel conceitual · (`mode`, `credentials`)
-- [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) (`cors`, `origin` default `*`) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7.1 (sem CORS nativo) · [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md)
+- [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) (`cors()`, `origin` default `*`) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7.1 (sem CORS nativo) · [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md)
 - [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) · [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) · ·
 - · · ·
 

@@ -2,10 +2,10 @@
 titulo: React - Renderização e Entrypoints
 Link: https://react.dev/reference/react-dom/client
 tags:
- - react
- - rendering
- - ssr
- - agent-context
+  - react
+  - rendering
+  - ssr
+  - agent-context
 source: "Documentação oficial do React — react-dom/client, react-dom/server, react-dom/static, StrictMode, preloading"
 verificado-em: 2026-08-14
 ---
@@ -41,7 +41,7 @@ hydrateRoot(document.getElementById('root')!, <App />)
 | O que faz | cria o DOM do zero | anexa listeners ao DOM existente |
 | Usar em | SPA pura | app com SSR/SSG |
 
-`root.unmount` desmonta a árvore. `ReactDOM.render` e `unmountComponentAtNode` foram removidos — não existem mais.
+`root.unmount()` desmonta a árvore. `ReactDOM.render` e `unmountComponentAtNode` foram removidos — não existem mais.
 
 | ID | Regra |
 | --- | --- |
@@ -53,7 +53,7 @@ Ocorre quando a árvore renderizada no cliente não bate com o HTML do servidor.
 
 | Causa | Correção |
 | --- | --- |
-| `Date.now`, `Math.random`, `new Date` no render | `REACT-PURE-01` — mover para estado ou passar do servidor |
+| `Date.now()`, `Math.random()`, `new Date()` no render | `REACT-PURE-01` — mover para estado ou passar do servidor |
 | `typeof window !== 'undefined'` ramificando o render | renderizar igual e ajustar em Effect |
 | `localStorage` lido no render | ler em `useEffect` após a montagem |
 | HTML inválido (`<div>` dentro de `<p>`) | corrigir a marcação |
@@ -63,8 +63,8 @@ O padrão para conteúdo genuinamente client-only:
 
 ```tsx
 const [montado, setMontado] = useState(false)
-useEffect( => setMontado(true), [])
-if (!montado) return <Placeholder /> // igual ao que o servidor renderizou
+useEffect(() => setMontado(true), [])
+if (!montado) return <Placeholder />   // igual ao que o servidor renderizou
 return <ConteudoDeCliente />
 ```
 
@@ -112,9 +112,9 @@ Duas notas verificadas na fonte:
 
 ```tsx
 createRoot(document.getElementById('root')!).render(
- <StrictMode>
- <App />
- </StrictMode>,
+  <StrictMode>
+    <App />
+  </StrictMode>,
 )
 ```
 
@@ -152,9 +152,9 @@ APIs de `react-dom` para antecipar trabalho de rede. Sinais, não garantias — 
 import { preload, preconnect } from 'react-dom'
 
 function Galeria({ proximaUrl }: { proximaUrl: string }) {
- preconnect('https://cdn.exemplo.com')
- preload(proximaUrl, { as: 'image' })
- //...
+  preconnect('https://cdn.exemplo.com')
+  preload(proximaUrl, { as: 'image' })
+  // ...
 }
 ```
 
@@ -171,12 +171,12 @@ Escala de custo crescente: `prefetchDNS` < `preconnect` < `preload` < `preinit`.
 ```tsx
 import { act } from 'react'
 
-await act(async => {
- root.render(<App />)
+await act(async () => {
+  root.render(<App />)
 })
 ```
 
-Garante que renders, Effects e atualizações agendadas terminem antes das asserções. Testing Library já envolve suas APIs em `act` — chamá-lo manualmente costuma indicar que o teste observa implementação em vez de comportamento. Ver.
+Garante que renders, Effects e atualizações agendadas terminem antes das asserções. Testing Library já envolve suas APIs em `act` — chamá-lo manualmente costuma indicar que o teste observa implementação em vez de comportamento..
 
 > `act` vem de `react`, não de `react-dom/test-utils`.
 
@@ -185,7 +185,7 @@ Garante que renders, Effects e atualizações agendadas terminem antes das asser
 ## 6. Checklist de revisão
 
 - [ ] SSR hidratando com `hydrateRoot`, não `createRoot`? → `REACT-DOM-01`
-- [ ] Algum `Date.now`, `Math.random` ou `localStorage` no render? → `REACT-PURE-01` / `REACT-PURE-02` (causa raiz da divergência de hidratação)
+- [ ] Algum `Date.now()`, `Math.random()` ou `localStorage` no render? → `REACT-PURE-01` / `REACT-PURE-02` (causa raiz da divergência de hidratação)
 - [ ] `typeof window` ramificando o render? → `REACT-DOM-03`
 - [ ] SSR em Node usando as APIs de Node Streams? → `REACT-DOM-04`
 - [ ] `renderToString` em código novo? → `REACT-DOM-05`

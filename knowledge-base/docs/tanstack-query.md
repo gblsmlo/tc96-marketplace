@@ -2,11 +2,11 @@
 titulo: TanStack Query
 Link: https://tanstack.com/query/latest/docs/framework/react/overview
 tags:
- - tanstack-query
- - data-fetching
- - server-state
- - reference
- - agent-context
+  - tanstack-query
+  - data-fetching
+  - server-state
+  - reference
+  - agent-context
 source: "Documentação oficial — tanstack.com/query/latest/docs/framework/react"
 verificado-em: 2026-08-14
 ---
@@ -75,10 +75,10 @@ Se o código está resolvendo qualquer um desses manualmente, provavelmente est�
 O dado vem de um servidor e outra pessoa pode alterá-lo?
 ├── SIM → é estado do servidor. Query.
 └── NÃO
- ├── É estado de UI efêmero → useState
- ├── Precisa sobreviver a refresh / ser link → search param da rota
- │ → [TanStack Router - Search Params](tanstack-router-search-params.md)
- └── É estado global de cliente com escrita frequente →
+    ├── É estado de UI efêmero → useState
+    ├── Precisa sobreviver a refresh / ser link → search param da rota
+    │   → [TanStack Router - Search Params](tanstack-router-search-params.md)
+    └── É estado global de cliente com escrita frequente →
 ```
 
 Guardar a resposta de uma query em `useState` cria uma segunda fonte de verdade que diverge na primeira revalidação. É `REACT-PAT-03` em [React - Patterns](react-patterns.md).
@@ -88,26 +88,26 @@ Guardar a resposta de uma query em `useState` cria uma segunda fonte de verdade 
 ```
 Com que frequência este dado muda, e o que custa mostrá-lo velho?
 ├── Praticamente imutável (país, moeda, enum de domínio)
-│ → staleTime alto (minutos a horas). Refetch é desperdício.
+│   → staleTime alto (minutos a horas). Refetch é desperdício.
 ├── Muda com o uso, mas ver velho por segundos é inofensivo
-│ → staleTime médio. O caso mais comum.
+│   → staleTime médio. O caso mais comum.
 └── Precisa estar sempre correto (saldo, estoque, permissão)
- → staleTime baixo ou zero, e revalide após ações que o afetam
+    → staleTime baixo ou zero, e revalide após ações que o afetam
 ```
 
-`staleTime: 0` — o padrão — significa "sempre velho": revalida em cada montagem, foco de janela e reconexão. Isso é seguro, não gratuito. Ver.
+`staleTime: 0` — o padrão — significa "sempre velho": revalida em cada montagem, foco de janela e reconexão. Isso é seguro, não gratuito..
 
 ### Escrevi no servidor. E agora?
 
 ```
 O que a escrita tornou velho?
 ├── Uma ou poucas listas/detalhes conhecidos
-│ → invalidateQueries nas chaves afetadas. É o padrão. Prefira isto.
+│   → invalidateQueries nas chaves afetadas. É o padrão. Prefira isto.
 ├── O servidor já devolveu o recurso atualizado na resposta
-│ → setQueryData para gravar direto, e considere invalidar mesmo assim
+│   → setQueryData para gravar direto, e considere invalidar mesmo assim
 └── Preciso de feedback instantâneo antes da resposta chegar
- → update otimista com snapshot e rollback
- →
+    → update otimista com snapshot e rollback
+      →
 ```
 
 Invalidar de menos deixa tela velha; invalidar de mais transforma cada escrita numa cascata de requests. Detalhe em [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md).
@@ -117,10 +117,10 @@ Invalidar de menos deixa tela velha; invalidar de mais transforma cada escrita n
 ```
 O dado que você quer mostrar otimisticamente vive no cache da Query?
 ├── SIM → mutation otimista: snapshot em onMutate, rollback em onError
-│ → [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md) § 5
+│         → [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md) § 5
 └── NÃO (estado local, formulário sem cache remoto)
- → useOptimistic do React
- → [React - Formulários e Actions](react-formularios-e-actions.md) § 5
+    → useOptimistic do React
+      → [React - Formulários e Actions](react-formularios-e-actions.md) § 5
 ```
 
 **Nunca as duas no mesmo dado** — viram duas fontes de verdade divergindo. É `REACT-FORM-07`.
@@ -177,16 +177,16 @@ As causas 4 e 5 são as que mais custam a achar, porque a invalidação roda, n�
 ## 7. Contrato de skill
 
 ```
-SEMPRE: docs/TanStack Query.md § 2 (modelo mental)
- § 5 (árvores de decisão)
+SEMPRE:   docs/TanStack Query.md § 2 (modelo mental)
+                                 § 5 (árvores de decisão)
 
 SOB DEMANDA, via § 4:
- o satélite da tarefa
+          o satélite da tarefa
 
 SE a tarefa envolve rota/loader:
- docs/TanStack Router - Carregamento de Dados.md
+          docs/TanStack Router - Carregamento de Dados.md
 
-NUNCA: todos os satélites de uma vez
+NUNCA:    todos os satélites de uma vez
 ```
 
 Invariantes:

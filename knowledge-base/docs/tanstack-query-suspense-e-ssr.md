@@ -2,10 +2,10 @@
 titulo: TanStack Query - Suspense e SSR
 Link: https://tanstack.com/query/latest/docs/framework/react/guides/suspense
 tags:
- - tanstack-query
- - suspense
- - ssr
- - agent-context
+  - tanstack-query
+  - suspense
+  - ssr
+  - agent-context
 source: "Documentação oficial — https://tanstack.com/query/latest/docs/framework/react"
 verificado-em: 2026-08-14
 ---
@@ -42,14 +42,14 @@ Três, verificados: `useSuspenseQuery`, `useSuspenseQueries`, `useSuspenseInfini
 
 ```tsx
 function Perfil({ id }: { id: string }) {
- const { data } = useSuspenseQuery(userOptions(id))
- return <h1>{data.name}</h1> // data é T, não T | undefined
+  const { data } = useSuspenseQuery(userOptions(id))
+  return <h1>{data.name}</h1>   // data é T, não T | undefined
 }
 
 <ErrorBoundary fallback={<Erro />}>
- <Suspense fallback={<Skeleton />}>
- <Perfil id={id} />
- </Suspense>
+  <Suspense fallback={<Skeleton />}>
+    <Perfil id={id} />
+  </Suspense>
 </ErrorBoundary>
 ```
 
@@ -74,7 +74,7 @@ const { data: posts } = useSuspenseQuery(postsOptions(id))
 
 // CERTO — paralelo
 const [{ data: user }, { data: posts }] = useSuspenseQueries({
- queries: [userOptions(id), postsOptions(id)],
+  queries: [userOptions(id), postsOptions(id)],
 })
 ```
 
@@ -96,16 +96,16 @@ Um Error Boundary que se recupera precisa que a query também esqueça o erro. �
 
 ```tsx
 <QueryErrorResetBoundary>
- {({ reset }) => (
- <ErrorBoundary
- onReset={reset}
- fallbackRender={({ resetErrorBoundary }) => (
- <button onClick={ => resetErrorBoundary}>Tentar de novo</button>
- )}
- >
- <Perfil id={id} />
- </ErrorBoundary>
- )}
+  {({ reset }) => (
+    <ErrorBoundary
+      onReset={reset}
+      fallbackRender={({ resetErrorBoundary }) => (
+        <button onClick={() => resetErrorBoundary()}>Tentar de novo</button>
+      )}
+    >
+      <Perfil id={id} />
+    </ErrorBoundary>
+  )}
 </QueryErrorResetBoundary>
 ```
 
@@ -129,23 +129,23 @@ Passar o dado do servidor como `initialData` funciona, e a fonte lista as desvan
 
 ### Prefetch + `dehydrate` / `HydrationBoundary` — o recomendado
 
-Três passos: buscar no servidor com um `QueryClient` dedicado, serializar o cache com `dehydrate`, restaurar no cliente dentro de `<HydrationBoundary>`.
+Três passos: buscar no servidor com um `QueryClient` dedicado, serializar o cache com `dehydrate()`, restaurar no cliente dentro de `<HydrationBoundary>`.
 
 ```tsx
 // Servidor (loader de rota / RSC / getServerSideProps)
-export async function loader {
- const queryClient = new QueryClient // um por requisição
- await queryClient.prefetchQuery(todosOptions)
- return { dehydratedState: dehydrate(queryClient) }
+export async function loader() {
+  const queryClient = new QueryClient()          // um por requisição
+  await queryClient.prefetchQuery(todosOptions())
+  return { dehydratedState: dehydrate(queryClient) }
 }
 
 // Cliente
 export default function Page({ dehydratedState }: Props) {
- return (
- <HydrationBoundary state={dehydratedState}>
- <Todos />
- </HydrationBoundary>
- )
+  return (
+    <HydrationBoundary state={dehydratedState}>
+      <Todos />
+    </HydrationBoundary>
+  )
 }
 ```
 
@@ -157,7 +157,7 @@ O `<HydrationBoundary>` pode ficar por rota ou na raiz da app.
 
 > "**This ensures that data is not shared between different users and requests**."
 
-Um `QueryClient` no escopo de módulo em código de servidor é um cache compartilhado entre usuários — o dado do usuário A servido ao usuário B. É bug de segurança, não de performance. No cliente a regra irmã é `TSQ-BASE-01`: criar em `useState( => new QueryClient)`, nunca no corpo do render.
+Um `QueryClient` no escopo de módulo em código de servidor é um cache compartilhado entre usuários — o dado do usuário A servido ao usuário B. É bug de segurança, não de performance. No cliente a regra irmã é `TSQ-BASE-01`: criar em `useState(() => new QueryClient())`, nunca no corpo do render.
 
 **`staleTime` acima de zero:**
 
@@ -169,7 +169,7 @@ Com o default `0`, tudo que o servidor buscou é considerado velho no instante d
 
 > "**Avoid setting `gcTime` to `0`** as it may result in a hydration error"
 
-**Serialização segura.** A fonte alerta que bibliotecas de serialização precisam prevenir XSS, e desaconselha `JSON.stringify` cru para injetar o estado desidratado no HTML.
+**Serialização segura.** A fonte alerta que bibliotecas de serialização precisam prevenir XSS, e desaconselha `JSON.stringify()` cru para injetar o estado desidratado no HTML.
 
 | ID | Regra |
 | --- | --- |
@@ -192,7 +192,7 @@ A configuração do comportamento default de desidratação:
 
 ```tsx
 shouldDehydrateQuery: (query) =>
- defaultShouldDehydrateQuery(query) || query.state.status === 'pending'
+  defaultShouldDehydrateQuery(query) || query.state.status === 'pending'
 ```
 
 ### Server Components e Server Actions
@@ -222,18 +222,18 @@ Ele continua rotulado como **experimental** pela própria documentação. Vale c
 
 ```tsx
 useQuery({
- queryKey: ['todos'],
- queryFn: async ({ signal }) => {
- const res = await fetch('/todos', { signal })
- if (!res.ok) throw new Error(`status ${res.status}`)
- return todosSchema.parse(await res.json)
- },
+  queryKey: ['todos'],
+  queryFn: async ({ signal }) => {
+    const res = await fetch('/todos', { signal })
+    if (!res.ok) throw new Error(`status ${res.status}`)
+    return todosSchema.parse(await res.json())
+  },
 })
 
 // axios (v0.22.0+)
 useQuery({
- queryKey: ['todos'],
- queryFn: ({ signal }) => axios.get('/todos', { signal }),
+  queryKey: ['todos'],
+  queryFn: ({ signal }) => axios.get('/todos', { signal }),
 })
 ```
 
@@ -249,7 +249,7 @@ Cancelamento não é erro. A query volta ao que era antes, sem `status: 'error'`
 
 `queryClient.cancelQueries({ queryKey: ['todos'] })` cancela manualmente, *"and revert it back to its previous state"*. É exatamente o primeiro passo do update otimista (`TSQ-MUT-10`).
 
-Não repassar o `signal` não quebra nada visível — só faz a requisição obsoleta seguir viajando, consumindo conexão e, em listas com busca por digitação, mantendo N requisições em voo por um resultado que ninguém vai ver. Ver.
+Não repassar o `signal` não quebra nada visível — só faz a requisição obsoleta seguir viajando, consumindo conexão e, em listas com busca por digitação, mantendo N requisições em voo por um resultado que ninguém vai ver..
 
 | ID | Regra |
 | --- | --- |
@@ -288,26 +288,26 @@ O default `online` também explica um caso confuso: `queryFn` que lê de storage
 ```tsx
 // ERRADO — QueryClient de módulo em código de servidor:
 // o cache é compartilhado entre requisições e entre usuários
-const queryClient = new QueryClient
-export async function loader {
- await queryClient.prefetchQuery(meOptions)
- return { dehydratedState: dehydrate(queryClient) }
+const queryClient = new QueryClient()
+export async function loader() {
+  await queryClient.prefetchQuery(meOptions())
+  return { dehydratedState: dehydrate(queryClient) }
 }
 
 // CERTO — um por requisição
-export async function loader {
- const queryClient = new QueryClient
- await queryClient.prefetchQuery(meOptions)
- return { dehydratedState: dehydrate(queryClient) }
+export async function loader() {
+  const queryClient = new QueryClient()
+  await queryClient.prefetchQuery(meOptions())
+  return { dehydratedState: dehydrate(queryClient) }
 }
 ```
 
 ```tsx
 // ERRADO — suspense query com condição: enabled não existe aqui
-const { data } = useSuspenseQuery({...userOptions(id), enabled: !!id })
+const { data } = useSuspenseQuery({ ...userOptions(id), enabled: !!id })
 
 // CERTO — condicional volta a ser useQuery
-const { data } = useQuery({...userOptions(id), enabled: !!id })
+const { data } = useQuery({ ...userOptions(id), enabled: !!id })
 ```
 
 | Antipadrão | Por que falha | Correção |
@@ -365,4 +365,4 @@ Verificadas em **2026-08-14**:
 - **A regra do `QueryClient` por requisição está no texto como prevenção de vazamento entre usuários**, não como detalhe de performance: *"This ensures that data is not shared between different users and requests"*.
 - **`initialData` nunca sobrescreve dado existente, mesmo sendo mais fresco** — o que desqualifica a abordagem para SSR em telas revisitadas.
 - **O default de `throwOnError` em suspense é uma função**, `(error, query) => typeof query.state.data === 'undefined'`: falha de refetch com dado em cache não chega ao boundary e não aparece em lugar nenhum.
-- **A fonte alerta para XSS na serialização do estado desidratado** e desaconselha `JSON.stringify` cru — ponto de segurança que não estava registrado.
+- **A fonte alerta para XSS na serialização do estado desidratado** e desaconselha `JSON.stringify()` cru — ponto de segurança que não estava registrado.

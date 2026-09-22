@@ -52,9 +52,9 @@ gerado-em: 2026-09-22
 | `TSR-NAV-07` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | 4. Preload: performance percebida tem preço |
 | `TSR-NAV-08` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | 4. Preload: performance percebida tem preço |
 | `TSR-NAV-09` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | 5. Navegação imperativa |
-| `TSR-NAV-10` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | 6. `redirect` em `beforeLoad` e `loader` |
-| `TSR-NAV-11` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | 6. `redirect` em `beforeLoad` e `loader` |
-| `TSR-NAV-12` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | 6. `redirect` em `beforeLoad` e `loader` |
+| `TSR-NAV-10` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | 6. `redirect()` em `beforeLoad` e `loader` |
+| `TSR-NAV-11` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | 6. `redirect()` em `beforeLoad` e `loader` |
+| `TSR-NAV-12` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | 6. `redirect()` em `beforeLoad` e `loader` |
 | `TSR-NAV-13` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | 7. Ler o estado do roteador |
 | `TSR-NAV-14` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | 7. Ler o estado do roteador |
 | `TSR-NAV-15` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | 8. Bloqueio de navegação |

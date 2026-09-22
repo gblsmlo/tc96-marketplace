@@ -2,10 +2,10 @@
 titulo: React - Rules of React
 Link: https://react.dev/reference/rules
 tags:
- - react
- - rules
- - reference
- - agent-context
+  - react
+  - rules
+  - reference
+  - agent-context
 source: "Documentação oficial do React — react.dev/reference/rules"
 verificado-em: 2026-08-14
 ---
@@ -37,22 +37,22 @@ Fonte: [Components and Hooks must be pure](https://react.dev/reference/rules/com
 
 > "React components are assumed to always return the same output with respect to their inputs – props, state, and context."
 
-As mesmas entradas produzem a mesma saída. Isso exclui do render: `Date.now`, `Math.random`, leitura de `window` sem guarda, contadores externos, `fetch`.
+As mesmas entradas produzem a mesma saída. Isso exclui do render: `Date.now()`, `Math.random()`, leitura de `window` sem guarda, contadores externos, `fetch`.
 
 ```tsx
 // ERRADO — saída muda a cada render sem que nada tenha mudado
-function Clock {
- return <span>{new Date.toLocaleTimeString}</span>
+function Clock() {
+  return <span>{new Date().toLocaleTimeString()}</span>
 }
 
 // CERTO — o tempo é estado, atualizado por sincronização externa
-function Clock {
- const [now, setNow] = useState( => new Date)
- useEffect( => {
- const id = setInterval( => setNow(new Date), 1000)
- return => clearInterval(id)
- }, [])
- return <span>{now.toLocaleTimeString}</span>
+function Clock() {
+  const [now, setNow] = useState(() => new Date())
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000)
+    return () => clearInterval(id)
+  }, [])
+  return <span>{now.toLocaleTimeString()}</span>
 }
 ```
 
@@ -74,16 +74,16 @@ Onde eles pertencem, em ordem de preferência:
 ```tsx
 // ERRADO — escrita durante o render
 function Cart({ items }: { items: Item[] }) {
- localStorage.setItem('count', String(items.length))
- return <span>{items.length}</span>
+  localStorage.setItem('count', String(items.length))
+  return <span>{items.length}</span>
 }
 
 // CERTO — sincronização é Effect
 function Cart({ items }: { items: Item[] }) {
- useEffect( => {
- localStorage.setItem('count', String(items.length))
- }, [items.length])
- return <span>{items.length}</span>
+  useEffect(() => {
+    localStorage.setItem('count', String(items.length))
+  }, [items.length])
+  return <span>{items.length}</span>
 }
 ```
 
@@ -130,7 +130,7 @@ const element = <Row item={item} />
 item.selected = true
 
 // CERTO — mutação antes de o JSX existir, ou melhor: novo objeto
-const next = {...item, selected: true }
+const next = { ...item, selected: true }
 const element = <Row item={next} />
 ```
 
@@ -140,9 +140,9 @@ Mutação **local** — de um objeto criado dentro do próprio render e ainda n�
 
 ```tsx
 function List({ items }: { items: Item[] }) {
- const rows = [] // criado aqui, ninguém mais vê
- for (const item of items) rows.push(<Row key={item.id} item={item} />)
- return <ul>{rows}</ul>
+  const rows = []                 // criado aqui, ninguém mais vê
+  for (const item of items) rows.push(<Row key={item.id} item={item} />)
+  return <ul>{rows}</ul>
 }
 ```
 
@@ -159,13 +159,13 @@ Fonte: [React calls Components and Hooks](https://react.dev/reference/rules/reac
 ```tsx
 // ERRADO — vira parte do render do pai: sem estado próprio,
 // sem Hooks próprios, sem posição na árvore, sem reconciliação.
-function Page {
- return <div>{Header({ title: 'Perfil' })}</div>
+function Page() {
+  return <div>{Header({ title: 'Perfil' })}</div>
 }
 
 // CERTO
-function Page {
- return <div><Header title="Perfil" /></div>
+function Page() {
+  return <div><Header title="Perfil" /></div>
 }
 ```
 
@@ -177,15 +177,15 @@ Chamar diretamente não é "um atalho equivalente": os Hooks do componente chama
 
 ```tsx
 // ERRADO — Hook como argumento, chamado dinamicamente
-function useData(hook: => Data) {
- return hook
+function useData(hook: () => Data) {
+  return hook()
 }
 
 // CERTO — chame Hooks diretamente e componha o resultado
-function useData {
- const a = useA
- const b = useB
- return { a, b }
+function useData() {
+  const a = useA()
+  const b = useB()
+  return { a, b }
 }
 ```
 
@@ -220,7 +220,7 @@ Válidos: componentes e Hooks customizados. Inválidos: funções utilitárias, 
 Ordem de verificação ao revisar um componente. As primeiras falham mais.
 
 - [ ] Algum Hook depois de um early return, dentro de `if`, loop ou callback? → `REACT-HOOK-01`
-- [ ] `fetch`, `localStorage`, `Date.now`, `Math.random` ou log no corpo do render? → `REACT-PURE-01` / `REACT-PURE-02`
+- [ ] `fetch`, `localStorage`, `Date.now()`, `Math.random()` ou log no corpo do render? → `REACT-PURE-01` / `REACT-PURE-02`
 - [ ] `.push`, `.sort`, `.splice` ou atribuição direta em props/estado? → `REACT-PURE-03`
 - [ ] `setState(x + 1)` onde deveria ser `setState(c => c + 1)`? → `REACT-STATE-01` (não é mutação: é leitura de snapshot obsoleto)
 - [ ] Componente invocado como `Componente(props)` em vez de `<Componente />`? → `REACT-CALL-01`

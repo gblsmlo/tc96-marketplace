@@ -2,9 +2,9 @@
 titulo: Bun - Testes - Execução e Configuração
 Link: https://bun.com/docs/test
 tags:
- - bun
- - testing
- - agent-context
+  - bun
+  - testing
+  - agent-context
 source: "Documentação oficial — https://bun.com/docs/test (test runner), /discovery, /configuration, /runtime-behavior"
 verificado-em: 2026-08-20
 ---
@@ -21,7 +21,7 @@ Entrada: [Bun - Testes](bun-testes.md) · Base normativa: [Bun - Testes](bun-tes
 
 ## 1. Conceito: o runner é um modo do runtime, não uma ferramenta separada
 
-`bun test` não é um binário nem um pacote: é o mesmo runtime que executa `bun./index.ts`, ligado num modo que descobre arquivos, injeta globais de teste e reporta resultado. Três consequências práticas caem daí, e elas explicam quase toda diferença em relação a Jest e Vitest:
+`bun test` não é um binário nem um pacote: é o mesmo runtime que executa `bun ./index.ts`, ligado num modo que descobre arquivos, injeta globais de teste e reporta resultado. Três consequências práticas caem daí, e elas explicam quase toda diferença em relação a Jest e Vitest:
 
 1. **Não há etapa de transformação para configurar.** TypeScript, JSX, `paths` do `tsconfig.json`, `.env` — tudo que o runtime já resolve, o runner resolve igual. `ts-jest`, `babel-jest`, `@swc/jest` e o bloco `transform` não têm equivalente porque não têm função ([Bun - Runtime e APIs](bun-runtime-e-apis.md) § 1).
 2. **Configuração de teste mora onde mora a do runtime**: `bunfig.toml`, não um `jest.config.js` paralelo. E o que o runner lê é a seção `[test]` — mais as chaves de topo (`define`, `loader`), que valem para qualquer execução.
@@ -70,13 +70,13 @@ pathIgnorePatterns = ["**/fixtures/**", "**/*.e2e.test.ts"]
 Cinco mecanismos independentes, e eles se combinam.
 
 ```bash
-bun test # tudo que a descoberta encontrou
-bun test pedidos api # filtro por SUBSTRING de caminho
-bun test./src/pedidos.test.ts # arquivo específico — o./ é obrigatório
-bun test -t "calcula frete" # filtro por NOME do teste (regex)
-bun test --only # só o que está marcado test.only/describe.only
-bun test --todo # inclui os test.todo na execução
-bun test --changed # só arquivos alcançados pelo que mudou no git
+bun test                              # tudo que a descoberta encontrou
+bun test pedidos api                  # filtro por SUBSTRING de caminho
+bun test ./src/pedidos.test.ts        # arquivo específico — o ./ é obrigatório
+bun test -t "calcula frete"           # filtro por NOME do teste (regex)
+bun test --only                       # só o que está marcado test.only/describe.only
+bun test --todo                       # inclui os test.todo na execução
+bun test --changed                    # só arquivos alcançados pelo que mudou no git
 ```
 
 ### 3.1 Posicional: substring de caminho, não glob
@@ -103,8 +103,8 @@ Consequência de desenho: **o texto do `describe` é endereço**. Renomear um `d
 `bun test --changed` roda apenas os arquivos de teste cujo **grafo de import alcança** um arquivo que o git reporta como modificado. `--changed=main` ou `--changed=HEAD~1` compara contra um branch, tag ou commit em vez do working tree.
 
 ```bash
-bun test --changed --watch # loop de desenvolvimento: só o que seu diff afeta
-bun test --changed=main # pré-commit / job rápido de PR
+bun test --changed --watch     # loop de desenvolvimento: só o que seu diff afeta
+bun test --changed=main        # pré-commit / job rápido de PR
 ```
 
 É o filtro que substitui convenção de nome e configuração manual: editar um utilitário profundo e rodar `bun test --changed` traz os testes que dependem dele transitivamente, sem você saber quais são.
@@ -116,17 +116,17 @@ bun test --changed=main # pré-commit / job rápido de PR
 ## 4. Modos de execução e flags de comportamento
 
 ```bash
-bun test --watch # reexecuta ao salvar
-bun test --hot # preserva estado entre execuções, mais agressivo
-bun test --timeout 10000 # por teste; default 5000
-bun test --bail # para na primeira falha (default 1)
-bun test --bail=5 # para na quinta
-bun test --retry 2 # repete o que falhou; { retry: N } por teste sobrepõe
-bun test --rerun-each 10 # roda cada arquivo 10 vezes — caça flaky
-bun test --randomize # ordem aleatória
-bun test --randomize --seed 42 # reproduz a ordem que revelou a falha
-bun test --inspect # abre o inspector; --inspect-brk pausa no início
-bun test --smol # reduz uso de memória
+bun test --watch                 # reexecuta ao salvar
+bun test --hot                   # preserva estado entre execuções, mais agressivo
+bun test --timeout 10000         # por teste; default 5000
+bun test --bail                  # para na primeira falha (default 1)
+bun test --bail=5                # para na quinta
+bun test --retry 2               # repete o que falhou; { retry: N } por teste sobrepõe
+bun test --rerun-each 10         # roda cada arquivo 10 vezes — caça flaky
+bun test --randomize             # ordem aleatória
+bun test --randomize --seed 42   # reproduz a ordem que revelou a falha
+bun test --inspect               # abre o inspector; --inspect-brk pausa no início
+bun test --smol                  # reduz uso de memória
 ```
 
 Calibração de uso — a diferença entre a flag existir e ela servir para algo:
@@ -207,8 +207,8 @@ O runner muda o ambiente do processo antes de rodar qualquer teste. Duas variáv
 | `TZ` | `Etc/UTC` | a menos que `TZ` já esteja definida — mantém datas determinísticas entre máquinas |
 
 ```bash
-NODE_ENV=development bun test # override explícito
-TZ=America/Sao_Paulo bun test # testar o comportamento em fuso local
+NODE_ENV=development bun test        # override explícito
+TZ=America/Sao_Paulo bun test        # testar o comportamento em fuso local
 ```
 
 `TZ=Etc/UTC` é uma decisão de determinismo com efeito colateral: um teste que formata data passa na sua máquina e no CI, e **falharia** num ambiente que define `TZ`. Quem asserta sobre data formatada deve fixar o fuso explicitamente em vez de herdar o default (`BUN-TEST-21`, em [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 5).
@@ -244,13 +244,13 @@ Handlers próprios são possíveis (`process.on("uncaughtException")`, `process.
 
 ```json
 {
- "scripts": {
- "test": "bun test",
- "test:watch": "bun test --watch",
- "test:changed": "bun test --changed --watch",
- "test:ci": "bun test --parallel --coverage --reporter=junit --reporter-outfile=./junit.xml",
- "typecheck": "tsc --noEmit"
- }
+  "scripts": {
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "test:changed": "bun test --changed --watch",
+    "test:ci": "bun test --parallel --coverage --reporter=junit --reporter-outfile=./junit.xml",
+    "typecheck": "tsc --noEmit"
+  }
 }
 ```
 
@@ -273,7 +273,7 @@ Quatro decisões embutidas aí, todas defensáveis por escrito:
 | --- | --- | --- |
 | `pedidos.tests.ts`, `testePedidos.ts`, `pedidos-test.ts` | não casa nenhum padrão de descoberta; nunca roda, e nada avisa | `pedidos.test.ts` — `BUN-TEST-01` |
 | `bun test "src/**/*.test.ts"` | glob não é suportado; o argumento vira substring de caminho | caminho com `./`, ou `root`/`pathIgnorePatterns` — `BUN-TEST-13` |
-| `bun test pedidos.test.ts` (sem `./`) | é filtro por substring; casa qualquer caminho que contenha o texto | `bun test./src/pedidos.test.ts` — `BUN-TEST-13` |
+| `bun test pedidos.test.ts` (sem `./`) | é filtro por substring; casa qualquer caminho que contenha o texto | `bun test ./src/pedidos.test.ts` — `BUN-TEST-13` |
 | `seed = 12345` no `bunfig.toml` sem `randomize = true` | não tem efeito, e nada avisa; a ordem continua sendo a de descoberta | declarar as duas chaves — `BUN-TEST-14` |
 | `--retry 3` no comando de teste do CI | esconde flakiness real e mascara o teste que estava certo em falhar | `{ retry: N }` no teste que tem motivo declarado |
 | `--changed` como portão de merge | o grafo de import não vê env, migração, fixture nem ordem | `--changed` no job de PR; suíte inteira no merge — `BUN-TEST-15` |

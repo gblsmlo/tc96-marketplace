@@ -2,12 +2,12 @@
 titulo: Claude Code - Sessão e Verificação
 Link: https://code.claude.com/docs/pt/best-practices
 tags:
- - claude-code
- - ia
- - verificacao
- - prompting
- - plan-mode
- - agent-context
+  - claude-code
+  - ia
+  - verificacao
+  - prompting
+  - plan-mode
+  - agent-context
 source: "Documentação oficial do Claude Code — Best practices, Choose a permission mode, Keep Claude working toward a goal (/goal), Checkpointing, Manage sessions, Interactive mode, Skills (run and verify your app), Automate actions with hooks"
 verificado-em: 2026-08-21
 ---

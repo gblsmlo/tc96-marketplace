@@ -2,10 +2,10 @@
 titulo: React - Efeitos e Sincronização
 Link: https://react.dev/reference/react/useEffect
 tags:
- - react
- - effects
- - hooks
- - agent-context
+  - react
+  - effects
+  - hooks
+  - agent-context
 source: "Documentação oficial do React — useEffect, useLayoutEffect, useInsertionEffect, useEffectEvent"
 verificado-em: 2026-08-14
 ---
@@ -36,10 +36,10 @@ Se a segunda pergunta não tem resposta, não é um Effect.
 Um Effect não tem "montar" e "desmontar" — tem **começar a sincronizar** e **parar de sincronizar**. O cleanup não é opcional nem é só para desmontagem: ele roda antes de cada re-execução também.
 
 ```tsx
-useEffect( => {
- const connection = createConnection(serverUrl, roomId)
- connection.connect
- return => connection.disconnect // desfaz exatamente o que o setup fez
+useEffect(() => {
+  const connection = createConnection(serverUrl, roomId)
+  connection.connect()
+  return () => connection.disconnect()   // desfaz exatamente o que o setup fez
 }, [serverUrl, roomId])
 ```
 
@@ -54,16 +54,16 @@ Ao trocar `roomId`: o React desconecta da sala antiga e conecta na nova. O mesmo
 ```tsx
 // ERRADO — a função async retorna uma Promise, e o React interpreta
 // esse retorno como se fosse a função de cleanup
-useEffect(async => {
- const data = await carregar
- setData(data)
+useEffect(async () => {
+  const data = await carregar()
+  setData(data)
 }, [])
 
 // CERTO — async por dentro, cleanup de verdade por fora
-useEffect( => {
- let active = true
- carregar.then((data) => { if (active) setData(data) })
- return => { active = false }
+useEffect(() => {
+  let active = true
+  carregar().then((data) => { if (active) setData(data) })
+  return () => { active = false }
 }, [])
 ```
 
@@ -103,7 +103,7 @@ Não apague da lista. Faça o valor deixar de ser lido:
 | Situação | Correção |
 | --- | --- |
 | Objeto/função recriado a cada render | mova para fora do componente, ou para dentro do Effect |
-| Só precisa do valor anterior do estado | forma updater: `setX(x =>...)` |
+| Só precisa do valor anterior do estado | forma updater: `setX(x => ...)` |
 | Valor lido mas **não deve** re-sincronizar | `useEffectEvent` (§ 4) |
 | É estado derivado | não é Effect — calcule no render |
 
@@ -115,8 +115,8 @@ A tabela que mais corrige código gerado.
 
 | Intenção | ❌ Effect | ✅ Correto |
 | --- | --- | --- |
-| Derivar valor de props/estado | `useEffect( => setB(f(a)), [a])` | `const b = f(a)` no render |
-| Cálculo caro | Effect + estado | `useMemo( => f(a), [a])` |
+| Derivar valor de props/estado | `useEffect(() => setB(f(a)), [a])` | `const b = f(a)` no render |
+| Cálculo caro | Effect + estado | `useMemo(() => f(a), [a])` |
 | Resetar estado ao trocar de item | Effect comparando props | `key` no componente |
 | Ajustar estado quando prop muda | Effect | calcular no render, ou repensar a posse |
 | Responder a um clique/submit | Effect observando estado | event handler |
@@ -132,40 +132,40 @@ A tabela que mais corrige código gerado.
 
 ```tsx
 // ERRADO — sem cancelamento, sem cache, sem dedupe, com race condition
-useEffect( => {
- fetch(`/api/users/${id}`)
-.then((r) => r.json)
-.then(setUser)
+useEffect(() => {
+  fetch(`/api/users/${id}`)
+    .then((r) => r.json())
+    .then(setUser)
 }, [id])
 ```
 
 Se `id` muda rápido, a resposta da primeira requisição pode chegar **depois** da segunda e sobrescrever o dado correto. O mínimo aceitável é ignorar respostas obsoletas:
 
 ```tsx
-useEffect( => {
- let active = true
- fetch(`/api/users/${id}`)
-.then((r) => r.json)
-.then((data) => { if (active) setUser(data) })
- return => { active = false }
+useEffect(() => {
+  let active = true
+  fetch(`/api/users/${id}`)
+    .then((r) => r.json())
+    .then((data) => { if (active) setUser(data) })
+  return () => { active = false }
 }, [id])
 ```
 
 Com `AbortController`, a requisição obsoleta é de fato cancelada, não apenas ignorada:
 
 ```tsx
-useEffect( => {
- const controller = new AbortController
+useEffect(() => {
+  const controller = new AbortController()
 
- fetch(`/api/users/${id}`, { signal: controller.signal })
-.then((r) => r.json)
-.then(setUser)
-.catch((err) => {
- if (err.name === 'AbortError') return // cancelamento não é erro
- setError(err)
- })
+  fetch(`/api/users/${id}`, { signal: controller.signal })
+    .then((r) => r.json())
+    .then(setUser)
+    .catch((err) => {
+      if (err.name === 'AbortError') return   // cancelamento não é erro
+      setError(err)
+    })
 
- return => controller.abort
+  return () => controller.abort()
 }, [id])
 ```
 
@@ -195,16 +195,16 @@ Resolve um conflito específico: o Effect precisa **ler** um valor, mas mudança
 
 ```tsx
 function ChatRoom({ roomId, theme }: { roomId: string; theme: Theme }) {
- const onConnected = useEffectEvent( => {
- showNotification('Conectado!', theme) // lê theme sempre atualizado
- })
+  const onConnected = useEffectEvent(() => {
+    showNotification('Conectado!', theme)   // lê theme sempre atualizado
+  })
 
- useEffect( => {
- const connection = createConnection(roomId)
- connection.on('connected', => onConnected)
- connection.connect
- return => connection.disconnect
- }, [roomId]) // theme fora da lista, corretamente
+  useEffect(() => {
+    const connection = createConnection(roomId)
+    connection.on('connected', () => onConnected())
+    connection.connect()
+    return () => connection.disconnect()
+  }, [roomId])   // theme fora da lista, corretamente
 }
 ```
 
@@ -242,9 +242,9 @@ O `eslint-plugin-react-hooks` faz cumprir essas restrições.
 
 ```tsx
 // Caso legítimo de useLayoutEffect: medir para posicionar sem flicker
-useLayoutEffect( => {
- const { height } = ref.current!.getBoundingClientRect
- setTooltipHeight(height)
+useLayoutEffect(() => {
+  const { height } = ref.current!.getBoundingClientRect()
+  setTooltipHeight(height)
 }, [])
 ```
 

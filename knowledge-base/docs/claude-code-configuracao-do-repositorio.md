@@ -2,14 +2,14 @@
 titulo: Claude Code - Configuração do Repositório
 Link: https://code.claude.com/docs/pt/features-overview
 tags:
- - claude-code
- - ia
- - configuracao
- - skills
- - hooks
- - mcp
- - monorepo
- - agent-context
+  - claude-code
+  - ia
+  - configuracao
+  - skills
+  - hooks
+  - mcp
+  - monorepo
+  - agent-context
 source: "Documentação oficial do Claude Code — Extend Claude Code, How Claude remembers your project (memory), Extend Claude with skills, Automate actions with hooks + Hooks reference, Create custom subagents, Connect Claude Code to tools via MCP, Set up Claude Code in a monorepo or large codebase"
 verificado-em: 2026-08-21
 ---
@@ -116,12 +116,12 @@ Para projeto maior, instruções em múltiplos arquivos — modular e mais fáci
 
 ```text
 seu-projeto/
-├──.claude/
-│ ├── CLAUDE.md
-│ └── rules/
-│ ├── code-style.md
-│ ├── testing.md
-│ └── security.md
+├── .claude/
+│   ├── CLAUDE.md
+│   └── rules/
+│       ├── code-style.md
+│       ├── testing.md
+│       └── security.md
 ```
 
 Todos os `.md` são descobertos recursivamente. **Rule sem `paths:` carrega no launch com a mesma prioridade do `.claude/CLAUDE.md`** — ou seja, não economiza nada em relação a estar no CLAUDE.md; a vantagem é organizacional.
@@ -131,7 +131,7 @@ Todos os `.md` são descobertos recursivamente. **Rule sem `paths:` carrega no l
 ```markdown
 ---
 paths:
- - "src/api/**/*.ts"
+  - "src/api/**/*.ts"
 ---
 
 # Regras de API
@@ -156,7 +156,7 @@ Ela dispara **quando o Claude lê arquivo que casa o padrão** — não em todo 
 **Symlink funciona** — dá para manter um conjunto compartilhado e linkar em vários projetos:
 
 ```bash
-ln -s ~/shared-claude-rules.claude/rules/shared
+ln -s ~/shared-claude-rules .claude/rules/shared
 ```
 
 > **O trade-off que a § 2 de [Claude Code - Contexto e Cache](claude-code-contexto-e-cache.md) detalha:** rule com `paths:` economiza contexto e **não sobrevive à compactação** — ela entra no histórico, e o histórico é o que a compactação resume. Se a regra é crítica, tire o `paths:` ou mova para o CLAUDE.md da raiz (`CC-CTX-04`).
@@ -304,19 +304,19 @@ Tipos de hook: **command** (script), **prompt-based**, e **HTTP**. Existe també
 
 ```json
 {
- "hooks": {
- "SessionStart": [
- {
- "matcher": "compact",
- "hooks": [
- {
- "type": "command",
- "command": "echo 'Lembrete: use Bun, não npm. Rode bun test antes de commitar. Sprint atual: refactor de auth.'"
- }
- ]
- }
- ]
- }
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Lembrete: use Bun, não npm. Rode bun test antes de commitar. Sprint atual: refactor de auth.'"
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
 

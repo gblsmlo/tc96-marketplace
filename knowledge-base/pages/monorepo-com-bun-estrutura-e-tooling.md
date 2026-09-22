@@ -1,13 +1,13 @@
 ---
 titulo: Monorepo com Bun - estrutura e tooling
 aliases:
- - Monorepo com Bun
- - Bun workspaces
+  - Monorepo com Bun
+  - Bun workspaces
 tags:
- - architecture
- - bun
- - monorepo
- - agent-context
+  - architecture
+  - bun
+  - monorepo
+  - agent-context
 verificado-em: 2026-08-16
 ---
 # Monorepo com Bun — estrutura e tooling
@@ -58,16 +58,16 @@ idênticos**. Não é previsão de problema — é fatura vencida.
 
 ```
 raiz/
-├── package.json workspaces + scripts orquestradores + overrides
-├── biome.json lint/format, com os overrides de fronteira
-├── tsconfig.json só o que a raiz precisa (scripts/)
+├── package.json              workspaces + scripts orquestradores + overrides
+├── biome.json                lint/format, com os overrides de fronteira
+├── tsconfig.json             só o que a raiz precisa (scripts/)
 ├── apps/
-│ ├── server/ deployável — BFF
-│ ├── web/ deployável — SPA
-│ └── storybook/ deployável — folha do grafo
+│   ├── server/               deployável — BFF
+│   ├── web/                  deployável — SPA
+│   └── storybook/            deployável — folha do grafo
 └── packages/
- ├── ui/ consumido, nunca deploya
- └── config/ tsconfig e biome compartilhados
+    ├── ui/                   consumido, nunca deploya
+    └── config/               tsconfig e biome compartilhados
 ```
 
 O critério que separa as duas pastas não é tamanho nem importância: **`apps/` é o que sobe;
@@ -77,20 +77,20 @@ ninguém importa dele.
 ### A direção de dependência, e a exceção real
 
 ```
-apps/storybook → apps/web → packages/ui → packages/config
- ⋮
- └ ─ ─ ─(só tipo)─ ─ ─→ apps/server
+apps/storybook  →  apps/web  →  packages/ui  →  packages/config
+                       ⋮
+                       └ ─ ─ ─(só tipo)─ ─ ─→  apps/server
 ```
 
 Três invariantes:
 
 1. **`apps` dependem de `packages`, nunca o contrário.** Um primitivo de `packages/ui` que precise
- de algo da aplicação recebe por prop ou slot.
+   de algo da aplicação recebe por prop ou slot.
 2. **`apps/web` depende de `apps/server` apenas por tipo.** App dependendo de app é incomum, mas aqui
- é o desenho: `import type { App } from '@escopo/server'`, apagado no build por
- `verbatimModuleSyntax`. Acoplamento total em compilação, **zero em runtime**.
+   é o desenho: `import type { App } from '@escopo/server'`, apagado no build por
+   `verbatimModuleSyntax`. Acoplamento total em compilação, **zero em runtime**.
 3. **Ninguém depende do Storybook.** Ele é folha, e é isso que permite tirá-lo do build de produção
- sem tocar em outro pacote.
+   sem tocar em outro pacote.
 
 ---
 
@@ -103,11 +103,11 @@ condena `shared/`.
 
 ```
 apps/server/src/features/<capacidade>/
-├── <capacidade>.routes.ts rotas + response por status
-├── <capacidade>.schema.ts a declaração canônica (validação, tipo, OpenAPI, contrato)
-├── <capacidade>.mapper.ts DTO do upstream → domínio
-├── <capacidade>.routes.test.ts colocalizado
-└── index.ts barrel = superfície pública da fatia
+├── <capacidade>.routes.ts        rotas + response por status
+├── <capacidade>.schema.ts        a declaração canônica (validação, tipo, OpenAPI, contrato)
+├── <capacidade>.mapper.ts        DTO do upstream → domínio
+├── <capacidade>.routes.test.ts   colocalizado
+└── index.ts                      barrel = superfície pública da fatia
 ```
 
 Prefixo repetido no nome (`agentes.routes.ts` e não `routes.ts`) porque o arquivo é encontrado por
@@ -117,13 +117,13 @@ busca, não por navegação de pasta.
 
 ```
 apps/web/src/features/<capacidade>/
-├── routes/ as telas — só montagem, ver abaixo
-├── api/ queryOptions, mutations, chaves, e os tipos DERIVADOS do contrato
+├── routes/         as telas — só montagem, ver abaixo
+├── api/            queryOptions, mutations, chaves, e os tipos DERIVADOS do contrato
 ├── components/
 ├── hooks/
-├── schemas/ o que é schema de verdade: search params, formulários
+├── schemas/        o que é schema de verdade: search params, formulários
 ├── utils/
-└── index.ts barrel = contrato da feature
+└── index.ts        barrel = contrato da feature
 ```
 
 **`routes/` não é `http/`.** Ali mora montagem de tela — `createFileRoute`, `loader`, `component`,
@@ -178,21 +178,21 @@ Refaça o teste antes de aceitar isso como permanente — é uma medição com d
 
 ```jsonc
 {
- "scripts": {
- "typecheck": "tsc --noEmit -p tsconfig.json && bun run --filter '@escopo/*' typecheck",
- "test": "bun run --filter '@escopo/*' test",
- "build": "bun run --filter '@escopo/web' build",
- "ci": "bun run lint:ci && bun run typecheck && bun run test && bun run check:resolucao"
- }
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json && bun run --filter '@escopo/*' typecheck",
+    "test":      "bun run --filter '@escopo/*' test",
+    "build":     "bun run --filter '@escopo/web' build",
+    "ci":        "bun run lint:ci && bun run typecheck && bun run test && bun run check:resolucao"
+  }
 }
 ```
 
 Três coisas verificadas aqui:
 
 - **`--filter` propaga falha.** Confirmado plantando um teste quebrado: o script sai com código 1.
- Não assuma — plante e confirme;
+  Não assuma — plante e confirme;
 - **Bun não suporta filtro negado.** `--filter '!@escopo/storybook'` roda o pacote mesmo assim. Para
- excluir, use filtro positivo;
+  excluir, use filtro positivo;
 - **`--filter '*'` casa o pacote raiz** e recursiona. Use o escopo (`'@escopo/*'`).
 
 ---
@@ -231,8 +231,8 @@ Duas guardas, e as duas são necessárias:
 E um passo de CI que falha se aparecer mais de uma resolução:
 
 ```ts
-const saida = await new Response(Bun.spawn(['bun', 'pm', 'why', pacote], { stdout: 'pipe' }).stdout).text
-const resolucoes = saida.split('\n').filter((l) => new RegExp(`^${pacote}@`).test(l.trim) && !l.startsWith(' '))
+const saida = await new Response(Bun.spawn(['bun', 'pm', 'why', pacote], { stdout: 'pipe' }).stdout).text()
+const resolucoes = saida.split('\n').filter((l) => new RegExp(`^${pacote}@`).test(l.trim()) && !l.startsWith(' '))
 if (resolucoes.length > 1) process.exit(1)
 ```
 
@@ -335,20 +335,18 @@ Um CI que só roda lint, typecheck e teste **não verifica um monorepo**. Faltam
 
 ### A sonda de fan-in lateral (`MONO-12`)
 
-**O executável não mora aqui.** Ele é a sonda **S14** do agente `monorepo-auditor`, que mede o fan-in
-de packages e de features numa passada só — a knowledge-base tem o que se **aprende**, o agente tem o
-que **executa**, e copiar o código para cá criaria a segunda cópia que a próxima correção esquece.
-
-> Até 2026-09-22 esta seção prometia `skills/bun-workspace/scripts/fan-in-lateral.sh`. Esse arquivo
-> nunca existiu, em nenhuma versão do plugin: a sonda foi entregue dentro do `monorepo-auditor`.
+**O executável não mora aqui.** Ele é `skills/bun-workspace/scripts/fan-in-lateral.sh`, no Hermes, e
+é a skill `bun-workspace` que documenta a invocação — este vault tem o que se **aprende**, o repo tem
+o que **executa**, e copiar o código para cá criaria a segunda cópia que a próxima correção esquece.
+Quem audita chega pela sonda S14 do `monorepo-auditor`.
 
 O que ela faz, e o que esperar:
 
 - roda as **duas escalas** — packages, identificados pelo `name` do manifesto, e as features de cada
- `apps/*/src/features` que encontrar;
+  `apps/*/src/features` que encontrar;
 - **lista a aresta antes de contá-la**, porque o número sozinho não diz o que consertar;
 - exclui `*boundar*`: o teste de fronteira carrega o import proibido **como string** para afirmá-lo,
- e contá-lo é reportar a guarda como violação;
+  e contá-lo é reportar a guarda como violação;
 - **sai com código 1** quando algum alvo chega a três — é isso que a faz passo de CI, e não leitura.
 
 Contagem **3 ou mais** é violação de `MONO-12`; 1 e 2 são inventário, não achado.
@@ -375,25 +373,25 @@ Duas disciplinas que decorrem disso, e valem além do monorepo:
 
 - **guarda que não falha não é guarda.** Sabote a guarda e confirme que o CI fica vermelho;
 - **número medido tem data de validade.** Ao citar, remeça. Um número correto quando medido vira
- falso quando o sistema ganha um consumidor a mais.
+  falso quando o sistema ganha um consumidor a mais.
 
 ---
 
 ## 8. Contrato de skill
 
 ```
-SEMPRE: § 1 (as duas perguntas) + § 6 (regras MONO-*)
+SEMPRE:   § 1 (as duas perguntas) + § 6 (regras MONO-*)
 
-AO CRIAR O WORKSPACE: § 2 (árvore) + § 5.1, § 5.2, § 5.6
-AO EXTRAIR UM PACOTE: § 1 + MONO-01 + § 3 (nomes)
-AO CONFIGURAR O CI: § 7 + MONO-04, MONO-07, MONO-11, MONO-12
-AO MIGRAR APP EXISTENTE: § 5 inteira + MONO-10
-AO AUDITAR: § 7 + MONO-11, MONO-12
+AO CRIAR O WORKSPACE:      § 2 (árvore) + § 5.1, § 5.2, § 5.6
+AO EXTRAIR UM PACOTE:      § 1 + MONO-01 + § 3 (nomes)
+AO CONFIGURAR O CI:        § 7 + MONO-04, MONO-07, MONO-11, MONO-12
+AO MIGRAR APP EXISTENTE:   § 5 inteira + MONO-10
+AO AUDITAR:                § 7 + MONO-11, MONO-12
 
-TAMBÉM: [Feature-Based Architecture](feature-based-architecture.md) para dentro de cada app
- [Fronteira do BFF - forma, jornada e regra](fronteira-do-bff-forma-jornada-e-regra.md) para o corte servidor/cliente
+TAMBÉM:  [Feature-Based Architecture](feature-based-architecture.md) para dentro de cada app
+         [Fronteira do BFF - forma, jornada e regra](fronteira-do-bff-forma-jornada-e-regra.md) para o corte servidor/cliente
 
-NUNCA: criar pacote por simetria, sem duplicação que o justifique
+NUNCA:   criar pacote por simetria, sem duplicação que o justifique
 ```
 
 ### Invariantes
@@ -404,9 +402,9 @@ NUNCA: criar pacote por simetria, sem duplicação que o justifique
 4. **Documento não é guarda** (`MONO-11`). Se está escrito e não roda, não existe.
 5. **Um passo por vez, verde antes do seguinte** (`MONO-10`).
 6. **A aresta lateral é permitida e contada** (`MONO-12`). Quem decide que aresta existe é esta
- nota; `REACT-ARCH-05` só decide como atravessá-la. Ao terceiro consumidor a permissão acaba.
+   nota; `REACT-ARCH-05` só decide como atravessá-la. Ao terceiro consumidor a permissão acaba.
 7. **Verificar antes de afirmar.** Toda afirmação sobre comportamento de ferramenta nesta nota foi
- executada. Se divergir do real, a nota é o bug.
+   executada. Se divergir do real, a nota é o bug.
 
 ---
 
@@ -419,11 +417,10 @@ NUNCA: criar pacote por simetria, sem duplicação que o justifique
 - [Elysia](../docs/elysia.md) · [Elysia - Schema e Eden](../docs/elysia-schema-e-eden.md) — a degradação para `any` e suas causas
 - [TanStack Router](../docs/tanstack-router.md) — rotas virtuais, quando a convenção de arquivo colide com a feature
 - [Architecture in React](architecture-in-react.md) — o roteador das decisões arquiteturais
--
 - `Monorepo Architecture - The Ultimate Guide for 2025` — fonte externa (blog do FSD): o mesmo
- problema resolvido com pnpm, Turborepo e Nx. Confirma fronteira, direção e API pública; diverge em
- tooling, em `paths` do tsconfig e no critério de extração. Acrescenta `affected`, cache remoto,
- `CODEOWNERS` e prune no deploy — nada disso verificado aqui
+  problema resolvido com pnpm, Turborepo e Nx. Confirma fronteira, direção e API pública; diverge em
+  tooling, em `paths` do tsconfig e no critério de extração. Acrescenta `affected`, cache remoto,
+  `CODEOWNERS` e prune no deploy — nada disso verificado aqui
 
 ## Procedência
 

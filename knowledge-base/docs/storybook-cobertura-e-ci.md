@@ -2,11 +2,11 @@
 titulo: Storybook - Cobertura e CI
 Link: https://storybook.js.org/docs/writing-tests/test-coverage
 tags:
- - storybook
- - testing
- - coverage
- - ci
- - agent-context
+  - storybook
+  - testing
+  - coverage
+  - ci
+  - agent-context
 source: "Documentação oficial do Storybook — Test coverage, In CI, Vitest addon"
 verificado-em: 2026-08-21
 ---
@@ -55,14 +55,14 @@ O que o número **de fato** responde é útil e mais estreito: *das stories que 
 Não vem embutido. Um dos dois, explicitamente (`SB-TEST-12`):
 
 ```bash
-npm install --save-dev @vitest/coverage-v8 # v8 é o default
+npm install --save-dev @vitest/coverage-v8        # v8 é o default
 npm install --save-dev @vitest/coverage-istanbul
 ```
 
 ```ts
 // vitest.config.ts
 coverage: {
- provider: 'istanbul', // 'v8' é o default
+  provider: 'istanbul',   // 'v8' é o default
 }
 ```
 
@@ -93,9 +93,9 @@ Isso é decisão da ferramenta, não bug: o widget gerencia o ciclo de vida do r
 
 ```ts
 coverage: {
- watermarks: {
- statements: [50, 80], // [baixo, alto]
- },
+  watermarks: {
+    statements: [50, 80],   // [baixo, alto]
+  },
 }
 ```
 
@@ -121,9 +121,9 @@ O comando é o mesmo do local — é isso que a fonte recomenda:
 
 ```json
 {
- "scripts": {
- "test-storybook": "vitest --project=storybook"
- }
+  "scripts": {
+    "test-storybook": "vitest --project=storybook"
+  }
 }
 ```
 
@@ -137,23 +137,23 @@ name: UI Tests
 on: [push]
 
 jobs:
- test:
- runs-on: ubuntu-latest
- container:
- image: mcr.microsoft.com/playwright:v1.58.2-noble
- steps:
- - uses: actions/checkout@v4
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+    steps:
+      - uses: actions/checkout@v4
 
- - name: Setup Node
- uses: actions/setup-node@v4
- with:
- node-version: 22.12.0
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
 
- - name: Install dependencies
- run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
- - name: Run tests
- run: npm run test-storybook
+      - name: Run tests
+        run: npm run test-storybook
 ```
 
 ### 3.2 Os binários do Playwright
@@ -180,8 +180,8 @@ O caminho é passar a URL por ambiente:
 ```ts
 // vitest.config.ts
 storybookTest({
- configDir: path.join(dirname, '.storybook'),
- storybookUrl: process.env.SB_URL,
+  configDir: path.join(dirname, '.storybook'),
+  storybookUrl: process.env.SB_URL,
 })
 ```
 
@@ -257,7 +257,7 @@ Pior que meta de cobertura comum: aqui o número sobe **escrevendo story**, não
 
 ```yaml
 # ✗ entra em watch mode e o job trava até o timeout
-- run: npm run test-storybook # onde o script é "vitest --project=storybook"
+- run: npm run test-storybook   # onde o script é "vitest --project=storybook"
 ```
 
 Ver § 3.1 — é divergência da própria fonte.

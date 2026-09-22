@@ -2,12 +2,12 @@
 titulo: Playwright - Configuração e Projects
 Link: https://playwright.dev/docs/test-configuration
 tags:
- - playwright
- - testing
- - configuration
- - projects
- - emulation
- - agent-context
+  - playwright
+  - testing
+  - configuration
+  - projects
+  - emulation
+  - agent-context
 source: "Documentação oficial do Playwright — Configuration, Projects, Web server, Emulation, TestConfig/TestOptions"
 verificado-em: 2026-08-20
 ---
@@ -26,33 +26,33 @@ verificado-em: 2026-08-20
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
- // ── andar do RUNNER ──────────────────────────────
- testDir: 'e2e',
- fullyParallel: true,
- forbidOnly: !!process.env.CI,
- retries: process.env.CI ? 2 : 0,
- workers: process.env.CI ? 2 : undefined,
- reporter: process.env.CI ? [['blob'], ['github']] : 'html',
- timeout: 30_000,
- expect: { timeout: 5_000 },
+  // ── andar do RUNNER ──────────────────────────────
+  testDir: 'e2e',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 2 : undefined,
+  reporter: process.env.CI ? [['blob'], ['github']] : 'html',
+  timeout: 30_000,
+  expect: { timeout: 5_000 },
 
- // ── andar da FIXTURE / BROWSER ───────────────────
- use: {
- baseURL: 'http://localhost:3000',
- trace: 'on-first-retry',
- screenshot: 'only-on-failure',
- testIdAttribute: 'data-testid',
- },
+  // ── andar da FIXTURE / BROWSER ───────────────────
+  use: {
+    baseURL: 'http://localhost:3000',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    testIdAttribute: 'data-testid',
+  },
 
- projects: [
- { name: 'chromium', use: {...devices['Desktop Chrome'] } },
- ],
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+  ],
 
- webServer: {
- command: 'bun run dev',
- url: 'http://localhost:3000',
- reuseExistingServer: !process.env.CI,
- },
+  webServer: {
+    command: 'bun run dev',
+    url: 'http://localhost:3000',
+    reuseExistingServer: !process.env.CI,
+  },
 });
 ```
 
@@ -77,9 +77,9 @@ use: { baseURL: 'http://localhost:3000' }
 ```
 
 ```ts
-await page.goto('/login'); // → http://localhost:3000/login
-await page.goto('./config'); // relativo à URL atual
-await expect(page).toHaveURL('/dashboard'); // também respeita baseURL
+await page.goto('/login');                     // → http://localhost:3000/login
+await page.goto('./config');                   // relativo à URL atual
+await expect(page).toHaveURL('/dashboard');    // também respeita baseURL
 ```
 
 Afeta `page.goto`, `page.waitForURL`, `expect(page).toHaveURL` e o `request` fixture. Trocar de ambiente passa a ser uma variável:
@@ -100,11 +100,11 @@ Um project é *um grupo lógico de testes com a mesma configuração*. Ele serve
 
 ```ts
 projects: [
- { name: 'chromium', use: {...devices['Desktop Chrome'] } },
- { name: 'firefox', use: {...devices['Desktop Firefox'] } },
- { name: 'webkit', use: {...devices['Desktop Safari'] } },
- { name: 'mobile-chrome', use: {...devices['Pixel 5'] } },
- { name: 'mobile-safari', use: {...devices['iPhone 12'] } },
+  { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+  { name: 'firefox',  use: { ...devices['Desktop Firefox'] } },
+  { name: 'webkit',   use: { ...devices['Desktop Safari'] } },
+  { name: 'mobile-chrome', use: { ...devices['Pixel 5'] } },
+  { name: 'mobile-safari', use: { ...devices['iPhone 12'] } },
 ],
 ```
 
@@ -114,26 +114,26 @@ projects: [
 
 ```ts
 // ✗ devices sobrescreve o locale
-use: { locale: 'pt-BR',...devices['iPhone 12'] }
+use: { locale: 'pt-BR', ...devices['iPhone 12'] }
 // ✓
-use: {...devices['iPhone 12'], locale: 'pt-BR' }
+use: { ...devices['iPhone 12'], locale: 'pt-BR' }
 ```
 
 ### 3.2 Dependência — setup e teardown
 
 ```ts
 projects: [
- {
- name: 'setup',
- testMatch: /.*\.setup\.ts/,
- teardown: 'cleanup',
- },
- { name: 'cleanup', testMatch: /.*\.teardown\.ts/ },
- {
- name: 'chromium',
- use: {...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json' },
- dependencies: ['setup'],
- },
+  {
+    name: 'setup',
+    testMatch: /.*\.setup\.ts/,
+    teardown: 'cleanup',
+  },
+  { name: 'cleanup', testMatch: /.*\.teardown\.ts/ },
+  {
+    name: 'chromium',
+    use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json' },
+    dependencies: ['setup'],
+  },
 ],
 ```
 
@@ -153,8 +153,8 @@ Semântica:
 
 ```ts
 projects: [
- { name: 'smoke', testMatch: /.*smoke\.spec\.ts/, retries: 0 },
- { name: 'default', testIgnore: /.*smoke\.spec\.ts/, retries: 2 },
+  { name: 'smoke',   testMatch: /.*smoke\.spec\.ts/, retries: 0 },
+  { name: 'default', testIgnore: /.*smoke\.spec\.ts/, retries: 2 },
 ],
 ```
 
@@ -166,12 +166,12 @@ projects: [
 
 ```ts
 webServer: {
- command: 'bun run dev',
- url: 'http://localhost:3000',
- reuseExistingServer: !process.env.CI,
- timeout: 120_000,
- stdout: 'ignore',
- stderr: 'pipe',
+  command: 'bun run dev',
+  url: 'http://localhost:3000',
+  reuseExistingServer: !process.env.CI,
+  timeout: 120_000,
+  stdout: 'ignore',
+  stderr: 'pipe',
 },
 ```
 
@@ -197,8 +197,8 @@ Vários servidores:
 
 ```ts
 webServer: [
- { command: 'bun run dev', url: 'http://localhost:3000', name: 'Frontend', reuseExistingServer: !process.env.CI },
- { command: 'bun run server', url: 'http://localhost:3333', name: 'BFF', reuseExistingServer: !process.env.CI },
+  { command: 'bun run dev',     url: 'http://localhost:3000', name: 'Frontend', reuseExistingServer: !process.env.CI },
+  { command: 'bun run server',  url: 'http://localhost:3333', name: 'BFF',      reuseExistingServer: !process.env.CI },
 ],
 ```
 
@@ -208,29 +208,29 @@ No stack deste vault isso é o caso normal: `apps/web` e `apps/server` sobem jun
 
 ## 5. Emulação
 
-Todas as opções abaixo valem em `use` top-level, em `projects[].use` e em `test.use`.
+Todas as opções abaixo valem em `use` top-level, em `projects[].use` e em `test.use()`.
 
 ### 5.1 Viewport e device
 
 ```ts
 use: {
- viewport: { width: 1280, height: 720 },
- deviceScaleFactor: 2,
- isMobile: true,
- hasTouch: true,
+  viewport: { width: 1280, height: 720 },
+  deviceScaleFactor: 2,
+  isMobile: true,
+  hasTouch: true,
 }
 ```
 
-`devices['iPhone 12']` empacota tudo isso. `page.setViewportSize` muda em runtime.
+`devices['iPhone 12']` empacota tudo isso. `page.setViewportSize()` muda em runtime.
 
 ### 5.2 Locale, timezone, geolocalização
 
 ```ts
 use: {
- locale: 'pt-BR',
- timezoneId: 'America/Sao_Paulo',
- geolocation: { latitude: -23.5505, longitude: -46.6333 },
- permissions: ['geolocation'],
+  locale: 'pt-BR',
+  timezoneId: 'America/Sao_Paulo',
+  geolocation: { latitude: -23.5505, longitude: -46.6333 },
+  permissions: ['geolocation'],
 }
 ```
 
@@ -252,8 +252,8 @@ Combina com project para cobrir tema claro e escuro na mesma execução:
 
 ```ts
 projects: [
- { name: 'claro', use: {...devices['Desktop Chrome'], colorScheme: 'light' } },
- { name: 'escuro', use: {...devices['Desktop Chrome'], colorScheme: 'dark' } },
+  { name: 'claro',  use: { ...devices['Desktop Chrome'], colorScheme: 'light' } },
+  { name: 'escuro', use: { ...devices['Desktop Chrome'], colorScheme: 'dark' } },
 ],
 ```
 
@@ -261,16 +261,16 @@ projects: [
 
 ```ts
 use: {
- permissions: ['notifications'],
- offline: true,
- javaScriptEnabled: false,
- userAgent: 'meu-agente/1.0',
+  permissions: ['notifications'],
+  offline: true,
+  javaScriptEnabled: false,
+  userAgent: 'meu-agente/1.0',
 }
 ```
 
 ```ts
 await context.grantPermissions(['notifications'], { origin: 'https://exemplo.com' });
-await context.clearPermissions;
+await context.clearPermissions();
 await context.setGeolocation({ latitude: -23.55, longitude: -46.63 });
 ```
 
@@ -328,7 +328,7 @@ Impede rodar contra staging, e duplica a informação de ambiente em cada arquiv
 
 ```ts
 // ✗ o locale é apagado
-use: { locale: 'pt-BR',...devices['iPhone 12'] }
+use: { locale: 'pt-BR', ...devices['iPhone 12'] }
 ```
 
 Ver § 3.1 (`PW-CFG-06`).
@@ -356,8 +356,8 @@ Retry local esconde o flake de quem estava em posição de consertá-lo, e o tra
 ```ts
 // ✗
 projects: [
- { name: 'staging', use: { baseURL: 'https://staging…' } },
- { name: 'prod', use: { baseURL: 'https://prod…' } },
+  { name: 'staging', use: { baseURL: 'https://staging…' } },
+  { name: 'prod',    use: { baseURL: 'https://prod…' } },
 ],
 ```
 

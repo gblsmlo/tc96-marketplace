@@ -17,10 +17,10 @@ verificado-em:
 
 ```
 Environment
- ├── Role (slug, name, descrição)
- │ └── Permission[] (slug)
- └── Organization
- └── OrganizationMembership (user × org × role)
+  ├── Role (slug, name, descrição)
+  │     └── Permission[] (slug)
+  └── Organization
+        └── OrganizationMembership (user × org × role)
 ```
 
 - **Role** — definido no nível do *environment*. Todas as orgs do ambiente compartilham esse catálogo. **Correção (2026-08-12):** a doc oficial descreve também **custom roles com escopo de organização**, que sobrepõem os do ambiente e recebem prefixo `org` no slug — ver [WorkOS - AuthKit](workos-authkit.md) §6. Ou seja, o catálogo não é só de ambiente.
@@ -47,10 +47,10 @@ Environment
 
 ```ts
 // ❌ frágil
-if (session.role === 'admin') { /*... */ }
+if (session.role === 'admin') { /* ... */ }
 
 // ✅ estável
-if (session.permissions.includes(P.membersInvite)) { /*... */ }
+if (session.permissions.includes(P.membersInvite)) { /* ... */ }
 ```
 
 > [!check] Verificar
@@ -67,11 +67,11 @@ Fonte única de verdade dos slugs, compartilhada entre server e app:
 ```ts
 // packages/auth-contract/permissions.ts
 export const P = {
- membersRead: 'members:read',
- membersInvite: 'members:invite',
- membersRemove: 'members:remove',
- billingRead: 'billing:read',
- billingManage: 'billing:manage',
+  membersRead:   'members:read',
+  membersInvite: 'members:invite',
+  membersRemove: 'members:remove',
+  billingRead:   'billing:read',
+  billingManage: 'billing:manage',
 } as const;
 
 export type Permission = (typeof P)[keyof typeof P];
@@ -101,18 +101,18 @@ export type Permission = (typeof P)[keyof typeof P];
 ```ts
 // server — a única camada que importa
 export const requirePermission = (...needed: Permission[]) =>
- createMiddleware<Env>(async (c, next) => {
- const { permissions } = c.get('session');
- if (!needed.every((p) => permissions.includes(p))) {
- throw new HTTPException(403, { message: 'insufficient_permissions' });
- }
- await next;
- });
+  createMiddleware<Env>(async (c, next) => {
+    const { permissions } = c.get('session');
+    if (!needed.every((p) => permissions.includes(p))) {
+      throw new HTTPException(403, { message: 'insufficient_permissions' });
+    }
+    await next();
+  });
 
-export const members = new Hono<Env>
-.use(authenticate)
-.get('/', requirePermission(P.membersRead), listMembers)
-.post('/invite', requirePermission(P.membersInvite), inviteMember);
+export const members = new Hono<Env>()
+  .use(authenticate)
+  .get('/', requirePermission(P.membersRead), listMembers)
+  .post('/invite', requirePermission(P.membersInvite), inviteMember);
 ```
 
 - `every` (AND) como default é a escolha segura. Para OR, exponha `requireAnyPermission` explícito em vez de flag — a semântica precisa estar legível na definição da rota.
@@ -126,9 +126,9 @@ As permissões estão *dentro* do access token. Mudar o role de um usuário no d
 
 ```mermaid
 flowchart LR
- A["t0: token emitido<br/>permissions: [billing:manage]"] --> B["t1: role rebaixado<br/>no dashboard"]
- B --> C["t1..t2: token antigo<br/>ainda vale ✋"]
- C --> D["t2: refresh<br/>permissions atualizadas"]
+    A["t0: token emitido<br/>permissions: [billing:manage]"] --> B["t1: role rebaixado<br/>no dashboard"]
+    B --> C["t1..t2: token antigo<br/>ainda vale ✋"]
+    C --> D["t2: refresh<br/>permissions atualizadas"]
 ```
 
 Janela de exposição ≈ TTL do access token.
@@ -155,12 +155,12 @@ O `403` do server é o único ponto onde o app descobre que sua visão de permis
 ```ts
 // app — handler global do TanStack Query
 queryCache: new QueryCache({
- onError: (error) => {
- if (error.status === 403) {
- queryClient.invalidateQueries({ queryKey: ['me'] }); // permissão pode ter mudado
- // → tela de acesso negado
- }
- },
+  onError: (error) => {
+    if (error.status === 403) {
+      queryClient.invalidateQueries({ queryKey: ['me'] }); // permissão pode ter mudado
+      // → tela de acesso negado
+    }
+  },
 })
 ```
 

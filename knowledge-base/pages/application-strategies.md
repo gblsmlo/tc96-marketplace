@@ -8,9 +8,9 @@ icon: null
 createdAt: '2025-04-01T15:56:46.660Z'
 lastUpdated: '2026-07-24T15:33:03.463Z'
 tags:
- - frontend
- - rendering
- - performance
+  - frontend
+  - rendering
+  - performance
 coverImage: null
 ---
 

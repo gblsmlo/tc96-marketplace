@@ -2,11 +2,11 @@
 titulo: TanStack Router
 Link: https://tanstack.com/router/latest/docs/framework/react/overview
 tags:
- - tanstack-router
- - routing
- - frontend
- - reference
- - agent-context
+  - tanstack-router
+  - routing
+  - frontend
+  - reference
+  - agent-context
 source: "Documentação oficial — tanstack.com/router/latest/docs/framework/react"
 verificado-em: 2026-08-14
 ---
@@ -57,7 +57,7 @@ Decisão que vem antes de qualquer outra, porque muda a estrutura do projeto.
 
 | | File-based | Code-based |
 | --- | --- | --- |
-| Onde a rota vive | no caminho do arquivo | em `createRoute` explícito |
+| Onde a rota vive | no caminho do arquivo | em `createRoute()` explícito |
 | Geração de tipos | automática, por plugin de build | manual, via `getParentRoute` |
 | Recomendação oficial | **preferida** | quando o file-based não expressa a estrutura |
 | Satélite | [TanStack Router - File-Based Routing](tanstack-router-file-based-routing.md) | [TanStack Router - Route Trees](tanstack-router-route-trees.md) |
@@ -82,7 +82,7 @@ A coluna **Satélite** diz o que carregar. Se a tarefa não está aqui, ela não
 | Carregar dados: `loader`, `beforeLoad`, pending/error, integração com Query | [TanStack Router - Carregamento de Dados](tanstack-router-carregamento-de-dados.md) |
 | Proteger rota: autenticação (`beforeLoad` + `throw redirect`) e autorização por papel | [TanStack Router - Carregamento de Dados](tanstack-router-carregamento-de-dados.md) · § 5.1 abaixo |
 | Injetar dependências por rota e dividir o bundle | [TanStack Router - Route Context e Code Splitting](tanstack-router-route-context-e-code-splitting.md) |
-| `notFound`, `notFoundComponent`, `router.invalidate` | [TanStack Router - Carregamento de Dados](tanstack-router-carregamento-de-dados.md) |
+| `notFound()`, `notFoundComponent`, `router.invalidate()` | [TanStack Router - Carregamento de Dados](tanstack-router-carregamento-de-dados.md) |
 | Search middlewares (`stripSearchParams`, `retainSearchParams`) e serialização customizada | [TanStack Router - Search Params](tanstack-router-search-params.md) |
 | `useMatches`, `useRouterState`, breadcrumbs | [TanStack Router - Navegação](tanstack-router-navegacao.md) |
 | Route masking e `linkOptions` | [TanStack Router - Navegação](tanstack-router-navegacao.md) |
@@ -96,16 +96,16 @@ A coluna **Satélite** diz o que carregar. Se a tarefa não está aqui, ela não
 ```
 O caminho tem um segmento variável?
 ├── SIM
-│ ├── Um segmento → rota dinâmica /posts/$postId
-│ └── O resto todo do caminho → splat /files/$
+│   ├── Um segmento → rota dinâmica  /posts/$postId
+│   └── O resto todo do caminho → splat  /files/$
 └── NÃO
- └── Preciso envolver filhos em UI compartilhada?
- ├── SIM
- │ ├── e o wrapper deve aparecer na URL → layout route
- │ └── e NÃO deve aparecer na URL → pathless layout route
- └── NÃO
- ├── É o conteúdo do próprio caminho do pai → index route
- └── Caso geral → rota básica
+    └── Preciso envolver filhos em UI compartilhada?
+        ├── SIM
+        │   ├── e o wrapper deve aparecer na URL → layout route
+        │   └── e NÃO deve aparecer na URL → pathless layout route
+        └── NÃO
+            ├── É o conteúdo do próprio caminho do pai → index route
+            └── Caso geral → rota básica
 ```
 
 Definições e exemplos de cada tipo em [TanStack Router - Routing Concepts](tanstack-router-routing-concepts.md).
@@ -115,13 +115,13 @@ Definições e exemplos de cada tipo em [TanStack Router - Routing Concepts](tan
 ```
 A navegação é iniciada por um clique do usuário num elemento?
 ├── SIM → <Link>. Sempre.
-│ Dá href real (abre em nova aba, é indexável, acessível),
-│ type safety e preload.
+│         Dá href real (abre em nova aba, é indexável, acessível),
+│         type safety e preload.
 └── NÃO
- ├── Consequência de uma ação (submit, timeout, login)
- │ → useNavigate
- └── Dentro de beforeLoad/loader — guarda de rota, sessão inválida
- → redirect (lançado, não retornado)
+    ├── Consequência de uma ação (submit, timeout, login)
+    │   → useNavigate()
+    └── Dentro de beforeLoad/loader — guarda de rota, sessão inválida
+        → redirect()  (lançado, não retornado)
 ```
 
 `<Link>` não é "a versão bonita" de navigate: é a única forma que produz um elemento navegável de verdade. Detalhes em [TanStack Router - Navegação](tanstack-router-navegacao.md).
@@ -132,11 +132,11 @@ A navegação é iniciada por um clique do usuário num elemento?
 O estado precisa sobreviver a refresh, ser compartilhável por link,
 ou responder ao botão voltar?
 ├── SIM → search param da rota, validado por schema
-│ (filtro, aba, página, ordenação, faixa de datas)
-│ → [TanStack Router - Search Params](tanstack-router-search-params.md)
+│         (filtro, aba, página, ordenação, faixa de datas)
+│         → [TanStack Router - Search Params](tanstack-router-search-params.md)
 └── NÃO → é estado efêmero de UI. useState no componente.
- (menu aberto, hover, foco, rascunho de campo)
- → [React - Patterns](react-patterns.md) § 2
+          (menu aberto, hover, foco, rascunho de campo)
+          → [React - Patterns](react-patterns.md) § 2
 ```
 
 ### Como carrego os dados desta rota?
@@ -145,14 +145,14 @@ ou responder ao botão voltar?
 Os dados são necessários para a rota renderizar?
 ├── NÃO → carregue no componente, sob <Suspense> ou com estado próprio
 └── SIM
- ├── O projeto usa TanStack Query?
- │ ├── SIM → loader chama ensureQueryData; o componente usa
- │ │ useSuspenseQuery. O cache é da Query, o loader
- │ │ só garante que já foi buscado.
- │ │ → [TanStack Query](tanstack-query.md)
- │ └── NÃO → loader nativo + useLoaderData, com staleTime da rota
- └── É uma checagem de acesso, não dados?
- → beforeLoad, que roda antes e pode redirect
+    ├── O projeto usa TanStack Query?
+    │   ├── SIM → loader chama ensureQueryData; o componente usa
+    │   │         useSuspenseQuery. O cache é da Query, o loader
+    │   │         só garante que já foi buscado.
+    │   │         → [TanStack Query](tanstack-query.md)
+    │   └── NÃO → loader nativo + useLoaderData, com staleTime da rota
+    └── É uma checagem de acesso, não dados?
+        → beforeLoad, que roda antes e pode redirect()
 ```
 
 Detalhe e o porquê da integração em [TanStack Router - Carregamento de Dados](tanstack-router-carregamento-de-dados.md).
@@ -166,20 +166,20 @@ Autenticação e autorização são decisões diferentes e terminam em lugares d
 ```
 O usuário está autenticado?
 ├── NÃO → throw redirect({ to: '/login', search: { redirect: location.href } })
-│ em beforeLoad. Nunca em componente ou Effect: lá o loader
-│ protegido já rodou e o dado já vazou.
+│         em beforeLoad. Nunca em componente ou Effect: lá o loader
+│         protegido já rodou e o dado já vazou.
 └── SIM
- └── Tem o papel/permissão necessário?
- ├── NÃO → NÃO redirecione. É erro esperado (403): renderize
- │ a tela de acesso negado como ESTADO da rota.
- │ Jogar para um boundary transforma "sem permissão"
- │ em tela de erro genérica. → REACT-ASYNC-09
- └── SIM → siga
+    └── Tem o papel/permissão necessário?
+        ├── NÃO → NÃO redirecione. É erro esperado (403): renderize
+        │         a tela de acesso negado como ESTADO da rota.
+        │         Jogar para um boundary transforma "sem permissão"
+        │         em tela de erro genérica. → REACT-ASYNC-09
+        └── SIM → siga
 ```
 
 Três coisas que essa árvore assume e que precisam estar ditas:
 
-**`redirect` precisa ser lançado.** `redirect({...})` como statement solto cria um objeto e o descarta — a guarda não acontece, sem erro. `TSR-NAV-10`.
+**`redirect()` precisa ser lançado.** `redirect({...})` como statement solto cria um objeto e o descarta — a guarda não acontece, sem erro. `TSR-NAV-10`.
 
 **A guarda do router não é segurança.** Ela evita tela vazia e melhora UX; a autorização real é do backend. A tabela de camadas de enforcement está em [WorkOS - RBAC](workos-rbac.md) § 4, que classifica o `beforeLoad` do TanStack Router exatamente como camada de UX. `TSR-NAV-12` e `TSR-CTX-07`.
 
@@ -211,7 +211,7 @@ Alguns princípios aparecem em mais de um satélite, porque cada um precisa se s
 | --- | --- | --- |
 | `defaultPreloadStaleTime: 0` com TanStack Query no loader | `TSR-LOAD-14` | `TSR-NAV-08` |
 | Mesmo objeto `queryOptions` entre loader e componente | `TSR-LOAD-15` | `TSQ-BASE-09`, `TSQ-PATTERN-12` |
-| Raiz com `createRootRouteWithContext<T>` | `TSR-CTX-02` | `TSR-ROUTE-03` |
+| Raiz com `createRootRouteWithContext<T>()()` | `TSR-CTX-02` | `TSR-ROUTE-03` |
 | Guarda de rota não substitui autorização no backend | `TSR-CTX-07` | `TSR-NAV-12` |
 | Ler dados fora do route file exige `getRouteApi` | `TSR-LOAD-07` | `TSR-ROUTE-05` |
 | Fronteira crítico × lazy no code splitting | `TSR-SPLIT-01` | `TSR-SPLIT-02` (é o complemento da mesma regra) |
@@ -228,16 +228,16 @@ E dois princípios do React que o Router **não** redefine — cite o ID do Reac
 ## 7. Contrato de skill
 
 ```
-SEMPRE: docs/TanStack Router.md § 2 (modelo mental)
- § 5 (árvores de decisão)
+SEMPRE:   docs/TanStack Router.md § 2 (modelo mental)
+                                  § 5 (árvores de decisão)
 
 SOB DEMANDA, via § 4:
- o satélite da tarefa
+          o satélite da tarefa
 
 SE a tarefa também mexe em componente/estado:
- docs/React.js.md
+          docs/React.js.md
 
-NUNCA: todos os satélites de uma vez
+NUNCA:    todos os satélites de uma vez
 ```
 
 Invariantes que a skill faz valer:

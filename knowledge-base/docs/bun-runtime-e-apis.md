@@ -2,9 +2,9 @@
 titulo: Bun - Runtime e APIs
 Link: https://bun.com/docs/runtime
 tags:
- - bun
- - runtime
- - agent-context
+  - bun
+  - runtime
+  - agent-context
 source: "Documentação oficial — https://bun.com/docs"
 verificado-em: 2026-08-15
 ---
@@ -38,10 +38,10 @@ O resto desta nota é a consequência dessas duas escolhas: onde a API do Bun é
 `bun run <arquivo>` e a forma curta `bun <arquivo>` são idênticas. Para scripts de `package.json`, `bun run <script>`.
 
 ```bash
-bun index.tsx # roda TS + JSX, sem build
-bun run dev # script do package.json
-bun run --bun vite # força o runtime do Bun num CLI com shebang node
-echo "console.log(1)" | bun run - # lê do stdin, tratado como TypeScript+JSX
+bun index.tsx              # roda TS + JSX, sem build
+bun run dev                # script do package.json
+bun run --bun vite         # força o runtime do Bun num CLI com shebang node
+echo "console.log(1)" | bun run -   # lê do stdin, tratado como TypeScript+JSX
 ```
 
 Duas armadilhas de linha de comando, ambas verificadas na fonte:
@@ -53,7 +53,7 @@ A ordem de resolução de `bun run <x>` é: **script do `package.json` → arqui
 
 ### Resolver imports
 
-Bun implementa o algoritmo de resolução do Node.js, com extensões opcionais. Para `import { x } from "./hello"` numa importação ESM local, a ordem tentada é `.tsx`, `.jsx`, `.mts`, `.ts`, `.mjs`, `.js`, `.cts`, `.cjs`, `.json`, e depois os mesmos como `hello/index.*`. A ordem muda por contexto: `require` tenta as extensões CommonJS antes das ESM, e imports dentro de `node_modules` tentam JavaScript antes de TypeScript.
+Bun implementa o algoritmo de resolução do Node.js, com extensões opcionais. Para `import { x } from "./hello"` numa importação ESM local, a ordem tentada é `.tsx`, `.jsx`, `.mts`, `.ts`, `.mjs`, `.js`, `.cts`, `.cjs`, `.json`, e depois os mesmos como `hello/index.*`. A ordem muda por contexto: `require()` tenta as extensões CommonJS antes das ESM, e imports dentro de `node_modules` tentam JavaScript antes de TypeScript.
 
 Uma regra de compatibilidade com TypeScript vale a pena conhecer porque parece bug: **`from "./x.js"` também resolve `./x.ts`**. É a *file extension substitution* do compilador TypeScript, que permite arquivos-fonte se referirem uns aos outros pelo caminho compilado. Fora de `node_modules`, `.mjs` também casa `.mts`. `.cjs` **não** é reescrito para `.cts`.
 
@@ -88,17 +88,17 @@ import { criarPedido } from "./pedidos.ts";
 const { formatarMoeda } = require("./formatacao.cjs"); // no mesmo arquivo, sem cerimônia
 ```
 
-`require` de um módulo ESM devolve o *module namespace*; `require` de um CJS devolve `module.exports`. A **única** quebra: `require` de um módulo com **top-level `await`** falha, porque `require` é síncrono por definição. Use `import` estático ou `import` dinâmico.
+`require()` de um módulo ESM devolve o *module namespace*; `require()` de um CJS devolve `module.exports`. A **única** quebra: `require()` de um módulo com **top-level `await`** falha, porque `require` é síncrono por definição. Use `import` estático ou `import()` dinâmico.
 
 ### `import.meta`
 
 ```ts
-import.meta.dir; // "/app/src" — equivale a __dirname
-import.meta.path; // "/app/src/pedidos.ts" — equivale a __filename
-import.meta.file; // "pedidos.ts"
-import.meta.url; // "file:///app/src/pedidos.ts"
-import.meta.main; // true se este arquivo foi o entrypoint de `bun run`
-import.meta.env; // alias de process.env
+import.meta.dir;       // "/app/src"                — equivale a __dirname
+import.meta.path;      // "/app/src/pedidos.ts"     — equivale a __filename
+import.meta.file;      // "pedidos.ts"
+import.meta.url;       // "file:///app/src/pedidos.ts"
+import.meta.main;      // true se este arquivo foi o entrypoint de `bun run`
+import.meta.env;       // alias de process.env
 await import.meta.resolve("zod"); // URL do módulo resolvido
 ```
 
@@ -127,18 +127,18 @@ A divisão é limpa e a própria doc a declara: **`Bun.file` e `Bun.write` trata
 ```ts
 const contrato = Bun.file("contratos/2026-08.json");
 
-contrato.size; // bytes — 0 também para arquivo inexistente
-contrato.type; // MIME type; default "text/plain;charset=utf-8"
+contrato.size;              // bytes — 0 também para arquivo inexistente
+contrato.type;              // MIME type; default "text/plain;charset=utf-8"
 
-await contrato.json; // conteúdo como objeto
-await contrato.text; // como string
-await contrato.bytes; // Uint8Array
-contrato.stream; // ReadableStream, sem carregar tudo em memória
+await contrato.json();      // conteúdo como objeto
+await contrato.text();      // como string
+await contrato.bytes();     // Uint8Array
+contrato.stream();          // ReadableStream, sem carregar tudo em memória
 
-await contrato.exists; // ← a checagem correta de existência
+await contrato.exists();    // ← a checagem correta de existência
 ```
 
-A checagem de existência é onde código gerado erra. `size` de um arquivo inexistente é `0`, e `type` volta com o default — nenhum dos dois distingue "vazio" de "não existe". Só `await file.exists` responde.
+A checagem de existência é onde código gerado erra. `size` de um arquivo inexistente é `0`, e `type` volta com o default — nenhum dos dois distingue "vazio" de "não existe". Só `await file.exists()` responde.
 
 `Bun.stdin`, `Bun.stdout` e `Bun.stderr` são instâncias de `BunFile`, o que faz `await Bun.write(Bun.stdout, Bun.file(p))` ser um `cat`.
 
@@ -147,7 +147,7 @@ A checagem de existência é onde código gerado erra. `size` de um arquivo inex
 `Bun.write(destino, dados)` aceita destino `string | URL | BunFile | number` e dados `string | Blob | BunFile | ArrayBuffer | TypedArray | Response`, escolhendo a syscall mais rápida para cada combinação.
 
 ```ts
-await Bun.write("saida.txt", "conteúdo"); // string
+await Bun.write("saida.txt", "conteúdo");                    // string
 await Bun.write(Bun.file("copia.pdf"), Bun.file("orig.pdf")); // cópia de arquivo
 await Bun.write("index.html", await fetch("https://exemplo.com")); // corpo da resposta
 ```
@@ -161,23 +161,23 @@ const relatorio = Bun.file("relatorio.ndjson");
 const writer = relatorio.writer({ highWaterMark: 1024 * 1024 });
 
 for (const pedido of pedidos) {
- writer.write(JSON.stringify(pedido) + "\n"); // bufferiza
+  writer.write(JSON.stringify(pedido) + "\n"); // bufferiza
 }
 
-await writer.flush; // grava o buffer; devolve o número de bytes
-await writer.end; // fecha
+await writer.flush();  // grava o buffer; devolve o número de bytes
+await writer.end();    // fecha
 ```
 
-O detalhe operacional: **o processo `bun` não encerra enquanto o `FileSink` estiver aberto.** Quem esquece `.end` produz um script que "trava no fim". `writer.unref` desliga esse vínculo, e `writer.ref` o restabelece.
+O detalhe operacional: **o processo `bun` não encerra enquanto o `FileSink` estiver aberto.** Quem esquece `.end()` produz um script que "trava no fim". `writer.unref()` desliga esse vínculo, e `writer.ref()` o restabelece.
 
 ### O critério de escolha
 
 | Operação | Use | Por quê |
 | --- | --- | --- |
-| Ler arquivo inteiro | `Bun.file.text/.json/.bytes` | assíncrono, sem `readFile` + parse manual |
-| Ler grande / streaming | `Bun.file.stream` | `ReadableStream` padrão, integra com `Response` |
-| Escrever payload pronto | `Bun.write` | escolhe a syscall; aceita `Response` e `BunFile` |
-| Escrever em loop | `file.writer` (`FileSink`) | buffer com high water mark |
+| Ler arquivo inteiro | `Bun.file().text()/.json()/.bytes()` | assíncrono, sem `readFile` + parse manual |
+| Ler grande / streaming | `Bun.file().stream()` | `ReadableStream` padrão, integra com `Response` |
+| Escrever payload pronto | `Bun.write()` | escolhe a syscall; aceita `Response` e `BunFile` |
+| Escrever em loop | `file.writer()` (`FileSink`) | buffer com high water mark |
 | Append | `node:fs` | `Bun.write` sobrescreve |
 | `mkdir`, `readdir`, `rm`, `stat`, `chmod`, `watch` | `node:fs` / `node:fs/promises` | não há equivalente em `Bun.*` |
 | API idêntica à do Node (lib compartilhada) | `node:fs` | portabilidade |
@@ -187,9 +187,9 @@ O detalhe operacional: **o processo `bun` não encerra enquanto o `FileSink` est
 | ID | Regra |
 | --- | --- |
 | `BUN-RT-01` | Operação de **diretório** (`mkdir`, `readdir`, `rm`, `stat`) **MUST** usar `node:fs` — `Bun.file`/`Bun.write` só tratam conteúdo de arquivo. |
-| `BUN-RT-02` | `Bun.file(path)` **NEVER** é tratado como leitura — a referência é preguiçosa; nada é lido até `.text`/`.json`/`.bytes`/`.stream`. |
-| `BUN-RT-03` | Existência de arquivo **MUST** ser checada com `await file.exists` — `size === 0` também é o valor de um arquivo inexistente. |
-| `BUN-RT-04` | `FileSink` **MUST** ser encerrado com `.end` (ou desvinculado com `.unref`) — sem isso o processo não termina. |
+| `BUN-RT-02` | `Bun.file(path)` **NEVER** é tratado como leitura — a referência é preguiçosa; nada é lido até `.text()`/`.json()`/`.bytes()`/`.stream()`. |
+| `BUN-RT-03` | Existência de arquivo **MUST** ser checada com `await file.exists()` — `size === 0` também é o valor de um arquivo inexistente. |
+| `BUN-RT-04` | `FileSink` **MUST** ser encerrado com `.end()` (ou desvinculado com `.unref()`) — sem isso o processo não termina. |
 
 ---
 
@@ -208,9 +208,9 @@ Ou seja: `.env.local` ganha de `.env.production`, que ganha de `.env`. É o inve
 Controles explícitos:
 
 ```bash
-bun --env-file=.env.ci src/index.ts # substitui quais arquivos são lidos
-bun --env-file=.env.a --env-file=.env.b run build # múltiplos
-bun run --no-env-file index.ts # desliga o carregamento automático
+bun --env-file=.env.ci src/index.ts      # substitui quais arquivos são lidos
+bun --env-file=.env.a --env-file=.env.b run build   # múltiplos
+bun run --no-env-file index.ts            # desliga o carregamento automático
 ```
 
 ```toml
@@ -224,16 +224,16 @@ Arquivos passados com `--env-file` continuam sendo lidos mesmo com o carregament
 
 ```ini
 DB_PASSWORD=s3nh4\$com\$cifrao
-DB_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME # expansão útil
+DB_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME  # expansão útil
 ```
 
 **Leitura.** `process.env`, `Bun.env` e `import.meta.env` são **o mesmo objeto** — a fonte descreve os dois últimos como aliases. Dentro do Bun, escolher entre eles é estilo. Em TypeScript, todas as propriedades são `string | undefined`; para declarar uma como obrigatória, use interface merging:
 
 ```ts
 declare module "bun" {
- interface Env {
- DATABASE_URL: string;
- }
+  interface Env {
+    DATABASE_URL: string;
+  }
 }
 ```
 
@@ -259,7 +259,7 @@ As consequências práticas, na ordem em que mordem:
 
 Se o componente precisa de configuração, receber por prop ou por um módulo de config injetável é o que remove a divergência inteira. Ver [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 4.
 
-E a fronteira que o mecanismo não resolve: **`.env` é conveniência de desenvolvimento, não secret management**. Ver `Arquivos.env não substituem secret management`.
+E a fronteira que o mecanismo não resolve: **`.env` é conveniência de desenvolvimento, não secret management**..
 
 | ID | Regra |
 | --- | --- |
@@ -275,18 +275,18 @@ A regra de bolso está na própria fonte: *"the asynchronous `Bun.spawn` API is 
 
 ```ts
 const proc = Bun.spawn(["git", "log", "--oneline", "-n", "20"], {
- cwd: "/srv/repo",
- env: {...process.env, GIT_PAGER: "cat" },
- timeout: 10_000, // ms; mata o processo ao estourar
- killSignal: "SIGKILL", // default é SIGTERM
- onExit(_proc, exitCode, signalCode, error) {
- // …
- },
+  cwd: "/srv/repo",
+  env: { ...process.env, GIT_PAGER: "cat" },
+  timeout: 10_000,         // ms; mata o processo ao estourar
+  killSignal: "SIGKILL",   // default é SIGTERM
+  onExit(_proc, exitCode, signalCode, error) {
+    // …
+  },
 });
 
-const saida = await proc.stdout.text; // stdout é ReadableStream por default
-await proc.exited; // Promise que resolve no encerramento
-proc.exitCode; // null | number
+const saida = await proc.stdout.text();  // stdout é ReadableStream por default
+await proc.exited;                       // Promise que resolve no encerramento
+proc.exitCode;                           // null | number
 ```
 
 Defaults que importam: `stdin` é `null` (nenhuma entrada), `stdout` é `"pipe"`, `stderr` é `"inherit"`. Quem quer capturar `stderr` precisa pedir `stderr: "pipe"` explicitamente.
@@ -294,10 +294,10 @@ Defaults que importam: `stdin` é `null` (nenhuma entrada), `stdout` é `"pipe"`
 Cancelamento cooperativo usa `AbortSignal` — o mesmo mecanismo de:
 
 ```ts
-const controller = new AbortController;
+const controller = new AbortController();
 const proc = Bun.spawn({ cmd: ["ffmpeg", "-i", entrada, saida], signal: controller.signal });
 // …
-controller.abort; // envia killSignal (default SIGTERM)
+controller.abort();   // envia killSignal (default SIGTERM)
 ```
 
 Escrever no stdin exige `stdin: "pipe"`, que devolve um `FileSink`:
@@ -305,7 +305,7 @@ Escrever no stdin exige `stdin: "pipe"`, que devolve um `FileSink`:
 ```ts
 const proc = Bun.spawn(["wc", "-l"], { stdin: "pipe" });
 proc.stdin.write(conteudo);
-proc.stdin.end;
+proc.stdin.end();
 ```
 
 `Bun.spawnSync` bloqueia e devolve um `SyncSubprocess`, com três diferenças declaradas: tem `success` (boolean do exit code zero), `stdout`/`stderr` são `Buffer` em vez de `ReadableStream`, e **não tem `stdin`**. Para saída potencialmente ilimitada, `maxBuffer` limita quantos bytes o processo pode emitir antes de ser morto.
@@ -314,7 +314,7 @@ proc.stdin.end;
 const r = Bun.spawnSync({ cmd: ["yes"], maxBuffer: 100 });
 ```
 
-O processo `bun` pai não termina enquanto houver filho vivo; `proc.unref` desfaz esse vínculo.
+O processo `bun` pai não termina enquanto houver filho vivo; `proc.unref()` desfaz esse vínculo.
 
 | ID | Regra |
 | --- | --- |
@@ -336,7 +336,7 @@ A fonte descreve `Bun.hash` explicitamente como *"utilities for non-cryptographi
 ```ts
 // Cadastro
 const hash = await Bun.password.hash(senhaEmClaro);
-// => "$argon2id$v=19$m=65536,t=2,p=1$…" salt já embutido
+// => "$argon2id$v=19$m=65536,t=2,p=1$…"   salt já embutido
 
 // Login
 const ok = await Bun.password.verify(senhaEmClaro, usuario.senhaHash);
@@ -378,11 +378,11 @@ globalThis.reloads ??= 0;
 globalThis.reloads++;
 
 Bun.serve({
- port: 3000,
- routes: {
- // `routes` e não `fetch` solto — BUN-HTTP-01. Ver [Bun - HTTP e Servidor](bun-http-e-servidor.md).
- "/reloads": => new Response(`reloads: ${globalThis.reloads}`),
- },
+  port: 3000,
+  routes: {
+    // `routes` e não `fetch` solto — BUN-HTTP-01. Ver [Bun - HTTP e Servidor](bun-http-e-servidor.md).
+    "/reloads": () => new Response(`reloads: ${globalThis.reloads}`),
+  },
 });
 ```
 
@@ -401,27 +401,27 @@ Duas notas de escopo: `bun --hot` **não é** HMR de browser. É o equivalente d
 Não é a lista completa (ver [Bun](bun.md) § 4 para o que ficou fora do mapa) — é o subconjunto que substitui dependência de npm.
 
 ```ts
-Bun.version; // "1.3.x" — versão do CLI em execução
-Bun.main; // caminho absoluto do entrypoint
-import.meta.path === Bun.main; // "este arquivo foi executado diretamente?"
+Bun.version;                    // "1.3.x" — versão do CLI em execução
+Bun.main;                       // caminho absoluto do entrypoint
+import.meta.path === Bun.main;  // "este arquivo foi executado diretamente?"
 
-Bun.which("psql"); // caminho do executável, ou null — substitui o pacote `which`
-Bun.randomUUIDv7; // UUID v7 monotônico, ordenável, bom para chave de banco
-await Bun.sleep(250); // Promise; há Bun.sleepSync para CLI
-Bun.deepEquals(a, b); // igualdade estrutural
+Bun.which("psql");              // caminho do executável, ou null — substitui o pacote `which`
+Bun.randomUUIDv7();             // UUID v7 monotônico, ordenável, bom para chave de banco
+await Bun.sleep(250);           // Promise; há Bun.sleepSync para CLI
+Bun.deepEquals(a, b);           // igualdade estrutural
 Bun.escapeHTML(entradaDoUsuario);
 Bun.fileURLToPath(import.meta.url);
 Bun.pathToFileURL("/srv/app/index.ts");
 
-Bun.gzipSync(bytes); Bun.gunzipSync(bytes);
-Bun.zstdCompressSync(bytes); await Bun.zstdDecompress(bytes);
+Bun.gzipSync(bytes);  Bun.gunzipSync(bytes);
+Bun.zstdCompressSync(bytes);  await Bun.zstdDecompress(bytes);
 
 await Bun.readableStreamToText(stream);
 await Bun.readableStreamToJSON(stream);
 await Bun.readableStreamToFormData(stream);
 ```
 
-Sobre `Bun.randomUUIDv7`: a doc detalha a garantia de monotonicidade — o contador é atômico e seguro entre Workers no mesmo processo, e quando ele estoura no mesmo milissegundo Bun avança o timestamp em vez de dar a volta, mantendo os UUIDs estritamente crescentes. Aceita `"hex"` (default), `"base64"`, `"base64url"` ou `"buffer"` como encoding. Para chave primária ordenável, é a escolha certa sobre `crypto.randomUUID` (v4).
+Sobre `Bun.randomUUIDv7()`: a doc detalha a garantia de monotonicidade — o contador é atômico e seguro entre Workers no mesmo processo, e quando ele estoura no mesmo milissegundo Bun avança o timestamp em vez de dar a volta, mantendo os UUIDs estritamente crescentes. Aceita `"hex"` (default), `"base64"`, `"base64url"` ou `"buffer"` como encoding. Para chave primária ordenável, é a escolha certa sobre `crypto.randomUUID()` (v4).
 
 Sobre streams: Bun implementa os tipos Web (`ReadableStream`, `WritableStream`, `TransformStream`) como globais, e também `node:stream`. Os dois convivem, mas a doc de compatibilidade registra que `isReadable`/`isWritable`/`Readable.isDisturbed` de `node:stream` só entendem streams do Node, não streams Web. Contexto conceitual em e.
 
@@ -456,34 +456,34 @@ Que o merge seja *shallow* importa na prática: declarar `[install]` no projeto 
 # bunfig.toml — raiz do projeto
 
 # --- topo: runtime ---
-preload = ["./instrumentacao.ts"] # roda antes de qualquer entrypoint
-jsx = "react-jsx" # mesmas chaves do tsconfig (§ 2)
-env = false # desliga o carregamento automático de.env (§ 4)
-logLevel = "warn" # "debug" | "warn" | "error"
+preload = ["./instrumentacao.ts"]     # roda antes de qualquer entrypoint
+jsx = "react-jsx"                     # mesmas chaves do tsconfig (§ 2)
+env = false                           # desliga o carregamento automático de .env (§ 4)
+logLevel = "warn"                     # "debug" | "warn" | "error"
 
 [install]
-linker = "isolated" # "hoisted" | "isolated" → [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) § 5
-ignoreScripts = true # bloqueia lifecycle scripts → § 4 daquela nota
-minimumReleaseAge = 259200 # segundos
-frozenLockfile = true # equivale a --frozen-lockfile
-production = false # sem devDependencies; congela o lockfile
+linker = "isolated"                   # "hoisted" | "isolated"  → [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) § 5
+ignoreScripts = true                  # bloqueia lifecycle scripts  → § 4 daquela nota
+minimumReleaseAge = 259200            # segundos
+frozenLockfile = true                 # equivale a --frozen-lockfile
+production = false                    # sem devDependencies; congela o lockfile
 
 [test]
-preload = ["./happydom.ts", "./testing-library.ts"] # → [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 2
+preload = ["./happydom.ts", "./testing-library.ts"]   # → [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 2
 root = "."
 coverageThreshold = { lines = 0.9 }
 pathIgnorePatterns = ["**/fixtures/**"]
 
 [run]
-bun = true # apelida `node` para `bun` dentro de scripts
-shell = "system" # "bun" | "system"
+bun = true                            # apelida `node` para `bun` dentro de scripts
+shell = "system"                      # "bun" | "system"
 silent = false
 
 [serve]
-port = 3000 # porta default de Bun.serve
+port = 3000                           # porta default de Bun.serve()
 ```
 
-O exemplo mostra o que este corpus usa; as seções têm mais chaves. O que cada uma alcança, e onde a nota detalha: **topo** = runtime (`preload`, `jsx*`, `env`, `define`, `loader`, `smol`, `logLevel`, `console.depth`) → § 2 e § 4 · **`[install]`** = `bun install`/`add`/`ci` (`linker`, `hoist`, `ignoreScripts`, `frozenLockfile`, `production`, `registry`, `scopes`, `minimumReleaseAge*`, `globalStore`, `saveTextLockfile`, `auto`, `security.scanner`, `cache.*`) → [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) · **`[test]`** = `bun test` (`preload`, `root`, `coverage*`, `pathIgnorePatterns`, `randomize`, `seed`, `retry`, `rerunEach`, `concurrentTestGlob`, `onlyFailures`, `reporter.*`) → [Bun - Testes - Execução e Configuração](bun-testes-execucao-e-configuracao.md) § 5 · **`[run]`** = `bun run` (`bun`, `shell`, `silent`, `elide-lines`, `noOrphans`) → § 2 · **`[serve]`** = `port` default de `Bun.serve` → [Bun - HTTP e Servidor](bun-http-e-servidor.md).
+O exemplo mostra o que este corpus usa; as seções têm mais chaves. O que cada uma alcança, e onde a nota detalha: **topo** = runtime (`preload`, `jsx*`, `env`, `define`, `loader`, `smol`, `logLevel`, `console.depth`) → § 2 e § 4 · **`[install]`** = `bun install`/`add`/`ci` (`linker`, `hoist`, `ignoreScripts`, `frozenLockfile`, `production`, `registry`, `scopes`, `minimumReleaseAge*`, `globalStore`, `saveTextLockfile`, `auto`, `security.scanner`, `cache.*`) → [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) · **`[test]`** = `bun test` (`preload`, `root`, `coverage*`, `pathIgnorePatterns`, `randomize`, `seed`, `retry`, `rerunEach`, `concurrentTestGlob`, `onlyFailures`, `reporter.*`) → [Bun - Testes - Execução e Configuração](bun-testes-execucao-e-configuracao.md) § 5 · **`[run]`** = `bun run` (`bun`, `shell`, `silent`, `elide-lines`, `noOrphans`) → § 2 · **`[serve]`** = `port` default de `Bun.serve()` → [Bun - HTTP e Servidor](bun-http-e-servidor.md).
 
 A chave `[test] preload` é descrita pela fonte como *"the same as the top-level `preload` field, but only applies to `bun test`"*. Não é um mecanismo à parte — é o mesmo campo com escopo menor.
 
@@ -492,28 +492,28 @@ A chave `[test] preload` é descrita pela fonte como *"the same as the top-level
 O equivalente de linha de comando do `preload`, e o análogo do `node --require`:
 
 ```bash
-bun --preload./setup.ts run./index.ts # flag do runtime → antes do subcomando
-bun -r./setup.ts index.ts # -r é alias de --preload
-bun test --preload./happydom.ts # ad-hoc; a forma persistente é [test] preload
+bun --preload ./setup.ts run ./index.ts    # flag do runtime → antes do subcomando
+bun -r ./setup.ts index.ts                 # -r é alias de --preload
+bun test --preload ./happydom.ts           # ad-hoc; a forma persistente é [test] preload
 ```
 
 Três pontos operacionais:
 
-- **A flag é do runtime, então vem antes do subcomando.** `bun run./index.ts --preload./setup.ts` repassa `--preload` ao script — o preload nunca roda. É a mesma armadilha de `bun run dev --watch` (§ 2).
-- **Para que serve:** registrar plugin, injetar global, instalar instrumentação — sem poluir o entrypoint com um `import` que só existe por causa do efeito colateral. Em `bun test` é o único lugar que roda *antes* dos imports do arquivo de teste, e por isso é onde vivem `mock.module` e `GlobalRegistrator.register` (`BUN-TEST-04`, `BUN-TEST-07`).
+- **A flag é do runtime, então vem antes do subcomando.** `bun run ./index.ts --preload ./setup.ts` repassa `--preload` ao script — o preload nunca roda. É a mesma armadilha de `bun run dev --watch` (§ 2).
+- **Para que serve:** registrar plugin, injetar global, instalar instrumentação — sem poluir o entrypoint com um `import` que só existe por causa do efeito colateral. Em `bun test` é o único lugar que roda *antes* dos imports do arquivo de teste, e por isso é onde vivem `mock.module()` e `GlobalRegistrator.register()` (`BUN-TEST-04`, `BUN-TEST-07`).
 - **`--import` não foi confirmado.** Node tem `--import` para o equivalente ESM de `--require`; não encontrei declaração na doc do Bun de que a flag exista ou seja aceita. Use `--preload`/`-r`, que estão documentados.
 
 ---
 
 ## 10. `using`: o recurso se fecha sozinho, e isso não é erro de digitação
 
-`using db = new Database("app.sqlite")` e `await using reserved = await sql.reserve` aparecem no corpus como padrão recomendado, e leem-se como `const` mal escrito para quem não viu a feature. Não é: `using` é uma **declaração** da proposta TC39 de *Explicit Resource Management*, e o que ela faz é chamar o descarte do recurso ao sair do escopo, inclusive por exceção ou `return` antecipado.
+`using db = new Database("app.sqlite")` e `await using reserved = await sql.reserve()` aparecem no corpus como padrão recomendado, e leem-se como `const` mal escrito para quem não viu a feature. Não é: `using` é uma **declaração** da proposta TC39 de *Explicit Resource Management*, e o que ela faz é chamar o descarte do recurso ao sair do escopo, inclusive por exceção ou `return` antecipado.
 
 ```ts
 {
- using arquivo = Bun.file("pedidos.ndjson").writer;
- arquivo.write(linha);
-} // ← aqui o [Symbol.dispose] do writer é chamado, mesmo se a linha acima lançar
+  using arquivo = Bun.file("pedidos.ndjson").writer();
+  arquivo.write(linha);
+}   // ← aqui o [Symbol.dispose] do writer é chamado, mesmo se a linha acima lançar
 ```
 
 O que é preciso saber antes de usar:
@@ -523,7 +523,7 @@ O que é preciso saber antes de usar:
 | Padrão | TC39, **stage 3** — não é JavaScript ratificado |
 | Suporte no motor | `using` e `await using` são suportados nativamente no JavaScriptCore, o motor do Bun |
 | Como funciona | o protótipo do objeto define `[Symbol.dispose]`, ou `[Symbol.asyncDispose]` para recurso assíncrono (`await using`) |
-| APIs do Bun | dezenas, incluindo `Bun.spawn`, `Bun.serve`, `Bun.connect`, `Bun.listen` e `bun:sqlite` |
+| APIs do Bun | dezenas, incluindo `Bun.spawn()`, `Bun.serve()`, `Bun.connect()`, `Bun.listen()` e `bun:sqlite` |
 | `DisposableStack` / `AsyncDisposableStack` | implementados no Bun 1.3 — para acumular vários recursos num escopo só |
 | TypeScript | **exige TS ≥ 5.2**, que introduziu a sintaxe |
 | `tsconfig.json` | `lib` precisa incluir `"esnext"` ou `"esnext.disposable"`; o `lib: ["ESNext"]` do tsconfig recomendado pelo Bun já cobre |
@@ -538,10 +538,10 @@ E a fronteira: `using` é uma feature de **linguagem**, não do Bun. Um arquivo 
 
 | Antipadrão | Por que falha | O que fazer |
 | --- | --- | --- |
-| `if (Bun.file(p).size > 0)` para testar existência | arquivo inexistente também tem `size === 0`; a condição confunde "vazio" com "ausente" | `await Bun.file(p).exists` — `BUN-RT-03` |
-| `const conteudo = Bun.file(p)` e usar `conteudo` como string | `Bun.file` devolve um `BunFile` preguiçoso, não o conteúdo; nada foi lido ainda | `await Bun.file(p).text` — `BUN-RT-02` |
-| `writer.write(...)` em loop sem `.end` | o processo `bun` fica vivo esperando o `FileSink` fechar; o script "trava no fim" | `await writer.end`, ou `writer.unref` — `BUN-RT-04` |
-| `readFileSync`/`spawnSync` dentro de handler de `Bun.serve` | bloqueia o event loop; sob carga, degrada todas as conexões, não só a atual | `Bun.file.text` / `Bun.spawn` — `BUN-RT-08` |
+| `if (Bun.file(p).size > 0)` para testar existência | arquivo inexistente também tem `size === 0`; a condição confunde "vazio" com "ausente" | `await Bun.file(p).exists()` — `BUN-RT-03` |
+| `const conteudo = Bun.file(p)` e usar `conteudo` como string | `Bun.file` devolve um `BunFile` preguiçoso, não o conteúdo; nada foi lido ainda | `await Bun.file(p).text()` — `BUN-RT-02` |
+| `writer.write(...)` em loop sem `.end()` | o processo `bun` fica vivo esperando o `FileSink` fechar; o script "trava no fim" | `await writer.end()`, ou `writer.unref()` — `BUN-RT-04` |
+| `readFileSync`/`spawnSync` dentro de handler de `Bun.serve` | bloqueia o event loop; sob carga, degrada todas as conexões, não só a atual | `Bun.file().text()` / `Bun.spawn` — `BUN-RT-08` |
 | `Bun.spawn` de comando externo sem `timeout` nem `signal` | processo pendurado mantém o pai vivo e vaza para o próximo deploy | `{ timeout, killSignal }` ou `{ signal }` — `BUN-RT-09` |
 | `Bun.hash(senha)` ou `new Bun.CryptoHasher("sha256")` para senha | `Bun.hash` é não criptográfico; sha256 sem salt nem custo é quebrável por força bruta | `Bun.password.hash` / `.verify` — `BUN-RT-10` |
 | `.env.production` esperando vencer `.env.local` | a precedência é crescente e `.env.local` é o último da lista | não versionar `.env.local` em máquina de deploy; usar `--env-file` explícito |
@@ -549,7 +549,7 @@ E a fronteira: `using` é uma feature de **linguagem**, não do Bun. Um arquivo 
 | `bun --hot` para rodar a suíte de testes | estado global preservado entre reloads mascara falha de setup e vaza entre execuções | `bun test --watch` — `BUN-RT-11` |
 | Imagem de container sem `node_modules`, contando com "o Bun resolve" | sem `node_modules`, Bun instala da rede em runtime e pode resolver `latest` | copiar `node_modules` (ou `bun ci` no build) e rodar com `--no-install` — `BUN-RT-12` |
 | `bun run dev --watch` | `bun` repassa flags do fim do comando ao script; o watch nunca é ativado | `bun --watch run dev` |
-| `bun run./index.ts --preload./setup.ts` | mesma armadilha: `--preload` vira argumento do script e o preload não roda | `bun --preload./setup.ts run./index.ts` — § 9 |
+| `bun run ./index.ts --preload ./setup.ts` | mesma armadilha: `--preload` vira argumento do script e o preload não roda | `bun --preload ./setup.ts run ./index.ts` — § 9 |
 | Alias de path declarado só em `resolve.alias` do `vite.config.ts` | Bun não lê o `vite.config`; o import quebra em `bun test` e em qualquer execução fora do Vite | declarar em `compilerOptions.paths` — § 2 |
 | `"jsx": "preserve"` no `tsconfig.json` de um projeto que roda em Bun | a fonte declara `"preserve"` não suportado; não há transform e o JSX não executa | `"react-jsx"` — § 2 |
 | Ler `import.meta.env.DEV`/`.MODE` num componente que também roda em `bun test` | são constantes injetadas pelo Vite; sob Bun, `import.meta.env` é `process.env` e elas são `undefined` | receber por prop/config injetável — § 4 |
@@ -561,7 +561,7 @@ E a fronteira: `using` é uma feature de **linguagem**, não do Bun. Um arquivo 
 ## Checklist de revisão
 
 - [ ] Existe `tsc --noEmit` no CI? O runtime não checa tipos.
-- [ ] Toda checagem de existência de arquivo usa `.exists`? → `BUN-RT-03`
+- [ ] Toda checagem de existência de arquivo usa `.exists()`? → `BUN-RT-03`
 - [ ] Todo `FileSink` aberto é encerrado ou desvinculado? → `BUN-RT-04`
 - [ ] Nenhuma chamada `*Sync` dentro de handler HTTP? → `BUN-RT-08`
 - [ ] Todo `Bun.spawn` de comando externo tem `timeout` ou `signal`? → `BUN-RT-09`
@@ -582,9 +582,8 @@ E a fronteira: `using` é uma feature de **linguagem**, não do Bun. Um arquivo 
 - [Bun](bun.md) — hub, mapa da API, árvores de decisão
 - [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) · [Bun - Testes](bun-testes.md) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Bun - Bundler e Build](bun-bundler-e-build.md) · [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md)
 - `Node.js` · · `TypeScript`
-- · `Arquivos.env não substituem secret management` ·
 - · ·
--
+- · ·
 
 ## Fontes consultadas
 

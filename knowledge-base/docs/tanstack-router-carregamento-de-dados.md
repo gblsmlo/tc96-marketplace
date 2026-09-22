@@ -2,16 +2,16 @@
 titulo: TanStack Router - Carregamento de Dados
 Link: https://tanstack.com/router/latest/docs/framework/react/guide/data-loading
 tags:
- - tanstack-router
- - data-loading
- - agent-context
+  - tanstack-router
+  - data-loading
+  - agent-context
 source: "Documentação oficial — https://tanstack.com/router/latest/docs/framework/react/"
 verificado-em: 2026-08-14
 ---
 
 # TanStack Router - Carregamento de Dados
 
-> `loader` · `loaderDeps` · `useLoaderData` · `getRouteApi` · `beforeLoad` · `pendingComponent` / `pendingMs` / `pendingMinMs` · `errorComponent` · `notFoundComponent` · `defaultPreload` · `staleTime` / `gcTime` / `preloadStaleTime` / `preloadGcTime` · `shouldReload` · `staleReloadMode` · `router.invalidate` · integração com TanStack Query via `ensureQueryData`.
+> `loader` · `loaderDeps` · `useLoaderData` · `getRouteApi` · `beforeLoad` · `pendingComponent` / `pendingMs` / `pendingMinMs` · `errorComponent` · `notFoundComponent` · `defaultPreload` · `staleTime` / `gcTime` / `preloadStaleTime` / `preloadGcTime` · `shouldReload` · `staleReloadMode` · `router.invalidate()` · integração com TanStack Query via `ensureQueryData`.
 >
 > Não cobre: definição e hierarquia de rotas — [TanStack Router - Routing Concepts](tanstack-router-routing-concepts.md); convenções de arquivo — [TanStack Router - File-Based Routing](tanstack-router-file-based-routing.md); ordem de precedência no match — [TanStack Router - Route Matching](tanstack-router-route-matching.md); contexto do router e code splitting — [TanStack Router - Route Context e Code Splitting](tanstack-router-route-context-e-code-splitting.md).
 
@@ -72,14 +72,14 @@ O loader recebe **um único objeto**. Campos verificados na fonte:
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts/$postId')({
- loader: ({ params: { postId }, abortController }) =>
- fetchPostById(postId, { signal: abortController.signal }),
- component: PostPage,
+  loader: ({ params: { postId }, abortController }) =>
+    fetchPostById(postId, { signal: abortController.signal }),
+  component: PostPage,
 })
 
-function PostPage {
- const post = Route.useLoaderData
- return <article>{post.body}</article>
+function PostPage() {
+  const post = Route.useLoaderData()
+  return <article>{post.body}</article>
 }
 ```
 
@@ -98,11 +98,11 @@ Na prática: `loader: ({ context }) => context.queryClient.ensureQueryData(opts)
 O `loader` aceita duas formas — a função direta e um objeto com `handler`:
 
 ```tsx
-loader: => fetchPosts
+loader: () => fetchPosts()
 
 loader: {
- handler: => fetchPosts,
- staleReloadMode: 'background', // ou 'blocking'
+  handler: () => fetchPosts(),
+  staleReloadMode: 'background', // ou 'blocking'
 }
 ```
 
@@ -120,8 +120,8 @@ O router faz cache SWR keyed pelo pathname totalmente parseado (`/posts/1` ≠ `
 
 ```tsx
 export const Route = createFileRoute('/posts')({
- loaderDeps: ({ search: { offset, limit } }) => ({ offset, limit }),
- loader: ({ deps: { offset, limit } }) => fetchPosts({ offset, limit }),
+  loaderDeps: ({ search: { offset, limit } }) => ({ offset, limit }),
+  loader: ({ deps: { offset, limit } }) => fetchPosts({ offset, limit }),
 })
 ```
 
@@ -139,7 +139,7 @@ loaderDeps: ({ search }) => search
 loaderDeps: ({ search: { offset, limit } }) => ({ offset, limit })
 ```
 
-`loaderDeps` precisa ser **determinística e serializável** — é uma chave de cache. Um `Date.now`, um objeto novo a cada chamada ou uma função ali dentro quebram o cache silenciosamente (a chave nunca bate) e o loader roda em toda navegação.
+`loaderDeps` precisa ser **determinística e serializável** — é uma chave de cache. Um `Date.now()`, um objeto novo a cada chamada ou uma função ali dentro quebram o cache silenciosamente (a chave nunca bate) e o loader roda em toda navegação.
 
 | ID | Regra |
 | --- | --- |
@@ -160,11 +160,11 @@ Três usos legítimos, e só três: **produzir contexto**, **guardar acesso** e 
 
 ```tsx
 export const Route = createFileRoute('/_authed')({
- beforeLoad: ({ context, location }) => {
- if (!context.auth.isAuthenticated) {
- throw redirect({ to: '/login', search: { redirect: location.href } })
- }
- },
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.isAuthenticated) {
+      throw redirect({ to: '/login', search: { redirect: location.href } })
+    }
+  },
 })
 ```
 
@@ -177,7 +177,7 @@ O aviso da fonte que precisa sobreviver a qualquer revisão:
 | ID | Regra |
 | --- | --- |
 | `TSR-LOAD-05` | `beforeLoad` **MUST** conter apenas contexto, guarda e redirect; a busca dos dados de tela **NEVER** fica ali (é serial e bloqueia os loaders paralelos). |
-| `TSR-LOAD-06` | Guarda de acesso **MUST** ser `throw redirect(...)` em `beforeLoad`, **NEVER** um `navigate` dentro de componente ou efeito. |
+| `TSR-LOAD-06` | Guarda de acesso **MUST** ser `throw redirect(...)` em `beforeLoad`, **NEVER** um `navigate()` dentro de componente ou efeito. |
 
 Para o lado tipado disso — de onde vem `context.auth` — ver [TanStack Router - Route Context e Code Splitting](tanstack-router-route-context-e-code-splitting.md) § 1.
 
@@ -187,14 +187,14 @@ Para o lado tipado disso — de onde vem `context.auth` — ver [TanStack Router
 
 ```tsx
 // Dentro do arquivo da rota
-const post = Route.useLoaderData
+const post = Route.useLoaderData()
 
 // Em arquivo separado, sem importar a Route (evita ciclo de import)
 import { getRouteApi } from '@tanstack/react-router'
 const route = getRouteApi('/posts/$postId')
 
-function PostBody {
- const post = route.useLoaderData
+function PostBody() {
+  const post = route.useLoaderData()
 }
 ```
 
@@ -213,10 +213,10 @@ Opções do hook, verificadas: `from` (route id do match pai mais próximo — r
 const ROTA = '/produtos/$produtoId' as const
 const api = getRouteApi(ROTA)
 
-export function FiltroAvaliacoes {
- const filtro = api.useSearch
- const navigate = useNavigate({ from: ROTA }) // uma única fonte do literal
- //...
+export function FiltroAvaliacoes() {
+  const filtro = api.useSearch()
+  const navigate = useNavigate({ from: ROTA })   // uma única fonte do literal
+  // ...
 }
 ```
 
@@ -243,10 +243,10 @@ Os dois números são um par. `pendingMs` evita mostrar spinner para uma respost
 
 ```tsx
 export const Route = createFileRoute('/posts')({
- loader: => fetchPosts,
- pendingComponent: => <PostsSkeleton />,
- pendingMs: 300,
- pendingMinMs: 500,
+  loader: () => fetchPosts(),
+  pendingComponent: () => <PostsSkeleton />,
+  pendingMs: 300,
+  pendingMinMs: 500,
 })
 ```
 
@@ -260,41 +260,41 @@ Relação com Suspense: `wrapInSuspense` existe como opção de rota. O modelo m
 
 ```tsx
 export const Route = createFileRoute('/posts')({
- loader: => fetchPosts,
- onError: ({ error }) => reportError(error),
- errorComponent: ({ error, reset }) => (
- <div role="alert">
- <p>{error.message}</p>
- <button onClick={reset}>Tentar de novo</button>
- </div>
- ),
+  loader: () => fetchPosts(),
+  onError: ({ error }) => reportError(error),
+  errorComponent: ({ error, reset }) => (
+    <div role="alert">
+      <p>{error.message}</p>
+      <button onClick={reset}>Tentar de novo</button>
+    </div>
+  ),
 })
 ```
 
 Defaults de router correspondentes: `defaultErrorComponent`, `defaultOnCatch`. Há também `onCatch: (error: Error, errorInfo: ErrorInfo) => void`.
 
-Caveat da fonte sobre recuperação: para **erros de loader**, `reset` sozinho não basta — é `router.invalidate` que coordena o reload do loader com o reset do error boundary.
+Caveat da fonte sobre recuperação: para **erros de loader**, `reset` sozinho não basta — é `router.invalidate()` que coordena o reload do loader com o reset do error boundary.
 
 | ID | Regra |
 | --- | --- |
 | `TSR-LOAD-09` | Rota com `loader` **MUST** ter `errorComponent` própria ou `defaultErrorComponent` configurado no router. |
-| `TSR-LOAD-10` | Recuperação de erro de loader **MUST** chamar `router.invalidate`, não apenas o `reset` do `errorComponent`. |
+| `TSR-LOAD-10` | Recuperação de erro de loader **MUST** chamar `router.invalidate()`, não apenas o `reset` do `errorComponent`. |
 
-### `notFoundComponent` e `notFound`
+### `notFoundComponent` e `notFound()`
 
 ```tsx
 import { createFileRoute, notFound } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts/$postId')({
- loader: async ({ params }) => {
- const post = await fetchPostById(params.postId)
- if (!post) throw notFound
- return post
- },
+  loader: async ({ params }) => {
+    const post = await fetchPostById(params.postId)
+    if (!post) throw notFound()
+    return post
+  },
 })
 ```
 
-`notFound` aceita `routeId` para escolher a boundary (`throw notFound({ routeId: '/_pathlessLayout' })`) e `data`, que chega ao `notFoundComponent`. O `notFoundComponent` tem acesso a `useParams`, `useSearch` e `useRouteContext`; disponibilidade de loader data depende de qual rota lançou.
+`notFound()` aceita `routeId` para escolher a boundary (`throw notFound({ routeId: '/_pathlessLayout' })`) e `data`, que chega ao `notFoundComponent`. O `notFoundComponent` tem acesso a `useParams()`, `useSearch()` e `useRouteContext()`; disponibilidade de loader data depende de qual rota lançou.
 
 O caveat estrutural, literal:
 
@@ -340,9 +340,9 @@ Defaults verificados:
 
 ```tsx
 const router = createRouter({
- routeTree,
- defaultPreload: 'intent',
- defaultPreloadDelay: 50,
+  routeTree,
+  defaultPreload: 'intent',
+  defaultPreloadDelay: 50,
 })
 ```
 
@@ -377,12 +377,12 @@ Duas consequências práticas, e as duas importam:
 
 ### Invalidação
 
-> "`router.invalidate` selects matching committed, cached, and in-flight loader generations for invalidation and retires matching active preload lanes."
+> "`router.invalidate()` selects matching committed, cached, and in-flight loader generations for invalidation and retires matching active preload lanes."
 
 | ID | Regra |
 | --- | --- |
 | `TSR-LOAD-12` | `beforeLoad` **NEVER** tem efeito colateral observável (analytics, escrita em store) — ele roda em preload por hover. |
-| `TSR-LOAD-13` | Mutação que invalida dado servido pelo loader nativo **MUST** chamar `router.invalidate`. |
+| `TSR-LOAD-13` | Mutação que invalida dado servido pelo loader nativo **MUST** chamar `router.invalidate()`. |
 
 ---
 
@@ -408,18 +408,18 @@ import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
 const postsQueryOptions = queryOptions({
- queryKey: ['posts'],
- queryFn: => fetchPosts,
+  queryKey: ['posts'],
+  queryFn: () => fetchPosts(),
 })
 
 export const Route = createFileRoute('/posts')({
- loader: ({ context }) => context.queryClient.ensureQueryData(postsQueryOptions),
- component: Posts,
+  loader: ({ context }) => context.queryClient.ensureQueryData(postsQueryOptions),
+  component: Posts,
 })
 
-function Posts {
- const { data: posts } = useSuspenseQuery(postsQueryOptions)
- return <PostList posts={posts} />
+function Posts() {
+  const { data: posts } = useSuspenseQuery(postsQueryOptions)
+  return <PostList posts={posts} />
 }
 ```
 
@@ -438,10 +438,10 @@ Quando o cache é externo, **quem decide frescor é o Query, não o router**. A 
 
 ```tsx
 const router = createRouter({
- routeTree,
- context: { queryClient },
- defaultPreload: 'intent',
- defaultPreloadStaleTime: 0, // obrigatório com TanStack Query
+  routeTree,
+  context: { queryClient },
+  defaultPreload: 'intent',
+  defaultPreloadStaleTime: 0, // obrigatório com TanStack Query
 })
 ```
 
@@ -462,25 +462,25 @@ Para erros com Suspense, a fonte aponta `useQueryErrorResetBoundary` para reseta
 ```tsx
 // ERRADO — o waterfall que o loader existe para eliminar
 export const Route = createFileRoute('/posts/$postId')({
- component: Post,
+  component: Post,
 })
-function Post {
- const { postId } = Route.useParams
- const [post, setPost] = useState(null)
- useEffect( => { fetchPostById(postId).then(setPost) }, [postId])
- if (!post) return <Spinner />
- return <article>{post.body}</article>
+function Post() {
+  const { postId } = Route.useParams()
+  const [post, setPost] = useState(null)
+  useEffect(() => { fetchPostById(postId).then(setPost) }, [postId])
+  if (!post) return <Spinner />
+  return <article>{post.body}</article>
 }
 
 // CERTO
 export const Route = createFileRoute('/posts/$postId')({
- loader: ({ params, abortController }) =>
- fetchPostById(params.postId, { signal: abortController.signal }),
- component: Post,
+  loader: ({ params, abortController }) =>
+    fetchPostById(params.postId, { signal: abortController.signal }),
+  component: Post,
 })
-function Post {
- const post = Route.useLoaderData
- return <article>{post.body}</article>
+function Post() {
+  const post = Route.useLoaderData()
+  return <article>{post.body}</article>
 }
 ```
 
@@ -489,21 +489,21 @@ function Post {
 beforeLoad: async ({ params }) => ({ post: await fetchPostById(params.postId) })
 
 // CERTO — beforeLoad dá contexto; loader busca, em paralelo com os irmãos
-beforeLoad: ({ context }) => ({ api: context.api.forPost }),
+beforeLoad: ({ context }) => ({ api: context.api.forPost() }),
 loader: ({ context, params }) => context.api.getPost(params.postId),
 ```
 
 ```tsx
 // ERRADO — chaves diferentes: o loader aquece um cache que o componente não lê
 loader: ({ context }) => context.queryClient.ensureQueryData({
- queryKey: ['posts'], queryFn: fetchPosts,
+  queryKey: ['posts'], queryFn: fetchPosts,
 }),
-component: => { useSuspenseQuery({ queryKey: ['posts', {}], queryFn: fetchPosts }) }
+component: () => { useSuspenseQuery({ queryKey: ['posts', {}], queryFn: fetchPosts }) }
 
 // CERTO — um único queryOptions compartilhado
 const postsQueryOptions = queryOptions({ queryKey: ['posts'], queryFn: fetchPosts })
 loader: ({ context }) => context.queryClient.ensureQueryData(postsQueryOptions),
-component: => { useSuspenseQuery(postsQueryOptions) }
+component: () => { useSuspenseQuery(postsQueryOptions) }
 ```
 
 | Antipadrão | Por que falha | Correção |
@@ -525,11 +525,11 @@ component: => { useSuspenseQuery(postsQueryOptions) }
 - [ ] `loaderDeps` lista só os search params usados, e não o `search` inteiro? → `TSR-LOAD-03`
 - [ ] Todo search param lido pelo loader está em `loaderDeps`? → `TSR-LOAD-04`
 - [ ] `beforeLoad` está buscando dado de tela em vez de só contexto/guarda? → `TSR-LOAD-05`
-- [ ] Guarda de auth é `throw redirect` e não `navigate` em efeito? → `TSR-LOAD-06`
+- [ ] Guarda de auth é `throw redirect()` e não `navigate()` em efeito? → `TSR-LOAD-06`
 - [ ] Componentes fora do route file usam `getRouteApi`? → `TSR-LOAD-07`
 - [ ] `pendingMs` customizado mantém `pendingMinMs > 0`? → `TSR-LOAD-08`
 - [ ] Rota com loader tem `errorComponent` (própria ou default)? → `TSR-LOAD-09`
-- [ ] Retry de erro de loader chama `router.invalidate`? → `TSR-LOAD-10`
+- [ ] Retry de erro de loader chama `router.invalidate()`? → `TSR-LOAD-10`
 - [ ] `notFoundComponent` está em rota com filhos? → `TSR-LOAD-11`
 - [ ] `beforeLoad` está livre de efeito colateral (roda em hover)? → `TSR-LOAD-12`
 - [ ] Mutações invalidam o loader nativo? → `TSR-LOAD-13`
@@ -543,7 +543,7 @@ component: => { useSuspenseQuery(postsQueryOptions) }
 
 - [TanStack Router](tanstack-router.md) · [TanStack Router - Routing Concepts](tanstack-router-routing-concepts.md) · [TanStack Router - Route Context e Code Splitting](tanstack-router-route-context-e-code-splitting.md)
 - [TanStack Router - Search Params](tanstack-router-search-params.md) — `loaderDeps` lê search params; a validação deles acontece antes do loader
-- [TanStack Router - Navegação](tanstack-router-navegacao.md) — `redirect` em `beforeLoad`, e o custo de preload disparado por `<Link>`
+- [TanStack Router - Navegação](tanstack-router-navegacao.md) — `redirect()` em `beforeLoad`, e o custo de preload disparado por `<Link>`
 - [TanStack Router - File-Based Routing](tanstack-router-file-based-routing.md) · [TanStack Router - Route Trees](tanstack-router-route-trees.md) · [TanStack Router - Route Matching](tanstack-router-route-matching.md)
 - [React - Efeitos e Sincronização](react-efeitos-e-sincronizacao.md) · [React - Suspense e Assincronia](react-suspense-e-assincronia.md) · [React.js](react-js.md)
 - · · [TanStack Query - O que um Dev Frontend Precisa Saber](tanstack-query-o-que-um-dev-frontend-precisa-saber.md)
@@ -562,7 +562,7 @@ Verificadas em 2026-08-14:
 
 ### O que a verificação contrariou
 
-- **`loader` aceita forma de objeto.** Além de `loader: =>...`, existe `loader: { handler, staleReloadMode }`. A opção `staleReloadMode` (`'background'` default, `'blocking'`) não aparece na maioria dos exemplos de terceiros.
+- **`loader` aceita forma de objeto.** Além de `loader: () => ...`, existe `loader: { handler, staleReloadMode }`. A opção `staleReloadMode` (`'background'` default, `'blocking'`) não aparece na maioria dos exemplos de terceiros.
 - **`staleTime` default é `0`, mas `preloadStaleTime` é `30_000`.** É comum supor um único número; são dois, com defaults diferentes, e é o segundo que quebra a integração com TanStack Query quando não é zerado.
 - **Preload roda `beforeLoad` E o `loader`** — e `beforeLoad` roda em hover, o que torna efeito colateral ali um bug silencioso. A frase da fonte *"its speculative lane still runs `beforeLoad`, but skips that route's loader"* é **condicionada a `preload: false` na rota**; lida fora de contexto, inverte o modelo. O que a lane especulativa nunca faz é ser promovida ao estado do router.
 - **`pendingComponent` não aparece por padrão em carregamentos rápidos.** `defaultPendingMs` é `1000` — quem espera ver o skeleton em toda navegação vai achar que a opção não funciona.

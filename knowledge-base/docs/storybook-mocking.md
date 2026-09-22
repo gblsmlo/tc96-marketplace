@@ -2,11 +2,11 @@
 titulo: Storybook - Mocking
 Link: https://storybook.js.org/docs/writing-stories/mocking-data-and-modules/mocking-modules
 tags:
- - storybook
- - mocking
- - msw
- - testing
- - agent-context
+  - storybook
+  - mocking
+  - msw
+  - testing
+  - agent-context
 source: "Documentação oficial do Storybook — Mocking modules, Mocking network requests, framework TanStack React"
 verificado-em: 2026-08-19
 ---
@@ -25,20 +25,20 @@ verificado-em: 2026-08-19
 
 | O que substituir | Ferramenta | Onde se declara |
 | --- | --- | --- |
-| callback que a story quer observar | `fn` | `meta.args` |
-| módulo do projeto ou pacote npm | `sb.mock` | **só** `.storybook/preview.*` |
+| callback que a story quer observar | `fn()` | `meta.args` |
+| módulo do projeto ou pacote npm | `sb.mock()` | **só** `.storybook/preview.*` |
 | requisição HTTP | MSW | `preview` + `beforeEach` |
 
 A primeira é assunto de [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) § 2. As outras duas são esta nota.
 
 ---
 
-## 2. `sb.mock` — automock de módulo
+## 2. `sb.mock()` — automock de módulo
 
 ### 2.1 O registro é de projeto
 
 ```tsx
-//.storybook/preview.tsx
+// .storybook/preview.tsx
 import { sb } from 'storybook/test';
 
 sb.mock(import('../../../packages/ui/src/lib/sessao.ts'));
@@ -48,7 +48,7 @@ const preview = { /* … */ } satisfies Preview;
 export default preview;
 ```
 
-**Esta é a restrição que mais surpreende:** a fonte diz que só é possível registrar módulo mockado na configuração de nível de projeto, *"para garantir mocking consistente e performante em todas as stories"*. Um `sb.mock` dentro de um arquivo de story não funciona — e não falha de forma óbvia (`SB-MOCK-01`).
+**Esta é a restrição que mais surpreende:** a fonte diz que só é possível registrar módulo mockado na configuração de nível de projeto, *"para garantir mocking consistente e performante em todas as stories"*. Um `sb.mock()` dentro de um arquivo de story não funciona — e não falha de forma óbvia (`SB-MOCK-01`).
 
 A divisão de trabalho fica assim, e vale memorizar:
 
@@ -67,14 +67,14 @@ A divisão de trabalho fica assim, e vale memorizar:
 
 Para módulo local, a fonte exige: **caminho relativo, com extensão, sem alias** (`SB-MOCK-02`).
 
-**Relativo ao arquivo que chama** — ou seja, a `.storybook/preview.tsx`, já que é o único lugar onde `sb.mock` pode ser registrado (`SB-MOCK-01`). Não é relativo à raiz do pacote nem ao componente.
+**Relativo ao arquivo que chama** — ou seja, a `.storybook/preview.tsx`, já que é o único lugar onde `sb.mock()` pode ser registrado (`SB-MOCK-01`). Não é relativo à raiz do pacote nem ao componente.
 
 > **A extensão `.ts` no specifier atrita com TypeScript.** Importar `'./x.ts'` num projeto TS exige configuração de compilador que a fonte do Storybook não nomeia. Registrado em [Storybook - Pendências de revisão](storybook-pendencias-de-revisao.md) — se o typecheck reclamar, o problema é esse, não o `sb.mock`.
 
 ```ts
-sb.mock(import('../src/lib/sessao.ts')); // ✅
-sb.mock(import('@escopo/ui/lib/sessao')); // ❌ alias
-sb.mock(import('../src/lib/sessao')); // ❌ sem extensão
+sb.mock(import('../src/lib/sessao.ts'));   // ✅
+sb.mock(import('@escopo/ui/lib/sessao'));  // ❌ alias
+sb.mock(import('../src/lib/sessao'));      // ❌ sem extensão
 ```
 
 **No monorepo isso dói.** `apps/storybook/.storybook/preview.tsx` mockando algo de `packages/ui` produz um caminho relativo longo e frágil — e é o único formato aceito. Duas mitigações:
@@ -84,26 +84,26 @@ sb.mock(import('../src/lib/sessao')); // ❌ sem extensão
 
 Pacote npm é pelo nome, sem essas restrições: `sb.mock(import('uuid'))`.
 
-### 2.4 Comportamento por story, com `mocked`
+### 2.4 Comportamento por story, com `mocked()`
 
 ```tsx
 import { mocked } from 'storybook/test';
 import { obterUsuarioDaSessao } from '../src/lib/sessao';
 
 export const UsuarioAdministrador: Story = {
- beforeEach: async => {
- mocked(obterUsuarioDaSessao).mockReturnValue({ nome: 'Ada', papel: 'admin' });
- },
+  beforeEach: async () => {
+    mocked(obterUsuarioDaSessao).mockReturnValue({ nome: 'Ada', papel: 'admin' });
+  },
 };
 
 export const SessaoExpirada: Story = {
- beforeEach: async => {
- mocked(obterUsuarioDaSessao).mockReturnValue(null);
- },
+  beforeEach: async () => {
+    mocked(obterUsuarioDaSessao).mockReturnValue(null);
+  },
 };
 ```
 
-`mocked` dá acesso **tipado** ao mock. Os métodos verificados na fonte:
+`mocked()` dá acesso **tipado** ao mock. Os métodos verificados na fonte:
 
 | Método | Para que |
 | --- | --- |
@@ -122,14 +122,14 @@ import { expect, mocked } from 'storybook/test';
 import { concluirTarefa } from '../src/lib/tarefas';
 
 export const ConcluiTarefa: Story = {
- beforeEach: async => {
- mocked(concluirTarefa).mockResolvedValue(undefined);
- },
- play: async ({ canvas, userEvent }) => {
- const botao = await canvas.findByRole('button', { name: 'Concluir' });
- await userEvent.click(botao);
- await expect(mocked(concluirTarefa)).toHaveBeenCalledWith('1');
- },
+  beforeEach: async () => {
+    mocked(concluirTarefa).mockResolvedValue(undefined);
+  },
+  play: async ({ canvas, userEvent }) => {
+    const botao = await canvas.findByRole('button', { name: 'Concluir' });
+    await userEvent.click(botao);
+    await expect(mocked(concluirTarefa)).toHaveBeenCalledWith('1');
+  },
 };
 ```
 
@@ -137,7 +137,7 @@ Duas diferenças em relação ao spy de prop (`SB-TEST-03`): o alvo vem de `mock
 
 `findByRole` porque a lista vem da rede — ver [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) § 2.3.
 
-**Composição não verificada:** que `mocked` funcione dentro de `play` (e não só em `beforeEach`), e que `toHaveBeenCalledWith` opere sobre automock do `sb.mock` do mesmo jeito que sobre `fn`, são leituras coerentes com a fonte mas **sem exemplo próprio nela**. Registrado em [Storybook - Pendências de revisão](storybook-pendencias-de-revisao.md).
+**Composição não verificada:** que `mocked()` funcione dentro de `play` (e não só em `beforeEach`), e que `toHaveBeenCalledWith` opere sobre automock do `sb.mock` do mesmo jeito que sobre `fn()`, são leituras coerentes com a fonte mas **sem exemplo próprio nela**. Registrado em [Storybook - Pendências de revisão](storybook-pendencias-de-revisao.md).
 
 ### 2.5 `__mocks__`
 
@@ -157,12 +157,12 @@ Terceiro caminho, baseado em condição de import do próprio Node:
 ```json
 // package.json
 {
- "imports": {
- "#lib/sessao": {
- "storybook": "./lib/sessao.mock.ts",
- "default": "./lib/sessao.ts"
- }
- }
+  "imports": {
+    "#lib/sessao": {
+      "storybook": "./lib/sessao.mock.ts",
+      "default": "./lib/sessao.ts"
+    }
+  }
 }
 ```
 
@@ -172,23 +172,23 @@ import { fn } from 'storybook/test';
 import * as real from './sessao';
 
 export const obterUsuarioDaSessao = fn(real.obterUsuarioDaSessao)
-.mockName('obterUsuarioDaSessao');
+  .mockName('obterUsuarioDaSessao');
 ```
 
 O código da aplicação passa a importar `#lib/sessao`, e a resolução muda conforme a condição. Vantagem: o arquivo de mock pode ser TypeScript. Custo: mexe no código de produção, e todo import precisa usar o alias `#`.
 
 ### 2.7 O que não dá para desfazer
 
-A fonte registra que **o grafo de módulos é fixo no build de produção**, sem possibilidade de "desmockar". Um módulo registrado em `sb.mock` está mockado para o Storybook inteiro — o que uma story pode fazer é definir comportamento, inclusive delegando ao real via `spy: true`.
+A fonte registra que **o grafo de módulos é fixo no build de produção**, sem possibilidade de "desmockar". Um módulo registrado em `sb.mock()` está mockado para o Storybook inteiro — o que uma story pode fazer é definir comportamento, inclusive delegando ao real via `spy: true`.
 
 ### 2.8 Regras — `SB-MOCK-01` a `SB-MOCK-05`
 
 | ID | Regra |
 | --- | --- |
-| `SB-MOCK-01` | `sb.mock` **MUST** ser chamado apenas em `.storybook/preview.*`. Em arquivo de story, **NEVER**. |
-| `SB-MOCK-02` | Caminho de módulo local em `sb.mock` **MUST** ser relativo e com extensão, sem alias. |
+| `SB-MOCK-01` | `sb.mock()` **MUST** ser chamado apenas em `.storybook/preview.*`. Em arquivo de story, **NEVER**. |
+| `SB-MOCK-02` | Caminho de módulo local em `sb.mock()` **MUST** ser relativo e com extensão, sem alias. |
 | `SB-MOCK-03` | Arquivo em `__mocks__` **MUST** ser JavaScript com ESM. TypeScript ou CJS **NEVER**. |
-| `SB-MOCK-04` | Comportamento de mock **MUST** ser definido em `beforeEach`, via `mocked`. |
+| `SB-MOCK-04` | Comportamento de mock **MUST** ser definido em `beforeEach`, via `mocked()`. |
 | `SB-MOCK-05` | `{ spy: true }` **MUST** ser usado quando a implementação real deve continuar rodando. |
 
 ---
@@ -199,20 +199,20 @@ A fonte registra que **o grafo de módulos é fixo no build de produção**, sem
 
 ```bash
 npm install msw msw-storybook-addon --save-dev
-npx msw init./public --save
+npx msw init ./public --save
 ```
 
 ```ts
-//.storybook/main.ts
+// .storybook/main.ts
 staticDirs: ['../public'],
 ```
 
 ```tsx
-//.storybook/preview.tsx
+// .storybook/preview.tsx
 import { mswLoader } from 'msw-storybook-addon/csf3';
 
 const preview = {
- loaders: [mswLoader],
+  loaders: [mswLoader()],
 } satisfies Preview;
 ```
 
@@ -224,19 +224,19 @@ O `staticDirs` não é opcional: o MSW precisa que o service worker seja servido
 import { http, HttpResponse } from 'msw';
 
 export const ListaCarregada: Story = {
- beforeEach({ msw }) {
- msw.use(
- http.get('https://api.exemplo/tarefas', => HttpResponse.json(tarefas)),
- );
- },
+  beforeEach({ msw }) {
+    msw.use(
+      http.get('https://api.exemplo/tarefas', () => HttpResponse.json(tarefas)),
+    );
+  },
 };
 
 export const ErroDoServidor: Story = {
- beforeEach({ msw }) {
- msw.use(
- http.get('https://api.exemplo/tarefas', => new HttpResponse(null, { status: 500 })),
- );
- },
+  beforeEach({ msw }) {
+    msw.use(
+      http.get('https://api.exemplo/tarefas', () => new HttpResponse(null, { status: 500 })),
+    );
+  },
 };
 ```
 
@@ -246,22 +246,22 @@ Para o estado de **carregando**, a fonte usa `delay` do próprio MSW dentro do r
 import { delay, http, HttpResponse } from 'msw';
 
 export const Carregando: Story = {
- beforeEach({ msw }) {
- msw.use(
- http.get('https://api.exemplo/tarefas', async => {
- await delay(800);
- return HttpResponse.json(tarefas);
- }),
- );
- },
+  beforeEach({ msw }) {
+    msw.use(
+      http.get('https://api.exemplo/tarefas', async () => {
+        await delay(800);
+        return HttpResponse.json(tarefas);
+      }),
+    );
+  },
 };
 ```
 
 GraphQL segue a mesma forma com `graphql.query(...)`.
 
-**Níveis.** A fonte afirma que `beforeEach` com handlers vale também no `meta` (todas as stories do arquivo) e no `preview` (todo o projeto) — mas **só exemplifica o nível de story**. A sintaxe dos outros dois não foi verificada aqui. Sem handler default no projeto, uma story que não declara `msw.use` faz requisição não interceptada, e o que acontece então não é documentado.
+**Níveis.** A fonte afirma que `beforeEach` com handlers vale também no `meta` (todas as stories do arquivo) e no `preview` (todo o projeto) — mas **só exemplifica o nível de story**. A sintaxe dos outros dois não foi verificada aqui. Sem handler default no projeto, uma story que não declara `msw.use()` faz requisição não interceptada, e o que acontece então não é documentado.
 
-**A API mudou na v3 do addon.** O padrão antigo `parameters.msw.handlers` foi substituído por `mswLoader` mais `beforeEach({ msw })`. Exemplo com `parameters.msw` é de versão anterior.
+**A API mudou na v3 do addon.** O padrão antigo `parameters.msw.handlers` foi substituído por `mswLoader()` mais `beforeEach({ msw })`. Exemplo com `parameters.msw` é de versão anterior.
 
 ### 3.3 Por que a story de erro importa
 
@@ -282,13 +282,13 @@ E é onde a ponte com o backend vale: nem o cliente `hc` do Hono nem o Eden Trea
 Story que alcança código de servidor quebra no browser com erro de módulo Node — `node:fs`, `node:crypto`, driver de banco. A doc do framework TanStack descreve três camadas:
 
 1. **Mocks de framework** — automáticos para os módulos `@tanstack/*`. **Só no caminho `tanstack-react`**: sob `react-vite` esta camada não existe, e o mock precisa ser declarado (`SB-RV-07`).
-2. **Mock de aplicação** — `sb.mock` no preview, com arquivo em `__mocks__` quando preciso.
+2. **Mock de aplicação** — `sb.mock()` no preview, com arquivo em `__mocks__` quando preciso.
 3. **Identificação do módulo** — ler o *stack trace* do erro para descobrir **qual** dependência Node foi puxada.
 
 O passo 3 é o que se pula e é o que resolve. O erro não diz "seu componente importa o client de banco"; ele diz que `node:fs` não existe. O caminho é ler o rastro até achar o módulo do seu código que iniciou a cadeia, e mockar **esse**, não o módulo do Node.
 
 ```tsx
-//.storybook/preview.tsx
+// .storybook/preview.tsx
 import { sb } from 'storybook/test';
 sb.mock(import('../../../apps/web/src/db/client.ts'));
 ```
@@ -307,7 +307,7 @@ sb.mock(import('../../../apps/web/src/db/client.ts'));
 
 ## 5. Antipadrões
 
-### 5.1 `sb.mock` dentro do arquivo de story
+### 5.1 `sb.mock()` dentro do arquivo de story
 
 O erro mais comum, porque é onde a intuição manda colocar. Registro é no preview (`SB-MOCK-01`).
 
@@ -345,7 +345,7 @@ Quando o servidor muda o contrato, o mock continua verde e a story documenta uma
 ## Relacionados
 
 - [Storybook](storybook.md) — hub
-- [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) — `fn`, `mocked` dentro da `play`
+- [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) — `fn()`, `mocked()` dentro da `play`
 - [Storybook - Decorators e Contexto](storybook-decorators-e-contexto.md) — `beforeEach` e limpeza
 - [Storybook - TanStack React](storybook-tanstack-react.md) — mocks de router e de server function
 - [Storybook - React Vite](storybook-react-vite.md) — onde `routeOverrides` não existe e o mock de módulo o substitui
@@ -363,13 +363,13 @@ Verificadas diretamente em **2026-08-19**:
 
 **Notas de verificação:**
 
-- **`sb.mock` só pode ser registrado na configuração de projeto.** A fonte dá a razão: consistência e performance em todas as stories.
+- **`sb.mock()` só pode ser registrado na configuração de projeto.** A fonte dá a razão: consistência e performance em todas as stories.
 - **Caminho local precisa ser relativo, com extensão e sem alias.** É a restrição que mais atrita com monorepo.
 - **Arquivos em `__mocks__` precisam ser JavaScript com ESM** — não TypeScript, não CJS — e exportar os mesmos named exports.
 - **`spy: true` preserva a implementação real** e ainda permite observar e sobrescrever; o default (`spy: false`) substitui todo export por mock do Vitest.
 - **O grafo de módulos é fixo no build de produção**: não há como desmockar.
-- **A API do `msw-storybook-addon` v3 é `mswLoader` + `beforeEach({ msw })`**, não `parameters.msw.handlers`.
-- **`npx msw init./public --save` e `staticDirs`** são parte obrigatória do setup de MSW.
+- **A API do `msw-storybook-addon` v3 é `mswLoader()` + `beforeEach({ msw })`**, não `parameters.msw.handlers`.
+- **`npx msw init ./public --save` e `staticDirs`** são parte obrigatória do setup de MSW.
 - **O framework TanStack descreve três camadas para dependência server-only**, e o passo de identificar o módulo pelo stack trace é explícito.
 - **`delay` do MSW é a forma da fonte para simular latência** e produzir estado de carregando.
 - **Handlers de nível `meta` e projeto são afirmados pela fonte, sem exemplo de sintaxe.**

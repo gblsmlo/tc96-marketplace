@@ -11,19 +11,58 @@ ACENTOS = str.maketrans("áãâéêíóõôúüç", "aaaeeiooouuc")
 def slug(nome):
     return re.sub(r"[^a-z0-9]+", "-", nome.lower().translate(ACENTOS)).strip("-") + ".md"
 
+# Limpeza cosmetica do que sobra ao tirar uma citacao: parentese vazio, virgula
+# orfa, espaco duplo. So pode rodar na LINHA de onde a citacao saiu — aplicada ao
+# documento inteiro, ela come `()` de codigo e achata indentacao. Foi o que
+# aconteceu ate 2026-09-22: 2.505 `()` e 5.524 linhas de indentacao, em 122 notas.
+def limpar_linha(linha):
+    # So o que sobra do TEXTO removido. Nada que possa existir em codigo:
+    # `()` e `(,` sao apagados pelos padroes ancorados no proprio marcador,
+    # aqui eles comeriam `req.json()` e `sql`...`.simple()` em code span.
+    linha = re.sub(r"\s+,", ",", linha)
+    # a citacao era o conteudo da oracao: sobra "Ver." pendurado. Remover a
+    # oracao e perda declarada da decisao sobre Zettels; deixar "Ver." e pior.
+    linha = re.sub(r"^\s*[-*]?\s*[Vv]er(\s+e)?\s*[.,;]\s*$", "", linha)
+    linha = re.sub(r"\s*[,;]?\s*(?:—\s*)?\b[Vv]er(\s+e)?\s*\.\s*$", ".", linha)
+    linha = re.sub(r"\s*(?:—\s*)?\b[Vv]er\s+e\b\.?", "", linha)
+    # espaco duplo so no meio da linha; indentacao (inclusive arte ASCII) fica
+    linha = re.sub(r"(?<=\S) {2,}", " ", linha)
+    return linha.rstrip()
+
+
+def por_linha(texto, tocou, transformar):
+    """Aplica `transformar` linha a linha; so limpa onde `tocou` deu verdadeiro.
+
+    Item de lista cujo unico conteudo era a citacao sai inteiro — um `-` sozinho
+    nao e uma lacuna declarada, e ruido.
+    """
+    saida = []
+    for linha in texto.split("\n"):
+        if not tocou(linha):
+            saida.append(linha)
+            continue
+        nova = limpar_linha(transformar(linha))
+        if re.fullmatch(r"\s*[-*+]\s*", nova):
+            continue
+        saida.append(nova)
+    return "\n".join(saida)
+
+
+Z = r"`Zettels/[^`]*\.md`"
+
+
 def tirar_zettels(texto):
-    z = r"`Zettels/[^`]*\.md`"
+    # linha que e so um caminho de Zettel em texto puro: sai inteira
     texto = re.sub(r"^[ \t]*[-+]?[ \t]*Zettels/[^\n]*\.md[ \t]*\n", "", texto, flags=re.M)
-    texto = re.sub(r"\s*\((?:" + z + r")(?:,\s*(?:" + z + r"))*\)", "", texto)
-    texto = re.sub(r",\s*" + z, "", texto)
-    texto = re.sub(z + r",\s*", "", texto)
-    texto = re.sub(r"\s*" + z, "", texto)
-    texto = re.sub(r"\(\s*\)", "", texto)
-    texto = re.sub(r"\(\s*,\s*", "(", texto)
-    texto = re.sub(r"\s+,", ",", texto)
-    texto = re.sub(r" {2,}", " ", texto)
-    texto = re.sub(r" +\.", ".", texto)
-    return re.sub(r" +$", "", texto, flags=re.M)
+
+    def tira(linha):
+        linha = re.sub(r"\s*\((?:" + Z + r")(?:,\s*(?:" + Z + r"))*\)", "", linha)
+        linha = re.sub(r",\s*" + Z, "", linha)
+        linha = re.sub(Z + r",\s*", "", linha)
+        return re.sub(r"\s*" + Z, "", linha)
+
+    return por_linha(texto, lambda l: re.search(Z, l), tira)
+
 
 def resolver_wikilinks(texto, sub_atual, indice, zettels):
     def alvo(m):
@@ -37,31 +76,22 @@ def resolver_wikilinks(texto, sub_atual, indice, zettels):
         sub, arquivo = destino
         prefixo = "" if sub == sub_atual else f"../{sub}/"
         return f"[{rotulo}]({prefixo}{arquivo})" + (f" {secao}" if secao else "")
+
     texto = re.sub(r"\[\[([^\]|#]+?)(#[^\]|]+)?(?:\|([^\]]+))?\]\]", alvo, texto)
+
     def ancora(m):
         alvo_, rot = m.group(1), (m.group(2) or m.group(1)).strip()
         frag = re.sub(r"[^a-z0-9]+", "-", alvo_.lower().translate(ACENTOS)).strip("-")
         return f"[{rot}](#{frag})"
     texto = re.sub(r"\[\[#([^\]|]+?)(?:\|([^\]]+))?\]\]", ancora, texto)
-    texto = re.sub(r"\s*\(\x00(?:,\s*\x00)*\)", "", texto)
-    texto = re.sub(r",\s*\x00", "", texto)
-    texto = re.sub(r"\x00,\s*", "", texto)
-    texto = re.sub(r"\s*\x00", "", texto)
-    texto = re.sub(r"\(\s*\)", "", texto)
-    texto = re.sub(r"\(\s*,\s*", "(", texto)
-    texto = re.sub(r"\s+,", ",", texto)
-    texto = re.sub(r" {2,}", " ", texto)
-    return re.sub(r" +$", "", texto, flags=re.M)
 
-def tirar_links_de_fora(texto, arquivos):
-    """[rotulo](../Areas/X.md) -> rotulo. Nada aqui aponta para fora do projeto."""
-    def alvo(m):
-        rotulo, destino = m.group(1), m.group(2)
-        if destino.split("/")[-1] in arquivos:
-            return m.group(0)
-        return rotulo
-    # o destino pode ter parenteses no nome ("... (SPA).md"): aceita um nivel
-    return re.sub(r"\[([^\]]+)\]\((\.\.?/(?:[^()\s]|\([^()]*\))+\.md)\)", alvo, texto)
+    def tira(linha):
+        linha = re.sub(r"\s*\(\x00(?:,\s*\x00)*\)", "", linha)
+        linha = re.sub(r",\s*\x00", "", linha)
+        linha = re.sub(r"\x00,\s*", "", linha)
+        return re.sub(r"\s*\x00", "", linha)
+
+    return por_linha(texto, lambda l: "\x00" in l, tira)
 
 
 def tirar_pastas_do_vault(texto, indice):
@@ -88,6 +118,17 @@ def tirar_pastas_do_vault(texto, indice):
 
 
 SUB_ATUAL = ["docs"]
+
+
+def tirar_links_de_fora(texto, arquivos):
+    """[rotulo](../Areas/X.md) -> rotulo. Nada aqui aponta para fora do projeto."""
+    def alvo(m):
+        rotulo, destino = m.group(1), m.group(2)
+        if destino.split("/")[-1] in arquivos:
+            return m.group(0)
+        return rotulo
+    # o destino pode ter parenteses no nome ("... (SPA).md"): aceita um nivel
+    return re.sub(r"\[([^\]]+)\]\((\.\.?/(?:[^()\s]|\([^()]*\))+\.md)\)", alvo, texto)
 
 
 def com_titulo(texto, titulo):

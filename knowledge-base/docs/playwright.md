@@ -2,13 +2,13 @@
 titulo: Playwright
 Link: https://playwright.dev/docs
 tags:
- - playwright
- - testing
- - e2e
- - frontend
- - agents
- - reference
- - agent-context
+  - playwright
+  - testing
+  - e2e
+  - frontend
+  - agents
+  - reference
+  - agent-context
 source: "Documentação oficial do Playwright — playwright.dev/docs, linha 1.62"
 verificado-em: 2026-08-20
 ---
@@ -46,12 +46,12 @@ Três fatos que decidem se o projeto sobe, e que quase nunca são o que se supõ
 
 | Timeout | Default | Onde se ajusta |
 | --- | --- | --- |
-| **teste** | **30 000 ms** | `timeout` top-level, `test.setTimeout`, `test.slow` |
+| **teste** | **30 000 ms** | `timeout` top-level, `test.setTimeout()`, `test.slow()` |
 | **asserção** (`expect`) | **5 000 ms** | `expect: { timeout }`, ou opção da própria asserção |
 | **ação** (`actionTimeout`) | **0 — sem timeout** | `use: { actionTimeout }`, ou opção da ação |
 | **navegação** (`navigationTimeout`) | **0 — sem timeout** | `use: { navigationTimeout }`, ou opção do `goto` |
 | **global** (`globalTimeout`) | **0 — sem timeout** | só no config |
-| **`beforeAll`/`afterAll`** | 30 000 ms | `test.setTimeout` dentro do hook |
+| **`beforeAll`/`afterAll`** | 30 000 ms | `test.setTimeout()` dentro do hook |
 | **fixture** | compartilha o do teste | `{ timeout }` na definição da fixture |
 
 Ação e navegação **não têm limite próprio**: elas são limitadas apenas pelo teto de 30 s do teste. É por isso que um clique num elemento que nunca aparece falha com "Test timeout of 30000ms exceeded" e não com um erro de clique — o diagnóstico está no trace, não na mensagem. Ver a § 5.5.
@@ -94,7 +94,7 @@ Carregue nesta ordem, parando assim que tiver o suficiente:
 
 ### Convenções e vocabulário
 
-**Todos os exemplos são TypeScript** e importam de `@playwright/test`. Onde a fonte oferece variantes em Python, Java e.NET, esta doc cobre só Node.
+**Todos os exemplos são TypeScript** e importam de `@playwright/test`. Onde a fonte oferece variantes em Python, Java e .NET, esta doc cobre só Node.
 
 Termos usados sem redefinição nos satélites:
 
@@ -123,7 +123,7 @@ Cinco afirmações. Quase todo teste flaky que um agente escreve viola uma delas
 
 **2. A espera é da ferramenta, não do teste.** Toda ação roda actionability checks antes de agir; toda asserção web-first reespera até passar. O tempo que um teste bem escrito passa esperando é implícito e adaptativo. Um `waitForTimeout` no meio de um teste não é "uma espera": é a declaração de que quem escreveu não sabia o que estava esperando — e é, ao mesmo tempo, lento quando a máquina está rápida e insuficiente quando está lenta.
 
-**3. Afirmar sobre a UI é sempre `expect(locator)`, nunca `expect(await …)`.** A diferença não é estilística. `expect(await locator.isVisible).toBe(true)` lê um booleano de um instante e afirma sobre esse instante congelado — se o elemento aparece 40 ms depois, o teste falha e o defeito não existe. `expect(locator).toBeVisible` afirma sobre a **condição**, e reespera. As duas linhas parecem equivalentes e têm confiabilidade oposta.
+**3. Afirmar sobre a UI é sempre `expect(locator)`, nunca `expect(await …)`.** A diferença não é estilística. `expect(await locator.isVisible()).toBe(true)` lê um booleano de um instante e afirma sobre esse instante congelado — se o elemento aparece 40 ms depois, o teste falha e o defeito não existe. `expect(locator).toBeVisible()` afirma sobre a **condição**, e reespera. As duas linhas parecem equivalentes e têm confiabilidade oposta.
 
 **4. Isolamento é por `BrowserContext`, e é barato.** Cada teste recebe um contexto novo — cookies, storage e cache próprios. Isso não é uma otimização: é o que permite paralelismo, retry e execução em qualquer ordem. Todo estado compartilhado entre testes é, portanto, uma decisão explícita que alguém tomou — via `storageState`, fixture worker-scoped ou `mode: 'serial'` — e que deve estar escrita. Estado compartilhado por acidente é a origem da falha que só acontece em CI.
 
@@ -141,7 +141,7 @@ Saber de onde algo vem evita a maior parte dos erros de import.
 | --- | --- |
 | `@playwright/test` | `test`, `expect`, `defineConfig`, `devices`, `mergeTests`, `mergeExpects`, `chromium`/`firefox`/`webkit`, `request` |
 | `@playwright/test/reporter` | tipos de reporter customizado: `Reporter`, `TestCase`, `TestResult`, `FullConfig`, `FullResult`, `Suite` |
-| `playwright` | a **Library**: `chromium.launch` e afins, sem runner. Não é para suíte de teste (`PW-CORE-02`) |
+| `playwright` | a **Library**: `chromium.launch()` e afins, sem runner. Não é para suíte de teste (`PW-CORE-02`) |
 | `@playwright/experimental-ct-react` | component testing legado — **substituído** pelo modelo de stories da própria `@playwright/test` na 1.62. Ver § 8 |
 | `@axe-core/playwright` | `AxeBuilder`, para varredura de acessibilidade. É pacote de terceiro, não do Playwright |
 | `@playwright/cli` | binário `playwright-cli`, global. Não é dependência de projeto |
@@ -157,7 +157,7 @@ Saber de onde algo vem evita a maior parte dos erros de import.
 
 Superfície ativa do que se usa em código novo. A coluna **Satélite** diz o que carregar.
 
-**Deliberadamente fora deste mapa:** os bindings Python/Java/.NET; Android e Electron; `connectOverCDP` e grid remoto; WebView2; extensões de Chrome; Service Workers como assunto próprio (só aparece como causa de rede sumida, § 5.4); `page.screencast` e a API de vídeo além do que o config expõe; `browser.bind`. Se a tarefa exigir um deles, consulte a fonte: a ausência aqui significa "não verificado nesta doc", não "não existe".
+**Deliberadamente fora deste mapa:** os bindings Python/Java/.NET; Android e Electron; `connectOverCDP` e grid remoto; WebView2; extensões de Chrome; Service Workers como assunto próprio (só aparece como causa de rede sumida, § 5.4); `page.screencast` e a API de vídeo além do que o config expõe; `browser.bind()`. Se a tarefa exigir um deles, consulte a fonte: a ausência aqui significa "não verificado nesta doc", não "não existe".
 
 ### 4.1 `playwright.config.ts` — nível superior
 
@@ -191,7 +191,7 @@ Opções do **runner**. A fonte é explícita: elas são top-level e **não** v�
 
 ### 4.2 `use` — opções de fixture e browser
 
-Valem em `use` top-level, em `projects[].use` e em `test.use`, do mais geral para o mais específico.
+Valem em `use` top-level, em `projects[].use` e em `test.use()`, do mais geral para o mais específico.
 
 | Grupo | Opções | Satélite |
 | --- | --- | --- |
@@ -247,19 +247,19 @@ Os valores completos de `trace`, `video` e `screenshot` — que são **sete, set
 
 ```
 O elemento tem papel e nome acessível? (botão, link, campo rotulado, cabeçalho)
-├─ SIM → getByRole('papel', { name }) ← o default, e o caminho certo em >80% dos casos
+├─ SIM  → getByRole('papel', { name })            ← o default, e o caminho certo em >80% dos casos
 └─ NÃO
- ├─ É um campo de formulário com <label>? → getByLabel
- ├─ É um campo sem label, só com placeholder? → getByPlaceholder
- │ (e o achado real é o label ausente — ver § 8)
- ├─ É uma imagem? → getByAltText
- ├─ É texto puro, não interativo? → getByText
- └─ Nada acima serve, e mexer no componente não é opção agora?
- → getByTestId (e registre a dívida)
- └─ nem isso? → locator('css=…') ← último recurso, justifique no código
+   ├─ É um campo de formulário com <label>?       → getByLabel
+   ├─ É um campo sem label, só com placeholder?   → getByPlaceholder
+   │                                                 (e o achado real é o label ausente — ver § 8)
+   ├─ É uma imagem?                               → getByAltText
+   ├─ É texto puro, não interativo?               → getByText
+   └─ Nada acima serve, e mexer no componente não é opção agora?
+      → getByTestId  (e registre a dívida)
+         └─ nem isso? → locator('css=…')  ← último recurso, justifique no código
 ```
 
-Resolveu para mais de um elemento (strict mode violation)? **A resposta não é `.first`.** É, nesta ordem: `filter({ hasText })`, encadear dentro de um container (`page.getByRole('listitem').filter(…).getByRole('button')`), ou `filter({ has: … })`. `nth`/`first`/`last` só quando a posição *é* o critério — "o primeiro resultado da busca" (`PW-LOC-02`).
+Resolveu para mais de um elemento (strict mode violation)? **A resposta não é `.first()`.** É, nesta ordem: `filter({ hasText })`, encadear dentro de um container (`page.getByRole('listitem').filter(…).getByRole('button')`), ou `filter({ has: … })`. `nth`/`first`/`last` só quando a posição *é* o critério — "o primeiro resultado da busca" (`PW-LOC-02`).
 
 ### 5.2 O teste é flaky — o que fazer
 
@@ -267,32 +267,32 @@ Esta é a árvore mais usada da doc. Percorra na ordem; **não pule para o fim**
 
 ```
 1. Existe waitForTimeout no teste?
- → remova. É a causa, não o sintoma (PW-CORE-05)
+   → remova. É a causa, não o sintoma (PW-CORE-05)
 
 2. Alguma asserção lê valor antes de afirmar?
- expect(await x.isVisible).toBe(true) / expect(await x.textContent).toBe('y')
- → troque por asserção web-first (PW-EXP-01)
+   expect(await x.isVisible()).toBe(true) / expect(await x.textContent()).toBe('y')
+   → troque por asserção web-first (PW-EXP-01)
 
 3. O teste espera navegação/evento DEPOIS de disparar a ação?
- → arme a espera antes: const p = page.waitForEvent(…); await acao; await p (PW-ACT-03)
+   → arme a espera antes: const p = page.waitForEvent(…); await acao(); await p (PW-ACT-03)
 
 4. Tem waitUntil: 'networkidle'?
- → remova. A fonte desencoraja explicitamente (PW-ACT-04)
+   → remova. A fonte desencoraja explicitamente (PW-ACT-04)
 
 5. O teste depende de dado que outro teste criou?
- → é dependência de ordem. Isole por fixture, ou declare mode:'serial' (PW-CORE-06)
+   → é dependência de ordem. Isole por fixture, ou declare mode:'serial' (PW-CORE-06)
 
 6. Falha só em CI, passa local?
- ├─ é screenshot? → SO/versão diferentes (PW-SNAP-02)
- ├─ é timing? → CI é mais lento; o teto de 30 s do teste está sendo atingido
- │ por espera legítima. Leia o trace antes de subir timeout
- └─ é estado de servidor? → workers concorrendo pela mesma conta (PW-AUTH-03)
+   ├─ é screenshot?          → SO/versão diferentes (PW-SNAP-02)
+   ├─ é timing?              → CI é mais lento; o teto de 30 s do teste está sendo atingido
+   │                            por espera legítima. Leia o trace antes de subir timeout
+   └─ é estado de servidor?  → workers concorrendo pela mesma conta (PW-AUTH-03)
 
 7. Falha só com paralelismo? (passa com --workers=1)
- → estado compartilhado: conta, registro no banco, arquivo, porta
+   → estado compartilhado: conta, registro no banco, arquivo, porta
 
 8. Nada acima
- → LEIA O TRACE (PW-DBG-01). Não altere o teste antes disso.
+   → LEIA O TRACE (PW-DBG-01). Não altere o teste antes disso.
 ```
 
 **O que nunca é a resposta:** subir `retries`. Retry esconde flake, não conserta (`PW-RUN-03`). Ele existe para absorver a instabilidade *residual* de uma suíte já sã.
@@ -304,20 +304,20 @@ Vale para UM arquivo, e é trivial?
 └─ test.beforeEach no arquivo
 
 Vale para vários arquivos, ou tem teardown, ou é tipado?
-└─ fixture (test.extend) ← o caso normal (PW-FIX-01)
- ├─ precisa rodar por teste? → escopo default
- ├─ é caro e reusável? → { scope: 'worker' }
- ├─ deve rodar sempre? → { auto: true }
- └─ é parâmetro de suíte? → { option: true } + projects[].use
+└─ fixture (test.extend)                              ← o caso normal (PW-FIX-01)
+   ├─ precisa rodar por teste?     → escopo default
+   ├─ é caro e reusável?           → { scope: 'worker' }
+   ├─ deve rodar sempre?           → { auto: true }
+   └─ é parâmetro de suíte?        → { option: true } + projects[].use
 
 Precisa rodar UMA vez antes de tudo, e o resultado é estado externo?
-└─ setup project + dependencies ← o recomendado pela fonte
- (login, semear banco, subir tenant)
- └─ e limpar depois? → teardown: 'nome-do-project'
+└─ setup project + dependencies                       ← o recomendado pela fonte
+   (login, semear banco, subir tenant)
+   └─ e limpar depois? → teardown: 'nome-do-project'
 
 Precisa rodar antes do runner existir?
-└─ globalSetup/globalTeardown ← último recurso: sem trace, sem fixture,
- não aparece no relatório (PW-CFG-03)
+└─ globalSetup/globalTeardown  ← último recurso: sem trace, sem fixture,
+                                  não aparece no relatório (PW-CFG-03)
 ```
 
 ### 5.4 Como substituir o mundo externo
@@ -325,14 +325,14 @@ Precisa rodar antes do runner existir?
 ```
 O que substituir?
 ├─ resposta HTTP de API
-│ ├─ quero resposta inventada → route.fulfill({ json })
-│ ├─ quero a real, com um ajuste → route.fetch + fulfill({ response, json })
-│ └─ quero congelar o tráfego real → routeFromHAR (update:true grava, false replica)
-├─ WebSocket → routeWebSocket
-├─ API do browser (bateria, geo, …) → page.addInitScript ANTES do goto
-├─ o tempo → page.clock (setFixedTime, ou install+pauseAt+fastForward)
+│  ├─ quero resposta inventada       → route.fulfill({ json })
+│  ├─ quero a real, com um ajuste    → route.fetch() + fulfill({ response, json })
+│  └─ quero congelar o tráfego real  → routeFromHAR (update:true grava, false replica)
+├─ WebSocket                         → routeWebSocket
+├─ API do browser (bateria, geo, …)  → page.addInitScript  ANTES do goto
+├─ o tempo                           → page.clock (setFixedTime, ou install+pauseAt+fastForward)
 └─ o estado do servidor
- └─ NÃO mocke: crie de verdade via request (APIRequestContext) — é mais fiel e mais rápido que UI
+   └─ NÃO mocke: crie de verdade via request (APIRequestContext) — é mais fiel e mais rápido que UI
 
 Os eventos de rede simplesmente não aparecem?
 → serviceWorkers: 'block'. É a causa mais comum e a menos óbvia (PW-NET-03)
@@ -346,12 +346,12 @@ O erro diz "Test timeout of 30000ms exceeded"? **Normalmente o problema não é 
 A mensagem aponta uma ação ou asserção específica?
 ├─ SIM → o alvo nunca ficou acionável. Vá para a § 5.2. NÃO suba timeout
 └─ NÃO → o teste é genuinamente longo (upload grande, job assíncrono, migração)
- ├─ é este teste só? → test.setTimeout(n) ou test.slow
- ├─ é toda a suíte? → timeout no config
- ├─ é uma fixture caríssima? → { timeout } na fixture (ela tem teto próprio)
- └─ é uma asserção que legitimamente demora?
- → opção da asserção: expect(x).toBeVisible({ timeout: 30_000 })
- NUNCA expect.timeout global — isso afrouxa a suíte inteira
+   ├─ é este teste só?          → test.setTimeout(n) ou test.slow()
+   ├─ é toda a suíte?           → timeout no config
+   ├─ é uma fixture caríssima?  → { timeout } na fixture (ela tem teto próprio)
+   └─ é uma asserção que legitimamente demora?
+      → opção da asserção: expect(x).toBeVisible({ timeout: 30_000 })
+         NUNCA expect.timeout global — isso afrouxa a suíte inteira
 ```
 
 `actionTimeout` e `navigationTimeout` são a exceção que raramente vale ligar: por default são `0`, e o teto do teste já os cobre. Ligá-los serve para obter **mensagem de erro melhor** (falha na ação, não no teste), não para deixar o teste mais rápido.
@@ -360,19 +360,19 @@ A mensagem aponta uma ação ou asserção específica?
 
 ```
 Quero verificar ESTRUTURA e semântica (o que um leitor de tela veria)?
-└─ toMatchAriaSnapshot ← preferir. Resistente a CSS, legível no diff,
- e verifica acessibilidade de graça (PW-SNAP-01)
+└─ toMatchAriaSnapshot   ← preferir. Resistente a CSS, legível no diff,
+                            e verifica acessibilidade de graça (PW-SNAP-01)
 
 Quero verificar PIXEL (o layout renderizado)?
-└─ toHaveScreenshot ← exige SO/versão iguais aos do CI (PW-SNAP-02)
- └─ tem região não determinística? → stylePath ou mask, nunca maxDiffPixels inflado
+└─ toHaveScreenshot      ← exige SO/versão iguais aos do CI (PW-SNAP-02)
+   └─ tem região não determinística? → stylePath ou mask, nunca maxDiffPixels inflado
 
 Quero verificar texto ou dado serializável fora da UI?
 └─ toMatchSnapshot
 
 Quero verificar UMA condição precisa?
 └─ nenhum snapshot: asserção comum. Snapshot para condição única
- é diff ruidoso com informação de menos
+   é diff ruidoso com informação de menos
 ```
 
 ### 5.7 Qual superfície de agente
@@ -380,16 +380,16 @@ Quero verificar UMA condição precisa?
 ```
 O objetivo é uma SUÍTE VERSIONADA que sobrevive ao agente?
 └─ Test Agents: npx playwright init-agents --loop=claude
- planner → spec.md → generator → *.spec.ts → healer conserta quando quebra
+   planner → spec .md → generator → *.spec.ts → healer conserta quando quebra
 
 O objetivo é um AGENTE DE CÓDIGO que às vezes precisa olhar o browser,
 dentro de um repositório grande?
 └─ @playwright/cli (playwright-cli)
- headless por default, saída concisa, skills sob demanda — menor custo de token
+   headless por default, saída concisa, skills sob demanda — menor custo de token
 
 O objetivo é um LOOP AGÊNTICO exploratório, com o browser como ferramenta de primeira classe?
 └─ @playwright/mcp
- headed por default, snapshot de acessibilidade no contexto — maior custo de token
+   headed por default, snapshot de acessibilidade no contexto — maior custo de token
 ```
 
 As três podem coexistir. O que não pode é usar MCP para escrever suíte (o resultado não fica versionado) nem Test Agents para exploração livre (eles produzem arquivos). Ver [Playwright - Agents, CLI e MCP](playwright-agents-cli-e-mcp.md).
@@ -411,7 +411,7 @@ Regras citáveis por ID. Uma skill, um prompt de revisão ou um comentário de P
 | `PW-CORE-02` | Suíte de teste **MUST** importar `test` e `expect` de `@playwright/test`. A Library `playwright` **NEVER** em teste — abre mão de isolamento, retry, trace e asserção com retry. |
 | `PW-CORE-03` | `@playwright/test` e `playwright` **MUST** estar na mesma versão. |
 | `PW-CORE-04` | Toda `expect` sobre `Locator`, `Page` ou `APIResponse` **MUST** ser aguardada com `await`. |
-| `PW-CORE-05` | `page.waitForTimeout` **NEVER** em teste versionado. † |
+| `PW-CORE-05` | `page.waitForTimeout()` **NEVER** em teste versionado. † |
 | `PW-CORE-06` | Um teste **NEVER** depende de outro ter rodado antes, salvo `mode: 'serial'` declarado explicitamente. † |
 | `PW-CORE-07` | Opções de runner (`retries`, `workers`, `timeout`, `reporter`, `fullyParallel`) **MUST** ser top-level no config. Dentro de `use` **NEVER**. |
 
@@ -422,13 +422,13 @@ As famílias completas vivem nos satélites, mas **estas precisam viajar com o c
 | ID | Regra | Satélite |
 | --- | --- | --- |
 | `PW-LOC-01` | Locator **MUST** preferir papel e nome acessível (`getByRole`) a CSS ou XPath. | [Playwright - Locators](playwright-locators.md) |
-| `PW-LOC-02` | `first`/`last`/`nth` **NEVER** são a resposta a uma strict mode violation; a resposta é `filter` ou encadeamento. Posição só quando a posição **é** o critério. | [Playwright - Locators](playwright-locators.md) |
+| `PW-LOC-02` | `first()`/`last()`/`nth()` **NEVER** são a resposta a uma strict mode violation; a resposta é `filter()` ou encadeamento. Posição só quando a posição **é** o critério. | [Playwright - Locators](playwright-locators.md) |
 | `PW-LOC-05` | Seletores de layout (`:right-of`, `:left-of`, `:above`, `:below`, `:near`) **NEVER** — a fonte os marca como deprecados. | [Playwright - Locators](playwright-locators.md) |
 | `PW-ACT-01` | Ação **MUST** confiar nos actionability checks. `force: true` só com o motivo escrito no código. † | [Playwright - Ações e Auto-waiting](playwright-acoes-e-auto-waiting.md) |
 | `PW-ACT-03` | Espera por evento **MUST** ser armada **antes** da ação que o dispara. | [Playwright - Ações e Auto-waiting](playwright-acoes-e-auto-waiting.md) |
 | `PW-ACT-04` | `waitUntil: 'networkidle'` **NEVER** — a fonte o desencoraja explicitamente. | [Playwright - Ações e Auto-waiting](playwright-acoes-e-auto-waiting.md) |
-| `PW-EXP-01` | Afirmação sobre a UI **MUST** usar asserção web-first (`expect(locator).…`). `expect(await locator.isVisible)` e formas equivalentes **NEVER**. | [Playwright - Assertions](playwright-assertions.md) |
-| `PW-EXP-03` | `expect(fn).toPass` **MUST** receber `timeout` explícito — o default é `0` e ele **não** herda `expect.timeout`. | [Playwright - Assertions](playwright-assertions.md) |
+| `PW-EXP-01` | Afirmação sobre a UI **MUST** usar asserção web-first (`expect(locator).…`). `expect(await locator.isVisible())` e formas equivalentes **NEVER**. | [Playwright - Assertions](playwright-assertions.md) |
+| `PW-EXP-03` | `expect(fn).toPass()` **MUST** receber `timeout` explícito — o default é `0` e ele **não** herda `expect.timeout`. | [Playwright - Assertions](playwright-assertions.md) |
 | `PW-CFG-02` | `trace` **MUST** ser no mínimo `'on-first-retry'`. `'off'` em CI **NEVER**. | [Playwright - Configuração e Projects](playwright-configuracao-e-projects.md) |
 | `PW-CFG-03` | Setup que precisa de fixture, trace ou visibilidade no relatório **MUST** ser setup project com `dependencies`, **NEVER** `globalSetup`. | [Playwright - Configuração e Projects](playwright-configuracao-e-projects.md) |
 | `PW-FIX-01` | Setup reusado entre arquivos **MUST** ser fixture, **NEVER** `beforeEach` copiado. | [Playwright - Fixtures](playwright-fixtures.md) |
@@ -442,8 +442,8 @@ As famílias completas vivem nos satélites, mas **estas precisam viajar com o c
 | `PW-SNAP-02` | Screenshot de referência **MUST** ser gerado no mesmo SO e versão de browser do CI. | [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) |
 | `PW-RUN-01` | `fullyParallel: true` **MUST** estar ligado para que `--shard` distribua por teste. Sem ele o shard distribui por **arquivo**, e a divisão fica desigual. | [Playwright - Execução, Retries e CI](playwright-execucao-retries-e-ci.md) |
 | `PW-RUN-03` | Teste flaky **NEVER** é considerado resolvido por aumento de `retries`. | [Playwright - Execução, Retries e CI](playwright-execucao-retries-e-ci.md) |
-| `PW-RUN-04` | `test.fail` e `test.fixme` **NEVER** são sinônimos: `fail` **roda** o teste e exige que ele falhe; `fixme` **não roda**. | [Playwright - Execução, Retries e CI](playwright-execucao-retries-e-ci.md) |
-| `PW-RUN-05` | `test.describe.serial` e `test.describe.parallel` **NEVER** em código novo — a fonte os marca como descontinuados em favor de `test.describe.configure`. | [Playwright - Execução, Retries e CI](playwright-execucao-retries-e-ci.md) |
+| `PW-RUN-04` | `test.fail()` e `test.fixme()` **NEVER** são sinônimos: `fail` **roda** o teste e exige que ele falhe; `fixme` **não roda**. | [Playwright - Execução, Retries e CI](playwright-execucao-retries-e-ci.md) |
+| `PW-RUN-05` | `test.describe.serial` e `test.describe.parallel` **NEVER** em código novo — a fonte os marca como descontinuados em favor de `test.describe.configure()`. | [Playwright - Execução, Retries e CI](playwright-execucao-retries-e-ci.md) |
 | `PW-DBG-01` | Falha de CI **MUST** ser investigada pelo trace antes de qualquer alteração no teste. | [Playwright - Debug e Trace](playwright-debug-e-trace.md) |
 | `PW-DBG-02` | `--debug` **NEVER** serve para medir tempo nem para rodar suíte: ele força `timeout=0` e `workers=1`. | [Playwright - Debug e Trace](playwright-debug-e-trace.md) |
 | `PW-STR-02` | Page object **NEVER** contém asserção de regra de negócio. A asserção é do teste. † | [Playwright - Estrutura de Testes](playwright-estrutura-de-testes.md) |
@@ -498,37 +498,37 @@ Como uma skill de Playwright deve consumir esta doc. O contrato geral de skills 
 ### O que carregar
 
 ```
-SEMPRE: docs/Playwright.md § 0 (os três fatos)
- docs/Playwright.md § 2 (modelo mental)
- docs/Playwright.md § 5 (árvores de decisão)
- docs/Playwright.md § 6 + § 6.1 + § 6.2 (regras e IDs canônicos)
+SEMPRE:   docs/Playwright.md § 0 (os três fatos)
+          docs/Playwright.md § 2 (modelo mental)
+          docs/Playwright.md § 5 (árvores de decisão)
+          docs/Playwright.md § 6 + § 6.1 + § 6.2 (regras e IDs canônicos)
 
 AO ESCREVER OU EDITAR um teste:
- docs/Playwright - Locators.md
- docs/Playwright - Assertions.md
+          docs/Playwright - Locators.md
+          docs/Playwright - Assertions.md
 
 ANTES DE ALTERAR um teste que já falha:
- docs/Playwright - Debug e Trace.md ← e leia o trace de verdade
+          docs/Playwright - Debug e Trace.md      ← e leia o trace de verdade
 
 AO CONFIGURAR o projeto:
- docs/Playwright - Configuração e Projects.md
- docs/Playwright - Execução, Retries e CI.md
+          docs/Playwright - Configuração e Projects.md
+          docs/Playwright - Execução, Retries e CI.md
 
 AO DECIDIR arquitetura de suíte (setup, page object, parametrização):
- docs/Playwright - Fixtures.md
- docs/Playwright - Estrutura de Testes.md
+          docs/Playwright - Fixtures.md
+          docs/Playwright - Estrutura de Testes.md
 
 SOB DEMANDA, via § 4 (mapa da API):
- o satélite da superfície tocada pela tarefa
+          o satélite da superfície tocada pela tarefa
 
-NUNCA: todos os satélites de uma vez
+NUNCA:    todos os satélites de uma vez
 ```
 
 ### Como citar
 
 Achados de revisão citam o ID da regra e o satélite, não parafraseiam:
 
-> `PW-EXP-01` — `expect(await page.getByRole('alert').isVisible).toBe(true)` afirma sobre um instante congelado; se o alerta aparece depois, o teste falha sem defeito. Troque por `await expect(page.getByRole('alert')).toBeVisible`.
+> `PW-EXP-01` — `expect(await page.getByRole('alert').isVisible()).toBe(true)` afirma sobre um instante congelado; se o alerta aparece depois, o teste falha sem defeito. Troque por `await expect(page.getByRole('alert')).toBeVisible()`.
 > Ver [Playwright - Assertions](playwright-assertions.md).
 
 ### Invariantes que a skill deve fazer valer
@@ -579,7 +579,7 @@ O corpo desta doc é Playwright fiel à fonte. Mas no meu stack várias decisõe
 
 **A ponte que mais importa: Playwright e Storybook não competem, e a fronteira mudou na 1.62.** [Storybook](storybook.md) testa **componente** em browser real (via addon-vitest, que por baixo usa Playwright); o Playwright testa **jornada** atravessando rotas, rede e sessão. A regra prática: se o teste precisa de rota, login ou mais de uma tela, é Playwright; se ele varia props de um componente, é story.
 
-O que mudou: a 1.62 tornou component testing não-experimental, com um modelo de **stories e galleries** (`*.story.tsx` + `window.mount` + a fixture `mount`) que substitui `@playwright/experimental-ct-react`. Isso põe as duas ferramentas em sobreposição real onde antes havia divisão limpa. **Esta doc não recomenda migrar** stories de Storybook para o modelo do Playwright num projeto que já tem [Storybook - Stories e Args](storybook-stories-e-args.md) funcionando: o Storybook entrega sidebar, docs, controles e a11y no mesmo arquivo, e o modelo do Playwright entrega teste. Registrado aqui como decisão desta doc, não da fonte.
+O que mudou: a 1.62 tornou component testing não-experimental, com um modelo de **stories e galleries** (`*.story.tsx` + `window.mount()` + a fixture `mount()`) que substitui `@playwright/experimental-ct-react`. Isso põe as duas ferramentas em sobreposição real onde antes havia divisão limpa. **Esta doc não recomenda migrar** stories de Storybook para o modelo do Playwright num projeto que já tem [Storybook - Stories e Args](storybook-stories-e-args.md) funcionando: o Storybook entrega sidebar, docs, controles e a11y no mesmo arquivo, e o modelo do Playwright entrega teste. Registrado aqui como decisão desta doc, não da fonte.
 
 **A ponte de runner.** O monorepo já tem dois runners por desenho (`bun test` para `apps/server`, `vitest --project=storybook` para stories — ver [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) `SB-TEST-05`). Playwright é o **terceiro**, e isso é deliberado: ele não roda sob `bun test` nem sob Vitest. O CI roda os três, e nenhum `--filter` do Bun alcança os outros dois — ver [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) § 4.
 
@@ -599,7 +599,6 @@ O que mudou: a 1.62 tornou component testing não-experimental, com um modelo de
 - [React.js](react-js.md) · [TanStack Query](tanstack-query.md) · [TanStack Router](tanstack-router.md) · [React Hook Form](react-hook-form.md)
 - [HTTP](http.md) · [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) · [Github Actions](github-actions.md)
 - [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) — onde a suíte E2E vive
--
 
 ## Fontes consultadas
 
@@ -628,22 +627,22 @@ Verificadas diretamente em **2026-08-20**:
 - **`actionTimeout` e `navigationTimeout` são `0` por default** — não existe teto de ação. O único teto é o do teste, 30 s. É por isso que quase toda falha de espera se apresenta como "test timeout", e o diagnóstico exige trace.
 - **`expect` tem timeout próprio de 5 s**, independente do teste. Subir o do teste não afrouxa a asserção, e vice-versa.
 - **`trace`, `video` e `screenshot` têm mais valores do que a página de guia mostra.** A referência de API lista **sete** para `trace` e `video` (incluindo `retain-on-first-failure` e `retain-on-failure-and-retries`) e **quatro** para `screenshot` (incluindo `on-first-failure`); a página do Trace Viewer lista cinco. **É divergência dentro da própria documentação** — a referência de API é a mais completa.
-- **`expect(fn).toPass` tem timeout default `0` e não respeita `expect.timeout`.** É a única asserção com essa exceção, e ela produz teste que trava em vez de falhar.
+- **`expect(fn).toPass()` tem timeout default `0` e não respeita `expect.timeout`.** É a única asserção com essa exceção, e ela produz teste que trava em vez de falhar.
 - **Os seletores de layout (`:right-of`, `:near`, …) estão marcados como deprecados.**
 - **Os seletores `_react` e `_vue` e o engine `:light` foram removidos na 1.58.** Código que os usa não roda mais — não é depreciação, é remoção.
 - **`noWaitAfter` está deprecado e "não tem efeito"** em `click`, `check`, `clear`, `dblclick`, `dragTo` e afins.
-- **`test.describe.serial` e `test.describe.parallel` estão marcados como descontinuados** na referência de API, em favor de `test.describe.configure` — mas a página-guia de retries ainda os usa em exemplo.
-- **`test.fail` roda o teste e exige que ele falhe; `test.fixme` não roda.** Os nomes sugerem o contrário do que fazem.
+- **`test.describe.serial` e `test.describe.parallel` estão marcados como descontinuados** na referência de API, em favor de `test.describe.configure()` — mas a página-guia de retries ainda os usa em exemplo.
+- **`test.fail()` roda o teste e exige que ele falhe; `test.fixme()` não roda.** Os nomes sugerem o contrário do que fazem.
 - **Sem `fullyParallel`, `--shard` distribui por arquivo, não por teste** — e a fonte avisa que a quantidade de testes por arquivo "pode influenciar muito" a distribuição.
 - **`workers` default é metade dos núcleos lógicos**, não um por núcleo.
 - **`--debug` implica `timeout=0` e `workers=1`.** Ele não é um modo de execução, é um modo de inspeção.
 - **`--update-snapshots` grava *patch* por default** (`updateSourceMethod: 'patch'`), não sobrescreve o arquivo-fonte; e `updateSnapshots` default é `'missing'`, não `'all'`.
 - **Setup project não roda automaticamente em UI mode** — a fonte descreve o procedimento manual de acionar o filtro. Suíte autenticada abre "deslogada" no UI mode na primeira vez.
-- **`page.goto` espera o evento `load`**, e segue redirecionamento de cliente. `networkidle` é desencorajado explicitamente.
+- **`page.goto()` espera o evento `load`**, e segue redirecionamento de cliente. `networkidle` é desencorajado explicitamente.
 - **Service Worker intercepta antes do `route`** — quando eventos de rede "desaparecem", a fonte manda tentar `serviceWorkers: 'block'` primeiro.
-- **`page.request` e `playwright.request.newContext` têm cookies diferentes:** o primeiro compartilha e atualiza os do contexto do browser, o segundo é isolado.
+- **`page.request` e `playwright.request.newContext()` têm cookies diferentes:** o primeiro compartilha e atualiza os do contexto do browser, o segundo é isolado.
 - **`storageState` é interoperável entre `BrowserContext` e `APIRequestContext`** — login por API serve para teste de UI, e vice-versa.
-- **Component testing deixou de ser experimental na 1.62**, com um modelo de stories/galleries e uma fixture `mount` que substituem `@playwright/experimental-ct-react`/`-vue`. É sobreposição nova com Storybook; ver a § 8.
+- **Component testing deixou de ser experimental na 1.62**, com um modelo de stories/galleries e uma fixture `mount()` que substituem `@playwright/experimental-ct-react`/`-vue`. É sobreposição nova com Storybook; ver a § 8.
 - **`retryStrategy` (`'immediate'` | `'isolated'`) é da 1.62** e não aparece nas páginas-guia de retries.
 - **Existem três superfícies de agente com ciclos de versão independentes**: Test Agents (embutido), `@playwright/cli` 0.1.18 e `@playwright/mcp` 0.0.79. A 1.62 passou a embutir as duas últimas via `npx playwright cli` e `npx playwright mcp`, mas os pacotes seguem versionando sozinhos, abaixo de 1.0.
 - **A ferramenta `browser_run_code_unsafe` do MCP é execução remota de código** — a própria fonte marca o risco.
@@ -651,7 +650,7 @@ Verificadas diretamente em **2026-08-20**:
 
 **Duas afirmações do changelog que a referência de API não sustenta**, e que por isso **não** são citadas nesta doc:
 
-- **`locator.normalize`** aparece nas notas de release da 1.59 como conversão de locator para forma canônica, mas **não existe** na referência de `Locator`. Não use.
+- **`locator.normalize()`** aparece nas notas de release da 1.59 como conversão de locator para forma canônica, mas **não existe** na referência de `Locator`. Não use.
 - **`page.localStorage` / `page.sessionStorage`** aparecem nas notas da 1.61 como Web Storage API, mas **não constam** da referência de `Page`. O caminho verificado para `sessionStorage` continua sendo `addInitScript` + `page.evaluate`, como a página de autenticação prescreve.
 
 Nos dois casos, o changelog e a referência de API discordam. Esta doc segue a **referência de API**, e registra a discordância em vez de escolher em silêncio.

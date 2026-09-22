@@ -40,19 +40,19 @@ A premissa que organiza tudo está na **§5 (The Threat of Malicious JavaScript)
 
 ```mermaid
 flowchart TB
- subgraph BFF["6.1 BFF — proxy"]
- A1[Browser] -->|cookie de sessão| B1[Backend]
- B1 -->|access token| C1[Resource Server]
- end
- subgraph TMB["6.2 Token-Mediating Backend"]
- A2[Browser] -->|cookie| B2[Backend]
- B2 -->|entrega access token| A2
- A2 -->|Bearer| C2[Resource Server]
- end
- subgraph BOC["6.3 Browser-based OAuth client"]
- A3[Browser] -->|fluxo OAuth completo| D3[Authorization Server]
- A3 -->|Bearer| C3[Resource Server]
- end
+    subgraph BFF["6.1 BFF — proxy"]
+        A1[Browser] -->|cookie de sessão| B1[Backend]
+        B1 -->|access token| C1[Resource Server]
+    end
+    subgraph TMB["6.2 Token-Mediating Backend"]
+        A2[Browser] -->|cookie| B2[Backend]
+        B2 -->|entrega access token| A2
+        A2 -->|Bearer| C2[Resource Server]
+    end
+    subgraph BOC["6.3 Browser-based OAuth client"]
+        A3[Browser] -->|fluxo OAuth completo| D3[Authorization Server]
+        A3 -->|Bearer| C3[Resource Server]
+    end
 ```
 
 ### 6.1 — Backend For Frontend (recomendado)

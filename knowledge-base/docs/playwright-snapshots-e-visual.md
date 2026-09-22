@@ -2,12 +2,12 @@
 titulo: Playwright - Snapshots e Visual
 Link: https://playwright.dev/docs/aria-snapshots
 tags:
- - playwright
- - testing
- - snapshots
- - visual-regression
- - accessibility
- - agent-context
+  - playwright
+  - testing
+  - snapshots
+  - visual-regression
+  - accessibility
+  - agent-context
 source: "Documentação oficial do Playwright — Snapshot testing (aria), Visual comparisons, Accessibility testing"
 verificado-em: 2026-08-20
 ---
@@ -26,11 +26,11 @@ Uma representação YAML da árvore de acessibilidade.
 
 ```ts
 await expect(page.getByRole('main')).toMatchAriaSnapshot(`
- - heading "Meus pedidos" [level=1]
- - list:
- - listitem: Café — R$ 12,00
- - listitem: Chá — R$ 9,00
- - button "Novo pedido"
+  - heading "Meus pedidos" [level=1]
+  - list:
+    - listitem: Café — R$ 12,00
+    - listitem: Chá — R$ 9,00
+  - button "Novo pedido"
 `);
 ```
 
@@ -48,13 +48,13 @@ await expect(page.getByRole('main')).toMatchAriaSnapshot(`
 
 ```yaml
 - heading "Título" [level=1]
-- heading /Issues \d+/ # regex no nome
+- heading /Issues \d+/                      # regex no nome
 - link "Saiba mais":
- - /url: "#detalhes" # a URL como filho
+  - /url: "#detalhes"                       # a URL como filho
 - textbox "E-mail" [invalid]: nao-e-email
 - checkbox [checked]
 - button "Alternar" [pressed=true]
-- textbox: Digite seu nome # nome omitido = casa qualquer
+- textbox: Digite seu nome                  # nome omitido = casa qualquer
 ```
 
 ### 1.2 Casamento parcial é o default
@@ -62,8 +62,8 @@ await expect(page.getByRole('main')).toMatchAriaSnapshot(`
 Omitir nome ou atributo **relaxa** a comparação:
 
 ```yaml
-- button # qualquer botão, qualquer rótulo
-- checkbox # marcado ou não
+- button          # qualquer botão, qualquer rótulo
+- checkbox        # marcado ou não
 ```
 
 Isso é o que torna aria snapshot utilizável: verifica-se a estrutura que importa e ignora-se o que varia.
@@ -72,9 +72,9 @@ Isso é o que torna aria snapshot utilizável: verifica-se a estrutura que impor
 
 ```yaml
 - list
- - /children: equal
- - listitem: Item A
- - listitem: Item B
+  - /children: equal
+  - listitem: Item A
+  - listitem: Item B
 ```
 
 | Valor | Significa |
@@ -87,7 +87,7 @@ Global:
 
 ```ts
 export default defineConfig({
- expect: { toMatchAriaSnapshot: { children: 'equal' } },
+  expect: { toMatchAriaSnapshot: { children: 'equal' } },
 });
 ```
 
@@ -106,7 +106,7 @@ Inline × arquivo: inline é melhor para snapshot pequeno (o diff aparece no pr�
 ### 1.5 Gerar e atualizar
 
 ```ts
-await expect(locator).toMatchAriaSnapshot(''); // vazio; será preenchido
+await expect(locator).toMatchAriaSnapshot('');    // vazio; será preenchido
 ```
 
 ```bash
@@ -116,8 +116,8 @@ npx playwright test --update-snapshots
 Programaticamente:
 
 ```ts
-console.log(await page.ariaSnapshot);
-console.log(await locator.ariaSnapshot);
+console.log(await page.ariaSnapshot());
+console.log(await locator.ariaSnapshot());
 ```
 
 O codegen também tem aba "Aria snapshot" e ação "Assert snapshot" ([Playwright - Debug e Trace](playwright-debug-e-trace.md) § 5).
@@ -128,8 +128,8 @@ O codegen também tem aba "Aria snapshot" e ação "Assert snapshot" ([Playwrigh
 
 ```ts
 test('página inicial', async ({ page }) => {
- await page.goto('/');
- await expect(page).toHaveScreenshot;
+  await page.goto('/');
+  await expect(page).toHaveScreenshot();
 });
 ```
 
@@ -147,16 +147,16 @@ O nome do arquivo carrega a plataforma justamente por isso:
 
 ```
 exemplo.spec.ts-snapshots/
- pagina-inicial-1-chromium-linux.png
- pagina-inicial-1-chromium-darwin.png
+  pagina-inicial-1-chromium-linux.png
+  pagina-inicial-1-chromium-darwin.png
 ```
 
 ### 2.2 Nome e formato
 
 ```ts
 await expect(page).toHaveScreenshot('inicial.png');
-await expect(page).toHaveScreenshot('inicial.webp'); // WebP, sem perda
-await expect(page).toHaveScreenshot(['pt-br', 'inicial.png']); // subpasta
+await expect(page).toHaveScreenshot('inicial.webp');            // WebP, sem perda
+await expect(page).toHaveScreenshot(['pt-br', 'inicial.png']);  // subpasta
 ```
 
 WebP reduz muito o peso no repositório — relevante numa suíte com dezenas de referências.
@@ -181,7 +181,7 @@ Também existem `maxDiffPixelRatio` e `threshold`.
 
 ```css
 /* screenshot.css */
-iframe,.live-chat, [data-testid="relogio"] { visibility: hidden; }
+iframe, .live-chat, [data-testid="relogio"] { visibility: hidden; }
 * { animation: none !important; transition: none !important; }
 ```
 
@@ -201,7 +201,7 @@ await expect(page).toHaveScreenshot({ mask: [page.getByTestId('avatar')] });
 
 **Outras opções** de `toHaveScreenshot`: `fullPage`, `animations`, `caret`, `clip`, `omitBackground`, `scale`, `timeout`.
 
-**E o que resolve mais que todas elas:** congelar o relógio. `page.clock.setFixedTime` elimina de uma vez toda a variação por data, hora e "há 2 minutos" ([Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 7).
+**E o que resolve mais que todas elas:** congelar o relógio. `page.clock.setFixedTime()` elimina de uma vez toda a variação por data, hora e "há 2 minutos" ([Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 7).
 
 **A armadilha cruzada:** bloquear imagens por `route` para acelerar a suíte quebra screenshot em silêncio — a referência tem as imagens, a execução não ([Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 1.3).
 
@@ -210,7 +210,7 @@ await expect(page).toHaveScreenshot({ mask: [page.getByTestId('avatar')] });
 ## 3. Snapshot de valor — `toMatchSnapshot`
 
 ```ts
-expect(await page.getByRole('heading').textContent).toMatchSnapshot('titulo.txt');
+expect(await page.getByRole('heading').textContent()).toMatchSnapshot('titulo.txt');
 ```
 
 Para texto e dado serializável. Fica no mesmo diretório `-snapshots` e **deve ser versionado**, porque o diff é a revisão.
@@ -261,35 +261,35 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 test('a página inicial não tem violação de a11y', async ({ page }) => {
- await page.goto('/');
- const r = await new AxeBuilder({ page }).analyze;
- expect(r.violations).toEqual([]);
+  await page.goto('/');
+  const r = await new AxeBuilder({ page }).analyze();
+  expect(r.violations).toEqual([]);
 });
 ```
 
 ```ts
 // escopo, tags WCAG, exclusões
 const r = await new AxeBuilder({ page })
-.include('#menu-lateral')
-.exclude('#widget-de-terceiro')
-.withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-.disableRules(['duplicate-id'])
-.analyze;
+  .include('#menu-lateral')
+  .exclude('#widget-de-terceiro')
+  .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+  .disableRules(['duplicate-id'])
+  .analyze();
 ```
 
 Por fixture, para não repetir a configuração:
 
 ```ts
-export const test = base.extend<{ makeAxeBuilder: => AxeBuilder }>({
- makeAxeBuilder: async ({ page }, use) => {
- await use( => new AxeBuilder({ page })
-.withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-.exclude('#widget-de-terceiro'));
- },
+export const test = base.extend<{ makeAxeBuilder: () => AxeBuilder }>({
+  makeAxeBuilder: async ({ page }, use) => {
+    await use(() => new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .exclude('#widget-de-terceiro'));
+  },
 });
 ```
 
-Anexar o resultado ao relatório com `testInfo.attach` torna o achado acionável em vez de um `toEqual([])` falhando.
+Anexar o resultado ao relatório com `testInfo.attach()` torna o achado acionável em vez de um `toEqual([])` falhando.
 
 **A ressalva da fonte, e ela é importante:** varredura automática *"detecta alguns problemas comuns"*, mas *"muitos problemas de acessibilidade só podem ser descobertos com teste manual"*. Suíte verde no axe não é aplicação acessível. Ver [Playwright - Locators](playwright-locators.md) § 2.1: localizar por papel é o outro meio caminho, e nenhum dos dois é auditoria.
 
@@ -314,12 +314,12 @@ Anexar o resultado ao relatório com `testInfo.attach` torna o achado acionável
 
 ```ts
 // ✗ falha por qualquer ajuste de padding, e o diff não diz o que mudou
-await expect(page.getByRole('navigation')).toHaveScreenshot;
+await expect(page.getByRole('navigation')).toHaveScreenshot();
 // ✓ diff legível, independente de SO, e verifica semântica
 await expect(page.getByRole('navigation')).toMatchAriaSnapshot(`
- - link "Início"
- - link "Pedidos"
- - link "Configurações"
+  - link "Início"
+  - link "Pedidos"
+  - link "Configurações"
 `);
 ```
 
@@ -344,7 +344,7 @@ await expect(page).toHaveScreenshot({ maxDiffPixels: 50_000 });
 // ✗
 await expect(page).toMatchAriaSnapshot(/* 120 linhas */);
 // ✓
-await expect(page.getByRole('button', { name: 'Salvar' })).toBeEnabled;
+await expect(page.getByRole('button', { name: 'Salvar' })).toBeEnabled();
 ```
 
 (`PW-SNAP-05`)

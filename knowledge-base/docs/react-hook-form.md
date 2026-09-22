@@ -2,12 +2,12 @@
 titulo: React Hook Form
 Link: https://react-hook-form.com/get-started
 tags:
- - react
- - forms
- - react-hook-form
- - frontend
- - reference
- - agent-context
+  - react
+  - forms
+  - react-hook-form
+  - frontend
+  - reference
+  - agent-context
 source: "Documentação oficial do React Hook Form — react-hook-form.com"
 verificado-em: 2026-08-15
 ---
@@ -49,7 +49,7 @@ Carregue nesta ordem, parando assim que tiver o suficiente:
 
 ### Convenções e vocabulário
 
-**Todos os exemplos são TypeScript**, e assumem `react-hook-form` v7 com `@hookform/resolvers` + (a forma `z.email` de topo é de Zod 4; em Zod 3 é `z.string.email`).
+**Todos os exemplos são TypeScript**, e assumem `react-hook-form` v7 com `@hookform/resolvers` + (a forma `z.email()` de topo é de Zod 4; em Zod 3 é `z.string().email()`).
 
 Três regras dependem de tipos e não têm sentido em JS: `RHF-VAL-02`, `RHF-VAL-04` e `RHF-CTRL-07`. Fora essas, em JS basta ignorar as anotações.
 
@@ -76,15 +76,15 @@ Termos usados sem redefinição nos satélites:
 
 Cinco afirmações. Quase todo erro de RHF que um agente comete viola uma delas.
 
-**1. O formulário não vive no estado do React.** RHF guarda os valores fora do ciclo de render — no próprio nó do DOM, via `ref`, e num store interno. Digitar não re-renderiza nada. É a inversão que explica o resto da API: se você reintroduz `useState` por campo, ou espalha `watch` pela raiz, paga de volta exatamente o custo que a biblioteca eliminou.
+**1. O formulário não vive no estado do React.** RHF guarda os valores fora do ciclo de render — no próprio nó do DOM, via `ref`, e num store interno. Digitar não re-renderiza nada. É a inversão que explica o resto da API: se você reintroduz `useState` por campo, ou espalha `watch()` pela raiz, paga de volta exatamente o custo que a biblioteca eliminou.
 
 **2. `register` é a via padrão; `Controller` é a ponte.** O critério não é preferência estética: é se o componente **encaminha `ref` e emite eventos nativos**. Um `<input>` do DOM encaminha — `register` basta. Um `<Select>` de design system que só aceita `value`/`onChange` não encaminha — precisa de `Controller`, que reintroduz o render controlado *daquele campo apenas*.
 
 **3. `formState` é um Proxy de assinatura, não um objeto.** Você só recebe atualização das propriedades que **leu incondicionalmente durante o render**. Uma propriedade acessada atrás de `&&`, `||`, ternário ou `if` pode nunca ser lida — o Proxy não a assina, e ela simplesmente não atualiza. Isso não é bug: é o mecanismo que evita calcular `isValid` para quem não pediu.
 
-**4. `defaultValues` é o contrato do formulário.** `isDirty` e `dirtyFields` comparam contra ele. `reset` volta para ele. Componente controlado depende dele para não começar não controlado. Campo ausente do `defaultValues` compara contra `undefined`, e o React acusa input mudando de não controlado para controlado no primeiro caractere.
+**4. `defaultValues` é o contrato do formulário.** `isDirty` e `dirtyFields` comparam contra ele. `reset()` volta para ele. Componente controlado depende dele para não começar não controlado. Campo ausente do `defaultValues` compara contra `undefined`, e o React acusa input mudando de não controlado para controlado no primeiro caractere.
 
-**5. Validação no cliente é fronteira de UX, não garantia.** O resolver converte entrada não confiável em dado tipado **no browser** — o que melhora a experiência e não protege nada. O servidor revalida sempre, e o que ele recusar volta pela via de erro do formulário, não por exceção. Ver.
+**5. Validação no cliente é fronteira de UX, não garantia.** O resolver converte entrada não confiável em dado tipado **no browser** — o que melhora a experiência e não protege nada. O servidor revalida sempre, e o que ele recusar volta pela via de erro do formulário, não por exceção..
 
 > **A consequência que mais surpreende.** Como o valor não está no estado do React, ler um campo **é uma escolha com custo**, não um acesso gratuito. Por isso existem cinco formas de ler (`getValues`, `watch`, `useWatch`, `useFormState`, `subscribe`) em vez de uma: cada uma paga um preço diferente de render. A árvore da § 5.2 é a parte desta doc que mais evita código ruim.
 
@@ -189,28 +189,28 @@ O objetivo é mapear **sintoma → API correta**, porque é nessa escolha que c�
 ```
 O campo é um elemento nativo (input, select, textarea)?
 ├── SIM
-│ └── O que o usuário VÊ é o que o formulário GUARDA?
-│ ├── SIM, só muda o TIPO ("42" → 42, "2026-08-15" → Date)
-│ │ → register + coerção explícita: valueAsNumber, valueAsDate,
-│ │ setValueAs, ou z.coerce.* no schema.
-│ │ O DOM SEMPRE devolve string. RHF-REG-03
-│ └── NÃO — exibe formatado e guarda outra coisa
-│ (moeda, percentual, telefone, máscara)
-│ → mão dupla. setValueAs NÃO resolve: ele só transforma
-│ a entrada. Use Controller com input/output.
-│ → [React Hook Form - Registro e Controle](react-hook-form-registro-e-controle.md) § 3.4
-│ RHF-CTRL-09
+│   └── O que o usuário VÊ é o que o formulário GUARDA?
+│       ├── SIM, só muda o TIPO ("42" → 42, "2026-08-15" → Date)
+│       │   → register + coerção explícita: valueAsNumber, valueAsDate,
+│       │     setValueAs, ou z.coerce.* no schema.
+│       │     O DOM SEMPRE devolve string.            RHF-REG-03
+│       └── NÃO — exibe formatado e guarda outra coisa
+│           (moeda, percentual, telefone, máscara)
+│           → mão dupla. setValueAs NÃO resolve: ele só transforma
+│             a entrada. Use Controller com input/output.
+│             → [React Hook Form - Registro e Controle](react-hook-form-registro-e-controle.md) § 3.4
+│                                                      RHF-CTRL-09
 └── NÃO — é componente de biblioteca ou de design system
- └── Ele encaminha `ref` e emite onChange com o evento nativo?
- ├── SIM → register funciona; espalhe o retorno nele
- └── NÃO — só aceita value/onChange
- │ (caso comum: Select, DatePicker, Combobox, editor rico,
- │ wrappers que só expõem value/onChange)
- ├── Uso pontual, escrito inline no JSX do form → <Controller>
- └── Vai virar componente reutilizável → useController
+    └── Ele encaminha `ref` e emite onChange com o evento nativo?
+        ├── SIM → register funciona; espalhe o retorno nele
+        └── NÃO — só aceita value/onChange
+            │   (caso comum: Select, DatePicker, Combobox, editor rico,
+            │    wrappers que só expõem value/onChange)
+            ├── Uso pontual, escrito inline no JSX do form → <Controller>
+            └── Vai virar componente reutilizável → useController
 
 Em nenhum caso os dois juntos: campo sob Controller não é registrado
-de novo com register. RHF-CORE-04
+de novo com register.  RHF-CORE-04
 ```
 
 > **Não decida por nome de biblioteca.** A pergunta do ramo é sobre o **componente**, não sobre o pacote de onde ele vem. Bibliotecas grandes são mistas: vários primitivos do Radix encaminham `ref` e renderizam um input nativo oculto justamente para funcionar com formulário, e componentes de wrapper na mesma biblioteca não encaminham. O teste é empírico e leva segundos — espalhe o `register` e veja se o valor chega no submit. Se chegar, `Controller` ali é render controlado que você pagou sem precisar (`RHF-CTRL-08`).
@@ -222,55 +222,55 @@ A pergunta certa não é "como leio", é **para que**. É aqui que a maior parte
 ```
 Para que você vai usar o valor?
 ├── Só no submit
-│ → NÃO LEIA. handleSubmit já entrega o objeto inteiro, validado.
-│ Ler para submeter é o desperdício mais comum.
+│   → NÃO LEIA. handleSubmit já entrega o objeto inteiro, validado.
+│     Ler para submeter é o desperdício mais comum.
 │
 ├── Numa checagem pontual dentro de um handler, sem afetar a UI
-│ → getValues — não assina nada, não re-renderiza
+│   → getValues() — não assina nada, não re-renderiza
 │
 ├── Para RENDERIZAR algo que depende do valor
-│ ├── Num componente pequeno e isolado (o caso normal)
-│ │ → useWatch({ control, name }) — o re-render fica no componente
-│ └── Precisa do form inteiro no componente raiz E a raiz é pequena
-│ → watch. Em formulário grande isso é proibido, não é
-│ um trade-off: desça a leitura. RHF-PERF-01
+│   ├── Num componente pequeno e isolado (o caso normal)
+│   │   → useWatch({ control, name }) — o re-render fica no componente
+│   └── Precisa do form inteiro no componente raiz E a raiz é pequena
+│       → watch(). Em formulário grande isso é proibido, não é
+│         um trade-off: desça a leitura.               RHF-PERF-01
 │
 ├── Para disparar efeito colateral sem UI (autosave, analytics, log)
-│ → subscribe({ name, formState, callback })
-│ watch(callback) faz isso e está DEPRECADO RHF-PERF-02
+│   → subscribe({ name, formState, callback })
+│     watch(callback) faz isso e está DEPRECADO             RHF-PERF-02
 │
 └── Para ler ESTADO do formulário (errors, isDirty, isSubmitting…)
- ├── No próprio componente que chamou useForm
- │ → destructuring de formState, ANTES do render RHF-CORE-02
- └── Em componente aninhado, ou dentro de FormProvider
- → useFormState({ control }) RHF-STATE-01
+    ├── No próprio componente que chamou useForm
+    │   → destructuring de formState, ANTES do render  RHF-CORE-02
+    └── Em componente aninhado, ou dentro de FormProvider
+        → useFormState({ control })  RHF-STATE-01
 ```
 
-> **Por que não `useFormContext` para ler `formState`.** A doc oficial de `useFormContext` é explícita: use `useFormState`. O Proxy de assinatura só registra o que foi lido **durante o render daquele componente**; ao pegar `formState` do contexto você recebe o objeto, mas a leitura acontece no componente errado. O resultado é estado que não atualiza — e o sintoma engana, porque o valor *inicial* está certo.
+> **Por que não `useFormContext()` para ler `formState`.** A doc oficial de `useFormContext` é explícita: use `useFormState`. O Proxy de assinatura só registra o que foi lido **durante o render daquele componente**; ao pegar `formState` do contexto você recebe o objeto, mas a leitura acontece no componente errado. O resultado é estado que não atualiza — e o sintoma engana, porque o valor *inicial* está certo.
 
 ### 5.3 Onde valido?
 
 ```
 A regra é expressável num schema?
 ├── SIM → resolver (zodResolver). Fonte única, reutilizável no servidor.
-│ └── A regra cruza campos (senha × confirmação, data início × fim)?
-│ →.refine /.superRefine no schema, não validate por campo
+│   └── A regra cruza campos (senha × confirmação, data início × fim)?
+│       → .refine() / .superRefine() no schema, não validate por campo
 └── NÃO
- ├── Regra trivial de um campo (required, min) e o projeto não tem schema
- │ → rules do register
- ├── Regra que exige I/O (e-mail já existe, cupom válido)
- │ ├── HÁ resolver no projeto? Então as rules do register NÃO
- │ │ rodam — nem validate, nem deps. RHF-VAL-06
- │ │ →.refine assíncrono no schema, OU só no submit
- │ │ via setError. Prefira o submit se não for
- │ │ implementar debounce e cancelamento. RHF-VAL-10
- │ └── NÃO há resolver → validate assíncrono no register
- │ Depende de outro campo? → deps, para revalidar junto
- └── Regra do formulário inteiro, sem resolver no projeto
- → validate no useForm (v7.72.0)
- NUNCA junto com resolver — são exclusivos. RHF-VAL-01
+    ├── Regra trivial de um campo (required, min) e o projeto não tem schema
+    │   → rules do register
+    ├── Regra que exige I/O (e-mail já existe, cupom válido)
+    │   ├── HÁ resolver no projeto? Então as rules do register NÃO
+    │   │   rodam — nem validate, nem deps.            RHF-VAL-06
+    │   │   → .refine() assíncrono no schema, OU só no submit
+    │   │     via setError. Prefira o submit se não for
+    │   │     implementar debounce e cancelamento.     RHF-VAL-10
+    │   └── NÃO há resolver → validate assíncrono no register
+    │       Depende de outro campo? → deps, para revalidar junto
+    └── Regra do formulário inteiro, sem resolver no projeto
+        → validate no useForm (v7.72.0)
+          NUNCA junto com resolver — são exclusivos.  RHF-VAL-01
 
-Qualquer que seja a resposta: o servidor revalida. RHF-CORE-05
+Qualquer que seja a resposta: o servidor revalida.  RHF-CORE-05
 ```
 
 ### 5.4 Quem é dono da submissão?
@@ -281,22 +281,22 @@ Esta é a fronteira com [React - Formulários e Actions](react-formularios-e-act
 Você precisa de validação por campo, erro por campo, array dinâmico
 de campos, ou formulário em várias etapas?
 ├── NÃO → as Actions nativas do React 19 bastam.
-│ useActionState + <form action>. Menos dependência, menos código.
-│ → [React - Formulários e Actions](react-formularios-e-actions.md). Pare aqui.
+│         useActionState + <form action>. Menos dependência, menos código.
+│         → [React - Formulários e Actions](react-formularios-e-actions.md). Pare aqui.
 └── SIM → React Hook Form é o dono da CAPTURA.
- └── Onde a mutação acontece?
- ├── Server Function / Server Action (Next.js, TanStack Start)
- │ → handleSubmit valida e, DENTRO dele, você chama a action.
- │ Sem <form action>. Sem ponte via useEffect. RHF-BRIDGE-02
- ├── Mutation do TanStack Query (há cache a invalidar)
- │ → handleSubmit chama mutateAsync.
- │ A mutation é dona do otimismo e da invalidação. RHF-BRIDGE-04
- └── Chamada isolada, sem cache e sem RSC
- → handleSubmit chama a função e trata o retorno
+    └── Onde a mutação acontece?
+        ├── Server Function / Server Action (Next.js, TanStack Start)
+        │   → handleSubmit valida e, DENTRO dele, você chama a action.
+        │     Sem <form action>. Sem ponte via useEffect.   RHF-BRIDGE-02
+        ├── Mutation do TanStack Query (há cache a invalidar)
+        │   → handleSubmit chama mutateAsync.
+        │     A mutation é dona do otimismo e da invalidação.  RHF-BRIDGE-04
+        └── Chamada isolada, sem cache e sem RSC
+            → handleSubmit chama a função e trata o retorno
 
 NUNCA os dois donos ao mesmo tempo:
- <form action={acaoServidor} onSubmit={handleSubmit(...)}> ❌
-Escolha um. RHF-BRIDGE-01
+  <form action={acaoServidor} onSubmit={handleSubmit(...)}>   ❌
+Escolha um.  RHF-BRIDGE-01
 ```
 
 > **E o `<Form>` do próprio RHF?** Ele existe, envia a requisição HTTP sozinho e suporta progressive enhancement — mas está marcado como **BETA** desde a v7.44.0. Enquanto isso valer, ele não é o padrão desta doc: use `<form onSubmit={handleSubmit(...)}>`. A exceção legítima é progressive enhancement real (o formulário precisa funcionar antes da hidratação), e aí o custo do beta é uma decisão consciente, registrada no código.
@@ -306,18 +306,18 @@ Escolha um. RHF-BRIDGE-01
 ```
 O erro pertence a um campo específico?
 ├── SIM
-│ ├── Veio da validação de cliente
-│ │ → o resolver ou as rules já preenchem errors[campo]. Nada a fazer.
-│ └── Veio do servidor (409 e-mail em uso, 422 campo inválido)
-│ → setError('email', { type: 'server', message }) RHF-ERR-02
-│ ATENÇÃO: erro posto num campo que tem validação é apagado
-│ na próxima rodada. Se precisa sobreviver → root. RHF-ERR-04
+│   ├── Veio da validação de cliente
+│   │   → o resolver ou as rules já preenchem errors[campo]. Nada a fazer.
+│   └── Veio do servidor (409 e-mail em uso, 422 campo inválido)
+│       → setError('email', { type: 'server', message })   RHF-ERR-02
+│         ATENÇÃO: erro posto num campo que tem validação é apagado
+│         na próxima rodada. Se precisa sobreviver → root.  RHF-ERR-04
 └── NÃO — é do formulário todo
- ├── Esperado (credencial inválida, saldo insuficiente, indisponível)
- │ → setError('root.serverError', { type: String(status), message })
- └── Inesperado (bug, contrato quebrado, exceção não prevista)
- → deixe subir para o Error Boundary. Não capture para exibir.
- →
+    ├── Esperado (credencial inválida, saldo insuficiente, indisponível)
+    │   → setError('root.serverError', { type: String(status), message })
+    └── Inesperado (bug, contrato quebrado, exceção não prevista)
+        → deixe subir para o Error Boundary. Não capture para exibir.
+        →
 
 Em nenhum caso o erro esperado é lançado de dentro do onSubmit:
 handleSubmit não engole exceções, e isSubmitSuccessful fica errado.
@@ -333,20 +333,20 @@ As etapas têm regra CRUZADA que precisa avisar antes da última?
 (ex.: "cliente PJ exige nota fiscal", com o tipo na etapa 1
  e a nota na etapa 3)
 ├── NÃO — o caso comum
-│ → UM FORMULÁRIO POR ETAPA, com acumulador no wizard.
-│ Cada etapa: schema próprio, isValid próprio, handleSubmit
-│ como "Avançar". RHF-STEP-01
-│ Voltar preenchido = values alimentado pelo acumulador.
-│ RHF-STEP-03
+│   → UM FORMULÁRIO POR ETAPA, com acumulador no wizard.
+│     Cada etapa: schema próprio, isValid próprio, handleSubmit
+│     como "Avançar".                              RHF-STEP-01
+│     Voltar preenchido = values alimentado pelo acumulador.
+│                                                  RHF-STEP-03
 └── SIM
- → um useForm só, com trigger(['campos','da','etapa']).
- Custo: isValid é global e não serve para o botão, e a
- fonte NÃO diz se errors fica restrito à etapa.
- Filtre por campo. RHF-STEP-05
+    → um useForm só, com trigger(['campos','da','etapa']).
+      Custo: isValid é global e não serve para o botão, e a
+      fonte NÃO diz se errors fica restrito à etapa.
+      Filtre por campo.                            RHF-STEP-05
 
 Nos dois casos, antes de enviar: safeParse do objeto acumulado
 contra o schema COMPLETO. As etapas validaram fragmentos.
- RHF-STEP-04
+                                                   RHF-STEP-04
 ```
 
 > **Por que a recomendação inverte o instinto.** Um formulário por etapa parece "mais estado para coordenar". É o contrário: o acumulador é um `useState` comum, e em troca somem quatro problemas de uma vez — `isValid` volta a ser útil, erros de etapas futuras não vazam, voltar sem perder dados deixa de depender de o RHF lembrar campo desmontado, e `shouldUnregister` deixa de importar. Detalhe e código em [React Hook Form - Estado e Performance](react-hook-form-estado-e-performance.md) § 7.
@@ -357,25 +357,25 @@ Ordem do mais barato ao mais caro. Ela é normativa e está detalhada na seção
 
 ```
 0. MEDIU? Profiler do React DevTools. Sem medida, pare aqui.
- (o mesmo REACT-PERF-01 de [React.js](react-js.md) vale aqui)
+   (o mesmo REACT-PERF-01 de [React.js](react-js.md) vale aqui)
 
 1. Existe useState espelhando um campo?
- → remova. O valor já está no formulário.
+   → remova. O valor já está no formulário.
 
-2. Existe watch sem argumento, ou watch em componente grande?
- → troque por useWatch no menor componente que precisa do valor
- RHF-PERF-01
+2. Existe watch() sem argumento, ou watch em componente grande?
+   → troque por useWatch no menor componente que precisa do valor
+     RHF-PERF-01
 
 3. formState está sendo lido no topo e passado por prop?
- → cada consumidor assina o que precisa com useFormState RHF-STATE-01
+   → cada consumidor assina o que precisa com useFormState  RHF-STATE-01
 
 4. Há Controller onde register bastaria?
- → Controller reintroduz render controlado. Só use quando o
- componente não encaminha ref. RHF-CORE-03
+   → Controller reintroduz render controlado. Só use quando o
+     componente não encaminha ref.  RHF-CORE-03
 
 5. É lista longa com useFieldArray?
- → o custo é volume de nós, não cálculo. Virtualize ou pagine;
- memoizar a linha não resolve sozinho.
+   → o custo é volume de nós, não cálculo. Virtualize ou pagine;
+     memoizar a linha não resolve sozinho.
 
 6. Só então: memo na linha/campo, com props estáveis.
 ```
@@ -392,7 +392,7 @@ Regras citáveis por ID. Uma skill, um prompt de revisão ou um comentário de P
 
 | ID | Regra |
 | --- | --- |
-| `RHF-CORE-01` | `defaultValues` **MUST** cobrir todo campo do formulário. `isDirty`, `dirtyFields`, `reset` e componentes controlados dependem dele; campo ausente compara contra `undefined`. |
+| `RHF-CORE-01` | `defaultValues` **MUST** cobrir todo campo do formulário. `isDirty`, `dirtyFields`, `reset()` e componentes controlados dependem dele; campo ausente compara contra `undefined`. |
 | `RHF-CORE-02` | Toda propriedade de `formState` de que o render depende **MUST** ser lida incondicionalmente durante o render. O Proxy assina o que foi **lido**: acesso atrás de `&&`/`||`/ternário ou dentro de `if` não assina, e aquela propriedade nunca atualiza. Desestruturar no topo é a forma mais simples de garantir isso — mas o defeito é o acesso condicional, não o fato de guardar o objeto. |
 | `RHF-CORE-03` | Componente que não encaminha `ref` **MUST** ser conectado por `Controller`/`useController`, nunca por `register` espalhado. |
 | `RHF-CORE-04` | Campo sob `Controller`/`useController` **NEVER** é registrado de novo com `register`. Registro duplo. |
@@ -415,13 +415,13 @@ As famílias completas vivem nos satélites, mas **estas precisam viajar com o c
 | `RHF-VAL-06` | Com `resolver` ativo, `rules` do `register` — `validate` e `deps` inclusive — **NEVER** rodam. | [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md) |
 | `RHF-ERR-04` | Erro de servidor que precisa sobreviver à revalidação do campo **MUST** ir para `root.*`. | [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md) |
 | `RHF-VAL-01` | `resolver` e `validate` de `useForm` **NEVER** coexistem — são mutuamente exclusivos. | [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md) |
-| `RHF-VAL-02` | Schema com `.transform`/`.default` **MUST** declarar os três generics: `useForm<z.input<S>, unknown, z.output<S>>`. | [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md) |
+| `RHF-VAL-02` | Schema com `.transform()`/`.default()` **MUST** declarar os três generics: `useForm<z.input<S>, unknown, z.output<S>>`. | [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md) |
 | `RHF-VAL-04` | O tipo do formulário **NEVER** é escrito à mão em paralelo ao schema — deriva dele. | [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md) |
 | `RHF-ERR-02` | Erro vindo do servidor **MUST** entrar por `setError`: de campo no campo, global em `root.serverError`. | [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md) |
 | `RHF-ERR-03` | Erro esperado **NEVER** é lançado de dentro do `onSubmit`. Apelido de `REACT-ASYNC-09`. | [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md) |
 | `RHF-STATE-01` | Dentro de `FormProvider`, estado de formulário **MUST** vir de `useFormState`, não de destructuring de `useFormContext`. | [React Hook Form - Estado e Performance](react-hook-form-estado-e-performance.md) |
 | `RHF-STATE-02` | `reset` pós-submissão **MUST** rodar em `useEffect` observando `isSubmitSuccessful` **e** um sinal de sucesso real — ver a armadilha abaixo. | [React Hook Form - Estado e Performance](react-hook-form-estado-e-performance.md) |
-| `RHF-PERF-01` | `watch` sem argumento **NEVER** em componente grande — re-renderiza a raiz. Use `useWatch`. | [React Hook Form - Estado e Performance](react-hook-form-estado-e-performance.md) |
+| `RHF-PERF-01` | `watch()` sem argumento **NEVER** em componente grande — re-renderiza a raiz. Use `useWatch`. | [React Hook Form - Estado e Performance](react-hook-form-estado-e-performance.md) |
 | `RHF-PERF-02` | Reação sem UI **MUST** usar `subscribe`; `watch(callback)` está marcado como deprecado na fonte (sem versão declarada). | [React Hook Form - Estado e Performance](react-hook-form-estado-e-performance.md) |
 | `RHF-PERF-03` | O retorno de `watch`/`useWatch` **NEVER** entra em array de dependências de `useEffect` — é otimizado para a fase de render. Para reagir fora do render, `subscribe`. Escrever de volta no formulário a partir daí é o caminho padrão para loop de render. | [React Hook Form - Estado e Performance](react-hook-form-estado-e-performance.md) |
 | `RHF-ARRAY-01` | `key` de `useFieldArray` **MUST** ser `field.id`, nunca o índice. | [React Hook Form - Estado e Performance](react-hook-form-estado-e-performance.md) |
@@ -442,22 +442,22 @@ Encadeadas: a API devolve 422, você captura, chama `setError`, não lança → 
 
 ```tsx
 // ERRADO — reseta também quando o servidor recusou
-useEffect( => {
- if (isSubmitSuccessful) reset
+useEffect(() => {
+  if (isSubmitSuccessful) reset()
 }, [isSubmitSuccessful, reset])
 
 // CERTO — o sinal de sucesso é seu, não do RHF
 const onSubmit = handleSubmit(async (data) => {
- try {
- await mutateAsync(data)
- setSalvouComSucesso(true)
- } catch (e) {
- setError('root.serverError', { message: mensagemDe(e) })
- }
+  try {
+    await mutateAsync(data)
+    setSalvouComSucesso(true)
+  } catch (e) {
+    setError('root.serverError', { message: mensagemDe(e) })
+  }
 })
 
-useEffect( => {
- if (salvouComSucesso) { reset; setSalvouComSucesso(false) }
+useEffect(() => {
+  if (salvouComSucesso) { reset(); setSalvouComSucesso(false) }
 }, [salvouComSucesso, reset])
 ```
 
@@ -520,28 +520,28 @@ Como uma skill de formulários deve consumir esta doc.
 ### O que carregar
 
 ```
-SEMPRE: docs/React Hook Form.md § 2 (modelo mental)
- § 5 (árvores de decisão)
- § 6 + § 6.1 (regras)
- § 8.3 (regras de ponte) ← não omita
- docs/React.js.md § 6 (REACT-PURE-*, REACT-HOOK-*)
+SEMPRE:   docs/React Hook Form.md § 2 (modelo mental)
+                                  § 5 (árvores de decisão)
+                                  § 6 + § 6.1 (regras)
+                                  § 8.3 (regras de ponte)   ← não omita
+          docs/React.js.md § 6 (REACT-PURE-*, REACT-HOOK-*)
 
 ANTES de decidir usar RHF:
- § 5.4 — pode ser que Actions nativas bastem
- docs/React - Formulários e Actions.md, se a árvore apontar para lá
+          § 5.4 — pode ser que Actions nativas bastem
+          docs/React - Formulários e Actions.md, se a árvore apontar para lá
 
 AO CONECTAR CAMPOS, com campo formatado (moeda, máscara),
 ou ao rotular/associar erro para leitor de tela:
- docs/React Hook Form - Registro e Controle.md
+          docs/React Hook Form - Registro e Controle.md
 
 AO DEFINIR VALIDAÇÃO ou TRATAR ERRO DE SERVIDOR:
- docs/React Hook Form - Validação e Resolvers.md
+          docs/React Hook Form - Validação e Resolvers.md
 
 AO LER ESTADO, REAGIR A VALORES, LISTAS, FORMULÁRIO EM ETAPAS,
 ou INVESTIGAR RE-RENDER:
- docs/React Hook Form - Estado e Performance.md
+          docs/React Hook Form - Estado e Performance.md
 
-NUNCA: abrir um satélite ANTES de saber que precisa dele
+NUNCA:    abrir um satélite ANTES de saber que precisa dele
 ```
 
 **Sobre carregar mais de um satélite.** A regra é de sequência, não de teto. Uma tarefa **estreita** — "por que este botão não habilita?" — toca um satélite e para ali. Uma tarefa **larga** — revisar um formulário inteiro, escrever um CRUD do zero — toca os três, porque conectar campos, validar e ler estado são três coisas que todo formulário faz.
@@ -554,13 +554,13 @@ O desperdício que a regra combate é carga preventiva: abrir tudo "por precauç
 
 Achados de revisão citam o ID da regra e o satélite, não parafraseiam:
 
-> `RHF-PERF-01` — `watch` sem argumento no componente raiz re-renderiza o formulário inteiro a cada tecla. Use `useWatch` no componente que precisa do valor.
+> `RHF-PERF-01` — `watch()` sem argumento no componente raiz re-renderiza o formulário inteiro a cada tecla. Use `useWatch` no componente que precisa do valor.
 > Ver [React Hook Form - Estado e Performance](react-hook-form-estado-e-performance.md).
 
 ### Invariantes que a skill deve fazer valer
 
 1. **Decidir antes de instalar.** A § 5.4 vem antes de qualquer código. RHF é a resposta certa para formulário complexo, não para todo formulário.
-2. **Verificar antes de afirmar.** Se uma API não está na § 4, ela não foi verificada nesta doc. Consulte a fonte e atualize a nota — não invente comportamento.
+2. **Verificar antes de afirmar.** Se uma API não está na § 4, ela não foi verificada nesta doc. Consulte a fonte e atualize a nota — não invente comportamento. 
 3. **A fonte vence.** Divergência entre esta nota e react-hook-form.com é bug desta nota.
 4. **Regra do React antes de regra do RHF.** Uma violação de `REACT-PURE-*` ou `REACT-HOOK-*` tem precedência: RHF não suspende nenhuma delas.
 5. **Um dono por submissão.** `RHF-BRIDGE-01` é a regra que mais economiza depuração.
@@ -613,37 +613,37 @@ O padrão é o da própria documentação oficial (seção *Advanced Usage*), e 
 import { useActionState, useId } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { criarTopico } from './actions' // 'use server'
+import { criarTopico } from './actions'   // 'use server'
 import { topicoSchema } from './schema'
 
-export function NovoTopico {
- const [state, dispatch, isPending] = useActionState(criarTopico, null)
- const id = useId
- const { register, handleSubmit, setError, formState: { errors } } = useForm({
- resolver: zodResolver(topicoSchema),
- defaultValues: { titulo: '' },
- })
+export function NovoTopico() {
+  const [state, dispatch, isPending] = useActionState(criarTopico, null)
+  const id = useId()
+  const { register, handleSubmit, setError, formState: { errors } } = useForm({
+    resolver: zodResolver(topicoSchema),
+    defaultValues: { titulo: '' },
+  })
 
- // O RHF valida; só então a action é despachada. Um dono só. RHF-BRIDGE-01
- // startTransition é obrigatório: o dispatch sai de fora de <form action>. REACT-FORM-04
- return (
- <form onSubmit={handleSubmit((data) => startTransition( => dispatch(data)))}>
- <label htmlFor={`${id}-titulo`}>Título</label>
- <input
- {...register('titulo')}
- id={`${id}-titulo`}
- aria-invalid={errors.titulo ? true : undefined}
- aria-describedby={errors.titulo ? `${id}-titulo-erro` : undefined}
- />
- {errors.titulo && (
- <p id={`${id}-titulo-erro`} role="alert">{errors.titulo.message}</p>
- )}
+  // O RHF valida; só então a action é despachada. Um dono só. RHF-BRIDGE-01
+  // startTransition é obrigatório: o dispatch sai de fora de <form action>. REACT-FORM-04
+  return (
+    <form onSubmit={handleSubmit((data) => startTransition(() => dispatch(data)))}>
+      <label htmlFor={`${id}-titulo`}>Título</label>
+      <input
+        {...register('titulo')}
+        id={`${id}-titulo`}
+        aria-invalid={errors.titulo ? true : undefined}
+        aria-describedby={errors.titulo ? `${id}-titulo-erro` : undefined}
+      />
+      {errors.titulo && (
+        <p id={`${id}-titulo-erro`} role="alert">{errors.titulo.message}</p>
+      )}
 
- {/* state e isPending são lidos direto no JSX — sem useEffect */}
- {state?.erro && <p role="alert">{state.erro}</p>}
- <button disabled={isPending}>{isPending ? 'Salvando…' : 'Salvar'}</button>
- </form>
- )
+      {/* state e isPending são lidos direto no JSX — sem useEffect */}
+      {state?.erro && <p role="alert">{state.erro}</p>}
+      <button disabled={isPending}>{isPending ? 'Salvando…' : 'Salvar'}</button>
+    </form>
+  )
 }
 ```
 
@@ -659,17 +659,17 @@ A Server Function continua sendo endpoint público: valida e autoriza sempre. `R
 
 ```tsx
 const { mutateAsync, isPending } = useMutation({
- mutationFn: salvarPerfil,
- onSuccess: => queryClient.invalidateQueries({ queryKey: ['perfil'] }),
+  mutationFn: salvarPerfil,
+  onSuccess: () => queryClient.invalidateQueries({ queryKey: ['perfil'] }),
 })
 
 const onSubmit = handleSubmit(async (data) => {
- try {
- await mutateAsync(data)
- } catch (e) {
- // erro esperado volta para o formulário; não é lançado. RHF-ERR-03
- setError('root.serverError', { message: mensagemDe(e) })
- }
+  try {
+    await mutateAsync(data)
+  } catch (e) {
+    // erro esperado volta para o formulário; não é lançado.  RHF-ERR-03
+    setError('root.serverError', { message: mensagemDe(e) })
+  }
 })
 ```
 
@@ -681,13 +681,13 @@ const onSubmit = handleSubmit(async (data) => {
 const { data } = useQuery({ queryKey: ['perfil'], queryFn: buscarPerfil })
 
 useForm({
- defaultValues: { nome: '', email: '' }, // forma do formulário
- values: data, // conteúdo vindo do servidor
- resetOptions: { keepDirtyValues: true }, // não sobrescreve edição em curso
+  defaultValues: { nome: '', email: '' },   // forma do formulário
+  values: data,                             // conteúdo vindo do servidor
+  resetOptions: { keepDirtyValues: true },  // não sobrescreve edição em curso
 })
 ```
 
-Ver e.
+
 
 ### 8.3 Regras da ponte
 
@@ -738,6 +738,6 @@ Pontos em que a fonte contraria o que se assume por hábito:
 - **Nomes reservados de campo:** `type`, `root`, `ref`, `types`, `message`, `form` colidem com a estrutura interna de `FieldError`. Nomes também não podem começar com número.
 - **`<Activity />` do React é suportado desde a v7.85.0** — o RHF ressincroniza as assinaturas internas no remount.
 - **Um 404 que era erro de URL, não ausência de página.** `createFormControl` mora em `/docs/createFormControl` (camelCase); `setValues` e `resetDefaultValues` têm páginas próprias. As três estão verificadas na § 4.3. Já `/docs/useform/resolver` de fato não existe — o contrato do resolver está em `/docs/useform#resolver`, que é a fonte real do que [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md) § 3.2 afirma.
-- **`rules` do `register` × `resolver`:** a exclusividade está afirmada na página de `useForm` ("Cannot be used with built-in validators") e é a base de `RHF-VAL-06`. A consequência para `validate` e `deps` é dedução direta dessa frase — a fonte não os nomeia um a um. A alternativa recomendada (`.refine` assíncrono com `mode: 'async'` do resolver) tem suporte declarado no README de `@hookform/resolvers`, mas **o encadeamento Zod async refine + zodResolver não foi testado end-to-end nesta verificação**.
+- **`rules` do `register` × `resolver`:** a exclusividade está afirmada na página de `useForm` ("Cannot be used with built-in validators") e é a base de `RHF-VAL-06`. A consequência para `validate` e `deps` é dedução direta dessa frase — a fonte não os nomeia um a um. A alternativa recomendada (`.refine()` assíncrono com `mode: 'async'` do resolver) tem suporte declarado no README de `@hookform/resolvers`, mas **o encadeamento Zod async refine + zodResolver não foi testado end-to-end nesta verificação**.
 
 **Sobre revisão.** Esta estrutura passou por teste de leitura com quatro agentes sem contexto (escolha entre RHF e Actions, performance e re-render, erros de servidor com Zod, componente de campo reutilizável) e uma auditoria de consistência de IDs e referências, em 2026-08-15. As correções aplicadas incluíram: reversão da orientação de validação assíncrona na § 3.3 do satélite de Validação (estava mandando usar `validate` do `register` num setup com resolver, onde ele não roda), reescrita de `RHF-STATE-04` que contradizia `RHF-STATE-02`, correção de `RHF-PERF-01` citado como permissão para o que proíbe, desambiguação de "número como chave isolada" contra `itens.0.nome`, e correção dos exemplos que violavam `RHF-A11Y-01`/`-03`. Ao editar esta doc, repetir o teste é mais barato que confiar na releitura.

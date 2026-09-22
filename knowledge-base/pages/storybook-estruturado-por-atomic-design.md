@@ -1,14 +1,14 @@
 ---
 titulo: Storybook estruturado por Atomic Design
 aliases:
- - Catálogo do Storybook
- - Atomic Design no Storybook
+  - Catálogo do Storybook
+  - Atomic Design no Storybook
 tags:
- - storybook
- - frontend
- - react
- - architecture
- - design-system
+  - storybook
+  - frontend
+  - react
+  - architecture
+  - design-system
 ---
 # Storybook estruturado por Atomic Design
 
@@ -132,12 +132,12 @@ ambiente no escopo do módulo não pode:
 import { clientEnv } from '@lemind/infra-env/client'
 
 export function AppAuthLayout({ children }) {
- return <span>{clientEnv.VITE_APP_NAME}</span> /* … */
+  return <span>{clientEnv.VITE_APP_NAME}</span> /* … */
 }
 
 // ✓ o ambiente viaja por prop, e a rota continua a única leitora
 export function AppAuthLayout({ appName, children }) {
- return <span>{appName}</span> /* … */
+  return <span>{appName}</span> /* … */
 }
 ```
 
@@ -186,22 +186,22 @@ escrever a réplica.
 Dois arquivos, e só o segundo tem efeito visual:
 
 ```ts
-//.storybook/main.ts — o diretório vira prefixo do título
+// .storybook/main.ts — o diretório vira prefixo do título
 stories: [
- { directory: '../src/stories/ui', files: storyFiles, titlePrefix: 'UI' },
- { directory: '../src/stories/patterns', files: storyFiles, titlePrefix: 'Patterns' },
- { directory: '../src/stories/features', files: storyFiles, titlePrefix: 'Features' },
- { directory: '../src/stories/layouts', files: storyFiles, titlePrefix: 'Layout' },
- { directory: '../src/stories/pages', files: storyFiles, titlePrefix: 'Pages' },
+  { directory: '../src/stories/ui',       files: storyFiles, titlePrefix: 'UI' },
+  { directory: '../src/stories/patterns', files: storyFiles, titlePrefix: 'Patterns' },
+  { directory: '../src/stories/features', files: storyFiles, titlePrefix: 'Features' },
+  { directory: '../src/stories/layouts',  files: storyFiles, titlePrefix: 'Layout' },
+  { directory: '../src/stories/pages',    files: storyFiles, titlePrefix: 'Pages' },
 ]
 ```
 
 ```ts
-//.storybook/preview.ts — isto é o que ordena a sidebar
+// .storybook/preview.ts — isto é o que ordena a sidebar
 options: {
- storySort: {
- order: ['Overview', 'UI', 'Patterns', 'Features', 'Layout', 'Pages'],
- },
+  storySort: {
+    order: ['Overview', 'UI', 'Patterns', 'Features', 'Layout', 'Pages'],
+  },
 }
 ```
 
@@ -252,29 +252,29 @@ vault. Onde divergem, e por quê:
 ### Carregamento mínimo
 
 ```
-SEMPRE: § 2 (escada e mapeamento) + § 5 (regras SB-LAYER-*)
+SEMPRE:                  § 2 (escada e mapeamento) + § 5 (regras SB-LAYER-*)
 
-AO CRIAR STORY NOVA: § 3 (Patterns × Features) — a pergunta de classificação
-AO CRIAR GRUPO NOVO: § 2 + SB-LAYER-02 + § 6 (os dois arquivos)
-AO REVISAR CATÁLOGO: § 7 (antipadrões)
-AO DOCUMENTAR UM SHELL: § 4 (template) + SB-LAYER-05, -06, -07
+AO CRIAR STORY NOVA:     § 3 (Patterns × Features) — a pergunta de classificação
+AO CRIAR GRUPO NOVO:     § 2 + SB-LAYER-02 + § 6 (os dois arquivos)
+AO REVISAR CATÁLOGO:     § 7 (antipadrões)
+AO DOCUMENTAR UM SHELL:  § 4 (template) + SB-LAYER-05, -06, -07
 
-TAMBÉM: [Storybook](../docs/storybook.md) § 6 para a API da story em si
- (esta nota decide em que camada ela entra;
- aquela decide como ela é escrita)
+TAMBÉM:                  [Storybook](../docs/storybook.md) § 6 para a API da story em si
+                         (esta nota decide em que camada ela entra;
+                          aquela decide como ela é escrita)
 
-NUNCA: citar SB-LAYER-* como se fosse da § 6 de [Storybook](../docs/storybook.md)
+NUNCA:                   citar SB-LAYER-* como se fosse da § 6 de [Storybook](../docs/storybook.md)
 ```
 
 ### Ordem das decisões ao criar uma story
 
 1. **Isto é primitivo indivisível?** → `UI`.
 2. **É composição?** Então é organism. **Carrega vocabulário do produto?** Não → `Patterns`.
- Sim → `Features`.
+   Sim → `Features`.
 3. **É estrutura de página com conteúdo de espaço reservado?** → `Layout`, e vale `SB-LAYER-05`.
 4. **É a estrutura preenchida, variando por estado de rota?** → `Pages`, e vale `SB-LAYER-06`.
 5. **Não encaixou em nenhum?** Não invente posição — o mapeamento da § 2 precisa de linha nova, e
- isso é decisão registrada, não exceção silenciosa.
+   isso é decisão registrada, não exceção silenciosa.
 
 ### Como citar um achado
 
@@ -286,13 +286,13 @@ NUNCA: citar SB-LAYER-* como se fosse da § 6 de [Storybook](../docs/storybook.m
 ### Invariantes
 
 1. **A escada é critério, não taxonomia.** Renomear grupo para "organisms" não melhora nada; o que
- melhora é aplicar a pergunta da § 3.
+   melhora é aplicar a pergunta da § 3.
 2. **Ownership antes de catálogo.** Se a classificação no Storybook briga com onde o arquivo mora,
- quem está errado é o arquivo.
+   quem está errado é o arquivo.
 3. **Story é detector.** Peça que não monta isolada tem defeito próprio; a story não é o lugar de
- contornar isso.
+   contornar isso.
 4. **Registrar, não excepcionar.** Grupo que não encaixa vira linha nova no mapeamento, com decisão
- registrada.
+   registrada.
 
 ---
 
@@ -302,7 +302,7 @@ Aplicado no monorepo `lemind`, registrado como decisão `028 — a escada do Ato
 catálogo do Storybook`. As autoridades do catálogo naquele repositório, na ordem:
 
 ```text
-UI/* primitivos de packages/ui/src/components
+UI/*                              primitivos de packages/ui/src/components
 Patterns/DetailSheet/{Shell,Content}
 Patterns/Checklist
 Patterns/Audit Trail
@@ -319,10 +319,10 @@ pages/{Login,Register,ResetPassword}
 Dois detalhes que só aparecem na aplicação real:
 
 - **`Features/Auth` é agrupada por provider**, não por tipo de componente — `Password` reúne entrada,
- cadastro e as duas etapas da recuperação; `TwoFactor` é grupo irmão porque é outro fator. O nível
- da escada decide a posição; o agrupamento **dentro** do nível é vocabulário de produto.
+  cadastro e as duas etapas da recuperação; `TwoFactor` é grupo irmão porque é outro fator. O nível
+  da escada decide a posição; o agrupamento **dentro** do nível é vocabulário de produto.
 - **`PasswordStrength` nasceu em `Patterns` com um consumidor só**, por `SB-LAYER-03`: ele recebe
- `{label, met}[]` e não conhece a política de senha, que mora na feature.
+  `{label, met}[]` e não conhece a política de senha, que mora na feature.
 
 ---
 

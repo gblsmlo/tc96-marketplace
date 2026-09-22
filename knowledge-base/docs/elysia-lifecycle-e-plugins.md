@@ -2,15 +2,15 @@
 titulo: Elysia - Lifecycle e Plugins
 Link: https://elysiajs.com/essential/plugin.html
 tags:
- - elysia
- - plugins
- - agent-context
+  - elysia
+  - plugins
+  - agent-context
 source: "Documentação oficial — https://elysiajs.com/"
 verificado-em: 2026-08-15
 ---
 # Elysia - Lifecycle e Plugins
 
-> A ordem completa do lifecycle e o que cada hook pode fazer · `state` × `decorate` × `derive` × `resolve` · `macro` · plugin como instância e `use` · deduplicação por `name`/`seed` · **escopo `local`/`scoped`/`global` e `as`** · `guard` · plugins oficiais de produção.
+> A ordem completa do lifecycle e o que cada hook pode fazer · `state` × `decorate` × `derive` × `resolve` · `macro` · plugin como instância e `use()` · deduplicação por `name`/`seed` · **escopo `local`/`scoped`/`global` e `as()`** · `guard` · plugins oficiais de produção.
 >
 > **Não cobre:** rotas, contexto e respostas ([Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md)) · schema e Eden ([Elysia - Schema e Eden](elysia-schema-e-eden.md)) · o runtime por baixo ([Bun - Runtime e APIs](bun-runtime-e-apis.md)).
 
@@ -20,7 +20,7 @@ Entrada: [Elysia](elysia.md) · Base normativa: [Elysia](elysia.md) § 6
 
 ## 1. Conceito: escopo é a única coisa que decide se um plugin afeta uma rota — e o default é o mais restritivo
 
-Em quase todo framework de servidor, registrar um middleware no app significa que ele roda para tudo. Em Elysia, não. Um hook registrado numa instância vale para **aquela instância e seus descendentes**, e para mais ninguém — nem para quem fez `.use` dela.
+Em quase todo framework de servidor, registrar um middleware no app significa que ele roda para tudo. Em Elysia, não. Um hook registrado numa instância vale para **aquela instância e seus descendentes**, e para mais ninguém — nem para quem fez `.use()` dela.
 
 A doc escolheu uma analogia exata:
 
@@ -31,20 +31,20 @@ O problema é que a falha é **silenciosa e invertida em relação à intuição
 ```ts
 import { Elysia } from 'elysia'
 
-const perfil = new Elysia
-.onBeforeHandle(({ cookie }) => {
- // ⚠️ DEFEITO 2: `throw new Error` não é um erro de domínio. Elysia classifica
- // como UNKNOWN e responde 500 — não 401 — e o Eden não vê erro tipado.
- // O certo é `return status(401, { erro: 'Não autenticado' })` — ELYSIA-CORE-03.
- if (!sessaoValida(cookie)) throw new Error('não autenticado')
- })
-.get('/perfil', => carregarPerfil)
+const perfil = new Elysia()
+  .onBeforeHandle(({ cookie }) => {
+    // ⚠️ DEFEITO 2: `throw new Error` não é um erro de domínio. Elysia classifica
+    //    como UNKNOWN e responde 500 — não 401 — e o Eden não vê erro tipado.
+    //    O certo é `return status(401, { erro: 'Não autenticado' })` — ELYSIA-CORE-03.
+    if (!sessaoValida(cookie)) throw new Error('não autenticado')
+  })
+  .get('/perfil', () => carregarPerfil())
 
-const app = new Elysia
-.use(perfil)
- // ⚠️ DEFEITO 1: NÃO tem checagem de sessão. Rota aberta. Nenhum aviso.
- // O hook acima é `local`: protege as rotas de `perfil` e mais nada.
-.patch('/perfil/renomear', ({ body }) => renomear(body))
+const app = new Elysia()
+  .use(perfil)
+  // ⚠️ DEFEITO 1: NÃO tem checagem de sessão. Rota aberta. Nenhum aviso.
+  //    O hook acima é `local`: protege as rotas de `perfil` e mais nada.
+  .patch('/perfil/renomear', ({ body }) => renomear(body))
 ```
 
 **São dois defeitos, e só um é de escopo.** O de escopo (`ELYSIA-LIFE-01`) deixa a rota do consumidor aberta; o de sinalização (`ELYSIA-CORE-03`) faz a rota *protegida* responder 500 em vez de 401 quando a sessão é inválida. Corrigir um sem o outro deixa o bloco errado. Esta nota existe em grande medida por causa desse bloco. A correção completa está em § 5.
@@ -56,24 +56,24 @@ Há uma segunda regra de alcance, ortogonal ao escopo e igualmente silenciosa: *
 ## 2. A ordem do lifecycle
 
 ```
- request
- │
- ┌────▼──────────┐ onRequest PreContext apenas. GLOBAL (não respeita ordem
- │ │ de rota). Retorno curto-circuita tudo.
- ├───────────────┤ onParse preenche body para content-type não coberto
- ├───────────────┤ onTransform muta o contexto para passar na validação
- │ │ + derive acrescenta propriedade — MESMA fila do transform
- ├═══════════════┤ ►► VALIDAÇÃO do body/query/params/headers/cookie
- ├───────────────┤ onBeforeHandle autorização. Retorno != undefined PULA o handler.
- │ │ + resolve acrescenta propriedade — MESMA fila do beforeHandle
- ├───────────────┤ ►► HANDLER
- ├───────────────┤ onAfterHandle lê responseValue. Retornar NÃO pula os seguintes.
- ├───────────────┤ mapResponse produz Response. Retornar PULA os seguintes.
+   request
+      │
+ ┌────▼──────────┐  onRequest        PreContext apenas. GLOBAL (não respeita ordem
+ │               │                   de rota). Retorno curto-circuita tudo.
+ ├───────────────┤  onParse          preenche body para content-type não coberto
+ ├───────────────┤  onTransform      muta o contexto para passar na validação
+ │               │  + derive         acrescenta propriedade — MESMA fila do transform
+ ├═══════════════┤  ►► VALIDAÇÃO do body/query/params/headers/cookie
+ ├───────────────┤  onBeforeHandle   autorização. Retorno != undefined PULA o handler.
+ │               │  + resolve        acrescenta propriedade — MESMA fila do beforeHandle
+ ├───────────────┤  ►► HANDLER
+ ├───────────────┤  onAfterHandle    lê responseValue. Retornar NÃO pula os seguintes.
+ ├───────────────┤  mapResponse      produz Response. Retornar PULA os seguintes.
  └────┬──────────┘
- │ ►► resposta enviada
- ┌────▼──────────┐ onAfterResponse logging e analytics
+      │  ►► resposta enviada
+ ┌────▼──────────┐  onAfterResponse  logging e analytics
  └───────────────┘
- onError intercepta erro lançado em QUALQUER fase acima
+        onError intercepta erro lançado em QUALQUER fase acima
 ```
 
 O que cada um pode e não pode:
@@ -99,11 +99,11 @@ Esta é a enumeração que as três notas de Elysia devem repetir. Extraída de 
 | --- | --- |
 | `request` | o `Request` Web Standard — é a única forma de ler qualquer coisa do corpo aqui |
 | `set` | `{ headers, status?, redirect? }` da resposta |
-| `store` | estado global da instância, criado por `.state` |
+| `store` | estado global da instância, criado por `.state()` |
 | `status` | **a função `status(code, valor)`** — é o que permite curto-circuitar com status tipado |
 | `redirect` | função de redirect |
 | `server` | `Server \| null` (**Bun only**) |
-| decorators | tudo que `.decorate` acrescentou |
+| decorators | tudo que `.decorate()` acrescentou |
 
 O item que mais falta em enumeração de segunda mão é `status`. Sem ele a única saída de um `onRequest` que quer barrar o request é montar uma `Response` na mão; com ele, `return status(429, { erro: 'Limite excedido' })` curto-circuita e é o mesmo valor tipado do resto do lifecycle.
 
@@ -142,26 +142,26 @@ A distinção que mais gera bug é a última coluna contra a penúltima. A doc n
 ```ts
 import { Elysia, t } from 'elysia'
 
-const contexto = new Elysia
- // barato, não decide nada: derive serve
-.derive(({ server, request }) => ({
- ip: server?.requestIP(request)?.address,
- recebidoEm: Date.now
- }))
+const contexto = new Elysia()
+  // barato, não decide nada: derive serve
+  .derive(({ server, request }) => ({
+    ip: server?.requestIP(request)?.address,
+    recebidoEm: Date.now()
+  }))
 
 const auth = new Elysia({ name: 'auth' })
-.guard({
- headers: t.Object({
- authorization: t.TemplateLiteral('Bearer ${string}')
- })
- })
- // decide acesso: resolve, depois da validação. `authorization` é string garantida.
-.resolve(({ headers: { authorization }, status }) => {
- const usuario = verificarToken(authorization.slice(7))
- if (!usuario) return status(401, { erro: 'Token inválido' })
- return { usuario }
- })
-.get('/eu', ({ usuario }) => usuario) // usuario é tipado
+  .guard({
+    headers: t.Object({
+      authorization: t.TemplateLiteral('Bearer ${string}')
+    })
+  })
+  // decide acesso: resolve, depois da validação. `authorization` é string garantida.
+  .resolve(({ headers: { authorization }, status }) => {
+    const usuario = verificarToken(authorization.slice(7))
+    if (!usuario) return status(401, { erro: 'Token inválido' })
+    return { usuario }
+  })
+  .get('/eu', ({ usuario }) => usuario)      // usuario é tipado
 ```
 
 Note que tanto `derive` quanto `resolve` podem **abortar** devolvendo `status(...)`: são hooks de lifecycle, e o retorno tem o mesmo efeito de curto-circuito. É o padrão para autenticação —.
@@ -171,13 +171,13 @@ Note que tanto `derive` quanto `resolve` podem **abortar** devolvendo `status(..
 `store` é um objeto mutável compartilhado. Desestruturar um primitivo dele quebra a referência:
 
 ```ts
-new Elysia
-.state('contador', 0)
-.get('/inc', ({ store }) => store.contador++) // ✅ muta o store
-.get('/errado', ({ store: { contador } }) => contador) // ❌ cópia, sempre 0
+new Elysia()
+  .state('contador', 0)
+  .get('/inc', ({ store }) => store.contador++)              // ✅ muta o store
+  .get('/errado', ({ store: { contador } }) => contador)     // ❌ cópia, sempre 0
 ```
 
-`state` aceita também remapeamento — `.state(({ velho,...resto }) => ({...resto, novo: 1 }))` — e a doc avisa que o objeto devolvido **substitui** o store, removendo o que não estiver nele.
+`state` aceita também remapeamento — `.state(({ velho, ...resto }) => ({ ...resto, novo: 1 }))` — e a doc avisa que o objeto devolvido **substitui** o store, removendo o que não estiver nele.
 
 | ID | Regra |
 | --- | --- |
@@ -187,7 +187,7 @@ new Elysia
 
 ---
 
-## 4. Plugin é uma instância, e `use` é a única forma de compor
+## 4. Plugin é uma instância, e `use()` é a única forma de compor
 
 Não existe tipo `Plugin` em Elysia. Um plugin é uma instância de `Elysia`, que poderia rodar sozinha:
 
@@ -197,30 +197,30 @@ import { Elysia } from 'elysia'
 import { Auth } from './service'
 
 export const auth = new Elysia({ name: 'auth', prefix: '/auth' })
-.post('/entrar', ({ body, cookie: { sessao } }) => Auth.entrar(body, sessao), {
- body: AuthModel.entrarBody,
- response: { 200: AuthModel.entrarOk, 400: AuthModel.entrarInvalido }
- })
+  .post('/entrar', ({ body, cookie: { sessao } }) => Auth.entrar(body, sessao), {
+    body: AuthModel.entrarBody,
+    response: { 200: AuthModel.entrarOk, 400: AuthModel.entrarInvalido }
+  })
 
 // index.ts
-new Elysia.use(auth).use(pedidos).use(usuarios).listen(3000)
+new Elysia().use(auth).use(pedidos).use(usuarios).listen(3000)
 ```
 
-`use` aceita instância, função `(app) => app`, plugin assíncrono e `import('./plugin')` (lazy — o módulo registra depois do start, e `await app.modules` espera por ele).
+`use()` aceita instância, função `(app) => app`, plugin assíncrono e `import('./plugin')` (lazy — o módulo registra depois do start, e `await app.modules` espera por ele).
 
 A doc recomenda **instância** em vez de callback funcional, com a razão explicitada: callbacks *"make encapsulation and scope harder to handle correctly"*. Sobre custo, ela é direta: *"Elysia can create 10k instances in a matter of milliseconds"* — não é decisão de performance.
 
 ### Dependência é explícita
 
-Aquilo que um plugin `decorate`/`state`/`model` **é** herdado por quem faz `.use` — mas só depois do `use`, e você precisa declará-lo:
+Aquilo que um plugin `decorate`/`state`/`model` **é** herdado por quem faz `.use()` — mas só depois do `use()`, e você precisa declará-lo:
 
 ```ts
-const auth = new Elysia.decorate('Auth', ServicoAuth)
+const auth = new Elysia().decorate('Auth', ServicoAuth)
 
-new Elysia
-.get('/a', ({ Auth }) => Auth.perfil) // ❌ erro de tipo: 'Auth' não existe aqui
-.use(auth)
-.get('/b', ({ Auth }) => Auth.perfil) // ✅
+new Elysia()
+  .get('/a', ({ Auth }) => Auth.perfil())   // ❌ erro de tipo: 'Auth' não existe aqui
+  .use(auth)
+  .get('/b', ({ Auth }) => Auth.perfil())   // ✅
 ```
 
 O que **não** é herdado é o lifecycle — ver § 5. É a assimetria central de Elysia: propriedades sobem, hooks não.
@@ -230,14 +230,14 @@ O que **não** é herdado é o lifecycle — ver § 5. É a assimetria central d
 Sem `name`, um plugin aplicado por três instâncias **executa três vezes**. Com `name`, Elysia deduplica.
 
 ```ts
-const ip = new Elysia({ name: 'ip' }) // sem isto, roda 1× por.use
-.derive({ as: 'global' }, ({ server, request }) => ({
- ip: server?.requestIP(request)
- }))
+const ip = new Elysia({ name: 'ip' })            // sem isto, roda 1× por .use()
+  .derive({ as: 'global' }, ({ server, request }) => ({
+    ip: server?.requestIP(request)
+  }))
 
-const rotasA = new Elysia.use(ip).get('/a', ({ ip }) => ip)
-const rotasB = new Elysia.use(ip).get('/b', ({ ip }) => ip)
-new Elysia.use(rotasA).use(rotasB) // `ip` registra uma vez só
+const rotasA = new Elysia().use(ip).get('/a', ({ ip }) => ip)
+const rotasB = new Elysia().use(ip).get('/b', ({ ip }) => ip)
+new Elysia().use(rotasA).use(rotasB)             // `ip` registra uma vez só
 ```
 
 `seed` complementa: quando o mesmo plugin é aplicado com configurações diferentes e cada configuração precisa contar como instância distinta, o `seed` (qualquer valor, não só string) entra no checksum.
@@ -253,11 +253,11 @@ new Elysia.use(rotasA).use(rotasB) // `ip` registra uma vez só
 | ID | Regra |
 | --- | --- |
 | `ELYSIA-LIFE-03` | Plugin aplicado por mais de uma instância **MUST** declarar `name` — sem ele o lifecycle roda uma vez por aplicação. |
-| `ELYSIA-LIFE-07` | Plugin novo **MUST** ser uma instância `new Elysia`, não um callback `(app) => app` — o callback dificulta encapsulamento e escopo. |
+| `ELYSIA-LIFE-07` | Plugin novo **MUST** ser uma instância `new Elysia()`, não um callback `(app) => app` — o callback dificulta encapsulamento e escopo. |
 
 ---
 
-## 5. Escopo: `local`, `scoped`, `global` e o método `as`
+## 5. Escopo: `local`, `scoped`, `global` e o método `as()`
 
 A seção mais importante desta nota.
 
@@ -266,7 +266,7 @@ A seção mais importante desta nota.
 | Escopo | Alcança |
 | --- | --- |
 | `local` (**default**) | a instância atual e seus descendentes |
-| `scoped` | **+ o pai imediato** (quem fez `.use`) |
+| `scoped` | **+ o pai imediato** (quem fez `.use()`) |
 | `global` | todas as instâncias, em qualquer nível |
 
 A tabela oficial, com quatro instâncias aninhadas (`child` dentro de `current` dentro de `parent` dentro de `main`), e o hook registrado em `current`:
@@ -283,26 +283,26 @@ Repare em `scoped`: sobe **um** nível, não todos. É a fonte da segunda rodada
 
 ```ts
 // 1. inline — um hook só
-new Elysia
-.derive({ as: 'scoped' }, => ({ requestId: crypto.randomUUID }))
+new Elysia()
+  .derive({ as: 'scoped' }, () => ({ requestId: crypto.randomUUID() }))
 
 // 2. guard — todos os hooks e schemas de um bloco
-new Elysia
-.guard({
- as: 'scoped',
- response: t.String,
- beforeHandle { /*... */ }
- })
-.get('/filho', 'ok')
+new Elysia()
+  .guard({
+    as: 'scoped',
+    response: t.String(),
+    beforeHandle() { /* ... */ }
+  })
+  .get('/filho', 'ok')
 
 // 3. instância — tudo que a instância registrou, no fim do encadeamento
-new Elysia
-.derive( => ({ oi: 'ok' }))
-.get('/filho', ({ oi }) => oi)
-.as('scoped') // aceita 'scoped' | 'global', não 'local'
+new Elysia()
+  .derive(() => ({ oi: 'ok' }))
+  .get('/filho', ({ oi }) => oi)
+  .as('scoped')                        // aceita 'scoped' | 'global', não 'local'
 ```
 
-`guard` com `as` é conveniente mas tem um limite verificado: *"it doesn't support `derive` and `resolve` method"*. Para elevar o escopo de um `resolve`, use `as` inline no próprio `resolve` ou `.as` na instância.
+`guard` com `as` é conveniente mas tem um limite verificado: *"it doesn't support `derive` and `resolve` method"*. Para elevar o escopo de um `resolve`, use `as` inline no próprio `resolve` ou `.as()` na instância.
 
 ### O plugin de autenticação, corrigido
 
@@ -313,33 +313,33 @@ import { Elysia, t } from 'elysia'
 
 // ── Opção A: escopo explícito no hook ──────────────────────────
 const auth = new Elysia({ name: 'auth' })
-.resolve({ as: 'scoped' }, ({ cookie: { sessao }, status }) => {
- const usuario = validarSessao(sessao.value)
- if (!usuario) return status(401, { erro: 'Não autenticado' })
- return { usuario }
- })
+  .resolve({ as: 'scoped' }, ({ cookie: { sessao }, status }) => {
+    const usuario = validarSessao(sessao.value)
+    if (!usuario) return status(401, { erro: 'Não autenticado' })
+    return { usuario }
+  })
 
-const app = new Elysia
-.use(auth)
-.get('/perfil', ({ usuario }) => usuario) // ✅ protegido
-.patch('/perfil/renomear', ({ usuario, body }) => renomear(usuario, body)) // ✅ protegido
+const app = new Elysia()
+  .use(auth)
+  .get('/perfil', ({ usuario }) => usuario)              // ✅ protegido
+  .patch('/perfil/renomear', ({ usuario, body }) => renomear(usuario, body))  // ✅ protegido
 
 // ── Opção B: macro, aplicada rota a rota ───────────────────────
 const authMacro = new Elysia({ name: 'auth.macro' })
-.macro({
- autenticado: {
- resolve: ({ cookie: { sessao }, status }) => {
- const usuario = validarSessao(sessao.value)
- if (!usuario) return status(401, { erro: 'Não autenticado' })
- return { usuario }
- }
- }
- })
+  .macro({
+    autenticado: {
+      resolve: ({ cookie: { sessao }, status }) => {
+        const usuario = validarSessao(sessao.value)
+        if (!usuario) return status(401, { erro: 'Não autenticado' })
+        return { usuario }
+      }
+    }
+  })
 
-const publicoEPrivado = new Elysia
-.use(authMacro)
-.get('/saude', => 'ok') // aberta, por design
-.get('/perfil', ({ usuario }) => usuario, { autenticado: true }) // protegida, explícita
+const publicoEPrivado = new Elysia()
+  .use(authMacro)
+  .get('/saude', () => 'ok')                                     // aberta, por design
+  .get('/perfil', ({ usuario }) => usuario, { autenticado: true }) // protegida, explícita
 ```
 
 **A escolha entre A e B é de arquitetura, não de gosto.** A opção A protege tudo dali para frente e falha para o lado seguro: esquecer é ficar protegido demais. A opção B torna cada rota autodocumentada e permite misturar rotas abertas e fechadas na mesma instância, mas falha para o lado inseguro: esquecer `autenticado: true` deixa a rota aberta. Em módulo inteiramente autenticado, A; onde há mistura, B com revisão de que toda rota nova declara o flag.
@@ -349,27 +349,27 @@ const publicoEPrivado = new Elysia
 Como `scoped` sobe só um nível, atravessar dois exige `as('scoped')` em cada instância intermediária:
 
 ```ts
-const plugin = new Elysia
-.guard({ response: t.String })
-.onBeforeHandle( => { console.log('chamado') })
-.get('/ok', => 'ok')
-.as('scoped')
+const plugin = new Elysia()
+  .guard({ response: t.String() })
+  .onBeforeHandle(() => { console.log('chamado') })
+  .get('/ok', () => 'ok')
+  .as('scoped')
 
-const intermediaria = new Elysia
-.use(plugin)
-.get('/tambem-ok', => 'ok')
-.as('scoped') // sem esta linha, `parent` não é afetado
+const intermediaria = new Elysia()
+  .use(plugin)
+  .get('/tambem-ok', () => 'ok')
+  .as('scoped')          // sem esta linha, `parent` não é afetado
 
-const parent = new Elysia
-.use(intermediaria)
-.get('/agora-vale', => 'ok')
+const parent = new Elysia()
+  .use(intermediaria)
+  .get('/agora-vale', () => 'ok')
 ```
 
 Se a intenção é "vale em todo lugar, ponto" — tracing, logging, CORS — use `global` e evite a corrente de `as`.
 
 | ID | Regra |
 | --- | --- |
-| `ELYSIA-LIFE-01` | Hook de plugin que precisa valer para quem o consome **MUST** declarar escopo (`{ as: 'scoped' }`, `guard({ as })` ou `.as`) — o default `local` não sobe, e a falha é silenciosa. |
+| `ELYSIA-LIFE-01` | Hook de plugin que precisa valer para quem o consome **MUST** declarar escopo (`{ as: 'scoped' }`, `guard({ as })` ou `.as()`) — o default `local` não sobe, e a falha é silenciosa. |
 | `ELYSIA-LIFE-08` | Plugin de autenticação **MUST** provar em teste que uma rota da instância **consumidora** é rejeitada sem credencial — testar só as rotas do próprio plugin não detecta erro de escopo. |
 | `ELYSIA-LIFE-09` | Hook transversal que deve valer em toda a árvore (tracing, logging, CORS) **MUST** usar `global`, não uma corrente de `as('scoped')`. |
 
@@ -383,38 +383,38 @@ Se a intenção é "vale em todo lugar, ponto" — tracing, logging, CORS — us
 import { Elysia, t, status } from 'elysia'
 
 const rbac = new Elysia({ name: 'rbac' })
-.macro({
- // forma abreviada: objeto vira função que recebe boolean
- autenticado: {
- resolve: ({ cookie: { sessao } }) => {
- const usuario = validarSessao(sessao.value)
- if (!usuario) return status(401, { erro: 'Não autenticado' })
- return { usuario }
- }
- },
- // forma parametrizada
- papel: (necessario: 'admin' | 'operador') => ({
- seed: necessario, // entra no checksum de deduplicação
- beforeHandle({ usuario, status }) {
- if (usuario.papel !== necessario) return status(403, { erro: 'Sem permissão' })
- }
- })
- })
+  .macro({
+    // forma abreviada: objeto vira função que recebe boolean
+    autenticado: {
+      resolve: ({ cookie: { sessao } }) => {
+        const usuario = validarSessao(sessao.value)
+        if (!usuario) return status(401, { erro: 'Não autenticado' })
+        return { usuario }
+      }
+    },
+    // forma parametrizada
+    papel: (necessario: 'admin' | 'operador') => ({
+      seed: necessario,                       // entra no checksum de deduplicação
+      beforeHandle({ usuario, status }) {
+        if (usuario.papel !== necessario) return status(403, { erro: 'Sem permissão' })
+      }
+    })
+  })
 
-new Elysia
-.use(rbac)
-.delete('/pedidos/:id', ({ params: { id } }) => cancelar(id), {
- autenticado: true,
- papel: 'admin'
- })
+new Elysia()
+  .use(rbac)
+  .delete('/pedidos/:id', ({ params: { id } }) => cancelar(id), {
+    autenticado: true,
+    papel: 'admin'
+  })
 ```
 
 Quatro pontos verificados que mudam código:
 
 1. **Macro pode declarar schema**, e ele se acumula com o schema da rota em vez de substituí-lo — inclusive schemas de bibliotecas diferentes.
-2. **`return status(...)`, não `throw`.** A doc: *"It's recommended that you `return status` instead of `throw new Error`"*, porque `throw` vira 500, e porque só o retorno preserva a inferência para Eden e para o OpenAPI gerado a partir de tipos.
+2. **`return status(...)`, não `throw`.** A doc: *"It's recommended that you `return status` instead of `throw new Error()`"*, porque `throw` vira 500, e porque só o retorno preserva a inferência para Eden e para o OpenAPI gerado a partir de tipos.
 3. **Macro deduplica sozinha** o lifecycle, usando o valor da propriedade como seed. `seed` explícito cobre o caso parametrizado.
-4. **Limitação de TypeScript:** um macro que estende outro não infere tipo dentro do `resolve`. O contorno documentado é usar a forma nomeada `.macro('nome', {... })`. O mesmo vale para usar o schema do próprio macro num hook dele.
+4. **Limitação de TypeScript:** um macro que estende outro não infere tipo dentro do `resolve`. O contorno documentado é usar a forma nomeada `.macro('nome', { ... })`. O mesmo vale para usar o schema do próprio macro num hook dele.
 
 | ID | Regra |
 | --- | --- |
@@ -427,14 +427,14 @@ Quatro pontos verificados que mudam código:
 `guard` aplica schema e hooks às rotas seguintes da instância (ou ao bloco, na forma com callback). É equivalente a repetir o hook local em cada rota.
 
 ```ts
-new Elysia
-.get('/publica', => 'ok') // fora do guard
-.guard({
- headers: t.Object({ authorization: t.String }),
- beforeHandle: [verificarToken, registrarAcesso] // aceita array
- })
-.get('/privada-1', => 'ok') // dentro
-.get('/privada-2', => 'ok') // dentro
+new Elysia()
+  .get('/publica', () => 'ok')                 // fora do guard
+  .guard({
+    headers: t.Object({ authorization: t.String() }),
+    beforeHandle: [verificarToken, registrarAcesso]   // aceita array
+  })
+  .get('/privada-1', () => 'ok')               // dentro
+  .get('/privada-2', () => 'ok')               // dentro
 ```
 
 Precedência de schema, verificada: *"If multiple global schemas are defined for the same property, the latest one will take precedence. If both local and global schemas are defined, the local one will take precedence."*
@@ -448,29 +448,29 @@ E o comportamento que costuma surpreender: por padrão o schema da rota **substi
 ## 8. Plugins oficiais em produção
 
 ```ts
-import { Elysia, env } from 'elysia' // `env`, não `process.env` — ELYSIA-APP-09
+import { Elysia, env } from 'elysia'          // `env`, não `process.env` — ELYSIA-APP-09
 import { cors } from '@elysia/cors'
 import { openapi } from '@elysia/openapi'
 import { jwt } from '@elysia/jwt'
 import { opentelemetry } from '@elysia/opentelemetry'
 
-new Elysia
-.use(opentelemetry) // primeiro: instrumenta o resto
-.use(cors({ origin: /\.meudominio\.com$/, credentials: true }))
-.use(openapi) // documentação em /openapi
-.use(jwt({ name: 'jwt', secret: env.JWT_SECRET!, exp: '7d' }))
-.use(auth)
-.use(pedidos)
-.listen(3000)
+new Elysia()
+  .use(opentelemetry())                       // primeiro: instrumenta o resto
+  .use(cors({ origin: /\.meudominio\.com$/, credentials: true }))
+  .use(openapi())                             // documentação em /openapi
+  .use(jwt({ name: 'jwt', secret: env.JWT_SECRET!, exp: '7d' }))
+  .use(auth)
+  .use(pedidos)
+  .listen(3000)
 ```
 
 | Plugin | Nota de calibração |
 | --- | --- |
 | `@elysia/cors` | `origin` default é `true` (= `*`) e `credentials` default é `true` — combinação permissiva demais para API autenticada. Restrinja `origin` por regex ou lista. Ver |
-| `@elysia/openapi` | expõe `/openapi` (Scalar) e `/openapi/json`. `fromTypes` gera doc a partir dos tipos, sem schema em runtime. Ver |
+| `@elysia/openapi` | expõe `/openapi` (Scalar) e `/openapi/json`. `fromTypes()` gera doc a partir dos tipos, sem schema em runtime. Ver |
 | `@elysia/jwt` | envolve `jose`; `alg` default `HS256` (simétrico). Para chave assimétrica e rotação via JWKS, ver |
 | `@elysia/static` | pasta `public`, prefixo `/public`. Não funciona no Cloudflare Worker |
-| `@elysia/opentelemetry` | `record`, `getCurrentSpan`, `setAttributes`. Ver |
+| `@elysia/opentelemetry` | `record()`, `getCurrentSpan()`, `setAttributes()`. Ver |
 | `@elysia/bearer`, `@elysia/cron`, `@elysia/html`, `@elysia/server-timing` | extração de token, cron, HTML/JSX, header `Server-Timing` |
 
 ### Nomeie suas funções de hook
@@ -483,9 +483,9 @@ Detalhe pequeno com efeito grande em observabilidade: o plugin de OpenTelemetry 
 
 // ✅ span: "buscarUsuario"
 .resolve(async function buscarUsuario({ cookie: { sessao }, status }) {
- const usuario = await buscarPerfil(sessao.value)
- if (!usuario) return status(401, { erro: 'Não autenticado' })
- return { usuario }
+  const usuario = await buscarPerfil(sessao.value)
+  if (!usuario) return status(401, { erro: 'Não autenticado' })
+  return { usuario }
 })
 ```
 
@@ -496,7 +496,7 @@ Duas notas de produção verificadas: instrumentações que dependem de monkey-p
 | ID | Regra |
 | --- | --- |
 | `ELYSIA-LIFE-11` | Hook em app instrumentada com OpenTelemetry **MUST** ser função nomeada — arrow anônima produz span `anonymous` e inutiliza o trace. |
-| `ELYSIA-LIFE-12` | `cors` em API autenticada **NEVER** fica com `origin` default (`*`) — a combinação com `credentials: true` é permissiva demais. |
+| `ELYSIA-LIFE-12` | `cors()` em API autenticada **NEVER** fica com `origin` default (`*`) — a combinação com `credentials: true` é permissiva demais. |
 
 ---
 
@@ -504,12 +504,12 @@ Duas notas de produção verificadas: instrumentações que dependem de monkey-p
 
 | Antipadrão | Por que falha | O que fazer |
 | --- | --- | --- |
-| **Plugin de auth sem escopo declarado** | `local` é o default: o `onBeforeHandle`/`resolve` protege só as rotas do próprio plugin. As rotas de quem deu `.use` ficam **abertas**, sem erro e sem aviso de tipo | `{ as: 'scoped' }`, `.as('scoped')` ou macro por rota — `ELYSIA-LIFE-01`, e teste do lado consumidor — `ELYSIA-LIFE-08` |
+| **Plugin de auth sem escopo declarado** | `local` é o default: o `onBeforeHandle`/`resolve` protege só as rotas do próprio plugin. As rotas de quem deu `.use()` ficam **abertas**, sem erro e sem aviso de tipo | `{ as: 'scoped' }`, `.as('scoped')` ou macro por rota — `ELYSIA-LIFE-01`, e teste do lado consumidor — `ELYSIA-LIFE-08` |
 | `derive` para resolver sessão ou permissão | roda em `transform`, **antes** da validação: o header/cookie lido não passou por schema, e a doc marca `derive` como sem integridade de tipo | `resolve` ou `macro.resolve` — `ELYSIA-LIFE-02` |
 | Plugin sem `name`, aplicado por vários módulos | o lifecycle roda uma vez **por aplicação** — hook duplicado, log duplicado, verificação duplicada | `new Elysia({ name: 'auth' })` — `ELYSIA-LIFE-03` |
-| `.use(plugin)` depois das rotas que ele deve afetar | evento só vale para rota registrada depois; as rotas acima ficam sem o hook | mover o `.use` para antes — `ELYSIA-CORE-01` |
+| `.use(plugin)` depois das rotas que ele deve afetar | evento só vale para rota registrada depois; as rotas acima ficam sem o hook | mover o `.use()` para antes — `ELYSIA-CORE-01` |
 | `as('scoped')` esperando atravessar dois níveis | `scoped` sobe **um** nível; a instância intermediária precisa do seu próprio `as`, ou nada chega ao topo | encadear `as('scoped')` em cada nível, ou usar `global` — `ELYSIA-LIFE-09` |
-| Macro que faz `throw new Error` ao negar acesso | vira `500 Internal Server Error` em vez de 401/403, e o Eden não vê o erro tipado | `return status(401,...)` — `ELYSIA-LIFE-10` |
+| Macro que faz `throw new Error()` ao negar acesso | vira `500 Internal Server Error` em vez de 401/403, e o Eden não vê o erro tipado | `return status(401, ...)` — `ELYSIA-LIFE-10` |
 | `decorate` de objeto que é mutado a cada request | `decorate` é compartilhado entre requests: a mutação vaza de um usuário para outro | `state` para mutável, `resolve` para valor por request — `ELYSIA-LIFE-05` |
 | `({ store: { contador } }) => contador` | desestruturar primitivo do store copia o valor e perde a referência — a leitura fica congelada no inicial | `({ store }) => store.contador` — `ELYSIA-LIFE-06` |
 | Lógica que lê `body` dentro de `onRequest` | `PreContext` não tem `body`, `query`, `params` nem `cookie` — ainda não foram parseados | `onParse`, `onTransform` ou `onBeforeHandle` — `ELYSIA-LIFE-04` |
@@ -529,7 +529,7 @@ Duas notas de produção verificadas: instrumentações que dependem de monkey-p
 - [ ] Hooks transversais usam `global` em vez de corrente de `as('scoped')`? → `ELYSIA-LIFE-09`
 - [ ] Macros negam acesso com `return status`, nunca `throw`? → `ELYSIA-LIFE-10`
 - [ ] Hooks são funções nomeadas onde há OpenTelemetry? → `ELYSIA-LIFE-11`
-- [ ] `cors` tem `origin` restrito? → `ELYSIA-LIFE-12`
+- [ ] `cors()` tem `origin` restrito? → `ELYSIA-LIFE-12`
 
 ---
 
@@ -540,7 +540,7 @@ Duas notas de produção verificadas: instrumentações que dependem de monkey-p
 - [Bun - Runtime e APIs](bun-runtime-e-apis.md) — o runtime por baixo dos plugins
 - · ·
 - · ·
-- · `Arquivos.env não substituem secret management`
+- ·
 
 ## Fontes consultadas
 
@@ -556,9 +556,9 @@ Verificadas em **2026-08-15**:
 
 **O que a verificação contrariou:**
 
-- **`.as` só tem duas sobrecargas: `'scoped'` e `'global'`.** Não existe `as('local')` — `local` é o default e não há como "descer" para ele.
+- **`.as()` só tem duas sobrecargas: `'scoped'` e `'global'`.** Não existe `as('local')` — `local` é o default e não há como "descer" para ele.
 - **`scoped` sobe exatamente um nível.** A leitura intuitiva ("scoped = vale no escopo todo") está errada; para atravessar dois níveis é preciso `as` em cada um, ou `global`.
-- **`guard` com `as` não cobre `derive` nem `resolve`** — a doc declara a limitação explicitamente. Para elevar um `resolve`, use `as` inline nele ou `.as` na instância.
+- **`guard` com `as` não cobre `derive` nem `resolve`** — a doc declara a limitação explicitamente. Para elevar um `resolve`, use `as` inline nele ou `.as()` na instância.
 - **`onTransform` e `derive` compartilham a mesma fila**, assim como `onBeforeHandle` e `resolve` — a ordem é a de registro, não por tipo de hook.
 - **Retornar de `onAfterHandle` não interrompe os `afterHandle` seguintes**, ao contrário de `beforeHandle`, `parse` e `mapResponse`, que interrompem. A assimetria é declarada na fonte.
 - **`onRequest` é global por natureza** e não obedece à regra de "só vale para rota registrada depois" — porque ainda não sabe qual rota vai atender.

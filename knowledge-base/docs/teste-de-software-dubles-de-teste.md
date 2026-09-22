@@ -2,10 +2,10 @@
 titulo: Teste de Software - Dublês de Teste
 Link: https://martinfowler.com/bliki/TestDouble.html
 tags:
- - testing
- - test-doubles
- - mocking
- - agent-context
+  - testing
+  - test-doubles
+  - mocking
+  - agent-context
 source: "Martin Fowler (TestDouble, Mocks Aren't Stubs), Software Engineering at Google cap. 11, e material próprio do vault"
 verificado-em: 2026-08-20
 ---
@@ -64,9 +64,9 @@ O exemplo canônico de teatro de teste, e vale detalhar porque ele passa em revi
 
 ```
 Teste E2E "criar pedido e vê-lo na lista", com a API mockada:
- 1. POST /pedidos → mock devolve 201 com um id
- 2. GET /pedidos → mock devolve uma lista fixa
- 3. asserção: o pedido aparece
+  1. POST /pedidos  → mock devolve 201 com um id
+  2. GET  /pedidos  → mock devolve uma lista fixa
+  3. asserção: o pedido aparece
 ```
 
 Isso **passa sempre** e não verifica nada. Pior: passa mesmo se cada arquivo de mock tiver seu próprio estado isolado — o `POST` nunca chega ao `GET`. E mesmo que chegasse, o verde só provaria consistência interna da imitação.
@@ -127,8 +127,8 @@ E no stack, as ferramentas por nível:
 
 | Ferramenta | Mecanismo | Nota |
 | --- | --- | --- |
-| `bun test` | `mock`, `spyOn`, `mock.module` | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) |
-| Storybook | `sb.mock` no preview, `fn`, MSW | [Storybook - Mocking](storybook-mocking.md) |
+| `bun test` | `mock()`, `spyOn`, `mock.module` | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) |
+| Storybook | `sb.mock()` no preview, `fn()`, MSW | [Storybook - Mocking](storybook-mocking.md) |
 | Playwright | `route`, `addInitScript`, `clock` | [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) |
 
 ---
@@ -170,9 +170,9 @@ Sem relógio controlado, todo teste que envolve tempo é ou lento (espera de ver
 ### 7.1 "Mock" para tudo
 
 ```
-✗ "o mock do servidor" (é um fake)
-✗ "mockei o fetch" (é um stub)
-✗ "mock do relógio" (é um fake ou stub)
+✗ "o mock do servidor"    (é um fake)
+✗ "mockei o fetch"        (é um stub)
+✗ "mock do relógio"       (é um fake ou stub)
 ```
 
 Cada nome errado é uma pergunta que não foi feita (`TS-DUB-01`).

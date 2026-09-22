@@ -2,10 +2,10 @@
 titulo: React - Refs e DOM
 Link: https://react.dev/reference/react/useRef
 tags:
- - react
- - refs
- - dom
- - agent-context
+  - react
+  - refs
+  - dom
+  - agent-context
 source: "Documentação oficial do React — useRef, useImperativeHandle, createPortal, flushSync"
 verificado-em: 2026-08-14
 ---
@@ -23,7 +23,7 @@ Entrada: [React.js](react-js.md) · Base normativa: [React - Rules of React](rea
 ## 1. `useRef`: memória que não redesenha
 
 ```tsx
-const ref = useRef(initialValue) // { current: initialValue }
+const ref = useRef(initialValue)   // { current: initialValue }
 ```
 
 Uma ref é uma caixa mutável que **sobrevive entre renders e não dispara render** ao mudar. Dois usos:
@@ -33,11 +33,11 @@ Uma ref é uma caixa mutável que **sobrevive entre renders e não dispara rende
 ```tsx
 const timeoutRef = useRef<number | null>(null)
 
-function start {
- timeoutRef.current = window.setTimeout( => { /*... */ }, 1000)
+function start() {
+  timeoutRef.current = window.setTimeout(() => { /* ... */ }, 1000)
 }
-function stop {
- if (timeoutRef.current !== null) clearTimeout(timeoutRef.current)
+function stop() {
+  if (timeoutRef.current !== null) clearTimeout(timeoutRef.current)
 }
 ```
 
@@ -48,8 +48,8 @@ Timer id, instância de observer, controller de request, contador de tentativas,
 ```tsx
 const inputRef = useRef<HTMLInputElement>(null)
 
-function focus {
- inputRef.current?.focus
+function focus() {
+  inputRef.current?.focus()
 }
 
 return <input ref={inputRef} />
@@ -84,13 +84,13 @@ Ou seja: código existente com `forwardRef` não está quebrado e não exige mig
 // React 19 — ref é uma prop comum
 type InputProps = React.ComponentPropsWithRef<'input'> & { label: string }
 
-function TextField({ label, ref,...props }: InputProps) {
- return (
- <label>
- {label}
- <input ref={ref} {...props} />
- </label>
- )
+function TextField({ label, ref, ...props }: InputProps) {
+  return (
+    <label>
+      {label}
+      <input ref={ref} {...props} />
+    </label>
+  )
 }
 
 // Uso
@@ -107,9 +107,9 @@ Também novo no React 19: o callback de ref pode **retornar uma função de limp
 
 ```tsx
 <div ref={(node) => {
- const observer = new ResizeObserver(handleResize)
- if (node) observer.observe(node)
- return => observer.disconnect // chamado ao desanexar
+  const observer = new ResizeObserver(handleResize)
+  if (node) observer.observe(node)
+  return () => observer.disconnect()   // chamado ao desanexar
 }} />
 ```
 
@@ -135,14 +135,14 @@ Restringe o que a ref de um componente expõe. A própria documentação classif
 
 ```tsx
 function VideoPlayer({ ref, src }: { ref: React.Ref<VideoHandle>; src: string }) {
- const videoRef = useRef<HTMLVideoElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
- useImperativeHandle(ref, => ({
- play: => videoRef.current?.play,
- pause: => videoRef.current?.pause,
- }), [])
+  useImperativeHandle(ref, () => ({
+    play:  () => videoRef.current?.play(),
+    pause: () => videoRef.current?.pause(),
+  }), [])
 
- return <video ref={videoRef} src={src} />
+  return <video ref={videoRef} src={src} />
 }
 ```
 
@@ -153,7 +153,7 @@ Legítimo quando a superfície imperativa precisa ser **deliberadamente menor** 
 | `REACT-REF-05` | `useImperativeHandle` **MUST** ser justificado por restrição intencional da API; expor o nó inteiro é ref normal. |
 | `REACT-REF-06` | Handle imperativo **NEVER** substitui props para o que é expressável declarativamente. |
 
-O antipadrão frequente: expor `setValue`, `setError`, `reset` via handle imperativo em vez de controlar por props. Isso cria uma segunda fonte de verdade fora do fluxo unidirecional — ver.
+O antipadrão frequente: expor `setValue`, `setError`, `reset` via handle imperativo em vez de controlar por props. Isso cria uma segunda fonte de verdade fora do fluxo unidirecional.
 
 ---
 
@@ -168,13 +168,13 @@ createPortal(children, domNode, key?)
 Renderiza filhos em outro ponto do **DOM**, mantendo-os no mesmo ponto da **árvore React**. Para modais, tooltips e popovers que precisam escapar de `overflow: hidden` ou de um `z-index` de stacking context.
 
 ```tsx
-function Modal({ children, onClose }: { children: React.ReactNode; onClose: => void }) {
- return createPortal(
- <div className="backdrop" onClick={onClose}>
- <div className="dialog" onClick={(e) => e.stopPropagation}>{children}</div>
- </div>,
- document.body,
- )
+function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
+  return createPortal(
+    <div className="backdrop" onClick={onClose}>
+      <div className="dialog" onClick={(e) => e.stopPropagation()}>{children}</div>
+    </div>,
+    document.body,
+  )
 }
 ```
 
@@ -193,7 +193,7 @@ Na prática, use um primitivo acessível pronto (Radix, base do shadcn) em vez d
 ```tsx
 import { flushSync } from 'react-dom'
 
-flushSync( => setItems([...items, novo]))
+flushSync(() => setItems([...items, novo]))
 listRef.current?.scrollTo({ top: listRef.current.scrollHeight })
 ```
 
@@ -215,7 +215,7 @@ Prejudica performance e desativa otimizações de concorrência. Legítimo apena
 | Ref para evitar re-render de valor que a UI mostra | é estado · `REACT-REF-02` |
 | `forwardRef` em código novo | `ref` como prop · `REACT-REF-03` |
 | Handle imperativo para o que props resolvem | props · `REACT-REF-06` |
-| Manipular DOM gerenciado pelo React (`innerHTML`, `remove`) | deixe o React reconciliar |
+| Manipular DOM gerenciado pelo React (`innerHTML`, `remove()`) | deixe o React reconciliar |
 | `flushSync` para "garantir" ordem de estado | forma updater / repensar o fluxo |
 | Modal com `createPortal` sem foco e `Esc` | primitivo acessível · `REACT-REF-07` |
 

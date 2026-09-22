@@ -1,13 +1,13 @@
 ---
 titulo: Fronteira do BFF - forma, jornada e regra
 aliases:
- - Fronteira do BFF
- - BFF forma jornada regra
+  - Fronteira do BFF
+  - BFF forma jornada regra
 tags:
- - architecture
- - backend-for-frontend
- - frontend
- - agent-context
+  - architecture
+  - backend-for-frontend
+  - frontend
+  - agent-context
 verificado-em: 2026-08-15
 ---
 
@@ -68,16 +68,16 @@ revisão de PR, sem discussão de gosto.
 
 ```
 1. "O curl fura?"
- Alguém chamando a API direto, sem passar pela tela, quebra a regra?
- SIM → é regra de negócio → backend
+   Alguém chamando a API direto, sem passar pela tela, quebra a regra?
+   SIM → é regra de negócio → backend
 
 2. "Outro cliente refaria?"
- Um app mobile consumindo a mesma API teria que reimplementar isto?
- SIM → é forma → BFF
+   Um app mobile consumindo a mesma API teria que reimplementar isto?
+   SIM → é forma → BFF
 
 3. "Muda se o design mudar?"
- Um redesenho da tela altera esta coisa?
- SIM → é jornada → feature
+   Um redesenho da tela altera esta coisa?
+   SIM → é jornada → feature
 ```
 
 Aplicados em ordem, os três são mutuamente exclusivos na prática. Se dois derem "sim", o item está
@@ -164,11 +164,11 @@ escritas).
 A linha:
 
 - **Agregação de leitura: à vontade.** Compor N respostas do upstream numa view é exatamente o papel
- do BFF, e é o único jeito de matar o *leque* — várias queries paralelas disparadas pelo mesmo id
- só para montar uma tela.
+  do BFF, e é o único jeito de matar o *leque* — várias queries paralelas disparadas pelo mesmo id
+  só para montar uma tela.
 - **Escrita composta: não.** Um endpoint que cria, anexa e ativa é uma saga, e o BFF **não pode
- garantir atomicidade**: se o terceiro passo falha, ele fica com um estado meio-feito que ninguém
- consegue reverter. Orquestração transacional pertence ao backend, que é dono da persistência.
+  garantir atomicidade**: se o terceiro passo falha, ele fica com um estado meio-feito que ninguém
+  consegue reverter. Orquestração transacional pertence ao backend, que é dono da persistência.
 
 A pergunta que decide, e ela é sobre falha, não sobre conveniência: *se o passo N falhar, quem
 desfaz os N-1 anteriores?* Se a resposta não for "o serviço que é dono dos dados", o endpoint está
@@ -191,16 +191,16 @@ fronteira volta a ser resíduo.
 capacidade nova?
 ├── SIM → nasce com contrato (endpoint tipado no BFF)
 └── NÃO → a tela precisa de agregação, tradução ou erro próprio?
- ├── SIM → migra para contrato
- └── NÃO → fica no proxy (leitura 1:1)
+          ├── SIM → migra para contrato
+          └── NÃO → fica no proxy (leitura 1:1)
 ```
 
 Duas propriedades desse critério importam mais que o critério em si:
 
 1. **É registrável.** Toda capacidade está de um lado declarado, então dá para contar — e medir
- antes/depois só faz sentido se você sabe o que mudou de lado;
+   antes/depois só faz sentido se você sabe o que mudou de lado;
 2. **É assimétrico de propósito.** Novo nasce com contrato porque o custo de nascer certo é baixo;
- existente só migra sob demanda porque migração sem motivo é risco sem retorno.
+   existente só migra sob demanda porque migração sem motivo é risco sem retorno.
 
 O que **não** justifica migrar: "para ficar consistente". Consistência não é sintoma. Agregação,
 tradução e erro próprio são.
@@ -291,27 +291,27 @@ e longe do browser; agregação só mostra ganho com RTT real.
 ## 12. Contrato de skill
 
 ```
-SEMPRE: § 2 (o corte) + § 3 (os três testes) + § 9 (regras BFF-*)
+SEMPRE:        § 2 (o corte) + § 3 (os três testes) + § 9 (regras BFF-*)
 
-AO CRIAR ROTA NO BFF: § 7 (limite da orquestração) + § 4 (validação)
-AO MOVER CÓDIGO DE CAMADA: § 8 (regra de migração) + § 3
-AO REVISAR PR: § 11 (antipadrões) + § 9
-AO JUSTIFICAR A ADOÇÃO: § 10 (como medir)
+AO CRIAR ROTA NO BFF:        § 7 (limite da orquestração) + § 4 (validação)
+AO MOVER CÓDIGO DE CAMADA:   § 8 (regra de migração) + § 3
+AO REVISAR PR:               § 11 (antipadrões) + § 9
+AO JUSTIFICAR A ADOÇÃO:      § 10 (como medir)
 
-TAMBÉM: [Feature-Based Architecture](feature-based-architecture.md) para o lado do frontend
- (esta nota decide o que atravessa; ela decide onde o código mora)
+TAMBÉM:  [Feature-Based Architecture](feature-based-architecture.md) para o lado do frontend
+         (esta nota decide o que atravessa; ela decide onde o código mora)
 
-NUNCA: decidir camada por conveniência de digitação
+NUNCA:   decidir camada por conveniência de digitação
 ```
 
 ### Invariantes
 
 1. **Teste antes de princípio.** "O BFF é fino" não decide nada às seis da tarde; os três testes da
- § 3 decidem.
+   § 3 decidem.
 2. **Regra que o `curl` fura não é regra.** Vale independentemente de quão bem escrito esteja o
- componente.
+   componente.
 3. **Validação repetida com propósitos diferentes não é duplicação** (§ 4). Regra de negócio
- repetida é.
+   repetida é.
 4. **Nenhuma checagem de fronteira é a última linha** (§ 5).
 5. **Agregação de leitura sim, escrita composta não** (§ 7). O critério é quem desfaz a falha.
 6. **A fronteira precisa ser declarada para ser medida** (`BFF-11`).

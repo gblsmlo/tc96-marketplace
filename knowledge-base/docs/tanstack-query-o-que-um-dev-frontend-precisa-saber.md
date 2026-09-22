@@ -2,10 +2,10 @@
 titulo: TanStack Query - O que um Dev Frontend Precisa Saber
 Link: https://tanstack.com/query/latest/docs/framework/react/overview
 tags:
- - tanstack-query
- - fundamentos
- - data-fetching
- - agent-context
+  - tanstack-query
+  - fundamentos
+  - data-fetching
+  - agent-context
 source: "Documentação oficial — https://tanstack.com/query/latest/docs/framework/react"
 verificado-em: 2026-08-14
 ---
@@ -69,36 +69,36 @@ Compatibilidade declarada na fonte: *"React Query is compatible with React v18+ 
 
 ```tsx
 import {
- QueryClient,
- QueryClientProvider,
- useQuery,
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
 } from '@tanstack/react-query'
 
 // Fora do render: uma instância por app no cliente.
 const queryClient = new QueryClient({
- defaultOptions: {
- queries: {
- staleTime: 60_000, // decisão explícita — ver TSQ-CACHE-01
- },
- },
+  defaultOptions: {
+    queries: {
+      staleTime: 60_000, // decisão explícita — ver TSQ-CACHE-01
+    },
+  },
 })
 
-export function App {
- return (
- <QueryClientProvider client={queryClient}>
- <Repo />
- </QueryClientProvider>
- )
+export function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Repo />
+    </QueryClientProvider>
+  )
 }
 ```
 
-O `QueryClient` **é** o cache. Criá-lo dentro do corpo de um componente o recria a cada render e joga o cache fora junto. As duas formas corretas: módulo (SPA pura) ou `useState( => new QueryClient)` (quando o app pode remontar, ou quando há SSR). No servidor a regra é outra e mais forte — uma instância **por requisição** — ver [TanStack Query - Suspense e SSR](tanstack-query-suspense-e-ssr.md) § 3.
+O `QueryClient` **é** o cache. Criá-lo dentro do corpo de um componente o recria a cada render e joga o cache fora junto. As duas formas corretas: módulo (SPA pura) ou `useState(() => new QueryClient())` (quando o app pode remontar, ou quando há SSR). No servidor a regra é outra e mais forte — uma instância **por requisição** — ver [TanStack Query - Suspense e SSR](tanstack-query-suspense-e-ssr.md) § 3.
 
 > **Com TanStack Router**, criar em escopo de módulo continua correto; o que **NEVER** se faz é *ler* esse singleton dentro de `beforeLoad`/`loader`. Ali o `queryClient` precisa chegar pelo `context` do router (`TSR-CTX-05`), senão quebra em SSR. Crie no módulo **e** injete no `createRouter` — as duas docs não se contradizem: uma fala de criação, a outra de acesso. Ver [TanStack Router - Route Context e Code Splitting](tanstack-router-route-context-e-code-splitting.md).
 
 | ID | Regra |
 | --- | --- |
-| `TSQ-BASE-01` | O `QueryClient` **NEVER** é construído no corpo do render — use escopo de módulo ou `useState( => new QueryClient)`. |
+| `TSQ-BASE-01` | O `QueryClient` **NEVER** é construído no corpo do render — use escopo de módulo ou `useState(() => new QueryClient())`. |
 
 ---
 
@@ -117,9 +117,9 @@ A key é o índice do cache e a unidade de invalidação. Duas afirmações lite
 ```tsx
 // EQUIVALENTES — ordem de chaves dentro de um objeto não importa,
 // e `undefined` é descartado
-useQuery({ queryKey: ['todos', { status, page }],... })
-useQuery({ queryKey: ['todos', { page, status }],... })
-useQuery({ queryKey: ['todos', { page, status, other: undefined }],... })
+useQuery({ queryKey: ['todos', { status, page }], ... })
+useQuery({ queryKey: ['todos', { page, status }], ... })
+useQuery({ queryKey: ['todos', { page, status, other: undefined }], ... })
 ```
 
 Mas:
@@ -128,9 +128,9 @@ Mas:
 
 ```tsx
 // DIFERENTES — três entradas de cache distintas
-useQuery({ queryKey: ['todos', status, page],... })
-useQuery({ queryKey: ['todos', page, status],... })
-useQuery({ queryKey: ['todos', undefined, page, status],... })
+useQuery({ queryKey: ['todos', status, page], ... })
+useQuery({ queryKey: ['todos', page, status], ... })
+useQuery({ queryKey: ['todos', undefined, page, status], ... })
 ```
 
 A assimetria é a fonte de bug mais comum: posições soltas no array são posicionais, objeto no array é comutativo. Por isso a hierarquia estável é `[entidade, escopo, parâmetros-como-objeto]` — `['todos', 'list', { page, status }]`. Ela é o que torna a invalidação por prefixo previsível ([TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md) § 3).
@@ -141,10 +141,10 @@ A assimetria é a fonte de bug mais comum: posições soltas no array são posic
 
 ```tsx
 function Todo({ todoId }: { todoId: string }) {
- return useQuery({
- queryKey: ['todos', 'detail', todoId],
- queryFn: => fetchTodoById(todoId),
- })
+  return useQuery({
+    queryKey: ['todos', 'detail', todoId],
+    queryFn: () => fetchTodoById(todoId),
+  })
 }
 ```
 
@@ -175,17 +175,17 @@ Para representar ausência com sucesso, a fonte manda resolver `null`.
 
 ```tsx
 const todoQuery = useQuery({
- queryKey: ['todos', 'detail', todoId],
- queryFn: async ({ signal }): Promise<Todo | null> => {
- const response = await fetch(`/api/todos/${todoId}`, { signal })
+  queryKey: ['todos', 'detail', todoId],
+  queryFn: async ({ signal }): Promise<Todo | null> => {
+    const response = await fetch(`/api/todos/${todoId}`, { signal })
 
- if (response.status === 404) return null // ausência é sucesso
- if (!response.ok) {
- throw new Error(`GET /todos/${todoId} falhou: ${response.status}`)
- }
+    if (response.status === 404) return null       // ausência é sucesso
+    if (!response.ok) {
+      throw new Error(`GET /todos/${todoId} falhou: ${response.status}`)
+    }
 
- return todoSchema.parse(await response.json) // contrato validado
- },
+    return todoSchema.parse(await response.json()) // contrato validado
+  },
 })
 ```
 
@@ -256,7 +256,7 @@ if (isError) return <Erro erro={error} />
 return <Lista todos={data} />
 ```
 
-Para indicador discreto de refetch em segundo plano existe `isFetching` por query e `useIsFetching` global.
+Para indicador discreto de refetch em segundo plano existe `isFetching` por query e `useIsFetching()` global.
 
 | ID | Regra |
 | --- | --- |
@@ -288,14 +288,14 @@ O default de `retry: 3` merece atenção específica: um `404` legítimo vira qu
 
 ```tsx
 new QueryClient({
- defaultOptions: {
- queries: {
- retry: (failureCount, error) => {
- if (error instanceof HttpError && error.status < 500) return false
- return failureCount < 3
- },
- },
- },
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error) => {
+        if (error instanceof HttpError && error.status < 500) return false
+        return failureCount < 3
+      },
+    },
+  },
 })
 ```
 
@@ -315,19 +315,19 @@ Em runtime ele apenas devolve o que recebeu. O valor está na inferência e no f
 import { queryOptions } from '@tanstack/react-query'
 
 export function todoOptions(todoId: string) {
- return queryOptions({
- queryKey: ['todos', 'detail', todoId] as const,
- queryFn: async ({ signal }) => {
- const res = await fetch(`/api/todos/${todoId}`, { signal })
- if (!res.ok) throw new Error(`status ${res.status}`)
- return todoSchema.parse(await res.json)
- },
- staleTime: 5 * 60_000,
- })
+  return queryOptions({
+    queryKey: ['todos', 'detail', todoId] as const,
+    queryFn: async ({ signal }) => {
+      const res = await fetch(`/api/todos/${todoId}`, { signal })
+      if (!res.ok) throw new Error(`status ${res.status}`)
+      return todoSchema.parse(await res.json())
+    },
+    staleTime: 5 * 60_000,
+  })
 }
 ```
 
-Consumidores verificados na fonte: `useQuery`, `useSuspenseQuery`, `useQueries`, `queryClient.prefetchQuery`, `queryClient.setQueryData`. E a key permanece tipada ao ser reusada:
+Consumidores verificados na fonte: `useQuery()`, `useSuspenseQuery()`, `useQueries()`, `queryClient.prefetchQuery()`, `queryClient.setQueryData()`. E a key permanece tipada ao ser reusada:
 
 ```tsx
 queryClient.setQueryData(todoOptions(id).queryKey, updated) // updated é tipado
@@ -364,46 +364,46 @@ Recomendado também: `@tanstack/eslint-plugin-query`, que pega estaticamente a m
 
 ```tsx
 // ERRADO — resposta da API espelhada em estado de cliente
-const { data } = useQuery(todosOptions)
+const { data } = useQuery(todosOptions())
 const [todos, setTodos] = useState<Todo[]>([])
-useEffect( => { if (data) setTodos(data) }, [data])
+useEffect(() => { if (data) setTodos(data) }, [data])
 
 // CERTO — o cache já é o estado. Não há segunda fonte de verdade.
-const { data: todos } = useQuery(todosOptions)
+const { data: todos } = useQuery(todosOptions())
 ```
 Violação de `REACT-PAT-03` e de `REACT-EFFECT-04`. O sintoma aparece na primeira mutation: o cache atualiza, o `useState` fica para trás.
 
 ```tsx
 // ERRADO — variável usada na queryFn e ausente da key
 useQuery({
- queryKey: ['todos'],
- queryFn: => fetchTodos(filtro),
+  queryKey: ['todos'],
+  queryFn: () => fetchTodos(filtro),
 })
 
 // CERTO
 useQuery({
- queryKey: ['todos', 'list', filtro],
- queryFn: => fetchTodos(filtro),
+  queryKey: ['todos', 'list', filtro],
+  queryFn: () => fetchTodos(filtro),
 })
 ```
 Violação de `TSQ-BASE-03`. Trocar o filtro não refaz a busca, e as duas variações disputam a mesma entrada de cache.
 
 ```tsx
 // ERRADO — fetch não lança em 500; o corpo de erro entra no cache como sucesso
-queryFn: => fetch('/api/todos').then((r) => r.json)
+queryFn: () => fetch('/api/todos').then((r) => r.json())
 
 // CERTO
-queryFn: async => {
- const r = await fetch('/api/todos')
- if (!r.ok) throw new Error(`status ${r.status}`)
- return todosSchema.parse(await r.json)
+queryFn: async () => {
+  const r = await fetch('/api/todos')
+  if (!r.ok) throw new Error(`status ${r.status}`)
+  return todosSchema.parse(await r.json())
 }
 ```
 Violação de `TSQ-BASE-05` e `TSQ-BASE-06`.
 
 | Antipadrão | Por que falha | Correção |
 | --- | --- | --- |
-| `new QueryClient` no corpo do componente | cache descartado a cada render; toda query refaz do zero | escopo de módulo ou `useState( =>...)` — `TSQ-BASE-01` |
+| `new QueryClient()` no corpo do componente | cache descartado a cada render; toda query refaz do zero | escopo de módulo ou `useState(() => ...)` — `TSQ-BASE-01` |
 | `if (isPending) return <Spinner />` em query com `enabled` | `pending + idle` é estado permanente; spinner nunca sai | `isLoading` — `TSQ-BASE-07` |
 | `queryFn` devolvendo `undefined` quando não acha nada | a query é marcada como **falha**, não como vazia | devolver `null` — `TSQ-BASE-04` |
 | `['todos', page, status]` com posições soltas | ordem posicional; refatorar a ordem invalida o cache inteiro em silêncio | `['todos', 'list', { page, status }]` |

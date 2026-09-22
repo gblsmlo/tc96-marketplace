@@ -2,17 +2,17 @@
 titulo: Bun - Bundler e Build
 Link: https://bun.com/docs/bundler
 tags:
- - bun
- - bundler
- - build
- - agent-context
+  - bun
+  - bundler
+  - build
+  - agent-context
 source: "Documentação oficial — https://bun.com/docs"
 verificado-em: 2026-08-15
 ---
 
 # Bun - Bundler e Build
 
-> `Bun.build` × `bun build` · `target` (`browser`/`bun`/`node`) e o que muda em cada · `external` × `packages` · splitting, `minify`, `sourcemap`, `define`, `loader` · plugins (`onResolve`/`onLoad`) · imports de HTML/CSS e o dev server com HMR · `--compile` para executável único · macros · onde Vite ainda ganha.
+> `Bun.build()` × `bun build` · `target` (`browser`/`bun`/`node`) e o que muda em cada · `external` × `packages` · splitting, `minify`, `sourcemap`, `define`, `loader` · plugins (`onResolve`/`onLoad`) · imports de HTML/CSS e o dev server com HMR · `--compile` para executável único · macros · onde Vite ainda ganha.
 >
 > **Não cobre:** resolução de módulos em runtime e transpilação sem bundle ([Bun - Runtime e APIs](bun-runtime-e-apis.md)) · instalação de dependências e lockfile ([Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md)) · o servidor que consome o artefato ([Bun - HTTP e Servidor](bun-http-e-servidor.md)) · imagem Docker e deploy ([Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md)).
 
@@ -38,31 +38,31 @@ E uma delimitação explícita da fonte, que evita expectativa errada: *"The Bun
 
 ---
 
-## 2. `Bun.build` × `bun build`: mesma engine, ergonomia diferente
+## 2. `Bun.build()` × `bun build`: mesma engine, ergonomia diferente
 
 **Conceito.** As duas formas cobrem o mesmo conjunto de opções. A API programática ganha quando o build tem lógica (matriz de targets, plugins construídos em runtime, leitura do `metafile`); a CLI ganha para o caso simples de um script em `package.json`.
 
 A diferença que importa em CI é o tratamento de falha: **`Bun.build` rejeita com um `AggregateError`**. Um `await Bun.build(...)` solto sem `try/catch` derruba o script com exit code diferente de zero — o que geralmente é o que você quer. Capturar e ignorar é como um build quebrado passa verde.
 
 ```ts
-// build.ts — equivalente a: bun build./src/index.tsx --outdir./dist --target browser --minify
+// build.ts — equivalente a: bun build ./src/index.tsx --outdir ./dist --target browser --minify
 const resultado = await Bun.build({
- entrypoints: ["./src/index.tsx"],
- outdir: "./dist",
- target: "browser", // default
- format: "esm", // default
- splitting: true, // default false
- minify: true, // default false
- sourcemap: "linked", // default "none"; "linked" exige outdir
- define: {
- // chave = identificador; valor = string JSON que é inlinada
- "process.env.NODE_ENV": JSON.stringify("production"),
- __VERSAO__: JSON.stringify(Bun.env.GIT_SHA ?? "dev"),
- },
+  entrypoints: ["./src/index.tsx"],
+  outdir: "./dist",
+  target: "browser",   // default
+  format: "esm",       // default
+  splitting: true,     // default false
+  minify: true,        // default false
+  sourcemap: "linked", // default "none"; "linked" exige outdir
+  define: {
+    // chave = identificador; valor = string JSON que é inlinada
+    "process.env.NODE_ENV": JSON.stringify("production"),
+    __VERSAO__: JSON.stringify(Bun.env.GIT_SHA ?? "dev"),
+  },
 });
 
 for (const artefato of resultado.outputs) {
- console.log(artefato.path, artefato.kind);
+  console.log(artefato.path, artefato.kind);
 }
 ```
 
@@ -116,7 +116,7 @@ O critério prático:
 | Servidor em imagem enxuta, sem `node_modules` | default (`"bundle"`), ou `--compile` |
 | Addon nativo / `.node` que não pode ser bundleado | `external` só para ele |
 
-**`splitting`** (default `false`) só faz sentido com múltiplos entrypoints ou `import` dinâmico: o código compartilhado vira um chunk com hash de conteúdo no nome. Ligar splitting com um único entrypoint e nenhum import dinâmico não produz chunk nenhum — só ruído no output.
+**`splitting`** (default `false`) só faz sentido com múltiplos entrypoints ou `import()` dinâmico: o código compartilhado vira um chunk com hash de conteúdo no nome. Ligar splitting com um único entrypoint e nenhum import dinâmico não produz chunk nenhum — só ruído no output.
 
 | ID | Regra |
 | --- | --- |
@@ -145,12 +145,12 @@ Para browser, `"external"` é o que dá stack trace legível no coletor de erros
 
 ```ts
 await Bun.build({
- entrypoints: ["./src/index.tsx"],
- outdir: "./dist",
- loader: {
- ".png": "dataurl", // inlina como data: URI
- ".sql": "text", // importa como string
- },
+  entrypoints: ["./src/index.tsx"],
+  outdir: "./dist",
+  loader: {
+    ".png": "dataurl", // inlina como data: URI
+    ".sql": "text",    // importa como string
+  },
 });
 ```
 
@@ -166,22 +166,22 @@ await Bun.build({
 
 **Conceito.** A API de plugin é **universal**: o mesmo objeto estende o bundler e o runtime. Um plugin é `{ name, setup(build) }`.
 
-Hooks verificados: `onStart` (bundle começou; pode devolver Promise, e o bundler espera), `onResolve` (antes de resolver um módulo), `onLoad` (antes de carregar), `onBeforeParse` (addon nativo zero-copy na thread do parser), `onEnd` (bundle terminou, recebe o `BuildOutput`).
+Hooks verificados: `onStart()` (bundle começou; pode devolver Promise, e o bundler espera), `onResolve()` (antes de resolver um módulo), `onLoad()` (antes de carregar), `onBeforeParse()` (addon nativo zero-copy na thread do parser), `onEnd()` (bundle terminou, recebe o `BuildOutput`).
 
 `onResolve` e `onLoad` recebem `{ filter: RegExp, namespace?: string }`. Namespace é o prefixo do módulo no código transpilado; o default é `"file"`, e `"bun"` / `"node"` cobrem os módulos embutidos.
 
 ```ts
 import type { BunPlugin } from "bun";
 
-// carrega.sql como string exportada por default
+// carrega .sql como string exportada por default
 const sqlPlugin: BunPlugin = {
- name: "sql-loader",
- setup(build) {
- build.onLoad({ filter: /\.sql$/ }, async ({ path }) => ({
- loader: "js",
- contents: `export default ${JSON.stringify(await Bun.file(path).text)};`,
- }));
- },
+  name: "sql-loader",
+  setup(build) {
+    build.onLoad({ filter: /\.sql$/ }, async ({ path }) => ({
+      loader: "js",
+      contents: `export default ${JSON.stringify(await Bun.file(path).text())};`,
+    }));
+  },
 };
 
 await Bun.build({ entrypoints: ["./src/index.ts"], outdir: "./dist", plugins: [sqlPlugin] });
@@ -197,12 +197,12 @@ await Bun.build({ entrypoints: ["./src/index.ts"], outdir: "./dist", plugins: [s
 
 ## 7. HTML, CSS e o dev server: útil, e declarado *work in progress*
 
-**Conceito.** `bun./index.html` sobe um dev server sem configuração: Bun varre o HTML com `HTMLRewriter`, acha `<script>` e `<link>`, roda bundler + transpiler + parser de CSS, reescreve os caminhos com hash e serve.
+**Conceito.** `bun ./index.html` sobe um dev server sem configuração: Bun varre o HTML com `HTMLRewriter`, acha `<script>` e `<link>`, roda bundler + transpiler + parser de CSS, reescreve os caminhos com hash e serve.
 
 ```bash
-bun./index.html # SPA: o HTML vira fallback de todas as rotas
-bun./index.html./about.html # MPA: / e /about
-bun./**/*.html # glob; o prefixo comum vira a base
+bun ./index.html                 # SPA: o HTML vira fallback de todas as rotas
+bun ./index.html ./about.html    # MPA: / e /about
+bun ./**/*.html                  # glob; o prefixo comum vira a base
 ```
 
 O mesmo import de HTML funciona dentro do servidor, ligando esta nota a [Bun - HTTP e Servidor](bun-http-e-servidor.md):
@@ -211,11 +211,11 @@ O mesmo import de HTML funciona dentro do servidor, ligando esta nota a [Bun - H
 import painel from "./painel.html";
 
 Bun.serve({
- routes: {
- "/": painel, // bundleado e servido
- "/api/pedidos": { GET: => Response.json(listarPedidos) },
- },
- development: { hmr: true, console: true }, // console: ecoa log do browser no terminal
+  routes: {
+    "/": painel,                                     // bundleado e servido
+    "/api/pedidos": { GET: () => Response.json(listarPedidos()) },
+  },
+  development: { hmr: true, console: true },         // console: ecoa log do browser no terminal
 });
 ```
 
@@ -229,7 +229,7 @@ O que `development` liga e desliga, verificado:
 | Bundling do `.html` | **rebundle a cada request** | lazy no primeiro request, cacheado em memória até reiniciar |
 | `Cache-Control` / `ETag` | — | enviados |
 
-Para produção há o caminho AOT, disponível **desde Bun v1.2.17**: `bun build --target=bun --production --outdir=dist./src/index.ts` transforma o import de HTML em um manifesto pré-construído, e `Bun.serve` passa a servir sem bundlar nada em runtime.
+Para produção há o caminho AOT, disponível **desde Bun v1.2.17**: `bun build --target=bun --production --outdir=dist ./src/index.ts` transforma o import de HTML em um manifesto pré-construído, e `Bun.serve` passa a servir sem bundlar nada em runtime.
 
 **Estado de estabilidade — não presuma.** A própria doc marca duas coisas:
 
@@ -237,11 +237,11 @@ Para produção há o caminho AOT, disponível **desde Bun v1.2.17**: `bun build
 
 > "The HMR API is still a work in progress. Some features are missing."
 
-Na tabela de `import.meta.hot`, `invalidate` e `send` estão marcados como **não implementados**, e `prune` como parcial (*"callback is currently never called"*). `accept`, `data`, `dispose`, `on`/`off` funcionam. E há uma restrição sintática que quebra código em silêncio: para a eliminação de código morto funcionar, **a frase `import.meta.hot.<API>` tem que aparecer inteira e direta**. `const hot = import.meta.hot; hot.accept` não funciona.
+Na tabela de `import.meta.hot`, `invalidate()` e `send()` estão marcados como **não implementados**, e `prune()` como parcial (*"callback is currently never called"*). `accept()`, `data`, `dispose()`, `on()`/`off()` funcionam. E há uma restrição sintática que quebra código em silêncio: para a eliminação de código morto funcionar, **a frase `import.meta.hot.<API>` tem que aparecer inteira e direta**. `const hot = import.meta.hot; hot.accept()` não funciona.
 
 | ID | Regra |
 | --- | --- |
-| `BUN-BUILD-08` | APIs de `import.meta.hot` **MUST** ser chamadas na forma completa `import.meta.hot.x`, sem passar por variável ou argumento — o contrário quebra a eliminação em produção. |
+| `BUN-BUILD-08` | APIs de `import.meta.hot` **MUST** ser chamadas na forma completa `import.meta.hot.x()`, sem passar por variável ou argumento — o contrário quebra a eliminação em produção. |
 | `BUN-BUILD-09` | Deploy de app fullstack **MUST** usar build AOT (`bun build --target=bun --production`) ou `development: false`; o dev server **NEVER** serve produção. |
 
 ---
@@ -252,10 +252,10 @@ Na tabela de `import.meta.hot`, `invalidate` e `send` estão marcados como **nã
 
 ```bash
 # produção, conforme a recomendação da doc
-bun build./src/servidor.ts --compile --minify --sourcemap --bytecode --outfile./servidor
+bun build ./src/servidor.ts --compile --minify --sourcemap --bytecode --outfile ./servidor
 
 # cross-compile: alvo declarado explicitamente
-bun build./src/servidor.ts --compile --target=bun-linux-x64 --outfile./servidor
+bun build ./src/servidor.ts --compile --target=bun-linux-x64 --outfile ./servidor
 ```
 
 O que cada flag faz, verificado: `--minify` encolhe o output; `--sourcemap` embute um mapa comprimido com zstd, e Bun o resolve sozinho quando um erro acontece; `--bytecode` move o parse do JavaScriptCore de runtime para build time (a doc mostra `tsc` iniciando **2x mais rápido**), sem ofuscar o fonte.
@@ -285,18 +285,18 @@ O que cada flag faz, verificado: `--minify` encolhe o output; `--sourcemap` embu
 ```ts
 import { hashDoCommit } from "./git.ts" with { type: "macro" };
 
-console.log(`build ${hashDoCommit}`); // vira uma string literal no bundle
+console.log(`build ${hashDoCommit()}`); // vira uma string literal no bundle
 ```
 
 Status na fonte: **a página de Macros não traz marcação de experimental ou beta**. O que ela traz são restrições duras, e é nelas que o código quebra:
 
-- **Só valores serializáveis.** JSON funciona; função e instância de classe não. `Response` e `Blob` têm serialização especial guiada pelo `Content-Type` — uma macro pode devolver o resultado de `fetch` direto.
+- **Só valores serializáveis.** JSON funciona; função e instância de classe não. `Response` e `Blob` têm serialização especial guiada pelo `Content-Type` — uma macro pode devolver o resultado de `fetch()` direto.
 - **Argumentos precisam ser estaticamente conhecidos.** Passar uma variável calculada em runtime é erro de build.
 - **Macros rodam de forma síncrona no transpiler, na fase de visita — antes dos plugins.**
 - **Código em `node_modules` não pode invocar macro** (barreira de segurança). Seu código pode importar macro *de* um pacote.
 - `--no-macros` desliga tudo, com erro de build.
 
-A eliminação de código morto roda **depois** da macro, então `if (macroQueRetornaFalse) { … }` some do bundle quando `minify.syntax` está ligado. É o mecanismo para compilar feature flags para fora.
+A eliminação de código morto roda **depois** da macro, então `if (macroQueRetornaFalse()) { … }` some do bundle quando `minify.syntax` está ligado. É o mecanismo para compilar feature flags para fora.
 
 | ID | Regra |
 | --- | --- |
@@ -311,9 +311,9 @@ Uma comparação honesta é o que torna esta nota útil. Verificado na doc ofici
 | Situação | Escolha | Por quê |
 | --- | --- | --- |
 | SPA React em produção, com ecossistema de plugins (Tailwind via plugin oficial, SVGR, i18n, análise de bundle) | **Vite** | Bun tem plugins, mas o ecossistema publicado é do Vite; a doc de Bun cita suporte a Tailwind e pouco mais |
-| App React com HMR sofisticado e Fast Refresh maduro | **Vite** | a API de HMR de Bun é declarada *work in progress*, com `invalidate` e `send` não implementados |
+| App React com HMR sofisticado e Fast Refresh maduro | **Vite** | a API de HMR de Bun é declarada *work in progress*, com `invalidate()` e `send()` não implementados |
 | Framework de meta-nível (Next, Remix, SvelteKit, TanStack Start) | **o bundler do framework** | o build é parte do framework, não uma escolha sua |
-| Landing page ou SPA pequena, sem plugin de terceiro | **Bun** | `bun./index.html` sobe sem configuração e sem dependência |
+| Landing page ou SPA pequena, sem plugin de terceiro | **Bun** | `bun ./index.html` sobe sem configuração e sem dependência |
 | App fullstack em que servidor e cliente moram no mesmo processo | **Bun** | HTML importado no servidor + AOT build produz um artefato só |
 | CLI distribuída como binário | **Bun** | `--compile` não tem equivalente direto em Vite |
 | Bundle de servidor para reduzir boot e imagem | **Bun** | `target: "bun"` + `--compile`, sem `node_modules` no destino |
@@ -340,7 +340,7 @@ O padrão por trás: **o custo de sair do Vite é proporcional ao número de plu
 A decisão acima depende de uma pergunta concreta — *o hot reload preserva o estado do componente?* — e a resposta verificável é parcial:
 
 - **Bun tem a transformação de Fast Refresh.** A CLI expõe a flag `--react-fast-refresh`, descrita na fonte como *"Enable React Fast Refresh transform (for development testing)"*.
-- **A doc de HMR reconhece Fast Refresh como participante do mecanismo**, na cláusula que descreve o fallback: *"When no modules call `import.meta.hot.accept` (and there isn't React Fast Refresh or a plugin calling it for you), the page reloads when the file updates."* Ou seja, sem Fast Refresh (ou um `accept` explícito) o comportamento é **recarregar a página** — e recarregar a página perde o estado, sempre.
+- **A doc de HMR reconhece Fast Refresh como participante do mecanismo**, na cláusula que descreve o fallback: *"When no modules call `import.meta.hot.accept()` (and there isn't React Fast Refresh or a plugin calling it for you), the page reloads when the file updates."* Ou seja, sem Fast Refresh (ou um `accept()` explícito) o comportamento é **recarregar a página** — e recarregar a página perde o estado, sempre.
 - **Não verificado:** se o template de `bun init --react` liga a transformação, e se o estado de componente é preservado através de um hot update. A doc do template diz apenas *"starts the API server and the React app with hot reloading"*, sem qualificar. A página de HMR não afirma preservação de estado de React em lugar nenhum; o que ela documenta para preservar estado é o `import.meta.hot.data`, que é manual e por módulo.
 
 Consequência prática, e é o que interessa à decisão: **não presuma paridade de Fast Refresh com o `@vitejs/plugin-react`**. Se preservar o estado do formulário enquanto se edita o componente é parte do fluxo de trabalho da equipe, isso precisa ser testado no seu projeto antes da troca, não deduzido da doc.
@@ -355,7 +355,7 @@ O guia oficial de Vite recomenda `bunx --bun vite`, e é justo perguntar o que s
 
 E a consequência mais citada — `--bun` desligar o carregamento automático de `.env` — **não é uma perda acidental, é comportamento deliberado de paridade com Node**, e a fonte explica por quê: *"When Bun is invoked as `node` … automatic `.env` loading is disabled to match Node.js. This lets tools with their own mode-aware `.env` resolution, such as Vite's `loadEnv`, pick the correct `.env.{mode}` file instead of seeing Bun's pre-populated values as shell-set overrides."* Para um projeto Vite isso é o comportamento **correto**: é o que faz `.env.production` e o filtro por prefixo `VITE_` funcionarem como o Vite espera, em vez de o Bun pré-popular tudo. `--env-file` explícito continua sendo respeitado.
 
-Sobre publicação de estático, ver.
+Sobre publicação de estático.
 
 > A doc lista `--app` e a flag de React Server Components (Bun Bake) explicitamente como **EXPERIMENTAL**. Não é caminho para produção hoje. A flag `--react-compiler` também é marcada **Experimental**.
 
@@ -372,7 +372,7 @@ Sobre publicação de estático, ver.
 | `try { await Bun.build(...) } catch {}` no script de build | o `AggregateError` é engolido e o CI passa com artefato quebrado | deixar propagar — `BUN-BUILD-01` |
 | `sourcemap: "inline"` no bundle de browser | o código-fonte inteiro é baixado por cada visitante | `"external"` + upload do mapa — `BUN-BUILD-06` |
 | Publicar biblioteca com dependências bundleadas | duplica React/lodash no consumidor e quebra a deduplicação | `packages: "external"` — `BUN-BUILD-05` |
-| `const hot = import.meta.hot; hot.accept` | a eliminação de código morto exige a frase inteira e direta; em produção quebra | `import.meta.hot.accept` — `BUN-BUILD-08` |
+| `const hot = import.meta.hot; hot.accept()` | a eliminação de código morto exige a frase inteira e direta; em produção quebra | `import.meta.hot.accept()` — `BUN-BUILD-08` |
 | Servir produção com `development: true` | rebundle a cada request, sem minificação, sem `Cache-Control` nem `ETag` | build AOT ou `development: false` — `BUN-BUILD-09` |
 | `bun build --compile --outdir dist` | `--compile` não aceita `--outdir`; o build falha | `--outfile` — `BUN-BUILD-10` |
 | Macro recebendo valor calculado em runtime | argumento de macro precisa ser estaticamente conhecido; é erro de build | passar constante ou o retorno de outra macro — `BUN-BUILD-11` |
@@ -418,7 +418,7 @@ Verificadas em **2026-08-15**:
 
 **Notas de verificação** — pontos em que a fonte contraria o que se assume por hábito:
 
-- **O dev server fullstack e a API de HMR são declarados *work in progress* na própria doc.** `import.meta.hot.invalidate` e `.send` aparecem como **não implementados**, e `.prune` como parcial (*"callback is currently never called"*).
+- **O dev server fullstack e a API de HMR são declarados *work in progress* na própria doc.** `import.meta.hot.invalidate()` e `.send()` aparecem como **não implementados**, e `.prune()` como parcial (*"callback is currently never called"*).
 - **`format: "cjs"` e `"iife"` são experimentais**, e `cjs` muda o default de `target` de `"browser"` para `"node"`.
 - **Um shebang `#!/usr/bin/env bun` no entrypoint muda o default de `target` para `"bun"`** — sem nenhuma flag.
 - **`target: "bun"` + `format: "cjs"` gera um wrapper CommonJS que a doc declara incompatível com Node.js.**

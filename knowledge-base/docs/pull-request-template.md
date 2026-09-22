@@ -23,6 +23,6 @@ titulo: Pull Request Template
 
 | Before | After |
 |--------|-------|
-| | |
+|        |       |
 
 ## Additional information

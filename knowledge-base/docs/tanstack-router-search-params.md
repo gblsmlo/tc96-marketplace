@@ -2,16 +2,16 @@
 titulo: TanStack Router - Search Params
 Link: https://tanstack.com/router/latest/docs/framework/react/guide/search-params
 tags:
- - tanstack-router
- - search-params
- - agent-context
+  - tanstack-router
+  - search-params
+  - agent-context
 source: "Documentação oficial — https://tanstack.com/router/latest/docs/framework/react/"
 verificado-em: 2026-08-14
 ---
 
 # TanStack Router - Search Params
 
-> `validateSearch` · adapters (Zod, Valibot, ArkType, Effect/Schema) · `useSearch` · `getRouteApi.useSearch` · atualização por `<Link search>` e `navigate({ search })` · herança entre rotas · `search.middlewares` (`retainSearchParams`, `stripSearchParams`) · `parseSearchWith` / `stringifySearchWith`.
+> `validateSearch` · adapters (Zod, Valibot, ArkType, Effect/Schema) · `useSearch` · `getRouteApi().useSearch` · atualização por `<Link search>` e `navigate({ search })` · herança entre rotas · `search.middlewares` (`retainSearchParams`, `stripSearchParams`) · `parseSearchWith` / `stringifySearchWith`.
 >
 > Não cobre: `<Link>` e navegação imperativa em geral — [TanStack Router - Navegação](tanstack-router-navegacao.md); path params (`$id`, `{-$opt}`) e `params.parse` — [TanStack Router - Routing Concepts](tanstack-router-routing-concepts.md); uso de search no `loader` — [TanStack Router - Carregamento de Dados](tanstack-router-carregamento-de-dados.md).
 
@@ -43,10 +43,10 @@ Diferente de `URLSearchParams`, o router serializa estruturas aninhadas automati
 
 ```tsx
 search={{
- pageIndex: 3,
- includeCategories: ['electronics', 'gifts'],
- sortBy: 'price',
- desc: true,
+  pageIndex: 3,
+  includeCategories: ['electronics', 'gifts'],
+  sortBy: 'price',
+  desc: true,
 }}
 ```
 
@@ -69,19 +69,19 @@ Na forma mais crua, é só uma função de `Record<string, unknown>` para o tipo
 type ProductSearchSortOptions = 'newest' | 'oldest' | 'price'
 
 type ProductSearch = {
- page: number
- filter: string
- sort: ProductSearchSortOptions
+  page: number
+  filter: string
+  sort: ProductSearchSortOptions
 }
 
 export const Route = createFileRoute('/shop/products')({
- validateSearch: (search: Record<string, unknown>): ProductSearch => {
- return {
- page: Number(search?.page ?? 1),
- filter: (search.filter as string) || '',
- sort: (search.sort as ProductSearchSortOptions) || 'newest',
- }
- },
+  validateSearch: (search: Record<string, unknown>): ProductSearch => {
+    return {
+      page: Number(search?.page ?? 1),
+      filter: (search.filter as string) || '',
+      sort: (search.sort as ProductSearchSortOptions) || 'newest',
+    }
+  },
 })
 ```
 
@@ -89,7 +89,7 @@ Repare no que o corpo dessa função faz: **todas as chaves têm comportamento d
 
 | ID | Regra |
 | --- | --- |
-| `TSR-SEARCH-03` | Toda chave do schema de search **MUST** definir comportamento para valor ausente e para valor inválido — `.catch`, `.default` ou fallback explícito. Schema que só descreve o caso feliz não valida nada. |
+| `TSR-SEARCH-03` | Toda chave do schema de search **MUST** definir comportamento para valor ausente e para valor inválido — `.catch()`, `.default()` ou fallback explícito. Schema que só descreve o caso feliz não valida nada. |
 
 ---
 
@@ -99,9 +99,9 @@ A escrita manual acima é didática; na prática o schema vem de uma biblioteca 
 
 ```tsx
 const productSearchSchema = z.object({
- page: z.number.catch(1),
- filter: z.string.catch(''),
- sort: z.enum(['newest', 'oldest', 'price']).catch('newest'),
+  page: z.number().catch(1),
+  filter: z.string().catch(''),
+  sort: z.enum(['newest', 'oldest', 'price']).catch('newest'),
 })
 ```
 
@@ -109,7 +109,7 @@ const productSearchSchema = z.object({
 
 ```tsx
 export const Route = createFileRoute('/shop/products/')({
- validateSearch: productSearchSchema,
+  validateSearch: productSearchSchema,
 })
 ```
 
@@ -119,17 +119,17 @@ export const Route = createFileRoute('/shop/products/')({
 import { zodValidator } from '@tanstack/zod-adapter'
 
 export const Route = createFileRoute('/shop/products/')({
- validateSearch: zodValidator(productSearchSchema),
+  validateSearch: zodValidator(productSearchSchema),
 })
 ```
 
-### `.catch` ou `.default` — é uma decisão de produto
+### `.catch()` ou `.default()` — é uma decisão de produto
 
 A fonte é explícita sobre o critério:
 
-> "we used Zod's `.catch` modifier instead of `.default` to avoid showing an error to the user because we firmly believe that if a search parameter is malformed, you probably don't want to halt the user's experience through the app to show a big fat error message. That said, there may be times that you **do want to show an error message**. In that case, you can use `.default` instead of `.catch`."
+> "we used Zod's `.catch()` modifier instead of `.default()` to avoid showing an error to the user because we firmly believe that if a search parameter is malformed, you probably don't want to halt the user's experience through the app to show a big fat error message. That said, there may be times that you **do want to show an error message**. In that case, you can use `.default()` instead of `.catch()`."
 
-Ou seja: `.catch` degrada silenciosamente para um valor sensato; `.default` só cobre a ausência, e um valor malformado sobe para o tratamento de erro da rota. Filtro de listagem quer `.catch`. Parâmetro que muda o significado da página — o id de um recurso, o modo de um formulário — provavelmente quer o erro visível.
+Ou seja: `.catch()` degrada silenciosamente para um valor sensato; `.default()` só cobre a ausência, e um valor malformado sobe para o tratamento de erro da rota. Filtro de listagem quer `.catch()`. Parâmetro que muda o significado da página — o id de um recurso, o modo de um formulário — provavelmente quer o erro visível.
 
 ### A pegadinha do Zod v3
 
@@ -139,9 +139,9 @@ Ou seja: `.catch` degrada silenciosamente para um valor sensato; `.default` só 
 import { fallback, zodValidator } from '@tanstack/zod-adapter'
 
 const productSearchSchema = z.object({
- page: fallback(z.number, 1).default(1),
- filter: fallback(z.string, '').default(''),
- sort: fallback(z.enum(['newest', 'oldest', 'price']), 'newest').default('newest'),
+  page: fallback(z.number(), 1).default(1),
+  filter: fallback(z.string(), '').default(''),
+  sort: fallback(z.enum(['newest', 'oldest', 'price']), 'newest').default('newest'),
 })
 ```
 
@@ -151,8 +151,8 @@ O sintoma de esquecer isso é sutil: nada quebra, o schema funciona, e o `useSea
 
 | ID | Regra |
 | --- | --- |
-| `TSR-SEARCH-04` | A escolha entre `.catch` e `.default` **MUST** ser deliberada: `.catch` quando um valor malformado deve degradar em silêncio; `.default` quando ele deve virar erro visível. |
-| `TSR-SEARCH-05` | Com Zod v3, `.catch` no schema de search **NEVER** aparece sem `fallback` do `@tanstack/zod-adapter` — o tipo colapsa para `unknown`. |
+| `TSR-SEARCH-04` | A escolha entre `.catch()` e `.default()` **MUST** ser deliberada: `.catch()` quando um valor malformado deve degradar em silêncio; `.default()` quando ele deve virar erro visível. |
+| `TSR-SEARCH-05` | Com Zod v3, `.catch()` no schema de search **NEVER** aparece sem `fallback()` do `@tanstack/zod-adapter` — o tipo colapsa para `unknown`. |
 | `TSR-SEARCH-06` | Zod v3 **MUST** passar por `zodValidator`; bibliotecas que implementam Standard Schema (Zod v4, Valibot, ArkType, Effect/Schema) **MUST** ser passadas direto, sem wrapper. |
 
 ---
@@ -162,10 +162,10 @@ O sintoma de esquecer isso é sutil: nada quebra, o schema funciona, e o `useSea
 Dentro da rota que declarou o schema:
 
 ```tsx
-const ProductList = => {
- const { page, filter, sort } = Route.useSearch
- // ^? number, string, 'newest' | 'oldest' | 'price'
- return <div>...</div>
+const ProductList = () => {
+  const { page, filter, sort } = Route.useSearch()
+  //      ^? number, string, 'newest' | 'oldest' | 'price'
+  return <div>...</div>
 }
 ```
 
@@ -176,8 +176,8 @@ import { getRouteApi } from '@tanstack/react-router'
 
 const routeApi = getRouteApi('/shop/products')
 
-const ProductList = => {
- const routeSearch = routeApi.useSearch
+const ProductList = () => {
+  const routeSearch = routeApi.useSearch()
 }
 ```
 
@@ -208,9 +208,9 @@ Rotas filhas enxergam o search validado pelos ancestrais, com os tipos mesclados
 
 ```tsx
 export const Route = createFileRoute('/shop/products/$productId')({
- beforeLoad: ({ search }) => {
- search // ProductSearch — herdado da rota pai
- },
+  beforeLoad: ({ search }) => {
+    search // ProductSearch — herdado da rota pai
+  },
 })
 ```
 
@@ -225,20 +225,20 @@ A distinção mais fácil de errar da API inteira.
 ```tsx
 // forma objeto — define o search resultante
 <Link from={Route.fullPath} search={{ page: 2, filter: 'new' }}>
- Next Page
+  Next Page
 </Link>
 
 // forma funcional — parte do search atual
-<Link from={Route.fullPath} search={(prev) => ({...prev, page: prev.page + 1 })}>
- Next Page
+<Link from={Route.fullPath} search={(prev) => ({ ...prev, page: prev.page + 1 })}>
+  Next Page
 </Link>
 ```
 
 Em componente genérico, `to="."` mantém a rota atual e mexe só no estado:
 
 ```tsx
-<Link to="." search={(prev) => ({...prev, page: prev.page + 1 })}>
- Next Page
+<Link to="." search={(prev) => ({ ...prev, page: prev.page + 1 })}>
+  Next Page
 </Link>
 ```
 
@@ -248,12 +248,12 @@ Imperativo, mesmo objeto:
 const navigate = useNavigate({ from: Route.fullPath })
 
 navigate({
- search: (prev) => ({ page: prev.page + 1 }),
+  search: (prev) => ({ page: prev.page + 1 }),
 })
 ```
 
 ```tsx
-router.navigate({ search: (prev) => ({...prev, page: 2 }) })
+router.navigate({ search: (prev) => ({ ...prev, page: 2 }) })
 ```
 
 Repare que o penúltimo exemplo, tirado da própria documentação, **não** espalha `prev`: `search: (prev) => ({ page: prev.page + 1 })` descarta `filter` e `sort`. Isso é intencional quando você quer resetar os demais filtros ao paginar — e é bug quando não quer. A forma funcional não mescla sozinha; ela apenas te dá acesso ao valor anterior.
@@ -264,7 +264,7 @@ O aviso da fonte sobre tipos:
 
 | ID | Regra |
 | --- | --- |
-| `TSR-SEARCH-07` | Atualização de uma única chave do search **MUST** usar a forma funcional com spread (`(prev) => ({...prev, page })`) — objeto literal e função sem spread substituem o search inteiro. |
+| `TSR-SEARCH-07` | Atualização de uma única chave do search **MUST** usar a forma funcional com spread (`(prev) => ({ ...prev, page })`) — objeto literal e função sem spread substituem o search inteiro. |
 | `TSR-SEARCH-08` | Componente reutilizado por várias rotas **MUST** navegar com `to="."` e forma funcional, **NEVER** com o path da rota escrito à mão. |
 | `TSR-SEARCH-09` | Valor que já vive no search **NEVER** é copiado para `useState` — apelido de `REACT-PAT-01` e `REACT-PAT-03` em [React - Patterns](react-patterns.md). Duas fontes de verdade divergem no botão voltar. |
 | `TSR-SEARCH-10` | Token, credencial, id de sessão e dado pessoal **NEVER** entram em search param — a URL vai para histórico, log de servidor, `Referer` e link compartilhado. |
@@ -273,19 +273,19 @@ O aviso da fonte sobre tipos:
 
 ## 7. Search middlewares
 
-Middlewares transformam o search **na geração de links**, antes de a URL ser construída. Resolvem o problema de "esse parâmetro precisa acompanhar o usuário por toda a navegação" sem espalhar `search={(prev) =>...}` em cada `<Link>`.
+Middlewares transformam o search **na geração de links**, antes de a URL ser construída. Resolvem o problema de "esse parâmetro precisa acompanhar o usuário por toda a navegação" sem espalhar `search={(prev) => ...}` em cada `<Link>`.
 
 ```tsx
 export const Route = createRootRoute({
- validateSearch: zodValidator(searchSchema),
- search: {
- middlewares: [
- ({ search, next }) => {
- const result = next(search)
- return { rootValue: search.rootValue,...result }
- },
- ],
- },
+  validateSearch: zodValidator(searchSchema),
+  search: {
+    middlewares: [
+      ({ search, next }) => {
+        const result = next(search)
+        return { rootValue: search.rootValue, ...result }
+      },
+    ],
+  },
 })
 ```
 
@@ -297,13 +297,13 @@ Dois middlewares prontos cobrem a maioria dos casos.
 
 ```tsx
 search: {
- middlewares: [retainSearchParams(['rootValue'])],
+  middlewares: [retainSearchParams(['rootValue'])],
 }
 ```
 
 ```tsx
 search: {
- middlewares: [retainSearchParams(true)],
+  middlewares: [retainSearchParams(true)],
 }
 ```
 
@@ -333,7 +333,7 @@ A terceira forma é o que produz URLs limpas sem perder defaults: `/shop/product
 | ID | Regra |
 | --- | --- |
 | `TSR-SEARCH-11` | Middleware que retém ou remove uma chave **MUST** ser declarado na mesma rota que valida essa chave — o escopo do schema é o escopo da política. |
-| `TSR-SEARCH-12` | Os valores passados a `stripSearchParams({... })` **MUST** ser exatamente os defaults do schema. Divergência transforma o default antigo em parâmetro explícito na URL. |
+| `TSR-SEARCH-12` | Os valores passados a `stripSearchParams({ ... })` **MUST** ser exatamente os defaults do schema. Divergência transforma o default antigo em parâmetro explícito na URL. |
 | `TSR-SEARCH-13` | `stripSearchParams` com array **MUST** listar apenas chaves opcionais, e a forma `true` **MUST** ser usada só quando o schema não tem chave obrigatória. |
 
 ---
@@ -344,9 +344,9 @@ O router expõe `parseSearch` e `stringifySearch` nas opções, com os helpers `
 
 ```tsx
 const search = {
- page: 1,
- sort: 'asc',
- filters: { author: 'tanner', min_words: 800 },
+  page: 1,
+  sort: 'asc',
+  filters: { author: 'tanner', min_words: 800 },
 }
 ```
 
@@ -363,9 +363,9 @@ Alternativas documentadas, com o mesmo objeto acima:
 
 ```tsx
 const router = createRouter({
- routeTree,
- parseSearch: parseSearchWith(JSON.parse),
- stringifySearch: stringifySearchWith(JSON.stringify),
+  routeTree,
+  parseSearch: parseSearchWith(JSON.parse),
+  stringifySearch: stringifySearchWith(JSON.stringify),
 })
 ```
 
@@ -393,9 +393,9 @@ A guarda escreve o destino ao barrar o acesso:
 ```tsx
 // routes/_authenticated.tsx
 beforeLoad: ({ context, location }) => {
- if (!context.auth.isAuthenticated) {
- throw redirect({ to: '/login', search: { redirect: location.href } })
- }
+  if (!context.auth.isAuthenticated) {
+    throw redirect({ to: '/login', search: { redirect: location.href } })
+  }
 }
 ```
 
@@ -404,22 +404,22 @@ A rota `/login` precisa **validar essa chave como qualquer outra** — inclusive
 ```tsx
 // routes/login.tsx
 const rotaInternaSegura = z
-.string
-.refine((v) => v.startsWith('/') && !v.startsWith('//'), 'destino externo')
-.catch('/')
+  .string()
+  .refine((v) => v.startsWith('/') && !v.startsWith('//'), 'destino externo')
+  .catch('/')
 
 export const Route = createFileRoute('/login')({
- validateSearch: zodValidator(z.object({ redirect: fallback(rotaInternaSegura, '/') })),
+  validateSearch: zodValidator(z.object({ redirect: fallback(rotaInternaSegura, '/') })),
 })
 
-function Login {
- const { redirect: destino } = Route.useSearch
- const navigate = useNavigate
+function Login() {
+  const { redirect: destino } = Route.useSearch()
+  const navigate = useNavigate()
 
- async function aoEntrar(credenciais: Credenciais) {
- await autenticar(credenciais)
- navigate({ to: destino, replace: true }) // replace: TSR-NAV-09
- }
+  async function aoEntrar(credenciais: Credenciais) {
+    await autenticar(credenciais)
+    navigate({ to: destino, replace: true })   // replace: TSR-NAV-09
+  }
 }
 ```
 
@@ -440,11 +440,11 @@ Os dois testes que o `refine` faz: começa com `/` (caminho interno) e **não** 
 
 ```tsx
 // ERRADO — o search vira "unknown" na leitura e nenhum uso errado é detectado (Zod v3)
-const schema = z.object({ page: z.number.catch(1) })
+const schema = z.object({ page: z.number().catch(1) })
 export const Route = createFileRoute('/shop')({ validateSearch: zodValidator(schema) })
 
-// CERTO — fallback preserva o tipo
-const schema = z.object({ page: fallback(z.number, 1).default(1) })
+// CERTO — fallback() preserva o tipo
+const schema = z.object({ page: fallback(z.number(), 1).default(1) })
 ```
 
 ```tsx
@@ -452,25 +452,25 @@ const schema = z.object({ page: fallback(z.number, 1).default(1) })
 <Link to="." search={{ page: page + 1 }}>Próxima</Link>
 
 // CERTO
-<Link to="." search={(prev) => ({...prev, page: prev.page + 1 })}>Próxima</Link>
+<Link to="." search={(prev) => ({ ...prev, page: prev.page + 1 })}>Próxima</Link>
 ```
 
 ```tsx
 // ERRADO — duas fontes de verdade: o botão voltar muda a URL e o estado local fica velho
 const [page, setPage] = useState(1)
-const search = Route.useSearch
-useEffect( => setPage(search.page), [search.page])
+const search = Route.useSearch()
+useEffect(() => setPage(search.page), [search.page])
 
 // CERTO — a URL é o estado
-const { page } = Route.useSearch
+const { page } = Route.useSearch()
 const navigate = useNavigate({ from: Route.fullPath })
-const setPage = (page: number) => navigate({ search: (prev) => ({...prev, page }) })
+const setPage = (page: number) => navigate({ search: (prev) => ({ ...prev, page }) })
 ```
 
 | Antipadrão | Por que falha | Correção |
 | --- | --- | --- |
 | Ler `new URLSearchParams(location.search)` na rota | ignora schema, tipos e reatividade do router | `useSearch` (`TSR-SEARCH-02`) |
-| Schema sem `.catch`/`.default` nas chaves | `?page=banana` chega como `NaN` no componente | comportamento explícito por chave (`TSR-SEARCH-03`) |
+| Schema sem `.catch()`/`.default()` nas chaves | `?page=banana` chega como `NaN` no componente | comportamento explícito por chave (`TSR-SEARCH-03`) |
 | `validateSearch` tipando o argumento como já validado | a função existe justamente para converter `unknown` | assinatura `(search: Record<string, unknown>)` |
 | `stripSearchParams` com defaults dessincronizados do schema | o default antigo vaza para a URL como escolha explícita | espelhar os defaults (`TSR-SEARCH-12`) |
 | Guardar `?token=` ou `?email=` para "passar entre telas" | URL vai para histórico, logs e `Referer` | contexto de rota ou `state` (`TSR-SEARCH-10`) |
@@ -483,10 +483,10 @@ const setPage = (page: number) => navigate({ search: (prev) => ({...prev, page }
 - [ ] Toda rota que lê search declara `validateSearch`? → `TSR-SEARCH-01`
 - [ ] Nenhuma leitura por `URLSearchParams` ou `window.location.search`? → `TSR-SEARCH-02`
 - [ ] Toda chave do schema trata ausência **e** valor inválido? → `TSR-SEARCH-03`
-- [ ] A escolha `.catch` vs `.default` é deliberada por chave? → `TSR-SEARCH-04`
-- [ ] Zod v3 usa `fallback` junto de `.catch`? → `TSR-SEARCH-05`
+- [ ] A escolha `.catch()` vs `.default()` é deliberada por chave? → `TSR-SEARCH-04`
+- [ ] Zod v3 usa `fallback()` junto de `.catch()`? → `TSR-SEARCH-05`
 - [ ] Zod v3 passa por `zodValidator`; Standard Schema entra direto? → `TSR-SEARCH-06`
-- [ ] Toda atualização parcial usa `(prev) => ({...prev,... })`? → `TSR-SEARCH-07`
+- [ ] Toda atualização parcial usa `(prev) => ({ ...prev, ... })`? → `TSR-SEARCH-07`
 - [ ] Componentes genéricos navegam com `to="."`? → `TSR-SEARCH-08`
 - [ ] Nenhum `useState` espelhando valor do search? → `TSR-SEARCH-09`
 - [ ] Nenhum dado sensível na query string? → `TSR-SEARCH-10`
@@ -508,7 +508,7 @@ const setPage = (page: number) => navigate({ search: (prev) => ({...prev, page }
 
 Verificadas em 2026-08-14:
 
-- [Search Params](https://tanstack.com/router/latest/docs/framework/react/guide/search-params) — `validateSearch`, adapters, `useSearch`, herança, middlewares, `.catch` vs `.default`, `fallback`
+- [Search Params](https://tanstack.com/router/latest/docs/framework/react/guide/search-params) — `validateSearch`, adapters, `useSearch`, herança, middlewares, `.catch()` vs `.default()`, `fallback()`
 - [Custom Search Param Serialization](https://tanstack.com/router/latest/docs/framework/react/guide/custom-search-param-serialization) — `parseSearchWith`/`stringifySearchWith` e avisos sobre Base64
 - [retainSearchParams](https://tanstack.com/router/latest/docs/framework/react/api/router/retainSearchParamsFunction) · [stripSearchParams](https://tanstack.com/router/latest/docs/framework/react/api/router/stripSearchParamsFunction)
 - [useSearch](https://tanstack.com/router/latest/docs/framework/react/api/router/useSearchHook)

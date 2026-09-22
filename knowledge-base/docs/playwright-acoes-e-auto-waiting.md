@@ -2,11 +2,11 @@
 titulo: Playwright - Ações e Auto-waiting
 Link: https://playwright.dev/docs/actionability
 tags:
- - playwright
- - testing
- - actions
- - auto-waiting
- - agent-context
+  - playwright
+  - testing
+  - actions
+  - auto-waiting
+  - agent-context
 source: "Documentação oficial do Playwright — Auto-waiting, Actions, Navigations, Events"
 verificado-em: 2026-08-20
 ---
@@ -47,7 +47,7 @@ Duas leituras não óbvias:
 - **`opacity: 0` conta como visível.** Um elemento em fade-in ou um overlay "invisível" por opacidade é clicável para o Playwright — e pode ser exatamente o que rouba o clique. O sintoma é um timeout na checagem "recebe eventos".
 - **"Estável" é a razão de o clique esperar animação.** Um botão que desliza para a posição não recebe clique até parar. É por isso que suíte com muita animação fica lenta, e é um dos poucos casos em que `animations: 'disabled'` ([Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) § 2) ajuda também fora de screenshot.
 
-**A linha de baixo da tabela é a mais importante:** `press`, `focus`, `dispatchEvent` e `setInputFiles` **não fazem checagem nenhuma**. Eles agem sobre o que estiver ali. São ferramentas para contornar UI hostil, não atalhos — e um teste que usa `dispatchEvent('click')` no lugar de `click` deixou de verificar que o botão é clicável.
+**A linha de baixo da tabela é a mais importante:** `press`, `focus`, `dispatchEvent` e `setInputFiles` **não fazem checagem nenhuma**. Eles agem sobre o que estiver ali. São ferramentas para contornar UI hostil, não atalhos — e um teste que usa `dispatchEvent('click')` no lugar de `click()` deixou de verificar que o botão é clicável.
 
 ### 1.1 `force`
 
@@ -62,7 +62,7 @@ Isso quase sempre esconde um defeito real: um overlay que não deveria estar ali
 ### 1.2 `trial`
 
 ```ts
-await locator.click({ trial: true }); // roda as checagens, NÃO clica
+await locator.click({ trial: true });   // roda as checagens, NÃO clica
 ```
 
 Útil para afirmar "este botão está pronto para ser clicado" sem efeito colateral.
@@ -74,7 +74,7 @@ await locator.click({ trial: true }); // roda as checagens, NÃO clica
 ```ts
 await page.getByRole('textbox', { name: 'Nome' }).fill('Maria');
 await page.getByLabel('Data de nascimento').fill('2020-02-02');
-await page.getByRole('textbox').clear;
+await page.getByRole('textbox').clear();
 ```
 
 `fill` foca o elemento, define o valor e dispara um único evento `input`. É a forma default (`PW-ACT-02`).
@@ -94,22 +94,22 @@ Use **só** quando a página reage a cada tecla — autocomplete que busca a cad
 ## 3. Clicar, marcar, selecionar
 
 ```ts
-await page.getByRole('button').click;
-await page.getByText('Item').dblclick;
+await page.getByRole('button').click();
+await page.getByText('Item').dblclick();
 await page.getByText('Item').click({ button: 'right' });
 await page.getByText('Item').click({ modifiers: ['Shift'] });
 await page.getByText('Item').click({ modifiers: ['ControlOrMeta'] });
 await page.getByText('Item').click({ position: { x: 0, y: 0 } });
-await page.getByRole('button').hover;
+await page.getByRole('button').hover();
 ```
 
 `'ControlOrMeta'` resolve Ctrl no Linux/Windows e Cmd no macOS — é o que evita teste que só passa num SO.
 
 ```ts
-await page.getByLabel('Aceito os termos').check;
-await page.getByLabel('Receber novidades').uncheck;
+await page.getByLabel('Aceito os termos').check();
+await page.getByLabel('Receber novidades').uncheck();
 await page.getByLabel('XL').setChecked(true);
-await expect(page.getByLabel('Receber novidades')).not.toBeChecked;
+await expect(page.getByLabel('Receber novidades')).not.toBeChecked();
 
 await page.getByLabel('Cor').selectOption('azul');
 await page.getByLabel('Cor').selectOption({ label: 'Azul' });
@@ -140,17 +140,17 @@ Nomes de tecla: `Backquote`, `Minus`, `Equal`, `Backslash`, `Backspace`, `Tab`, 
 ```ts
 await page.getByLabel('Anexo').setInputFiles(path.join(__dirname, 'nota.pdf'));
 await page.getByLabel('Anexos').setInputFiles([
- path.join(__dirname, 'a.txt'),
- path.join(__dirname, 'b.txt'),
+  path.join(__dirname, 'a.txt'),
+  path.join(__dirname, 'b.txt'),
 ]);
 await page.getByLabel('Pasta').setInputFiles(path.join(__dirname, 'pasta'));
-await page.getByLabel('Anexo').setInputFiles([]); // limpa
+await page.getByLabel('Anexo').setInputFiles([]);              // limpa
 
 // arquivo sintético, sem tocar o disco — o caminho preferível em teste
 await page.getByLabel('Anexo').setInputFiles({
- name: 'nota.txt',
- mimeType: 'text/plain',
- buffer: Buffer.from('conteúdo de teste'),
+  name: 'nota.txt',
+  mimeType: 'text/plain',
+  buffer: Buffer.from('conteúdo de teste'),
 });
 ```
 
@@ -158,7 +158,7 @@ Quando o upload é por botão custom em vez de `<input type=file>` visível:
 
 ```ts
 const escolhaPromise = page.waitForEvent('filechooser');
-await page.getByRole('button', { name: 'Anexar' }).click;
+await page.getByRole('button', { name: 'Anexar' }).click();
 const escolha = await escolhaPromise;
 await escolha.setFiles(path.join(__dirname, 'nota.pdf'));
 ```
@@ -173,13 +173,13 @@ Note o padrão: **a espera é armada antes do clique** (§ 7).
 await page.locator('#origem').dragTo(page.locator('#destino'));
 
 // controle manual, quando dragTo não é suficiente
-await page.locator('#origem').hover;
-await page.mouse.down;
-await page.locator('#destino').hover;
-await page.mouse.up;
+await page.locator('#origem').hover();
+await page.mouse.down();
+await page.locator('#destino').hover();
+await page.mouse.up();
 
-await page.getByText('Rodapé').scrollIntoViewIfNeeded;
-await page.getByTestId('lista').hover;
+await page.getByText('Rodapé').scrollIntoViewIfNeeded();
+await page.getByTestId('lista').hover();
 await page.mouse.wheel(0, 200);
 ```
 
@@ -191,24 +191,24 @@ Quase toda ação já rola o alvo até a viewport. `scrollIntoViewIfNeeded` expl
 
 ### 7.1 Navegação
 
-`page.goto` espera o evento `load`, e segue redirecionamento de cliente.
+`page.goto()` espera o evento `load`, e segue redirecionamento de cliente.
 
 ```ts
-await page.goto('/dashboard'); // relativo, via baseURL
+await page.goto('/dashboard');            // relativo, via baseURL
 ```
 
 Navegação disparada por clique **normalmente não precisa de espera**: a ação seguinte já espera actionability do próximo alvo.
 
 ```ts
 await page.goto('/');
-await page.getByRole('link', { name: 'Entrar' }).click;
-await page.getByLabel('E-mail').fill('a@b.com'); // já espera a nova página
+await page.getByRole('link', { name: 'Entrar' }).click();
+await page.getByLabel('E-mail').fill('a@b.com');   // já espera a nova página
 ```
 
 Quando o clique pode disparar **mais de uma** navegação, ou quando a URL final é o que se quer afirmar:
 
 ```ts
-await page.getByRole('button', { name: 'Entrar' }).click;
+await page.getByRole('button', { name: 'Entrar' }).click();
 await page.waitForURL('**/dashboard');
 ```
 
@@ -226,16 +226,16 @@ Isso é relevante para o stack: um app React com SSR/RSC tem essa janela por con
 
 ```ts
 // ✓
-const popupPromise = page.waitForEvent('popup'); // sem await
-await page.getByText('abrir popup').click;
+const popupPromise = page.waitForEvent('popup');   // sem await
+await page.getByText('abrir popup').click();
 const popup = await popupPromise;
 
 const downloadPromise = page.waitForEvent('download');
-await page.getByRole('button', { name: 'Exportar' }).click;
+await page.getByRole('button', { name: 'Exportar' }).click();
 const download = await downloadPromise;
 
 const requestPromise = page.waitForRequest('**/api/pedidos');
-await page.getByRole('button', { name: 'Salvar' }).click;
+await page.getByRole('button', { name: 'Salvar' }).click();
 const request = await requestPromise;
 ```
 
@@ -244,10 +244,10 @@ Se a espera vier depois do clique, o evento pode já ter acontecido — e o test
 Listeners contínuos:
 
 ```ts
-page.on('request', r => console.log('→', r.url));
+page.on('request', r => console.log('→', r.url()));
 page.once('dialog', d => d.accept('42'));
 
-const l = (r: Request) => console.log('✓', r.url);
+const l = (r: Request) => console.log('✓', r.url());
 page.on('requestfinished', l);
 await page.goto('/');
 page.off('requestfinished', l);
@@ -258,11 +258,11 @@ page.off('requestfinished', l);
 O Playwright **dispensa diálogos automaticamente** se ninguém escutar — `alert`, `confirm` e `prompt` são recusados por default, e a página segue. Para aceitar:
 
 ```ts
-page.once('dialog', d => d.accept);
-await page.getByRole('button', { name: 'Excluir' }).click;
+page.once('dialog', d => d.accept());
+await page.getByRole('button', { name: 'Excluir' }).click();
 ```
 
-Consequência prática: um fluxo que depende de `confirm` **passa silenciosamente pelo caminho de cancelamento** se o teste não registrar o handler. O teste "de exclusão" verifica que nada foi excluído.
+Consequência prática: um fluxo que depende de `confirm()` **passa silenciosamente pelo caminho de cancelamento** se o teste não registrar o handler. O teste "de exclusão" verifica que nada foi excluído.
 
 ---
 
@@ -271,12 +271,12 @@ Consequência prática: um fluxo que depende de `confirm` **passa silenciosament
 | ID | Regra |
 | --- | --- |
 | `PW-ACT-01` | Ação **MUST** confiar nos actionability checks. `force: true` só com o motivo escrito no código. † |
-| `PW-ACT-02` | `fill` **MUST** ser a forma default de escrever em campo. `pressSequentially` só quando a página reage a cada tecla. |
+| `PW-ACT-02` | `fill()` **MUST** ser a forma default de escrever em campo. `pressSequentially()` só quando a página reage a cada tecla. |
 | `PW-ACT-03` | Espera por evento **MUST** ser armada **antes** da ação que o dispara. |
 | `PW-ACT-04` | `waitUntil: 'networkidle'` **NEVER** — a fonte o desencoraja explicitamente. |
 | `PW-ACT-05` | `noWaitAfter` **NEVER** — a opção está deprecada e não tem efeito. |
 | `PW-ACT-06` | `dispatchEvent` e `focus` **NEVER** substituem `click` e `fill` por conveniência: eles não fazem checagem alguma e removem a verificação que era o valor do teste. † |
-| `PW-ACT-07` | `page.waitForTimeout` **NEVER** em teste versionado. *(apelido de `PW-CORE-05` — cite o canônico)* |
+| `PW-ACT-07` | `page.waitForTimeout()` **NEVER** em teste versionado. *(apelido de `PW-CORE-05` — cite o canônico)* |
 
 ---
 
@@ -286,9 +286,9 @@ Consequência prática: um fluxo que depende de `confirm` **passa silenciosament
 
 ```ts
 // ✗
-await page.getByRole('button', { name: 'Salvar' }).click;
+await page.getByRole('button', { name: 'Salvar' }).click();
 await page.waitForTimeout(3000);
-await expect(page.getByText('Salvo')).toBeVisible;
+await expect(page.getByText('Salvo')).toBeVisible();
 ```
 
 Lento sempre, insuficiente às vezes. A asserção já reespera (`PW-CORE-05`).
@@ -306,8 +306,8 @@ O overlay que rouba o clique no teste rouba o clique do usuário. `force` conver
 
 ```ts
 // ✗
-await page.getByRole('button', { name: 'Exportar' }).click;
-const download = await page.waitForEvent('download'); // pode já ter passado
+await page.getByRole('button', { name: 'Exportar' }).click();
+const download = await page.waitForEvent('download');   // pode já ter passado
 ```
 
 Ver § 7.3 (`PW-ACT-03`).
@@ -319,7 +319,7 @@ Ver § 7.3 (`PW-ACT-03`).
 await page.goto('/dashboard', { waitUntil: 'networkidle' });
 ```
 
-Um único polling na aplicação torna isso um timeout garantido. O que se quer afirmar é sempre um estado concreto — `await expect(page.getByRole('heading', { name: 'Painel' })).toBeVisible` (`PW-ACT-04`).
+Um único polling na aplicação torna isso um timeout garantido. O que se quer afirmar é sempre um estado concreto — `await expect(page.getByRole('heading', { name: 'Painel' })).toBeVisible()` (`PW-ACT-04`).
 
 ### 9.5 `pressSequentially` como default
 
@@ -330,11 +330,11 @@ await page.getByLabel('Descrição').pressSequentially('texto longo de 200 carac
 
 200 eventos de teclado onde um `fill` bastava (`PW-ACT-02`).
 
-### 9.6 Fluxo com `confirm` sem handler
+### 9.6 Fluxo com `confirm()` sem handler
 
 ```ts
 // ✗ verifica o caminho de cancelamento acreditando verificar a exclusão
-await page.getByRole('button', { name: 'Excluir' }).click;
+await page.getByRole('button', { name: 'Excluir' }).click();
 await expect(page.getByRole('row')).toHaveCount(2);
 ```
 

@@ -2,9 +2,9 @@
 titulo: Bun - Testes - Ciclo de Vida e Isolamento
 Link: https://bun.com/docs/test/lifecycle
 tags:
- - bun
- - testing
- - agent-context
+  - bun
+  - testing
+  - agent-context
 source: "Documentação oficial — https://bun.com/docs/test/lifecycle, /parallel"
 verificado-em: 2026-08-20
 ---
@@ -34,7 +34,7 @@ O mapa mental que organiza esta nota inteira: existem **três escopos**, e cada 
 | --- | --- | --- |
 | **Teste** | `beforeEach`/`afterEach`, `onTestFinished` | a cada teste, sempre |
 | **Arquivo** | `beforeAll`/`afterAll` no topo do arquivo, estado de módulo | só com `--isolate` (implícito em `--parallel`) |
-| **Execução** | hooks declarados em `preload`, `mock.module` | nunca, dentro de uma invocação |
+| **Execução** | hooks declarados em `preload`, `mock.module()` | nunca, dentro de uma invocação |
 
 ---
 
@@ -53,17 +53,17 @@ O mapa mental que organiza esta nota inteira: existem **três escopos**, e cada 
 Com hooks no arquivo, num `describe` externo e num interno, a fonte declara esta sequência para cada teste:
 
 ```
-1. beforeAll do arquivo
-2. beforeAll do describe externo
-3. beforeAll do describe interno
-4. beforeEach do externo
-5. beforeEach do interno
-6. corpo do teste
-7. afterEach do interno
-8. afterEach do externo
-9. afterAll do interno
-10. afterAll do externo
-11. afterAll do arquivo
+1.  beforeAll   do arquivo
+2.  beforeAll   do describe externo
+3.  beforeAll   do describe interno
+4.  beforeEach  do externo
+5.  beforeEach  do interno
+6.  corpo do teste
+7.  afterEach   do interno
+8.  afterEach   do externo
+9.  afterAll    do interno
+10. afterAll    do externo
+11. afterAll    do arquivo
 ```
 
 `before*` vai de fora para dentro, `after*` de dentro para fora. É o que permite o padrão comum: banco no `beforeAll` do arquivo, transação no `beforeEach` do `describe`, rollback no `afterEach`.
@@ -76,10 +76,10 @@ Com hooks no arquivo, num `describe` externo e num interno, a fonte declara esta
 ```ts
 import { test, onTestFinished } from "bun:test";
 
-test("cria e limpa o arquivo temporário", async => {
- const caminho = await criarTemp;
- onTestFinished(async => { await rm(caminho); }); // registrado no ponto de uso
- expect(await Bun.file(caminho).exists).toBe(true);
+test("cria e limpa o arquivo temporário", async () => {
+  const caminho = await criarTemp();
+  onTestFinished(async () => { await rm(caminho); });   // registrado no ponto de uso
+  expect(await Bun.file(caminho).exists()).toBe(true);
 });
 ```
 
@@ -99,8 +99,8 @@ import { beforeAll, afterAll } from "bun:test";
 
 let servidor: ReturnType<typeof Bun.serve>;
 
-beforeAll(async => { servidor = await subirServidorDeTeste; });
-afterAll(async => { await servidor.stop; });
+beforeAll(async () => { servidor = await subirServidorDeTeste(); });
+afterAll(async () => { await servidor.stop(); });
 ```
 
 ```toml
@@ -117,7 +117,7 @@ preload = ["./test/setup.ts"]
 > | Saída | Como | Custo |
 > | --- | --- | --- |
 > | Setup **por arquivo e isolado** | manter no preload, mas derivar porta/banco/diretório de `BUN_TEST_WORKER_ID` (§ 4) | subida repetida, sem colisão — é o caminho que escala |
-> | Setup **idempotente e barato** | `globalThis.__servidor ??= await subir` — funciona sob `--no-isolate`, **não** sob `--isolate`, que zera o global entre arquivos | funciona só numa configuração |
+> | Setup **idempotente e barato** | `globalThis.__servidor ??= await subir()` — funciona sob `--no-isolate`, **não** sob `--isolate`, que zera o global entre arquivos | funciona só numa configuração |
 > | Recurso **fora** do runner | `docker compose up` ou serviço de CI antes de `bun test`; o preload só conecta | mais infra, zero surpresa — |
 >
 > A regra que sobra: **setup de preload é idempotente e barato, ou parametrizado por worker.** Setup caro e único não tem onde caber.
@@ -131,10 +131,10 @@ preload = ["./test/setup.ts"]
 ## 4. `--parallel`, `--isolate` e o que a isolação reseta
 
 ```bash
-bun test --parallel # um worker por core; IMPLICA --isolate
-bun test --parallel=4 # quatro workers
-bun test --parallel --no-isolate # um global por worker, não por arquivo
-bun test --isolate # global novo por arquivo, sem paralelizar
+bun test --parallel                 # um worker por core; IMPLICA --isolate
+bun test --parallel=4               # quatro workers
+bun test --parallel --no-isolate    # um global por worker, não por arquivo
+bun test --isolate                  # global novo por arquivo, sem paralelizar
 ```
 
 | Flag | O que faz | Quando |
@@ -186,19 +186,19 @@ Sem isso, `--parallel` transforma um teste correto em falha intermitente: dois w
 `--parallel` paraleliza arquivos entre processos. Concorrência é outra coisa: testes do **mesmo** arquivo que se sobrepõem, cooperativamente, num só thread e num só global.
 
 ```ts
-test.concurrent("busca A", async => { … });
-test.concurrent("busca B", async => { … }); // sobrepõe com A
-test.serial("aplica migração", async => { … }); // nunca sobrepõe
+test.concurrent("busca A", async () => { … });
+test.concurrent("busca B", async () => { … });   // sobrepõe com A
+test.serial("aplica migração", async () => { … }); // nunca sobrepõe
 ```
 
 ```bash
-bun test --concurrent # trata TODOS os testes como concurrent
-bun test --max-concurrency=8 # teto de testes simultâneos (default 20)
+bun test --concurrent               # trata TODOS os testes como concurrent
+bun test --max-concurrency=8        # teto de testes simultâneos (default 20)
 ```
 
 ```toml
 [test]
-concurrentTestGlob = "**/*.integration.test.ts" # concorrência só onde vale
+concurrentTestGlob = "**/*.integration.test.ts"   # concorrência só onde vale
 ```
 
 **O que a concorrência compra:** tempo de espera de I/O. Dez testes que cada um espera 200 ms de rede terminam em ~200 ms, não em 2 s. **O que ela não compra:** CPU — é um thread só. Teste que calcula não fica mais rápido concorrente.
@@ -227,10 +227,10 @@ Vale separá-los, porque o remédio de um não serve para o outro:
 Como se detecta, antes do CI:
 
 ```bash
-bun test --randomize # ordem aleatória; a suíte precisa passar assim
-bun test --randomize --seed 42 # reproduz a ordem que revelou a falha
-bun test --isolate # global novo por arquivo, sem paralelizar — isola a causa
-bun test --rerun-each 10 # repete cada arquivo; pega flaky que não é de ordem
+bun test --randomize            # ordem aleatória; a suíte precisa passar assim
+bun test --randomize --seed 42  # reproduz a ordem que revelou a falha
+bun test --isolate              # global novo por arquivo, sem paralelizar — isola a causa
+bun test --rerun-each 10        # repete cada arquivo; pega flaky que não é de ordem
 ```
 
 A correção tem sempre a mesma forma: **mover o estado de que o arquivo depende para dentro dele** — `beforeAll`/`beforeEach` no próprio arquivo, ou uma fixture que constrói o que o teste precisa. Se o custo disso for alto, o sinal é que o setup pertence ao preload, e aí ele precisa ser idempotente (`BUN-TEST-24`).
@@ -244,8 +244,8 @@ A correção tem sempre a mesma forma: **mover o estado de que o arquivo depende
 ## 7. `--shard` e `--timings`: dividir entre máquinas
 
 ```bash
-bun test --shard=1/4 # primeira de quatro fatias determinísticas
-bun test --update-timings # grava a duração por arquivo
+bun test --shard=1/4        # primeira de quatro fatias determinísticas
+bun test --update-timings   # grava a duração por arquivo
 bun test --timings=.timings.json --shard=2/4
 ```
 
@@ -271,7 +271,7 @@ Sem `--timings`, quatro shards com o mesmo número de arquivos podem levar tempo
 | Confiar na ordem de declaração entre arquivos ("o de setup roda primeiro") | a ordem de descoberta não é contrato, e `--parallel` a destrói | fixture explícita no arquivo que precisa |
 | `--shard` sem `--timings` numa suíte com arquivos muito desiguais | um shard leva 8 minutos e outro 40 segundos | gravar e cachear timings — § 7 |
 | Presumir que uma pasta inteira cai no mesmo shard | a distribuição não garante localidade em nenhuma das duas leituras da fonte | não depender de localidade — § 7 |
-| Estado global vazado "que não incomoda ninguém" | sem `--isolate` ele viaja para todos os arquivos seguintes | `mock.restore` no preload e fixtures por arquivo — [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 3 |
+| Estado global vazado "que não incomoda ninguém" | sem `--isolate` ele viaja para todos os arquivos seguintes | `mock.restore()` no preload e fixtures por arquivo — [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 3 |
 
 ---
 

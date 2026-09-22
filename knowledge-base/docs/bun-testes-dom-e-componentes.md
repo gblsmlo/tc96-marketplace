@@ -2,10 +2,10 @@
 titulo: Bun - Testes - DOM e Componentes
 Link: https://bun.com/docs/test/dom
 tags:
- - bun
- - testing
- - react
- - agent-context
+  - bun
+  - testing
+  - react
+  - agent-context
 source: "Documentação oficial — https://bun.com/docs/test/dom e https://bun.com/docs/guides/test/testing-library"
 verificado-em: 2026-08-20
 ---
@@ -34,15 +34,15 @@ A escolha de implementação é **happy-dom**, que a fonte apresenta como *"lean
 
 ```bash
 bun add -d @happy-dom/global-registrator \
- @testing-library/react @testing-library/dom @testing-library/jest-dom \
- @testing-library/user-event
+           @testing-library/react @testing-library/dom @testing-library/jest-dom \
+           @testing-library/user-event
 ```
 
 ```ts
 // test/happydom.ts — preload 1: injeta os globais de browser
 import { GlobalRegistrator } from "@happy-dom/global-registrator";
 
-GlobalRegistrator.register;
+GlobalRegistrator.register();
 ```
 
 ```ts
@@ -53,9 +53,9 @@ import * as matchers from "@testing-library/jest-dom/matchers";
 
 expect.extend(matchers);
 
-afterEach( => {
- cleanup;
- document.body.innerHTML = "";
+afterEach(() => {
+  cleanup();
+  document.body.innerHTML = "";
 });
 ```
 
@@ -71,8 +71,8 @@ import { TestingLibraryMatchers } from "@testing-library/jest-dom/matchers";
 import { Matchers, AsymmetricMatchers } from "bun:test";
 
 declare module "bun:test" {
- interface Matchers<T> extends TestingLibraryMatchers<typeof expect.stringContaining, void> {}
- interface AsymmetricMatchers extends TestingLibraryMatchers<any, any> {}
+  interface Matchers<T> extends TestingLibraryMatchers<typeof expect.stringContaining, void> {}
+  interface AsymmetricMatchers extends TestingLibraryMatchers<any, any> {}
 }
 ```
 
@@ -82,9 +82,9 @@ import { test, expect } from "bun:test";
 import { render, screen } from "@testing-library/react";
 import { ResumoCarrinho } from "./ResumoCarrinho";
 
-test("mostra o total do carrinho", => {
- render(<ResumoCarrinho itens={[{ id: "1", preco: 1990 }]} />);
- expect(screen.getByRole("status")).toHaveTextContent("R$ 19,90");
+test("mostra o total do carrinho", () => {
+  render(<ResumoCarrinho itens={[{ id: "1", preco: 1990 }]} />);
+  expect(screen.getByRole("status")).toHaveTextContent("R$ 19,90");
 });
 ```
 
@@ -94,32 +94,32 @@ Quatro detalhes, e três deles são a diferença entre a receita funcionar e nã
 
 > **Divergência interna da fonte, registrada.** A página curta de DOM testing mostra `import '@testing-library/jest-dom'` no arquivo de teste e num `test-setup.ts`; o guia dedicado de Testing Library usa a forma explícita, importando de `@testing-library/jest-dom/matchers` e passando por `expect.extend`. As duas páginas da mesma doc divergem. Esta nota segue o guia — é a forma que funciona.
 
-**2. Dois arquivos de preload, nesta ordem, e não um só.** A fonte declara o motivo: num preload único, os pacotes `@testing-library/*` precisam ser carregados com `await import` **depois** de `GlobalRegistrator.register`, porque eles inspecionam globais de browser no momento em que são avaliados. Dois arquivos na ordem certa resolvem sem `await import`.
+**2. Dois arquivos de preload, nesta ordem, e não um só.** A fonte declara o motivo: num preload único, os pacotes `@testing-library/*` precisam ser carregados com `await import()` **depois** de `GlobalRegistrator.register()`, porque eles inspecionam globais de browser no momento em que são avaliados. Dois arquivos na ordem certa resolvem sem `await import()`.
 
 **3. `/// <reference lib="dom" />` no topo do arquivo de teste** resolve *"Cannot find name 'document'"*. É problema de tipo, não de runtime — e é por arquivo.
 
-**4. `cleanup` em `afterEach`, no preload.** O `document` é compartilhado entre testes do mesmo arquivo: sem limpeza, `getByRole` passa a encontrar elementos renderizados pelo teste anterior e falha por "found multiple elements". A doc mostra `cleanup` mais `document.body.innerHTML = ""` — a segunda linha cobre o que foi escrito no DOM fora do `render`.
+**4. `cleanup()` em `afterEach`, no preload.** O `document` é compartilhado entre testes do mesmo arquivo: sem limpeza, `getByRole` passa a encontrar elementos renderizados pelo teste anterior e falha por "found multiple elements". A doc mostra `cleanup()` mais `document.body.innerHTML = ""` — a segunda linha cobre o que foi escrito no DOM fora do `render`.
 
 | ID | Regra |
 | --- | --- |
-| `BUN-TEST-07` | Registro de DOM (`GlobalRegistrator.register`) **MUST** acontecer em `[test] preload`, **NEVER** dentro de um arquivo de teste. |
+| `BUN-TEST-07` | Registro de DOM (`GlobalRegistrator.register()`) **MUST** acontecer em `[test] preload`, **NEVER** dentro de um arquivo de teste. |
 | `BUN-TEST-12` | Matcher de `@testing-library/jest-dom` **MUST** ser registrado com `expect.extend` num preload — o `import` do pacote sozinho não registra nada em `bun:test`. |
-| `BUN-TEST-25` | `GlobalRegistrator.register` e os pacotes `@testing-library/*` **MUST** viver em preloads separados, nesta ordem — num arquivo único, os pacotes **MUST** ser carregados por `await import` depois do registro. |
-| `BUN-TEST-26` | Arquivo que renderiza componente **MUST** ter `cleanup` em `afterEach` (de preferência no preload) — o `document` é compartilhado entre os testes do arquivo. |
+| `BUN-TEST-25` | `GlobalRegistrator.register()` e os pacotes `@testing-library/*` **MUST** viver em preloads separados, nesta ordem — num arquivo único, os pacotes **MUST** ser carregados por `await import()` depois do registro. |
+| `BUN-TEST-26` | Arquivo que renderiza componente **MUST** ter `cleanup()` em `afterEach` (de preferência no preload) — o `document` é compartilhado entre os testes do arquivo. |
 
 ### DOM sem React
 
 A receita completa é para componente. Para testar código que só manipula DOM, o preload 1 basta:
 
 ```ts
-test("registra o custom element", => {
- class Contador extends HTMLElement {
- constructor { super; this.innerHTML = "<p>0</p>"; }
- }
- customElements.define("app-contador", Contador);
+test("registra o custom element", () => {
+  class Contador extends HTMLElement {
+    constructor() { super(); this.innerHTML = "<p>0</p>"; }
+  }
+  customElements.define("app-contador", Contador);
 
- document.body.innerHTML = "<app-contador></app-contador>";
- expect(document.querySelector("app-contador p")?.textContent).toBe("0");
+  document.body.innerHTML = "<app-contador></app-contador>";
+  expect(document.querySelector("app-contador p")?.textContent).toBe("0");
 });
 ```
 
@@ -135,17 +135,17 @@ import { test, expect } from "bun:test";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-test("adiciona o item ao carrinho ao clicar", async => {
- const user = userEvent.setup; // sempre antes do render
- render(<BotaoAdicionar produtoId="p-1" />);
+test("adiciona o item ao carrinho ao clicar", async () => {
+  const user = userEvent.setup();          // sempre antes do render
+  render(<BotaoAdicionar produtoId="p-1" />);
 
- await user.click(screen.getByRole("button", { name: /adicionar/i }));
+  await user.click(screen.getByRole("button", { name: /adicionar/i }));
 
- // findBy* já embute waitFor — prefira a ele em vez de waitFor + getBy*
- expect(await screen.findByRole("status")).toHaveTextContent("1 item");
+  // findBy* já embute waitFor — prefira a ele em vez de waitFor + getBy*
+  expect(await screen.findByRole("status")).toHaveTextContent("1 item");
 
- // waitFor para condição que não é "elemento existe"
- await waitFor( => expect(screen.getByRole("button")).toBeDisabled);
+  // waitFor para condição que não é "elemento existe"
+  await waitFor(() => expect(screen.getByRole("button")).toBeDisabled());
 });
 ```
 
@@ -154,8 +154,8 @@ test("adiciona o item ao carrinho ao clicar", async => {
 | Simular um usuário (click, type, tab, hover) | `userEvent` — dispara a sequência real de eventos | `fireEvent.click` para fluxo de usuário |
 | Disparar **um** evento específico (`change` de input controlado por lib, `scroll`) | `fireEvent` | `userEvent` para um evento sintético isolado |
 | Esperar algo aparecer | `await screen.findBy*` | `waitFor` + `getBy*` — mais verboso, mesma coisa |
-| Esperar condição que não é "elemento existe" | `await waitFor( => expect(…))` | `Bun.sleep` — teste com sleep é teste flaky |
-| Envolver atualização de estado feita fora de evento | `act` | envolver `render`/`userEvent`, que já chamam `act` internamente |
+| Esperar condição que não é "elemento existe" | `await waitFor(() => expect(…))` | `Bun.sleep` — teste com sleep é teste flaky |
+| Envolver atualização de estado feita fora de evento | `act()` | envolver `render`/`userEvent`, que já chamam `act` internamente |
 
 **`userEvent` é assíncrono.** `user.click` devolve Promise, e esquecer o `await` produz asserção que roda antes do re-render. Combinado com `BUN-TEST-06` (asserção em callback sem contagem), é o par de erros mais comum em teste de componente.
 
@@ -189,7 +189,7 @@ echo 'import "./src/Botao.css"; console.log("ok");' > /tmp/probe.ts && bun /tmp/
 Se falhar ou trouxer algo inesperado, o remédio verificado é mapear a extensão para um loader inofensivo:
 
 ```toml
-# bunfig.toml — trata.css como texto em vez de deixar o resultado indefinido
+# bunfig.toml — trata .css como texto em vez de deixar o resultado indefinido
 loader = { ".css" = "text" }
 ```
 
@@ -204,27 +204,27 @@ Isso desativa qualquer asserção sobre classe gerada por CSS Modules — o que,
 O que não vem pronto: a própria doc mostra o preload **registrando stubs**, o que é o reconhecimento de que APIs de layout e de mídia não estão lá.
 
 ```ts
-// test/happydom.ts — depois de GlobalRegistrator.register
+// test/happydom.ts — depois de GlobalRegistrator.register()
 import { jest } from "bun:test";
 
 global.ResizeObserver = class ResizeObserver {
- observe {}
- unobserve {}
- disconnect {}
+  observe() {}
+  unobserve() {}
+  disconnect() {}
 };
 
 Object.defineProperty(window, "matchMedia", {
- writable: true,
- value: jest.fn.mockImplementation((query: string) => ({
- matches: false,
- media: query,
- onchange: null,
- addListener: jest.fn,
- removeListener: jest.fn,
- addEventListener: jest.fn,
- removeEventListener: jest.fn,
- dispatchEvent: jest.fn,
- })),
+  writable: true,
+  value: jest.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
 });
 ```
 
@@ -236,11 +236,11 @@ E o limite que nenhum stub resolve: **nada disso mede.** `getBoundingClientRect`
 
 ## 6. Isolação e o registro do DOM
 
-Sob `--isolate` — implícito em `--parallel` — a fonte declara que, entre arquivos, Bun cria um `globalThis` novo, limpa os registros de módulo, fecha servidores e sockets, e **reexecuta os scripts de preload** ([Bun - Testes - Ciclo de Vida e Isolamento](bun-testes-ciclo-de-vida-e-isolamento.md) § 4). Consequência direta: **`GlobalRegistrator.register` roda uma vez por arquivo de teste**, e cada arquivo ganha um `document` limpo.
+Sob `--isolate` — implícito em `--parallel` — a fonte declara que, entre arquivos, Bun cria um `globalThis` novo, limpa os registros de módulo, fecha servidores e sockets, e **reexecuta os scripts de preload** ([Bun - Testes - Ciclo de Vida e Isolamento](bun-testes-ciclo-de-vida-e-isolamento.md) § 4). Consequência direta: **`GlobalRegistrator.register()` roda uma vez por arquivo de teste**, e cada arquivo ganha um `document` limpo.
 
-O lado bom é grande: o vazamento de DOM entre arquivos — o `getByRole` que encontra dois elementos porque o arquivo anterior não limpou — deixa de ser possível por construção. `cleanup` continua necessário **entre testes do mesmo arquivo** (`BUN-TEST-26`), e é por isso que ele mora no `afterEach` do preload.
+O lado bom é grande: o vazamento de DOM entre arquivos — o `getByRole` que encontra dois elementos porque o arquivo anterior não limpou — deixa de ser possível por construção. `cleanup()` continua necessário **entre testes do mesmo arquivo** (`BUN-TEST-26`), e é por isso que ele mora no `afterEach` do preload.
 
-**O que não foi verificado:** se `GlobalRegistrator.register` é idempotente e qual o custo de repeti-lo por arquivo. A fonte do Bun declara que o preload é reexecutado; o comportamento do registrator sob reexecução é do happy-dom, e não há declaração a respeito. **Meça antes de concluir que `--parallel` acelera uma suíte de DOM:** com muitos arquivos pequenos, o custo de reconstruir o DOM por arquivo pode superar o ganho, e `--parallel --no-isolate` é a alternativa — ao preço de devolver o vazamento entre arquivos do mesmo worker.
+**O que não foi verificado:** se `GlobalRegistrator.register()` é idempotente e qual o custo de repeti-lo por arquivo. A fonte do Bun declara que o preload é reexecutado; o comportamento do registrator sob reexecução é do happy-dom, e não há declaração a respeito. **Meça antes de concluir que `--parallel` acelera uma suíte de DOM:** com muitos arquivos pequenos, o custo de reconstruir o DOM por arquivo pode superar o ganho, e `--parallel --no-isolate` é a alternativa — ao preço de devolver o vazamento entre arquivos do mesmo worker.
 
 ---
 
@@ -248,10 +248,10 @@ O lado bom é grande: o vazamento de DOM entre arquivos — o `getByRole` que en
 
 | Antipadrão | Por que falha | O que fazer |
 | --- | --- | --- |
-| `GlobalRegistrator.register` dentro do arquivo de teste | registra tarde para módulos que checam `typeof window` no topo, e precisa ser repetido em cada arquivo | `[test] preload` — `BUN-TEST-07` |
+| `GlobalRegistrator.register()` dentro do arquivo de teste | registra tarde para módulos que checam `typeof window` no topo, e precisa ser repetido em cada arquivo | `[test] preload` — `BUN-TEST-07` |
 | `import "@testing-library/jest-dom"` e esperar `toHaveTextContent` | o import sozinho não registra matcher em `bun:test`; o matcher não existe em runtime | `expect.extend(matchers)` no preload — `BUN-TEST-12` |
 | Juntar happy-dom e Testing Library num preload só, com import estático | os pacotes inspecionam globais de browser na avaliação, antes do registro | dois preloads, nesta ordem — `BUN-TEST-25` |
-| `@testing-library/react` sem `cleanup` em `afterEach` | o `document` é compartilhado; `getByRole` encontra elementos do teste anterior | `cleanup` + limpar `document.body` — `BUN-TEST-26` |
+| `@testing-library/react` sem `cleanup()` em `afterEach` | o `document` é compartilhado; `getByRole` encontra elementos do teste anterior | `cleanup()` + limpar `document.body` — `BUN-TEST-26` |
 | `user.click(...)` sem `await` | `userEvent` é assíncrono; a asserção roda antes do re-render | `await user.click(...)` — § 3 |
 | `waitFor` + `getBy*` para esperar elemento aparecer | mais verboso e com pior mensagem de erro que a forma pronta | `await screen.findBy*` — § 3 |
 | `await Bun.sleep(300)` para esperar render | teste com sleep é flaky e lento | `findBy*` / `waitFor` — § 3 |
@@ -269,7 +269,7 @@ O lado bom é grande: o vazamento de DOM entre arquivos — o `getByRole` que en
 - [ ] O registro de happy-dom está em `[test] preload`? → `BUN-TEST-07`
 - [ ] Os matchers de `jest-dom` passam por `expect.extend`? → `BUN-TEST-12`
 - [ ] Happy-dom e Testing Library estão em preloads separados, nesta ordem? → `BUN-TEST-25`
-- [ ] Há `cleanup` em `afterEach`? → `BUN-TEST-26`
+- [ ] Há `cleanup()` em `afterEach`? → `BUN-TEST-26`
 - [ ] Todo `userEvent` é aguardado? → § 3
 - [ ] As esperas usam `findBy*`/`waitFor`, nunca `sleep`? → § 3
 - [ ] O componente sob teste recebe configuração por prop, em vez de ler `import.meta.env`? → § 4

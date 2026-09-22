@@ -2,11 +2,11 @@
 titulo: Trunk-based development
 type: Page
 tags:
- - devops
- - version-control
- - git
- - ci-cd
- - trunk-based-development
+  - devops
+  - version-control
+  - git
+  - ci-cd
+  - trunk-based-development
 source: "Atlassian — Trunk-based Development (Kev Zettler)"
 ---
 # Trunk-based development
@@ -70,17 +70,9 @@ Trunk-based development é descrito como o **padrão atual para times de engenha
 
 ## Relacionados
 
--
--
--
--
--
--
--
--
 
 ## Fonte
 
-Atlassian — *Trunk-based development*, por Kev Zettler. Disponível em:
+Atlassian — *Trunk-based development*, por Kev Zettler. Disponível em: 
 https://www.atlassian.com/continuous-delivery/continuous-integration/trunk-based-development
 

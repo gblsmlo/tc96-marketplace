@@ -2,10 +2,10 @@
 titulo: TanStack Router - File-Based Routing
 Link: https://tanstack.com/router/latest/docs/framework/react/routing/file-based-routing
 tags:
- - tanstack-router
- - routing
- - build
- - agent-context
+  - tanstack-router
+  - routing
+  - build
+  - agent-context
 source: "Documentação oficial — https://tanstack.com/router/latest/docs/framework/react/"
 verificado-em: 2026-08-14
 ---
@@ -64,7 +64,7 @@ E o conteúdo mínimo de um arquivo de rota, presente em todos os exemplos ofici
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts/$postId')({
- component: PostComponent,
+  component: PostComponent,
 })
 ```
 
@@ -95,13 +95,13 @@ import react from '@vitejs/plugin-react'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
- plugins: [
- tanstackRouter({
- target: 'react',
- autoCodeSplitting: true,
- }),
- react,
- ],
+  plugins: [
+    tanstackRouter({
+      target: 'react',
+      autoCodeSplitting: true,
+    }),
+    react(),
+  ],
 })
 ```
 
@@ -113,7 +113,7 @@ Alternativa sem bundler: a CLI do TanStack Router, configurada por `tsr.config.j
 
 | ID | Regra |
 | --- | --- |
-| `TSR-FILE-03` | `tanstackRouter` **MUST** vir antes de `@vitejs/plugin-react` no array de `plugins`. |
+| `TSR-FILE-03` | `tanstackRouter()` **MUST** vir antes de `@vitejs/plugin-react` no array de `plugins`. |
 
 ---
 
@@ -123,10 +123,10 @@ Os defaults cobrem o projeto padrão inteiro:
 
 ```json
 {
- "routesDirectory": "./src/routes",
- "generatedRouteTree": "./src/routeTree.gen.ts",
- "routeFileIgnorePrefix": "-",
- "quoteStyle": "single"
+  "routesDirectory": "./src/routes",
+  "generatedRouteTree": "./src/routeTree.gen.ts",
+  "routeFileIgnorePrefix": "-",
+  "quoteStyle": "single"
 }
 ```
 
@@ -175,10 +175,10 @@ Opções completas:
 
 ```ts
 // ERRADO — a transformação do router não roda sobre o output do plugin React
-plugins: [react, tanstackRouter({ target: 'react' })]
+plugins: [react(), tanstackRouter({ target: 'react' })]
 
 // CERTO
-plugins: [tanstackRouter({ target: 'react' }), react]
+plugins: [tanstackRouter({ target: 'react' }), react()]
 ```
 
 **Componente auxiliar dentro de `routes/`**
@@ -205,7 +205,7 @@ src/routes/posts/-PostsTable.tsx
 
 - [ ] Todo arquivo de rota exporta `const Route`? → `TSR-FILE-01`
 - [ ] A convenção assumida bate com `routeToken`/`indexToken`/`routeFileIgnorePrefix` do projeto? → `TSR-FILE-02`
-- [ ] `tanstackRouter` vem antes de `react` no `vite.config.ts`? → `TSR-FILE-03`
+- [ ] `tanstackRouter()` vem antes de `react()` no `vite.config.ts`? → `TSR-FILE-03`
 - [ ] `disableTypes` está `false`? → `TSR-FILE-04`
 - [ ] `routeTree.gen.ts` só mudou por regeneração, nunca por edição manual? → `TSR-FILE-05`
 - [ ] Arquivos auxiliares dentro de `routes/` usam o prefixo de exclusão? → `TSR-ROUTE-13`

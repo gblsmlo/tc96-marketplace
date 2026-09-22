@@ -2,10 +2,10 @@
 titulo: React - Formulários e Actions
 Link: https://react.dev/reference/react/useActionState
 tags:
- - react
- - forms
- - actions
- - agent-context
+  - react
+  - forms
+  - actions
+  - agent-context
 source: "Documentação oficial do React — useActionState, useOptimistic, useFormStatus"
 verificado-em: 2026-08-14
 ---
@@ -33,16 +33,16 @@ const [error, setError] = useState<string | null>(null)
 const [data, setData] = useState<Result | null>(null)
 
 async function handleSubmit(e: React.FormEvent) {
- e.preventDefault
- setIsLoading(true)
- setError(null)
- try {
- setData(await submit(new FormData(e.currentTarget)))
- } catch (err) {
- setError((err as Error).message)
- } finally {
- setIsLoading(false)
- }
+  e.preventDefault()
+  setIsLoading(true)
+  setError(null)
+  try {
+    setData(await submit(new FormData(e.currentTarget)))
+  } catch (err) {
+    setError((err as Error).message)
+  } finally {
+    setIsLoading(false)
+  }
 }
 ```
 
@@ -56,14 +56,14 @@ async function handleSubmit(e: React.FormEvent) {
 
 ```tsx
 <form action={minhaAction}>
- <input name="titulo" />
- <button type="submit">Salvar</button>
+  <input name="titulo" />
+  <button type="submit">Salvar</button>
 </form>
 ```
 
 A função recebe o `FormData` do formulário. O React:
 
-- previne o comportamento padrão automaticamente — **sem `e.preventDefault`**;
+- previne o comportamento padrão automaticamente — **sem `e.preventDefault()`**;
 - envolve a submissão em uma Transition, sem `startTransition` manual;
 - reseta o formulário não controlado após uma Action bem-sucedida.
 
@@ -71,7 +71,7 @@ A função recebe o `FormData` do formulário. O React:
 
 | ID | Regra |
 | --- | --- |
-| `REACT-FORM-01` | Com `<form action>`, **NEVER** chamar `e.preventDefault` — o React já previne. |
+| `REACT-FORM-01` | Com `<form action>`, **NEVER** chamar `e.preventDefault()` — o React já previne. |
 | `REACT-FORM-02` | Campos que a Action lê **MUST** ter `name`; `FormData` é indexado por `name`, não por id nem por estado. |
 
 ---
@@ -95,72 +95,72 @@ import { useActionState, useId } from 'react'
 import { z } from 'zod'
 
 const topicoSchema = z.object({
- titulo: z.string.min(5, 'O título deve ter no mínimo 5 caracteres.'),
+  titulo: z.string().min(5, 'O título deve ter no mínimo 5 caracteres.'),
 })
 
 type FormState = {
- ok: boolean
- message?: string // erro geral (rede, 500)
- fieldErrors?: Record<string, string> // erro por campo
+  ok: boolean
+  message?: string                          // erro geral (rede, 500)
+  fieldErrors?: Record<string, string>      // erro por campo
 }
 
 async function criarTopico(_prev: FormState, formData: FormData): Promise<FormState> {
- // formData.get devolve string | File | null — coagir antes de validar
- const parsed = topicoSchema.safeParse({ titulo: String(formData.get('titulo') ?? '') })
+  // formData.get() devolve string | File | null — coagir antes de validar
+  const parsed = topicoSchema.safeParse({ titulo: String(formData.get('titulo') ?? '') })
 
- if (!parsed.success) {
- // flatten devolve { fieldErrors: Record<string, string[]> } — pegamos a 1ª mensagem
- const { fieldErrors } = z.flattenError(parsed.error)
- return {
- ok: false,
- fieldErrors: Object.fromEntries(
- Object.entries(fieldErrors).map(([campo, msgs]) => [campo, msgs![0]]),
- ),
- }
- }
+  if (!parsed.success) {
+    // flatten() devolve { fieldErrors: Record<string, string[]> } — pegamos a 1ª mensagem
+    const { fieldErrors } = z.flattenError(parsed.error)
+    return {
+      ok: false,
+      fieldErrors: Object.fromEntries(
+        Object.entries(fieldErrors).map(([campo, msgs]) => [campo, msgs![0]]),
+      ),
+    }
+  }
 
- try {
- await api.criarTopico(parsed.data)
- return { ok: true }
- } catch {
- // falha inesperada vira mensagem, não exceção: lançar derrubaria o formulário
- return { ok: false, message: 'Não foi possível salvar. Tente de novo.' }
- }
+  try {
+    await api.criarTopico(parsed.data)
+    return { ok: true }
+  } catch {
+    // falha inesperada vira mensagem, não exceção: lançar derrubaria o formulário
+    return { ok: false, message: 'Não foi possível salvar. Tente de novo.' }
+  }
 }
 
-function NovoTopico {
- const [state, formAction, isPending] = useActionState(criarTopico, { ok: false })
- const id = useId
- const erro = state.fieldErrors?.titulo
+function NovoTopico() {
+  const [state, formAction, isPending] = useActionState(criarTopico, { ok: false })
+  const id = useId()
+  const erro = state.fieldErrors?.titulo
 
- return (
- <form action={formAction}>
- <label htmlFor={`${id}-titulo`}>Título</label>
- <input
- id={`${id}-titulo`}
- name="titulo"
- aria-invalid={!!erro}
- aria-describedby={erro ? `${id}-titulo-erro` : undefined}
- />
- {erro && <p id={`${id}-titulo-erro`} role="alert">{erro}</p>}
+  return (
+    <form action={formAction}>
+      <label htmlFor={`${id}-titulo`}>Título</label>
+      <input
+        id={`${id}-titulo`}
+        name="titulo"
+        aria-invalid={!!erro}
+        aria-describedby={erro ? `${id}-titulo-erro` : undefined}
+      />
+      {erro && <p id={`${id}-titulo-erro`} role="alert">{erro}</p>}
 
- {state.message && <p role="alert">{state.message}</p>}
- {state.ok && <p role="status">Tópico criado.</p>}
+      {state.message && <p role="alert">{state.message}</p>}
+      {state.ok && <p role="status">Tópico criado.</p>}
 
- <button disabled={isPending}>{isPending ? 'Salvando…' : 'Salvar'}</button>
- </form>
- )
+      <button disabled={isPending}>{isPending ? 'Salvando…' : 'Salvar'}</button>
+    </form>
+  )
 }
 ```
 
 Quatro decisões do exemplo que não são óbvias:
 
-- **`String(... ?? '')`** — `formData.get` devolve `string | File | null`. Campo vazio devolve `''`, campo ausente devolve `null`; o schema precisa receber string.
+- **`String(... ?? '')`** — `formData.get()` devolve `string | File | null`. Campo vazio devolve `''`, campo ausente devolve `null`; o schema precisa receber string.
 - **IDs via `useId`** — `aria-describedby` precisa apontar para o parágrafo de erro, e o ID tem que ser estável entre servidor e cliente. Ver `REACT-UTIL-01` em [React - Hooks Utilitários](react-hooks-utilitarios.md).
 - **`role="alert"` para erro, `role="status"` para sucesso** — o primeiro interrompe o leitor de tela, o segundo espera a pausa. Erro de submissão justifica interrupção; confirmação não.
 - **Falha de rede vira `message`, não exceção** — lançar acionaria o Error Boundary e removeria o formulário da tela, junto com o que o usuário digitou.
 
-O padrão-chave: **erro esperado é retornado como estado, não lançado.** Lançar manda o erro para o Error Boundary e derruba a UI do formulário — comportamento errado para "título obrigatório". Ver e `REACT-ASYNC-09`.
+O padrão-chave: **erro esperado é retornado como estado, não lançado.** Lançar manda o erro para o Error Boundary e derruba a UI do formulário — comportamento errado para "título obrigatório". `REACT-ASYNC-09`.
 
 ### Caveats verificados
 
@@ -186,21 +186,21 @@ O padrão-chave: **erro esperado é retornado como estado, não lançado.** Lan�
 ```tsx
 import { useFormStatus } from 'react-dom'
 
-const { pending, data, method, action } = useFormStatus
+const { pending, data, method, action } = useFormStatus()
 ```
 
 Lê o status do `<form>` **ancestral**. Único Hook exportado por `react-dom`.
 
 ```tsx
-function SubmitButton {
- const { pending } = useFormStatus
- return <button disabled={pending}>{pending ? 'Enviando…' : 'Enviar'}</button>
+function SubmitButton() {
+  const { pending } = useFormStatus()
+  return <button disabled={pending}>{pending ? 'Enviando…' : 'Enviar'}</button>
 }
 
 // Precisa estar DENTRO do form, em um componente separado
 <form action={minhaAction}>
- <input name="email" />
- <SubmitButton />
+  <input name="email" />
+  <SubmitButton />
 </form>
 ```
 
@@ -224,25 +224,25 @@ Mostra o resultado esperado **imediatamente**, enquanto a Action está pendente.
 
 ```tsx
 function Mensagens({ mensagens, enviar }: Props) {
- const [otimistas, addOtimista] = useOptimistic(
- mensagens,
- (state: Mensagem[], nova: string) => [...state, { texto: nova, pendente: true }],
- )
+  const [otimistas, addOtimista] = useOptimistic(
+    mensagens,
+    (state: Mensagem[], nova: string) => [...state, { texto: nova, pendente: true }],
+  )
 
- async function action(formData: FormData) {
- const texto = String(formData.get('texto'))
- addOtimista(texto) // aparece na hora
- await enviar(texto) // ao concluir, converge para `mensagens`
- }
+  async function action(formData: FormData) {
+    const texto = String(formData.get('texto'))
+    addOtimista(texto)                 // aparece na hora
+    await enviar(texto)                // ao concluir, converge para `mensagens`
+  }
 
- return (
- <>
- {otimistas.map((m, i) => (
- <p key={i}>{m.texto}{m.pendente && ' (enviando…)'}</p>
- ))}
- <form action={action}><input name="texto" /></form>
- </>
- )
+  return (
+    <>
+      {otimistas.map((m, i) => (
+        <p key={i}>{m.texto}{m.pendente && ' (enviando…)'}</p>
+      ))}
+      <form action={action}><input name="texto" /></form>
+    </>
+  )
 }
 ```
 
@@ -253,7 +253,7 @@ Caveats verificados:
 - o setter **não** pode ser chamado durante o render;
 - não há render extra para "limpar" o otimista — otimista e real convergem no mesmo render.
 
-O rollback é automático: se a Action falha, o estado volta a `value`. Isso é diferente de uma mutation otimista de cache, onde snapshot e rollback são explícitos — ver.
+O rollback é automático: se a Action falha, o estado volta a `value`. Isso é diferente de uma mutation otimista de cache, onde snapshot e rollback são explícitos.
 
 | ID | Regra |
 | --- | --- |
@@ -285,7 +285,7 @@ O rollback é automático: se a Action falha, o estado volta a `value`. Isso é 
 
 | Antipadrão | Correção |
 | --- | --- |
-| `e.preventDefault` com `<form action>` | remover · `REACT-FORM-01` |
+| `e.preventDefault()` com `<form action>` | remover · `REACT-FORM-01` |
 | Campos sem `name` lidos via `FormData` | adicionar `name` · `REACT-FORM-02` |
 | Lançar erro de validação da action | retornar no estado · `REACT-FORM-03` |
 | `useFormStatus` no mesmo componente do `<form>` | extrair componente filho · `REACT-FORM-05` |

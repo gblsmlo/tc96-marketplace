@@ -2,11 +2,11 @@
 titulo: Storybook - Configuração e Builder
 Link: https://storybook.js.org/docs/api/main-config/main-config
 tags:
- - storybook
- - vite
- - monorepo
- - configuracao
- - agent-context
+  - storybook
+  - vite
+  - monorepo
+  - configuracao
+  - agent-context
 source: "Documentação oficial do Storybook — main.ts config, Styling and CSS, Migration guide, frameworks"
 verificado-em: 2026-08-19
 ---
@@ -31,18 +31,18 @@ A divisão importa porque é a fronteira de o que pode ser importado. `main.ts` 
 ### 1.1 `main.ts` mínimo, e o que cada campo faz
 
 ```ts
-//.storybook/main.ts
+// .storybook/main.ts
 import type { StorybookConfig } from '@storybook/tanstack-react';
 
 const config: StorybookConfig = {
- framework: '@storybook/tanstack-react',
- stories: [
- '../../../packages/ui/src/**/*.stories.@(ts|tsx)',
- '../../../packages/ui/src/**/*.mdx',
- '../../web/src/**/*.stories.@(ts|tsx)',
- ],
- addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-vitest'],
- staticDirs: ['../public'],
+  framework: '@storybook/tanstack-react',
+  stories: [
+    '../../../packages/ui/src/**/*.stories.@(ts|tsx)',
+    '../../../packages/ui/src/**/*.mdx',
+    '../../web/src/**/*.stories.@(ts|tsx)',
+  ],
+  addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-vitest'],
+  staticDirs: ['../public'],
 };
 
 export default config;
@@ -51,7 +51,7 @@ export default config;
 - **`framework`** é obrigatório. Sem ele o Storybook não sobe (`SB-CFG-01`).
 - **`stories`** são globs **relativos ao diretório `.storybook/`**, não à raiz do pacote. Num monorepo isso produz os `../../../` acima — feio, e correto. Glob que não casa não dá erro: dá sidebar vazia (`SB-CFG-02`).
 - **`addons`** são pacotes. Em 10.x, `@storybook/addon-docs` é explícito — não existe mais um pacote guarda-chuva de "essentials" a puxar tudo.
-- **`staticDirs`** serve arquivos como estáticos, e é relativo ao `.storybook/` como os globs de `stories`. É o campo que o MSW exige para achar o service worker (`SB-CFG-05`) — e o `npx msw init./public` que o gera roda a partir da raiz do pacote, não do `.storybook/`.
+- **`staticDirs`** serve arquivos como estáticos, e é relativo ao `.storybook/` como os globs de `stories`. É o campo que o MSW exige para achar o service worker (`SB-CFG-05`) — e o `npx msw init ./public` que o gera roda a partir da raiz do pacote, não do `.storybook/`.
 
 ### 1.2 Restrições de plataforma da linha 10
 
@@ -75,10 +75,10 @@ O campo aceita string ou `{ name, options }`:
 
 ```ts
 framework: {
- name: '@storybook/react-vite',
- options: {
- builder: { /* opções do builder Vite */ },
- },
+  name: '@storybook/react-vite',
+  options: {
+    builder: { /* opções do builder Vite */ },
+  },
 },
 ```
 
@@ -95,16 +95,16 @@ npm view storybook dist-tags
 ### 1.4 `preview.tsx` mínimo
 
 ```tsx
-//.storybook/preview.tsx
+// .storybook/preview.tsx
 import type { Preview } from '@storybook/tanstack-react';
 import '../../../packages/ui/src/styles/global.css';
 
 const preview = {
- parameters: {
- layout: 'centered',
- a11y: { test: 'error' },
- },
- tags: ['autodocs'],
+  parameters: {
+    layout: 'centered',
+    a11y: { test: 'error' },
+  },
+  tags: ['autodocs'],
 } satisfies Preview;
 
 export default preview;
@@ -170,12 +170,12 @@ Existe `@storybook/addon-themes` com decorators prontos; a página de estilo lin
 
 ```ts
 const config: StorybookConfig = {
- framework: '@storybook/tanstack-react',
- stories: [/* … */],
- viteFinal: async (config) => {
- // modificar e devolver a config do Vite
- return config;
- },
+  framework: '@storybook/tanstack-react',
+  stories: [/* … */],
+  viteFinal: async (config) => {
+    // modificar e devolver a config do Vite
+    return config;
+  },
 };
 ```
 
@@ -194,8 +194,8 @@ A saída que mantém `SB-CFG-06` cumprível é **extrair a config compartilhada 
 import type { UserConfig } from 'vite';
 
 export const baseConfig: UserConfig = {
- resolve: { alias: { /* … */ } },
- plugins: [ /* … */ ],
+  resolve: { alias: { /* … */ } },
+  plugins: [ /* … */ ],
 };
 ```
 
@@ -237,11 +237,11 @@ O desenho está em [Monorepo com Bun - estrutura e tooling](../pages/monorepo-co
 
 ```json
 {
- "scripts": {
- "storybook": "storybook dev -p 6006",
- "build-storybook": "storybook build",
- "test-storybook": "vitest run --project=storybook"
- }
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test-storybook": "vitest run --project=storybook"
+  }
 }
 ```
 

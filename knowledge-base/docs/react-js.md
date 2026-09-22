@@ -2,10 +2,10 @@
 titulo: React.js
 Link: https://react.dev/reference/react
 tags:
- - react
- - frontend
- - reference
- - agent-context
+  - react
+  - frontend
+  - reference
+  - agent-context
 source: "Documentação oficial do React — react.dev/reference"
 verificado-em: 2026-08-14
 ---
@@ -30,13 +30,13 @@ Leia a seção 2 (modelo mental) uma vez. Depois use a seção 4 como índice e 
 
 Carregue nesta ordem, parando assim que tiver o suficiente:
 
-| Passo | Carregar | Quando |
+| Passo | Carregar                         | Quando                                                                    |
 | ----- | -------------------------------- | ------------------------------------------------------------------------- |
-| 1 | Esta nota (seções 2, 5, 6) | Sempre que a tarefa envolver React |
-| 2 | [React - Rules of React](react-rules-of-react.md) | Sempre que for **escrever ou modificar** componentes/Hooks |
-| 3 | O satélite do domínio específico | Quando a tarefa toca uma API concreta — use a seção 4 para descobrir qual |
-| 4 | [React - Patterns](react-patterns.md) | Decisões de estrutura: onde mora o estado, como compor, o que extrair |
-| 5 | [React - Hooks](react-hooks.md) | Referência de assinatura, parâmetros e caveats de um Hook |
+| 1     | Esta nota (seções 2, 5, 6)       | Sempre que a tarefa envolver React                                        |
+| 2     | [React - Rules of React](react-rules-of-react.md)       | Sempre que for **escrever ou modificar** componentes/Hooks                |
+| 3     | O satélite do domínio específico | Quando a tarefa toca uma API concreta — use a seção 4 para descobrir qual |
+| 4     | [React - Patterns](react-patterns.md)             | Decisões de estrutura: onde mora o estado, como compor, o que extrair     |
+| 5     | [React - Hooks](react-hooks.md)                | Referência de assinatura, parâmetros e caveats de um Hook                 |
 
 **Regra de economia de contexto:** nunca carregue todos os satélites.
 
@@ -201,25 +201,25 @@ Duas perguntas, nesta ordem: **qual mecanismo** e **em qual componente**. Pular 
 ```
 O dado vem do servidor?
 ├── SIM → não é estado de cliente. Não use useState como fonte de verdade.
-│ → TanStack Query. Ver § 8
+│         → TanStack Query. Ver § 8
 └── NÃO
- └── É derivável de props/estado que já existem?
- ├── SIM → calcule no render. Não crie estado.
- │ Caro de verdade (medido)? → useMemo
- │ →
- └── NÃO
- └── Mudá-lo deve redesenhar a UI?
- ├── NÃO → useRef
- └── SIM
- ├── Pertence à URL (filtro, aba, paginação,
- │ qualquer coisa que deva sobreviver a
- │ refresh e ser compartilhável por link)
- │ → estado de rota. Ver § 8
- ├── Vem de uma store fora do React
- │ → useSyncExternalStore
- ├── Várias transições relacionadas, ou estados
- │ que não podem coexistir → useReducer
- └── Caso geral → useState
+    └── É derivável de props/estado que já existem?
+        ├── SIM → calcule no render. Não crie estado.
+        │         Caro de verdade (medido)? → useMemo
+        │ →
+        └── NÃO
+            └── Mudá-lo deve redesenhar a UI?
+                ├── NÃO → useRef
+                └── SIM
+                    ├── Pertence à URL (filtro, aba, paginação,
+                    │   qualquer coisa que deva sobreviver a
+                    │   refresh e ser compartilhável por link)
+                    │   → estado de rota. Ver § 8
+                    ├── Vem de uma store fora do React
+                    │   → useSyncExternalStore
+                    ├── Várias transições relacionadas, ou estados
+                    │   que não podem coexistir → useReducer
+                    └── Caso geral → useState
 ```
 
 **B. Em qual componente?**
@@ -228,10 +228,10 @@ O dado vem do servidor?
 Quantos componentes leem este estado?
 ├── Um → nele mesmo (colocation)
 ├── Vários irmãos → no ancestral comum MAIS PRÓXIMO, e pare ali
-│ └── A subida está atravessando níveis que não usam o dado?
-│ → composição (children/slots) antes de Context
+│   └── A subida está atravessando níveis que não usam o dado?
+│       → composição (children/slots) antes de Context
 └── A árvore inteira, leitura frequente e escrita rara → Context
- └── Escrita frequente? → store externa
+    └── Escrita frequente? → store externa
 ```
 
 E o derivado consumido por mais de um irmão: **calcule uma vez no dono do estado** e passe o resultado; não repita o mesmo `filter` em cada filho. Detalhe e exemplos em [React - Patterns](react-patterns.md) § 2.
@@ -245,15 +245,15 @@ O código responde a uma interação específica do usuário?
 Não. Então: existe um sistema externo a sincronizar
 (DOM não gerenciado, subscription, timer, socket, analytics)?
 ├── NÃO → provavelmente não deveria existir.
-│ Estado derivado → calcule no render
-│ Reagir a mudança de props → calcule ou use key
-│ Buscar dados → biblioteca de data fetching
+│         Estado derivado → calcule no render
+│         Reagir a mudança de props → calcule ou use key
+│         Buscar dados → biblioteca de data fetching
 └── SIM
- ├── Precisa medir layout antes do paint → useLayoutEffect
- ├── Injeta CSS (biblioteca) → useInsertionEffect
- └── Caso geral → useEffect
- └── Lê um valor que NÃO deve reexecutar o Effect
- → extraia com useEffectEvent
+    ├── Precisa medir layout antes do paint → useLayoutEffect
+    ├── Injeta CSS (biblioteca) → useInsertionEffect
+    └── Caso geral → useEffect
+        └── Lê um valor que NÃO deve reexecutar o Effect
+            → extraia com useEffectEvent
 ```
 
 ### A UI trava durante uma atualização
@@ -262,28 +262,28 @@ Não. Então: existe um sistema externo a sincronizar
 
 ```
 0. MEDIU? Profiler ou DevTools. Sem medida, pare aqui. (REACT-PERF-01)
- └── React Compiler ativo no projeto? Então memoização manual
- é redundante — resolva pelos passos 1-3. (REACT-PERF-02)
+   └── React Compiler ativo no projeto? Então memoização manual
+       é redundante — resolva pelos passos 1-3. (REACT-PERF-02)
 
 1. Está criando estado desnecessário? → calcule no render
 2. O estado está alto demais na árvore? → desça ao dono real
 3. Composição resolve? → mover estado para componente menor,
- ou passar children como prop, elimina re-render SEM memoizar
+   ou passar children como prop, elimina re-render SEM memoizar
 
 4. Ainda lento? Quantos nós estão sendo renderizados?
- ├── Milhares de linhas/itens no DOM
- │ → o custo é volume, não cálculo. Concorrência NÃO resolve.
- │ → reduza o que é renderizado: virtualização ou paginação
- └── Poucos nós, mas cálculo pesado a cada tecla/atualização
- ├── Quero despriorizar a ATUALIZAÇÃO que eu disparo
- │ ├── e preciso de flag de pendência → useTransition
- │ └── e estou fora de um componente → startTransition
- └── Quero que o CONSUMIDOR pesado fique para trás enquanto
- o input responde na hora → useDeferredValue
- (+ memo no cálculo derivado, senão o trabalho roda igual)
+   ├── Milhares de linhas/itens no DOM
+   │   → o custo é volume, não cálculo. Concorrência NÃO resolve.
+   │   → reduza o que é renderizado: virtualização ou paginação
+   └── Poucos nós, mas cálculo pesado a cada tecla/atualização
+       ├── Quero despriorizar a ATUALIZAÇÃO que eu disparo
+       │   ├── e preciso de flag de pendência → useTransition
+       │   └── e estou fora de um componente → startTransition
+       └── Quero que o CONSUMIDOR pesado fique para trás enquanto
+           o input responde na hora → useDeferredValue
+           (+ memo no cálculo derivado, senão o trabalho roda igual)
 
 5. Re-render desnecessário de filho, confirmado no Profiler
- → memo + estabilidade de props (useCallback / useMemo)
+   → memo + estabilidade de props (useCallback / useMemo)
 ```
 
 > **`useTransition` × `useDeferredValue`.** O critério da documentação é o acesso ao `set`: *"You can wrap an update into a Transition only if you have access to the `set` function of that state. If you want to start a Transition in response to some prop or a custom Hook value, try `useDeferredValue` instead."* Sem acesso ao `set` — o valor chega por prop ou de um Hook de terceiro — só resta `useDeferredValue`.
@@ -298,11 +298,11 @@ Componente pesado a carregar sob demanda → lazy + <Suspense>
 Promise criada no servidor, lida no cliente → use + <Suspense>
 Submissão de formulário com pendência e erro → useActionState
 Feedback imediato antes da resposta chegar
- ├── o dado vive no cache de uma query → mutation otimista, NÃO useOptimistic
- │ →
- └── não vive → useOptimistic
+  ├── o dado vive no cache de uma query → mutation otimista, NÃO useOptimistic
+  │ →
+  └── não vive → useOptimistic
 Falha de render a isolar → Error Boundary
- →
+  →
 ```
 
 > A ramificação do feedback otimista importa: `useOptimistic` e mutation otimista resolvem o mesmo problema em camadas diferentes, e usar os dois no mesmo dado produz duas fontes de verdade divergindo (`REACT-FORM-07`).
@@ -385,20 +385,20 @@ Como uma skill de React deve consumir esta doc.
 ### O que uma skill de React deve carregar
 
 ```
-SEMPRE: docs/React.js.md § 2 (modelo mental)
- docs/React.js.md § 5 (árvores de decisão)
- docs/React.js.md § 6 + § 6.1 (regras normativas e críticas)
+SEMPRE:   docs/React.js.md § 2 (modelo mental)
+          docs/React.js.md § 5 (árvores de decisão)
+          docs/React.js.md § 6 + § 6.1 (regras normativas e críticas)
 
 AO ESCREVER/EDITAR componentes:
- docs/React - Rules of React.md
+          docs/React - Rules of React.md
 
 SOB DEMANDA, via § 4 (mapa da API):
- o satélite do domínio tocado pela tarefa
+          o satélite do domínio tocado pela tarefa
 
 EM DECISÃO DE ESTRUTURA:
- docs/React - Patterns.md
+          docs/React - Patterns.md
 
-NUNCA: todos os satélites de uma vez
+NUNCA:    todos os satélites de uma vez
 ```
 
 ### Como citar

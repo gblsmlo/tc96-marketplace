@@ -2,9 +2,9 @@
 titulo: Bun - Testes - Escrita e Asserções
 Link: https://bun.com/docs/test/writing-tests
 tags:
- - bun
- - testing
- - agent-context
+  - bun
+  - testing
+  - agent-context
 source: "Documentação oficial — https://bun.com/docs/test/writing-tests, /snapshots"
 verificado-em: 2026-08-20
 ---
@@ -32,14 +32,14 @@ Daí o critério que organiza o resto: cada API abaixo é apresentada com **o qu
 ```ts
 import { test, describe, expect } from "bun:test";
 
-test("soma dois inteiros", => {
- expect(2 + 2).toBe(4);
+test("soma dois inteiros", () => {
+  expect(2 + 2).toBe(4);
 });
 
-describe("calculadora de frete", => {
- test("cobra por faixa de peso", => {
- expect(frete({ peso: 1200 })).toBe(2490);
- });
+describe("calculadora de frete", () => {
+  test("cobra por faixa de peso", () => {
+    expect(frete({ peso: 1200 })).toBe(2490);
+  });
 });
 ```
 
@@ -48,9 +48,9 @@ describe("calculadora de frete", => {
 **Assíncrono: `async`/`await`, e só.**
 
 ```ts
-test("busca o pedido", async => {
- const pedido = await repo.buscar("p-1");
- expect(pedido.status).toBe("pago");
+test("busca o pedido", async () => {
+  const pedido = await repo.buscar("p-1");
+  expect(pedido.status).toBe("pago");
 });
 ```
 
@@ -65,18 +65,18 @@ O parâmetro `done` existe por compatibilidade — e a fonte declara a armadilha
 ## 3. Timeout, `retry` e `repeats`
 
 ```ts
-test("operação lenta", async => {
- expect(await operacaoLenta).toBe(42);
-}, 500); // terceiro argumento: ms
+test("operação lenta", async () => {
+  expect(await operacaoLenta()).toBe(42);
+}, 500);                                   // terceiro argumento: ms
 
-test("requisição instável", async => {
- const r = await fetch("https://exemplo.com/api");
- expect(r.ok).toBe(true);
+test("requisição instável", async () => {
+  const r = await fetch("https://exemplo.com/api");
+  expect(r.ok).toBe(true);
 }, { retry: 3 });
 
-test("garante estabilidade", => {
- expect(Math.random).toBeLessThan(1);
-}, { repeats: 20 }); // roda 21 vezes: 1 + 20
+test("garante estabilidade", () => {
+  expect(Math.random()).toBeLessThan(1);
+}, { repeats: 20 });                       // roda 21 vezes: 1 + 20
 ```
 
 O que a fonte declara, e que muda como se usa:
@@ -127,8 +127,8 @@ Onde cada um pertence:
 
 ```ts
 // bug conhecido em ponto flutuante — quero ser avisado se for corrigido
-test.failing("soma decimal exata", => {
- expect(0.1 + 0.2).toBe(0.3);
+test.failing("soma decimal exata", () => {
+  expect(0.1 + 0.2).toBe(0.3);
 });
 ```
 
@@ -145,17 +145,17 @@ test.failing("soma decimal exata", => {
 
 ```ts
 test.each([
- [1, 2, 3],
- [3, 4, 7],
+  [1, 2, 3],
+  [3, 4, 7],
 ])("soma(%p, %p) = %p", (a, b, esperado) => {
- expect(a + b).toBe(esperado);
+  expect(a + b).toBe(esperado);
 });
 
 test.each([
- { peso: 500, faixa: "leve", valor: 1490 },
- { peso: 12000, faixa: "pesada", valor: 4990 },
+  { peso: 500, faixa: "leve", valor: 1490 },
+  { peso: 12000, faixa: "pesada", valor: 4990 },
 ])("frete de $peso g é $valor", ({ peso, valor }) => {
- expect(frete({ peso })).toBe(valor);
+  expect(frete({ peso })).toBe(valor);
 });
 ```
 
@@ -196,7 +196,7 @@ Com objetos, `$propriedade` interpola pelo nome — é o que torna o título leg
 | Snapshot | `.toMatchSnapshot`, `.toMatchInlineSnapshot`, `.toThrowErrorMatchingSnapshot`, `.toThrowErrorMatchingInlineSnapshot` |
 | Utilitários | `expect.extend`, `expect.anything`, `expect.any`, `expect.assertions`, `expect.hasAssertions` |
 
-**Não implementado:** `expect.addSnapshotSerializer`. Serializador customizado de snapshot não existe — o que limita snapshot a valores que o formatador default representa bem (§ 9).
+**Não implementado:** `expect.addSnapshotSerializer()`. Serializador customizado de snapshot não existe — o que limita snapshot a valores que o formatador default representa bem (§ 9).
 
 **A compatibilidade com Jest não é total, e a fonte diz isso**: *"Bun aims for compatibility with Jest, but not everything is implemented"*, com uma [issue de rastreamento](https://github.com/oven-sh/bun/issues/1825) citada como referência de estado. "Existe no Jest" não é evidência de que existe aqui — conferir antes de usar é a invariante do [Bun](bun.md) § 7.
 
@@ -213,34 +213,34 @@ A diferença que morde: `expect({ a: 1, b: undefined }).toEqual({ a: 1 })` **pas
 ### 6.3 `.toThrow` e o teste de erro
 
 ```ts
-expect( => validar(pedidoInvalido)).toThrow(ValidacaoError);
-expect( => validar(pedidoInvalido)).toThrow(/cep/i);
+expect(() => validar(pedidoInvalido)).toThrow(ValidacaoError);
+expect(() => validar(pedidoInvalido)).toThrow(/cep/i);
 await expect(cobrar(pedidoInvalido)).rejects.toThrow(PagamentoRecusado);
 ```
 
 Três formas, e a terceira é a que mais falta em código gerado: para função assíncrona, `.rejects` é o caminho — envolver em `try/catch` funciona, mas exige contagem de asserções (§ 7) para não passar em silêncio.
 
-**`.toThrow` sem argumento aceita qualquer erro**, inclusive o `TypeError` que aparece quando você quebrou a chamada. Passar a classe ou a mensagem é o que faz o teste afirmar algo.
+**`.toThrow()` sem argumento aceita qualquer erro**, inclusive o `TypeError` que aparece quando você quebrou a chamada. Passar a classe ou a mensagem é o que faz o teste afirmar algo.
 
 ---
 
 ## 7. Contagem de asserções: o antídoto do falso positivo
 
 ```ts
-test("propaga o erro do gateway", async => {
- expect.assertions(1); // exatamente uma asserção deve rodar
- try {
- await cobrar(pedidoInvalido);
- } catch (e) {
- expect(e).toBeInstanceOf(PagamentoRecusado);
- }
+test("propaga o erro do gateway", async () => {
+  expect.assertions(1);                        // exatamente uma asserção deve rodar
+  try {
+    await cobrar(pedidoInvalido);
+  } catch (e) {
+    expect(e).toBeInstanceOf(PagamentoRecusado);
+  }
 });
 
-test("chama o callback de progresso", async => {
- expect.hasAssertions; // ao menos uma
- await enviar(arquivo, (pct) => {
- expect(pct).toBeGreaterThanOrEqual(0);
- });
+test("chama o callback de progresso", async () => {
+  expect.hasAssertions();                      // ao menos uma
+  await enviar(arquivo, (pct) => {
+    expect(pct).toBeGreaterThanOrEqual(0);
+  });
 });
 ```
 
@@ -250,7 +250,7 @@ Onde ela é obrigatória: toda vez que a asserção está dentro de `catch`, de 
 
 | ID | Regra |
 | --- | --- |
-| `BUN-TEST-06` | Teste cuja asserção vive em `catch`, callback ou branch condicional **MUST** declarar `expect.assertions(n)` ou `expect.hasAssertions`. |
+| `BUN-TEST-06` | Teste cuja asserção vive em `catch`, callback ou branch condicional **MUST** declarar `expect.assertions(n)` ou `expect.hasAssertions()`. |
 
 ---
 
@@ -263,18 +263,18 @@ Onde ela é obrigatória: toda vez que a asserção está dentro de `catch`, de 
 import { expect } from "bun:test";
 
 expect.extend({
- toBeCentavos(recebido: unknown) {
- const ok = Number.isInteger(recebido) && (recebido as number) >= 0;
- return {
- pass: ok,
- message: =>
- `esperava inteiro não negativo em centavos, recebi ${JSON.stringify(recebido)}`,
- };
- },
+  toBeCentavos(recebido: unknown) {
+    const ok = Number.isInteger(recebido) && (recebido as number) >= 0;
+    return {
+      pass: ok,
+      message: () =>
+        `esperava inteiro não negativo em centavos, recebi ${JSON.stringify(recebido)}`,
+    };
+  },
 });
 ```
 
-Um matcher próprio vale a pena quando a mesma asserção composta aparece em muitos testes **e** a mensagem de falha default não diz o que está errado. O ganho real é a mensagem: `expect(valor).toBeCentavos` falha explicando o domínio, enquanto três `expect` encadeados falham explicando aritmética.
+Um matcher próprio vale a pena quando a mesma asserção composta aparece em muitos testes **e** a mensagem de falha default não diz o que está errado. O ganho real é a mensagem: `expect(valor).toBeCentavos()` falha explicando o domínio, enquanto três `expect` encadeados falham explicando aritmética.
 
 O mesmo mecanismo é o que registra os matchers de `@testing-library/jest-dom` — e ali ele não é conveniência, é obrigatório (`BUN-TEST-12`, em [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 2).
 
@@ -283,9 +283,9 @@ O mesmo mecanismo é o que registra os matchers de `@testing-library/jest-dom` �
 ```ts
 import { expectTypeOf } from "bun:test";
 
-expectTypeOf<string>.toEqualTypeOf<string>;
-expectTypeOf(saudar).parameters.toEqualTypeOf<[string]>;
-expectTypeOf(Promise.resolve(42)).resolves.toBeNumber;
+expectTypeOf<string>().toEqualTypeOf<string>();
+expectTypeOf(saudar).parameters.toEqualTypeOf<[string]>();
+expectTypeOf(Promise.resolve(42)).resolves.toBeNumber();
 ```
 
 A API é compatível com a do Vitest e é **no-op em runtime**: um arquivo inteiro de `expectTypeOf` passa em `bun test` sem checar tipo nenhum. A verificação acontece em `tsc --noEmit`, num passo separado — a própria fonte instrui `bunx tsc --noEmit`.
@@ -301,8 +301,8 @@ Isso não desmerece a API: escrever expectativa de tipo *no arquivo de teste* ma
 ## 9. Snapshots
 
 ```ts
-test("serializa o pedido para o gateway", => {
- expect(montarPayload(pedido)).toMatchSnapshot;
+test("serializa o pedido para o gateway", () => {
+  expect(montarPayload(pedido)).toMatchSnapshot();
 });
 ```
 
@@ -312,15 +312,15 @@ Na primeira execução, Bun grava em `__snapshots__/<arquivo>.snap`, ao lado do 
 projeto/
 ├── pedido.test.ts
 └── __snapshots__/
- └── pedido.test.ts.snap
+    └── pedido.test.ts.snap
 ```
 
 | Matcher | Onde grava |
 | --- | --- |
-| `toMatchSnapshot` | `__snapshots__/*.snap` |
-| `toMatchInlineSnapshot` | dentro do próprio arquivo de teste, inserido automaticamente |
-| `toThrowErrorMatchingSnapshot` | arquivo `.snap`, com a mensagem do erro |
-| `toThrowErrorMatchingInlineSnapshot` | inline |
+| `toMatchSnapshot()` | `__snapshots__/*.snap` |
+| `toMatchInlineSnapshot()` | dentro do próprio arquivo de teste, inserido automaticamente |
+| `toThrowErrorMatchingSnapshot()` | arquivo `.snap`, com a mensagem do erro |
+| `toThrowErrorMatchingInlineSnapshot()` | inline |
 
 **Inline × arquivo:** inline serve para valor pequeno que você quer ver ao lado da asserção (uma mensagem de erro, um objeto de três chaves). Arquivo serve para payload grande — e paga o preço de o diff ficar longe do teste.
 
@@ -328,12 +328,12 @@ projeto/
 
 ```ts
 expect(usuario).toMatchSnapshot({
- id: expect.any(String),
- criadoEm: expect.any(String),
+  id: expect.any(String),
+  criadoEm: expect.any(String),
 });
 ```
 
-Sem property matchers, um `id` aleatório ou um `new Date` fazem o snapshot falhar em **toda** execução. O que acontece na prática não é o time consertar o teste: é o time aprender a rodar `-u` por reflexo — e a partir daí o snapshot deixa de verificar qualquer coisa.
+Sem property matchers, um `id` aleatório ou um `new Date()` fazem o snapshot falhar em **toda** execução. O que acontece na prática não é o time consertar o teste: é o time aprender a rodar `-u` por reflexo — e a partir daí o snapshot deixa de verificar qualquer coisa.
 
 ### `--update-snapshots` é comando de pessoa
 
@@ -359,10 +359,10 @@ E a outra metade: `__snapshots__/` **versionado**. Snapshot fora do repositório
 | `test.skip` para bug conhecido | o teste some do relatório e ninguém percebe quando o bug é corrigido | `test.failing` — `BUN-TEST-11` |
 | `test.only` deixado no código "porque desabilita o resto" | sem `--only` não filtra nada; se o CI passar a flag, o resto da suíte desaparece | `-t "nome"` localmente, e não commitar `.only` — `BUN-TEST-08` |
 | `{ retry: 2, repeats: 5 }` no mesmo teste | a fonte declara a combinação inválida | escolher um — `BUN-TEST-16` |
-| `.toThrow` sem argumento | aceita qualquer erro, inclusive o `TypeError` de você ter quebrado a chamada | passar a classe ou a mensagem |
-| `try/catch` para testar rejeição de Promise | exige contagem de asserções para não passar em silêncio | `await expect(fn).rejects.toThrow(X)` |
+| `.toThrow()` sem argumento | aceita qualquer erro, inclusive o `TypeError` de você ter quebrado a chamada | passar a classe ou a mensagem |
+| `try/catch` para testar rejeição de Promise | exige contagem de asserções para não passar em silêncio | `await expect(fn()).rejects.toThrow(X)` |
 | `expectTypeOf` como se verificasse em runtime | é no-op; o arquivo passa sem checar tipo nenhum | `tsc --noEmit` em passo separado — `BUN-TEST-18` |
-| `toMatchSnapshot` sobre objeto com `id` aleatório ou `Date` | falha em toda execução, e o time aprende a rodar `-u` por reflexo | property matchers — `BUN-TEST-19` |
+| `toMatchSnapshot()` sobre objeto com `id` aleatório ou `Date` | falha em toda execução, e o time aprende a rodar `-u` por reflexo | property matchers — `BUN-TEST-19` |
 | `-u` no comando de teste do CI | o snapshot passa a registrar qualquer saída, inclusive a regressão | `-u` é comando de pessoa, e o diff vai para o PR — `BUN-TEST-05` |
 | `__snapshots__/` no `.gitignore` | é gerado na primeira execução de cada máquina e passa sempre | versionar — `BUN-TEST-05` |
 | `timeout: 0` num teste de CI | troca uma falha por um job pendurado | corrigir a causa (quase sempre `await` faltando) |

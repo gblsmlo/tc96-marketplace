@@ -2,11 +2,11 @@
 titulo: Playwright - Debug e Trace
 Link: https://playwright.dev/docs/trace-viewer
 tags:
- - playwright
- - testing
- - debugging
- - trace
- - agent-context
+  - playwright
+  - testing
+  - debugging
+  - trace
+  - agent-context
 source: "Documentação oficial do Playwright — Trace viewer, UI Mode, Debugging Tests, Test generator"
 verificado-em: 2026-08-20
 ---
@@ -23,9 +23,9 @@ verificado-em: 2026-08-20
 
 ```ts
 use: {
- trace: 'on-first-retry',
- screenshot: 'only-on-failure',
- video: 'retain-on-failure',
+  trace: 'on-first-retry',
+  screenshot: 'only-on-failure',
+  video: 'retain-on-failure',
 }
 ```
 
@@ -61,7 +61,7 @@ Vídeo é inferior ao trace para diagnóstico — não tem DOM, nem rede, nem lo
 
 ```ts
 await context.tracing.start({ screenshots: true, snapshots: true });
-const page = await context.newPage;
+const page = await context.newPage();
 await page.goto('/');
 await context.tracing.stop({ path: 'trace.zip' });
 ```
@@ -70,12 +70,12 @@ await context.tracing.stop({ path: 'trace.zip' });
 
 ```ts
 try {
- await context.tracing.start({ screenshots: true, snapshots: true });
- // … setup …
- await context.tracing.stop({ path: './test-results/setup-trace.zip' });
+  await context.tracing.start({ screenshots: true, snapshots: true });
+  // … setup …
+  await context.tracing.stop({ path: './test-results/setup-trace.zip' });
 } catch (erro) {
- await context.tracing.stop({ path: './test-results/failed-setup-trace.zip' });
- throw erro;
+  await context.tracing.stop({ path: './test-results/failed-setup-trace.zip' });
+  throw erro;
 }
 ```
 
@@ -86,7 +86,7 @@ try {
 ```bash
 npx playwright show-trace test-results/…/trace.zip
 npx playwright show-trace https://exemplo.com/trace.zip
-npx playwright show-report # e clicar no trace anexado
+npx playwright show-report          # e clicar no trace anexado
 ```
 
 Ou arrastar o `.zip` em **[trace.playwright.dev](https://trace.playwright.dev)** — é uma PWA, o arquivo não sai da máquina.
@@ -122,7 +122,7 @@ As abas, e o que cada uma responde:
 
 > O passo 2 é o que o trace tem e nenhum `console.log` dá. "Element intercepts pointer events" diz exatamente que há um overlay — e é a diferença entre remover o overlay e aplicar `force: true` sobre um bug real (`PW-ACT-01`).
 
-**`locator.describe`** melhora essa leitura, especialmente para um agente que vai processar o trace depois:
+**`locator.describe()`** melhora essa leitura, especialmente para um agente que vai processar o trace depois:
 
 ```ts
 page.getByRole('row').filter({ hasText: 'NF-0042' }).describe('linha da nota em disputa');
@@ -134,7 +134,7 @@ page.getByRole('row').filter({ hasText: 'NF-0042' }).describe('linha da nota em 
 
 ```bash
 npx playwright test --ui
-npx playwright test --ui-host=0.0.0.0 # Docker / Codespaces
+npx playwright test --ui-host=0.0.0.0                 # Docker / Codespaces
 npx playwright test --ui-port=8080 --ui-host=0.0.0.0
 ```
 
@@ -153,24 +153,24 @@ npx playwright test --ui-port=8080 --ui-host=0.0.0.0
 ## 5. Depurar ao vivo
 
 ```bash
-npx playwright test --debug # Inspector + browser
-npx playwright test pedidos.spec.ts:42 --debug # um teste
+npx playwright test --debug                       # Inspector + browser
+npx playwright test pedidos.spec.ts:42 --debug     # um teste
 npx playwright test --project=chromium --debug
-PWDEBUG=console npx playwright test # helpers no console do DevTools
-DEBUG=pw:api npx playwright test # log verboso da API
+PWDEBUG=console npx playwright test               # helpers no console do DevTools
+DEBUG=pw:api npx playwright test                  # log verboso da API
 ```
 
 ```ts
-await page.pause; // breakpoint que abre o Inspector
+await page.pause();      // breakpoint que abre o Inspector
 ```
 
-Com `PWDEBUG=console` e um `page.pause`, o console do browser ganha um objeto `playwright`:
+Com `PWDEBUG=console` e um `page.pause()`, o console do browser ganha um objeto `playwright`:
 
 ```js
 playwright.$('.seletor')
 playwright.locator('.seletor')
 playwright.inspect('.seletor')
-playwright.selector($0) // gera locator para o elemento selecionado no Elements
+playwright.selector($0)      // gera locator para o elemento selecionado no Elements
 ```
 
 > **`--debug` implica `timeout=0` e `workers=1`** (`PW-DBG-02`). Ele não é modo de execução: é modo de inspeção. Medir tempo nele, ou concluir que "sob debug passa, então não é flake", é conclusão inválida — o timeout desligado é exatamente o que faz passar.
@@ -225,22 +225,22 @@ O `--save-storage`/`--load-storage` é a forma de gravar num app autenticado sem
 
 ```ts
 test('finaliza uma compra', async ({ page }) => {
- await test.step('escolhe o produto', async => {
- await page.goto('/produtos');
- await page.getByRole('link', { name: 'Café especial' }).click;
- });
+  await test.step('escolhe o produto', async () => {
+    await page.goto('/produtos');
+    await page.getByRole('link', { name: 'Café especial' }).click();
+  });
 
- await test.step('adiciona ao carrinho', async => {
- await page.getByRole('button', { name: 'Adicionar ao carrinho' }).click;
- await expect(page.getByTestId('badge-carrinho')).toHaveText('1');
- });
+  await test.step('adiciona ao carrinho', async () => {
+    await page.getByRole('button', { name: 'Adicionar ao carrinho' }).click();
+    await expect(page.getByTestId('badge-carrinho')).toHaveText('1');
+  });
 
- await test.step('finaliza', async => {
- await page.getByRole('link', { name: 'Finalizar' }).click;
- await page.getByLabel('Cartão').fill('4242424242424242');
- await page.getByRole('button', { name: 'Pagar' }).click;
- await expect(page.getByText('Pedido confirmado')).toBeVisible;
- });
+  await test.step('finaliza', async () => {
+    await page.getByRole('link', { name: 'Finalizar' }).click();
+    await page.getByLabel('Cartão').fill('4242424242424242');
+    await page.getByRole('button', { name: 'Pagar' }).click();
+    await expect(page.getByText('Pedido confirmado')).toBeVisible();
+  });
 });
 ```
 
@@ -266,7 +266,7 @@ O defeito real continua no produto; o teste passou a não detectá-lo (`PW-DBG-0
 ```ts
 // ✗
 console.log('cheguei aqui');
-console.log(await page.content);
+console.log(await page.content());
 ```
 
 O trace já tem o DOM inteiro, navegável, e por ação. O `console.log` fica no código depois (`PW-DBG-04`).
@@ -288,9 +288,9 @@ Mais peso, menos informação: sem DOM, sem rede, sem log de actionability (`PW-
 ```ts
 // ✗
 test('test', async ({ page }) => {
- await page.goto('http://localhost:3000/');
- await page.getByRole('link', { name: 'Entrar' }).click;
- // … 40 linhas lineares, nome de teste "test", URL absoluta …
+  await page.goto('http://localhost:3000/');
+  await page.getByRole('link', { name: 'Entrar' }).click();
+  // … 40 linhas lineares, nome de teste "test", URL absoluta …
 });
 ```
 

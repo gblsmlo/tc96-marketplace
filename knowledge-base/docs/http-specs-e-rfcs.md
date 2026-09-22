@@ -2,10 +2,10 @@
 titulo: HTTP - Specs e RFCs
 Link: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Resources_and_specifications
 tags:
- - http
- - rfc
- - specs
- - agent-context
+  - http
+  - rfc
+  - specs
+  - agent-context
 source: "MDN Web Docs — https://developer.mozilla.org/en-US/docs/Web/HTTP"
 verificado-em: 2026-08-15
 ---
@@ -35,7 +35,7 @@ A consequência prática é uma só, e é onde esta nota paga o custo de existir
 | Uma afirmação com `MUST`/`SHOULD`/`MUST NOT` entrando em doc, ADR ou revisão | RFC, com seção |
 | Duas pessoas discordam sobre o que o protocolo exige | RFC, com seção |
 | Um header ou status que você não sabe se existe oficialmente | Registro do IANA (§ 4) |
-| Comportamento de `fetch`, CORS ou preflight no browser | **Fetch Standard (WHATWG)**, não IETF |
+| Comportamento de `fetch()`, CORS ou preflight no browser | **Fetch Standard (WHATWG)**, não IETF |
 
 E o inverso também vale: o RFC **não** documenta suporte de browser, não traz exemplo pedagógico e não avisa quando a prática de mercado diverge do texto. Ler RFC para aprender HTTP é caro e desnecessário. Ler RFC para fechar uma decisão é barato e obrigatório.
 
@@ -70,7 +70,7 @@ E o que ficou no lugar, com status confirmado no rfc-editor.org em **2026-08-15*
 
 Três pontos que mudam como se cita:
 
-**A semântica não pertence mais a nenhuma versão.** RFC 9110 define método, status, header e negociação para HTTP/1.1, /2 e /3 ao mesmo tempo. Citar "RFC 9112 §..." para falar de `POST` é erro de endereço: 9112 só cobre a sintaxe de fio do 1.1 (linha de request, `Transfer-Encoding`, gestão de conexão). Se a afirmação vale em HTTP/2, ela mora em 9110.
+**A semântica não pertence mais a nenhuma versão.** RFC 9110 define método, status, header e negociação para HTTP/1.1, /2 e /3 ao mesmo tempo. Citar "RFC 9112 § ..." para falar de `POST` é erro de endereço: 9112 só cobre a sintaxe de fio do 1.1 (linha de request, `Transfer-Encoding`, gestão de conexão). Se a afirmação vale em HTTP/2, ela mora em 9110.
 
 **9110, 9111 e 9112 são Internet Standard; 9113 e 9114 não.** A distinção não é cosmética: `Internet Standard` (com número STD) é o topo do processo do IETF e sinaliza estabilidade e implantação comprovadas. HTTP/2 e HTTP/3 seguem em `Proposed Standard` — plenamente implantados, mas em degrau formal mais baixo. Em documento que classifica maturidade de dependências, isso é a informação correta.
 
@@ -138,7 +138,7 @@ O ponto que o vault já registra e que esta tabela só reforça: **`SameSite` n�
 
 | Spec | Organização | O que governa | Nota do vault |
 | --- | --- | --- | --- |
-| **Fetch Standard** — [fetch.spec.whatwg.org](https://fetch.spec.whatwg.org/) | WHATWG, **Living Standard** | protocolo CORS (§ 3.3), preflight (§ 3.3.8), forbidden request-headers (§ 2.2.2), `Cross-Origin-Resource-Policy`, API `fetch`/`Headers`/`Request`/`Response` (§ 5) | [HTTP - CORS](http-cors.md) · · |
+| **Fetch Standard** — [fetch.spec.whatwg.org](https://fetch.spec.whatwg.org/) | WHATWG, **Living Standard** | protocolo CORS (§ 3.3), preflight (§ 3.3.8), forbidden request-headers (§ 2.2.2), `Cross-Origin-Resource-Policy`, API `fetch()`/`Headers`/`Request`/`Response` (§ 5) | [HTTP - CORS](http-cors.md) · · |
 | **URL Standard** — [url.spec.whatwg.org](https://url.spec.whatwg.org/) | WHATWG, Living Standard | o que browsers realmente fazem com URL; convive com a RFC 3986 sem substituí-la | — |
 | **HTML Standard** | WHATWG, Living Standard | Server-Sent Events e o comportamento de formulário sobre HTTP | — |
 
@@ -175,7 +175,7 @@ O inverso da § 3: você tem uma dúvida, quer o endereço.
 | `Range`, `Accept-Ranges`, `Content-Range`, `206` | RFC 9110 § 14 |
 | `Authorization` / `WWW-Authenticate` / `401` / `407` | RFC 9110 § 11 |
 | Qualquer coisa de CORS ou preflight | **Fetch Standard § 3.3** (WHATWG) |
-| Comportamento de `fetch`, `Headers`, `Request`, `Response` | **Fetch Standard § 5** (WHATWG) |
+| Comportamento de `fetch()`, `Headers`, `Request`, `Response` | **Fetch Standard § 5** (WHATWG) |
 | `SameSite`, `__Host-`, prefixos de cookie | **draft-ietf-httpbis-rfc6265bis** |
 | Formato de corpo de erro de API | RFC 9457 |
 | **Este header existe oficialmente?** | **IANA HTTP Field Name Registry** |
@@ -232,7 +232,7 @@ Nas notas de HTTP, `Authorization` e `WWW-Authenticate` entram como **mecanismo 
 | `HTTP-SPEC-01` | Afirmação normativa sobre o protocolo em ADR, comentário de PR ou doc **MUST** trazer número de RFC **e** número de seção (`RFC 9110 § 9.2.2`), não só o número do RFC. |
 | `HTTP-SPEC-02` | Texto do projeto **NEVER** cita RFC 7230, 7231, 7232, 7233, 7234, 7235, 7538, 7540, 7807 ou 2818 como fonte vigente — os substitutos estão na § 2. |
 | `HTTP-SPEC-03` | Afirmação com `MUST`/`MUST NOT`/`SHOULD` sobre HTTP **NEVER** tem link do MDN como única fonte; o RFC com seção **MUST** aparecer ao lado. |
-| `HTTP-SPEC-04` | Regra de CORS, preflight, `fetch` ou `Cross-Origin-Resource-Policy` **NEVER** é atribuída a um número de RFC — a fonte é o Fetch Standard (WHATWG). |
+| `HTTP-SPEC-04` | Regra de CORS, preflight, `fetch()` ou `Cross-Origin-Resource-Policy` **NEVER** é atribuída a um número de RFC — a fonte é o Fetch Standard (WHATWG). |
 | `HTTP-SPEC-05` | Afirmação sobre `SameSite`, `__Host-` ou `__Secure-` **NEVER** cita RFC 6265; **MUST** citar `draft-ietf-httpbis-rfc6265bis` com a revisão. |
 | `HTTP-SPEC-06` | Serviço nosso **NEVER** emite status code ausente do IANA HTTP Status Code Registry — `419`, `420` e `499` estão fora. |
 | `HTTP-SPEC-07` | Header definido pelo projeto e ausente do IANA HTTP Field Name Registry **MUST** ter nome prefixado pelo produto (`Acme-Request-Id`) e constar do contrato da API. |

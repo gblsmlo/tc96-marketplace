@@ -2,13 +2,13 @@
 titulo: Claude Code - Paralelismo e Escala
 Link: https://code.claude.com/docs/pt/agents
 tags:
- - claude-code
- - ia
- - subagentes
- - workflows
- - worktree
- - paralelismo
- - agent-context
+  - claude-code
+  - ia
+  - subagentes
+  - workflows
+  - worktree
+  - paralelismo
+  - agent-context
 source: "Documentação oficial do Claude Code — Run agents in parallel, Create custom subagents, Orchestrate subagents at scale with dynamic workflows, Run parallel sessions with worktrees, Message your other Claude Code sessions, Commands (/batch)"
 verificado-em: 2026-08-21
 ---
@@ -50,9 +50,9 @@ As tarefas tocam os mesmos arquivos? ────────► isole em worktr
 Mudança grande e divisível em unidades? ─────► /batch
 
 NÃO é rodar agente:
- background bash — um comando de shell sem bloquear a conversa, sem agente
- /subtask — subagente forkado, herda o SEU contexto em vez de começar limpo
- /fork — copia a sessão inteira para uma nova sessão em background
+  background bash — um comando de shell sem bloquear a conversa, sem agente
+  /subtask — subagente forkado, herda o SEU contexto em vez de começar limpo
+  /fork — copia a sessão inteira para uma nova sessão em background
 ```
 
 > **Paralelismo troca token por tempo de parede, não por eficiência.** Rodar várias sessões ou subagentes ao mesmo tempo **multiplica** o consumo.
@@ -160,7 +160,7 @@ O runtime acompanha o resultado de cada agente conforme o run avança, e é isso
 | --- | --- |
 | **Sem input do usuário no meio do run** | só prompts de permissão de agente pausam. Para aprovação entre etapas, rode **cada etapa como seu próprio workflow** |
 | Sem acesso direto a filesystem ou shell **pelo script** | os agentes leem, escrevem e rodam comandos; o script coordena |
-| Sem carregamento de módulo — script com `import` **falha antes de começar** | o corpo é JavaScript puro. Trabalho que precisa de biblioteca vai na tarefa de um agente |
+| Sem carregamento de módulo — script com `import()` **falha antes de começar** | o corpo é JavaScript puro. Trabalho que precisa de biblioteca vai na tarefa de um agente |
 | Até **16 agentes concorrentes**, menos com menos CPU disponível | limita uso de recurso local |
 | **1.000 agentes no total** por run | evita laço desgovernado |
 | Num fan-out, agentes que compartilham o prefixo de cache do primeiro começam até **5 segundos** depois dele | os demais leem o prefixo que o primeiro cacheou, em vez de cada um processar sem cache |

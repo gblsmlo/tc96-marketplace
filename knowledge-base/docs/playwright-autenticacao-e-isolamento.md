@@ -2,11 +2,11 @@
 titulo: Playwright - Autenticação e Isolamento
 Link: https://playwright.dev/docs/auth
 tags:
- - playwright
- - testing
- - authentication
- - isolation
- - agent-context
+  - playwright
+  - testing
+  - authentication
+  - isolation
+  - agent-context
 source: "Documentação oficial do Playwright — Authentication, Isolation, API testing"
 verificado-em: 2026-08-20
 ---
@@ -35,21 +35,21 @@ Vários contextos num teste — para testar interação entre usuários:
 
 ```ts
 test('admin vê a mensagem do usuário', async ({ browser }) => {
- const ctxAdmin = await browser.newContext({ storageState: 'playwright/.auth/admin.json' });
- const ctxUser = await browser.newContext({ storageState: 'playwright/.auth/user.json' });
+  const ctxAdmin = await browser.newContext({ storageState: 'playwright/.auth/admin.json' });
+  const ctxUser  = await browser.newContext({ storageState: 'playwright/.auth/user.json' });
 
- const admin = await ctxAdmin.newPage;
- const user = await ctxUser.newPage;
+  const admin = await ctxAdmin.newPage();
+  const user  = await ctxUser.newPage();
 
- await user.goto('/chat');
- await user.getByRole('textbox').fill('preciso de ajuda');
- await user.getByRole('button', { name: 'Enviar' }).click;
+  await user.goto('/chat');
+  await user.getByRole('textbox').fill('preciso de ajuda');
+  await user.getByRole('button', { name: 'Enviar' }).click();
 
- await admin.goto('/chat/atendimento');
- await expect(admin.getByText('preciso de ajuda')).toBeVisible;
+  await admin.goto('/chat/atendimento');
+  await expect(admin.getByText('preciso de ajuda')).toBeVisible();
 
- await ctxAdmin.close;
- await ctxUser.close;
+  await ctxAdmin.close();
+  await ctxUser.close();
 });
 ```
 
@@ -69,15 +69,15 @@ import path from 'node:path';
 const authFile = path.join(__dirname, '../playwright/.auth/user.json');
 
 setup('autenticar', async ({ page }) => {
- await page.goto('/login');
- await page.getByLabel('E-mail').fill(process.env.TEST_USER!);
- await page.getByLabel('Senha').fill(process.env.TEST_PASSWORD!);
- await page.getByRole('button', { name: 'Entrar' }).click;
+  await page.goto('/login');
+  await page.getByLabel('E-mail').fill(process.env.TEST_USER!);
+  await page.getByLabel('Senha').fill(process.env.TEST_PASSWORD!);
+  await page.getByRole('button', { name: 'Entrar' }).click();
 
- // ancorar num estado observável, não numa URL qualquer
- await expect(page.getByRole('heading', { name: 'Painel' })).toBeVisible;
+  // ancorar num estado observável, não numa URL qualquer
+  await expect(page.getByRole('heading', { name: 'Painel' })).toBeVisible();
 
- await page.context.storageState({ path: authFile });
+  await page.context().storageState({ path: authFile });
 });
 ```
 
@@ -87,12 +87,12 @@ A asserção antes de salvar não é decorativa: sem ela, um login que falhou gr
 
 ```ts
 projects: [
- { name: 'setup', testMatch: /.*\.setup\.ts/ },
- {
- name: 'chromium',
- use: {...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json' },
- dependencies: ['setup'],
- },
+  { name: 'setup', testMatch: /.*\.setup\.ts/ },
+  {
+    name: 'chromium',
+    use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json' },
+    dependencies: ['setup'],
+  },
 ],
 ```
 
@@ -128,31 +128,31 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 export const test = base.extend<{}, { workerStorageState: string }>({
- // sobrescreve a opção storageState com o valor calculado por worker
- storageState: ({ workerStorageState }, use) => use(workerStorageState),
+  // sobrescreve a opção storageState com o valor calculado por worker
+  storageState: ({ workerStorageState }, use) => use(workerStorageState),
 
- workerStorageState: [async ({ browser }, use) => {
- const id = test.info.parallelIndex;
- const arquivo = path.resolve(test.info.project.outputDir, `.auth/${id}.json`);
+  workerStorageState: [async ({ browser }, use) => {
+    const id = test.info().parallelIndex;
+    const arquivo = path.resolve(test.info().project.outputDir, `.auth/${id}.json`);
 
- if (fs.existsSync(arquivo)) {
- await use(arquivo);
- return;
- }
+    if (fs.existsSync(arquivo)) {
+      await use(arquivo);
+      return;
+    }
 
- const page = await browser.newPage({ storageState: undefined });
- const conta = await alocarConta(id);
+    const page = await browser.newPage({ storageState: undefined });
+    const conta = await alocarConta(id);
 
- await page.goto('/login');
- await page.getByLabel('E-mail').fill(conta.email);
- await page.getByLabel('Senha').fill(conta.senha);
- await page.getByRole('button', { name: 'Entrar' }).click;
- await page.waitForURL('/painel');
+    await page.goto('/login');
+    await page.getByLabel('E-mail').fill(conta.email);
+    await page.getByLabel('Senha').fill(conta.senha);
+    await page.getByRole('button', { name: 'Entrar' }).click();
+    await page.waitForURL('/painel');
 
- await page.context.storageState({ path: arquivo });
- await page.close;
- await use(arquivo);
- }, { scope: 'worker' }],
+    await page.context().storageState({ path: arquivo });
+    await page.close();
+    await use(arquivo);
+  }, { scope: 'worker' }],
 });
 
 export { expect } from '@playwright/test';
@@ -174,10 +174,10 @@ Quando a aplicação permite login por HTTP, isto é mais rápido e mais estáve
 
 ```ts
 setup('autenticar', async ({ request }) => {
- await request.post('/api/sessao', {
- data: { email: process.env.TEST_USER, senha: process.env.TEST_PASSWORD },
- });
- await request.storageState({ path: authFile });
+  await request.post('/api/sessao', {
+    data: { email: process.env.TEST_USER, senha: process.env.TEST_PASSWORD },
+  });
+  await request.storageState({ path: authFile });
 });
 ```
 
@@ -193,14 +193,14 @@ A ressalva: isso pula o fluxo de login, então o fluxo de login precisa de teste
 // tests/auth.setup.ts
 const adminFile = 'playwright/.auth/admin.json';
 setup('autenticar como admin', async ({ page }) => {
- // … login …
- await page.context.storageState({ path: adminFile });
+  // … login …
+  await page.context().storageState({ path: adminFile });
 });
 
 const userFile = 'playwright/.auth/user.json';
 setup('autenticar como operador', async ({ page }) => {
- // … login …
- await page.context.storageState({ path: userFile });
+  // … login …
+  await page.context().storageState({ path: userFile });
 });
 ```
 
@@ -216,8 +216,8 @@ Por project — melhor quando a **mesma** suíte deve rodar sob papéis diferent
 
 ```ts
 projects: [
- { name: 'admin', use: { storageState: 'playwright/.auth/admin.json' }, dependencies: ['setup'] },
- { name: 'operador', use: { storageState: 'playwright/.auth/user.json' }, dependencies: ['setup'] },
+  { name: 'admin',    use: { storageState: 'playwright/.auth/admin.json' }, dependencies: ['setup'] },
+  { name: 'operador', use: { storageState: 'playwright/.auth/user.json' },  dependencies: ['setup'] },
 ],
 ```
 
@@ -225,16 +225,16 @@ Por fixture — quando o teste precisa dos dois ao mesmo tempo:
 
 ```ts
 export const test = base.extend<{ adminPage: Page; userPage: Page }>({
- adminPage: async ({ browser }, use) => {
- const ctx = await browser.newContext({ storageState: 'playwright/.auth/admin.json' });
- await use(await ctx.newPage);
- await ctx.close;
- },
- userPage: async ({ browser }, use) => {
- const ctx = await browser.newContext({ storageState: 'playwright/.auth/user.json' });
- await use(await ctx.newPage);
- await ctx.close;
- },
+  adminPage: async ({ browser }, use) => {
+    const ctx = await browser.newContext({ storageState: 'playwright/.auth/admin.json' });
+    await use(await ctx.newPage());
+    await ctx.close();
+  },
+  userPage: async ({ browser }, use) => {
+    const ctx = await browser.newContext({ storageState: 'playwright/.auth/user.json' });
+    await use(await ctx.newPage());
+    await ctx.close();
+  },
 });
 ```
 
@@ -248,8 +248,8 @@ export const test = base.extend<{ adminPage: Page; userPage: Page }>({
 test.use({ storageState: { cookies: [], origins: [] } });
 
 test('visitante é redirecionado para o login', async ({ page }) => {
- await page.goto('/painel');
- await expect(page).toHaveURL(/\/login/);
+  await page.goto('/painel');
+  await expect(page).toHaveURL(/\/login/);
 });
 ```
 
@@ -263,15 +263,15 @@ Zerar explicitamente é necessário porque o `storageState` do project continua 
 
 ```ts
 // salvar
-const session = await page.evaluate( => JSON.stringify(sessionStorage));
+const session = await page.evaluate(() => JSON.stringify(sessionStorage));
 fs.writeFileSync('playwright/.auth/session.json', session, 'utf-8');
 
 // restaurar
 const session = JSON.parse(fs.readFileSync('playwright/.auth/session.json', 'utf-8'));
 await context.addInitScript(storage => {
- if (window.location.hostname === 'exemplo.com')
- for (const [k, v] of Object.entries(storage))
- window.sessionStorage.setItem(k, v as string);
+  if (window.location.hostname === 'exemplo.com')
+    for (const [k, v] of Object.entries(storage))
+      window.sessionStorage.setItem(k, v as string);
 }, session);
 ```
 
@@ -301,10 +301,10 @@ await context.addInitScript(storage => {
 ```ts
 // ✗ paga 2 s por teste, e reencena um fluxo que já tem teste próprio
 test.beforeEach(async ({ page }) => {
- await page.goto('/login');
- await page.getByLabel('E-mail').fill('a@b.com');
- await page.getByLabel('Senha').fill('123');
- await page.getByRole('button', { name: 'Entrar' }).click;
+  await page.goto('/login');
+  await page.getByLabel('E-mail').fill('a@b.com');
+  await page.getByLabel('Senha').fill('123');
+  await page.getByRole('button', { name: 'Entrar' }).click();
 });
 ```
 
@@ -313,7 +313,7 @@ test.beforeEach(async ({ page }) => {
 ### 9.2 `storageState` versionado
 
 ```gitignore
-# ✗ ausência de playwright/.auth no.gitignore
+# ✗ ausência de playwright/.auth no .gitignore
 ```
 
 Cookie de sessão no histórico do git, recuperável por qualquer pessoa com acesso ao repositório — inclusive depois de "apagado" (`PW-AUTH-02`).
@@ -340,7 +340,7 @@ Falha dependente de ordem, que aparece só sob paralelismo e desaparece com `--w
 
 ```ts
 // ✗ cria conta nova a cada worker substituído após falha
-const id = test.info.workerIndex;
+const id = test.info().workerIndex;
 ```
 
 Ver § 3.
@@ -349,8 +349,8 @@ Ver § 3.
 
 ```ts
 // ✗
-await page.getByRole('button', { name: 'Entrar' }).click;
-await page.context.storageState({ path: authFile }); // grava mesmo se falhou
+await page.getByRole('button', { name: 'Entrar' }).click();
+await page.context().storageState({ path: authFile });   // grava mesmo se falhou
 ```
 
 Toda a suíte falha depois, apontando para a tela de login em vez do setup (`PW-AUTH-06`).
@@ -360,8 +360,8 @@ Toda a suíte falha depois, apontando para a tela de login em vez do setup (`PW-
 ```ts
 // ✗ o storageState do project continua valendo
 test('visitante vai para o login', async ({ page }) => {
- await page.goto('/painel');
- await expect(page).toHaveURL(/\/login/); // falha: está logado
+  await page.goto('/painel');
+  await expect(page).toHaveURL(/\/login/);      // falha: está logado
 });
 ```
 

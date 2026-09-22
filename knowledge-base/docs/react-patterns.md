@@ -2,10 +2,10 @@
 titulo: React - Patterns
 Link: https://react.dev/learn
 tags:
- - react
- - patterns
- - architecture
- - agent-context
+  - react
+  - patterns
+  - architecture
+  - agent-context
 source: "react.dev (Learn + Reference) e Zettels de frontend do vault"
 verificado-em: 2026-08-14
 ---
@@ -53,21 +53,21 @@ A ordem importa: composição escolhida antes de decidir a posse do dado quase s
 Calcule **uma vez, no dono do estado**, e passe o resultado. Repetir o mesmo `filter` em cada filho duplica trabalho e permite que os dois divirjam.
 
 ```tsx
-function Tela {
- const [filtro, setFiltro] = useState('')
- const [produtos, setProdutos] = useState<Produto[]>([])
+function Tela() {
+  const [filtro, setFiltro] = useState('')
+  const [produtos, setProdutos] = useState<Produto[]>([])
 
- // calculado uma vez, no dono do estado
- const visiveis = produtos.filter((p) => p.nome.includes(filtro))
- const total = visiveis.reduce((s, p) => s + p.preco, 0)
+  // calculado uma vez, no dono do estado
+  const visiveis = produtos.filter((p) => p.nome.includes(filtro))
+  const total = visiveis.reduce((s, p) => s + p.preco, 0)
 
- return (
- <>
- <CampoFiltro value={filtro} onChange={setFiltro} />
- <ListaProdutos produtos={visiveis} />
- <Resumo quantidade={visiveis.length} total={total} />
- </>
- )
+  return (
+    <>
+      <CampoFiltro value={filtro} onChange={setFiltro} />
+      <ListaProdutos produtos={visiveis} />
+      <Resumo quantidade={visiveis.length} total={total} />
+    </>
+  )
 }
 ```
 
@@ -83,11 +83,11 @@ Quando pertence, a fonte de verdade é a rota — no meu stack, os search params
 | --- | --- |
 | `REACT-PAT-10` | Estado que precisa sobreviver a refresh, ser compartilhável por link ou responder ao botão voltar **MUST** viver na URL, não em `useState`. |
 
-| ID | Regra |
+| ID             | Regra                                                                                                        |
 | -------------- | ------------------------------------------------------------------------------------------------------------ |
-| `REACT-PAT-01` | Valor derivável de props/estado existentes **NEVER** vira estado próprio. |
+| `REACT-PAT-01` | Valor derivável de props/estado existentes **NEVER** vira estado próprio.                                    |
 | `REACT-PAT-02` | Estado **MUST** viver no ancestral comum mais próximo dos componentes que o leem — nem acima, nem duplicado. |
-| `REACT-PAT-03` | Dado remoto **NEVER** é armazenado em `useState` como fonte de verdade. |
+| `REACT-PAT-03` | Dado remoto **NEVER** é armazenado em `useState` como fonte de verdade.                                      |
 
 ### Colocação: subir o mínimo
 
@@ -116,17 +116,17 @@ Um componente controla estrutura e comportamento comuns; o consumidor fornece o 
 
 ```tsx
 type CardProps = {
- children: React.ReactNode
- footer?: React.ReactNode
+  children: React.ReactNode
+  footer?: React.ReactNode
 }
 
 function Card({ children, footer }: CardProps) {
- return (
- <section>
- {children}
- {footer && <footer>{footer}</footer>}
- </section>
- )
+  return (
+    <section>
+      {children}
+      {footer && <footer>{footer}</footer>}
+    </section>
+  )
 }
 ```
 
@@ -139,7 +139,7 @@ Passar JSX como children evita repassar props por níveis intermediários que n�
 ```tsx
 // Em vez de Layout repassar `user` para Header repassar para Avatar:
 <Layout header={<Header avatar={<Avatar user={user} />} />}>
- <Content />
+  <Content />
 </Layout>
 ```
 
@@ -147,7 +147,7 @@ Passar JSX como children evita repassar props por níveis intermediários que n�
 
 Critério do vault, em: extraia quando o componente representa um conceito, se repete, isola comportamento relevante, ou reduz a carga cognitiva do pai. **Separar cada bloco visual em um arquivo não é bom projeto** — fragmentação excessiva aumenta navegação e passagem de props.
 
-Para variantes visuais, ver.
+Para variantes visuais.
 
 | ID | Regra |
 | --- | --- |
@@ -185,8 +185,8 @@ Nos dois casos a validação de schema é Zod. Actions nativas não são "para b
 A lógica precisa de estado ou de Hooks do React?
 ├── NÃO → função comum. Testável sem renderizar. Prefira sempre que possível.
 └── SIM
- ├── Ela também produz UI própria? → componente
- └── Só coordena estado/sincronização? → Hook customizado
+    ├── Ela também produz UI própria? → componente
+    └── Só coordena estado/sincronização? → Hook customizado
 ```
 
 Detalhe em e nas regras `REACT-HOOK-04..07` em [React - Hooks](react-hooks.md).
@@ -217,13 +217,13 @@ Marca onde o código passa a ir para o bundle do cliente. Tudo importado a parti
 
 ### Fronteira de confiança — servidor
 
-Uma Server Function roda no servidor, mas continua recebendo entrada não confiável: valide, autentique e autorize sempre. Ver e.
+Uma Server Function roda no servidor, mas continua recebendo entrada não confiável: valide, autentique e autorize sempre..
 
-| ID | Regra |
+| ID             | Regra                                                                                                          |
 | -------------- | -------------------------------------------------------------------------------------------------------------- |
-| `REACT-PAT-06` | Error Boundaries **MUST** existir no nível da feature, não apenas na raiz. |
-| `REACT-PAT-07` | Erro esperado **NEVER** é lançado para um boundary — é estado da UI. |
-| `REACT-PAT-08` | A fronteira `'use client'` **MUST** ficar o mais baixo possível na árvore. |
+| `REACT-PAT-06` | Error Boundaries **MUST** existir no nível da feature, não apenas na raiz.                                     |
+| `REACT-PAT-07` | Erro esperado **NEVER** é lançado para um boundary — é estado da UI.                                           |
+| `REACT-PAT-08` | A fronteira `'use client'` **MUST** ficar o mais baixo possível na árvore.                                     |
 | `REACT-PAT-09` | Toda função de servidor **MUST** validar a entrada na própria fronteira, independente da validação no cliente. |
 
 ---

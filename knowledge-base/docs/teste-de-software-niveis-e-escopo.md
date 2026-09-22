@@ -2,10 +2,10 @@
 titulo: Teste de Software - Níveis e Escopo
 Link: https://martinfowler.com/articles/practical-test-pyramid.html
 tags:
- - testing
- - software-quality
- - test-levels
- - agent-context
+  - testing
+  - software-quality
+  - test-levels
+  - agent-context
 source: "Martin Fowler (Practical Test Pyramid), Kent C. Dodds (Testing Trophy), Software Engineering at Google cap. 11, guru99 (níveis clássicos)"
 verificado-em: 2026-08-20
 ---
@@ -115,13 +115,13 @@ O critério para escolher é **onde a lógica do sistema vive**:
 
 ```
 A complexidade está DENTRO de funções?
- (cálculo, domínio rico, regra de negócio densa, parsing)
- → pirâmide. Teste de unidade paga muito, porque é onde o defeito nasce
+  (cálculo, domínio rico, regra de negócio densa, parsing)
+  → pirâmide. Teste de unidade paga muito, porque é onde o defeito nasce
 
 A complexidade está ENTRE as peças?
- (BFF, adaptação de dado, orquestração, mapeamento de contrato, wiring)
- → trophy. Teste de unidade de cada peça passa e a integração quebra,
- porque o defeito está na junta, e a junta é o que unidade não vê
+  (BFF, adaptação de dado, orquestração, mapeamento de contrato, wiring)
+  → trophy. Teste de unidade de cada peça passa e a integração quebra,
+    porque o defeito está na junta, e a junta é o que unidade não vê
 ```
 
 **Para o stack deste vault a resposta costuma ser trophy** — um frontend React com BFF tem mais junta que cálculo. Mas a resposta é por módulo, não por repositório: o pacote que calcula imposto é pirâmide, e a rota que orquestra três chamadas é trophy.
@@ -185,7 +185,7 @@ Receber "escreva um teste" e escrever E2E porque parece mais completo. É o anti
 ```
 ✗ 40 testes E2E cobrindo as faixas de desconto
 ✓ 40 testes de unidade sobre a função de desconto
- + 1 E2E que confirma que a tela exibe o valor calculado
+  + 1 E2E que confirma que a tela exibe o valor calculado
 ```
 
 (`TS-NIV-02`)

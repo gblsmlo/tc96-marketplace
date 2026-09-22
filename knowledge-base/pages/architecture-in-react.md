@@ -1,11 +1,11 @@
 ---
 titulo: Architecture in React
 aliases:
- - Arquitetura em React
+  - Arquitetura em React
 tags:
- - frontend
- - react
- - architecture
+  - frontend
+  - react
+  - architecture
 ---
 # Architecture in React
 
@@ -113,7 +113,7 @@ haver evidência.
 
 O item 6 é o mais comum de se antecipar e o que mais custa quando antecipado: uma abstração criada no
 segundo consumidor tem contrato inventado, e o terceiro caso chega exigindo uma flag.
-Ver.
+
 
 Um corolário: **estrutura de pasta não é a primeira decisão.** É a quarta. Projetos que começam
 desenhando o diretório costumam ter fronteiras bonitas com dependências invertidas atravessando-as.
@@ -137,16 +137,16 @@ IDs normativos. Ela responde a uma única pergunta: *qual nota abrir para esta d
 
 ```
 DECISÃO DE ESTRUTURA / IMPORT / PASTA
- → [Feature-Based Architecture](feature-based-architecture.md) § 4 (regras) e § 10 (contrato)
+  → [Feature-Based Architecture](feature-based-architecture.md) § 4 (regras) e § 10 (contrato)
 
 DECISÃO DENTRO DO COMPONENTE
- → [React - Patterns](../docs/react-patterns.md)
+  → [React - Patterns](../docs/react-patterns.md)
 
 REGRA NORMATIVA DE REACT
- → [React - Rules of React](../docs/react-rules-of-react.md) e [React.js](../docs/react-js.md) § 6
+  → [React - Rules of React](../docs/react-rules-of-react.md) e [React.js](../docs/react-js.md) § 6
 
 CONSULTA DE API
- → [React.js](../docs/react-js.md) § 4 (mapa da API) → o satélite indicado
+  → [React.js](../docs/react-js.md) § 4 (mapa da API) → o satélite indicado
 ```
 
 A hierarquia de fontes do vault, da mais forte para a mais fraca: `docs/` (documentação verificada)

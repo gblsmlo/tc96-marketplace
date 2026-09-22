@@ -2,11 +2,11 @@
 titulo: React Hook Form - Estado e Performance
 Link: https://react-hook-form.com/docs/useform/formstate
 tags:
- - react
- - forms
- - react-hook-form
- - performance
- - agent-context
+  - react
+  - forms
+  - react-hook-form
+  - performance
+  - agent-context
 source: "Documentação oficial — https://react-hook-form.com/docs"
 verificado-em: 2026-08-15
 ---
@@ -31,12 +31,12 @@ E a assinatura **não é declarada: é criada pela leitura**. `formState` vem em
 
 ```tsx
 // ✅ o destructuring é a leitura — assina isDirty e isValid
-const { formState: { isDirty, isValid } } = useForm<Perfil>
+const { formState: { isDirty, isValid } } = useForm<Perfil>()
 return <button disabled={!isDirty || !isValid}>Salvar</button>
 
 // ❌ isDirty é lido e assinado; isValid NÃO — o `||` curto-circuita quando
-// isDirty é true, então o Proxy nunca vê a leitura de isValid
-const { formState } = useForm<Perfil>
+//    isDirty é true, então o Proxy nunca vê a leitura de isValid
+const { formState } = useForm<Perfil>()
 return <button disabled={!formState.isDirty || !formState.isValid}>Salvar</button>
 ```
 
@@ -52,13 +52,13 @@ Isso não é bug: é o mecanismo evitando calcular `isValid` para quem não pedi
 >
 > ```tsx
 > // ✅ o objeto inteiro
-> useEffect( => {
-> if (formState.errors.nome) { /* … */ }
+> useEffect(() => {
+>   if (formState.errors.nome) { /* … */ }
 > }, [formState])
 >
 > // ❌ a propriedade — não dispara, porque a atualização vem em lote
-> useEffect( => {
-> if (formState.errors.nome) { /* … */ }
+> useEffect(() => {
+>   if (formState.errors.nome) { /* … */ }
 > }, [formState.errors])
 > ```
 >
@@ -123,12 +123,12 @@ Um componente filho que chama `setValue` no mount pode fazê-lo antes de a assin
 
 ```tsx
 // No componente que chamou useForm: a assinatura já existe
-useEffect( => { setValue('cupom', cupomDaUrl) }, [])
+useEffect(() => { setValue('cupom', cupomDaUrl) }, [])
 
 // Em componente filho: precisa esperar
 const { isReady } = useFormState({ control })
-useEffect( => {
- if (isReady) setValue('cupom', cupomDaUrl)
+useEffect(() => {
+  if (isReady) setValue('cupom', cupomDaUrl)
 }, [isReady])
 ```
 
@@ -142,7 +142,7 @@ Esta tabela é o centro do satélite. O eixo não é "o que devolve", é **onde 
 
 | API | Assina? | Quem re-renderiza | Onde chamar | Use quando |
 | --- | --- | --- | --- | --- |
-| `getValues` | não | ninguém | qualquer lugar | leitura pontual dentro de um handler |
+| `getValues()` | não | ninguém | qualquer lugar | leitura pontual dentro de um handler |
 | `watch(name?)` | sim | o componente que chamou — normalmente a **raiz** | junto do `useForm` | você precisa mesmo do form inteiro na raiz |
 | `useWatch({ control, name })` | sim | **só** o componente que chamou | qualquer componente | render que depende de um valor |
 | `useFormState({ control })` | sim | **só** o componente que chamou | qualquer componente | render que depende de erro, dirty, submitting |
@@ -151,9 +151,9 @@ Esta tabela é o centro do satélite. O eixo não é "o que devolve", é **onde 
 ### 3.1 `getValues` — leitura sem custo
 
 ```tsx
-const onAplicarCupom = => {
- const cupom = getValues('cupom') // não assina, não re-renderiza
- if (cupom) validarCupom(cupom)
+const onAplicarCupom = () => {
+  const cupom = getValues('cupom')     // não assina, não re-renderiza
+  if (cupom) validarCupom(cupom)
 }
 ```
 
@@ -166,12 +166,12 @@ Quatro sobrecargas verificadas:
 ```ts
 watch(name: string, defaultValue?: unknown): unknown
 watch(names: string[], defaultValue?: { [k: string]: unknown }): unknown[]
-watch: { [k: string]: unknown }
-watch(callback, defaultValues?): { unsubscribe: => void } // Deprecated — ver § 3.6
+watch(): { [k: string]: unknown }
+watch(callback, defaultValues?): { unsubscribe: () => void }   // Deprecated — ver § 3.6
 ```
 
 ```tsx
-const tipo = watch('tipo') // re-renderiza ESTE componente a cada mudança
+const tipo = watch('tipo')     // re-renderiza ESTE componente a cada mudança
 ```
 
 Chamado junto do `useForm`, "este componente" é o formulário inteiro. A fonte:
@@ -187,11 +187,11 @@ Duas caveats de valor inicial:
 
 ```tsx
 function ResumoTotal({ control }: { control: Control<Pedido> }) {
- // defaultValue cobre o primeiro render: sem ele, `itens` pode vir undefined
- // e o reduce lança. Ver as caveats de valor inicial em § 3.2.
- const itens = useWatch({ control, name: 'itens', defaultValue: [] })
- const total = itens.reduce((s, i) => s + i.preco * i.quantidade, 0)
- return <strong>{formatarMoeda(total)}</strong>
+  // defaultValue cobre o primeiro render: sem ele, `itens` pode vir undefined
+  // e o reduce lança. Ver as caveats de valor inicial em § 3.2.
+  const itens = useWatch({ control, name: 'itens', defaultValue: [] })
+  const total = itens.reduce((s, i) => s + i.preco * i.quantidade, 0)
+  return <strong>{formatarMoeda(total)}</strong>
 }
 ```
 
@@ -212,8 +212,8 @@ Props verificadas:
 
 ```tsx
 const acimaDoLimite = useWatch({
- control,
- compute: (form) => form.total > LIMITE, // só notifica quando o boolean vira
+  control,
+  compute: (form) => form.total > LIMITE,   // só notifica quando o boolean vira
 })
 ```
 
@@ -235,12 +235,12 @@ Vale igualmente para `watch`. Para reagir a mudanças **fora do render**, a API 
 
 ```tsx
 function BotaoSalvar({ control }: { control: Control<Perfil> }) {
- const { isDirty, isSubmitting } = useFormState({ control })
- return <button disabled={!isDirty || isSubmitting}>Salvar</button>
+  const { isDirty, isSubmitting } = useFormState({ control })
+  return <button disabled={!isDirty || isSubmitting}>Salvar</button>
 }
 ```
 
-O Proxy vale aqui também, e a fonte repete a exigência: `const { isDirty } = useFormState` ✅ contra `const formState = useFormState` ❌.
+O Proxy vale aqui também, e a fonte repete a exigência: `const { isDirty } = useFormState()` ✅ contra `const formState = useFormState()` ❌.
 
 `name` (v7.4.0) restringe a assinatura a campos específicos; `disabled` (v7.13.0) desliga a assinatura; `exact` (v7.20.0) tem default `false`.
 
@@ -253,12 +253,12 @@ Disponível desde a **v7.55.0**. A fonte descreve o propósito em uma linha:
 > "This function is dedicated to subscribing to form state without **render**"
 
 ```tsx
-useEffect( => {
- const unsubscribe = subscribe({
- formState: { values: true },
- callback: ({ values }) => salvarRascunho(values),
- })
- return unsubscribe // RHF-STATE-05
+useEffect(() => {
+  const unsubscribe = subscribe({
+    formState: { values: true },
+    callback: ({ values }) => salvarRascunho(values),
+  })
+  return unsubscribe        // RHF-STATE-05
 }, [subscribe])
 ```
 
@@ -279,7 +279,7 @@ Devolve a função de cancelamento, que **precisa** ser retornada do efeito. Com
 
 | ID | Regra |
 | --- | --- |
-| `RHF-PERF-01` | `watch` sem argumento **NEVER** em componente grande — re-renderiza a raiz. Use `useWatch` no menor componente que precisa do valor. |
+| `RHF-PERF-01` | `watch()` sem argumento **NEVER** em componente grande — re-renderiza a raiz. Use `useWatch` no menor componente que precisa do valor. |
 | `RHF-PERF-02` | Reação sem UI (autosave, analytics, log) **MUST** usar `subscribe`. A sobrecarga `watch(callback)` está marcada **Deprecated** na fonte, com `subscribe` como substituto. |
 | `RHF-PERF-03` | O retorno de `watch`/`useWatch` **NEVER** entra em array de dependências de `useEffect` — é otimizado para a fase de render. |
 | `RHF-PERF-04` | Leitura que não afeta a UI **MUST** usar `getValues`, **NEVER** `watch`. |
@@ -325,7 +325,7 @@ Duas opções do `useForm` que parecem alternativas e não são: uma define a **
 Verificado: `defaultValues` "are cached. To reset them, use the reset API", são incluídos no resultado da submissão por padrão, e **não** devem receber `undefined`, "as it conflicts with the default state of a controlled component". Aceita função assíncrona:
 
 ```tsx
-useForm({ defaultValues: async => fetch('/api/perfil').then((r) => r.json) })
+useForm({ defaultValues: async () => fetch('/api/perfil').then((r) => r.json()) })
 ```
 
 `values` sobrescreve `defaultValues` a menos que `resetOptions: { keepDefaultValues: true }`; quando muda, o `reset` interno é invocado conforme `resetOptions`.
@@ -336,9 +336,9 @@ O par certo para dado remoto é `defaultValues` para a forma e `values` para o c
 const { data } = useQuery({ queryKey: ['perfil'], queryFn: buscarPerfil })
 
 useForm({
- defaultValues: { nome: '', email: '' }, // forma — todo campo existe desde o início
- values: data, // conteúdo — reativo
- resetOptions: { keepDirtyValues: true }, // não apaga edição em curso
+  defaultValues: { nome: '', email: '' },   // forma — todo campo existe desde o início
+  values: data,                             // conteúdo — reativo
+  resetOptions: { keepDirtyValues: true },  // não apaga edição em curso
 })
 ```
 
@@ -359,7 +359,7 @@ Opções verificadas: `keepErrors`, `keepDirty`, `keepDirtyValues` (v7.31.0), `k
 Desde a **v7.36.0**, `values` também aceita callback que recebe os valores atuais:
 
 ```tsx
-reset((atuais) => ({...atuais, cupom: '' }))
+reset((atuais) => ({ ...atuais, cupom: '' }))
 ```
 
 **Limpar após submissão bem-sucedida** é o caso mais comum, e o lugar correto **não** é o `onSubmit`. A fonte recomenda o `useEffect` porque "execution order matters": resetar dentro do `onSubmit` compete com a atualização do próprio `isSubmitSuccessful` e produz estado inconsistente.
@@ -368,8 +368,8 @@ Mas a condição do effect **não pode ser `isSubmitSuccessful` sozinho**:
 
 ```tsx
 // ERRADO — também reseta quando o servidor recusou
-useEffect( => {
- if (isSubmitSuccessful) reset
+useEffect(() => {
+  if (isSubmitSuccessful) reset()
 }, [isSubmitSuccessful, reset])
 ```
 
@@ -380,16 +380,16 @@ Pela § 2.3, `isSubmitSuccessful` significa "o `onSubmit` não lançou". E como 
 const [salvou, setSalvou] = useState(false)
 
 const onSubmit = handleSubmit(async (data) => {
- try {
- await mutateAsync(data)
- setSalvou(true)
- } catch (e) {
- setError('root.serverError', { message: mensagemDe(e) })
- }
+  try {
+    await mutateAsync(data)
+    setSalvou(true)
+  } catch (e) {
+    setError('root.serverError', { message: mensagemDe(e) })
+  }
 })
 
-useEffect( => {
- if (salvou) { reset; setSalvou(false) }
+useEffect(() => {
+  if (salvou) { reset(); setSalvou(false) }
 }, [salvou, reset])
 ```
 
@@ -426,7 +426,7 @@ O default é o certo para formulário em etapas ou com campos condicionais, em q
 
 ```tsx
 const { formState: { isSubmitting } } = useForm({ /* … */ })
-useForm({ disabled: isSubmitting }) // congela o formulário durante o envio
+useForm({ disabled: isSubmitting })   // congela o formulário durante o envio
 ```
 
 > **Não verificado:** se o `disabled` de nível de formulário exclui os valores da submissão, como faz o `disabled` de nível de **campo** (`RHF-REG-05`, em [React Hook Form - Registro e Controle](react-hook-form-registro-e-controle.md)). A página de `useForm` descreve apenas o bloqueio de interação, sem declarar o efeito sobre os valores enviados. Confirme na fonte antes de depender disso.
@@ -481,28 +481,28 @@ Dois avisos citados da fonte, e o segundo é o que engana:
 ```tsx
 // A condição vive no schema, não só no JSX
 const pedidoSchema = z.discriminatedUnion('pedidoEspecial', [
- z.object({ pedidoEspecial: z.literal(false), itens: itensSchema }),
- z.object({
- pedidoEspecial: z.literal(true),
- observacao: z.string.min(1, 'Descreva o que torna o pedido especial.'),
- itens: itensSchema,
- }),
+  z.object({ pedidoEspecial: z.literal(false), itens: itensSchema }),
+  z.object({
+    pedidoEspecial: z.literal(true),
+    observacao: z.string().min(1, 'Descreva o que torna o pedido especial.'),
+    itens: itensSchema,
+  }),
 ])
 
-function Observacao {
- const { control, register, unregister } = useFormContext<Pedido>
- const especial = useWatch({ control, name: 'pedidoEspecial' })
+function Observacao() {
+  const { control, register, unregister } = useFormContext<Pedido>()
+  const especial = useWatch({ control, name: 'pedidoEspecial' })
 
- useEffect( => {
- if (!especial) unregister('observacao') // some do payload junto com a UI
- }, [especial, unregister])
+  useEffect(() => {
+    if (!especial) unregister('observacao')   // some do payload junto com a UI
+  }, [especial, unregister])
 
- if (!especial) return null
- return <textarea {...register('observacao')} />
+  if (!especial) return null
+  return <textarea {...register('observacao')} />
 }
 ```
 
-União discriminada é preferível a `.optional` + `.refine` porque o tipo de saída deixa de **admitir** a combinação impossível (`pedidoEspecial: false` com `observacao` preenchida), em vez de apenas rejeitá-la em runtime.
+União discriminada é preferível a `.optional()` + `.refine()` porque o tipo de saída deixa de **admitir** a combinação impossível (`pedidoEspecial: false` com `observacao` preenchida), em vez de apenas rejeitá-la em runtime.
 
 > **Por que `unregister` explícito e não `shouldUnregister` no campo.** A opção existe no nível do campo (§ 4.4), mas ali ela **também remove o `defaultValue`** (`RHF-STATE-12`), e a versão global é incompatível com `useFieldArray` (`RHF-ARRAY-03`). Num formulário com lista dinâmica — que é o caso desta seção — o `unregister` explícito é o caminho que não tem nenhum dos dois efeitos colaterais.
 
@@ -547,13 +547,13 @@ A ordem anunciada em [React Hook Form](react-hook-form.md) § 5.7, do mais barat
 const { fields, append, remove, move } = useFieldArray({ control, name: 'itens' })
 
 {fields.map((field, index) => (
- <div key={field.id}> {/* ✅ nunca o índice */}
- <input {...register(`itens.${index}.nome`)} />
- <button type="button" onClick={ => remove(index)}>Remover</button>
- </div>
+  <div key={field.id}>                              {/* ✅ nunca o índice */}
+    <input {...register(`itens.${index}.nome`)} />
+    <button type="button" onClick={() => remove(index)}>Remover</button>
+  </div>
 ))}
-<button type="button" onClick={ => append({ nome: '', quantidade: 1 })}>
- Adicionar
+<button type="button" onClick={() => append({ nome: '', quantidade: 1 })}>
+  Adicionar
 </button>
 ```
 
@@ -582,7 +582,7 @@ Props: `name` (obrigatório, **nomes dinâmicos não são suportados**), `contro
 | `key` **precisa** ser `field.id`, nunca o índice | valores embaralhados ao remover — § 6.3 |
 | Cada entrada **precisa ser objeto**; arrays planos não são suportados | `{ tags: ['a','b'] }` ❌ · `{ tags: [{ valor: 'a' }] }` ✅ |
 | `shouldUnregister: true` **não é suportado** | campos recém-adicionados são desregistrados no re-render e **perdem o valor** |
-| `append`/`prepend`/`insert`/`update` **não aceitam `{}`** | `append` ❌ · `append({})` ❌ · `append({ nome: 'bill' })` ✅ |
+| `append`/`prepend`/`insert`/`update` **não aceitam `{}`** | `append()` ❌ · `append({})` ❌ · `append({ nome: 'bill' })` ✅ |
 | Não empilhe ações no mesmo handler | enfileire via `useEffect` — a segunda ação roda no render seguinte |
 | Um `useFieldArray` por `name` | "Each useFieldArray is unique and has its own state update" — duas instâncias divergem |
 
@@ -592,18 +592,18 @@ E sobre empilhar ações, o exemplo oficial:
 
 ```tsx
 // ❌ as duas ações competem no mesmo tick
-onClick={ => { append({ test: 'test' }); remove(0) }}
+onClick={() => { append({ test: 'test' }); remove(0) }}
 
 // ✅ o remove acontece depois do segundo render
-useEffect( => { remove(0) }, [remove])
-onClick={ => { append({ test: 'test' }) }}
+useEffect(() => { remove(0) }, [remove])
+onClick={() => { append({ test: 'test' }) }}
 ```
 
 ### 6.3 Índice × identidade
 
 O erro do `key={index}` merece detalhe porque o sintoma não aponta para a causa.
 
-Com `key` de índice, remover o item 0 faz o React reaproveitar o nó do DOM daquela posição para o que era o item 1. Como o campo é **não controlado**, o valor que estava no nó do DOM permanece ali — e a lista passa a exibir dados trocados, embora `getValues` devolva o array correto. A divergência entre o que se vê e o que se submete é o que torna esse bug caro: ele não quebra, ele mente.
+Com `key` de índice, remover o item 0 faz o React reaproveitar o nó do DOM daquela posição para o que era o item 1. Como o campo é **não controlado**, o valor que estava no nó do DOM permanece ali — e a lista passa a exibir dados trocados, embora `getValues()` devolva o array correto. A divergência entre o que se vê e o que se submete é o que torna esse bug caro: ele não quebra, ele mente.
 
 `field.id` é gerado pela biblioteca exatamente para isso, e a fonte remete à página de listas do React para o porquê. O nome da chave é configurável por `keyName`, mas não há razão para mudá-lo — e na v8 beta ele deixa de existir (§ Notas de verificação).
 
@@ -615,7 +615,7 @@ Virtualizar, porém, tem um efeito colateral que a fonte descreve:
 
 > "A common practice is to only render the items in the viewport; however, this causes issues as items are removed from the DOM when they are out of view and then re-added. This will cause items to reset to their default values when they re-enter the viewport."
 
-Duas saídas oficiais: `FormProvider` + `useFormContext` nas linhas virtualizadas, ou `Controller` restaurando o valor via `getValues` ao renderizar cada item.
+Duas saídas oficiais: `FormProvider` + `useFormContext` nas linhas virtualizadas, ou `Controller` restaurando o valor via `getValues()` ao renderizar cada item.
 
 > E antes de otimizar `FormProvider`: "Using React Hook Form's DevTools alongside FormProvider can cause performance issues in some situations. Before diving deep in performance optimizations, consider this bottleneck first."
 
@@ -640,7 +640,7 @@ Um wizard força uma decisão que nenhum formulário de tela única obriga a tom
 
 ### 7.1 O que a fonte não responde
 
-`trigger(['cliente.nome', 'cliente.email'])` devolve `Promise<boolean>` e é a via óbvia para liberar a etapa seguinte. O problema aparece quando há `resolver`: **o schema roda inteiro**, então um `itens: z.array.min(1)` produz erro já no `trigger` da etapa 1, quando o usuário nem chegou lá.
+`trigger(['cliente.nome', 'cliente.email'])` devolve `Promise<boolean>` e é a via óbvia para liberar a etapa seguinte. O problema aparece quando há `resolver`: **o schema roda inteiro**, então um `itens: z.array().min(1)` produz erro já no `trigger` da etapa 1, quando o usuário nem chegou lá.
 
 A fonte **não diz** se `formState.errors` fica com os erros de todas as etapas ou só dos campos nomeados — verifiquei a página de `trigger` e ela trata apenas de re-render. Ver [Notas de verificação](#notas-de-verificacao).
 
@@ -651,12 +651,12 @@ Isso importa porque é a diferença entre a etapa 1 mostrar erros de campos que 
 ```
 As etapas compartilham validação cruzada
 (uma regra que só faz sentido vendo dados de duas etapas)?
-├── NÃO (o caso comum)
-│ → UM FORMULÁRIO POR ETAPA, com acumulador no wizard.
-│ Cada etapa tem seu schema, seu isValid, seu ciclo de vida.
+├── NÃO  (o caso comum)
+│   → UM FORMULÁRIO POR ETAPA, com acumulador no wizard.
+│     Cada etapa tem seu schema, seu isValid, seu ciclo de vida.
 └── SIM, e a regra precisa avisar ANTES da última etapa
- → um formulário só, com trigger por etapa.
- Aceite a incerteza da § 7.1 e teste o comportamento.
+    → um formulário só, com trigger por etapa.
+      Aceite a incerteza da § 7.1 e teste o comportamento.
 
 Em ambos: o schema COMPLETO valida o objeto acumulado antes do envio.
 É ele que o servidor também usa.
@@ -677,76 +677,76 @@ Um schema por etapa, e o completo é a soma — não duas declarações do mesmo
 
 ```tsx
 const passo1Schema = z.object({
- cliente: z.object({
- nome: z.string.min(2, 'Informe ao menos 2 caracteres.'),
- email: z.email('E-mail inválido.'),
- }),
+  cliente: z.object({
+    nome: z.string().min(2, 'Informe ao menos 2 caracteres.'),
+    email: z.email('E-mail inválido.'),
+  }),
 })
 
 const passo2Schema = z.object({
- itens: z.array(z.object({
- descricao: z.string.min(1, 'Descreva o item.'),
- quantidadeCentavos: z.number.int.positive,
- })).min(1, 'Adicione ao menos um item.'),
+  itens: z.array(z.object({
+    descricao: z.string().min(1, 'Descreva o item.'),
+    quantidadeCentavos: z.number().int().positive(),
+  })).min(1, 'Adicione ao menos um item.'),
 })
 
 const passo3Schema = z.object({
- observacoes: z.string.max(500).optional,
+  observacoes: z.string().max(500).optional(),
 })
 
 // O completo é a composição, não uma terceira declaração
 const orcamentoSchema = z.object({
-...passo1Schema.shape,
-...passo2Schema.shape,
-...passo3Schema.shape,
+  ...passo1Schema.shape,
+  ...passo2Schema.shape,
+  ...passo3Schema.shape,
 })
 
 type Orcamento = z.infer<typeof orcamentoSchema>
 type Passo1 = z.infer<typeof passo1Schema>
 ```
 
-O spread de `.shape` funciona igual em Zod 3 e 4, e deixa explícito que o completo **é** a soma das partes. Regra cruzada entre etapas vai num `.refine` no `orcamentoSchema`, não nos parciais.
+O spread de `.shape` funciona igual em Zod 3 e 4, e deixa explícito que o completo **é** a soma das partes. Regra cruzada entre etapas vai num `.refine()` no `orcamentoSchema`, não nos parciais.
 
 ### 7.4 O acumulador
 
 ```tsx
-export function WizardOrcamento {
- const [etapa, setEtapa] = useState(1)
- const [dados, setDados] = useState<Partial<Orcamento>>({})
+export function WizardOrcamento() {
+  const [etapa, setEtapa] = useState(1)
+  const [dados, setDados] = useState<Partial<Orcamento>>({})
 
- const avancar = (parcial: Partial<Orcamento>) => {
- setDados((d) => ({...d,...parcial }))
- setEtapa((e) => e + 1)
- }
+  const avancar = (parcial: Partial<Orcamento>) => {
+    setDados((d) => ({ ...d, ...parcial }))
+    setEtapa((e) => e + 1)
+  }
 
- return (
- <>
- {etapa === 1 && <Passo1 dados={dados} onAvancar={avancar} />}
- {etapa === 2 && (
- <Passo2 dados={dados} onAvancar={avancar} onVoltar={ => setEtapa(1)} />
- )}
- {etapa === 3 && (
- <Passo3 dados={dados} onVoltar={ => setEtapa(2)} onEnviar={enviar} />
- )}
- </>
- )
+  return (
+    <>
+      {etapa === 1 && <Passo1 dados={dados} onAvancar={avancar} />}
+      {etapa === 2 && (
+        <Passo2 dados={dados} onAvancar={avancar} onVoltar={() => setEtapa(1)} />
+      )}
+      {etapa === 3 && (
+        <Passo3 dados={dados} onVoltar={() => setEtapa(2)} onEnviar={enviar} />
+      )}
+    </>
+  )
 }
 
 function Passo1({ dados, onAvancar }: PassoProps) {
- const { register, handleSubmit, formState: { errors, isValid } } = useForm<Passo1>({
- resolver: zodResolver(passo1Schema),
- mode: 'onTouched',
- defaultValues: { cliente: { nome: '', email: '' } },
- values: dados as Passo1, // volta preenchido — RHF-BRIDGE-03
- })
+  const { register, handleSubmit, formState: { errors, isValid } } = useForm<Passo1>({
+    resolver: zodResolver(passo1Schema),
+    mode: 'onTouched',
+    defaultValues: { cliente: { nome: '', email: '' } },
+    values: dados as Passo1,        // volta preenchido — RHF-BRIDGE-03
+  })
 
- // handleSubmit é o "Avançar": valida esta etapa e só então segue
- return (
- <form onSubmit={handleSubmit(onAvancar)}>
- {/* campos */}
- <button disabled={!isValid}>Avançar</button>
- </form>
- )
+  // handleSubmit é o "Avançar": valida esta etapa e só então segue
+  return (
+    <form onSubmit={handleSubmit(onAvancar)}>
+      {/* campos */}
+      <button disabled={!isValid}>Avançar</button>
+    </form>
+  )
 }
 ```
 
@@ -763,15 +763,15 @@ O acumulador é `Partial<Orcamento>` — TypeScript não garante que ele esteja 
 
 ```tsx
 const enviar = async (ultimoPasso: Partial<Orcamento>) => {
- const completo = {...dados,...ultimoPasso }
- const parsed = orcamentoSchema.safeParse(completo)
+  const completo = { ...dados, ...ultimoPasso }
+  const parsed = orcamentoSchema.safeParse(completo)
 
- if (!parsed.success) {
- // etapa incompleta: leve o usuário de volta em vez de enviar lixo
- setEtapa(primeiraEtapaComErro(parsed.error))
- return
- }
- await api.criarOrcamento(parsed.data)
+  if (!parsed.success) {
+    // etapa incompleta: leve o usuário de volta em vez de enviar lixo
+    setEtapa(primeiraEtapaComErro(parsed.error))
+    return
+  }
+  await api.criarOrcamento(parsed.data)
 }
 ```
 
@@ -799,18 +799,18 @@ Nesse caso: `trigger(['a','b'])` para avançar, `isValid` **não** serve para o 
 
 | Antipadrão | Por que falha | Correção |
 | --- | --- | --- |
-| `const { formState } = useForm` sem desestruturar o que usa | o Proxy assina por leitura no render; nada foi lido | desestruturar no topo · `RHF-CORE-02` |
+| `const { formState } = useForm()` sem desestruturar o que usa | o Proxy assina por leitura no render; nada foi lido | desestruturar no topo · `RHF-CORE-02` |
 | `useEffect(…, [formState.errors])` | `formState` atualiza em lote; a propriedade não dispara | `[formState]` · `RHF-STATE-04` |
-| `watch` na raiz para exibir um campo | re-renderiza o formulário inteiro a cada tecla | `useWatch` na folha · `RHF-PERF-01` |
+| `watch()` na raiz para exibir um campo | re-renderiza o formulário inteiro a cada tecla | `useWatch` na folha · `RHF-PERF-01` |
 | `watch(callback)` para autosave | sobrecarga marcada Deprecated; força o caminho de render | `subscribe` · `RHF-PERF-02` |
 | `useEffect(…, [watch('x')])` | o retorno é otimizado para render, não para dependências | `subscribe` · `RHF-PERF-03` |
-| `getValues` para renderizar | não assina; a tela congela no último render | `useWatch` |
+| `getValues()` para renderizar | não assina; a tela congela no último render | `useWatch` |
 | `watch` para uma checagem dentro de handler | paga re-render por uma leitura invisível | `getValues` · `RHF-PERF-04` |
-| `errors` lido de `useFormContext` | a leitura ocorre no componente errado; só o 1º render acerta | `useFormState({ control })` · `RHF-STATE-01` |
+| `errors` lido de `useFormContext()` | a leitura ocorre no componente errado; só o 1º render acerta | `useFormState({ control })` · `RHF-STATE-01` |
 | `setValue` no mount de componente filho | roda antes de a assinatura existir; a chamada se perde | aguardar `isReady` · `RHF-STATE-03` |
 | `subscribe` sem retornar o unsubscribe | assinatura vaza a cada remount | `return unsubscribe` · `RHF-STATE-05` |
-| `reset` dentro do `onSubmit` | compete com a atualização de `isSubmitSuccessful` | `useEffect` com sinal de sucesso próprio · `RHF-STATE-02` |
-| `useEffect( => { if (isSubmitSuccessful) reset })` | erro de servidor tratado com `setError` não lança, então a flag fica `true` e o reset apaga campos e erros | condicionar a um sinal de sucesso real · `RHF-STATE-02` |
+| `reset()` dentro do `onSubmit` | compete com a atualização de `isSubmitSuccessful` | `useEffect` com sinal de sucesso próprio · `RHF-STATE-02` |
+| `useEffect(() => { if (isSubmitSuccessful) reset() })` | erro de servidor tratado com `setError` não lança, então a flag fica `true` e o reset apaga campos e erros | condicionar a um sinal de sucesso real · `RHF-STATE-02` |
 | `setValue('obj', {…})` para um campo | a fonte marca como menos performático | mirar o campo folha · `RHF-STATE-06` |
 | `setValue` para trocar o array inteiro | contorna a API própria e desacerta o estado do array | `replace` · `RHF-STATE-07` |
 | `getFieldState` sem `formState` assinado | devolve estado não inicializado, sem erro | assinar antes · `RHF-STATE-08` |
@@ -833,7 +833,7 @@ Nesse caso: `trigger(['a','b'])` para avançar, `isValid` **não** serve para o 
 
 - [ ] Todo `formState` usado está desestruturado antes do render? → `RHF-CORE-02`
 - [ ] Algum `useEffect` depende de uma propriedade de `formState` em vez do objeto? → `RHF-STATE-04`
-- [ ] Existe `watch` sem argumento, ou `watch` em componente grande? → `RHF-PERF-01`
+- [ ] Existe `watch()` sem argumento, ou `watch` em componente grande? → `RHF-PERF-01`
 - [ ] Autosave, analytics ou log usam `subscribe`, e não `watch(callback)`? → `RHF-PERF-02`
 - [ ] O retorno de `watch`/`useWatch` aparece em array de dependências? → `RHF-PERF-03`
 - [ ] Leitura que não afeta a UI usa `getValues`? → `RHF-PERF-04`
@@ -896,7 +896,7 @@ Pontos em que a fonte contraria o que se assume por hábito — ou o que esta do
 - **`exact` tem defaults diferentes na mesma biblioteca:** `false` em `useWatch` e `useFormState`, `true` em `Controller`/`useController`.
 - **`shouldUnregister: false` (o default) não valida campos desmontados.** Os valores persistem, mas ficam fora da validação embutida — o que é fácil de confundir com "o campo passou".
 - **`shouldUnregister` é configuração global** e sobrepõe a configuração de nível de campo, e não apenas coexiste com ela.
-- **`reset(x)` redefine `defaultValues`.** Um `reset` posterior sem argumento volta para `x`, não para os valores originais do `useForm`.
+- **`reset(x)` redefine `defaultValues`.** Um `reset()` posterior sem argumento volta para `x`, não para os valores originais do `useForm`.
 - **`getFieldState` exige assinatura por propriedade**, não uma assinatura genérica: `isDirty` precisa de `dirtyFields` assinado, `error` precisa de `errors`, e assim por diante.
 - **Nome desconhecido em `getFieldState` não dá erro** — devolve estado default, o que faz um typo passar como campo válido e limpo.
 

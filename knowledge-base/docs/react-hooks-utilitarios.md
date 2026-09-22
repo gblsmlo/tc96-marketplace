@@ -2,9 +2,9 @@
 titulo: React - Hooks Utilitários
 Link: https://react.dev/reference/react/useId
 tags:
- - react
- - hooks
- - agent-context
+  - react
+  - hooks
+  - agent-context
 source: "Documentação oficial do React — useId, useSyncExternalStore, useDebugValue"
 verificado-em: 2026-08-14
 ---
@@ -22,25 +22,25 @@ Entrada: [React.js](react-js.md) · Base normativa: [React - Hooks](react-hooks.
 ## 1. `useId`
 
 ```tsx
-const id = useId
+const id = useId()
 ```
 
 Gera um ID único e **estável entre servidor e cliente** — é isso que o diferencia de qualquer gerador próprio.
 
 ```tsx
-function CampoSenha {
- const id = useId
- return (
- <>
- <label htmlFor={`${id}-senha`}>Senha</label>
- <input id={`${id}-senha`} type="password" aria-describedby={`${id}-dica`} />
- <p id={`${id}-dica`}>Mínimo de 12 caracteres.</p>
- </>
- )
+function CampoSenha() {
+  const id = useId()
+  return (
+    <>
+      <label htmlFor={`${id}-senha`}>Senha</label>
+      <input id={`${id}-senha`} type="password" aria-describedby={`${id}-dica`} />
+      <p id={`${id}-dica`}>Mínimo de 12 caracteres.</p>
+    </>
+  )
 }
 ```
 
-Um contador global ou `Math.random` produziria valores diferentes no servidor e no cliente, causando erro de hidratação — ver [React - Renderização e Entrypoints](react-renderizacao-e-entrypoints.md) § 1. `useId` é gerado a partir da **posição do componente na árvore**, então é o mesmo dos dois lados.
+Um contador global ou `Math.random()` produziria valores diferentes no servidor e no cliente, causando erro de hidratação — ver [React - Renderização e Entrypoints](react-renderizacao-e-entrypoints.md) § 1. `useId` é gerado a partir da **posição do componente na árvore**, então é o mesmo dos dois lados.
 
 **Um `useId` por componente, com sufixos**, é o padrão recomendado quando há vários elementos relacionados — como no exemplo acima. Chamar o Hook várias vezes funciona, mas é desnecessário.
 
@@ -68,15 +68,15 @@ Assina uma store **fora** do React de forma segura sob renderização concorrent
 | `getServerSnapshot?` | valor usado no SSR e na hidratação inicial |
 
 ```tsx
-function useLarguraJanela {
- return useSyncExternalStore(
- (callback) => {
- window.addEventListener('resize', callback)
- return => window.removeEventListener('resize', callback)
- },
- => window.innerWidth,
- => 1024, // sem window no servidor
- )
+function useLarguraJanela() {
+  return useSyncExternalStore(
+    (callback) => {
+      window.addEventListener('resize', callback)
+      return () => window.removeEventListener('resize', callback)
+    },
+    () => window.innerWidth,
+    () => 1024,   // sem window no servidor
+  )
 }
 ```
 
@@ -90,13 +90,13 @@ A alternativa ingênua — `useEffect` + `useState` — permite **tearing**: dur
 
 ```tsx
 // ERRADO — novo objeto a cada chamada → loop infinito
- => ({ largura: window.innerWidth, altura: window.innerHeight })
+() => ({ largura: window.innerWidth, altura: window.innerHeight })
 
 // CERTO — valor primitivo
- => window.innerWidth
+() => window.innerWidth
 
 // CERTO — objeto cacheado na store, com identidade nova só quando muda
- => store.getEstadoCacheado
+() => store.getEstadoCacheado()
 ```
 
 | ID | Regra |
@@ -109,7 +109,7 @@ A alternativa ingênua — `useEffect` + `useState` — permite **tearing**: dur
 
 Quase nunca diretamente. Bibliotecas de estado (Redux) já o usam internamente. Use-o à mão para APIs do browser (`navigator.onLine`, `matchMedia`, `localStorage`) ou uma store própria pequena.
 
-Para dado remoto, não é a ferramenta — ver.
+Para dado remoto, não é a ferramenta.
 
 ---
 
@@ -122,17 +122,17 @@ useDebugValue(value, format?)
 Rótulo do Hook customizado no React DevTools. Só isso.
 
 ```tsx
-function useOnlineStatus {
- const online = useSyncExternalStore(subscribe, => navigator.onLine, => true)
- useDebugValue(online ? 'Online' : 'Offline')
- return online
+function useOnlineStatus() {
+  const online = useSyncExternalStore(subscribe, () => navigator.onLine, () => true)
+  useDebugValue(online ? 'Online' : 'Offline')
+  return online
 }
 ```
 
 O segundo parâmetro adia a formatação — a função só roda quando o Hook é inspecionado no DevTools, evitando custo em cada render:
 
 ```tsx
-useDebugValue(date, (d) => d.toISOString)
+useDebugValue(date, (d) => d.toISOString())
 ```
 
 | ID | Regra |

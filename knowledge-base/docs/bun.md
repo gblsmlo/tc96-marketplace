@@ -2,9 +2,9 @@
 titulo: Bun
 Link: https://bun.com/docs
 tags:
- - bun
- - reference
- - agent-context
+  - bun
+  - reference
+  - agent-context
 source: "Documentação oficial — https://bun.com/docs"
 verificado-em: 2026-08-15
 ---
@@ -72,9 +72,9 @@ Cinco afirmações. Quase todo erro que um agente comete em Bun viola uma delas.
 
 **4. Compatibilidade com Node.js é objetivo declarado, não estado alcançado — e saber onde ela termina evita a maior classe de bug.** A fonte é explícita: *"This is an ongoing effort"*, e mantém uma [página de status por módulo](https://bun.com/docs/runtime/nodejs-compat) medida contra o Node.js v26. A maioria dos módulos está 🟢, vários estão 🟡 com lacunas nomeadas (`node:https` sem `SNICallback`, `node:vm` parcial, `node:worker_threads` ignorando `resourceLimits`), e `node:sea` está 🔴. "Funciona no Node" não é evidência de que funciona no Bun; a página de compatibilidade é.
 
-**5. ESM e CJS coexistem no mesmo arquivo, com uma exceção que importa.** `import` e `require` funcionam lado a lado, e `require` aceita `.ts`, `.tsx` e `.mjs`. A única quebra é `require` de um módulo com **top-level `await`** — `require` é síncrono por definição. É a única regra de interop que precisa ser lembrada.
+**5. ESM e CJS coexistem no mesmo arquivo, com uma exceção que importa.** `import` e `require` funcionam lado a lado, e `require()` aceita `.ts`, `.tsx` e `.mjs`. A única quebra é `require()` de um módulo com **top-level `await`** — `require` é síncrono por definição. É a única regra de interop que precisa ser lembrada.
 
-> **O corolário que economiza tempo:** quando algo não roda em Bun, a primeira pergunta não é "qual é o bug do Bun". É *"isto está usando um global do Bun em processo `node`, uma API `node:*` marcada 🟡, ou `require` num módulo com top-level await?"*. Os três cobrem a maioria dos casos. Ver § 5.
+> **O corolário que economiza tempo:** quando algo não roda em Bun, a primeira pergunta não é "qual é o bug do Bun". É *"isto está usando um global do Bun em processo `node`, uma API `node:*` marcada 🟡, ou `require()` num módulo com top-level await?"*. Os três cobrem a maioria dos casos. Ver § 5.
 
 ---
 
@@ -92,7 +92,7 @@ Saber de onde algo vem — e onde roda — evita metade dos erros.
 | `node:*` | `import { readdir } from "node:fs/promises"` | superfície Node.js reimplementada | Sim |
 | Globais Web | nada | `fetch`, `Request`, `Response`, `Headers`, `URL`, `Blob`, `ReadableStream`, `AbortController`, `crypto`, `WebSocket`, `structuredClone` | Sim (browser/Node modernos) |
 | Globais Node | nada | `process`, `Buffer`, `__dirname`, `__filename`, `require`, `module`, `global` | Sim |
-| `import.meta` | linguagem | `.dir`, `.file`, `.path`, `.url`, `.main`, `.env`, `.resolve`, e os aliases `.dirname`/`.filename` | Parcial (nomes diferem) |
+| `import.meta` | linguagem | `.dir`, `.file`, `.path`, `.url`, `.main`, `.env`, `.resolve()`, e os aliases `.dirname`/`.filename` | Parcial (nomes diferem) |
 
 Três consequências que aparecem em código gerado:
 
@@ -132,7 +132,7 @@ Superfície verificada em bun.com/docs. A coluna **Satélite** diz o que carrega
 | --- | --- | --- |
 | `Bun.file(path)` | Referência preguiçosa a arquivo, com interface `Blob` | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
 | `Bun.write(dest, data)` | Escrita multiuso (string, Blob, `Response`, TypedArray, `BunFile`) | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
-| `file.writer` → `FileSink` | Escrita incremental com buffer | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
+| `file.writer()` → `FileSink` | Escrita incremental com buffer | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
 | `Bun.stdin` / `stdout` / `stderr` | Streams padrão como `BunFile` | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
 | `node:fs` | Diretórios, permissões, tudo que `Bun.file` não cobre | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
 | Carregamento de `.env` | Automático, com ordem de precedência e expansão | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
@@ -148,7 +148,7 @@ Superfície verificada em bun.com/docs. A coluna **Satélite** diz o que carrega
 | `Bun.hash.*` | Hash **não criptográfico** (wyhash, xxHash, crc32, …) | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
 | `Bun.version`, `Bun.revision`, `Bun.main` | Identidade do runtime e do entrypoint | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
 | `Bun.which`, `Bun.sleep`, `Bun.peek`, `Bun.deepEquals`, `Bun.escapeHTML` | Utilitários que aparecem em código real | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
-| `Bun.randomUUIDv7` | UUID v7 monotônico, ordenável | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
+| `Bun.randomUUIDv7()` | UUID v7 monotônico, ordenável | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
 | `Bun.gzipSync` / `deflateSync` / `zstdCompress` e inversos | Compressão síncrona e assíncrona | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
 | `Bun.readableStreamTo*` | Coletar `ReadableStream` em texto, JSON, bytes, `Blob`, `FormData` | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
 
@@ -177,7 +177,7 @@ Superfície verificada em bun.com/docs. A coluna **Satélite** diz o que carrega
 | `test`/`describe`/`expect`, matchers, `expect.assertions` | Corpo do teste e asserção | [Bun - Testes - Escrita e Asserções](bun-testes-escrita-e-assercoes.md) |
 | `test.each`/`.skip`/`.only`/`.todo`/`.failing`/`.if` | Modificadores | [Bun - Testes - Escrita e Asserções](bun-testes-escrita-e-assercoes.md) |
 | `toMatchSnapshot`, `toMatchInlineSnapshot`, `-u` | Snapshots em arquivo e inline | [Bun - Testes - Escrita e Asserções](bun-testes-escrita-e-assercoes.md) |
-| `mock`, `spyOn`, `mock.module`, as três limpezas | Mocks de função, espiões e mocks de módulo | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) |
+| `mock()`, `spyOn()`, `mock.module()`, as três limpezas | Mocks de função, espiões e mocks de módulo | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) |
 | `setSystemTime`, `useFakeTimers`, `advanceTimersByTime` | Congelar data e fazer o tempo passar | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) |
 | `beforeAll`/`beforeEach`/`afterEach`/`afterAll`/`onTestFinished` | Ciclo de vida e escopo | [Bun - Testes - Ciclo de Vida e Isolamento](bun-testes-ciclo-de-vida-e-isolamento.md) |
 | `--parallel`, `--isolate`, `BUN_TEST_WORKER_ID`, `--shard` | Isolamento, paralelismo e divisão em CI | [Bun - Testes - Ciclo de Vida e Isolamento](bun-testes-ciclo-de-vida-e-isolamento.md) |
@@ -202,7 +202,7 @@ Superfície verificada em bun.com/docs. A coluna **Satélite** diz o que carrega
 | `ws.publish` / `server.publish` | Pub/sub por tópico (`publishToSelf` é `false`) | [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 5 |
 | `error(err)` | Handler de erro do servidor | [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 6 |
 | `development` | Aceita booleano **e objeto** — `NEVER` ligado em produção | [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 6 |
-| `server.reload`, `.stop`, `.requestIP` | Ciclo de vida e binding | [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 6 |
+| `server.reload()`, `.stop()`, `.requestIP()` | Ciclo de vida e binding | [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 6 |
 | `tls`, `unix`, `reusePort`, `hostname`, `port` | Opções de binding e transporte | [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 6 |
 | **O que não existe nativamente** | middleware, validação tipada, cliente tipado, CORS | [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7 · [Backend no runtime Bun](backend-no-runtime-bun.md) |
 
@@ -225,13 +225,13 @@ Superfície verificada em bun.com/docs. A coluna **Satélite** diz o que carrega
 | API | Para que serve | Satélite |
 | --- | --- | --- |
 | `new Database(path, { strict, safeIntegers })` | SQLite embutido, síncrono | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 2 |
-| `db.query` × `db.prepare` | Cacheado (20 entradas) × não cacheado | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 2 |
-| `.get`, `.all`, `.run`, `.iterate`, `.values` | Executores — `.get` devolve `null`, não `undefined` | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 2 |
+| `db.query()` × `db.prepare()` | Cacheado (20 entradas) × não cacheado | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 2 |
+| `.get()`, `.all()`, `.run()`, `.iterate()`, `.values()` | Executores — `.get()` devolve `null`, não `undefined` | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 2 |
 | Parâmetro (`$nome`, `?`, `${}` na tag) | **A defesa contra SQL injection** | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 3 |
 | `db.transaction(fn)` · `sql.begin(fn)` | Transação — no `begin`, use o `tx` recebido | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 4 |
 | `PRAGMA journal_mode = WAL` | Concorrência de leitura em SQLite | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 4 |
 | `Bun.sql` (tagged template) | **PostgreSQL, MySQL e SQLite** — o adapter vem do formato da URL | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 5 |
-| `sql.reserve`, `sql.unsafe`, `sql.file`, `ssl` | Pool, escape hatch, script, TLS (default `"disable"`) | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 5 |
+| `sql.reserve()`, `sql.unsafe()`, `sql.file()`, `ssl` | Pool, escape hatch, script, TLS (default `"disable"`) | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 5 |
 | `POSTGRES_URL` / `DATABASE_URL` / `PGSSLMODE` … | Variáveis de conexão, por nome e precedência | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 5 |
 | Cliente Redis · `S3Client` / `Bun.s3` + presign | Os outros dois clientes embutidos | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 6 |
 | **Migração de schema** | **Bun não tem.** É de você ou de uma ferramenta externa | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) § 8 · |
@@ -241,12 +241,12 @@ Superfície verificada em bun.com/docs. A coluna **Satélite** diz o que carrega
 | API | Para que serve | Satélite |
 | --- | --- | --- |
 | `Bun.$` | Shell cross-platform, interpolação escapada por default | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) § 2 |
-| `.text`, `.json`, `.quiet`, `.nothrow`, `.cwd`, `.env` | Superfície do `$` | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) § 2 |
+| `.text()`, `.json()`, `.quiet()`, `.nothrow()`, `.cwd()`, `.env()` | Superfície do `$` | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) § 2 |
 | `bun:ffi` — `dlopen`, `cc`, `JSCallback` | Bibliotecas nativas — **experimental** | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) § 3 |
 | `Worker` | Paralelismo real — **experimental** | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) § 4 |
 | **Matriz de compatibilidade `node:*`** | Onde a compatibilidade termina; legenda 🟢/🟡/🔴 | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) § 1 e § 5 |
 | Imagem `oven/bun`, `USER bun`, `--no-env-file` | Deploy em container | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) § 6 |
-| `SIGTERM` + `server.stop` + `process.exit` | Graceful shutdown — as duas metades | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) § 6 |
+| `SIGTERM` + `server.stop()` + `process.exit()` | Graceful shutdown — as duas metades | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) § 6 |
 | `--smol` | Aumenta a frequência de GC; **não** é "modo container" | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) § 6 |
 
 ---
@@ -262,28 +262,28 @@ A pergunta que decide não é "async ou sync" — é **se a operação é sobre 
 ```
 É sobre o CONTEÚDO de um arquivo?
 ├── NÃO (mkdir, readdir, rm, stat, chmod, watch, symlink)
-│ └── node:fs / node:fs/promises. Não existe equivalente em Bun.*
-│ → a própria doc de File I/O manda usar node:fs para isso
+│   └── node:fs / node:fs/promises. Não existe equivalente em Bun.*
+│       → a própria doc de File I/O manda usar node:fs para isso
 │
 └── SIM
- ├── LER
- │ ├── inteiro, uma vez → Bun.file(path).text |.json |.bytes |.arrayBuffer
- │ ├── em pedaços → Bun.file(path).stream → ReadableStream
- │ └── só checar existência → await Bun.file(path).exists
- │ ⚠ NÃO use.size === 0: arquivo inexistente também tem size 0
- │
- └── ESCREVER
- ├── payload pronto (string, Blob, TypedArray, Response, BunFile)
- │ → await Bun.write(dest, data) ← copia arquivo, salva
- │ resposta HTTP, escreve
- │ em Bun.stdout — tudo o mesmo
- ├── incremental / em loop → Bun.file(p).writer → FileSink
- │ └──.write bufferiza ·.flush grava ·.end fecha
- │ ⚠ o processo NÃO encerra até.end (ou.unref)
- └── append → node:fs (Bun.write sobrescreve)
+    ├── LER
+    │   ├── inteiro, uma vez → Bun.file(path).text() | .json() | .bytes() | .arrayBuffer()
+    │   ├── em pedaços → Bun.file(path).stream()  → ReadableStream
+    │   └── só checar existência → await Bun.file(path).exists()
+    │       ⚠ NÃO use .size === 0: arquivo inexistente também tem size 0
+    │
+    └── ESCREVER
+        ├── payload pronto (string, Blob, TypedArray, Response, BunFile)
+        │   → await Bun.write(dest, data)      ← copia arquivo, salva
+        │                                        resposta HTTP, escreve
+        │                                        em Bun.stdout — tudo o mesmo
+        ├── incremental / em loop → Bun.file(p).writer() → FileSink
+        │   └── .write() bufferiza · .flush() grava · .end() fecha
+        │       ⚠ o processo NÃO encerra até .end() (ou .unref())
+        └── append → node:fs (Bun.write sobrescreve)
 ```
 
-Sobre "quando o async importa": `Bun.file.text` e `Bun.write` são assíncronos e **não bloqueiam o event loop**. Dentro de um handler de `Bun.serve` isso é obrigatório. Em CLI de vida curta, `node:fs` síncrono é aceitável e às vezes mais simples — mas nunca em servidor.
+Sobre "quando o async importa": `Bun.file().text()` e `Bun.write()` são assíncronos e **não bloqueiam o event loop**. Dentro de um handler de `Bun.serve` isso é obrigatório. Em CLI de vida curta, `node:fs` síncrono é aceitável e às vezes mais simples — mas nunca em servidor.
 
 ### Vim do Node e meu código não roda. O que checar?
 
@@ -291,33 +291,33 @@ Percorra na ordem. As três primeiras cobrem a maioria dos casos.
 
 ```
 1. ReferenceError: Bun is not defined
- → o processo é `node`, não `bun`.
- ├── é um CLI com shebang #!/usr/bin/env node? → bun run --bun <cli>
- │ ou bunx --bun <cli>
- └── é código seu? → rode com `bun`, ou troque o global Bun por node:*
+   → o processo é `node`, não `bun`.
+     ├── é um CLI com shebang #!/usr/bin/env node? → bun run --bun <cli>
+     │                                               ou bunx --bun <cli>
+     └── é código seu? → rode com `bun`, ou troque o global Bun por node:*
 
 2. Cannot find name 'Bun' (erro de TIPO, não de runtime)
- → falta @types/bun: bun add -d @types/bun
- └── TypeScript 6.0+ ainda exige "types": ["bun"] em compilerOptions
+   → falta @types/bun:  bun add -d @types/bun
+     └── TypeScript 6.0+ ainda exige "types": ["bun"] em compilerOptions
 
-3. Erro dentro de um require
- └── o módulo tem top-level await? → require é síncrono; use import
- ou import dinâmico
+3. Erro dentro de um require()
+   └── o módulo tem top-level await? → require() é síncrono; use import
+                                        ou import() dinâmico
 
 4. Um módulo node:* se comporta diferente
- → consulte a página de compatibilidade ANTES de suspeitar do seu código.
- Vários módulos estão 🟡 com lacunas nomeadas; node:sea está 🔴.
- → [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md)
+   → consulte a página de compatibilidade ANTES de suspeitar do seu código.
+     Vários módulos estão 🟡 com lacunas nomeadas; node:sea está 🔴.
+     → [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md)
 
 5. Um pacote não funcionou depois de instalar
- ├── depende de postinstall? → Bun NÃO roda lifecycle scripts por padrão.
- │ → bun pm untrusted (lista o que foi bloqueado)
- │ → trustedDependencies / bun pm trust — ver [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md)
- └── importa algo que não declarou (phantom dependency)?
- → o linker isolated expõe isso; hoisted escondia
+   ├── depende de postinstall? → Bun NÃO roda lifecycle scripts por padrão.
+   │   → bun pm untrusted  (lista o que foi bloqueado)
+   │   → trustedDependencies / bun pm trust — ver [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md)
+   └── importa algo que não declarou (phantom dependency)?
+       → o linker isolated expõe isso; hoisted escondia
 
 6. Compila mas o tipo está errado em produção
- → Bun NÃO faz type checking. `tsc --noEmit` precisa estar no CI.
+   → Bun NÃO faz type checking. `tsc --noEmit` precisa estar no CI.
 ```
 
 ### Preciso rodar um processo ou um comando. Qual API?
@@ -325,52 +325,52 @@ Percorra na ordem. As três primeiras cobrem a maioria dos casos.
 ```
 É um comando de shell com pipe, redirect, glob ou variável?
 ├── SIM
-│ ├── e precisa ser cross-platform (Windows incluído)
-│ │ → Bun.$ — implementa ls/cd/rm nativamente, escapa
-│ │ interpolação por padrão (sem injeção)
-│ │ → [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md)
-│ └── e o ambiente é só POSIX e o comando é trivial
-│ → Bun.spawn(["sh", "-c", …]) ainda funciona, mas o escape
-│ passa a ser sua responsabilidade
+│   ├── e precisa ser cross-platform (Windows incluído)
+│   │   → Bun.$  — implementa ls/cd/rm nativamente, escapa
+│   │             interpolação por padrão (sem injeção)
+│   │             → [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md)
+│   └── e o ambiente é só POSIX e o comando é trivial
+│       → Bun.spawn(["sh", "-c", …]) ainda funciona, mas o escape
+│         passa a ser sua responsabilidade
 │
 └── NÃO — é executar um binário com argumentos
- ├── dentro de servidor HTTP ou código com event loop vivo
- │ → Bun.spawn(cmd, { … }) ← NUNCA spawnSync aqui
- │ ├── precisa de deadline → { timeout, killSignal }
- │ ├── precisa de cancelamento → { signal }
- │ ├── escrever no stdin → { stdin: "pipe" } → proc.stdin.write
- │ └── ler o stdout → await proc.stdout.text
- ├── em CLI de vida curta, saída pequena
- │ → Bun.spawnSync(cmd) → { success, stdout: Buffer, stderr: Buffer }
- │ └── proteja contra saída ilimitada: { maxBuffer }
- └── precisa de API idêntica à do Node (lib compartilhada)
- → node:child_process
+    ├── dentro de servidor HTTP ou código com event loop vivo
+    │   → Bun.spawn(cmd, { … })            ← NUNCA spawnSync aqui
+    │      ├── precisa de deadline → { timeout, killSignal }
+    │ ├── precisa de cancelamento → { signal }
+    │      ├── escrever no stdin → { stdin: "pipe" } → proc.stdin.write()
+    │      └── ler o stdout → await proc.stdout.text()
+    ├── em CLI de vida curta, saída pequena
+    │   → Bun.spawnSync(cmd)  → { success, stdout: Buffer, stderr: Buffer }
+    │      └── proteja contra saída ilimitada: { maxBuffer }
+    └── precisa de API idêntica à do Node (lib compartilhada)
+        → node:child_process
 ```
 
 ### Qual comando `bun` para esta tarefa?
 
 ```
 O que você quer executar?
-├── um arquivo do projeto → bun <arquivo> (bun run <arquivo>)
-├── um script do package.json → bun run <script>
-│ └── ⚠ se o nome colide com um comando embutido do bun,
-│ o embutido vence: use SEMPRE `bun run <script>` em automação
+├── um arquivo do projeto        → bun <arquivo>        (bun run <arquivo>)
+├── um script do package.json    → bun run <script>
+│   └── ⚠ se o nome colide com um comando embutido do bun,
+│         o embutido vence: use SEMPRE `bun run <script>` em automação
 ├── um binário de dependência já instalada
-│ ├── com o runtime que o shebang pedir → bun run <bin> (ou bunx <bin>)
-│ └── forçando o runtime do Bun → bun run --bun <bin>
-├── um pacote npm que você NÃO quer instalar → bunx <pkg> (= bun x)
-│ ├── versão fixa → bunx <pkg>@<versão>
-│ ├── binário com nome ≠ pacote → bunx -p <pkg> <bin>
-│ └── forçando o Bun → bunx --bun <pkg>
-│ ⚠ --bun vem ANTES do nome; depois do nome vai para o pacote
-└── um comando do sistema → bun run <cmd> (último da ordem de resolução)
+│   ├── com o runtime que o shebang pedir → bun run <bin>   (ou bunx <bin>)
+│   └── forçando o runtime do Bun         → bun run --bun <bin>
+├── um pacote npm que você NÃO quer instalar → bunx <pkg>   (= bun x)
+│   ├── versão fixa            → bunx <pkg>@<versão>
+│   ├── binário com nome ≠ pacote → bunx -p <pkg> <bin>
+│   └── forçando o Bun         → bunx --bun <pkg>
+│       ⚠ --bun vem ANTES do nome; depois do nome vai para o pacote
+└── um comando do sistema        → bun run <cmd>  (último da ordem de resolução)
 
 Ordem de resolução de `bun run <x>`:
- 1. script do package.json → 2. arquivo-fonte → 3. binário de dependência
- → 4. comando do sistema (só com `bun run` explícito)
+  1. script do package.json → 2. arquivo-fonte → 3. binário de dependência
+  → 4. comando do sistema (só com `bun run` explícito)
 
 Flags do Bun vêm depois de `bun`, nunca no fim:
- bun --watch run dev ✔ bun run dev --watch ✘ (vai para o script)
+  bun --watch run dev   ✔     bun run dev --watch   ✘ (vai para o script)
 ```
 
 ---
@@ -388,10 +388,10 @@ Regras citáveis por ID. Uma skill, um prompt de revisão ou um comentário de P
 | `BUN-CORE-01` | Código que usa o global `Bun` **MUST** rodar sob o processo `bun` — não sob `node`, nem sob um CLI com shebang `node` sem `--bun`. |
 | `BUN-CORE-02` | Projeto em Bun **MUST** ter type checking explícito no CI (`tsc --noEmit`) — o runtime transpila sem checar tipos. |
 | `BUN-CORE-03` | PR que adiciona `jest`, `ts-node`, `nodemon` ou `dotenv` ao `package.json` **MUST** declarar no corpo por que o equivalente embutido não serve — o binário cobre os quatro sem ressalva. **Bundler não entra nesta regra:** ali existe trade-off real, decidido em [Bun - Bundler e Build](bun-bundler-e-build.md) § 10. |
-| `BUN-CORE-04` | Módulo com top-level `await` **NEVER** é carregado com `require`. |
+| `BUN-CORE-04` | Módulo com top-level `await` **NEVER** é carregado com `require()`. |
 | `BUN-CORE-05` | Afirmação sobre compatibilidade com Node.js **MUST** ser conferida na página de compatibilidade oficial — "funciona no Node" não é evidência. |
 | `BUN-CORE-06` | Automação (script, CI, Dockerfile) **MUST** usar `bun run <script>` na forma explícita; a forma curta `bun <script>` perde para um comando embutido de mesmo nome. |
-| `BUN-CORE-07` | Flag **do runtime** (`--watch`, `--hot`, `--bun`, `--preload`/`-r`, `--no-env-file`) **MUST** vir antes do subcomando — `bun --preload./setup.ts run./index.ts`. Flag **do subcomando** (`--filter`, `--frozen-lockfile`, `--production`, `--coverage`) vem depois dele — `bun install --filter './packages/api'`. Flag posta **depois do nome do script ou do pacote** **NEVER** é do Bun: ali ela é repassada ao alvo. |
+| `BUN-CORE-07` | Flag **do runtime** (`--watch`, `--hot`, `--bun`, `--preload`/`-r`, `--no-env-file`) **MUST** vir antes do subcomando — `bun --preload ./setup.ts run ./index.ts`. Flag **do subcomando** (`--filter`, `--frozen-lockfile`, `--production`, `--coverage`) vem depois dele — `bun install --filter './packages/api'`. Flag posta **depois do nome do script ou do pacote** **NEVER** é do Bun: ali ela é repassada ao alvo. |
 
 ### 6.1 Regras críticas dos satélites
 
@@ -399,12 +399,12 @@ As famílias completas vivem nos satélites, mas **estas precisam viajar com o c
 
 **Critério de entrada nesta tabela:** a violação é silenciosa (não há erro em dev), ou é de segurança, ou o comportamento contraria o hábito trazido de Node. Regra que o compilador ou um teste pega fica só no satélite.
 
-> **O satélite é canônico.** As linhas abaixo reproduzem o texto do satélite **verbatim**, e não uma paráfrase. Em qualquer divergência entre esta tabela e o satélite, o satélite vence e esta tabela é o bug — a § 7 manda citar por ID sem parafrasear, e duas cópias divergentes de uma regra normativa inviabilizam isso. Esta tabela já teve uma regressão desse tipo: uma versão enxugada de `BUN-SYS-11` perdeu o `process.exit` e prescrevia um shutdown que deixa o container pendurado até o `SIGKILL`.
+> **O satélite é canônico.** As linhas abaixo reproduzem o texto do satélite **verbatim**, e não uma paráfrase. Em qualquer divergência entre esta tabela e o satélite, o satélite vence e esta tabela é o bug — a § 7 manda citar por ID sem parafrasear, e duas cópias divergentes de uma regra normativa inviabilizam isso. Esta tabela já teve uma regressão desse tipo: uma versão enxugada de `BUN-SYS-11` perdeu o `process.exit()` e prescrevia um shutdown que deixa o container pendurado até o `SIGKILL`.
 
 | ID | Regra | Satélite |
 | --- | --- | --- |
 | `BUN-RT-01` | Operação de **diretório** (`mkdir`, `readdir`, `rm`, `stat`) **MUST** usar `node:fs` — `Bun.file`/`Bun.write` só tratam conteúdo de arquivo. | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
-| `BUN-RT-03` | Existência de arquivo **MUST** ser checada com `await file.exists` — `size === 0` também é o valor de um arquivo inexistente. | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
+| `BUN-RT-03` | Existência de arquivo **MUST** ser checada com `await file.exists()` — `size === 0` também é o valor de um arquivo inexistente. | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
 | `BUN-RT-05` | Segredo de produção **NEVER** vem de arquivo `.env` carregado pelo runtime. | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
 | `BUN-RT-08` | Handler de servidor HTTP **NEVER** chama `Bun.spawnSync` nem uma API `*Sync` de `node:fs` — bloqueia o event loop do processo inteiro. | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
 | `BUN-RT-09` | Subprocesso de duração não garantida **MUST** receber `timeout` ou `signal`. | [Bun - Runtime e APIs](bun-runtime-e-apis.md) |
@@ -416,10 +416,10 @@ As famílias completas vivem nos satélites, mas **estas precisam viajar com o c
 | `BUN-PKG-04` | Declarar `trustedDependencies` **MUST** reincluir os pacotes da lista padrão ainda necessários — a lista declarada **substitui** a padrão. | [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) |
 | `BUN-PKG-08` | `overrides`/`resolutions` **MUST** estar no `package.json` raiz — Bun ignora os declarados em workspace. | [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) |
 | `BUN-PKG-09` | Editar um pacote em `node_modules/` **MUST** ser precedido de `bun patch <pkg>`; edição direta corrompe o cache global. | [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) |
-| `BUN-TEST-02` | `spyOn` **MUST** ter restauração garantida (`mock.restore` em `afterEach` ou no preload) — sem isso o spy vaza para os testes seguintes. | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) |
-| `BUN-TEST-03` | `mock.module` **NEVER** é desfeito por `mock.restore`; mock de módulo **MUST** ser registrado em `--preload` ou tratado como estado global do processo de teste. | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) |
+| `BUN-TEST-02` | `spyOn` **MUST** ter restauração garantida (`mock.restore()` em `afterEach` ou no preload) — sem isso o spy vaza para os testes seguintes. | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) |
+| `BUN-TEST-03` | `mock.module()` **NEVER** é desfeito por `mock.restore()`; mock de módulo **MUST** ser registrado em `--preload` ou tratado como estado global do processo de teste. | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) |
 | `BUN-TEST-05` | `--update-snapshots` (`-u`) **NEVER** aparece no comando de teste do CI, e o diretório `__snapshots__/` **MUST** estar versionado — snapshot fora do repositório não é asserção. | [Bun - Testes - Escrita e Asserções](bun-testes-escrita-e-assercoes.md) |
-| `BUN-TEST-06` | Teste cuja asserção vive em `catch`, callback ou branch condicional **MUST** declarar `expect.assertions(n)` ou `expect.hasAssertions`. | [Bun - Testes - Escrita e Asserções](bun-testes-escrita-e-assercoes.md) |
+| `BUN-TEST-06` | Teste cuja asserção vive em `catch`, callback ou branch condicional **MUST** declarar `expect.assertions(n)` ou `expect.hasAssertions()`. | [Bun - Testes - Escrita e Asserções](bun-testes-escrita-e-assercoes.md) |
 | `BUN-TEST-09` | Teste que depende de estado deixado por **outro arquivo** **MUST** ser corrigido movendo o setup para dentro do próprio arquivo — `test.serial` **NEVER** resolve isso (ele sequencia dentro do arquivo) e nenhuma flag restaura o global compartilhado sob `--isolate`; a detecção é `bun test --randomize`. | [Bun - Testes - Ciclo de Vida e Isolamento](bun-testes-ciclo-de-vida-e-isolamento.md) |
 | `BUN-TEST-27` | `coverageThreshold` **MUST** vir acompanhado do reporter `text` habilitado em toda execução fora de `--parallel` — com apenas `--coverage-reporter=lcov` o processo sai `0` mesmo abaixo do limiar. | [Bun - Testes - Cobertura e CI](bun-testes-cobertura-e-ci.md) |
 | `BUN-TEST-28` | `coverageThreshold` **NEVER** depende da chave `statements` — ela é aceita e **não** é aplicada; o portão real é `lines` e `functions`. | [Bun - Testes - Cobertura e CI](bun-testes-cobertura-e-ci.md) |
@@ -436,9 +436,9 @@ As famílias completas vivem nos satélites, mas **estas precisam viajar com o c
 | `BUN-DATA-09` | Conexão a banco remoto **MUST** declarar `ssl` explicitamente — o default de `Bun.sql` é `"disable"`. | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) |
 | `BUN-DATA-12` | Resultado de query que cruza a fronteira HTTP **MUST** passar por validação de schema — o driver devolve `any` tipado por declaração, não por verificação. | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) |
 | `BUN-SYS-01` | Comando externo com valor de runtime **MUST** usar interpolação de `Bun.$`; `child_process.exec` com string concatenada **NEVER** em código novo. | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) |
-| `BUN-SYS-05` | `bun:ffi` e `cc` **NEVER** entram em caminho de produção — a doc os declara experimentais e recomenda Node-API. | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) |
+| `BUN-SYS-05` | `bun:ffi` e `cc()` **NEVER** entram em caminho de produção — a doc os declara experimentais e recomenda Node-API. | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) |
 | `BUN-SYS-07` | Migração de Node **MUST** enumerar os módulos `node:*` usados pelo código **e pelas dependências transitivas** (grep no fonte e em `node_modules`, `bun why` para achar quem trouxe cada um) e conferir cada um na matriz oficial — 🟡 significa "importa e roda o happy path", não "compatível". | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) |
-| `BUN-SYS-11` | Serviço em container **MUST** registrar listener de `SIGTERM` (e `SIGINT`) que drene o servidor — `await server.stop` em `Bun.serve`, `server.close` em `node:http` — e **MUST** terminar chamando `process.exit`: sem o listener, `beforeExit`/`exit` não são emitidos e as conexões em voo são cortadas; com o listener e sem o `process.exit`, a saída padrão do sinal fica **suprimida** e o processo só morre no `SIGKILL` do orquestrador. | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) |
+| `BUN-SYS-11` | Serviço em container **MUST** registrar listener de `SIGTERM` (e `SIGINT`) que drene o servidor — `await server.stop()` em `Bun.serve`, `server.close()` em `node:http` — e **MUST** terminar chamando `process.exit()`: sem o listener, `beforeExit`/`exit` não são emitidos e as conexões em voo são cortadas; com o listener e sem o `process.exit()`, a saída padrão do sinal fica **suprimida** e o processo só morre no `SIGKILL` do orquestrador. | [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) |
 
 ### Famílias completas nos satélites
 
@@ -466,32 +466,32 @@ Como uma skill de Bun deve consumir esta doc.
 ### O que uma skill de Bun deve carregar
 
 ```
-SEMPRE: docs/Bun.md § 2 (modelo mental)
- docs/Bun.md § 3 (fronteiras de import)
- docs/Bun.md § 5 (árvores de decisão)
- docs/Bun.md § 6 + § 6.1 (regras normativas e críticas)
+SEMPRE:   docs/Bun.md § 2 (modelo mental)
+          docs/Bun.md § 3 (fronteiras de import)
+          docs/Bun.md § 5 (árvores de decisão)
+          docs/Bun.md § 6 + § 6.1 (regras normativas e críticas)
 
 AO ESCREVER código de aplicação:
- docs/Bun - Runtime e APIs.md
+          docs/Bun - Runtime e APIs.md
 
 AO TOCAR package.json, lockfile, CI ou monorepo:
- docs/Bun - Gerenciador de Pacotes.md
+          docs/Bun - Gerenciador de Pacotes.md
 
 AO ESCREVER ou CORRIGIR teste:
- docs/Bun - Testes.md
+          docs/Bun - Testes.md
 
 SOB DEMANDA, via § 4 (mapa da API):
- o satélite do domínio tocado pela tarefa
+          o satélite do domínio tocado pela tarefa
 
-NUNCA: todos os satélites de uma vez
- — exceto MIGRAÇÃO Node→Bun, que legitimamente toca 7 dos 8.
- Caminho nomeado: § 2 + § 5 (árvore "vim do Node") +
- [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) § 5 (matriz) + o satélite
- de cada superfície que a app usa.
+NUNCA:    todos os satélites de uma vez
+          — exceto MIGRAÇÃO Node→Bun, que legitimamente toca 7 dos 8.
+            Caminho nomeado: § 2 + § 5 (árvore "vim do Node") +
+            [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) § 5 (matriz) + o satélite
+            de cada superfície que a app usa.
 
- inventar assinatura, flag ou default. O que não estiver no
- satélite MUST ser conferido em bun.com/docs antes de usar —
- a § 4 é um índice de roteamento, não uma allow-list de APIs.
+          inventar assinatura, flag ou default. O que não estiver no
+          satélite MUST ser conferido em bun.com/docs antes de usar —
+          a § 4 é um índice de roteamento, não uma allow-list de APIs.
 ```
 
 ### Como citar
@@ -535,7 +535,7 @@ Bun toca o meu stack de frontend ([React.js](react-js.md), [TanStack Query](tans
 
 **Bun ao lado do Vite, e não no lugar dele.** Em projeto Vite existente, Bun entra como package manager e como runtime do CLI: `bun run --bun vite`. Há um detalhe verificado que evita um bug sutil de configuração — **quando Bun é invocado como `node` (via `bun --bun`, `bunx --bun` ou um symlink `node`), ele desliga o carregamento automático de `.env`**, justamente para que ferramentas com resolução própria de modo (o `loadEnv` do Vite) escolham o `.env.{mode}` correto em vez de enxergar os valores pré-carregados pelo Bun como se fossem do shell. `--env-file` explícito continua valendo.
 
-**`bun test` para código de frontend.** O runner não traz DOM: `document` e `window` não existem por padrão. A receita verificada é `bun add -d @happy-dom/global-registrator`, um arquivo que chama `GlobalRegistrator.register`, e `[test] preload = ["./happydom.ts"]` no `bunfig.toml`. Em TypeScript, os tipos de DOM exigem `/// <reference lib="dom" />` no topo do arquivo de teste. **Um passo a mais que a doc oficial esconde:** os matchers de `@testing-library/jest-dom` (`toHaveTextContent`, `toBeInTheDocument`) **não** são registrados pelo simples `import` do pacote — é preciso `expect.extend(matchers)` a partir de `@testing-library/jest-dom/matchers`, num preload (`BUN-TEST-12`). Duas páginas da doc oficial divergem nesse ponto; a do guia é a que funciona. Receita completa em [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 2. O que testar continua sendo decisão de estratégia — e.
+**`bun test` para código de frontend.** O runner não traz DOM: `document` e `window` não existem por padrão. A receita verificada é `bun add -d @happy-dom/global-registrator`, um arquivo que chama `GlobalRegistrator.register()`, e `[test] preload = ["./happydom.ts"]` no `bunfig.toml`. Em TypeScript, os tipos de DOM exigem `/// <reference lib="dom" />` no topo do arquivo de teste. **Um passo a mais que a doc oficial esconde:** os matchers de `@testing-library/jest-dom` (`toHaveTextContent`, `toBeInTheDocument`) **não** são registrados pelo simples `import` do pacote — é preciso `expect.extend(matchers)` a partir de `@testing-library/jest-dom/matchers`, num preload (`BUN-TEST-12`). Duas páginas da doc oficial divergem nesse ponto; a do guia é a que funciona. Receita completa em [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 2. O que testar continua sendo decisão de estratégia — e.
 
 **A fronteira com `Node.js`.** Bun se apresenta como *drop-in replacement*, e para a maior parte do código de aplicação é. As duas coisas que não transferem: (a) qualquer arquivo que use o global `Bun` deixa de rodar em Node — isso é uma escolha de acoplamento, não um detalhe; (b) a compatibilidade `node:*` é medida contra o Node.js v26 e tem lacunas nomeadas por módulo. Biblioteca publicada em npm que precisa rodar nos dois: use `node:*` e trate `Bun.*` como otimização opcional. Aplicação que você controla: acople sem culpa e registre a decisão. A matriz completa está em [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md).
 
@@ -557,7 +557,6 @@ Bun toca o meu stack de frontend ([React.js](react-js.md), [TanStack Query](tans
 - `Node.js` — o runtime que Bun busca substituir; a fronteira está na § 8
 - `TypeScript` ·
 - [React.js](react-js.md) · [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md) · [TanStack Router](tanstack-router.md) · `Tailwindcss` · `Next.js`
--
 
 ## Fontes consultadas
 
@@ -582,6 +581,6 @@ Verificadas diretamente em **2026-08-15**:
 - **O linker default depende de `configVersion` e da presença de workspaces**: monorepo novo nasce `isolated` (modelo pnpm), projeto de pacote único nasce `hoisted`, projeto anterior à v1.3.2 permanece `hoisted`.
 - **`bun test --parallel` implica `--isolate`**: cada arquivo ganha um global novo. Sem `--parallel`, o default é o oposto — todos os arquivos compartilham um único global no mesmo processo.
 - **`test.only` sozinho não filtra nada**: é preciso rodar `bun test --only`. Um `.only` esquecido não "some com os outros testes" como no Jest — mas também não é inofensivo, porque o CI pode passar a flag.
-- **`mock.restore` não desfaz `mock.module`.** A fonte é explícita. Mock de módulo é efeito persistente do processo de teste.
+- **`mock.restore()` não desfaz `mock.module()`.** A fonte é explícita. Mock de módulo é efeito persistente do processo de teste.
 - **Bun desliga o carregamento automático de `.env` quando invocado como `node`** (`bun --bun`, `bunx --bun`, symlink `node`), para não atropelar ferramentas com resolução própria de `.env.{mode}` como o Vite.
 - **`bun run` respeita lifecycle hooks do seu próprio `package.json`** (`preclean`/`postclean`), mas **não** roda os das dependências instaladas. São dois mecanismos diferentes com o mesmo nome.

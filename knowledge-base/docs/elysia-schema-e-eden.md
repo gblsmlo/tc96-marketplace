@@ -2,9 +2,9 @@
 titulo: Elysia - Schema e Eden
 Link: https://elysiajs.com/essential/validation.html
 tags:
- - elysia
- - schema
- - agent-context
+  - elysia
+  - schema
+  - agent-context
 source: "Documentação oficial — https://elysiajs.com/"
 verificado-em: 2026-08-15
 ---
@@ -29,35 +29,35 @@ E há um quinto, que a doc trata em outra página: o mesmo schema é o **contrat
 ```ts
 import { Elysia, t } from 'elysia'
 
-const app = new Elysia
-.post('/pedidos', ({ body, status }) => {
- // body é { sku: string, quantidade: number } — sem anotação, sem cast
- const pedido = criar(body)
- if (!pedido) return status(409, { erro: 'Sem estoque' })
- return status(201, pedido) // 201 está no `response`: o sucesso sai por `status`
- }, {
- body: t.Object({
- sku: t.String({ minLength: 3 }),
- quantidade: t.Number({ minimum: 1 })
- }),
- response: {
- 201: t.Object({ id: t.Number, sku: t.String }),
- 409: t.Object({ erro: t.String })
- }
- })
+const app = new Elysia()
+  .post('/pedidos', ({ body, status }) => {
+    // body é { sku: string, quantidade: number } — sem anotação, sem cast
+    const pedido = criar(body)
+    if (!pedido) return status(409, { erro: 'Sem estoque' })
+    return status(201, pedido)     // 201 está no `response`: o sucesso sai por `status`
+  }, {
+    body: t.Object({
+      sku: t.String({ minLength: 3 }),
+      quantidade: t.Number({ minimum: 1 })
+    }),
+    response: {
+      201: t.Object({ id: t.Number(), sku: t.String() }),
+      409: t.Object({ erro: t.String() })
+    }
+  })
 
 export type App = typeof app
 ```
 
-Desse bloco saem, sem nenhuma linha adicional: a rejeição de payload malformado em runtime; o tipo de `body` no handler; o tipo de retorno checado contra `response`; a entrada no `/openapi`; e o tipo que o `treaty<App>` do frontend enxerga, incluindo o 409 como variante de erro tipada.
+Desse bloco saem, sem nenhuma linha adicional: a rejeição de payload malformado em runtime; o tipo de `body` no handler; o tipo de retorno checado contra `response`; a entrada no `/openapi`; e o tipo que o `treaty<App>()` do frontend enxerga, incluindo o 409 como variante de erro tipada.
 
 > **Repare no `status(201, pedido)`.** Declarar `201` no `response` não muda o status de nada — `return pedido` cru sai como **200**, e o 200 nem está no mapa. O status declarado e o status emitido são duas coisas, e é o `status(code, valor)` que os une; `ELYSIA-CORE-04` existe exatamente por isso. Um mapa `response` que lista códigos que o handler nunca emite é documentação falsa: passa no build, gera OpenAPI errado, e o `switch (error.status)` do frontend cobre um caso morto.
 
 O corolário é a regra mais importante desta nota: **qualquer `interface` TypeScript escrita à mão para descrever um payload que já tem schema é duplicação e vai divergir.** Quando você precisa do tipo fora do handler, extraia:
 
 ```ts
-export const PedidoBody = t.Object({ sku: t.String, quantidade: t.Number })
-export type PedidoBody = typeof PedidoBody.static // ← não reescreva
+export const PedidoBody = t.Object({ sku: t.String(), quantidade: t.Number() })
+export type PedidoBody = typeof PedidoBody.static     // ← não reescreva
 ```
 
 É a tese de e com a diferença de que aqui a ferramenta torna a duplicação desnecessária em vez de apenas indesejável.
@@ -77,20 +77,20 @@ import { Elysia } from 'elysia'
 import { z } from 'zod'
 import * as v from 'valibot'
 
-new Elysia
-.get('/id/:id', ({ params: { id }, query: { nome } }) => id, {
- params: z.object({ id: z.coerce.number }), // Zod
- query: v.object({ nome: v.literal('Lilith') }) // Valibot, na mesma rota
- })
+new Elysia()
+  .get('/id/:id', ({ params: { id }, query: { nome } }) => id, {
+    params: z.object({ id: z.coerce.number() }),     // Zod
+    query: v.object({ nome: v.literal('Lilith') })   // Valibot, na mesma rota
+  })
 ```
 
 Então a pergunta deixa de ser "posso usar Zod" e vira "onde". Os trade-offs verificados:
 
 | | `t` (TypeBox) | Zod via Standard Schema |
 | --- | --- | --- |
-| Coerção de query/params | **automática** — `t.Number` vira `t.Numeric` em schema de rota | manual: `z.coerce.number` |
+| Coerção de query/params | **automática** — `t.Number()` vira `t.Numeric()` em schema de rota | manual: `z.coerce.number()` |
 | OpenAPI | direto, sem configuração | exige `mapJsonSchema: { zod: z.toJSONSchema }` no plugin |
-| Validação de arquivo | `t.File({ type: 'image/*' })` valida de fato | precisa de `fileType` — ver abaixo |
+| Validação de arquivo | `t.File({ type: 'image/*' })` valida de fato | precisa de `fileType()` — ver abaixo |
 | Opções de cookie no schema | `t.Cookie(props, { secrets, sign, httpOnly })` | não há equivalente |
 | Compartilhar schema com o frontend | tipo viaja pelo Eden; o schema em si é do servidor | o schema inteiro é importável nos dois lados |
 | Ecossistema do vault | novo | já estabelecido |
@@ -105,16 +105,16 @@ O que **não** fazer é declarar em Zod e redeclarar em `t` a mesma forma. Isso 
 > import { Elysia, fileType } from 'elysia'
 > import { z } from 'zod'
 >
-> new Elysia.post('/upload', ({ body }) => body, {
-> body: z.object({
-> foto: z.file.refine((f) => fileType(f, 'image/jpeg'))
-> })
+> new Elysia().post('/upload', ({ body }) => body, {
+>   body: z.object({
+>     foto: z.file().refine((f) => fileType(f, 'image/jpeg'))
+>   })
 > })
 > ```
 
 | ID | Regra |
 | --- | --- |
-| `ELYSIA-TYPE-02` | Upload validado por Standard Schema **MUST** usar `fileType` — validadores genéricos conferem o `content-type` declarado pelo cliente, não o conteúdo. |
+| `ELYSIA-TYPE-02` | Upload validado por Standard Schema **MUST** usar `fileType()` — validadores genéricos conferem o `content-type` declarado pelo cliente, não o conteúdo. |
 
 ---
 
@@ -123,24 +123,24 @@ O que **não** fazer é declarar em Zod e redeclarar em `t` a mesma forma. Isso 
 Seis chaves no terceiro argumento da rota: `body`, `query`, `params`, `headers`, `cookie`, `response`.
 
 ```ts
-new Elysia
-.get('/pedidos', ({ query }) => listar(query), {
- query: t.Object({
- pagina: t.Number({ minimum: 1, default: 1 }), // "2" → 2
- ativos: t.Boolean, // "true" → true
- tags: t.Array(t.String), // ?tags=a,b ou ?tags=a&tags=b
- filtro: t.Optional(t.ObjectString({ uf: t.String })) // JSON em string
- })
- })
+new Elysia()
+  .get('/pedidos', ({ query }) => listar(query), {
+    query: t.Object({
+      pagina: t.Number({ minimum: 1, default: 1 }),   // "2" → 2
+      ativos: t.Boolean(),                            // "true" → true
+      tags: t.Array(t.String()),                      // ?tags=a,b  ou  ?tags=a&tags=b
+      filtro: t.Optional(t.ObjectString({ uf: t.String() }))  // JSON em string
+    })
+  })
 ```
 
 ### As três regras de coerção
 
-1. **`t.Number` vira `t.Numeric` em schema de rota.** Porque header, query e path param chegam sempre como string. Vale para `params`, `query`, `headers`, `cookie` — **não vale para `body`**, nem para `t.Object` aninhado. `t.Number` fora de um schema de rota também não é convertido.
+1. **`t.Number` vira `t.Numeric` em schema de rota.** Porque header, query e path param chegam sempre como string. Vale para `params`, `query`, `headers`, `cookie` — **não vale para `body`**, nem para `t.Object` aninhado. `t.Number()` fora de um schema de rota também não é convertido.
 2. **`t.Boolean` vira `t.BooleanString`**, pela mesma razão e com as mesmas exceções.
 3. **Array em query aceita dois formatos:** vírgula (`?tags=a,b,c`, o formato do `nuqs`) e chave repetida (`?tags=a&tags=b`, formato de formulário HTML). Precisa declarar `t.Array(...)` — sem isso, uma chave repetida vira string única.
 
-Essa assimetria entre `body` e o resto é deliberada e é a fonte de um bug recorrente: `t.Number` num `body` **rejeita** `"2"`, porque JSON tem números de verdade e não há razão para coagir.
+Essa assimetria entre `body` e o resto é deliberada e é a fonte de um bug recorrente: `t.Number()` num `body` **rejeita** `"2"`, porque JSON tem números de verdade e não há razão para coagir.
 
 ### Comportamentos específicos por chave
 
@@ -170,47 +170,47 @@ O default é conveniente e tem uma consequência de segurança boa (mass assignm
 E o comportamento que surpreende: o schema da rota **substitui** o do guard em vez de somar-se a ele.
 
 ```ts
-new Elysia
-.guard({ body: t.Object({ idade: t.Number }) })
-.post('/usuario', ({ body }) => body, {
- body: t.Object({ nome: t.String }) // substitui: `idade` não é mais exigido
- })
+new Elysia()
+  .guard({ body: t.Object({ idade: t.Number() }) })
+  .post('/usuario', ({ body }) => body, {
+    body: t.Object({ nome: t.String() })    // substitui: `idade` não é mais exigido
+  })
 ```
 
 Para somar, `schema: 'standalone'`:
 
 ```ts
-new Elysia
-.guard({
- schema: 'standalone', // [!code ++]
- body: t.Object({ idade: t.Number })
- })
-.post('/usuario', ({ body }) => body, { // body exige idade E nome
- body: t.Object({ nome: t.String })
- })
+new Elysia()
+  .guard({
+    schema: 'standalone',                    // [!code ++]
+    body: t.Object({ idade: t.Number() })
+  })
+  .post('/usuario', ({ body }) => body, {    // body exige idade E nome
+    body: t.Object({ nome: t.String() })
+  })
 ```
 
 `standalone` roda os dois schemas de forma independente, e — detalhe verificado — **eles podem ser de bibliotecas diferentes**: um guard em Zod somando-se a um schema local em `t` funciona.
 
 ### Reference models
 
-`.model` registra schemas por nome, referenciáveis por string, com autocomplete:
+`.model()` registra schemas por nome, referenciáveis por string, com autocomplete:
 
 ```ts
 // auth.model.ts
-export const authModel = new Elysia
-.model({
- 'auth.entrar': t.Object({ usuario: t.String, senha: t.String }),
- 'auth.perfil': t.Object({ id: t.Number, usuario: t.String })
- })
+export const authModel = new Elysia()
+  .model({
+    'auth.entrar': t.Object({ usuario: t.String(), senha: t.String() }),
+    'auth.perfil': t.Object({ id: t.Number(), usuario: t.String() })
+  })
 
 // auth/index.ts
-new Elysia
-.use(authModel)
-.post('/entrar', ({ body }) => entrar(body), {
- body: 'auth.entrar',
- response: { 200: 'auth.perfil' }
- })
+new Elysia()
+  .use(authModel)
+  .post('/entrar', ({ body }) => entrar(body), {
+    body: 'auth.entrar',
+    response: { 200: 'auth.perfil' }
+  })
 ```
 
 Dois efeitos: o schema aparece na seção `components` do OpenAPI e é referenciado por `$ref`, em vez de repetido inline; e nomes duplicados fazem Elysia **lançar erro**, o que a doc contorna com a convenção de prefixo por namespace (`admin.auth`, `user.auth`).
@@ -232,17 +232,17 @@ Declarar `response` faz quatro coisas ao mesmo tempo, e é a declaração de mai
 
 ```ts
 .get('/pedidos/:id', ({ params: { id }, status }) => {
- const pedido = buscar(id)
- if (!pedido) return status(404, { erro: 'Não encontrado' })
- if (!podeVer(pedido)) return status(403, { erro: 'Sem permissão' })
- return pedido
+  const pedido = buscar(id)
+  if (!pedido) return status(404, { erro: 'Não encontrado' })
+  if (!podeVer(pedido)) return status(403, { erro: 'Sem permissão' })
+  return pedido
 }, {
- params: t.Object({ id: t.Numeric }),
- response: {
- 200: t.Object({ id: t.Number, total: t.Number }),
- 403: t.Object({ erro: t.String }),
- 404: t.Object({ erro: t.String })
- }
+  params: t.Object({ id: t.Numeric() }),
+  response: {
+    200: t.Object({ id: t.Number(), total: t.Number() }),
+    403: t.Object({ erro: t.String() }),
+    404: t.Object({ erro: t.String() })
+  }
 })
 ```
 
@@ -256,8 +256,8 @@ Duas camadas. Por campo, com a propriedade `error` do schema (string ou função
 
 ```ts
 body: t.Object({
- quantidade: t.Number({ error: 'quantidade deve ser um número' }),
- email: t.String({ format: 'email', error: 'e-mail inválido' })
+  quantidade: t.Number({ error: 'quantidade deve ser um número' }),
+  email: t.String({ format: 'email', error: 'e-mail inválido' })
 })
 ```
 
@@ -265,13 +265,13 @@ E central, narroweando `code === 'VALIDATION'` no `onError`:
 
 ```ts
 .onError(({ code, error, status }) => {
- if (code === 'VALIDATION') {
- // error é ValidationError; `all` lista todas as causas, com `path` no formato OpenAPI
- return status(422, {
- erro: 'Payload inválido',
- campos: error.all.map((e) => ({ campo: e.path, mensagem: e.summary }))
- })
- }
+  if (code === 'VALIDATION') {
+    // error é ValidationError; `all` lista todas as causas, com `path` no formato OpenAPI
+    return status(422, {
+      erro: 'Payload inválido',
+      campos: error.all.map((e) => ({ campo: e.path, mensagem: e.summary }))
+    })
+  }
 })
 ```
 
@@ -299,26 +299,26 @@ Quatro comportamentos de produção verificados:
 import { Elysia } from 'elysia'
 import { openapi } from '@elysia/openapi'
 
-new Elysia
-.use(openapi({
- documentation: {
- info: { title: 'API de Pedidos', version: '1.0.0' },
- tags: [{ name: 'Pedidos', description: 'Ciclo de vida do pedido' }]
- }
- }))
+new Elysia()
+  .use(openapi({
+    documentation: {
+      info: { title: 'API de Pedidos', version: '1.0.0' },
+      tags: [{ name: 'Pedidos', description: 'Ciclo de vida do pedido' }]
+    }
+  }))
 ```
 
-UI em `/openapi` (Scalar por padrão; `provider: 'swagger-ui'` ou `null`), spec JSON em `/openapi/json`. Descrição por rota vai em `detail` (`summary`, `description`, `tags`, `deprecated`, `hide`, `security`), que segue o Operation Object do OpenAPI 3. `detail` e `tags` também são aceitos no construtor, valendo para toda a instância. Ver.
+UI em `/openapi` (Scalar por padrão; `provider: 'swagger-ui'` ou `null`), spec JSON em `/openapi/json`. Descrição por rota vai em `detail` (`summary`, `description`, `tags`, `deprecated`, `hide`, `security`), que segue o Operation Object do OpenAPI 3. `detail` e `tags` também são aceitos no construtor, valendo para toda a instância..
 
-### `fromTypes`: doc a partir dos tipos
+### `fromTypes()`: doc a partir dos tipos
 
-O modo normal lê o schema em runtime. `fromTypes` lê os **tipos** do arquivo raiz e documenta até rotas sem schema declarado:
+O modo normal lê o schema em runtime. `fromTypes()` lê os **tipos** do arquivo raiz e documenta até rotas sem schema declarado:
 
 ```ts
 import { openapi, fromTypes } from '@elysia/openapi'
 
-export const app = new Elysia // precisa ser exportada
-.use(openapi({ references: fromTypes }))
+export const app = new Elysia()        // precisa ser exportada
+  .use(openapi({ references: fromTypes() }))
 ```
 
 Quatro caveats verificados: o schema de runtime tem precedência sobre o tipo; em produção convém apontar para o `.d.ts` gerado (`fromTypes('dist/index.d.ts')`); tipos explícitos podem não resolver — o contorno documentado é envolver em `Prettify<T>`; e em monorepo é preciso informar `projectRoot` e, havendo vários, `tsconfigPath`. **Não funciona no Cloudflare Worker** (depende de `fs`).
@@ -345,8 +345,8 @@ openapi({ mapJsonSchema: { zod: z.toJSONSchema } })
 
 ```ts
 // server/index.ts
-const app = new Elysia.use(pedidos).use(usuarios).listen(3000)
-export type App = typeof app // o encadeamento inteiro, num tipo
+const app = new Elysia().use(pedidos).use(usuarios).listen(3000)
+export type App = typeof app          // o encadeamento inteiro, num tipo
 ```
 
 Duas condições para isso funcionar, ambas verificadas: **method chaining contínuo** (quebrar perde os tipos acumulados — `ELYSIA-APP-01`) e **`strict: true`** no `tsconfig` dos dois lados, com TypeScript >= 5.0.
@@ -356,7 +356,7 @@ Duas condições para isso funcionar, ambas verificadas: **method chaining cont�
 ```ts
 // client/api.ts
 import { treaty } from '@elysia/eden'
-import type { App } from '../server' // import de TIPO: nada vai para o bundle
+import type { App } from '../server'      // import de TIPO: nada vai para o bundle
 
 // `parseDate: false` não é opcional se este cliente alimenta o cache do
 // TanStack Query — ELYSIA-TYPE-10. Ver a nota no fim desta seção.
@@ -367,10 +367,10 @@ O caminho HTTP vira acesso a propriedade; o parâmetro dinâmico vira chamada de
 
 | Rota | Eden |
 | --- | --- |
-| `GET /pedidos` | `api.pedidos.get` |
-| `GET /pedidos/:id` | `api.pedidos({ id: 9 }).get` |
+| `GET /pedidos` | `api.pedidos.get()` |
+| `GET /pedidos/:id` | `api.pedidos({ id: 9 }).get()` |
 | `POST /pedidos` | `api.pedidos.post({ sku: 'A', quantidade: 2 })` |
-| `GET /pedidos/:id/itens` | `api.pedidos({ id: 9 }).itens.get` |
+| `GET /pedidos/:id/itens` | `api.pedidos({ id: 9 }).itens.get()` |
 
 Métodos com corpo recebem `(body, opções?)`; `GET`/`HEAD` recebem só `(opções?)`. As opções são `{ query, headers, fetch }`, e `fetch` aceita qualquer `RequestInit` — inclusive `signal`, o que dá cancelamento. Se o corpo é opcional mas você precisa de query, passe `null` como primeiro argumento.
 
@@ -381,20 +381,20 @@ Métodos com corpo recebem `(body, opções?)`; `GET`/`HEAD` recebem só `(opç�
 Verificada em `@elysia/eden@1.4.10`, `treaty2/types.d.ts` — é uma **união discriminada**:
 
 ```ts
-| { data: T, error: null, response: Response, status: number, headers }
+| { data: T,    error: null,                    response: Response, status: number, headers }
 | { data: null, error: { status: C, value: V }, response: Response, status: number, headers }
 ```
 
 ```ts
-const { data, error } = await api.pedidos({ id: 9 }).get
+const { data, error } = await api.pedidos({ id: 9 }).get()
 
-// data: Pedido | null — enquanto `error` não for checado
+// data: Pedido | null   — enquanto `error` não for checado
 if (error) {
- switch (error.status) {
- case 404: return mostrarNaoEncontrado(error.value) // value tipado pelo response[404]
- case 403: return mostrarSemPermissao(error.value)
- default: throw error.value
- }
+  switch (error.status) {
+    case 404: return mostrarNaoEncontrado(error.value)   // value tipado pelo response[404]
+    case 403: return mostrarSemPermissao(error.value)
+    default:  throw error.value
+  }
 }
 // data: Pedido — estreitado
 ```
@@ -417,26 +417,26 @@ import { queryOptions } from '@tanstack/react-query'
 import { api } from './client'
 
 export const pedidoOptions = (id: number) =>
- queryOptions({
- queryKey: ['pedidos', 'detalhe', id] as const,
- queryFn: async ({ signal }) => {
- const { data, error } = await api.pedidos({ id }).get({ fetch: { signal } })
- if (error) throw error // sem isto, a query "tem sucesso" com data: null
- return data
- },
- staleTime: 60_000 // TSQ-CACHE-01
- })
+  queryOptions({
+    queryKey: ['pedidos', 'detalhe', id] as const,
+    queryFn: async ({ signal }) => {
+      const { data, error } = await api.pedidos({ id }).get({ fetch: { signal } })
+      if (error) throw error        // sem isto, a query "tem sucesso" com data: null
+      return data
+    },
+    staleTime: 60_000               // TSQ-CACHE-01
+  })
 ```
 
 ```ts
 // mutation: mesma regra, mais a invalidação
 const criar = useMutation({
- mutationFn: async (novo: NovoPedido) => {
- const { data, error } = await api.pedidos.post(novo)
- if (error) throw error
- return data
- },
- onSuccess: => queryClient.invalidateQueries({ queryKey: ['pedidos'] })
+  mutationFn: async (novo: NovoPedido) => {
+    const { data, error } = await api.pedidos.post(novo)
+    if (error) throw error
+    return data
+  },
+  onSuccess: () => queryClient.invalidateQueries({ queryKey: ['pedidos'] })
 })
 ```
 
@@ -449,29 +449,29 @@ A discriminação por `error.status` costuma ser mostrada em query, mas o caso q
 Duas condições, as duas já cobertas por regras: o `throw error` da `mutationFn` (`ELYSIA-TYPE-09`), que é o que faz a Query tratar como falha; e o mapa `response` por status no servidor (`ELYSIA-TYPE-06`), que é o que dá tipo ao `value`.
 
 ```tsx
-// servidor: response: { 201: PedidoCriado, 409: t.Object({ erro: t.String, sku: t.String }) }
+// servidor: response: { 201: PedidoCriado, 409: t.Object({ erro: t.String(), sku: t.String() }) }
 
-function FormularioPedido {
- const criar = useMutation({
- mutationFn: async (novo: NovoPedido) => {
- const { data, error } = await api.pedidos.post(novo)
- if (error) throw error // ELYSIA-TYPE-09
- return data
- },
- onSuccess: => queryClient.invalidateQueries({ queryKey: ['pedidos', 'lista'] })
- })
+function FormularioPedido() {
+  const criar = useMutation({
+    mutationFn: async (novo: NovoPedido) => {
+      const { data, error } = await api.pedidos.post(novo)
+      if (error) throw error          // ELYSIA-TYPE-09
+      return data
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['pedidos', 'lista'] })
+  })
 
- // `criar.error` é o { status, value } do Eden — mesmo narrowing da query
- const erroDeEstoque = criar.error?.status === 409 ? criar.error.value : undefined
+  // `criar.error` é o { status, value } do Eden — mesmo narrowing da query
+  const erroDeEstoque = criar.error?.status === 409 ? criar.error.value : undefined
 
- return (
- <form onSubmit={(e) => { e.preventDefault; criar.mutate(lerFormulario(e)) }}>
- <input name="sku" aria-invalid={erroDeEstoque !== undefined} />
- {erroDeEstoque && <span role="alert">Sem estoque para {erroDeEstoque.sku}</span>}
- {criar.error && criar.error.status >= 500 && <span role="alert">Erro interno. Tente de novo.</span>}
- <button disabled={criar.isPending}>Criar</button>
- </form>
- )
+  return (
+    <form onSubmit={(e) => { e.preventDefault(); criar.mutate(lerFormulario(e)) }}>
+      <input name="sku" aria-invalid={erroDeEstoque !== undefined} />
+      {erroDeEstoque && <span role="alert">Sem estoque para {erroDeEstoque.sku}</span>}
+      {criar.error && criar.error.status >= 500 && <span role="alert">Erro interno. Tente de novo.</span>}
+      <button disabled={criar.isPending}>Criar</button>
+    </form>
+  )
 }
 ```
 
@@ -488,49 +488,49 @@ O envelope mínimo, declarado uma vez como reference model e reusado:
 import { Elysia, t } from 'elysia'
 
 export const Pedido = t.Object({
- id: t.Number,
- sku: t.String,
- total: t.Number
+  id: t.Number(),
+  sku: t.String(),
+  total: t.Number()
 })
 
-export const pedidosModel = new Elysia.model({
- 'pedidos.lista': t.Object({
- itens: t.Array(Pedido),
- total: t.Number, // total de registros, não da página — alimenta o "de N"
- hasMore: t.Boolean // o nome é o que TSQ-PATTERN-05 lê; não renomeie
- })
+export const pedidosModel = new Elysia().model({
+  'pedidos.lista': t.Object({
+    itens: t.Array(Pedido),
+    total: t.Number(),        // total de registros, não da página — alimenta o "de N"
+    hasMore: t.Boolean()      // o nome é o que TSQ-PATTERN-05 lê; não renomeie
+  })
 })
 
 // pedidos/index.ts
-new Elysia
-.use(pedidosModel)
-.get('/pedidos', ({ query: { pagina, porPagina } }) => {
- const { itens, total } = repositorio.listar({ pagina, porPagina })
- return { itens, total, hasMore: pagina * porPagina < total }
- }, {
- query: t.Object({
- pagina: t.Number({ minimum: 1, default: 1 }), // "2" → 2, coerção de query
- porPagina: t.Number({ minimum: 1, maximum: 100, default: 20 })
- }),
- response: { 200: 'pedidos.lista' }
- })
+new Elysia()
+  .use(pedidosModel)
+  .get('/pedidos', ({ query: { pagina, porPagina } }) => {
+    const { itens, total } = repositorio.listar({ pagina, porPagina })
+    return { itens, total, hasMore: pagina * porPagina < total }
+  }, {
+    query: t.Object({
+      pagina: t.Number({ minimum: 1, default: 1 }),      // "2" → 2, coerção de query
+      porPagina: t.Number({ minimum: 1, maximum: 100, default: 20 })
+    }),
+    response: { 200: 'pedidos.lista' }
+  })
 ```
 
 ```ts
 // cliente: a queryKey tem o nível de escopo, e a página entra nela — TSQ-PATTERN-04
 export const pedidosOptions = (pagina: number) =>
- queryOptions({
- queryKey: ['pedidos', 'lista', { pagina }] as const,
- queryFn: async ({ signal }) => {
- const { data, error } = await api.pedidos.get({ query: { pagina }, fetch: { signal } })
- if (error) throw error
- return data // { itens, total, hasMore }
- },
- placeholderData: keepPreviousData // TSQ-PATTERN-04
- })
+  queryOptions({
+    queryKey: ['pedidos', 'lista', { pagina }] as const,
+    queryFn: async ({ signal }) => {
+      const { data, error } = await api.pedidos.get({ query: { pagina }, fetch: { signal } })
+      if (error) throw error
+      return data                       // { itens, total, hasMore }
+    },
+    placeholderData: keepPreviousData   // TSQ-PATTERN-04
+  })
 ```
 
-`hasMore` como booleano do servidor, e não como `itens.length === porPagina` inferido no cliente, é o que faz a última página parar certo: a inferência erra exatamente quando o total é múltiplo do tamanho da página. Para o trade-off entre offset e cursor — e quando `total` deixa de ser barato de calcular — ver.
+`hasMore` como booleano do servidor, e não como `itens.length === porPagina` inferido no cliente, é o que faz a última página parar certo: a inferência erra exatamente quando o total é múltiplo do tamanho da página. Para o trade-off entre offset e cursor — e quando `total` deixa de ser barato de calcular.
 
 Alternativa: `treaty<App>(url, { throwHttpError: true })` faz o Eden lançar sozinho, ao custo de perder o `{ error }` tipado em todos os pontos de chamada. Escolha uma política e aplique no cliente inteiro — misturar as duas produz tratamento de erro inconsistente.
 
@@ -555,19 +555,19 @@ Mesma forma de retorno, sintaxe de string. Quando preferir: a doc dá um critér
 
 ```ts
 // servidor
-new Elysia.ws('/chat', {
- body: t.String,
- response: t.String,
- message(ws, mensagem) { ws.send(mensagem) }
+new Elysia().ws('/chat', {
+  body: t.String(),
+  response: t.String(),
+  message(ws, mensagem) { ws.send(mensagem) }
 })
 
 // cliente
-const chat = api.chat.subscribe
+const chat = api.chat.subscribe()
 chat.subscribe((m) => console.log('recebido', m.data))
-chat.on('open', => chat.send('olá'))
+chat.on('open', () => chat.send('olá'))
 ```
 
-`subscribe` devolve um `EdenWS` que estende `WebSocket` (mesma API, mais `.raw` para o socket nativo). O schema de `ws` aceita `body`, `query`, `params`, `header`, `cookie` e `response`, e mensagem JSON stringificada é parseada antes de validar.
+`subscribe()` devolve um `EdenWS` que estende `WebSocket` (mesma API, mais `.raw` para o socket nativo). O schema de `ws` aceita `body`, `query`, `params`, `header`, `cookie` e `response`, e mensagem JSON stringificada é parseada antes de validar.
 
 ### Quando o Eden devolve `any`
 
@@ -588,17 +588,17 @@ Checklist da doc para quando a inferência falha: `strict: true` ausente; versõ
 | Antipadrão | Por que falha | O que fazer |
 | --- | --- | --- |
 | `interface Pedido {...}` no frontend duplicando o `t.Object` do servidor | duas fontes de verdade para a mesma forma; a divergência aparece em produção, não no build | `typeof S.static` no servidor, `treaty<App>` no cliente — `ELYSIA-TYPE-01` |
-| `queryFn: => api.pedidos.get` | devolve o envelope `{data, error}` e nunca lança: query fica `success` com `data.data === null`, sem retry, sem error boundary | desembrulhar e `throw error` na `queryFn` — `ELYSIA-TYPE-09` |
+| `queryFn: () => api.pedidos.get()` | devolve o envelope `{data, error}` e nunca lança: query fica `success` com `data.data === null`, sem retry, sem error boundary | desembrulhar e `throw error` na `queryFn` — `ELYSIA-TYPE-09` |
 | Rota com 404/403 sem mapa `response` por status | o Eden tipa o erro como `unknown`; o `switch (error.status)` perde o narrowing e vira `any` | declarar `response: { 200: …, 403: …, 404: … }` — `ELYSIA-TYPE-06` |
 | Eden com `parseDate` default alimentando o cache da Query | strings ISO viram `Date`, structural sharing desliga, tudo re-renderiza a cada refetch | `parseDate: false` e converter no `select` — `ELYSIA-TYPE-10` |
 | `guard` com schema, esperando que some ao da rota | o default é `override`: o schema local **substitui** o do guard, e a validação que você achava garantida some | `schema: 'standalone'` no guard — `ELYSIA-TYPE-05` |
-| `t.Number` num campo de `body` esperando aceitar `"2"` | coerção só acontece em `params`/`query`/`headers`/`cookie`; em `body` o número precisa ser número | `t.Numeric` explícito se o cliente manda string — `ELYSIA-TYPE-04` |
-| `headers: t.Object({ Authorization: t.String })` | Elysia normaliza headers em minúsculas; a chave capitalizada nunca casa e a validação sempre falha | `authorization` — `ELYSIA-TYPE-03` |
+| `t.Number()` num campo de `body` esperando aceitar `"2"` | coerção só acontece em `params`/`query`/`headers`/`cookie`; em `body` o número precisa ser número | `t.Numeric()` explícito se o cliente manda string — `ELYSIA-TYPE-04` |
+| `headers: t.Object({ Authorization: t.String() })` | Elysia normaliza headers em minúsculas; a chave capitalizada nunca casa e a validação sempre falha | `authorization` — `ELYSIA-TYPE-03` |
 | Rotas em Zod sem `mapJsonSchema` | validação funciona, mas as rotas aparecem sem schema no `/openapi` — a documentação mente por omissão | `openapi({ mapJsonSchema: { zod: z.toJSONSchema } })` — `ELYSIA-TYPE-07` |
-| `z.file` sem `fileType` num upload | valida o `content-type` declarado pelo cliente, que é forjável — arquivo executável passa como imagem | `.refine((f) => fileType(f, 'image/jpeg'))` — `ELYSIA-TYPE-02` |
+| `z.file()` sem `fileType()` num upload | valida o `content-type` declarado pelo cliente, que é forjável — arquivo executável passa como imagem | `.refine((f) => fileType(f, 'image/jpeg'))` — `ELYSIA-TYPE-02` |
 | Versões diferentes de `elysia` no monorepo | o Eden degrada silenciosamente para `any`; o build passa e nada avisa | fixar a versão e conferir com `npm why elysia` — `ELYSIA-TYPE-11` |
-| `response: { 201:... }` com o handler fazendo `return pedido` | o retorno cru sai como **200**, que nem está no mapa; o OpenAPI publica um 201 que nunca acontece | `return status(201, pedido)` — `ELYSIA-CORE-04` |
-| `allowUnsafeValidationDetails: true` deixado ligado em produção | a resposta de erro passa a listar campos, tipos e restrições do schema para qualquer requisição malformada | condicionar ao ambiente, ou `validationDetail` campo a campo — `ELYSIA-TYPE-12` |
+| `response: { 201: ... }` com o handler fazendo `return pedido` | o retorno cru sai como **200**, que nem está no mapa; o OpenAPI publica um 201 que nunca acontece | `return status(201, pedido)` — `ELYSIA-CORE-04` |
+| `allowUnsafeValidationDetails: true` deixado ligado em produção | a resposta de erro passa a listar campos, tipos e restrições do schema para qualquer requisição malformada | condicionar ao ambiente, ou `validationDetail()` campo a campo — `ELYSIA-TYPE-12` |
 | `GET /pedidos` devolvendo `{ pedidos }` sem `total` nem `hasMore` | o controle de paginação do frontend não tem como saber se há próxima página; `TSQ-PATTERN-05` fica insatisfazível e o botão avança para o vazio | envelope `{ itens, total, hasMore }` no `response` — `ELYSIA-TYPE-13` |
 
 ---
@@ -606,7 +606,7 @@ Checklist da doc para quando a inferência falha: `strict: true` ausente; versõ
 ## Checklist de revisão
 
 - [ ] Nenhum tipo de payload é reescrito à mão? → `ELYSIA-TYPE-01`
-- [ ] Uploads validados por Standard Schema usam `fileType`? → `ELYSIA-TYPE-02`
+- [ ] Uploads validados por Standard Schema usam `fileType()`? → `ELYSIA-TYPE-02`
 - [ ] Nomes de header no schema estão em minúsculas? → `ELYSIA-TYPE-03`
 - [ ] Nenhum campo de `body` depende de coerção? → `ELYSIA-TYPE-04`
 - [ ] Guards que precisam somar declaram `schema: 'standalone'`? → `ELYSIA-TYPE-05`
@@ -651,14 +651,14 @@ Verificadas em **2026-08-15**:
 - **Elysia não obriga TypeBox.** Standard Schema aceita Zod, Valibot, ArkType, Effect Schema, Yup e Joi, e schemas de bibliotecas diferentes coexistem no mesmo handler e no mesmo `guard` standalone.
 - **Standard Schema não implica OpenAPI automático.** Sem `mapJsonSchema`, rotas em Zod validam mas não documentam. É o custo escondido de trocar `t` por Zod na fronteira HTTP.
 - **`t.Uint8Array` é a grafia real** (`type-system/index.d.ts`), enquanto a documentação escreve `t.UInt8Array`. Existe também `t.NumericEnum`, `t.ArrayString`, `t.ArrayQuery`, `t.NoValidate` e `t.String({ trusted })`, ausentes da página de TypeBox.
-- **`t.ObjectString` exige as propriedades como argumento** (`t.ObjectString({ uf: t.String })`), embora a doc mostre `t.ObjectString` sem argumento.
+- **`t.ObjectString` exige as propriedades como argumento** (`t.ObjectString({ uf: t.String() })`), embora a doc mostre `t.ObjectString()` sem argumento.
 - **Coerção não vale para `body`** — só para `params`, `query`, `headers` e `cookie`, e nunca dentro de `t.Object` aninhado.
 - **`t.Optional` no nível da rota difere do TypeBox puro**: torna a chave inteira opcional, em vez de marcar um campo do objeto.
 - **`normalize` tem default `true`**: propriedades fora do schema somem silenciosamente da entrada **e da saída**.
 - **Eden Treaty não lança em erro HTTP** (`throwHttpError: false`) e **converte data em `Date`** (`parseDate: true`) por padrão. As duas defaults têm efeito direto e silencioso sobre TanStack Query.
 - **`error` do Eden não é um `Error`** — é `{ status, value }`, uma união discriminada por código de status.
 - **Eden Fetch não é mais mais rápido que Treaty**; a única razão documentada para preferi-lo é performance de tipos acima de ~500 rotas.
-- **O exemplo oficial de integração com React Query** (página de TanStack Start) usa `queryFn: => getTreaty.get`, que devolve o envelope e não trata erro — correto como demonstração mínima, insuficiente como código de produção.
+- **O exemplo oficial de integração com React Query** (página de TanStack Start) usa `queryFn: () => getTreaty().get()`, que devolve o envelope e não trata erro — correto como demonstração mínima, insuficiente como código de produção.
 - **O status default de erro de validação é 422**, e nenhuma página da doc o declara. Está em `ValidationError.status = 422` no `error.js` do pacote publicado. Sai mesmo sem `onError`, o que contraria o reflexo de esperar 400.
 - **`allowUnsafeValidationDetails` tem default `false`** (página de Config) e é **global**: não há granularidade por rota. Ligar em produção para depurar um endpoint expõe a forma do schema de todos.
 - **`parseDate` (default `true`) e `throwHttpError` (default `false`)** estão confirmados na página de Config do Eden Treaty, com esses números explícitos. `throwHttpError` também aceita uma função `(response) => boolean`, o que permite lançar só para certos status — detalhe ausente da narrativa "ou lança tudo, ou nada".

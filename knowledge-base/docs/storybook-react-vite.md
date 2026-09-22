@@ -2,10 +2,10 @@
 titulo: Storybook - React Vite
 Link: https://storybook.js.org/docs/get-started/frameworks/react-vite
 tags:
- - storybook
- - vite
- - react
- - agent-context
+  - storybook
+  - vite
+  - react
+  - agent-context
 source: "Documentação oficial do Storybook — framework React & Vite; TanStack Router — History types"
 verificado-em: 2026-08-19
 ---
@@ -42,14 +42,14 @@ Isso é uma qualidade, não uma falta. Se o Storybook cobre um design system de 
 O Storybook vai renderizar alguma story cuja árvore de import
 alcança @tanstack/react-router?
 ├── NÃO
-│ → @storybook/react-vite
-│ típico: Storybook exclusivo de packages/ui
+│   → @storybook/react-vite
+│     típico: Storybook exclusivo de packages/ui
 └── SIM
- ├── e o projeto está em Vite ≥ 7 e React ≥ 18
- │ → @storybook/tanstack-react
- └── e o projeto NÃO alcança esses requisitos
- → @storybook/react-vite + decorator de router (§ 4)
- é o caminho de transição, não o destino
+    ├── e o projeto está em Vite ≥ 7 e React ≥ 18
+    │   → @storybook/tanstack-react
+    └── e o projeto NÃO alcança esses requisitos
+        → @storybook/react-vite + decorator de router (§ 4)
+          é o caminho de transição, não o destino
 ```
 
 Dois cenários concretos:
@@ -70,25 +70,25 @@ npm install --save-dev @storybook/react-vite
 ```
 
 ```ts
-//.storybook/main.ts
+// .storybook/main.ts
 import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
- framework: '@storybook/react-vite',
- stories: ['../src/**/*.stories.@(ts|tsx)', '../src/**/*.mdx'],
- addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-vitest'],
+  framework: '@storybook/react-vite',
+  stories: ['../src/**/*.stories.@(ts|tsx)', '../src/**/*.mdx'],
+  addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-vitest'],
 };
 
 export default config;
 ```
 
 ```tsx
-//.storybook/preview.tsx
+// .storybook/preview.tsx
 import type { Preview } from '@storybook/react-vite';
 
 const preview = {
- parameters: { layout: 'centered', a11y: { test: 'error' } },
- tags: ['autodocs'],
+  parameters: { layout: 'centered', a11y: { test: 'error' } },
+  tags: ['autodocs'],
 } satisfies Preview;
 
 export default preview;
@@ -102,10 +102,10 @@ O campo aceita string ou objeto:
 
 ```ts
 framework: {
- name: '@storybook/react-vite',
- options: {
- builder: { /* opções do builder Vite */ },
- },
+  name: '@storybook/react-vite',
+  options: {
+    builder: { /* opções do builder Vite */ },
+  },
 },
 ```
 
@@ -119,7 +119,7 @@ O requisito do `@storybook/addon-vitest` é **um framework de Storybook que use 
 
 ## 4. O router à mão
 
-Esta é a diferença que gera trabalho. Sem embrulho automático, qualquer componente que use `<Link>`, `useNavigate`, `useSearch` ou `useParams` lança fora de contexto de router.
+Esta é a diferença que gera trabalho. Sem embrulho automático, qualquer componente que use `<Link>`, `useNavigate()`, `useSearch()` ou `useParams()` lança fora de contexto de router.
 
 ### 4.1 Duas formas, e a diferença entre elas importa
 
@@ -140,39 +140,39 @@ A rota é criada para a story, e o componente dela é `<Story />`. Assim os hook
 // PaginaTarefa.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
- Outlet,
- RouterProvider,
- createMemoryHistory,
- createRootRoute,
- createRoute,
- createRouter,
+  Outlet,
+  RouterProvider,
+  createMemoryHistory,
+  createRootRoute,
+  createRoute,
+  createRouter,
 } from '@tanstack/react-router';
 import { PaginaTarefa } from './PaginaTarefa';
 
 const meta = {
- title: 'Web/Páginas/PaginaTarefa',
- component: PaginaTarefa,
- parameters: { layout: 'fullscreen' },
- decorators: [
- (Story) => {
- const rootRoute = createRootRoute({ component: => <Outlet /> });
+  title: 'Web/Páginas/PaginaTarefa',
+  component: PaginaTarefa,
+  parameters: { layout: 'fullscreen' },
+  decorators: [
+    (Story) => {
+      const rootRoute = createRootRoute({ component: () => <Outlet /> });
 
- const storyRoute = createRoute({
- getParentRoute: => rootRoute,
- path: '/tarefas/$id',
- component: => <Story />,
- });
+      const storyRoute = createRoute({
+        getParentRoute: () => rootRoute,
+        path: '/tarefas/$id',
+        component: () => <Story />,
+      });
 
- const router = createRouter({
- routeTree: rootRoute.addChildren([storyRoute]),
- history: createMemoryHistory({
- initialEntries: ['/tarefas/42?tab=detalhes'],
- }),
- });
+      const router = createRouter({
+        routeTree: rootRoute.addChildren([storyRoute]),
+        history: createMemoryHistory({
+          initialEntries: ['/tarefas/42?tab=detalhes'],
+        }),
+      });
 
- return <RouterProvider router={router} />;
- },
- ],
+      return <RouterProvider router={router} />;
+    },
+  ],
 } satisfies Meta<typeof PaginaTarefa>;
 
 export default meta;
@@ -185,7 +185,7 @@ Quatro pontos:
 
 - **`<Story />` é o componente da rota.** É isso que mantém `args` e controles vivos.
 - **`createMemoryHistory` é obrigatório.** History de browser numa story mexe na URL do próprio Storybook e vaza navegação entre stories (`SB-RV-02`).
-- **Params e query entram como string em `initialEntries`.** `'/tarefas/42?tab=detalhes'` produz `useParams` → `{ id: '42' }` e `useSearch` → `{ tab: 'detalhes' }`. **Sem checagem de tipo** contra o path — errar o nome do segmento não é erro de compilação, é story que renderiza errado. É o custo direto de não estar no caminho TanStack.
+- **Params e query entram como string em `initialEntries`.** `'/tarefas/42?tab=detalhes'` produz `useParams()` → `{ id: '42' }` e `useSearch()` → `{ tab: 'detalhes' }`. **Sem checagem de tipo** contra o path — errar o nome do segmento não é erro de compilação, é story que renderiza errado. É o custo direto de não estar no caminho TanStack.
 - **O router é criado dentro do decorator**, uma instância por render (`SB-RV-03`).
 
 A API de árvore em código — `createRootRoute`, `createRoute`, `getParentRoute`, `addChildren` — está documentada em [TanStack Router - Route Trees](tanstack-router-route-trees.md), incluindo `TSR-TREE-06`: a raiz vem de `createRootRoute`, nunca de `createRoute` com `id` inventado.
@@ -196,13 +196,13 @@ A API de árvore em código — `createRootRoute`, `createRoute`, `getParentRout
 
 ```tsx
 decorators: [
- => {
- const router = createRouter({
- routeTree, // de../routeTree.gen
- history: createMemoryHistory({ initialEntries: ['/tarefas/42'] }),
- });
- return <RouterProvider router={router} />;
- },
+  () => {
+    const router = createRouter({
+      routeTree,                                    // de ../routeTree.gen
+      history: createMemoryHistory({ initialEntries: ['/tarefas/42'] }),
+    });
+    return <RouterProvider router={router} />;
+  },
 ],
 ```
 
@@ -219,7 +219,7 @@ Custo adicional: o `loader` real da rota roda. Ver § 4.4.
 | `routeOverrides` para `loader` / `beforeLoad` | **não há**. Reduza a árvore (§ 4.2, que não tem `loader`) ou mocke o módulo que o `loader` chama — [Storybook - Mocking](storybook-mocking.md) |
 | `routeOverrides.validateSearch` | **não há, e não há substituto**. `validateSearch` vive na definição da rota. Na árvore mínima você não o declara; na árvore real, o schema manda. Ver [Storybook - Pendências de revisão](storybook-pendencias-de-revisao.md) |
 | `context` / `useRouterContext` | `createRouter({ context })`, na criação |
-| navegação virando spy | não há. Para asseverar navegação, passe a ação por prop e observe com `fn` |
+| navegação virando spy | não há. Para asseverar navegação, passe a ação por prop e observe com `fn()` |
 | stubs de server function do Start | não há |
 | automock dos módulos `@tanstack/*` | mock explícito, se necessário (`SB-RV-07`) |
 
@@ -282,7 +282,7 @@ O motivo legítimo para voltar é um só: o piso de versão. Se o projeto não p
 const router = createRouter({ routeTree, history: createMemoryHistory({ initialEntries: ['/'] }) }); // ❌
 
 const meta = {
- decorators: [ => <RouterProvider router={router} />],
+  decorators: [() => <RouterProvider router={router} />],
 } satisfies Meta<typeof PaginaTarefa>;
 ```
 
@@ -292,10 +292,10 @@ A instância é compartilhada por todas as stories do arquivo. A segunda renderi
 
 ```tsx
 decorators: [
- (Story) => { // ❌ Story declarado e nunca usado
- const router = createRouter({ routeTree, history });
- return <RouterProvider router={router} />;
- },
+  (Story) => {                                    // ❌ Story declarado e nunca usado
+    const router = createRouter({ routeTree, history });
+    return <RouterProvider router={router} />;
+  },
 ],
 ```
 

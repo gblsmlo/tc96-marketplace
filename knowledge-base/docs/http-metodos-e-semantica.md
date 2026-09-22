@@ -2,10 +2,10 @@
 titulo: HTTP - Métodos e Semântica
 Link: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods
 tags:
- - http
- - metodos
- - api
- - agent-context
+  - http
+  - metodos
+  - api
+  - agent-context
 source: "MDN Web Docs — https://developer.mozilla.org/en-US/docs/Web/HTTP"
 verificado-em: 2026-08-15
 ---
@@ -177,9 +177,9 @@ Content-Type: application/json; charset=utf-8
 `DELETE` é idempotente e **não** é safe. A confusão vem de olhar para o status em vez do estado: MDN mostra a sequência sem rodeios.
 
 ```http
-DELETE /pedidos/p-4471 HTTP/1.1 → 204
-DELETE /pedidos/p-4471 HTTP/1.1 → 404
-DELETE /pedidos/p-4471 HTTP/1.1 → 404
+DELETE /pedidos/p-4471 HTTP/1.1   →  204
+DELETE /pedidos/p-4471 HTTP/1.1   →  404
+DELETE /pedidos/p-4471 HTTP/1.1   →  404
 ```
 
 > "The response returned by each request may differ: for example, the first call of a `DELETE` will likely return a `200`, while successive ones will likely return a `404`."
@@ -298,7 +298,7 @@ O cliente não pode inventar segurança de retry. Ele só sabe uma coisa: o mét
 
 Duas leituras, ambas importantes.
 
-**Primeira: retentar `POST` é escolha da API, não do cliente.** Se o desenho não oferece "algum meio de saber", o cliente correto **não** retenta — e uma criação que falhou por timeout de rede simplesmente falha, mesmo tendo sido aplicada no servidor. Configurar `retry` no cliente para uma mutation de `POST` sem esse meio é criar pedidos duplicados por conta própria. Ver.
+**Primeira: retentar `POST` é escolha da API, não do cliente.** Se o desenho não oferece "algum meio de saber", o cliente correto **não** retenta — e uma criação que falhou por timeout de rede simplesmente falha, mesmo tendo sido aplicada no servidor. Configurar `retry` no cliente para uma mutation de `POST` sem esse meio é criar pedidos duplicados por conta própria..
 
 **Segunda: o "meio de saber" é a chave de idempotência**, e ela é responsabilidade do servidor. O padrão é um header com um identificador gerado pelo cliente, que o servidor persiste junto com o resultado da primeira execução:
 
@@ -320,31 +320,31 @@ import { zValidator } from '@hono/zod-validator'
 import * as z from 'zod'
 
 const criarPedidoSchema = z.object({
- clienteId: z.string.uuid,
- itens: z.array(z.object({ sku: z.string, quantidade: z.number.int.positive })).min(1),
+  clienteId: z.string().uuid(),
+  itens: z.array(z.object({ sku: z.string(), quantidade: z.number().int().positive() })).min(1),
 })
 
-const chaveSchema = z.object({ 'idempotency-key': z.string.uuid })
+const chaveSchema = z.object({ 'idempotency-key': z.string().uuid() })
 
-const pedidos = new Hono.post(
- '/pedidos',
- zValidator('header', chaveSchema),
- zValidator('json', criarPedidoSchema),
- async (c) => {
- const chave = c.req.valid('header')['idempotency-key']
+const pedidos = new Hono().post(
+  '/pedidos',
+  zValidator('header', chaveSchema),
+  zValidator('json', criarPedidoSchema),
+  async (c) => {
+    const chave = c.req.valid('header')['idempotency-key']
 
- const jaExecutado = await buscarResultadoPorChave(chave)
- if (jaExecutado) {
- // mesma resposta da primeira execução — o cliente não distingue
- return c.json(jaExecutado.corpo, 201, { Location: jaExecutado.location })
- }
+    const jaExecutado = await buscarResultadoPorChave(chave)
+    if (jaExecutado) {
+      // mesma resposta da primeira execução — o cliente não distingue
+      return c.json(jaExecutado.corpo, 201, { Location: jaExecutado.location })
+    }
 
- const pedido = await criarPedido(c.req.valid('json'))
- await guardarResultado(chave, pedido)
- return c.json({ id: pedido.id, status: pedido.status }, 201, {
- Location: `/pedidos/${pedido.id}`,
- })
- }
+    const pedido = await criarPedido(c.req.valid('json'))
+    await guardarResultado(chave, pedido)
+    return c.json({ id: pedido.id, status: pedido.status }, 201, {
+      Location: `/pedidos/${pedido.id}`,
+    })
+  }
 )
 ```
 

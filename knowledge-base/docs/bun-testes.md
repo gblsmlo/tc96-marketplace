@@ -2,10 +2,10 @@
 titulo: Bun - Testes
 Link: https://bun.com/docs/test
 tags:
- - bun
- - testing
- - reference
- - agent-context
+  - bun
+  - testing
+  - reference
+  - agent-context
 source: "Documentação oficial — bun.com/docs/test (test runner), guias de Testing Library e migração"
 verificado-em: 2026-08-20
 ---
@@ -48,7 +48,7 @@ Todos os exemplos são TypeScript e importam de `bun:test` explicitamente, mesmo
 | --- | --- |
 | **runner** | o modo `bun test` do mesmo binário que executa a aplicação — não é um pacote separado |
 | **preload** | script declarado em `[test] preload` / `--preload`, avaliado **antes** dos arquivos de teste |
-| **escopo de execução** | o que vive por invocação inteira: hooks de preload, `mock.module`. Não é reiniciado entre arquivos |
+| **escopo de execução** | o que vive por invocação inteira: hooks de preload, `mock.module()`. Não é reiniciado entre arquivos |
 | **escopo de arquivo** | o que vive por arquivo: `beforeAll` no topo, estado de módulo. Só é reiniciado com `--isolate` |
 | **isolação** | `globalThis` novo por arquivo (`--isolate`, implícito em `--parallel`) |
 | **worker** | processo que recebe arquivos sob `--parallel`; identificado por `BUN_TEST_WORKER_ID` |
@@ -68,7 +68,7 @@ Cinco afirmações. Quase todo erro que um agente comete em `bun test` viola uma
 
 **3. Verde significa "as asserções que rodaram passaram" — não que elas rodaram.** Asserção dentro de `catch` que nunca foi alcançado, `await` esquecido num `userEvent`, `expectTypeOf` que é no-op, snapshot regravado por reflexo: quatro formas de teste verde que não verifica nada. `expect.assertions(n)` existe para essa classe de defeito, e é o único mecanismo que a pega.
 
-**4. Mock tem escopo, e o escopo raramente é o que você quer.** As três limpezas fazem coisas diferentes, e `mock.restore` **não** desfaz `mock.module` — mock de módulo é estado de processo. Como o default é um global compartilhado, "vazou" não significa "afetou o próximo teste": significa "afetou o resto da suíte".
+**4. Mock tem escopo, e o escopo raramente é o que você quer.** As três limpezas fazem coisas diferentes, e `mock.restore()` **não** desfaz `mock.module()` — mock de módulo é estado de processo. Como o default é um global compartilhado, "vazou" não significa "afetou o próximo teste": significa "afetou o resto da suíte".
 
 **5. Configuração de teste mora no `bunfig.toml`, e o comando é só o que varia por invocação.** Se `bun test` puro não funciona no projeto, a configuração está no lugar errado. Isso importa mais aqui do que em outros runners, porque é o comando que qualquer pessoa — ou agente — roda sem ler documentação.
 
@@ -82,10 +82,10 @@ Cinco afirmações. Quase todo erro que um agente comete em `bun test` viola uma
 
 ```ts
 import {
- test, it, describe, expect,
- beforeAll, beforeEach, afterEach, afterAll, onTestFinished,
- mock, spyOn, jest, vi,
- setSystemTime, expectTypeOf,
+  test, it, describe, expect,
+  beforeAll, beforeEach, afterEach, afterAll, onTestFinished,
+  mock, spyOn, jest, vi,
+  setSystemTime, expectTypeOf,
 } from "bun:test";
 ```
 
@@ -145,12 +145,12 @@ Superfície verificada em bun.com/docs. A coluna **Satélite** diz o que carrega
 
 | API | Para que serve | Satélite |
 | --- | --- | --- |
-| `mock`, `jest.fn`, `vi.fn` | função observável | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 2 |
+| `mock()`, `jest.fn()`, `vi.fn()` | função observável | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 2 |
 | `spyOn(obj, "metodo")` | espiar (e opcionalmente substituir) | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 2 |
 | `.mock.calls`/`.results`/`.lastCall`, `mockReturnValueOnce`, `mockResolvedValue` | inspeção e roteiro de retorno | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 2 |
-| `mock.clearAllMocks`, `jest.resetAllMocks`, `mock.restore` | **as três limpezas, e o que cada uma não faz** | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 3 |
+| `mock.clearAllMocks()`, `jest.resetAllMocks()`, `mock.restore()` | **as três limpezas, e o que cada uma não faz** | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 3 |
 | `mock.module(especificador, factory)` | mock de módulo — escopo de processo | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 4 |
-| `setSystemTime`, `jest.now` | congelar data | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 5 |
+| `setSystemTime()`, `jest.now()` | congelar data | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 5 |
 | `useFakeTimers`, `advanceTimersByTime`, `runAllTimers`, `getTimerCount` | fazer o tempo passar | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 5 |
 | `TZ` / `process.env.TZ` em teste | fuso na asserção de data | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 5 |
 | objeto `vi` | superfície de compatibilidade Vitest | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 6 |
@@ -171,10 +171,10 @@ Superfície verificada em bun.com/docs. A coluna **Satélite** diz o que carrega
 
 | API | Para que serve | Satélite |
 | --- | --- | --- |
-| `GlobalRegistrator.register` (happy-dom) | injetar `document`/`window` | [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 2 |
+| `GlobalRegistrator.register()` (happy-dom) | injetar `document`/`window` | [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 2 |
 | `expect.extend(matchers)` de `jest-dom` | registrar `toBeInTheDocument` e afins | [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 2 |
 | `matchers.d.ts`, `/// <reference lib="dom" />` | tipos | [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 2 |
-| `cleanup` | limpar o `document` entre testes | [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 2 |
+| `cleanup()` | limpar o `document` entre testes | [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 2 |
 | `userEvent`, `findBy*`, `waitFor`, `act` | interação e espera | [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 3 |
 | loaders, `import.meta.env`, `paths` no teste | o que o Vite fazia e aqui é outra coisa | [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 4 |
 | stubs de `ResizeObserver`, `matchMedia` | o que happy-dom não implementa | [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 5 |
@@ -202,19 +202,19 @@ O sintoma mais comum, e o que tem mais causas distintas.
 ```
 O teste passa isolado e falha junto com os outros?
 ├── Falha só quando outro arquivo roda antes
-│ → estado no global compartilhado. Detecte: bun test --randomize
-│ ├── É spy não restaurado? → mock.restore no preload — BUN-TEST-02
-│ ├── É mock.module? → escopo de processo; registre no preload — BUN-TEST-03
-│ └── É estado de módulo/fixture? → mover o setup para dentro do arquivo — BUN-TEST-09
-│ (test.serial NÃO resolve: ele sequencia dentro do arquivo)
+│   → estado no global compartilhado. Detecte: bun test --randomize
+│     ├── É spy não restaurado?        → mock.restore() no preload — BUN-TEST-02
+│     ├── É mock.module()?             → escopo de processo; registre no preload — BUN-TEST-03
+│     └── É estado de módulo/fixture?  → mover o setup para dentro do arquivo — BUN-TEST-09
+│        (test.serial NÃO resolve: ele sequencia dentro do arquivo)
 ├── Falha só com --parallel
-│ ├── Dois testes disputam banco/porta/diretório → derive de BUN_TEST_WORKER_ID — BUN-TEST-10
-│ └── O preload sobe algo caro (servidor, migração) → hooks de preload envolvem CADA arquivo — BUN-TEST-24
+│   ├── Dois testes disputam banco/porta/diretório → derive de BUN_TEST_WORKER_ID — BUN-TEST-10
+│   └── O preload sobe algo caro (servidor, migração) → hooks de preload envolvem CADA arquivo — BUN-TEST-24
 ├── Falha só quando outro teste do MESMO arquivo roda antes
-│ ├── Há test.concurrent / --concurrent? → estado compartilhado entre concorrentes — BUN-TEST-23
-│ └── Componente: o DOM tem resto do teste anterior → cleanup em afterEach — BUN-TEST-26
+│   ├── Há test.concurrent / --concurrent?  → estado compartilhado entre concorrentes — BUN-TEST-23
+│   └── Componente: o DOM tem resto do teste anterior → cleanup() em afterEach — BUN-TEST-26
 └── Falha de forma intermitente, sem padrão de ordem
- → bun test --rerun-each 20; suspeite de await faltando e de timer real
+    → bun test --rerun-each 20; suspeite de await faltando e de timer real
 ```
 
 Detalhe em [Bun - Testes - Ciclo de Vida e Isolamento](bun-testes-ciclo-de-vida-e-isolamento.md) § 6.
@@ -223,34 +223,34 @@ Detalhe em [Bun - Testes - Ciclo de Vida e Isolamento](bun-testes-ciclo-de-vida-
 
 ```
 O código sob teste recebe a dependência de fora (parâmetro, construtor, contexto)?
-├── SIM → passe um duplo. Sem mock, sem escopo global, sem restauração.
-│ É a forma preferida. [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 4
+├── SIM  → passe um duplo. Sem mock, sem escopo global, sem restauração.
+│          É a forma preferida. [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) § 4
 └── NÃO
- ├── A dependência é método de um objeto que o teste tem em mãos?
- │ → spyOn(obj, "metodo") + mock.restore garantido — BUN-TEST-02
- └── É um módulo importado?
- ├── O import do original tem efeito colateral (conexão, listener, env)?
- │ → mock.module em [test] preload — BUN-TEST-04 (não há outra forma)
- └── Não tem efeito colateral?
- → mock.module serve, mas é escopo de PROCESSO — BUN-TEST-03
- Se três arquivos mockam o mesmo módulo, a dependência queria ser parâmetro.
+    ├── A dependência é método de um objeto que o teste tem em mãos?
+    │   → spyOn(obj, "metodo")  +  mock.restore() garantido — BUN-TEST-02
+    └── É um módulo importado?
+        ├── O import do original tem efeito colateral (conexão, listener, env)?
+        │   → mock.module() em [test] preload — BUN-TEST-04 (não há outra forma)
+        └── Não tem efeito colateral?
+            → mock.module() serve, mas é escopo de PROCESSO — BUN-TEST-03
+              Se três arquivos mockam o mesmo módulo, a dependência queria ser parâmetro.
 ```
 
 ### 5.3 "Preciso controlar o tempo"
 
 ```
-Preciso de uma data fixa (new Date, Date.now, Intl)?
-└── setSystemTime(new Date("…")) — NÃO é useFakeTimers — BUN-TEST-20
+Preciso de uma data fixa (new Date(), Date.now(), Intl)?
+└── setSystemTime(new Date("…"))         — NÃO é useFakeTimers — BUN-TEST-20
 
 Preciso que o tempo PASSE (setTimeout, debounce, polling, retry com backoff)?
-└── jest.useFakeTimers + jest.advanceTimersByTime(ms)
+└── jest.useFakeTimers() + jest.advanceTimersByTime(ms)
 
 Preciso das duas coisas?
 └── as duas combinam; setSystemTime funciona junto do avanço de timers
 
 Vou asserir sobre data ou hora FORMATADA?
 └── fixe o fuso: TZ=… no comando, ou process.env.TZ no teste — BUN-TEST-21
- (o Etc/UTC do runner só vale enquanto TZ não estiver no ambiente)
+    (o Etc/UTC do runner só vale enquanto TZ não estiver no ambiente)
 
 Estou tentado a usar sleep?
 └── nunca. Em componente: findBy*/waitFor. Em timer: fake timers.
@@ -267,9 +267,9 @@ O código de teste quase sempre roda sem edição — imports de `vitest` e de `
 | `environment: "jsdom"` / `"happy-dom"` | happy-dom via `GlobalRegistrator` no preload | não é chave de config; é código — `BUN-TEST-07` |
 | `testEnvironment: "jsdom"` (Jest) | idem. **jsdom não é oferecido como alternativa suportada** | [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 1 |
 | `vi.mock("./mod", factory)` | `mock.module("./mod", factory)` (`vi.mock` existe) | **não assuma hoisting** — `BUN-TEST-04` |
-| `vi.fn` / `vi.spyOn` | `mock` / `spyOn` — as formas `vi.*` também existem | |
-| `vi.resetAllMocks` / `vi.restoreAllMocks` | ver a tabela das três limpezas | os escopos **não** coincidem com os do Vitest |
-| `vi.useFakeTimers` | `jest.useFakeTimers` | o construtor `Date` **não** é trocado — `BUN-TEST-20` |
+| `vi.fn()` / `vi.spyOn()` | `mock()` / `spyOn()` — as formas `vi.*` também existem | |
+| `vi.resetAllMocks()` / `vi.restoreAllMocks()` | ver a tabela das três limpezas | os escopos **não** coincidem com os do Vitest |
+| `vi.useFakeTimers()` | `jest.useFakeTimers()` | o construtor `Date` **não** é trocado — `BUN-TEST-20` |
 | `testTimeout` | `--timeout <ms>` (default `5000`) | vira flag, não config |
 | `bail` | `--bail` | granularidade de **arquivo** |
 | `coverage.*` | `[test] coverage*` | limiar é **fração** (`0.9`), e tem duas condições silenciosas — `BUN-TEST-27`, `BUN-TEST-28` |
@@ -286,23 +286,23 @@ O código de teste quase sempre roda sem edição — imports de `vitest` e de `
 ```
 Suíte pequena (< ~2 min)?
 └── bun test --parallel --coverage
- + passo separado de tsc --noEmit — BUN-TEST-18
+    + passo separado de tsc --noEmit — BUN-TEST-18
 
 Suíte grande?
 └── matriz de --shard=i/n, com --timings cacheado entre execuções
- (sem o cache, a divisão volta a ser por contagem de arquivos)
+    (sem o cache, a divisão volta a ser por contagem de arquivos)
 
 Quer feedback rápido no PR?
 └── job extra com --changed=origin/<base>
- NUNCA como portão de merge: o grafo de import não vê env, migração nem fixture
+    NUNCA como portão de merge: o grafo de import não vê env, migração nem fixture
 
 Precisa de relatório para o CI (GitLab, Jenkins)?
 └── --reporter=junit --reporter-outfile=./junit.xml — BUN-TEST-29
- No GitHub Actions, as anotações saem sem configuração nenhuma
+    No GitHub Actions, as anotações saem sem configuração nenhuma
 
 Vai ligar limiar de cobertura?
 └── mantenha "text" nos reporters — BUN-TEST-27
- e não confie em "statements" — BUN-TEST-28
+    e não confie em "statements" — BUN-TEST-28
 ```
 
 Receita completa em [Bun - Testes - Cobertura e CI](bun-testes-cobertura-e-ci.md) § 5.
@@ -315,20 +315,20 @@ Receita completa em [Bun - Testes - Cobertura e CI](bun-testes-cobertura-e-ci.md
 
 "toBeInTheDocument is not a function"
 └── falta expect.extend(matchers) — BUN-TEST-12
- (import "@testing-library/jest-dom" sozinho NÃO registra nada)
+    (import "@testing-library/jest-dom" sozinho NÃO registra nada)
 
 "Cannot find name 'document'" (só no tsc)
 └── /// <reference lib="dom" /> no topo do arquivo
 
 "screen.getByRole found multiple elements"
-└── falta cleanup em afterEach — BUN-TEST-26
+└── falta cleanup() em afterEach — BUN-TEST-26
 
 A asserção roda antes do re-render
 └── await no userEvent; e prefira findBy* a waitFor + getBy*
 
 O componente importa SVG/CSS/import.meta.env e quebra
 └── é a fronteira com o Vite — [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 4
- A saída que dispensa a lista: componente puro, configuração por prop
+    A saída que dispensa a lista: componente puro, configuração por prop
 
 Depende de tamanho, layout ou rolagem
 └── happy-dom não mede. Teste de browser — [Storybook - Testes e Interações](storybook-testes-e-interacoes.md)
@@ -359,7 +359,7 @@ Regras citáveis por ID. Uma skill, um prompt de revisão ou um comentário de P
 | ID | Regra |
 | --- | --- |
 | `BUN-TEST-05` | `--update-snapshots` (`-u`) **NEVER** aparece no comando de teste do CI, e o diretório `__snapshots__/` **MUST** estar versionado — snapshot fora do repositório não é asserção. |
-| `BUN-TEST-06` | Teste cuja asserção vive em `catch`, callback ou branch condicional **MUST** declarar `expect.assertions(n)` ou `expect.hasAssertions`. |
+| `BUN-TEST-06` | Teste cuja asserção vive em `catch`, callback ou branch condicional **MUST** declarar `expect.assertions(n)` ou `expect.hasAssertions()`. |
 | `BUN-TEST-08` | `test.only` **NEVER** é usado como forma de desabilitar os demais testes — sem `bun test --only` ele não filtra nada. |
 | `BUN-TEST-11` | Teste que documenta bug conhecido **MUST** usar `test.failing`, **NEVER** `test.skip` — `failing` avisa quando o bug é corrigido. |
 | `BUN-TEST-16` | `retry` e `repeats` **NEVER** coexistem no mesmo teste — a fonte declara a combinação inválida. |
@@ -371,8 +371,8 @@ Regras citáveis por ID. Uma skill, um prompt de revisão ou um comentário de P
 
 | ID | Regra |
 | --- | --- |
-| `BUN-TEST-02` | `spyOn` **MUST** ter restauração garantida (`mock.restore` em `afterEach` ou no preload) — sem isso o spy vaza para os testes seguintes. |
-| `BUN-TEST-03` | `mock.module` **NEVER** é desfeito por `mock.restore`; mock de módulo **MUST** ser registrado em `--preload` ou tratado como estado global do processo de teste. |
+| `BUN-TEST-02` | `spyOn` **MUST** ter restauração garantida (`mock.restore()` em `afterEach` ou no preload) — sem isso o spy vaza para os testes seguintes. |
+| `BUN-TEST-03` | `mock.module()` **NEVER** é desfeito por `mock.restore()`; mock de módulo **MUST** ser registrado em `--preload` ou tratado como estado global do processo de teste. |
 | `BUN-TEST-04` | Mock cujo objetivo é impedir efeito colateral de import (conexão, listener, leitura de env no topo) **MUST** ser registrado em `--preload` — mockar depois do import não desfaz o que já rodou. |
 | `BUN-TEST-20` | Congelar data **MUST** usar `setSystemTime` — `useFakeTimers` não troca o construtor `Date` em `bun:test`, ao contrário do Jest. |
 | `BUN-TEST-21` | Asserção sobre data ou hora **formatada** **MUST** fixar o fuso explicitamente (`TZ` no comando, ou `process.env.TZ` no teste) — o `Etc/UTC` do runner só vale enquanto `TZ` não estiver definida no ambiente. † |
@@ -391,10 +391,10 @@ Regras citáveis por ID. Uma skill, um prompt de revisão ou um comentário de P
 
 | ID | Regra |
 | --- | --- |
-| `BUN-TEST-07` | Registro de DOM (`GlobalRegistrator.register`) **MUST** acontecer em `[test] preload`, **NEVER** dentro de um arquivo de teste. |
+| `BUN-TEST-07` | Registro de DOM (`GlobalRegistrator.register()`) **MUST** acontecer em `[test] preload`, **NEVER** dentro de um arquivo de teste. |
 | `BUN-TEST-12` | Matcher de `@testing-library/jest-dom` **MUST** ser registrado com `expect.extend` num preload — o `import` do pacote sozinho não registra nada em `bun:test`. |
-| `BUN-TEST-25` | `GlobalRegistrator.register` e os pacotes `@testing-library/*` **MUST** viver em preloads separados, nesta ordem — num arquivo único, os pacotes **MUST** ser carregados por `await import` depois do registro. |
-| `BUN-TEST-26` | Arquivo que renderiza componente **MUST** ter `cleanup` em `afterEach` (de preferência no preload) — o `document` é compartilhado entre os testes do arquivo. |
+| `BUN-TEST-25` | `GlobalRegistrator.register()` e os pacotes `@testing-library/*` **MUST** viver em preloads separados, nesta ordem — num arquivo único, os pacotes **MUST** ser carregados por `await import()` depois do registro. |
+| `BUN-TEST-26` | Arquivo que renderiza componente **MUST** ter `cleanup()` em `afterEach` (de preferência no preload) — o `document` é compartilhado entre os testes do arquivo. |
 
 ### `27`–`29` — cobertura e CI · [Bun - Testes - Cobertura e CI](bun-testes-cobertura-e-ci.md)
 
@@ -427,32 +427,32 @@ Como uma skill de teste em Bun deve consumir esta doc.
 ### O que carregar
 
 ```
-SEMPRE: docs/Bun - Testes.md § 2 (modelo mental)
- docs/Bun - Testes.md § 3 (fronteiras de import)
- docs/Bun - Testes.md § 6.1 (o caminho mínimo)
+SEMPRE:   docs/Bun - Testes.md § 2 (modelo mental)
+          docs/Bun - Testes.md § 3 (fronteiras de import)
+          docs/Bun - Testes.md § 6.1 (o caminho mínimo)
 
 AO ESCREVER teste novo:
- docs/Bun - Testes - Escrita e Asserções.md
+          docs/Bun - Testes - Escrita e Asserções.md
 
 AO SUBSTITUIR dependência (mock, spy, duplo) ou controlar tempo:
- docs/Bun - Testes - Mocks e Tempo.md + § 5.2 / § 5.3
+          docs/Bun - Testes - Mocks e Tempo.md   +   § 5.2 / § 5.3
 
 AO DIAGNOSTICAR "passa sozinho, falha na suíte" ou flaky:
- § 5.1 + docs/Bun - Testes - Ciclo de Vida e Isolamento.md
+          § 5.1   +   docs/Bun - Testes - Ciclo de Vida e Isolamento.md
 
 AO TESTAR componente React:
- docs/Bun - Testes - DOM e Componentes.md
+          docs/Bun - Testes - DOM e Componentes.md
 
 AO MEXER em CI, cobertura ou reporter:
- docs/Bun - Testes - Cobertura e CI.md
+          docs/Bun - Testes - Cobertura e CI.md
 
 AO CONFIGURAR o projeto do zero:
- docs/Bun - Testes - Execução e Configuração.md § 5
- + docs/Bun - Testes - DOM e Componentes.md § 2 (se houver componente)
+          docs/Bun - Testes - Execução e Configuração.md § 5
+          + docs/Bun - Testes - DOM e Componentes.md § 2 (se houver componente)
 
-NUNCA: os seis satélites de uma vez
- inventar flag, chave de bunfig ou assinatura de matcher
- — o que não estiver na § 4 MUST ser conferido em bun.com/docs
+NUNCA:    os seis satélites de uma vez
+          inventar flag, chave de bunfig ou assinatura de matcher
+          — o que não estiver na § 4 MUST ser conferido em bun.com/docs
 ```
 
 Três recortes prontos, para as tarefas mais frequentes:
@@ -474,7 +474,7 @@ Achados de revisão citam o ID e o satélite, e não parafraseiam:
 
 1. **Asserção que pode não rodar precisa de contagem.** Todo `expect` dentro de `catch`, callback ou `if` vem com `expect.assertions(n)` (`BUN-TEST-06`). É a invariante que mais pega código gerado.
 2. **Todo `spyOn` tem restauração garantida**, e a garantia mora no preload, não no arquivo (`BUN-TEST-02`).
-3. **Mock de módulo é estado de processo.** Se a skill escreve `mock.module`, ela decidiu por um efeito que dura a execução inteira — e isso precisa ser intencional (`BUN-TEST-03`, `BUN-TEST-04`).
+3. **Mock de módulo é estado de processo.** Se a skill escreve `mock.module()`, ela decidiu por um efeito que dura a execução inteira — e isso precisa ser intencional (`BUN-TEST-03`, `BUN-TEST-04`).
 4. **Nada de `sleep`.** Espera é `findBy*`, `waitFor` ou fake timers. `Bun.sleep` num teste é achado.
 5. **Type checking é passo separado.** Nenhuma entrega está verificada sem `tsc --noEmit` (`BUN-TEST-18`).
 6. **Verificar antes de afirmar.** Flag, chave de `bunfig.toml` ou matcher que não está na § 4 não foi verificado nesta doc: consulte bun.com/docs e **atualize a nota**.
@@ -494,10 +494,10 @@ Derive-a de **um** satélite, não desta nota inteira: uma skill de teste de com
 | **Integração externa: mock, duplo ou serviço real** | — a § 5.2 escolhe o *mecanismo*, não a *estratégia* |
 | **O que asseverar num componente** | — DOM disponível não implica testar implementação |
 | **Componente em browser real** | [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) — o addon-vitest roda em Playwright e **não** roda sob `bun test`; o monorepo fica com dois runners por desenho |
-| **Servidor HTTP sob teste** | [Bun - HTTP e Servidor](bun-http-e-servidor.md) — `Bun.serve` em `beforeAll`, `server.stop` em `afterAll`, porta por worker (`BUN-TEST-10`) |
+| **Servidor HTTP sob teste** | [Bun - HTTP e Servidor](bun-http-e-servidor.md) — `Bun.serve` em `beforeAll`, `server.stop()` em `afterAll`, porta por worker (`BUN-TEST-10`) |
 | **Banco em teste** | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) — `bun:sqlite` em memória para unidade; banco por worker para integração |
 | **Instalação e pin de versão em CI** | [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) — `bun ci`, lockfile versionado |
-| **Handler de rota tipado sob teste** | [Hono - Validação e RPC](hono-validacao-e-rpc.md) · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — `app.request` / Eden dispensam subir servidor |
+| **Handler de rota tipado sob teste** | [Hono - Validação e RPC](hono-validacao-e-rpc.md) · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — `app.request()` / Eden dispensam subir servidor |
 | **Mutation e cache no frontend** | [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md) — `QueryClient` novo por teste, `retry: false` |
 | **Trunk-based e portão de teste** | |
 
@@ -528,7 +528,7 @@ Verificadas em **2026-08-20**, contra `bun` **1.4.0** (`npm view bun dist-tags` 
 
 - **O default é um único global compartilhado por todos os arquivos**, num processo só. Isolamento por arquivo só existe com `--isolate` (implícito em `--parallel`). É o oposto do que Jest e Vitest treinam a esperar.
 - **`coverageThreshold` tem duas condições silenciosas que ninguém supõe:** a chave `statements` é **aceita e não aplicada**, e **fora de `--parallel` a checagem só roda com o reporter `text` habilitado** — execuções com apenas `--coverage-reporter=lcov` saem `0` independentemente do número. Um projeto pode ter portão de cobertura que nunca fechou.
-- **`mock.restore` não desfaz `mock.module`.** Está escrito na fonte, e é a diferença de escopo mais fácil de violar da API.
+- **`mock.restore()` não desfaz `mock.module()`.** Está escrito na fonte, e é a diferença de escopo mais fácil de violar da API.
 - **As três limpezas fazem coisas diferentes:** `clearAllMocks` preserva a implementação, `resetAllMocks` a remove mas não restaura o original do spy, só `restore` restaura.
 - **`useFakeTimers` não troca o construtor `Date`** em `bun:test` — a fonte diz que é para evitar o bug de `Date !== Date` do Jest. Congelar data é `setSystemTime`.
 - **`test.only` exige `bun test --only`.** E aqui as páginas da fonte divergem: a referência de API descreve `only` como já pulando os demais testes; a página de escrita de testes mostra a flag como o gatilho.
@@ -543,13 +543,13 @@ Verificadas em **2026-08-20**, contra `bun` **1.4.0** (`npm view bun dist-tags` 
 - **`beforeAll` que lança pula todos os testes do escopo** — a falha chega disfarçada de "skip", não de erro.
 - **`repeats: N` roda N+1 vezes**, e `retry` com `repeats` é combinação inválida.
 - **Se o teste declara `done`, ele precisa chamá-lo — ou pendura** até o timeout.
-- **`expect.addSnapshotSerializer` não está implementado.** Serializador customizado de snapshot não existe.
+- **`expect.addSnapshotSerializer()` não está implementado.** Serializador customizado de snapshot não existe.
 - **`expectTypeOf` é no-op em runtime.** A verificação exige `tsc` num passo separado.
 - **`onTestFinished` não funciona em teste concorrente.**
 - **`--isolate` reexecuta os scripts de preload a cada arquivo**, além de criar `globalThis` novo, limpar os registros de módulo, fechar servidores/sockets/watchers/subprocessos e cancelar timers.
 - **Hooks de nível de preload envolvem cada arquivo sob `--parallel`** — "uma vez por execução" deixa de valer exatamente onde mais dói.
 - **`import "@testing-library/jest-dom"` não basta**, e as duas páginas da fonte divergem: a página de DOM mostra o import simples, o guia de Testing Library usa `expect.extend(matchers)`. A que funciona é a do guia.
-- **A ordem dos preloads importa:** `@testing-library/*` precisa ser avaliado depois de `GlobalRegistrator.register`.
+- **A ordem dos preloads importa:** `@testing-library/*` precisa ser avaliado depois de `GlobalRegistrator.register()`.
 - **No runtime, `import logo from "./logo.svg"` resolve para o caminho absoluto em disco**, não para uma URL como no Vite.
 - **jsdom não é oferecido como alternativa.** happy-dom é o caminho documentado.
 - **Imports de `vitest` e de `@jest/globals` são reescritos para `bun:test`.** Muito teste de Vitest roda sem edição; o que não migra é a configuração.
@@ -567,7 +567,7 @@ Verificadas em **2026-08-20**, contra `bun` **1.4.0** (`npm view bun dist-tags` 
 
 - **`import "./Botao.css"` e CSS Modules sob `bun test`**: a fonte documenta `css` como loader e o comportamento no bundler, e não declara o comportamento no runtime. [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md) § 4 dá a sonda e a saída.
 - **`IntersectionObserver` no happy-dom**: a fonte stuba `ResizeObserver` e `matchMedia` e não menciona este.
-- **Idempotência e custo de `GlobalRegistrator.register` sob reexecução por arquivo**: é comportamento do happy-dom, não declarado pela doc do Bun. Meça antes de assumir que `--parallel` acelera uma suíte de DOM.
+- **Idempotência e custo de `GlobalRegistrator.register()` sob reexecução por arquivo**: é comportamento do happy-dom, não declarado pela doc do Bun. Meça antes de assumir que `--parallel` acelera uma suíte de DOM.
 - **Hoisting de `mock.module`/`vi.mock`**: a fonte não declara que sejam içados como no Vitest. Trate como não içados.
 - **Detalhe do protocolo de reporter customizado** (domínios `TestReporter` e `LifecycleReporter`): existe, e não foi explorado aqui.
 - **`--only` não aparece na lista de flags da CLI** que a fonte publica, embora a página de escrita de testes o use. Comportamento tratado como verificado pela prosa; a listagem, como incompleta.

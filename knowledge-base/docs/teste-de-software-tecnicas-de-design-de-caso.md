@@ -2,10 +2,10 @@
 titulo: Teste de Software - Técnicas de Design de Caso
 Link: https://www.guru99.com/equivalence-partitioning-boundary-value-analysis.html
 tags:
- - testing
- - test-design
- - coverage
- - agent-context
+  - testing
+  - test-design
+  - coverage
+  - agent-context
 source: "guru99 (EP/BVA, white box, cobertura), ISTQB CTFL v4.0 (as três categorias de técnica), Mutation testing"
 verificado-em: 2026-08-20
 ---
@@ -104,8 +104,8 @@ Para quando o comportamento depende do que veio antes.
 
 ```
 rascunho ──enviar──▶ em análise ──aprovar──▶ aprovado ──emitir──▶ emitido
- │
- └──rejeitar──▶ rejeitado ──corrigir──▶ rascunho
+                          │
+                          └──rejeitar──▶ rejeitado ──corrigir──▶ rascunho
 ```
 
 Cubra: **as transições válidas**, e — o que quase ninguém faz — **as inválidas**: aprovar um rascunho, emitir um rejeitado, enviar duas vezes. Transição inválida que o sistema aceita é uma das classes de defeito mais danosas, porque corrompe estado em vez de dar erro.
@@ -135,9 +135,9 @@ Cubra: **as transições válidas**, e — o que quase ninguém faz — **as inv
 
 ```ts
 function aplicar(v: number, cupom?: string) {
- let total = v;
- if (cupom) total = total * 0.9;
- return total;
+  let total = v;
+  if (cupom) total = total * 0.9;
+  return total;
 }
 ```
 
@@ -158,7 +158,7 @@ Cobertura mede **execução**, não **verificação**. Um teste que chama a fun�
 
 ```ts
 // 100% de cobertura, zero verificação
-test('calcula', => { calcularFrete(pedido); });
+test('calcula', () => { calcularFrete(pedido); });
 ```
 
 Isso não é hipótese: é o resultado direto de tratar cobertura como meta (`TS-CORE-05`). A métrica que mede o que se queria está na § 4.

@@ -2,12 +2,12 @@
 titulo: Claude Code - Contexto e Cache
 Link: https://code.claude.com/docs/pt/context-window
 tags:
- - claude-code
- - ia
- - contexto
- - cache
- - performance
- - agent-context
+  - claude-code
+  - ia
+  - contexto
+  - cache
+  - performance
+  - agent-context
 source: "Documentação oficial do Claude Code — Explore the context window, How Claude Code uses prompt caching, Model configuration (effort, extended thinking, extended context, auto-compaction), Manage costs (reduce token usage)"
 verificado-em: 2026-08-21
 ---
