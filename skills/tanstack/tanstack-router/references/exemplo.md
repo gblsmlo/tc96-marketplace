@@ -1,30 +1,28 @@
-# Exemplo trabalhado
+# Worked example
 
-Tarefa: *"a listagem de faturas precisa filtrar por status, e o filtro tem que sobreviver a refresh e ao botão voltar"*.
+Task: *"the invoice listing has to filter by status, and the filter has to survive a refresh and the back button"*.
 
-Esta skill roteia; ela **não** escreve o código. O exemplo abaixo é do uso dela — que notas carregar, em que ordem, e o que conferir antes de dar a tarefa por concluída.
+This skill routes; it does **not** write the code. The example below is about using it — which notes to load, in what order, and what to check before calling the task done.
 
-**1. Identificar a tarefa.** "Filtro que sobrevive a refresh e ao voltar" é estado que pertence à URL, não ao componente. Na tabela de "Como usar", isso é **lidar com search params** — e, porque a listagem também busca dado, **carregar dados de rota**. Duas tarefas, nesta ordem.
+**1. Identify the task.** "A filter that survives a refresh and the back button" is state that belongs to the URL, not to the component. In the "How to use" table, that is **handling search params** — and, because the listing also fetches data, **loading route data**. Two tasks, in this order.
 
-**2. Carregar, na ordem da tabela:**
+**2. Load, in the table's order:**
 
-| Ordem | Nota | Para responder |
+| Order | Note | To answer |
 | --- | --- | --- |
-| 1 | [TanStack Router - Search Params](../../../../knowledge-base/docs/tanstack-router-search-params.md) | como declarar e validar o `status` |
-| 2 | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | como trocar o filtro sem empilhar histórico a cada tecla |
-| 3 | [TanStack Router - Carregamento de Dados](../../../../knowledge-base/docs/tanstack-router-carregamento-de-dados.md) | se o loader participa, ou se o dado é do cache |
+| 1 | [TanStack Router - Search Params](../../../../knowledge-base/docs/tanstack-router-search-params.md) | how to declare and validate `status` |
+| 2 | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) | how to change the filter without stacking history on every keystroke |
+| 3 | [TanStack Router - Carregamento de Dados](../../../../knowledge-base/docs/tanstack-router-carregamento-de-dados.md) | whether the loader participates, or the data is the cache's |
 
-Não carregue [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md) nem [TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md): a rota já existe. É a regra de economia de contexto.
+Do not load [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md) nor [TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md): the route already exists. That is the context-economy rule.
 
-**3. Percorrer o "Verificar" de cada tarefa.** O que essa passagem produz de decisão real:
+**3. Walk each task's "Check".** What that pass produces as real decisions:
 
-- o `status` é **validado** na rota, não lido como string solta — é o que dá o tipo ao resto;
-- trocar o filtro **substitui** o histórico em vez de empilhar, senão o botão voltar percorre cada letra digitada;
-- o dado remoto continua sendo do [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md); a rota é dona do **filtro**, não das faturas — a fronteira está em [TanStack Router - Carregamento de Dados](../../../../knowledge-base/docs/tanstack-router-carregamento-de-dados.md), e a decisão loader × Query é dela;
-- o componente **não** guarda o filtro em `useState` (`REACT-PAT-10`) — se guardasse, teria dois donos do mesmo dado divergindo.
+- `status` is **validated** on the route, not read as a loose string — that is what gives the type to everything else;
+- changing the filter **replaces** history instead of stacking it, otherwise the back button walks through every typed letter;
+- the remote data still belongs to [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md); the route owns the **filter**, not the invoices — the boundary is in [TanStack Router - Carregamento de Dados](../../../../knowledge-base/docs/tanstack-router-carregamento-de-dados.md), and the loader × Query decision is theirs;
+- the component does **not** keep the filter in `useState` (`REACT-PAT-10`) — if it did, there would be two owners of the same data diverging.
 
-**4. A regra de honestidade, em ação.** Se [TanStack Router - Search Params](../../../../knowledge-base/docs/tanstack-router-search-params.md) estiver ausente ou incompleta no momento da leitura — o que o Aviso acima admite ser possível — **declare a limitação** e vá à documentação oficial do TanStack Router. Depois registre o verificado na nota. O que não se faz é preencher a lacuna de memória e apresentar a suposição como fato.
+**4. The honesty rule, in action.** If [TanStack Router - Search Params](../../../../knowledge-base/docs/tanstack-router-search-params.md) is absent or incomplete at the time of reading — which the warning above admits is possible — **declare the limitation** and go to the official TanStack Router documentation. Then record what was verified in the note. What you do not do is fill the gap from memory and present the assumption as fact.
 
-**A fronteira que este exemplo demarca:** três skills tocam esta tela e nenhuma invade a outra — esta decide que o filtro é da URL, `tanstack-query` decide o cache das faturas, e `react-developer` escreve o componente que consome as duas.
-
----
+**The boundary this example marks out:** three skills touch this screen and none invades another — this one decides the filter belongs to the URL, `tanstack-query` decides the invoices' cache, and `react-developer` writes the component that consumes both.

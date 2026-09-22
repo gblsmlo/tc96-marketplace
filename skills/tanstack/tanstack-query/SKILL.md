@@ -1,8 +1,9 @@
 ---
 nome: tanstack-query
-descricao: Trabalhar com estado do servidor no TanStack Query — ler dado remoto, política de frescor, mutation e invalidação, update otimista com rollback, listas paginadas e infinitas, integração com o loader de rota — citando IDs `TSQ-*`, com doze sondas executáveis e uma tabela de diagnóstico por sintoma — use quando a tarefa for buscar dado que outra pessoa pode alterar, decidir `staleTime`, invalidar depois de escrever, montar update otimista, paginar, ou entender por que a tela não atualiza ou por que há requests demais. Não use para estado de UI efêmero, que é react-developer, para estado que pertence à URL, que é tanstack-router, nem para cache HTTP, que é http-cache.
+descricao: Work with server state in TanStack Query — reading remote data, freshness policy, mutations and invalidation, optimistic updates with rollback, paginated and infinite lists, integration with the route loader — citing `TSQ-*` IDs, with twelve executable probes and a symptom-based diagnostic table — use when the task is fetching data someone else can change, deciding `staleTime`, invalidating after a write, building an optimistic update, paginating, or understanding why the screen does not update or why there are too many requests. Do not use for ephemeral UI state, which is react-developer, for state that belongs to the URL, which is tanstack-router, nor for HTTP caching, which is http-cache.
 tipo: skill
 familia: tanstack
+idioma: en
 fonte: "[TanStack Query](../../../knowledge-base/docs/tanstack-query.md)"
 docs:
   - /websites/tanstack_query
@@ -14,117 +15,117 @@ tags:
 
 # tanstack-query
 
-> **Fonte desta skill:** [TanStack Query](../../../knowledge-base/docs/tanstack-query.md), com os cinco satélites carregados **um por vez**.
-> Esta skill **não contém** o texto das regras nem a superfície de API — ela roteia por tarefa e diagnostica por sintoma.
-> **Superfície de API:** resolva pelo Context7 — `/websites/tanstack_query`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [TanStack Query](../../../knowledge-base/docs/tanstack-query.md), with the five satellites loaded **one at a time**.
+> This skill **contains** neither the text of the rules nor the API surface — it routes by task and diagnoses by symptom.
+> **API surface:** resolve it through Context7 — `/websites/tanstack_query`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contrato que esta skill implementa: [TanStack Query](../../../knowledge-base/docs/tanstack-query.md) § 7.
+Contract this skill implements: [TanStack Query](../../../knowledge-base/docs/tanstack-query.md) § 7.
 
 ---
 
-## Quando usar
+## When to use
 
-O dado **vem de um servidor e outra pessoa pode alterá-lo**: ler, escrever, invalidar, paginar, decidir frescor, ou entender o cache.
+The data **comes from a server and someone else can change it**: reading, writing, invalidating, paginating, deciding freshness, or understanding the cache.
 
-Antes de tudo, passe pela primeira árvore de [TanStack Query](../../../knowledge-base/docs/tanstack-query.md) § 5 ("Este dado é da Query?"):
+Before anything, go through the first tree in [TanStack Query](../../../knowledge-base/docs/tanstack-query.md) § 5 ("Este dado é da Query?"):
 
-| O dado é… | Vá para |
+| The data is… | Go to |
 | --- | --- |
-| estado de UI efêmero, ou estrutura de componente | `react-developer` · `react-review` |
-| estado que pertence à URL (filtro, aba, página, ordenação) | `tanstack-router` |
-| dado de uma rota, carregado pelo loader | `tanstack-router`, **e** a tarefa 6 |
-| estado global de cliente com escrita frequente | |
-| frescor decidido pelo **servidor**, por header | `http-cache` — outra camada |
+| ephemeral UI state, or component structure | `react-developer` · `react-review` |
+| state that belongs to the URL (filter, tab, page, sorting) | `tanstack-router` |
+| a route's data, loaded by the loader | `tanstack-router`, **and** task 6 |
+| global client state with frequent writes | |
+| freshness decided by the **server**, through headers | `http-cache` — another layer |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
 ```
-SEMPRE: TanStack Query § 2 (modelo mental) e § 5 (árvores)
-SOB DEMANDA, via § 4: o satélite da tarefa
-SE envolve rota/loader: TanStack Router - Carregamento de Dados
-NUNCA: todos os satélites de uma vez
+ALWAYS: TanStack Query § 2 (mental model) and § 5 (trees)
+ON DEMAND, via § 4: the satellite for the task
+IF it involves a route/loader: TanStack Router - Carregamento de Dados
+NEVER: all satellites at once
 ```
 
-Os cinco satélites somam mais de 100 KB. **Carregar todos é o erro de contexto mais caro desta doc.**
+The five satellites add up to more than 100 KB. **Loading all of them is the most expensive context mistake in this doc.**
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/por-tarefa.md` | o mapa tarefa → satélite, e os sete recortes |
-| `references/nao-assumir-de-memoria.md` | a assinatura dos callbacks na v5, e as duas camadas de otimismo |
-| `references/diagnostico.md` | "a tela não atualiza" e "requests demais", sintoma a sintoma |
-| `references/fronteira.md` | o que é de outra skill |
-| `references/mapa-de-ids.md` | os 55 `TSQ-*` por satélite e seção |
-| `references/exemplo.md` | caso trabalhado |
-| `scripts/sondas.sh` | doze sondas sobre o código |
-| `scripts/gerar-mapa-de-ids.sh` | regenera o mapa a partir de `Docs/TanStack Query*` |
+| `references/por-tarefa.md` | the task → satellite map, and the seven cuts |
+| `references/nao-assumir-de-memoria.md` | the callback signatures in v5, and the two layers of optimism |
+| `references/diagnostico.md` | "the screen does not update" and "too many requests", symptom by symptom |
+| `references/fronteira.md` | what belongs to another skill |
+| `references/mapa-de-ids.md` | the 55 `TSQ-*` by satellite and section |
+| `references/exemplo.md` | worked case |
+| `scripts/sondas.sh` | twelve probes over the code |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `Docs/TanStack Query*` |
 
 ---
 
-## Passo 1 — Sondar
+## Step 1 — Probe
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/tanstack-query/scripts/sondas.sh src
 ```
 
-**As duas que mais pagam:**
+**The two that pay most:**
 
-| Sonda | O que revela |
+| Probe | What it reveals |
 | --- | --- |
-| **S1** — `staleTime` nunca declarado | **todo dado nasce stale** (`TSQ-CACHE-01`): rede a cada montagem, foco de aba e reconexão |
-| **S6** — update otimista sem `cancelQueries`/`onError`/`onSettled` | ciclo incompleto (`TSQ-MUT-10`): pisca e volta, ou não faz rollback |
+| **S1** — `staleTime` never declared | **every piece of data is born stale** (`TSQ-CACHE-01`): network on every mount, tab focus and reconnect |
+| **S6** — optimistic update without `cancelQueries`/`onError`/`onSettled` | an incomplete cycle (`TSQ-MUT-10`): it flickers and reverts, or does not roll back |
 
-E a que mais engana: **S2**, gatilho desligado como remédio. `refetchOnWindowFocus: false` apaga o sintoma e deixa `refetchOnMount` com a política oposta no mesmo cache — duas regras contraditórias sobre o mesmo dado (`TSQ-CACHE-03`).
-
----
-
-## Passo 2 — Rotear por tarefa
-
-`references/por-tarefa.md`: ler dado · política de frescor · escrever e invalidar · update otimista · lista paginada · loader de rota · diagnosticar cache.
+And the most misleading one: **S2**, a trigger switched off as a remedy. `refetchOnWindowFocus: false` erases the symptom and leaves `refetchOnMount` with the opposite policy on the same cache — two contradictory rules about the same data (`TSQ-CACHE-03`).
 
 ---
 
-## Passo 3 — Não assumir de memória
+## Step 2 — Route by task
+
+`references/por-tarefa.md`: reading data · freshness policy · writing and invalidating · optimistic update · paginated list · route loader · diagnosing the cache.
+
+---
+
+## Step 3 — Do not assume from memory
 
 `references/nao-assumir-de-memoria.md`:
 
-1. **As assinaturas dos callbacks de mutation mudaram dentro da v5.** O retorno de `onMutate` chega como **terceiro argumento**. Código escrito contra a forma antiga lê o objeto errado, e o rollback **falha em silêncio** (`TSQ-MUT-11`). A forma antiga domina o material de treino — é o que sai por default de código gerado.
-2. **Otimismo tem duas camadas.** `useOptimistic` e o update sobre o cache resolvem o mesmo problema em lugares diferentes; usar as duas cria dois estados provisórios com rollbacks independentes. Em qualquer delas, **o otimista nunca é fonte de verdade** (`REACT-FORM-07`).
+1. **The mutation callback signatures changed within v5.** The return of `onMutate` arrives as the **third argument**. Code written against the old form reads the wrong object, and the rollback **fails silently** (`TSQ-MUT-11`). The old form dominates the training material — it is what generated code produces by default.
+2. **Optimism has two layers.** `useOptimistic` and the cache update solve the same problem in different places; using both creates two provisional states with independent rollbacks. In either of them, **the optimistic value is never the source of truth** (`REACT-FORM-07`).
 
 ---
 
-## Passo 4 — Diagnosticar por sintoma
+## Step 4 — Diagnose by symptom
 
-`references/diagnostico.md`, duas tabelas: **"a tela não atualiza"** e **"requests demais"**. Comece pela tabela, abra **um** satélite.
+`references/diagnostico.md`, two tables: **"the screen does not update"** and **"too many requests"**. Start with the table, open **one** satellite.
 
-**A correção quase nunca é desligar gatilho** — calibre `staleTime` primeiro (`TSQ-CACHE-03`).
-
----
-
-## Passo 5 — Fechar
-
-1. **Se o dado é de rota**, o frescor é decidido em **um** cache só: `defaultPreloadStaleTime: 0` (`TSR-LOAD-14`) — `tanstack-router`.
-2. **Se o cliente é Eden**, o `queryFn` precisa **lançar** (`ELYSIA-TYPE-09`), senão a query fica em `success` com o erro dentro de `data` — `elysia-schema`.
-3. **Se o sintoma é re-render**, confira structural sharing (`TSQ-CACHE-04`) e tracked properties (`TSQ-CACHE-05`) antes de memoizar.
-4. **Declare o que não verificou.**
+**The fix is almost never switching off a trigger** — calibrate `staleTime` first (`TSQ-CACHE-03`).
 
 ---
 
-## Exemplo
+## Step 5 — Closing
 
-Listagem de faturas com filtro na URL, mutation de aprovação e update otimista: a key inclui o filtro; a mutation faz `cancelQueries` → snapshot → escrita imutável → rollback no `onError` → `invalidateQueries` retornando a Promise no `onSettled`. O que o hábito produziria: key sem o filtro, rollback lendo o argumento errado, e `refetchOnWindowFocus: false` para "resolver" o excesso de requests.
-
-Caso completo: `references/exemplo.md`.
+1. **If the data belongs to a route**, freshness is decided in **one** cache only: `defaultPreloadStaleTime: 0` (`TSR-LOAD-14`) — `tanstack-router`.
+2. **If the client is Eden**, the `queryFn` has to **throw** (`ELYSIA-TYPE-09`), otherwise the query stays in `success` with the error inside `data` — `elysia-schema`.
+3. **If the symptom is re-rendering**, check structural sharing (`TSQ-CACHE-04`) and tracked properties (`TSQ-CACHE-05`) before memoizing.
+4. **Declare what you did not verify.**
 
 ---
 
-## Relacionados
+## Example
 
-- [TanStack Query](../../../knowledge-base/docs/tanstack-query.md) — fonte desta skill: § 2, § 4, § 5, § 7
-- `tanstack-router` — o dado de rota, e o preload
-- `react-developer` · `react-review` — o componente em volta
-- `elysia-schema` — a ponte com o Eden
-- `http-cache` — a camada de cache do servidor
+An invoice listing with a filter in the URL, an approval mutation and an optimistic update: the key includes the filter; the mutation does `cancelQueries` → snapshot → immutable write → rollback in `onError` → `invalidateQueries` returning the Promise in `onSettled`. What habit would produce: a key without the filter, a rollback reading the wrong argument, and `refetchOnWindowFocus: false` to "solve" the excess requests.
+
+Full case: `references/exemplo.md`.
+
+---
+
+## Related
+
+- [TanStack Query](../../../knowledge-base/docs/tanstack-query.md) — source of this skill: § 2, § 4, § 5, § 7
+- `tanstack-router` — route data, and preloading
+- `react-developer` · `react-review` — the component around it
+- `elysia-schema` — the bridge with Eden
+- `http-cache` — the server's cache layer

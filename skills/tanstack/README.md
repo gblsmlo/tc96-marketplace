@@ -1,38 +1,39 @@
-# Skills de TanStack
+# TanStack skills
 
-Duas skills, e a fronteira entre elas é **de quem é o dado**.
+Two skills, and the boundary between them is **who owns the data**.
 
-| Skill | A pergunta que responde | Fonte | Apoio interno |
+| Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
-| `tanstack-query` | o dado vem do servidor e outra pessoa pode alterá-lo | [TanStack Query](../../knowledge-base/docs/tanstack-query.md) | 6 referências + 2 scripts |
-| `tanstack-router` | o estado pertence à URL, ou a rota carrega o dado | [TanStack Router](../../knowledge-base/docs/tanstack-router.md) | 5 referências + 2 scripts |
+| `tanstack-query` | the data comes from a server and someone else can change it | [TanStack Query](../../knowledge-base/docs/tanstack-query.md) | 6 references + 2 scripts |
+| `tanstack-router` | the state belongs to the URL, or the route loads the data | [TanStack Router](../../knowledge-base/docs/tanstack-router.md) | 5 references + 2 scripts |
 
-## O que os pacotes acrescentaram
+## What the packages added
 
-| Skill | Ganhou | Lacuna que fechou |
+| Skill | Gained | Gap it closed |
 | --- | --- | --- |
-| `tanstack-query` | **12 sondas** | a skill tinha as melhores tabelas de diagnóstico do vault — e nenhum comando |
-| `tanstack-router` | **16 sondas** + **`regras-por-tarefa.md`** | ela **não citava ID nenhum** |
+| `tanstack-query` | **12 probes** | the skill had the best diagnostic tables in the vault — and no command |
+| `tanstack-router` | **16 probes** + **`regras-por-tarefa.md`** | it **cited no ID at all** |
 
-**A correção de estado que saiu daqui.** `tanstack-router` abria com um "aviso de estado da
-doc" dizendo que os satélites estavam **em construção**, e por isso emprestava `REACT-*` em
-vez de citar família própria. Os dez satélites hoje existem e somam **102 regras `TSR-*`**
-declaradas. O aviso saiu; cada tarefa passou a ter família citável, e o mapa é gerado da doc.
+**The status fix that came out of here.** `tanstack-router` opened with a "doc status warning"
+saying the satellites were **under construction**, and for that reason borrowed `REACT-*` instead
+of citing a family of its own. The ten satellites exist today and add up to **102 declared
+`TSR-*` rules**. The warning is gone; every task now has a citable family, and the map is
+generated from the docs.
 
-**As sondas que mais pagam, uma de cada:**
+**The probes that pay most, one from each:**
 
-- **Query, S6** — update otimista **sem** `cancelQueries`/`onError`/`onSettled`: o script
- diz qual das três falta, arquivo por arquivo (`TSQ-MUT-10`);
-- **Router, S15** — loader usando Query **sem** `defaultPreloadStaleTime: 0`: dois caches
- decidindo frescor (`TSR-LOAD-14`), cujo sintoma é "dado velho com o Query aparentemente
- certo".
+- **Query, S6** — an optimistic update **without** `cancelQueries`/`onError`/`onSettled`: the
+ script says which of the three is missing, file by file (`TSQ-MUT-10`);
+- **Router, S15** — a loader using Query **without** `defaultPreloadStaleTime: 0`: two caches
+ deciding freshness (`TSR-LOAD-14`), whose symptom is "stale data with Query apparently
+ right".
 
-As duas apontam para a **mesma fronteira**, de lados opostos — e é por isso que a tabela de
-diagnóstico da Query termina numa linha que cita `TSR-LOAD-14`.
+Both point at the **same boundary**, from opposite sides — and that is why Query's diagnostic
+table ends on a row citing `TSR-LOAD-14`.
 
-## Os mapas de IDs
+## The ID maps
 
-Um gerador por skill, porque as fontes são distintas: **55 `TSQ-*`** e **102 `TSR-*`**.
+One generator per skill, because the sources are distinct: **55 `TSQ-*`** and **102 `TSR-*`**.
 
 ```bash
 bash plugins/hermes-frontend/skills/tanstack-query/scripts/gerar-mapa-de-ids.sh
@@ -41,26 +42,26 @@ bash scripts/instalar.sh
 ```
 
 <!-- tokens:inicio -->
-## Orçamento de contexto
+## Context budget
 
-Medido por `skill-validator` (tiktoken), em 2026-09-05. **O número que importa é o da
-coluna `SKILL.md`**: é o que entra no contexto antes de a skill decidir o que abrir.
-As referências carregam sob demanda, uma por vez.
+Measured by `skill-validator` (tiktoken), on 2026-09-05. **The number that matters is the
+`SKILL.md` column**: it is what enters the context before the skill decides what to open.
+References load on demand, one at a time.
 
-| Skill | `SKILL.md` | maior `references/` | total | refs |
+| Skill | `SKILL.md` | largest `references/` | total | refs |
 | --- | ---: | --- | ---: | ---: |
 | `tanstack-query` | 1.467 | `por-tarefa.md` (3.535) | 9.969 | 6 |
 | `tanstack-router` | 1.272 | `mapa-de-ids.md` (3.467) | 8.066 | 5 |
 
-Carregar as 2 skills deste grupo de uma vez custaria **2.739 tokens** só de `SKILL.md`,
-e **18.035** com todas as referências. É por isso que cada skill declara o que **nunca** carregar.
+Loading all 2 skills in this group at once would cost **2.739 tokens** in `SKILL.md` alone,
+and **18.035** with every reference. That is why each skill declares what it must **never** load.
 
-Regenerar: `bash scripts/medir.sh`
+Regenerate: `bash scripts/medir.sh`
 <!-- tokens:fim -->
 
-## Relacionados
+## Related
 
-- [Skill — Índice](../README.md)
-- [família react](../react/README.md) — o componente em volta
-- `hermes-backend: família elysia` — a ponte com o Eden (`ELYSIA-TYPE-09`)
+- [Skills index](../README.md)
+- [react family](../react/README.md) — the component around it
+- `hermes-backend: elysia family` — the bridge with Eden (`ELYSIA-TYPE-09`)
 - `http-cache` — a camada de cache do servidor

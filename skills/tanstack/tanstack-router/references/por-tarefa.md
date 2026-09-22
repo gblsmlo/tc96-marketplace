@@ -1,82 +1,79 @@
-# As sete tarefas
+# The seven tasks
 
-> Roteador tarefa → nota, com o que verificar em cada uma.
+> A task → note router, with what to check in each one.
 
-| Tarefa | Carregar (nesta ordem) |
+| Task | Load (in this order) |
 | --- | --- |
-| Definir uma rota nova | [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md) → [TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md) → [TanStack Router - Route Trees](../../../../knowledge-base/docs/tanstack-router-route-trees.md) |
-| Entender por que uma URL casa (ou não) com uma rota | [TanStack Router - Route Matching](../../../../knowledge-base/docs/tanstack-router-route-matching.md) → [TanStack Router - Route Trees](../../../../knowledge-base/docs/tanstack-router-route-trees.md) |
-| Navegar entre rotas | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) → [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md) |
-| Lidar com search params | [TanStack Router - Search Params](../../../../knowledge-base/docs/tanstack-router-search-params.md) → [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) |
-| Carregar dados de rota | [TanStack Router - Carregamento de Dados](../../../../knowledge-base/docs/tanstack-router-carregamento-de-dados.md) → [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) |
-| Dividir bundle | [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) → [TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md) |
-| Árvore de rotas fora da convenção de arquivos | [TanStack Router - Virtual File Routes](../../../../knowledge-base/docs/tanstack-router-virtual-file-routes.md) → [TanStack Router - Route Trees](../../../../knowledge-base/docs/tanstack-router-route-trees.md) |
+| Defining a new route | [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md) → [TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md) → [TanStack Router - Route Trees](../../../../knowledge-base/docs/tanstack-router-route-trees.md) |
+| Understanding why a URL matches (or does not match) a route | [TanStack Router - Route Matching](../../../../knowledge-base/docs/tanstack-router-route-matching.md) → [TanStack Router - Route Trees](../../../../knowledge-base/docs/tanstack-router-route-trees.md) |
+| Navigating between routes | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) → [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md) |
+| Handling search params | [TanStack Router - Search Params](../../../../knowledge-base/docs/tanstack-router-search-params.md) → [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) |
+| Loading route data | [TanStack Router - Carregamento de Dados](../../../../knowledge-base/docs/tanstack-router-carregamento-de-dados.md) → [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) |
+| Splitting the bundle | [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) → [TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md) |
+| A route tree outside the file convention | [TanStack Router - Virtual File Routes](../../../../knowledge-base/docs/tanstack-router-virtual-file-routes.md) → [TanStack Router - Route Trees](../../../../knowledge-base/docs/tanstack-router-route-trees.md) |
 
 ---
 
-### 1. Definir uma rota nova
+### 1. Defining a new route
 
-**Carregar:** [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md), depois [TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md); [TanStack Router - Route Trees](../../../../knowledge-base/docs/tanstack-router-route-trees.md) se a rota entra numa hierarquia já existente.
+**Load:** [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md), then [TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md); [TanStack Router - Route Trees](../../../../knowledge-base/docs/tanstack-router-route-trees.md) if the route joins an existing hierarchy.
 
-**Verificar:**
+**Check:**
 
-- O projeto usa file-based routing ou rotas em código? A convenção do projeto decide onde o arquivo vai — confirme antes de criar ([TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md) × [TanStack Router - Virtual File Routes](../../../../knowledge-base/docs/tanstack-router-virtual-file-routes.md)).
-- O nome do arquivo produz o path pretendido, segundo a convenção documentada — não segundo intuição.
-- A rota é de qual tipo (raiz, layout, aninhada, dinâmica, curinga)? Confira a taxonomia em [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md) antes de escolher.
-- Onde a rota se encaixa na árvore, e o que ela herda do pai (layout, contexto, loader).
-- A árvore gerada foi atualizada, se o projeto depende de geração.
-- Os tipos batem: type-safety é o ponto do roteador; erro de tipo aqui é sinal de path ou params mal declarados.
+- Does the project use file-based routing or routes in code? The project's convention decides where the file goes — confirm before creating it ([TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md) × [TanStack Router - Virtual File Routes](../../../../knowledge-base/docs/tanstack-router-virtual-file-routes.md)).
+- Does the file name produce the intended path, according to the documented convention — not according to intuition.
+- What type is the route (root, layout, nested, dynamic, wildcard)? Check the taxonomy in [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md) before choosing.
+- Where the route fits in the tree, and what it inherits from the parent (layout, context, loader).
+- The generated tree was updated, if the project depends on generation.
+- The types line up: type safety is the router's point; a type error here signals a badly declared path or params.
 
-### 2. Navegar
+### 2. Navigating
 
-**Carregar:** [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md); [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md) se a rota de destino for aninhada ou dinâmica.
+**Load:** [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md); [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md) if the destination route is nested or dynamic.
 
-**Verificar:**
+**Check:**
 
-- Navegação declarativa (link) ou imperativa (em handler/efeito)? Prefira a declarativa quando o destino é conhecido no render — é o que dá semântica de link ao usuário e ao browser.
-- Params e search params do destino estão completos e tipados.
-- Navegação relativa × absoluta: confirme o comportamento documentado antes de assumir.
-- Substituir histórico ou empilhar? A escolha errada quebra o botão voltar.
-- O destino existe na árvore de rotas — não navegue para path montado por concatenação de string sem checagem de tipo.
+- Declarative navigation (a link) or imperative (in a handler/effect)? Prefer the declarative one when the destination is known at render — that is what gives link semantics to the user and the browser.
+- The destination's params and search params are complete and typed.
+- Relative × absolute navigation: confirm the documented behavior before assuming.
+- Replace history or stack it? The wrong choice breaks the back button.
+- The destination exists in the route tree — do not navigate to a path built by string concatenation with no type check.
 
 ### 3. Search params
 
-**Carregar:** [TanStack Router - Search Params](../../../../knowledge-base/docs/tanstack-router-search-params.md); [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) para escrever de volta na URL.
+**Load:** [TanStack Router - Search Params](../../../../knowledge-base/docs/tanstack-router-search-params.md); [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) to write back to the URL.
 
-**Verificar:**
+**Check:**
 
-- Este estado **pertence** à URL? Critério em [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 2: precisa sobreviver a refresh, ser compartilhável por link ou responder ao botão voltar (`REACT-PAT-10`). Filtro, aba, paginação, ordenação e faixa de datas quase sempre pertencem; menu aberto, hover e foco não.
-- Se pertence à URL, a fonte de verdade é a rota — **não** `useState` espelhando o param.
-- Os params são validados na leitura, com schema: a URL é entrada não confiável.
-- Valores padrão e params ausentes têm comportamento definido.
-- A escrita preserva os demais params em vez de sobrescrever a query inteira.
-- Tipos derivam do schema, não de `any` nem de cast manual.
+- Does this state **belong** to the URL? Criterion in [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 2: it has to survive a refresh, be shareable by link or respond to the back button (`REACT-PAT-10`). A filter, a tab, pagination, sorting and a date range almost always belong; an open menu, hover and focus do not.
+- If it belongs to the URL, the source of truth is the route — **not** a `useState` mirroring the param.
+- The params are validated on read, with a schema: the URL is untrusted input.
+- Default values and absent params have defined behavior.
+- Writing preserves the other params instead of overwriting the whole query.
+- Types derive from the schema, not from `any` or a manual cast.
 
-### 4. Carregar dados de rota
+### 4. Loading route data
 
-**Carregar:** [TanStack Router - Carregamento de Dados](../../../../knowledge-base/docs/tanstack-router-carregamento-de-dados.md); [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) quando o loader depende de contexto injetado.
+**Load:** [TanStack Router - Carregamento de Dados](../../../../knowledge-base/docs/tanstack-router-carregamento-de-dados.md); [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) when the loader depends on injected context.
 
-**Verificar:**
+**Check:**
 
-- Quem é o dono do dado: o loader da rota, o cache do [TanStack Query](../../../../knowledge-base/docs/tanstack-query-o-que-um-dev-frontend-precisa-saber.md), ou os dois integrados? Escolha **um dono** e documente — duas fontes de verdade divergem.
-- Nada de `fetch` em `useEffect` para o que o loader deveria carregar: `REACT-EFFECT-06` continua valendo dentro de uma rota.
-- Dependências do loader (params, search params, contexto) estão declaradas, para que a recarga aconteça quando elas mudam.
-- Onde a espera para: fronteira de `<Suspense>`/pending no nível certo da árvore, não na raiz por padrão.
-- Onde a falha para: todo ponto de carregamento precisa de fronteira de erro — `REACT-ASYNC-08` e `REACT-PAT-06` ([React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 6).
-- Erro esperado (404 de negócio, sem permissão) é estado/rota de erro, não exceção jogada para o boundary — `REACT-ASYNC-09`.
-- Prefetch em hover/intent está considerado, se a doc do satélite o suportar.
+- Who owns the data: the route's loader, [TanStack Query](../../../../knowledge-base/docs/tanstack-query-o-que-um-dev-frontend-precisa-saber.md)'s cache, or both integrated? Pick **one owner** and document it — two sources of truth diverge.
+- No `fetch` in a `useEffect` for what the loader should load: `REACT-EFFECT-06` still holds inside a route.
+- The loader's dependencies (params, search params, context) are declared, so that reloading happens when they change.
+- Where waiting stops: a `<Suspense>`/pending boundary at the right level of the tree, not at the root by default.
+- Where failure stops: every loading point needs an error boundary — `REACT-ASYNC-08` and `REACT-PAT-06` ([React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 6).
+- An expected error (a business 404, no permission) is error state/route, not an exception thrown to the boundary — `REACT-ASYNC-09`.
+- Prefetching on hover/intent has been considered, if the satellite's docs support it.
 
-### 5. Dividir bundle
+### 5. Splitting the bundle
 
-**Carregar:** [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md); [TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md) para a convenção de arquivos que o suporta.
+**Load:** [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md); [TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md) for the file convention that supports it.
 
-**Verificar:**
+**Check:**
 
-- Existe medida do problema antes da divisão? Mesma disciplina de `REACT-PERF-01`: otimização sem medida não entra.
-- O que é dividido é o **componente/código da rota**, não o loader crítico — dividir o carregamento de dados atrasa a rota em vez de acelerá-la.
-- A divisão respeita a convenção documentada no satélite; divisão manual com `lazy` por fora pode duplicar o que o roteador já faz.
-- Há fronteira de espera para o chunk, e ela não é a raiz.
-- Rotas críticas de entrada não ficaram atrás de um chunk desnecessário.
-
----
-
+- Is there a measurement of the problem before splitting? The same discipline as `REACT-PERF-01`: optimization without measurement does not go in.
+- What is split is the route's **component/code**, not the critical loader — splitting data loading delays the route instead of speeding it up.
+- The split respects the convention documented in the satellite; a manual `lazy` split on the side can duplicate what the router already does.
+- There is a waiting boundary for the chunk, and it is not the root.
+- Critical entry routes did not end up behind an unnecessary chunk.

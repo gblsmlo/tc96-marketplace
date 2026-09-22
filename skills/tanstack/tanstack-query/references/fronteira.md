@@ -1,22 +1,19 @@
-# Fronteira com as outras skills
+# Boundary with the other skills
 
-| A pergunta é sobre | Skill |
+| The question is about | Skill |
 | --- | --- |
-| O dado remoto: key, frescor, invalidação, otimismo, forma da consulta | esta |
-| A rota: onde o loader mora, casamento de URL, search params, navegação, code splitting | `tanstack-router` |
-| O componente que já existe: pureza, Hooks, estrutura, severidade do achado | `react-review` |
-| O componente novo: posse do estado, composição, fronteiras de falha e espera | `react-developer` |
+| The remote data: key, freshness, invalidation, optimism, query shape | this one |
+| The route: where the loader lives, URL matching, search params, navigation, code splitting | `tanstack-router` |
+| A component that already exists: purity, Hooks, structure, finding severity | `react-review` |
+| A new component: state ownership, composition, failure and waiting boundaries | `react-developer` |
 
-Sobreposições resolvidas:
+Overlaps resolved:
 
-- **Dado remoto em `useState`** aparece nas quatro. É `REACT-PAT-03` para citar; a correção é desta skill (vira query).
-- **`fetch` em `useEffect`** é `REACT-EFFECT-06`; a correção é query, ou loader se o dado pertence à rota — tarefa 6.
-- **Update otimista** é fronteira com `react-developer`: a escolha da camada está acima, e `REACT-FORM-07` vale nas duas.
-- **Paginação e filtro** são fronteira com `tanstack-router`: o valor pertence à URL (`REACT-PAT-10`), o cache pertence à key (`TSQ-PATTERN-04`). Os dois, não um dos dois.
+- **Remote data in `useState`** shows up in all four. `REACT-PAT-03` is the ID to cite; the fix belongs to this skill (it becomes a query).
+- **`fetch` in `useEffect`** is `REACT-EFFECT-06`; the fix is a query, or a loader if the data belongs to the route — task 6.
+- **Optimistic updates** are a boundary with `react-developer`: the choice of layer sits above, and `REACT-FORM-07` holds in both.
+- **Pagination and filtering** are a boundary with `tanstack-router`: the value belongs to the URL (`REACT-PAT-10`), the cache belongs to the key (`TSQ-PATTERN-04`). Both, not one of the two.
 
-Ao reportar achado em revisão, use o formato de `react-review` — ID canônico + `arquivo:linha` + correção concreta + link do satélite. Os IDs `TSQ-*` entram nesse formato do mesmo jeito que os `REACT-*`.
+When reporting a finding in a review, use `react-review`'s format — canonical ID + `file:line` + concrete fix + satellite link. The `TSQ-*` IDs fit that format just as the `REACT-*` ones do.
 
-**Regra de honestidade:** se a API tocada não aparece em [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md) § 4 nem nos satélites, ela não foi verificada nesta doc. Declare a limitação, consulte [tanstack.com/query](https://tanstack.com/query/latest/docs/framework/react/overview) e proponha atualizar a nota — não afirme comportamento e não invente ID ([TanStack Query](../../../../knowledge-base/docs/tanstack-query.md) § 7).
-
----
-
+**Honesty rule:** if the API you touched appears neither in [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md) § 4 nor in the satellites, it has not been verified in this doc. Declare the limitation, consult [tanstack.com/query](https://tanstack.com/query/latest/docs/framework/react/overview) and propose updating the note — do not assert behavior and do not invent an ID ([TanStack Query](../../../../knowledge-base/docs/tanstack-query.md) § 7).

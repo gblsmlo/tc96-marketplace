@@ -1,38 +1,35 @@
-# Diagnóstico: sintoma → causa provável → satélite
+# Diagnosis: symptom → likely cause → satellite
 
-As duas perguntas mais frequentes sobre esta biblioteca são as duas caras do mesmo eixo. Comece pela tabela, abra **um** satélite.
+The two most frequent questions about this library are two faces of the same axis. Start with the table, open **one** satellite.
 
-### "A tela não atualiza"
+### "The screen does not update"
 
-| Sintoma | Causa provável | Onde |
+| Symptom | Likely cause | Where |
 | --- | --- | --- |
-| Trocar filtro/param não refaz a busca | variável usada na `queryFn` fora da key (`TSQ-BASE-03`) — as variações disputam a mesma entrada de cache | [TanStack Query - O que um Dev Frontend Precisa Saber](../../../../knowledge-base/docs/tanstack-query-o-que-um-dev-frontend-precisa-saber.md) |
-| Salvou e a lista continua antiga | a mutation não invalida nada, ou invalida prefixo que não cobre o efeito (`TSQ-MUT-07`) | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) |
-| Invalidação roda, não dá erro e não surte efeito | `staleTime: 'static'` na query (`TSQ-CACHE-02`), ou query desabilitada guardando o dado (`TSQ-PATTERN-10`) | [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md) · [TanStack Query - Padrões de Consulta](../../../../knowledge-base/docs/tanstack-query-padroes-de-consulta.md) |
-| Cache está certo no devtools, tela não | mutação no lugar em vez de escrita imutável (`TSQ-MUT-08`) — sem nova referência, o React não vê mudança | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) |
-| Botão volta a "Salvar" antes de a lista mudar | callback de invalidação sem `return` da Promise (`TSQ-MUT-02`) | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) |
-| Update otimista pisca e volta | falta `cancelQueries` em `onMutate` (`TSQ-MUT-10`): refetch em voo chega depois e reverte | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) |
-| Erro na escrita e a tela fica no estado otimista | rollback lendo o argumento errado — assinatura antiga de `onError` (`TSQ-MUT-11`) | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) § 2 |
-| Rollback restaura valor errado | snapshot em `useRef`/módulo, sobrescrito por mutation concorrente (`TSQ-MUT-11`) | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) |
-| Spinner que nunca sai | `isPending` em query com `enabled` (`TSQ-BASE-07`), ou `fetchStatus: 'paused'` sem rede (`TSQ-BASE-08`) | [TanStack Query - O que um Dev Frontend Precisa Saber](../../../../knowledge-base/docs/tanstack-query-o-que-um-dev-frontend-precisa-saber.md) § 5 |
-| `isSuccess` com `data: undefined` | `select` validando ou lançando (`TSQ-PATTERN-13`) | [TanStack Query - Padrões de Consulta](../../../../knowledge-base/docs/tanstack-query-padroes-de-consulta.md) |
-| Dado velho após mutação, com o Query aparentemente certo | router segurando o preload: falta `defaultPreloadStaleTime: 0` (`TSR-LOAD-14`) | [TanStack Router - Carregamento de Dados](../../../../knowledge-base/docs/tanstack-router-carregamento-de-dados.md) § 8 |
+| Changing the filter/param does not refetch | a variable used in the `queryFn` left out of the key (`TSQ-BASE-03`) — the variations compete for the same cache entry | [TanStack Query - O que um Dev Frontend Precisa Saber](../../../../knowledge-base/docs/tanstack-query-o-que-um-dev-frontend-precisa-saber.md) |
+| Saved and the list is still old | the mutation invalidates nothing, or invalidates a prefix that does not cover the effect (`TSQ-MUT-07`) | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) |
+| Invalidation runs, does not error and has no effect | `staleTime: 'static'` on the query (`TSQ-CACHE-02`), or a disabled query holding the data (`TSQ-PATTERN-10`) | [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md) · [TanStack Query - Padrões de Consulta](../../../../knowledge-base/docs/tanstack-query-padroes-de-consulta.md) |
+| The cache is right in devtools, the screen is not | an in-place mutation instead of an immutable write (`TSQ-MUT-08`) — with no new reference, React does not see a change | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) |
+| The button returns to "Save" before the list changes | an invalidation callback without `return`ing the Promise (`TSQ-MUT-02`) | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) |
+| The optimistic update flickers and reverts | missing `cancelQueries` in `onMutate` (`TSQ-MUT-10`): an in-flight refetch lands later and reverts it | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) |
+| The write errors and the screen stays optimistic | the rollback reading the wrong argument — the old `onError` signature (`TSQ-MUT-11`) | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) § 2 |
+| The rollback restores the wrong value | the snapshot in a `useRef`/module, overwritten by a concurrent mutation (`TSQ-MUT-11`) | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) |
+| A spinner that never goes away | `isPending` on a query with `enabled` (`TSQ-BASE-07`), or `fetchStatus: 'paused'` with no network (`TSQ-BASE-08`) | [TanStack Query - O que um Dev Frontend Precisa Saber](../../../../knowledge-base/docs/tanstack-query-o-que-um-dev-frontend-precisa-saber.md) § 5 |
+| `isSuccess` with `data: undefined` | `select` validating or throwing (`TSQ-PATTERN-13`) | [TanStack Query - Padrões de Consulta](../../../../knowledge-base/docs/tanstack-query-padroes-de-consulta.md) |
+| Stale data after a mutation, with Query apparently right | the router holding the preload: missing `defaultPreloadStaleTime: 0` (`TSR-LOAD-14`) | [TanStack Router - Carregamento de Dados](../../../../knowledge-base/docs/tanstack-router-carregamento-de-dados.md) § 8 |
 
-### "Requests demais"
+### "Too many requests"
 
-| Sintoma | Causa provável | Onde |
+| Symptom | Likely cause | Where |
 | --- | --- | --- |
-| Rede a cada montagem, foco de aba e reconexão | `staleTime` nunca declarado (`TSQ-CACHE-01`): todo dado nasce stale | [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md) § 3 |
-| Rajada de requisições a cada escrita | `invalidateQueries` sem filtro (`TSQ-MUT-07`), ou `refetchType: 'all'` em prefixo largo | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) § 3 |
-| Voltar para a tela sempre recarrega do zero | `gcTime` baixo: o cache é descartado antes de você voltar | [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md) § 2 |
-| Refetch em cascata, dado que não mudou parecendo novo | `Date`/`Map`/`Set` na `queryFn` quebrando structural sharing (`TSQ-CACHE-04`) | [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md) § 5 |
-| Re-render a cada `isFetching` | `const { data,...rest }` desligando tracked properties (`TSQ-CACHE-05`) | [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md) § 5 |
-| Telas lentas, latências somadas em série | waterfall por `enabled` que a API podia resolver em uma chamada (`TSQ-PATTERN-01`), ou suspense queries lado a lado (`TSQ-PATTERN-03`, `TSQ-SSR-02`) | [TanStack Query - Padrões de Consulta](../../../../knowledge-base/docs/tanstack-query-padroes-de-consulta.md) · [TanStack Query - Suspense e SSR](../../../../knowledge-base/docs/tanstack-query-suspense-e-ssr.md) |
-| Invalidar a lista infinita dispara N requisições | falta `maxPages` (`TSQ-PATTERN-08`): o refetch refaz todas as páginas em série | [TanStack Query - Padrões de Consulta](../../../../knowledge-base/docs/tanstack-query-padroes-de-consulta.md) § 4 |
-| Busca por digitação deixa N requisições em voo | `queryFn` ignorando o `signal` (`TSQ-SSR-10`) | [TanStack Query - Suspense e SSR](../../../../knowledge-base/docs/tanstack-query-suspense-e-ssr.md) § 5 · |
-| Cliente refaz na hidratação tudo que o servidor já buscou | `staleTime: 0` com SSR (`TSQ-SSR-05`) | [TanStack Query - Suspense e SSR](../../../../knowledge-base/docs/tanstack-query-suspense-e-ssr.md) § 3 |
+| Network on every mount, tab focus and reconnect | `staleTime` never declared (`TSQ-CACHE-01`): every piece of data is born stale | [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md) § 3 |
+| A burst of requests on every write | `invalidateQueries` without a filter (`TSQ-MUT-07`), or `refetchType: 'all'` on a broad prefix | [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) § 3 |
+| Returning to the screen always reloads from scratch | a low `gcTime`: the cache is discarded before you come back | [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md) § 2 |
+| Cascading refetches, unchanged data looking new | `Date`/`Map`/`Set` in the `queryFn` breaking structural sharing (`TSQ-CACHE-04`) | [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md) § 5 |
+| A re-render on every `isFetching` | `const { data,...rest }` switching off tracked properties (`TSQ-CACHE-05`) | [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md) § 5 |
+| Slow screens, latencies added up in series | a waterfall from `enabled` that the API could have resolved in one call (`TSQ-PATTERN-01`), or suspense queries side by side (`TSQ-PATTERN-03`, `TSQ-SSR-02`) | [TanStack Query - Padrões de Consulta](../../../../knowledge-base/docs/tanstack-query-padroes-de-consulta.md) · [TanStack Query - Suspense e SSR](../../../../knowledge-base/docs/tanstack-query-suspense-e-ssr.md) |
+| Invalidating the infinite list fires N requests | missing `maxPages` (`TSQ-PATTERN-08`): the refetch redoes every page in series | [TanStack Query - Padrões de Consulta](../../../../knowledge-base/docs/tanstack-query-padroes-de-consulta.md) § 4 |
+| Type-ahead search leaves N requests in flight | the `queryFn` ignoring the `signal` (`TSQ-SSR-10`) | [TanStack Query - Suspense e SSR](../../../../knowledge-base/docs/tanstack-query-suspense-e-ssr.md) § 5 · |
+| The client refetches on hydration everything the server already fetched | `staleTime: 0` with SSR (`TSQ-SSR-05`) | [TanStack Query - Suspense e SSR](../../../../knowledge-base/docs/tanstack-query-suspense-e-ssr.md) § 3 |
 
-**A correção quase nunca é desligar gatilho.** `refetchOnWindowFocus: false` apaga o sintoma e deixa `refetchOnMount` com a política oposta no mesmo cache — duas regras contraditórias sobre o mesmo dado. Calibre `staleTime` primeiro; desligar gatilho é ajuste fino depois, nunca remédio → `TSQ-CACHE-03`.
-
----
-
+**The fix is almost never switching off a trigger.** `refetchOnWindowFocus: false` erases the symptom and leaves `refetchOnMount` with the opposite policy on the same cache — two contradictory rules about the same data. Calibrate `staleTime` first; switching off a trigger is fine-tuning afterwards, never a remedy → `TSQ-CACHE-03`.

@@ -1,64 +1,64 @@
-# As famílias `TSR-*`, por tarefa
+# The `TSR-*` families, by task
 
-> **O que mudou.** A versão anterior desta skill trazia um "aviso de estado da doc" dizendo
-> que os satélites estavam **em construção** e, por isso, **não citava ID nenhum** — ela
-> emprestava `REACT-*`. Os dez satélites hoje existem e somam **102 regras `TSR-*`**
-> declaradas. O aviso saiu, e cada tarefa passa a ter família citável.
+> **What changed.** The previous version of this skill carried a "doc status warning" saying
+> the satellites were **under construction** and, for that reason, **cited no ID at all** — it
+> borrowed `REACT-*`. The ten satellites exist today and add up to **102 declared `TSR-*`
+> rules**. The warning is gone, and every task now has a citable family.
 
-| Tarefa | Família | Onde |
+| Task | Family | Where |
 | --- | --- | --- |
-| definir rota, hierarquia, layout | `TSR-ROUTE-*` | [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md) |
-| convenção de arquivo e geração da árvore | `TSR-FILE-*` | [TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md) |
-| montagem e organização da árvore | `TSR-TREE-*` | [TanStack Router - Route Trees](../../../../knowledge-base/docs/tanstack-router-route-trees.md) |
-| por que uma URL casa (ou não) | `TSR-MATCH-*` | [TanStack Router - Route Matching](../../../../knowledge-base/docs/tanstack-router-route-matching.md) |
-| árvore fora da convenção de arquivos | `TSR-VIRTUAL-*` | [TanStack Router - Virtual File Routes](../../../../knowledge-base/docs/tanstack-router-virtual-file-routes.md) |
-| navegar, `<Link>`, `useNavigate`, preload | `TSR-NAV-*` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) |
-| search params tipados e validados | `TSR-SEARCH-*` | [TanStack Router - Search Params](../../../../knowledge-base/docs/tanstack-router-search-params.md) |
-| loader, `beforeLoad`, integração com cache | `TSR-LOAD-*` | [TanStack Router - Carregamento de Dados](../../../../knowledge-base/docs/tanstack-router-carregamento-de-dados.md) |
-| contexto de rota (injeção de dependência tipada) | `TSR-CTX-*` | [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) |
-| code splitting por rota | `TSR-SPLIT-*` | [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) |
+| defining a route, hierarchy, layout | `TSR-ROUTE-*` | [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md) |
+| file convention and tree generation | `TSR-FILE-*` | [TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md) |
+| assembling and organizing the tree | `TSR-TREE-*` | [TanStack Router - Route Trees](../../../../knowledge-base/docs/tanstack-router-route-trees.md) |
+| why a URL matches (or does not) | `TSR-MATCH-*` | [TanStack Router - Route Matching](../../../../knowledge-base/docs/tanstack-router-route-matching.md) |
+| a tree outside the file convention | `TSR-VIRTUAL-*` | [TanStack Router - Virtual File Routes](../../../../knowledge-base/docs/tanstack-router-virtual-file-routes.md) |
+| navigating, `<Link>`, `useNavigate`, preloading | `TSR-NAV-*` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) |
+| typed and validated search params | `TSR-SEARCH-*` | [TanStack Router - Search Params](../../../../knowledge-base/docs/tanstack-router-search-params.md) |
+| loader, `beforeLoad`, cache integration | `TSR-LOAD-*` | [TanStack Router - Carregamento de Dados](../../../../knowledge-base/docs/tanstack-router-carregamento-de-dados.md) |
+| route context (typed dependency injection) | `TSR-CTX-*` | [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) |
+| per-route code splitting | `TSR-SPLIT-*` | [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) |
 
-Índice completo, por seção: `mapa-de-ids.md`.
+Full index, by section: `mapa-de-ids.md`.
 
 ---
 
-## As regras que decidem a maior parte dos casos
+## The rules that decide most cases
 
-**Navegação**
+**Navigation**
 
-| Regra | O que exige |
+| Rule | What it requires |
 | --- | --- |
-| `TSR-NAV-01` | `to` **nunca** recebe string interpolada — path param vai em `params`, query em `search`, fragmento em `hash` |
-| `TSR-NAV-02` | destino conhecido no render é **`<Link>`**; `useNavigate` em `onClick` não |
-| `TSR-NAV-03` | `to` relativo (`.`, `..`) **exige** `from` — sem ele a origem é `/`, não a rota atual |
-| `TSR-NAV-04` | `from` vem de `Route.fullPath`, nunca de string literal repetida no JSX |
-| `TSR-NAV-09` | navegação que **consome** a rota atual (pós-login, pós-submit) usa `replace: true` |
+| `TSR-NAV-01` | `to` **never** takes an interpolated string — a path param goes in `params`, a query in `search`, a fragment in `hash` |
+| `TSR-NAV-02` | a destination known at render is **`<Link>`**; `useNavigate` in an `onClick` is not |
+| `TSR-NAV-03` | a relative `to` (`.`, `..`) **requires** `from` — without it the origin is `/`, not the current route |
+| `TSR-NAV-04` | `from` comes from `Route.fullPath`, never from a string literal repeated in the JSX |
+| `TSR-NAV-09` | navigation that **consumes** the current route (post-login, post-submit) uses `replace: true` |
 
 **Search params**
 
-| Regra | O que exige |
+| Rule | What it requires |
 | --- | --- |
-| `TSR-SEARCH-01` | rota que lê search **declara `validateSearch`** — sem schema não há tipo, default nem garantia de forma |
-| `TSR-SEARCH-02` | a fonte é `useSearch` — nunca `window.location.search`, `URLSearchParams` ou hook de outra biblioteca |
-| `TSR-SEARCH-03` | toda chave define comportamento para **ausente** e para **inválido**; schema só do caso feliz não valida nada |
-| `TSR-SEARCH-05` | Zod v3 com `.catch` **precisa** de `fallback` do adapter, senão o tipo colapsa para `unknown` |
-| `TSR-SEARCH-07` | atualizar **uma** chave usa a forma funcional com spread — objeto literal substitui o search inteiro |
+| `TSR-SEARCH-01` | a route that reads search **declares `validateSearch`** — without a schema there is no type, no default and no guarantee of shape |
+| `TSR-SEARCH-02` | the source is `useSearch` — never `window.location.search`, `URLSearchParams` or another library's hook |
+| `TSR-SEARCH-03` | every key defines behavior for **absent** and for **invalid**; a happy-path-only schema validates nothing |
+| `TSR-SEARCH-05` | Zod v3 with `.catch` **requires** the adapter's `fallback`, otherwise the type collapses to `unknown` |
+| `TSR-SEARCH-07` | updating **one** key uses the functional form with a spread — an object literal replaces the whole search |
 
-**Carregamento**
+**Loading**
 
-| Regra | O que exige |
+| Rule | What it requires |
 | --- | --- |
-| `TSR-LOAD-01` | dado da primeira renderização vem do `loader`, **nunca** de `fetch` em `useEffect` (apelido de `REACT-EFFECT-06`) |
-| `TSR-LOAD-03` · `TSR-LOAD-04` | `loaderDeps` devolve **só** os search params que o loader lê — e o loader não lê o search da `location` |
-| `TSR-LOAD-05` | `beforeLoad` é contexto, guarda e redirect; buscar dado de tela ali é **serial** e bloqueia os loaders paralelos |
-| `TSR-LOAD-06` | guarda de acesso é `throw redirect(...)` em `beforeLoad`, não `navigate` em efeito |
-| `TSR-LOAD-09` | rota com `loader` tem `errorComponent` própria ou `defaultErrorComponent` no router |
-| `TSR-LOAD-14` | loader que usa Query exige `defaultPreloadStaleTime: 0` — **um** cache decide o frescor. `TSR-NAV-08` é apelido; cite o canônico |
+| `TSR-LOAD-01` | first-render data comes from the `loader`, **never** from a `fetch` in a `useEffect` (alias of `REACT-EFFECT-06`) |
+| `TSR-LOAD-03` · `TSR-LOAD-04` | `loaderDeps` returns **only** the search params the loader reads — and the loader does not read search from `location` |
+| `TSR-LOAD-05` | `beforeLoad` is context, guard and redirect; fetching screen data there is **serial** and blocks the parallel loaders |
+| `TSR-LOAD-06` | an access guard is `throw redirect(...)` in `beforeLoad`, not a `navigate` in an effect |
+| `TSR-LOAD-09` | a route with a `loader` has its own `errorComponent` or a `defaultErrorComponent` on the router |
+| `TSR-LOAD-14` | a loader using Query requires `defaultPreloadStaleTime: 0` — **one** cache decides freshness. `TSR-NAV-08` is an alias; cite the canonical one |
 
 ---
 
-## Relacionados
+## Related
 
-- `por-tarefa.md` — o que carregar e verificar em cada tarefa
-- `mapa-de-ids.md` — os 102 `TSR-*` por satélite e seção
-- `tanstack-query` — o outro cache, e a regra `TSR-LOAD-14` que os concilia
+- `por-tarefa.md` — what to load and check in each task
+- `mapa-de-ids.md` — the 102 `TSR-*` by satellite and section
+- `tanstack-query` — the other cache, and the `TSR-LOAD-14` rule that reconciles them

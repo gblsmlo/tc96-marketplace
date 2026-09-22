@@ -1,26 +1,23 @@
-# Dois pontos que não se assumem de memória
+# Two points you do not assume from memory
 
-### As assinaturas dos callbacks de mutation mudaram dentro da v5
+### The mutation callback signatures changed within v5
 
-**Confira em [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) § 2 ("As assinaturas dos callbacks") toda vez que tocar em mutation com `onMutate`, e sempre em update otimista.** Não escreva de cabeça e não copie de exemplo encontrado fora do vault.
+**Check [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) § 2 ("As assinaturas dos callbacks") every time you touch a mutation with `onMutate`, and always on an optimistic update.** Do not write it from memory and do not copy from an example found outside the vault.
 
-O que muda o resultado: **o retorno de `onMutate` chega como o terceiro argumento**, e `context` passou a ser o último e a ser outra coisa. Código escrito contra a forma antiga lê o objeto errado — o rollback recebe `undefined` e **falha em silêncio**: a mutation "trata" o erro, a tela não volta ao estado anterior, e nada estoura.
+What changes the outcome: **the return of `onMutate` arrives as the third argument**, and `context` became the last one and became something else. Code written against the old form reads the wrong object — the rollback receives `undefined` and **fails silently**: the mutation "handles" the error, the screen does not revert to the previous state, and nothing blows up.
 
-Por que isto está aqui e não é detalhe de doc: a assinatura antiga domina o material de treino, então é exatamente o que código gerado por IA produz por default. TypeScript pega — desde que os tipos não estejam frouxos no ponto do callback.
+Why this is here and not a doc detail: the old signature dominates the training material, so it is exactly what AI-generated code produces by default. TypeScript catches it — as long as the types are not loose at the callback.
 
-Regras envolvidas: `TSQ-MUT-11` (o snapshot trafega pelo retorno de `onMutate`) e `TSQ-MUT-10` (ciclo completo). A checklist do satélite fecha com essa conferência como item próprio.
+Rules involved: `TSQ-MUT-11` (the snapshot travels through `onMutate`'s return) and `TSQ-MUT-10` (complete cycle). The satellite's checklist closes with that check as an item of its own.
 
-### Otimismo tem duas camadas — escolha uma, e declare qual
+### Optimism has two layers — pick one, and declare which
 
-`useOptimistic` do React e o update otimista sobre o cache da Query resolvem o mesmo problema em camadas diferentes. Usar as duas no mesmo fluxo cria dois estados provisórios que convergem em momentos distintos, com rollbacks independentes.
+React's `useOptimistic` and the optimistic update over Query's cache solve the same problem at different layers. Using both in the same flow creates two provisional states that converge at different moments, with independent rollbacks.
 
-| Critério | Camada |
+| Criterion | Layer |
 | --- | --- |
-| O dado otimista aparece em **um** lugar, dentro de um formulário/Action | `useOptimistic` — [React - Formulários e Actions](../../../../knowledge-base/docs/react-formularios-e-actions.md) § 5 |
-| Aparece em mais de um lugar, ou precisa sobreviver à navegação | cache da Query, ciclo completo — `TSQ-MUT-10` |
-| É um item só na lista e o cache não precisa ser tocado | renderizar as `variables` da mutation enquanto `pending` — a versão que não tem como dar rollback errado ([TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) § 5) |
+| The optimistic data appears in **one** place, inside a form/Action | `useOptimistic` — [React - Formulários e Actions](../../../../knowledge-base/docs/react-formularios-e-actions.md) § 5 |
+| It appears in more than one place, or has to survive navigation | Query's cache, complete cycle — `TSQ-MUT-10` |
+| It is a single item in a list and the cache does not need touching | render the mutation's `variables` while `pending` — the version that cannot roll back wrongly ([TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) § 5) |
 
-Em qualquer das três, **o otimista nunca é fonte de verdade** — `REACT-FORM-07`. A verdade converge do servidor: no React, ao fim da Action; na Query, na invalidação de `onSettled`. Um rollback é automático (`useOptimistic`), o outro é explícito com snapshot (Query) — confundir os dois é como se escreve rollback que não roda.
-
----
-
+In any of the three, **the optimistic value is never the source of truth** — `REACT-FORM-07`. Truth converges from the server: in React, at the end of the Action; in Query, at the invalidation in `onSettled`. One rollback is automatic (`useOptimistic`), the other is explicit with a snapshot (Query) — confusing the two is how a rollback that never runs gets written.

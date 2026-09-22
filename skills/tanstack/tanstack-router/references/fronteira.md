@@ -1,14 +1,11 @@
-# Fronteira com React
+# Boundary with React
 
-O roteador resolve o que o React puro não resolve. Ao decidir entre uma primitiva do React e o roteador, use [React.js](../../../../knowledge-base/docs/react-js.md) § 8 (pontes com o stack):
+The router solves what plain React does not. When deciding between a React primitive and the router, use [React.js](../../../../knowledge-base/docs/react-js.md) § 8 (bridges with the stack):
 
-| Problema | Não use | Use |
+| Problem | Do not use | Use |
 | --- | --- | --- |
-| Filtro, aba, paginação, ordenação | `useState` | search params da rota (`REACT-PAT-10`) |
-| Navegação e histórico | `useState` + history | API de navegação do roteador |
-| Dado remoto de uma tela | `useEffect` + `useState` | loader da rota e/ou TanStack Query (`REACT-EFFECT-06`, `REACT-PAT-03`) |
+| Filter, tab, pagination, sorting | `useState` | the route's search params (`REACT-PAT-10`) |
+| Navigation and history | `useState` + history | the router's navigation API |
+| A screen's remote data | `useEffect` + `useState` | the route's loader and/or TanStack Query (`REACT-EFFECT-06`, `REACT-PAT-03`) |
 
-Ao revisar código de rota, os IDs `REACT-*` continuam citáveis com o formato de `react-review`: ID canônico + arquivo:linha + correção concreta + link do satélite.
-
----
-
+When reviewing route code, the `REACT-*` IDs remain citable in `react-review`'s format: canonical ID + file:line + concrete fix + satellite link.

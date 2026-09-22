@@ -1,8 +1,9 @@
 ---
 nome: tanstack-router
-descricao: Trabalhar com roteamento no TanStack Router — definir e aninhar rotas, navegar com `<Link>`, search params tipados e validados, loader e integração com cache, contexto de rota e code splitting — citando IDs `TSR-*`, com dezesseis sondas executáveis — use quando a tarefa for criar ou aninhar rota, montar navegação, validar e ler search params, decidir entre loader e Query, proteger rota por guarda, ou dividir bundle. Não use para o dado remoto em si, que é tanstack-query, nem para o interior dos componentes, que é react-developer e react-review.
+descricao: Work with routing in TanStack Router — defining and nesting routes, navigating with `<Link>`, typed and validated search params, loaders and cache integration, route context and code splitting — citing `TSR-*` IDs, with sixteen executable probes — use when the task is creating or nesting a route, building navigation, validating and reading search params, deciding between a loader and Query, guarding a route, or splitting the bundle. Do not use for the remote data itself, which is tanstack-query, nor for the inside of components, which is react-developer and react-review.
 tipo: skill
 familia: tanstack
+idioma: en
 fonte: "[TanStack Router](../../../knowledge-base/docs/tanstack-router.md)"
 docs:
   - /websites/tanstack_router
@@ -14,102 +15,102 @@ tags:
 
 # tanstack-router
 
-> **Fonte desta skill:** [TanStack Router](../../../knowledge-base/docs/tanstack-router.md) e os dez satélites, carregados **um por tarefa**.
-> Esta skill **não contém** procedimento técnico de API — ela roteia por tarefa, cita a regra e diz o que verificar.
-> **Superfície de API:** resolva pelo Context7 — `/websites/tanstack_router`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [TanStack Router](../../../knowledge-base/docs/tanstack-router.md) and the ten satellites, loaded **one per task**.
+> This skill **does not contain** technical API procedure — it routes by task, cites the rule and says what to check.
+> **API surface:** resolve it through Context7 — `/websites/tanstack_router`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-> **O que mudou nesta versão.** A anterior trazia um "aviso de estado da doc" dizendo que os satélites estavam **em construção**, e por isso **não citava ID nenhum** — emprestava `REACT-*`. Os dez satélites hoje existem e somam **102 regras `TSR-*`**. O aviso saiu; cada tarefa passou a ter família citável, e o mapa é gerado da doc.
+> **What changed in this version.** The previous one carried a "doc status warning" saying the satellites were **under construction**, and for that reason **cited no ID at all** — it borrowed `REACT-*`. The ten satellites exist today and add up to **102 `TSR-*` rules**. The warning is gone; every task now has a citable family, and the map is generated from the docs.
 
 ---
 
-## Quando usar
+## When to use
 
-A pergunta é sobre **rota, navegação, URL ou carregamento de rota**.
+The question is about **routing, navigation, the URL or route loading**.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| o dado remoto em si: frescor, invalidação, otimismo | `tanstack-query` |
-| o interior do componente | `react-developer` · `react-review` |
-| onde o arquivo mora na feature | `react-structure` |
-| formulário multi-etapa (o **valor** é do form; a **etapa** é da URL) | `react-hook-form` |
+| the remote data itself: freshness, invalidation, optimism | `tanstack-query` |
+| the inside of the component | `react-developer` · `react-review` |
+| where the file lives in the feature | `react-structure` |
+| a multi-step form (the **value** is the form's; the **step** is the URL's) | `react-hook-form` |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-1. Identifique **a tarefa** em `references/por-tarefa.md`.
-2. Carregue apenas os satélites da coluna "Carregar", na ordem indicada.
-3. Percorra os itens de "Verificar" antes de dar a tarefa por concluída.
+1. Identify **the task** in `references/por-tarefa.md`.
+2. Load only the satellites in the "Load" column, in the order given.
+3. Walk the "Check" items before calling the task done.
 
-**Nunca carregue os dez satélites de uma vez.**
+**Never load all ten satellites at once.**
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/por-tarefa.md` | as sete tarefas: o que carregar e o que verificar |
-| `references/regras-por-tarefa.md` | as famílias `TSR-*` por tarefa, e as regras que decidem a maior parte dos casos |
-| `references/fronteira.md` | o que é de React e não do router |
-| `references/mapa-de-ids.md` | os 102 `TSR-*` por satélite e seção |
-| `references/exemplo.md` | caso trabalhado |
-| `scripts/sondas.sh` | dezesseis sondas sobre rota, navegação, search e loader |
-| `scripts/gerar-mapa-de-ids.sh` | regenera o mapa a partir de `Docs/TanStack Router*` |
+| `references/por-tarefa.md` | the seven tasks: what to load and what to check |
+| `references/regras-por-tarefa.md` | the `TSR-*` families per task, and the rules that decide most cases |
+| `references/fronteira.md` | what belongs to React and not to the router |
+| `references/mapa-de-ids.md` | the 102 `TSR-*` by satellite and section |
+| `references/exemplo.md` | worked case |
+| `scripts/sondas.sh` | sixteen probes over routing, navigation, search and loaders |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `Docs/TanStack Router*` |
 
 ---
 
-## Passo 1 — Sondar
+## Step 1 — Probe
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/tanstack-router/scripts/sondas.sh src
 ```
 
-**As duas que mais pagam:**
+**The two that pay most:**
 
-| Sonda | O que revela |
+| Probe | What it reveals |
 | --- | --- |
-| **S5** — rota que lê search **sem `validateSearch`** | sem schema não há tipo, não há default e não há garantia de forma (`TSR-SEARCH-01`) |
-| **S15** — loader usando Query **sem `defaultPreloadStaleTime: 0`** | dois caches decidindo frescor (`TSR-LOAD-14`) — o sintoma aparece como "dado velho com o Query aparentemente certo" |
+| **S5** — a route reading search **without `validateSearch`** | without a schema there is no type, no default and no guarantee of shape (`TSR-SEARCH-01`) |
+| **S15** — a loader using Query **without `defaultPreloadStaleTime: 0`** | two caches deciding freshness (`TSR-LOAD-14`) — the symptom shows up as "stale data with Query apparently right" |
 
-E a mais frequente em código gerado: **S1**, `to` com string interpolada (`TSR-NAV-01`) — path param vai em `params`, query em `search`.
-
----
-
-## Passo 2 — Rotear por tarefa
-
-`references/por-tarefa.md`: definir rota · entender o match · navegar · search params · carregar dados · dividir bundle · árvore virtual.
-
-As famílias e as regras decisivas de cada uma: `references/regras-por-tarefa.md`.
+And the most frequent one in generated code: **S1**, `to` with an interpolated string (`TSR-NAV-01`) — a path param goes in `params`, a query in `search`.
 
 ---
 
-## Passo 3 — As fronteiras que decidem citação
+## Step 2 — Route by task
 
-- **`TSR-LOAD-01` é apelido de `REACT-EFFECT-06`** — buscar dado da primeira renderização em `useEffect` é o mesmo defeito, visto do router. Em revisão que cruza docs, cite o canônico do React.
-- **`TSR-NAV-08` é apelido de `TSR-LOAD-14`** — cite o canônico.
-- **A etapa do wizard é da URL** (`REACT-PAT-10`); o **valor** dos campos é do formulário (`react-hook-form`).
+`references/por-tarefa.md`: defining a route · understanding the match · navigating · search params · loading data · splitting the bundle · virtual tree.
 
----
-
-## Passo 4 — Fechar
-
-1. **Se o loader usa Query**, o frescor é decidido em **um** cache — `defaultPreloadStaleTime: 0`.
-2. **Se a guarda está num efeito**, ela está no lugar errado: é `throw redirect(...)` em `beforeLoad` (`TSR-LOAD-06`).
-3. **Se a rota tem `loader`**, ela precisa de `errorComponent` (`TSR-LOAD-09`) — senão a falha sobe para a raiz.
-4. **Declare o que não verificou.** Se a nota que a tarefa exige estiver incompleta, consulte a doc oficial, **declare a limitação** e registre o que foi verificado — não preencha lacuna de memória.
+The families and the decisive rules of each: `references/regras-por-tarefa.md`.
 
 ---
 
-## Exemplo
+## Step 3 — The boundaries that decide the citation
 
-Listagem com filtro, página e ordenação na URL: `validateSearch` com `.catch`/`.default` por chave, `loaderDeps` devolvendo **só** as chaves que o loader lê, `<Link>` com `params`/`search` em vez de string interpolada, e `defaultPreloadStaleTime: 0` porque o loader usa Query.
-
-Caso completo: `references/exemplo.md`.
+- **`TSR-LOAD-01` is an alias of `REACT-EFFECT-06`** — fetching first-render data in a `useEffect` is the same defect, seen from the router. In a review that crosses docs, cite React's canonical one.
+- **`TSR-NAV-08` is an alias of `TSR-LOAD-14`** — cite the canonical one.
+- **The wizard's step belongs to the URL** (`REACT-PAT-10`); the fields' **values** belong to the form (`react-hook-form`).
 
 ---
 
-## Relacionados
+## Step 4 — Closing
 
-- [TanStack Router](../../../knowledge-base/docs/tanstack-router.md) — o hub, e os dez satélites
-- `tanstack-query` — o outro cache; `TSR-LOAD-14` é o que os concilia
-- `react-developer` · `react-review` · `react-structure` — o que fica dentro da rota
-- `react-hook-form` — o wizard cuja etapa mora na URL
+1. **If the loader uses Query**, freshness is decided in **one** cache — `defaultPreloadStaleTime: 0`.
+2. **If the guard is in an effect**, it is in the wrong place: it is `throw redirect(...)` in `beforeLoad` (`TSR-LOAD-06`).
+3. **If the route has a `loader`**, it needs an `errorComponent` (`TSR-LOAD-09`) — otherwise the failure rises to the root.
+4. **Declare what you did not verify.** If the note the task requires is incomplete, consult the official docs, **declare the limitation** and record what was verified — do not fill a gap from memory.
+
+---
+
+## Example
+
+A listing with a filter, page and sorting in the URL: `validateSearch` with `.catch`/`.default` per key, `loaderDeps` returning **only** the keys the loader reads, `<Link>` with `params`/`search` instead of an interpolated string, and `defaultPreloadStaleTime: 0` because the loader uses Query.
+
+Full case: `references/exemplo.md`.
+
+---
+
+## Related
+
+- [TanStack Router](../../../knowledge-base/docs/tanstack-router.md) — the hub, and the ten satellites
+- `tanstack-query` — the other cache; `TSR-LOAD-14` is what reconciles them
+- `react-developer` · `react-review` · `react-structure` — what stays inside the route
+- `react-hook-form` — the wizard whose step lives in the URL
