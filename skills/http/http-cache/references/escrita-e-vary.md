@@ -1,43 +1,40 @@
-# Escrita concorrente e Vary
+# Concurrent writes and Vary
 
-Este passo é o menos conhecido e o que evita perda de dado silenciosa.
-
-```
-Mais de um cliente pode editar este recurso?
-├── NÃO → nada a fazer
-└── SIM → a rota de escrita MUST aceitar If-Match e responder 412
- quando o ETag não corresponde (HTTP-CACHE-08)
-```
+This step is the least known and the one that prevents silent data loss.
 
 ```
-PUT /faturas/42 If-Match: "v7"
-├── ETag atual é "v7" → 200, aplica
-└── ETag atual é "v9" → 412 Precondition Failed
- (outra pessoa editou; o cliente relê e decide)
+Can more than one client edit this resource?
+├── NO → nothing to do
+└── YES → the write route MUST accept If-Match and answer 412
+ when the ETag does not match (HTTP-CACHE-08)
 ```
 
-Sem isso, o padrão é **last-write-wins**: quem salvou depois apaga a alteração de quem salvou antes, e ninguém é avisado.
+```
+PUT /invoices/42 If-Match: "v7"
+├── current ETag is "v7" → 200, applies
+└── current ETag is "v9" → 412 Precondition Failed
+ (someone else edited; the client re-reads and decides)
+```
 
-**O `ETag` usado em `If-Match` precisa ser forte** — sem o prefixo `W/` (`HTTP-CACHE-09`). Um `ETag` fraco declara equivalência semântica, não identidade de bytes, e não serve para decidir se houve escrita concorrente.
+Without it, the default is **last-write-wins**: whoever saved later erases the change of whoever saved earlier, and nobody is told.
 
-> **Ponte com o cliente:** o `412` é um **erro esperado**, não uma exceção — ele é estado da UI ("alguém editou; recarregar?"), não caso para Error Boundary. Ver `REACT-ASYNC-09` em `Docs/React - Suspense e Assincronia.md` e o update otimista de `Docs/TanStack Query - Mutations e Invalidação.md`, que precisa de rollback quando o `412` chega.
+**The `ETag` used in `If-Match` has to be strong** — without the `W/` prefix (`HTTP-CACHE-09`). A weak `ETag` declares semantic equivalence, not byte identity, and does not serve to decide whether there was a concurrent write.
+
+> **Bridge with the client:** the `412` is an **expected error**, not an exception — it is UI state ("someone edited; reload?"), not a case for an Error Boundary. See `REACT-ASYNC-09` in `Docs/React - Suspense e Assincronia.md` and the optimistic update in `Docs/TanStack Query - Mutations e Invalidação.md`, which needs a rollback when the `412` arrives.
 
 ---
 
-## Passo 4 — `Vary`
+## Step 4 — `Vary`
 
-**Resposta cujo corpo depende de um header do request declara esse header em `Vary`** (`HTTP-CACHE-10`). Sem isso, o cache compartilhado serve a representação errada para outro cliente — e o sintoma é "funciona pra mim, quebra pro colega".
+**A response whose body depends on a request header declares that header in `Vary`** (`HTTP-CACHE-10`). Without it, the shared cache serves the wrong representation to another client — and the symptom is "works for me, breaks for my colleague".
 
-Os casos que aparecem no stack:
+The cases that show up in this stack:
 
-| O corpo varia por… | `Vary` | Regra específica |
+| The body varies by… | `Vary` | Specific rule |
 | --- | --- | --- |
 | `Accept` | `Vary: Accept` | `HTTP-CORE-04` |
-| `Accept-Encoding` (resposta comprimida) | `Vary: Accept-Encoding` | `HTTP-NEG-01` |
+| `Accept-Encoding` (compressed response) | `Vary: Accept-Encoding` | `HTTP-NEG-01` |
 | `Accept-Language` | `Vary: Accept-Language` | `HTTP-CORE-04` |
-| `Origin` (CORS com origem dinâmica) | `Vary: Origin` — **inclusive quando a origem é recusada** | `HTTP-CORS-03` |
+| `Origin` (CORS with a dynamic origin) | `Vary: Origin` — **including when the origin is refused** | `HTTP-CORS-03` |
 
-**E o que `Vary` não resolve:** `Vary: Cookie` ou `Vary: User-Agent` para proteger conteúdo personalizado **não funciona** — a cardinalidade é alta demais e o cache fica inútil ou vaza. O mecanismo correto é `private` (`HTTP-CACHE-11`).
-
----
-
+**And what `Vary` does not solve:** `Vary: Cookie` or `Vary: User-Agent` to protect personalized content **does not work** — the cardinality is too high and the cache ends up useless or leaking. The correct mechanism is `private` (`HTTP-CACHE-11`).

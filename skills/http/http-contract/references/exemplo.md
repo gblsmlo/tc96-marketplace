@@ -1,43 +1,40 @@
-# Exemplo trabalhado
+# Worked example
 
-Tarefa: *"endpoint para aprovar uma fatura"*.
+Task: *"an endpoint to approve an invoice"*.
 
-**Passo 1 — o método.** Aprovar altera estado → não é safe. Repetir a aprovação produz o mesmo estado final (já aprovada continua aprovada) → **é idempotente**. Duas opções sobrevivem:
+**Step 1 — the method.** Approving changes state → not safe. Repeating the approval produces the same final state (already approved stays approved) → **it is idempotent**. Two options survive:
 
-- `POST /faturas/42/aprovacao` — cria o recurso "aprovação";
-- `PUT /faturas/42/aprovacao` — declara o estado.
+- `POST /invoices/42/approval` — creates the "approval" resource;
+- `PUT /invoices/42/approval` — declares the state.
 
-Escolho **`PUT`**, porque a idempotência fica no contrato em vez de depender de chave (`HTTP-METH-04`). E `GET /faturas/42/aprovar` estaria fora de questão — ação destrutiva atrás de método safe (`HTTP-METH-01`).
+I choose **`PUT`**, because idempotency then lives in the contract instead of depending on a key (`HTTP-METH-04`). And `GET /invoices/42/approve` would be out of the question — a destructive action behind a safe method (`HTTP-METH-01`).
 
-**Passo 2 — o status:**
+**Step 2 — the status:**
 
-| Caso | Status | Obrigação |
+| Case | Status | Obligation |
 | --- | --- | --- |
-| aprovou agora | `200` com a fatura | `Content-Type` (`HTTP-CORE-03`) |
-| já estava aprovada | `200` — mesmo estado final | idempotência visível |
-| fatura não existe | `404` | — |
-| sem permissão de aprovar | `403` | credencial válida, permissão insuficiente (`HTTP-STATUS-10`) |
-| sem credencial | `401` | `WWW-Authenticate` (`HTTP-STATUS-10`) |
-| corpo válido, mas valor acima do limite do aprovador | **`422`** | não `400` (`HTTP-STATUS-11`) |
-| `Content-Type` errado no request | **`415`** | não `400` (`HTTP-NEG-07`) |
-| o serviço de contabilidade caiu | **`502`** | somos gateway (`HTTP-STATUS-12`) |
+| approved now | `200` with the invoice | `Content-Type` (`HTTP-CORE-03`) |
+| already approved | `200` — same final state | visible idempotency |
+| invoice does not exist | `404` | — |
+| no permission to approve | `403` | valid credential, insufficient permission (`HTTP-STATUS-10`) |
+| no credential | `401` | `WWW-Authenticate` (`HTTP-STATUS-10`) |
+| valid body, but amount above the approver's limit | **`422`** | not `400` (`HTTP-STATUS-11`) |
+| wrong `Content-Type` in the request | **`415`** | not `400` (`HTTP-NEG-07`) |
+| the accounting service is down | **`502`** | we are the gateway (`HTTP-STATUS-12`) |
 
-**Passo 3 — retry.** `PUT` é idempotente, então retry do cliente é seguro sem chave de idempotência. **Se fosse `POST`**, `HTTP-METH-08` proibiria retry automático sem `HTTP-METH-09` cumprida.
+**Step 3 — retry.** `PUT` is idempotent, so a client retry is safe with no idempotency key. **Were it `POST`**, `HTTP-METH-08` would forbid automatic retry without `HTTP-METH-09` being met.
 
-**Passo 4 — erro.** `application/problem+json`, o formato único da API (`HTTP-SPEC-08`), citando **RFC 9457**.
+**Step 4 — errors.** `application/problem+json`, the API's single format (`HTTP-SPEC-08`), citing **RFC 9457**.
 
-**Passo 5 — o stack.** Em Hono, `methodNotAllowed` precisa estar montado, senão `PATCH /faturas/42/aprovacao` volta `404` em vez de `405` (`HTTP-METH-07`).
+**Step 5 — the stack.** In Hono, `methodNotAllowed` has to be mounted, otherwise `PATCH /invoices/42/approval` returns `404` instead of `405` (`HTTP-METH-07`).
 
-**O que as decisões evitaram:**
+**What these decisions prevented:**
 
-| Decisão | Alternativa comum | Regra |
+| Decision | Common alternative | Rule |
 | --- | --- | --- |
-| `PUT` numa subrota de estado | `POST /faturas/42/aprovar`, sem idempotência declarada | `HTTP-METH-04` |
-| `422` para limite de aprovador | `400`, que não distingue sintaxe de regra | `HTTP-STATUS-11` |
-| `415` para `Content-Type` errado | `400` | `HTTP-NEG-07` |
-| `502` quando o upstream cai | `500`, que culpa a nossa aplicação | `HTTP-STATUS-12` |
-| `200` na reaprovação | `409`, que quebra a idempotência que o `PUT` prometeu | `HTTP-METH-04` |
-| status carregando o resultado | `200 {ok: false}` | `HTTP-CORE-06` |
-
----
-
+| `PUT` on a state sub-route | `POST /invoices/42/approve`, with no declared idempotency | `HTTP-METH-04` |
+| `422` for the approver limit | `400`, which does not tell syntax from rule | `HTTP-STATUS-11` |
+| `415` for the wrong `Content-Type` | `400` | `HTTP-NEG-07` |
+| `502` when the upstream falls | `500`, which blames our application | `HTTP-STATUS-12` |
+| `200` on re-approval | `409`, which breaks the idempotency `PUT` promised | `HTTP-METH-04` |
+| the status carrying the result | `200 {ok: false}` | `HTTP-CORE-06` |

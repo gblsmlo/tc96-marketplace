@@ -1,50 +1,47 @@
-# A árvore de frescor, ETag e o 304
+# The freshness tree, ETag and the 304
 
-A árvore completa é a § 5.3 do hub. O resumo operacional:
+The full tree is § 5.3 of the hub. The operational summary:
 
-| O recurso é… | `Cache-Control` |
+| The resource is… | `Cache-Control` |
 | --- | --- |
-| dado sensível que não pode tocar disco | `no-store` |
-| específico do usuário autenticado | `private, max-age=<n>` |
-| público com URL versionada (hash no nome) | `public, max-age=31536000, immutable` |
-| público, muda de vez em quando, servir velho é aceitável | `s-maxage=<curto>, stale-while-revalidate=<n>` |
-| público, muda a cada escrita | `max-age=0, must-revalidate` + `ETag` |
+| sensitive data that must not touch disk | `no-store` |
+| specific to the authenticated user | `private, max-age=<n>` |
+| public with a versioned URL (hash in the name) | `public, max-age=31536000, immutable` |
+| public, changes now and then, serving stale is acceptable | `s-maxage=<short>, stale-while-revalidate=<n>` |
+| public, changes on every write | `max-age=0, must-revalidate` + `ETag` |
 
-**A regra de entrada:** toda resposta de `GET` declara `Cache-Control` explicitamente (`HTTP-CACHE-01`). Omitir **não desliga o cache** — entra o **frescor heurístico**, cerca de 10% do intervalo desde o `Last-Modified` (RFC 9111 § 4.2.2). É a razão nº 1 de "cacheou e eu não pedi".
+**The entry rule:** every `GET` response declares `Cache-Control` explicitly (`HTTP-CACHE-01`). Omitting it **does not switch caching off** — **heuristic freshness** kicks in, roughly 10% of the interval since `Last-Modified` (RFC 9111 § 4.2.2). It is reason #1 for "it cached and I never asked for that".
 
-### 1.1 As três confusões de diretiva
+### 1.1 The three directive confusions
 
-| Você quer | Diretiva certa | O erro comum |
+| You want | The right directive | The common mistake |
 | --- | --- | --- |
-| "não guarde em lugar nenhum" | `no-store` | `no-cache` — que **armazena** |
-| "guarde, mas pergunte antes de reusar" | `no-cache` | `no-store`, que joga fora e perde o `304` |
-| "só o browser dele, nunca a CDN" | `private` | `public` com dado de sessão |
+| "do not store it anywhere" | `no-store` | `no-cache` — which **does store** |
+| "store it, but ask before reusing" | `no-cache` | `no-store`, which throws it away and loses the `304` |
+| "only their browser, never the CDN" | `private` | `public` with session data |
 
-**`no-cache` armazena a resposta** — ele impede o reuso **sem revalidação**. Quem escreve `no-store` querendo "sempre revalidar" perde a economia do `304` inteira (`HTTP-CACHE-03`, `HTTP-CACHE-12`).
+**`no-cache` stores the response** — it prevents reuse **without revalidation**. Whoever writes `no-store` meaning "always revalidate" loses the whole `304` saving (`HTTP-CACHE-03`, `HTTP-CACHE-12`).
 
-**Resposta personalizada por usuário é `private` no mínimo** (`HTTP-CACHE-02`). `public` num corpo derivado de cookie de sessão é como um cache compartilhado serve o dado de uma pessoa para outra.
+**A per-user personalized response is `private` at minimum** (`HTTP-CACHE-02`). `public` on a body derived from a session cookie is how a shared cache serves one person's data to another.
 
-**`max-age` acima de 24 h exige URL versionada** (`HTTP-CACHE-04`) — sem hash no nome, não há como corrigir antes do prazo.
+**`max-age` above 24 h requires a versioned URL** (`HTTP-CACHE-04`) — without a hash in the name, there is no way to correct it before the deadline.
 
 ---
 
-## Passo 2 — `ETag` e o `304`
+## Step 2 — `ETag` and the `304`
 
 ```
-GET /faturas/42 → 200 + ETag: "v7" + Cache-Control
-GET /faturas/42 → If-None-Match: "v7"
- → 304, sem corpo, repetindo ETag/Cache-Control/Date/Vary
+GET /invoices/42 → 200 + ETag: "v7" + Cache-Control
+GET /invoices/42 → If-None-Match: "v7"
+ → 304, no body, repeating ETag/Cache-Control/Date/Vary
 ```
 
-| Confira | Regra |
+| Check | Rule |
 | --- | --- |
-| resposta `200` revalidável inclui `ETag`; `Last-Modified` é fallback | `HTTP-CACHE-05` |
-| a rota **trata** `If-None-Match` e responde `304` quando bate | `HTTP-CACHE-07` |
-| `304` **sem corpo**, repetindo `ETag`, `Cache-Control`, `Date` e `Vary` | `HTTP-CACHE-06` |
+| a revalidatable `200` response includes `ETag`; `Last-Modified` is the fallback | `HTTP-CACHE-05` |
+| the route **handles** `If-None-Match` and answers `304` when it matches | `HTTP-CACHE-07` |
+| `304` **with no body**, repeating `ETag`, `Cache-Control`, `Date` and `Vary` | `HTTP-CACHE-06` |
 
-**Emitir `ETag` sem tratar `If-None-Match` é o antipadrão mais comum aqui**: custa o header e não entrega economia nenhuma — o cliente pergunta e recebe o corpo inteiro de volta.
+**Emitting an `ETag` without handling `If-None-Match` is the most common antipattern here**: it costs the header and delivers no saving at all — the client asks and receives the whole body back.
 
-**O que o stack faz sozinho:** `Bun.serve` responde `304` a `If-None-Match` ao servir `Bun.file` — mas **só para arquivo**. Para resposta dinâmica, o `ETag` é seu (`Docs/Bun - HTTP e Servidor.md`). Em Hono há `hono/etag`, com `weak: false` por default (`Docs/Hono - Middleware e Ciclo de Vida.md` § 5).
-
----
-
+**What the stack does on its own:** `Bun.serve` answers `304` to `If-None-Match` when serving `Bun.file` — but **only for files**. For a dynamic response, the `ETag` is yours (`Docs/Bun - HTTP e Servidor.md`). In Hono there is `hono/etag`, with `weak: false` by default (`Docs/Hono - Middleware e Ciclo de Vida.md` § 5).

@@ -1,8 +1,9 @@
 ---
 nome: http-review
-descricao: Auditar o contrato HTTP de uma API existente contra as regras normativas da doc do vault, citando IDs `HTTP-*`, com oito sondas `curl` executáveis para o que a leitura de código não mostra — use quando a tarefa for revisar as rotas de um serviço ou de um PR, conferir se os status e headers estão certos, achar escrita sem proteção de concorrência, verificar se o CORS está desenhado ou improvisado, ou checar citação de RFC em ADR e documentação. Não use para desenhar rota nova, que é http-contract, para política de frescor, que é http-cache, nem para uma falha concreta em investigação, que é http-diagnose.
+descricao: Audit an existing API's HTTP contract against the normative rules in the vault docs, citing `HTTP-*` IDs, with eight executable `curl` probes for what reading code does not show — use when the task is reviewing a service's routes or a PR's, checking whether statuses and headers are right, finding a write without concurrency protection, verifying whether CORS was designed or improvised, or checking RFC citations in an ADR or documentation. Do not use to design a new route, which is http-contract, for freshness policy, which is http-cache, nor for one concrete failure under investigation, which is http-diagnose.
 tipo: skill
 familia: http
+idioma: en
 fonte: "[HTTP](../../../knowledge-base/docs/http.md)"
 tags:
   - skill
@@ -13,105 +14,105 @@ tags:
 
 # http-review
 
-> **Fonte desta skill:** [HTTP](../../../knowledge-base/docs/http.md) — a § 6 normativa (74 regras, numeração contínua), a § 6.1 com as 25 que viajam com o caminho mínimo, e a § 6.2 com os IDs canônicos.
-> Esta skill **não contém** o texto das regras — ela diz o que executar, em que ordem varrer, como classificar e como reportar.
+> **Source of this skill:** [HTTP](../../../knowledge-base/docs/http.md) — the normative § 6 (74 rules, continuous numbering), § 6.1 with the 25 that travel with the minimum path, and § 6.2 with the canonical IDs.
+> This skill **does not contain** the text of the rules — it says what to run, in what order to scan, how to classify and how to report.
 
-Contrato que esta skill implementa: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
+Contract this skill implements: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
 
 ---
 
-## Quando usar
+## When to use
 
-Auditar o contrato de uma API que **já existe** — o serviço inteiro, ou as rotas de um PR.
+Auditing the contract of an API that **already exists** — the whole service, or the routes in a PR.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| desenhar rota nova | `http-contract` |
-| política de frescor e condicional | `http-cache` |
-| uma falha concreta em investigação | `http-diagnose` |
-| o handler no framework | `elysia-build` |
-| a suíte que deveria cobrir isso | `test-review` |
+| designing a new route | `http-contract` |
+| freshness and conditional policy | `http-cache` |
+| one concrete failure under investigation | `http-diagnose` |
+| the handler in the framework | `elysia-build` |
+| the suite that should cover this | `test-review` |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 2 | o modelo mental |
-| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.1 | regras e as críticas |
-| 3 | `references/mapa-de-ids.md` | **obrigatório antes de citar** |
-| 4 | o satélite do achado | via § 4 do hub |
+| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 2 | the mental model |
+| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.1 | the rules and the critical ones |
+| 3 | `references/mapa-de-ids.md` | **required before citing** |
+| 4 | the satellite for the finding | via § 4 of the hub |
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/sondas.md` | as oito sondas, e o que cada uma revela |
-| `references/varredura-e-severidade.md` | a ordem por consequência, e a classificação |
-| `references/relatorio-e-corte.md` | formato do achado, e o que **não** é achado |
-| `references/antipadroes.md` | a grade completa com ID |
-| `references/fechamento.md` | transformar sonda em teste, e declarar o não verificado |
-| `references/mapa-de-ids.md` | os 74 `HTTP-*` por satélite e seção |
-| `scripts/sondas.sh` | roda as oito contra o serviço de pé |
-| `scripts/gerar-mapa-de-ids.sh` | regenera o mapa nas quatro skills de HTTP |
+| `references/sondas.md` | the eight probes, and what each one reveals |
+| `references/varredura-e-severidade.md` | the order by consequence, and the classification |
+| `references/relatorio-e-corte.md` | finding format, and what is **not** a finding |
+| `references/antipadroes.md` | the full grid, with IDs |
+| `references/fechamento.md` | turning a probe into a test, and declaring the unverified |
+| `references/mapa-de-ids.md` | the 74 `HTTP-*` by satellite and section |
+| `scripts/sondas.sh` | runs all eight against the running service |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map across the four HTTP skills |
 
 ---
 
-## Passo 1 — Sondar antes de ler
+## Step 1 — Probe before reading
 
-Contrato HTTP é **invisível no código**: o handler parece certo, o teste passa, e o header que falta só quebra atrás de uma CDN ou noutro browser.
+An HTTP contract is **invisible in the code**: the handler looks right, the test passes, and the missing header only breaks behind a CDN or in another browser.
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/http-review/scripts/sondas.sh https://api.local /faturas/42 /faturas/42
+bash ${CLAUDE_PLUGIN_ROOT}/skills/http-review/scripts/sondas.sh https://api.local /invoices/42 /invoices/42
 ```
 
-**Duas paradas obrigatórias:**
+**Two mandatory stops:**
 
-| Sonda | Se mostrar… | Por quê |
+| Probe | If it shows… | Why |
 | --- | --- | --- |
-| S5 | a escrita com `If-Match` obsoleto foi **aplicada** | perda silenciosa de dado sob concorrência — não é achado de estilo |
-| S8 | dois formatos de erro na mesma API | contrato público inconsistente, e cada rota nova amplia |
+| S5 | the write with a stale `If-Match` was **applied** | silent data loss under concurrency — not a style finding |
+| S8 | two error formats in the same API | an inconsistent public contract, and every new route widens it |
 
-**S3 é a que mais acende no stack:** em Hono, sem o middleware `methodNotAllowed`, método não suportado devolve `404` em vez de `405`.
-
----
-
-## Passo 2 — Varrer na ordem
-
-`references/varredura-e-severidade.md`, por **consequência**: o que corrompe dado → o que mente sobre o resultado → o que quebra cliente → o que degrada cache → convenção.
+**S3 is the one that lights up most in this stack:** in Hono, without the `methodNotAllowed` middleware, an unsupported method returns `404` instead of `405`.
 
 ---
 
-## Passo 3 — Classificar e reportar
+## Step 2 — Scan in order
 
-Bloqueante é o que **corrompe dado ou mente** (escrita sem `If-Match`, falha em `2xx`, origem refletida cegamente); Alta é o que quebra cliente hoje; Média é dívida.
-
-Para sonda, **a evidência é a saída do `curl`** — cole-a, com o status e os headers.
-
-**Três coisas não são achado:** ausência de header que o stack já emite, escolha de formato de erro **consistente** que não é a sua preferida, e verbosidade de URL. Detalhe em `references/relatorio-e-corte.md`.
+`references/varredura-e-severidade.md`, by **consequence**: what corrupts data → what lies about the result → what breaks clients → what degrades caching → convention.
 
 ---
 
-## Passo 4 — Fechar
+## Step 3 — Classify and report
 
-1. **Transforme sonda em teste.** S3, S4, S5 e S6 são verificáveis em teste de API — achado que só existe no relatório volta em seis meses.
-2. **Ordene por severidade**, não por rota.
-3. **Se o serviço não sobe**, declare quais sondas não rodaram. **"Não verificado" não é "sem achado"**.
+Blocking is what **corrupts data or lies** (a write without `If-Match`, a failure as `2xx`, a blindly reflected origin); High is what breaks clients today; Medium is debt.
 
----
+For a probe, **the evidence is the `curl` output** — paste it, with the status and the headers.
 
-## Exemplo
-
-API de faturas: as sondas mostram `PUT` com `If-Match` obsoleto sendo **aplicado** (perda silenciosa), `PATCH` devolvendo `404` em vez de `405`, e a origem `malicioso.example` sendo ecoada sem `Vary`. Os três são de categorias diferentes — corrupção, cliente quebrado e segurança — e o relatório os separa.
-
-O formato e o corte estão em `references/relatorio-e-corte.md`.
+**Three things are not findings:** the absence of a header the stack already emits, a **consistent** error format that is not your preferred one, and URL verbosity. Detail in `references/relatorio-e-corte.md`.
 
 ---
 
-## Relacionados
+## Step 4 — Closing
 
-- [HTTP](../../../knowledge-base/docs/http.md) — fonte desta skill: § 6, § 6.1, § 6.2, § 7
-- `http-contract` · `http-cache` · `http-diagnose` — as skills irmãs
-- `elysia-build` — onde a correção costuma ser feita
-- `test-review` — a suíte que deveria proteger o contrato
+1. **Turn a probe into a test.** S3, S4, S5 and S6 are verifiable in an API test — a finding that only exists in the report comes back in six months.
+2. **Order by severity**, not by route.
+3. **If the service does not start**, declare which probes did not run. **"Not verified" is not "no findings"**.
+
+---
+
+## Example
+
+An invoices API: the probes show a `PUT` with a stale `If-Match` being **applied** (silent loss), a `PATCH` returning `404` instead of `405`, and the origin `malicious.example` being echoed without `Vary`. All three are from different categories — corruption, broken client and security — and the report separates them.
+
+The format and the cut are in `references/relatorio-e-corte.md`.
+
+---
+
+## Related
+
+- [HTTP](../../../knowledge-base/docs/http.md) — source of this skill: § 6, § 6.1, § 6.2, § 7
+- `http-contract` · `http-cache` · `http-diagnose` — the sibling skills
+- `elysia-build` — where the fix is usually made
+- `test-review` — the suite that should protect the contract

@@ -1,81 +1,78 @@
-# É CORS mesmo? e o modelo de falha
+# Is it really CORS? and the failure model
 
-**1. Não existe RFC de CORS.** O protocolo, o preflight e os forbidden headers são do **Fetch Standard (WHATWG)**, Living Standard, sem versão citável. Atribuir regra de CORS a um RFC é erro de citação (`HTTP-SPEC-04`), e procurar a resposta no RFC 9110 é perder tempo.
+**1. There is no CORS RFC.** The protocol, the preflight and the forbidden headers belong to the **Fetch Standard (WHATWG)**, a Living Standard with no citable version. Attributing a CORS rule to an RFC is a citation error (`HTTP-SPEC-04`), and looking for the answer in RFC 9110 is wasted time.
 
-**2. CORS não é autorização.** Ele restringe o que um script de **outra origem** pode **ler** — e **não impede a requisição de chegar ao servidor**. Se a preocupação é impedir acesso, o mecanismo é o handler (`HTTP-CORS-08`). Um endpoint "protegido por CORS" está aberto para qualquer cliente que não seja browser.
-
----
-
-## Passo 1 — É CORS mesmo?
-
-A árvore completa é a § 5.4 do hub. Percorra **sem pular**:
-
-```
-O erro no console menciona "CORS policy"?
-├── NÃO → não é CORS. É rede, TLS, DNS, ou o servidor caiu.
-│ Confirme se a requisição saiu (aba Network / log do servidor).
-└── SIM
- └── A requisição chegou ao servidor (aparece no log)?
- ├── NÃO → o preflight falhou ou não foi respondido
- │ ├── há OPTIONS no log? → o handler não devolve os Access-Control-Allow-*
- │ └── não há OPTIONS → a rota não trata OPTIONS
- │ (framework devolvendo 404/405 no preflight)
- └── SIM, 2xx, e ainda falhou
- ├── usa cookie/credencial? → Allow-Origin: * é INVÁLIDO com credenciais
- ├── o header vem undefined → falta Access-Control-Expose-Headers
- └── falha só para alguns, ou só antes de hard refresh
- → cache compartilhado sem Vary: Origin
-```
-
-**O primeiro nó é o que mais engana:** "CORS" no console frequentemente é o browser relatando que **não houve resposta** — servidor caído, TLS inválido, porta errada. A checagem é o log do servidor, não o console.
+**2. CORS is not authorization.** It restricts what a script from **another origin** may **read** — and it **does not stop the request from reaching the server**. If the concern is preventing access, the mechanism is the handler (`HTTP-CORS-08`). An endpoint "protected by CORS" is open to any client that is not a browser.
 
 ---
 
-## Passo 2 — O modelo de falha, ramo a ramo
+## Step 1 — Is it really CORS?
 
-### 2.1 O preflight
+The full tree is § 5.4 of the hub. Walk it **without skipping**:
 
-Um `OPTIONS` automático que o browser envia **antes** da chamada real, quando ela não é "simples".
+```
+Does the console error mention "CORS policy"?
+├── NO → it is not CORS. It is the network, TLS, DNS, or the server is down.
+│ Confirm whether the request left at all (Network tab / server log).
+└── YES
+ └── Did the request reach the server (does it appear in the log)?
+ ├── NO → the preflight failed or was not answered
+ │ ├── is there an OPTIONS in the log? → the handler does not return the Access-Control-Allow-*
+ │ └── no OPTIONS → the route does not handle OPTIONS
+ │ (framework returning 404/405 on the preflight)
+ └── YES, 2xx, and it still failed
+ ├── does it use a cookie/credential? → Allow-Origin: * is INVALID with credentials
+ ├── the header comes back undefined → missing Access-Control-Expose-Headers
+ └── it fails only for some, or only before a hard refresh
+ → shared cache without Vary: Origin
+```
 
-| Gatilho de preflight | Regra |
+**The first node is the most misleading:** "CORS" in the console is frequently the browser reporting that **there was no response** — server down, invalid TLS, wrong port. The check is the server log, not the console.
+
+---
+
+## Step 2 — The failure model, branch by branch
+
+### 2.1 The preflight
+
+An automatic `OPTIONS` the browser sends **before** the real call, when that call is not "simple".
+
+| Preflight trigger | Rule |
 | --- | --- |
-| método fora de `GET`/`HEAD`/`POST` | `HTTP-CORS-07` |
-| header não-safelisted (`Authorization`, `Content-Type: application/json`, header custom) | `HTTP-CORS-06` |
+| a method other than `GET`/`HEAD`/`POST` | `HTTP-CORS-07` |
+| a non-safelisted header (`Authorization`, `Content-Type: application/json`, a custom header) | `HTTP-CORS-06` |
 
-> **`application/json` não é `Content-Type` de requisição simples.** É a causa da maioria dos preflights "inexplicáveis" numa SPA — praticamente toda chamada de API dispara preflight, e isso é normal.
+> **`application/json` is not a simple-request `Content-Type`.** It is the cause of most "inexplicable" preflights in an SPA — practically every API call triggers a preflight, and that is normal.
 
-**A resposta ao preflight precisa ser 2xx e não pode exigir autenticação** (`HTTP-CORS-05`) — o browser não manda credencial no `OPTIONS`. Middleware de auth montado antes do de CORS transforma todo preflight em `401`, e o sintoma é "CORS" no console.
+**The preflight response has to be 2xx and cannot require authentication** (`HTTP-CORS-05`) — the browser does not send credentials on the `OPTIONS`. Auth middleware mounted before the CORS one turns every preflight into a `401`, and the symptom is "CORS" in the console.
 
-### 2.2 Credenciais
+### 2.2 Credentials
 
 ```
-A chamada usa cookie, Authorization, ou credentials: 'include'?
-└── SIM → Access-Control-Allow-Origin: * é INVÁLIDO
- → ecoe a origem concreta + Access-Control-Allow-Credentials: true
+Does the call use a cookie, Authorization, or credentials: 'include'?
+└── YES → Access-Control-Allow-Origin: * is INVALID
+ → echo the concrete origin + Access-Control-Allow-Credentials: true
  (HTTP-CORS-02)
- → e a origem concreta veio de uma ALLOWLIST, nunca do header Origin
- refletido cegamente (HTTP-CORS-01)
- → e a resposta declara Vary: Origin, inclusive quando RECUSA
+ → and the concrete origin came from an ALLOWLIST, never from the Origin
+ header reflected blindly (HTTP-CORS-01)
+ → and the response declares Vary: Origin, including when it REFUSES
  (HTTP-CORS-03)
 ```
 
-**O default do Hono é `origin: '*'`**, que é inválido com `credentials: true` — `HONO-MW-08` em `Docs/Hono - Middleware e Ciclo de Vida.md`. É o caso concreto mais comum deste ramo no stack.
+**Hono's default is `origin: '*'`**, which is invalid with `credentials: true` — `HONO-MW-08` in `Docs/Hono - Middleware e Ciclo de Vida.md`. It is the most common concrete case of this branch in this stack.
 
-### 2.3 Header que chega `undefined`
+### 2.3 A header that arrives `undefined`
 
-Só **sete** headers de resposta são legíveis cross-origin por default. `ETag` e `Location` **não estão** entre eles.
+Only **seven** response headers are readable cross-origin by default. `ETag` and `Location` are **not** among them.
 
-Se o JavaScript precisa ler um header, ele vai em `Access-Control-Expose-Headers` (`HTTP-CORS-04`). E `*` ali **nunca** em rota que aceita credenciais (`HTTP-CORS-10`).
+If JavaScript needs to read a header, it goes in `Access-Control-Expose-Headers` (`HTTP-CORS-04`). And `*` there **never** on a route that accepts credentials (`HTTP-CORS-10`).
 
-Isto interage com `http-cache`: uma API que emite `ETag` para o cliente usar em `If-None-Match` precisa expor `ETag`, senão o cliente nunca o vê.
+This interacts with `http-cache`: an API that emits an `ETag` for the client to use in `If-None-Match` has to expose `ETag`, otherwise the client never sees it.
 
-### 2.4 Funciona para uns e não para outros
+### 2.4 It works for some and not for others
 
-Cache compartilhado servindo a resposta de outra origem. A correção é `Vary: Origin` (`HTTP-CORS-03`) — e ela vale **inclusive quando a origem é recusada**, porque a resposta de recusa também é cacheável.
+A shared cache serving another origin's response. The fix is `Vary: Origin` (`HTTP-CORS-03`) — and it holds **including when the origin is refused**, because the refusal response is cacheable too.
 
-### 2.5 Funciona em produção e falha local
+### 2.5 It works in production and fails locally
 
-`HTTP-CORS-09`: a allowlist precisa incluir as origens de desenvolvimento. **Porta diferente é origem diferente** — `localhost:3000` e `localhost:5173` não são a mesma origem.
-
----
-
+`HTTP-CORS-09`: the allowlist has to include the development origins. **A different port is a different origin** — `localhost:3000` and `localhost:5173` are not the same origin.

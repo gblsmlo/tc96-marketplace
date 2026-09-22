@@ -1,8 +1,9 @@
 ---
 nome: http-contract
-descricao: Desenhar ou alterar o contrato HTTP de um endpoint — método, status, `Location`, idempotência, corpo de erro — citando IDs `HTTP-*`, com conferência executável por `curl` antes de entregar — use quando a tarefa for criar rota nova, escolher entre `PUT` e `PATCH`, decidir qual status devolver, projetar redirecionamento, tornar uma escrita segura para retry, ou padronizar o corpo de erro de uma API. Não use para política de cache e requisição condicional, que é http-cache, para requisição bloqueada pelo browser, que é http-diagnose, nem para auditar uma API inteira, que é http-review.
+descricao: Design or change the HTTP contract of an endpoint — method, status, `Location`, idempotency, error body — citing `HTTP-*` IDs, with an executable `curl` check before delivering — use when the task is creating a new route, choosing between `PUT` and `PATCH`, deciding which status to return, designing a redirect, making a write safe to retry, or standardizing an API's error body. Do not use for cache policy and conditional requests, which is http-cache, for a request blocked by the browser, which is http-diagnose, nor to audit a whole API, which is http-review.
 tipo: skill
 familia: http
+idioma: en
 fonte: "[HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md)"
 tags:
   - skill
@@ -12,114 +13,114 @@ tags:
 
 # http-contract
 
-> **Fonte desta skill:** [HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md) e [HTTP - Status e Redirecionamento](../../../knowledge-base/docs/http-status-e-redirecionamento.md), com o hub [HTTP](../../../knowledge-base/docs/http.md) como roteador. As 74 regras `HTTP-*` são declaradas na § 6 do hub.
-> Esta skill **não contém** o texto das regras — ela diz o que decidir, em que ordem, e o que conferir com `curl` antes de entregar.
+> **Source of this skill:** [HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md) and [HTTP - Status e Redirecionamento](../../../knowledge-base/docs/http-status-e-redirecionamento.md), with the [HTTP](../../../knowledge-base/docs/http.md) hub as the router. The 74 `HTTP-*` rules are declared in § 6 of the hub.
+> This skill **does not contain** the text of the rules — it says what to decide, in what order, and what to check with `curl` before delivering.
 
-Contrato que esta skill implementa: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
+Contract this skill implements: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
 
 ---
 
-## Quando usar
+## When to use
 
-Há um endpoint a desenhar ou alterar, e as perguntas são **qual método**, **qual status**, **o que volta no corpo**.
+There is an endpoint to design or change, and the questions are **which method**, **which status**, **what comes back in the body**.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
 | `Cache-Control`, `ETag`, `304`, `If-Match`, `Vary` | `http-cache` |
-| requisição bloqueada, CORS, formato errado | `http-diagnose` |
-| auditar o contrato de uma API existente | `http-review` |
-| escrever o handler no framework | `elysia-build` · `Docs/Hono - Roteamento e Contexto.md` |
-| validar o corpo em runtime | `elysia-schema` · `Docs/Hono - Validação e RPC.md` |
-| autenticação, sessão, token | `OWASP - Sessão e Autorização` · `RFC 9700 - OAuth 2.0 Security BCP` |
+| a blocked request, CORS, wrong format | `http-diagnose` |
+| auditing the contract of an existing API | `http-review` |
+| writing the handler in the framework | `elysia-build` · `Docs/Hono - Roteamento e Contexto.md` |
+| validating the body at runtime | `elysia-schema` · `Docs/Hono - Validação e RPC.md` |
+| authentication, session, tokens | `OWASP - Sessão e Autorização` · `RFC 9700 - OAuth 2.0 Security BCP` |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 2 | o modelo mental do protocolo |
-| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 5.1 e § 5.2 | as duas árvores desta skill |
-| 3 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.1 + § 6.2 | regras, críticas, e os IDs canônicos |
-| 4 | [HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](../../../knowledge-base/docs/http-status-e-redirecionamento.md) | as duas fontes, inseparáveis |
-| 5 | [HTTP](../../../knowledge-base/docs/http.md) § 8 | **antes de escrever header à mão** — o stack pode já fazer |
+| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 2 | the protocol's mental model |
+| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 5.1 and § 5.2 | this skill's two trees |
+| 3 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.1 + § 6.2 | rules, critical ones, and the canonical IDs |
+| 4 | [HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](../../../knowledge-base/docs/http-status-e-redirecionamento.md) | the two sources, inseparable |
+| 5 | [HTTP](../../../knowledge-base/docs/http.md) § 8 | **before writing a header by hand** — the stack may already do it |
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/metodo-e-status.md` | as duas árvores, com o que cada ramo decide |
-| `references/idempotencia-e-erro.md` | retry seguro, chave de idempotência, corpo de erro, header à mão |
-| `references/autoverificacao.md` | os 15 itens, e os três `curl` que valem mais |
-| `references/antipadroes.md` | a grade com ID |
-| `references/mapa-de-ids.md` | os 74 `HTTP-*` por satélite e seção, e a nota sobre `Vary` |
-| `references/exemplo.md` | caso trabalhado |
-| `scripts/conferir.sh` | roda os `curl` do Passo 6 e lista o que exige leitura |
+| `references/metodo-e-status.md` | the two trees, with what each branch decides |
+| `references/idempotencia-e-erro.md` | safe retry, idempotency key, error body, hand-written headers |
+| `references/autoverificacao.md` | the 15 items, and the three `curl` calls that are worth most |
+| `references/antipadroes.md` | the grid, with IDs |
+| `references/mapa-de-ids.md` | the 74 `HTTP-*` by satellite and section, and the note about `Vary` |
+| `references/exemplo.md` | worked case |
+| `scripts/conferir.sh` | runs the Step 6 `curl` calls and lists what requires reading |
 
-**A nota de § 6.2 que mais importa aqui:** as três regras de `Vary` **não são apelidos** — cada uma acrescenta uma obrigação concreta. Cite a específica quando o contexto for específico.
-
----
-
-## Passo 1 — Qual método
-
-`references/metodo-e-status.md`. O corte que decide quase tudo: **método safe não escreve estado** (`HTTP-CORE-02`, `HTTP-METH-01`), e `PUT` substitui a representação **inteira** (`HTTP-METH-03`).
+**The § 6.2 note that matters most here:** the three `Vary` rules **are not aliases** — each adds a concrete obligation. Cite the specific one when the context is specific.
 
 ---
 
-## Passo 2 — Qual status
+## Step 1 — Which method
 
-Falha **nunca** é `2xx` (`HTTP-CORE-06`). `201` leva `Location`; `204` não tem corpo; `405` leva `Allow`; `401` leva `WWW-Authenticate`; `429`/`503` levam `Retry-After`.
-
----
-
-## Passo 3 — Idempotência e retry
-
-`POST`/`PATCH` que pode ser retentado aceita **chave de idempotência** (`HTTP-METH-09`). Sem isso, o retry do cliente cria o segundo pedido — e o cliente não tem como saber.
+`references/metodo-e-status.md`. The cut that decides nearly everything: **a safe method does not write state** (`HTTP-CORE-02`, `HTTP-METH-01`), and `PUT` replaces the **whole** representation (`HTTP-METH-03`).
 
 ---
 
-## Passo 4 — Corpo de erro
+## Step 2 — Which status
 
-**Um formato só na API inteira** (`HTTP-SPEC-08`). Dois formatos é contrato público inconsistente, e cada rota nova amplia o problema.
-
----
-
-## Passo 5 — Antes de escrever header à mão
-
-Confira [HTTP](../../../knowledge-base/docs/http.md) § 8: o stack pode já fazer. Header escrito à mão onde o framework já emite é fonte de divergência silenciosa.
+A failure is **never** `2xx` (`HTTP-CORE-06`). `201` carries `Location`; `204` has no body; `405` carries `Allow`; `401` carries `WWW-Authenticate`; `429`/`503` carry `Retry-After`.
 
 ---
 
-## Passo 6 — Autoverificar antes de entregar
+## Step 3 — Idempotency and retry
+
+A `POST`/`PATCH` that can be retried accepts an **idempotency key** (`HTTP-METH-09`). Without it, the client's retry creates the second order — and the client has no way to know.
+
+---
+
+## Step 4 — Error body
+
+**One format across the whole API** (`HTTP-SPEC-08`). Two formats is an inconsistent public contract, and every new route widens the problem.
+
+---
+
+## Step 5 — Before writing a header by hand
+
+Check [HTTP](../../../knowledge-base/docs/http.md) § 8: the stack may already do it. A hand-written header where the framework already emits one is a source of silent divergence.
+
+---
+
+## Step 6 — Self-check before delivering
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/http-contract/scripts/conferir.sh https://api.local /pedidos/42 /pedidos
+bash ${CLAUDE_PLUGIN_ROOT}/skills/http-contract/scripts/conferir.sh https://api.local /orders/42 /orders
 ```
 
-Quinze itens em `references/autoverificacao.md`. **O que vale mais:** `curl -i` na rota e ler os headers de verdade — em especial o `PATCH` numa rota que só aceita `PUT`, que pega `HTTP-METH-07` (`404` em vez de `405` com `Allow`).
+Fifteen items in `references/autoverificacao.md`. **What is worth most:** `curl -i` on the route and reading the headers for real — especially a `PATCH` on a route that only accepts `PUT`, which catches `HTTP-METH-07` (`404` instead of `405` with `Allow`).
 
 ---
 
-## Passo 7 — Fechar
+## Step 7 — Closing
 
-1. **Rode o `curl`.** Contrato é o que o servidor responde, não o que o handler parece fazer.
-2. **Se a pergunta virou "por quanto tempo isso pode ser guardado"**, é `http-cache`.
-3. **Se o browser bloqueou**, é `http-diagnose` — e a causa é do servidor, não do cliente.
-4. **Declare o que não verificou.**
-
----
-
-## Exemplo
-
-Endpoint de criação de pedido: `POST` com chave de idempotência, `201` com `Location`, erro de validação em `422` no formato único da API, e `405` com `Allow` para método não suportado. O `curl -i` mostra que a rota devolvia `404` no `PATCH` — o middleware faltando, não o handler.
-
-Caso completo: `references/exemplo.md`.
+1. **Run the `curl`.** The contract is what the server answers, not what the handler appears to do.
+2. **If the question became "how long can this be stored"**, it is `http-cache`.
+3. **If the browser blocked it**, it is `http-diagnose` — and the cause is the server's, not the client's.
+4. **Declare what you did not verify.**
 
 ---
 
-## Relacionados
+## Example
 
-- [HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](../../../knowledge-base/docs/http-status-e-redirecionamento.md) — as fontes
+An order creation endpoint: `POST` with an idempotency key, `201` with `Location`, a validation error as `422` in the API's single format, and `405` with `Allow` for an unsupported method. `curl -i` showed the route returned `404` on `PATCH` — the missing middleware, not the handler.
+
+Full case: `references/exemplo.md`.
+
+---
+
+## Related
+
+- [HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](../../../knowledge-base/docs/http-status-e-redirecionamento.md) — the sources
 - [HTTP](../../../knowledge-base/docs/http.md) § 2, § 5, § 6, § 7, § 8
-- `http-cache` · `http-diagnose` · `http-review` — as skills irmãs
-- `elysia-build` — o mecanismo que implementa este contrato
+- `http-cache` · `http-diagnose` · `http-review` — the sibling skills
+- `elysia-build` — the mechanism that implements this contract

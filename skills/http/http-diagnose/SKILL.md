@@ -1,8 +1,9 @@
 ---
 nome: http-diagnose
-descricao: Diagnosticar requisição bloqueada pelo browser ou discordância de formato entre cliente e servidor — o modelo de falha de CORS, preflight, headers legíveis, `415` × `406`, charset — citando IDs `HTTP-CORS-*` e `HTTP-NEG-*`, com cinco sondas `curl` executáveis — use quando a tarefa for investigar erro de CORS no console, preflight que falha, header que chega `undefined` no JavaScript, requisição que funciona no curl e falha no browser, acento quebrado, ou corpo no formato errado. Não use para desenhar método e status, que é http-contract, para política de frescor, que é http-cache, nem para auditar a API inteira, que é http-review.
+descricao: Diagnose a request blocked by the browser or a format disagreement between client and server — the CORS failure model, preflight, readable headers, `415` × `406`, charset — citing `HTTP-CORS-*` and `HTTP-NEG-*` IDs, with five executable `curl` probes — use when the task is investigating a CORS error in the console, a failing preflight, a header that arrives `undefined` in JavaScript, a request that works in curl and fails in the browser, broken accents, or a body in the wrong format. Do not use to design method and status, which is http-contract, for freshness policy, which is http-cache, nor to audit the whole API, which is http-review.
 tipo: skill
 familia: http
+idioma: en
 fonte: "[HTTP - CORS](../../../knowledge-base/docs/http-cors.md)"
 tags:
   - skill
@@ -12,117 +13,117 @@ tags:
 
 # http-diagnose
 
-> **Fonte desta skill:** [HTTP - CORS](../../../knowledge-base/docs/http-cors.md) e [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/docs/http-negociacao-de-conteudo-e-range.md), com o hub [HTTP](../../../knowledge-base/docs/http.md) como roteador.
-> Esta skill **não contém** o texto das regras — ela diz o que sondar, em que ordem eliminar hipóteses, e o que **não** é CORS.
+> **Source of this skill:** [HTTP - CORS](../../../knowledge-base/docs/http-cors.md) and [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/docs/http-negociacao-de-conteudo-e-range.md), with the [HTTP](../../../knowledge-base/docs/http.md) hub as the router.
+> This skill **does not contain** the text of the rules — it says what to probe, in what order to eliminate hypotheses, and what is **not** CORS.
 
-Contrato que esta skill implementa: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
+Contract this skill implements: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
 
 ---
 
-## Quando usar
+## When to use
 
-Uma requisição não chega, ou chega e o formato está errado.
+A request does not arrive, or arrives and the format is wrong.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| desenhar método e status | `http-contract` |
-| política de frescor, `ETag`, condicional | `http-cache` |
-| auditar a API inteira | `http-review` |
-| o plugin `cors` do Elysia com default permissivo | `elysia-diagnose` (`ELYSIA-LIFE-12`) — é o mesmo achado por outro caminho |
+| designing method and status | `http-contract` |
+| freshness policy, `ETag`, conditionals | `http-cache` |
+| auditing the whole API | `http-review` |
+| Elysia's `cors` plugin with a permissive default | `elysia-diagnose` (`ELYSIA-LIFE-12`) — the same finding by another path |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 5.4 e § 5.5 | as duas árvores desta skill |
-| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.2 | regras e IDs canônicos |
-| 3 | [HTTP - CORS](../../../knowledge-base/docs/http-cors.md) | a fonte |
-| 4 | [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/docs/http-negociacao-de-conteudo-e-range.md) | quando o sintoma é formato, não bloqueio |
+| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 5.4 and § 5.5 | this skill's two trees |
+| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.2 | rules and canonical IDs |
+| 3 | [HTTP - CORS](../../../knowledge-base/docs/http-cors.md) | the source |
+| 4 | [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/docs/http-negociacao-de-conteudo-e-range.md) | when the symptom is format, not blocking |
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/modelo-de-falha.md` | "é CORS mesmo?" e o modelo de falha, ramo a ramo |
-| `references/formato-e-encoding.md` | `415` × `406`, idioma, charset |
-| `references/sondas.md` | as cinco sondas, e como ler cada resultado |
-| `references/relatorio-e-corte.md` | formato do achado, e o que **não** é CORS |
-| `references/antipadroes.md` | a grade com ID |
-| `references/mapa-de-ids.md` | os 74 `HTTP-*` por satélite e seção |
-| `scripts/sondas-cors.sh` | roda as cinco e imprime a leitura de cada uma |
+| `references/modelo-de-falha.md` | "is it really CORS?" and the failure model, branch by branch |
+| `references/formato-e-encoding.md` | `415` × `406`, language, charset |
+| `references/sondas.md` | the five probes, and how to read each result |
+| `references/relatorio-e-corte.md` | finding format, and what is **not** CORS |
+| `references/antipadroes.md` | the grid, with IDs |
+| `references/mapa-de-ids.md` | the 74 `HTTP-*` by satellite and section |
+| `scripts/sondas-cors.sh` | runs all five and prints the reading of each |
 
 ---
 
-## Passo 0 — Duas coisas que economizam a sessão inteira
+## Step 0 — Two things that save the whole session
 
-1. **CORS é decisão do servidor.** Mexer no cliente nunca é a correção.
-2. **`curl` não faz CORS** — e é por isso que ele serve: mostra o que o servidor responde, **sem o browser no meio**.
+1. **CORS is a server decision.** Changing the client is never the fix.
+2. **`curl` does not do CORS** — and that is exactly why it helps: it shows what the server answers, **without the browser in the way**.
 
 ---
 
-## Passo 1 — É CORS mesmo?
+## Step 1 — Is it really CORS?
 
-`references/modelo-de-falha.md`. Metade dos "erros de CORS" é o servidor não respondendo: a mensagem do browser é a mesma.
+`references/modelo-de-falha.md`. Half of all "CORS errors" are the server not responding: the browser's message is the same.
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/http-diagnose/scripts/sondas-cors.sh https://api.local/faturas http://localhost:5173
+bash ${CLAUDE_PLUGIN_ROOT}/skills/http-diagnose/scripts/sondas-cors.sh https://api.local/invoices http://localhost:5173
 ```
 
-**A sonda 2 é a que mais rende:** se o preflight devolve `401`, `404` ou `405`, o problema é o **preflight**, não a chamada real — e o handler está correto.
+**Probe 2 pays most:** if the preflight returns `401`, `404` or `405`, the problem is the **preflight**, not the real call — and the handler is correct.
 
 ---
 
-## Passo 2 — O modelo de falha, ramo a ramo
+## Step 2 — The failure model, branch by branch
 
-Origem não permitida · preflight não tratado · header de request não listado · header de resposta não exposto · credencial com `origin: '*'` · `Vary: Origin` ausente.
+Origin not allowed · preflight not handled · request header not listed · response header not exposed · credentials with `origin: '*'` · missing `Vary: Origin`.
 
-**`origin: '*'` com `credentials: true` é inválido** e o browser recusa (`HTTP-CORS-02`) — é o mesmo achado que `ELYSIA-LIFE-12` pelo lado do framework.
+**`origin: '*'` with `credentials: true` is invalid** and the browser refuses (`HTTP-CORS-02`) — the same finding as `ELYSIA-LIFE-12` from the framework side.
 
-**A sonda 4 é a que quase ninguém roda:** com a origem **recusada**, ainda há `Vary: Origin`? Sem ele, o cache serve a resposta de uma origem para outra (`HTTP-CORS-03`).
-
----
-
-## Passo 3 — Formato, idioma, encoding
-
-`references/formato-e-encoding.md`. `415` é sobre o que **entra**; `406` sobre o que **sai** — trocar os dois é o erro mais comum. E `text/*` sem `charset` é acento quebrado esperando acontecer (`HTTP-CORE-03`).
+**Probe 4 is the one almost nobody runs:** with the origin **refused**, is `Vary: Origin` still there? Without it, the cache serves one origin's response to another (`HTTP-CORS-03`).
 
 ---
 
-## Passo 4 — Reportar
+## Step 3 — Format, language, encoding
+
+`references/formato-e-encoding.md`. `415` is about what **comes in**; `406` about what **goes out** — swapping the two is the most common mistake. And `text/*` without `charset` is a broken accent waiting to happen (`HTTP-CORE-03`).
+
+---
+
+## Step 4 — Report
 
 ```
-`ID-DA-REGRA` — <onde>
-Sintoma: <a mensagem do browser, e o que o usuário vê>
-Evidência: <a saída da sonda, com o header>
-Causa: <uma frase>
-Correção: <no servidor>
-Ver Satélite correspondente.
+`RULE-ID` — <where>
+Symptom: <the browser's message, and what the user sees>
+Evidence: <the probe's output, with the header>
+Cause: <one sentence>
+Fix: <on the server>
+See the corresponding satellite.
 ```
 
-**Evidência é a saída do `curl`**, com o header colado. "Parece CORS" não é evidência.
+**Evidence is the `curl` output**, with the header pasted in. "Looks like CORS" is not evidence.
 
 ---
 
-## Passo 5 — O corte: o que não é CORS
+## Step 5 — The cut: what is not CORS
 
-Erro que o `curl` também reproduz, `401` legítimo, header que o servidor nunca enviou, mixed content, e cookie que não vai por `SameSite` — **nenhum é CORS**, e tratar como tal leva a afrouxar a política sem resolver. Tabela em `references/relatorio-e-corte.md`.
-
----
-
-## Passo 6 — Fechar
-
-1. **A correção é no servidor.** Se a proposta mexe no cliente, ela está errada.
-2. **Se a origem é ecoada sem lista**, o achado é de **segurança** (`HTTP-CORS-01`), não de configuração.
-3. **Se o preflight é a causa**, confira também o cache dele (`Access-Control-Max-Age`).
-4. **Declare o que não verificou.**
+An error that `curl` also reproduces, a legitimate `401`, a header the server never sent, mixed content, and a cookie that does not travel because of `SameSite` — **none of these is CORS**, and treating them as such leads to loosening the policy without solving anything. Table in `references/relatorio-e-corte.md`.
 
 ---
 
-## Relacionados
+## Step 6 — Closing
 
-- [HTTP - CORS](../../../knowledge-base/docs/http-cors.md) — fonte desta skill
-- [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/docs/http-negociacao-de-conteudo-e-range.md) — a segunda fonte
-- `http-contract` · `http-cache` · `http-review` — as skills irmãs
-- `elysia-diagnose` — o mesmo achado pelo lado do plugin
+1. **The fix is on the server.** If the proposal touches the client, it is wrong.
+2. **If the origin is echoed without a list**, the finding is about **security** (`HTTP-CORS-01`), not configuration.
+3. **If the preflight is the cause**, also check its cache (`Access-Control-Max-Age`).
+4. **Declare what you did not verify.**
+
+---
+
+## Related
+
+- [HTTP - CORS](../../../knowledge-base/docs/http-cors.md) — source of this skill
+- [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/docs/http-negociacao-de-conteudo-e-range.md) — the second source
+- `http-contract` · `http-cache` · `http-review` — the sibling skills
+- `elysia-diagnose` — the same finding from the plugin side

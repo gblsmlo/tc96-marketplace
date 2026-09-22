@@ -1,29 +1,26 @@
-# As oito sondas
+# The eight probes
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/http-review/scripts/sondas.sh https://api.local /faturas/42 /faturas/42
+bash ${CLAUDE_PLUGIN_ROOT}/skills/http-review/scripts/sondas.sh https://api.local /invoices/42 /invoices/42
 ```
 
-Contrato HTTP é **invisível no código**: o handler parece certo, o teste passa, e o header que falta só quebra atrás de uma CDN ou noutro browser. Rode estas oito sondas contra o serviço de pé, **antes** de abrir o código.
+An HTTP contract is **invisible in the code**: the handler looks right, the test passes, and the missing header only breaks behind a CDN or in another browser. Run these eight probes against the running service, **before** opening the code.
 
-| Sonda | Como | O que revela |
+| Probe | How | What it reveals |
 | --- | --- | --- |
-| **S1. Headers de uma leitura** | `curl -i <GET de recurso>` | `HTTP-CACHE-01`, `HTTP-CORE-03` — falta `Cache-Control`? `Content-Type` sem `charset`? |
-| **S2. `HEAD` responde?** | `curl -i -X HEAD <mesma URL>` | `HTTP-METH-06` — `HEAD` ausente onde `GET` responde |
-| **S3. Método não suportado** | `curl -i -X PATCH <rota que só aceita PUT>` | `HTTP-METH-07` — devolve `404` em vez de `405` com `Allow`? |
-| **S4. Condicional** | `curl -i -H 'If-None-Match: "x"' <GET>` e com o `ETag` real | `HTTP-CACHE-07` — emite `ETag` e ignora `If-None-Match`? |
-| **S5. Escrita concorrente** | `curl -i -X PUT -H 'If-Match: "obsoleto"' <rota de escrita>` | `HTTP-CACHE-08` — aplica a escrita em vez de `412`? |
-| **S6. Preflight** | `curl -i -X OPTIONS <rota> -H 'Origin: …' -H 'Access-Control-Request-Method: POST'` | `HTTP-CORS-05`, `HTTP-CORS-06` |
-| **S7. Origem recusada** | `curl -isS <rota> -H 'Origin: https://malicioso.example' \| grep -i 'access-control\|vary'` | `HTTP-CORS-01`, `HTTP-CORS-03` — reflete cegamente? falta `Vary`? |
-| **S8. Corpo de erro** | provocar `400`, `404`, `422` e `500` e comparar os corpos | `HTTP-SPEC-08` — mais de um formato na mesma API? |
+| **S1. Headers of a read** | `curl -i <GET of a resource>` | `HTTP-CACHE-01`, `HTTP-CORE-03` — missing `Cache-Control`? `Content-Type` without `charset`? |
+| **S2. Does `HEAD` answer?** | `curl -i -X HEAD <same URL>` | `HTTP-METH-06` — `HEAD` absent where `GET` answers |
+| **S3. Unsupported method** | `curl -i -X PATCH <route that only accepts PUT>` | `HTTP-METH-07` — does it return `404` instead of `405` with `Allow`? |
+| **S4. Conditional** | `curl -i -H 'If-None-Match: "x"' <GET>` and with the real `ETag` | `HTTP-CACHE-07` — does it emit an `ETag` and ignore `If-None-Match`? |
+| **S5. Concurrent write** | `curl -i -X PUT -H 'If-Match: "stale"' <write route>` | `HTTP-CACHE-08` — does it apply the write instead of `412`? |
+| **S6. Preflight** | `curl -i -X OPTIONS <route> -H 'Origin: …' -H 'Access-Control-Request-Method: POST'` | `HTTP-CORS-05`, `HTTP-CORS-06` |
+| **S7. Refused origin** | `curl -isS <route> -H 'Origin: https://malicious.example' \| grep -i 'access-control\|vary'` | `HTTP-CORS-01`, `HTTP-CORS-03` — does it reflect blindly? is `Vary` missing? |
+| **S8. Error body** | provoke `400`, `404`, `422` and `500` and compare the bodies | `HTTP-SPEC-08` — more than one format in the same API? |
 
-**S5 é a mais grave e a menos rodada.** Se a escrita é aplicada, o serviço tem perda silenciosa de dado sob concorrência — não é achado de estilo.
+**S5 is the gravest and the least run.** If the write is applied, the service has silent data loss under concurrency — that is not a style finding.
 
-**S3 é a mais provável de acender no stack:** em Hono, sem o middleware `methodNotAllowed`, método não suportado devolve `404` (`Docs/Hono - Middleware e Ciclo de Vida.md` § 5).
+**S3 is the most likely to light up in this stack:** in Hono, without the `methodNotAllowed` middleware, an unsupported method returns `404` (`Docs/Hono - Middleware e Ciclo de Vida.md` § 5).
 
-**Se S8 mostrar dois formatos de erro, reporte antes de continuar** — é contrato público inconsistente, e cada rota nova amplia o problema.
+**If S8 shows two error formats, report before continuing** — that is an inconsistent public contract, and every new route widens the problem.
 
-**Se o serviço não sobe**, declare quais sondas não rodaram (Passo 6, item 6). "Não verificado" não é "sem achado".
-
----
-
+**If the service does not start**, declare which probes did not run (Step 6, item 6). "Not verified" is not "no findings".

@@ -1,56 +1,53 @@
-# Método e status
+# Method and status
 
-> Passos 1 e 2. As árvores completas são a § 5.1 e § 5.2 de [HTTP](../../../../knowledge-base/docs/http.md).
+> Steps 1 and 2. The full trees are § 5.1 and § 5.2 of [HTTP](../../../../knowledge-base/docs/http.md).
 
-A árvore completa é a § 5.1 do hub. As invariantes que ela protege:
+The full tree is § 5.1 of the hub. The invariants it protects:
 
-| Propriedade | Significa | Regra |
+| Property | Means | Rule |
 | --- | --- | --- |
-| **safe** | não altera estado de domínio — `GET`, `HEAD`, `OPTIONS` | `HTTP-CORE-02`, `HTTP-METH-01` |
-| **idempotente** | repetir produz o mesmo estado final — `PUT`, `DELETE` | `HTTP-METH-04` |
-| **cacheável** | a resposta pode ser reusada | `HTTP-METH-10` |
+| **safe** | does not change domain state — `GET`, `HEAD`, `OPTIONS` | `HTTP-CORE-02`, `HTTP-METH-01` |
+| **idempotent** | repeating produces the same final state — `PUT`, `DELETE` | `HTTP-METH-04` |
+| **cacheable** | the response can be reused | `HTTP-METH-10` |
 
-Três decisões que a árvore resolve e que se erram por hábito:
+Three decisions the tree settles and that get made wrong out of habit:
 
-- **`PUT` substitui a representação inteira.** Endpoint que aceita `PUT` e ignora os campos ausentes não é `PUT` — é `PATCH` mal nomeado (`HTTP-METH-03`).
-- **Nada de corpo em `GET`, `HEAD` ou `DELETE`** — nem do cliente, nem definido pelo servidor (`HTTP-METH-02`).
-- **Toda rota que responde `GET` responde `HEAD`** na mesma URL, com os mesmos headers e sem corpo (`HTTP-METH-06`).
+- **`PUT` replaces the whole representation.** An endpoint that accepts `PUT` and ignores absent fields is not `PUT` — it is a badly named `PATCH` (`HTTP-METH-03`).
+- **No body in `GET`, `HEAD` or `DELETE`** — neither from the client, nor defined by the server (`HTTP-METH-02`).
+- **Every route that answers `GET` answers `HEAD`** on the same URL, with the same headers and no body (`HTTP-METH-06`).
 
-E a que não é sobre estilo: **ação destrutiva nunca fica atrás de método safe** (`HTTP-METH-01`). Um `GET /pedidos/42/cancelar` é disparado por prefetch de browser, por crawler e por qualquer cache.
+And the one that is not about style: **a destructive action never sits behind a safe method** (`HTTP-METH-01`). A `GET /orders/42/cancel` is fired by browser prefetch, by crawlers and by any cache.
 
 ---
 
-## Passo 2 — Qual status
+## Step 2 — Which status
 
-A árvore completa é a § 5.2 do hub. As obrigações que acompanham cada escolha:
+The full tree is § 5.2 of the hub. The obligations that come with each choice:
 
-| Status | Obrigação | Regra |
+| Status | Obligation | Rule |
 | --- | --- | --- |
-| `201` | `Location` apontando para o recurso criado | `HTTP-STATUS-03`, `HTTP-METH-05` |
-| `204` | **sem corpo** | `HTTP-STATUS-04` |
-| `202` | no corpo, o identificador ou URL de acompanhamento | `HTTP-STATUS-05` |
+| `201` | `Location` pointing at the created resource | `HTTP-STATUS-03`, `HTTP-METH-05` |
+| `204` | **no body** | `HTTP-STATUS-04` |
+| `202` | in the body, the tracking identifier or URL | `HTTP-STATUS-05` |
 | `401` | `WWW-Authenticate` | `HTTP-STATUS-10` |
-| `405` | `Allow` com os métodos suportados | `HTTP-METH-07` |
-| `415` | quando o `Content-Type` **do request** é recusado — não `400` | `HTTP-NEG-07` |
-| `422` | corpo válido reprovado por regra de negócio | `HTTP-STATUS-11` |
+| `405` | `Allow` with the supported methods | `HTTP-METH-07` |
+| `415` | when the **request's** `Content-Type` is refused — not `400` | `HTTP-NEG-07` |
+| `422` | a valid body rejected by a business rule | `HTTP-STATUS-11` |
 | `429` / `503` | `Retry-After` | `HTTP-STATUS-09` |
-| `502` | quando o serviço é gateway e o upstream falhou | `HTTP-STATUS-12` |
+| `502` | when the service is a gateway and the upstream failed | `HTTP-STATUS-12` |
 
-**A regra que domina o passo:** falha nunca é `2xx` com erro no corpo. O status carrega o resultado (`HTTP-CORE-06` — canônico; `HTTP-STATUS-01` é apelido e não deve ser citado).
+**The rule that dominates the step:** a failure is never `2xx` with an error in the body. The status carries the result (`HTTP-CORE-06` — canonical; `HTTP-STATUS-01` is an alias and must not be cited).
 
-> **A ponte que evita o bug mais comum do stack:** nem o `hc` do Hono nem o Eden Treaty do Elysia **lançam** em status de erro. Uma `queryFn` ingênua fica em `success` com o erro dentro de `data` — ver `Docs/Hono - Validação e RPC.md` e `Docs/Elysia - Schema e Eden.md`. Ou seja: cumprir `HTTP-CORE-06` no servidor **não basta** se o cliente tipado não checa `res.ok`.
+> **The bridge that avoids the stack's most common bug:** neither Hono's `hc` nor Elysia's Eden Treaty **throws** on an error status. A naive `queryFn` stays in `success` with the error inside `data` — see `Docs/Hono - Validação e RPC.md` and `Docs/Elysia - Schema e Eden.md`. In other words: honoring `HTTP-CORE-06` on the server **is not enough** if the typed client does not check `res.ok`.
 
-### 2.1 Redirecionamento
+### 2.1 Redirects
 
-| Preciso… | Use | Regra |
+| I need to… | Use | Rule |
 | --- | --- | --- |
-| preservar método e corpo | `307` (temporário) ou `308` (permanente) | `HTTP-STATUS-07` |
-| mandar um `POST` para uma página de resultado | **`303`** | `HTTP-STATUS-08` |
-| mover permanentemente uma URL de `GET` | `301` | — |
+| preserve method and body | `307` (temporary) or `308` (permanent) | `HTTP-STATUS-07` |
+| send a `POST` to a result page | **`303`** | `HTTP-STATUS-08` |
+| permanently move a `GET` URL | `301` | — |
 
-E todo `3xx` de redirecionamento leva `Location` (`HTTP-STATUS-06`).
+And every redirect `3xx` carries `Location` (`HTTP-STATUS-06`).
 
-> **`301` e `302` permitem a troca de método pela própria spec** — não é tolerância a bug de browser. É por isso que "temporário" não é o critério: o critério é se o método precisa sobreviver.
-
----
-
+> **`301` and `302` allow the method to change by the spec itself** — this is not tolerance of a browser bug. That is why "temporary" is not the criterion: the criterion is whether the method has to survive.

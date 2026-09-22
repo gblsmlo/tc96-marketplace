@@ -1,8 +1,9 @@
 ---
 nome: http-cache
-descricao: Decidir a política de cache HTTP de um recurso e implementar requisição condicional — `Cache-Control` diretiva a diretiva, `ETag`, `304`, `If-Match` para escrita concorrente, `Vary` — citando IDs `HTTP-CACHE-*`, com sondas `curl` que provam se a condicional é tratada — use quando a tarefa for definir frescor de uma rota, ligar `ETag` e responder `304`, proteger escrita concorrente contra sobrescrita, decidir entre `no-store` e `no-cache`, versionar asset, ou entender por que um cache serviu resposta errada. Não use para desenhar método e status, que é http-contract, para requisição bloqueada pelo browser, que é http-diagnose, nem para o cache do TanStack Query, que é outra camada.
+descricao: Decide a resource's HTTP cache policy and implement conditional requests — `Cache-Control` directive by directive, `ETag`, `304`, `If-Match` for concurrent writes, `Vary` — citing `HTTP-CACHE-*` IDs, with `curl` probes that prove whether the conditional is handled — use when the task is defining a route's freshness, turning on `ETag` and answering `304`, protecting a concurrent write against overwriting, choosing between `no-store` and `no-cache`, versioning an asset, or understanding why a cache served the wrong response. Do not use to design method and status, which is http-contract, for a request blocked by the browser, which is http-diagnose, nor for the TanStack Query cache, which is another layer.
 tipo: skill
 familia: http
+idioma: en
 fonte: "[HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md)"
 tags:
   - skill
@@ -12,114 +13,114 @@ tags:
 
 # http-cache
 
-> **Fonte desta skill:** [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md), com o hub [HTTP](../../../knowledge-base/docs/http.md) como roteador.
-> Esta skill **não contém** o texto das regras — ela diz o que decidir e o que provar com `curl`.
+> **Source of this skill:** [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md), with the [HTTP](../../../knowledge-base/docs/http.md) hub as the router.
+> This skill **does not contain** the text of the rules — it says what to decide and what to prove with `curl`.
 
-Contrato que esta skill implementa: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
+Contract this skill implements: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
 
 ---
 
-## Quando usar
+## When to use
 
-A pergunta é **por quanto tempo**, **quem pode guardar**, ou **como revalidar** — ou uma escrita concorrente sobrescreveu a de outra pessoa.
+The question is **for how long**, **who may store it**, or **how to revalidate** — or a concurrent write overwrote someone else's.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| qual método, qual status, `Location` | `http-contract` |
-| requisição bloqueada, CORS, formato errado | `http-diagnose` |
-| auditar a API inteira | `http-review` |
-| `staleTime`/`gcTime` do cliente | `tanstack-query` — **outra camada**, ver Passo 5 |
+| which method, which status, `Location` | `http-contract` |
+| a blocked request, CORS, wrong format | `http-diagnose` |
+| auditing the whole API | `http-review` |
+| the client's `staleTime`/`gcTime` | `tanstack-query` — **another layer**, see Step 5 |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 5.3 | a árvore de frescor — o núcleo desta skill |
-| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.2 | regras e, **obrigatório**, a nota sobre `Vary` e `ETag` forte |
-| 3 | [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md) | a fonte |
-| 4 | [HTTP](../../../knowledge-base/docs/http.md) § 8.3 | a fronteira com o cache do TanStack Query |
+| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 5.3 | the freshness tree — the core of this skill |
+| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.2 | rules and, **required**, the note about `Vary` and strong `ETag` |
+| 3 | [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md) | the source |
+| 4 | [HTTP](../../../knowledge-base/docs/http.md) § 8.3 | the boundary with the TanStack Query cache |
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/frescor-e-etag.md` | a árvore de frescor, `ETag`, e o `304` |
-| `references/escrita-e-vary.md` | `If-Match`/`412`, e as obrigações de `Vary` |
-| `references/fronteira-com-o-query.md` | por que a confusão com o cache do cliente é estrutural |
-| `references/autoverificacao.md` | os 12 itens, e as sondas que provam |
-| `references/antipadroes.md` | a grade com ID |
-| `references/mapa-de-ids.md` | os 74 `HTTP-*` por satélite e seção |
-| `references/exemplo.md` | caso trabalhado |
-| `scripts/sondas-cache.sh` | prova se a condicional é tratada e se a escrita concorrente é barrada |
+| `references/frescor-e-etag.md` | the freshness tree, `ETag`, and the `304` |
+| `references/escrita-e-vary.md` | `If-Match`/`412`, and the obligations of `Vary` |
+| `references/fronteira-com-o-query.md` | why the confusion with the client cache is structural |
+| `references/autoverificacao.md` | the 12 items, and the probes that prove them |
+| `references/antipadroes.md` | the grid, with IDs |
+| `references/mapa-de-ids.md` | the 74 `HTTP-*` by satellite and section |
+| `references/exemplo.md` | worked case |
+| `scripts/sondas-cache.sh` | proves whether the conditional is handled and whether the concurrent write is barred |
 
-> **A nota de § 6.2 que esta skill mais usa:** as três regras de `Vary` **não são apelidos**. `HTTP-CORE-04` é o enunciado geral; `HTTP-CACHE-10` acrescenta a consequência de cache; `HTTP-NEG-01` a de compressão; `HTTP-CORS-03` a de origem dinâmica.
-
----
-
-## Passo 1 — A árvore de frescor
-
-`references/frescor-e-etag.md`. Toda resposta `GET` declara `Cache-Control` (`HTTP-CACHE-01`) — sem ele, a política é do cache intermediário, não sua. Resposta de usuário autenticado é `private` ou `no-store` (`HTTP-CACHE-02`).
-
-**`no-store` não é "revalidar sempre"** (`HTTP-CACHE-03`) — isso é `no-cache`.
+> **The § 6.2 note this skill uses most:** the three `Vary` rules **are not aliases**. `HTTP-CORE-04` is the general statement; `HTTP-CACHE-10` adds the cache consequence; `HTTP-NEG-01` the compression one; `HTTP-CORS-03` the dynamic-origin one.
 
 ---
 
-## Passo 2 — `ETag` e o `304`
+## Step 1 — The freshness tree
 
-Emitir `ETag` não basta: a rota precisa **tratar** `If-None-Match` e devolver `304` sem corpo (`HTTP-CACHE-07`, `HTTP-CACHE-06`). ETag emitido e ignorado é decorativo — e a sonda 2 do script prova isso em um comando.
+`references/frescor-e-etag.md`. Every `GET` response declares `Cache-Control` (`HTTP-CACHE-01`) — without it, the policy belongs to the intermediate cache, not to you. A response for an authenticated user is `private` or `no-store` (`HTTP-CACHE-02`).
 
----
-
-## Passo 3 — Escrita concorrente
-
-`If-Match` com **ETag forte** (`HTTP-CACHE-09`) e `412` quando não casa (`HTTP-CACHE-08`). É a regra mais grave desta skill: sem ela, **duas edições simultâneas apagam uma à outra em silêncio**.
+**`no-store` is not "always revalidate"** (`HTTP-CACHE-03`) — that is `no-cache`.
 
 ---
 
-## Passo 4 — `Vary`
+## Step 2 — `ETag` and the `304`
 
-Liste os headers que **mudam o corpo** (`HTTP-CACHE-10`), e **nunca** use `Vary` com `Cookie`/`User-Agent` para proteger dado (`HTTP-CACHE-11`) — isso não é controle de acesso.
-
----
-
-## Passo 5 — A fronteira com o TanStack Query
-
-São **camadas empilhadas com donos diferentes**: o cache HTTP é decidido pelo **servidor**, por header; o do Query, pelo **cliente**, por `staleTime`. Um `staleTime` alto não impede o browser de servir resposta cacheada; um `no-store` não impede o Query de devolver o que já tem. Detalhe: `references/fronteira-com-o-query.md`.
+Emitting an `ETag` is not enough: the route has to **handle** `If-None-Match` and return `304` with no body (`HTTP-CACHE-07`, `HTTP-CACHE-06`). An emitted-and-ignored ETag is decorative — and probe 2 of the script proves it in one command.
 
 ---
 
-## Passo 6 — Autoverificar antes de entregar
+## Step 3 — Concurrent writes
+
+`If-Match` with a **strong ETag** (`HTTP-CACHE-09`) and `412` when it does not match (`HTTP-CACHE-08`). It is the gravest rule in this skill: without it, **two simultaneous edits erase each other silently**.
+
+---
+
+## Step 4 — `Vary`
+
+List the headers that **change the body** (`HTTP-CACHE-10`), and **never** use `Vary` with `Cookie`/`User-Agent` to protect data (`HTTP-CACHE-11`) — that is not access control.
+
+---
+
+## Step 5 — The boundary with TanStack Query
+
+They are **stacked layers with different owners**: the HTTP cache is decided by the **server**, through headers; Query's, by the **client**, through `staleTime`. A high `staleTime` does not stop the browser from serving a cached response; a `no-store` does not stop Query from returning what it already has. Detail: `references/fronteira-com-o-query.md`.
+
+---
+
+## Step 6 — Self-check before delivering
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/http-cache/scripts/sondas-cache.sh https://api.local/faturas/42
+bash ${CLAUDE_PLUGIN_ROOT}/skills/http-cache/scripts/sondas-cache.sh https://api.local/invoices/42
 ```
 
-As duas sondas que mais falham são as que **não dão erro** quando não implementadas: a condicional devolve `200` com o corpo inteiro, e a escrita concorrente aplica a mudança.
+The two probes that fail most are the ones that **do not error** when unimplemented: the conditional returns `200` with the whole body, and the concurrent write applies the change.
 
 ---
 
-## Passo 7 — Fechar
+## Step 7 — Closing
 
-1. **Rode as sondas.** Política declarada e política implementada são coisas diferentes.
-2. **Se a decisão virou "qual status devolver"**, é `http-contract`.
-3. **Se o cache serviu resposta de outra origem**, o achado é `Vary` — e pode ser CORS (`http-diagnose`).
-4. **Declare o que não verificou.**
-
----
-
-## Exemplo
-
-Recurso de fatura: `private, max-age=0, must-revalidate` com `ETag` forte, `304` tratado, e `If-Match` obrigatório na escrita. A sonda mostra que o `PUT` com `If-Match` obsoleto **aplicava** a escrita — perda silenciosa sob concorrência, e o achado mais grave da revisão.
-
-Caso completo: `references/exemplo.md`.
+1. **Run the probes.** A declared policy and an implemented policy are different things.
+2. **If the decision became "which status to return"**, it is `http-contract`.
+3. **If the cache served a response from another origin**, the finding is `Vary` — and it may be CORS (`http-diagnose`).
+4. **Declare what you did not verify.**
 
 ---
 
-## Relacionados
+## Example
 
-- [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md) — fonte desta skill
+An invoice resource: `private, max-age=0, must-revalidate` with a strong `ETag`, `304` handled, and `If-Match` required on writes. The probe showed that a `PUT` with a stale `If-Match` **applied** the write — silent loss under concurrency, and the review's gravest finding.
+
+Full case: `references/exemplo.md`.
+
+---
+
+## Related
+
+- [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md) — source of this skill
 - [HTTP](../../../knowledge-base/docs/http.md) § 5.3, § 6, § 7, § 8.3
-- `http-contract` · `http-diagnose` · `http-review` — as skills irmãs
-- `tanstack-query` — a outra camada de cache
+- `http-contract` · `http-diagnose` · `http-review` — the sibling skills
+- `tanstack-query` — the other cache layer

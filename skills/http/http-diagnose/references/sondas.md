@@ -1,34 +1,31 @@
-# As cinco sondas
+# The five probes
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/http-diagnose/scripts/sondas-cors.sh https://api.local/faturas http://localhost:5173
+bash ${CLAUDE_PLUGIN_ROOT}/skills/http-diagnose/scripts/sondas-cors.sh https://api.local/invoices http://localhost:5173
 ```
 
-O que separa esta skill de tentativa e erro. `curl` **não faz CORS** — e é exatamente por isso que ele é útil: ele mostra o que o servidor responde, sem o browser no meio.
+What separates this skill from trial and error. `curl` **does not do CORS** — and that is exactly why it is useful: it shows what the server answers, without the browser in the way.
 
 ```bash
-# 1. o servidor responde? (elimina o primeiro nó da árvore)
-curl -i https://api.local/faturas
+# 1. does the server answer? (eliminates the tree's first node)
+curl -i https://api.local/invoices
 
-# 2. o preflight é tratado?
-curl -i -X OPTIONS https://api.local/faturas \
+# 2. is the preflight handled?
+curl -i -X OPTIONS https://api.local/invoices \
  -H 'Origin: http://localhost:5173' \
  -H 'Access-Control-Request-Method: POST' \
  -H 'Access-Control-Request-Headers: content-type,authorization'
 
-# 3. a origem é ecoada, e há Vary?
-curl -isS https://api.local/faturas -H 'Origin: http://localhost:5173' \
+# 3. is the origin echoed, and is there a Vary?
+curl -isS https://api.local/invoices -H 'Origin: http://localhost:5173' \
  | grep -i 'access-control\|vary'
 
-# 4. e quando a origem é RECUSADA — ainda há Vary: Origin?
-curl -isS https://api.local/faturas -H 'Origin: https://malicioso.example' \
+# 4. and when the origin is REFUSED — is Vary: Origin still there?
+curl -isS https://api.local/invoices -H 'Origin: https://malicious.example' \
  | grep -i 'access-control\|vary'
 
 # 5. charset
-curl -isS https://api.local/relatorio.csv | grep -i 'content-type'
+curl -isS https://api.local/report.csv | grep -i 'content-type'
 ```
 
-**A sonda 2 é a que mais rende:** se ela devolver `401`, `404` ou `405`, o problema é o preflight e não a chamada real. E **a sonda 4 é a que quase ninguém roda** — é ela que pega `HTTP-CORS-03` violada.
-
----
-
+**Probe 2 pays most:** if it returns `401`, `404` or `405`, the problem is the preflight and not the real call. And **probe 4 is the one almost nobody runs** — it is what catches a violated `HTTP-CORS-03`.

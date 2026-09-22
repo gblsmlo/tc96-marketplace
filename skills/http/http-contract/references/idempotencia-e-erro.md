@@ -1,41 +1,38 @@
-# Idempotência, corpo de erro e headers
+# Idempotency, error body and headers
 
-Decisão de desenho, não detalhe de implementação.
+A design decision, not an implementation detail.
 
 ```
-O cliente pode reenviar esta requisição sem intenção?
-(retry automático, botão clicado duas vezes, timeout de rede)
-├── é GET/HEAD/PUT/DELETE → já é idempotente por semântica (HTTP-METH-04)
-└── é POST ou PATCH
- ├── criar duplicata é aceitável? → nada a fazer
- └── criar duplicata é defeito
- → aceitar chave de idempotência no request (HTTP-METH-09)
- e o cliente NÃO configura retry sem ela (HTTP-METH-08)
+Can the client resend this request unintentionally?
+(automatic retry, a button clicked twice, a network timeout)
+├── it is GET/HEAD/PUT/DELETE → already idempotent by semantics (HTTP-METH-04)
+└── it is POST or PATCH
+ ├── is creating a duplicate acceptable? → nothing to do
+ └── creating a duplicate is a defect
+ → accept an idempotency key in the request (HTTP-METH-09)
+ and the client does NOT configure retry without it (HTTP-METH-08)
 ```
 
-**`HTTP-METH-08` é sobre o cliente e é frequentemente violada por configuração**, não por código: um retry global no cliente HTTP transforma todo `POST` em risco de duplicata. Ver.
+**`HTTP-METH-08` is about the client and is frequently violated by configuration**, not by code: a global retry in the HTTP client turns every `POST` into a duplicate risk. See.
 
 ---
 
-## Passo 4 — Corpo de erro
+## Step 4 — Error body
 
-**Uma API tem um formato só, declarado no contrato** (`HTTP-SPEC-08`). O padrão citável é `application/problem+json` — e ele é **RFC 9457**, não 7807, que foi obsoletada em 2023 (`HTTP-SPEC-02`).
+**An API has one format, declared in the contract** (`HTTP-SPEC-08`). The citable standard is `application/problem+json` — and it is **RFC 9457**, not 7807, which was obsoleted in 2023 (`HTTP-SPEC-02`).
 
-E o que **não** vai no erro: dado sensível nunca em query string (`HTTP-CORE-07`), e o status nunca é `2xx` (`HTTP-CORE-06`).
+And what does **not** go in the error: sensitive data never in the query string (`HTTP-CORE-07`), and the status is never `2xx` (`HTTP-CORE-06`).
 
 ---
 
-## Passo 5 — Antes de escrever header à mão
+## Step 5 — Before writing a header by hand
 
-A § 8 do hub existe para este passo, e ela muda o trabalho:
+§ 8 of the hub exists for this step, and it changes the work:
 
-| Onde o handler roda | O que **você** precisa escrever |
+| Where the handler runs | What **you** have to write |
 | --- | --- |
-| `Bun.serve` cru | **tudo** — CORS, `Cache-Control`, `ETag` dinâmico, mapeamento de erro para status, `405` com `Allow` |
-| Hono | há built-in para CORS, `etag`, `compress`, `bodyLimit`, e **`methodNotAllowed`** |
-| Elysia | `@elysia/cors`, e o schema produz validação + tipo + OpenAPI + cliente |
+| raw `Bun.serve` | **everything** — CORS, `Cache-Control`, dynamic `ETag`, error-to-status mapping, `405` with `Allow` |
+| Hono | there are built-ins for CORS, `etag`, `compress`, `bodyLimit`, and **`methodNotAllowed`** |
+| Elysia | `@elysia/cors`, and the schema produces validation + type + OpenAPI + client |
 
-**A armadilha do Hono que é violação silenciosa de `HTTP-METH-07`:** sem o middleware `methodNotAllowed`, método não suportado numa rota existente devolve **`404`**, não `405` com `Allow`. Ver `Docs/Hono - Middleware e Ciclo de Vida.md` § 5.
-
----
-
+**The Hono trap that is a silent violation of `HTTP-METH-07`:** without the `methodNotAllowed` middleware, an unsupported method on an existing route returns **`404`**, not `405` with `Allow`. See `Docs/Hono - Middleware e Ciclo de Vida.md` § 5.

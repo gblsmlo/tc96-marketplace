@@ -1,44 +1,41 @@
-# Exemplo trabalhado
+# Worked example
 
-Tarefa: *"a listagem de faturas está lenta, e duas pessoas editando a mesma fatura se sobrescrevem"*.
+Task: *"the invoice listing is slow, and two people editing the same invoice overwrite each other"*.
 
-São dois problemas e duas partes da árvore.
+These are two problems and two parts of the tree.
 
-**Parte 1 — frescor da listagem.** É dado de usuário autenticado, muda a cada escrita, e servir velho não é aceitável (dinheiro na tela):
+**Part 1 — the listing's freshness.** It is an authenticated user's data, it changes on every write, and serving stale is not acceptable (money on screen):
 
 ```http
-GET /faturas
+GET /invoices
 200 OK
 Cache-Control: private, max-age=0, must-revalidate
-ETag: "lista-v41"
+ETag: "list-v41"
 Vary: Accept, Accept-Encoding
 Content-Type: application/json; charset=utf-8
 ```
 
-E a rota passa a tratar `If-None-Match`, devolvendo `304` quando `"lista-v41"` bate (`HTTP-CACHE-07`). A economia vem do `304`, não do `max-age` — o cliente pergunta sempre, e a resposta é pequena.
+And the route starts handling `If-None-Match`, returning `304` when `"list-v41"` matches (`HTTP-CACHE-07`). The saving comes from the `304`, not from `max-age` — the client always asks, and the answer is small.
 
-**Parte 2 — a escrita concorrente:**
+**Part 2 — the concurrent write:**
 
 ```http
-PUT /faturas/42
+PUT /invoices/42
 If-Match: "v7"
 
-→ 412 Precondition Failed (o ETag atual é "v9")
+→ 412 Precondition Failed (the current ETag is "v9")
 ```
 
-**O que as decisões evitaram:**
+**What these decisions prevented:**
 
-| Decisão | Alternativa comum | Regra |
+| Decision | Common alternative | Rule |
 | --- | --- | --- |
-| `private` | `public`, e a CDN serve a fatura de uma pessoa para outra | `HTTP-CACHE-02` |
-| `max-age=0, must-revalidate` + `ETag` | `no-store`, que perde o `304` e mantém a lentidão | `HTTP-CACHE-03` |
-| tratar `If-None-Match` | só emitir `ETag`, e o cliente receber o corpo sempre | `HTTP-CACHE-07` |
-| `Vary: Accept, Accept-Encoding` | sem `Vary`, e o cache serve gzip a cliente que não aceita | `HTTP-CACHE-10`, `HTTP-NEG-01` |
-| `If-Match` + `412` | last-write-wins, perda silenciosa de dado | `HTTP-CACHE-08` |
-| `ETag` forte | `W/"v7"`, que não decide identidade | `HTTP-CACHE-09` |
-| `charset=utf-8` explícito | acentos quebrados | `HTTP-CORE-03` |
+| `private` | `public`, and the CDN serves one person's invoice to another | `HTTP-CACHE-02` |
+| `max-age=0, must-revalidate` + `ETag` | `no-store`, which loses the `304` and keeps the slowness | `HTTP-CACHE-03` |
+| handling `If-None-Match` | only emitting `ETag`, and the client receiving the body every time | `HTTP-CACHE-07` |
+| `Vary: Accept, Accept-Encoding` | no `Vary`, and the cache serving gzip to a client that does not accept it | `HTTP-CACHE-10`, `HTTP-NEG-01` |
+| `If-Match` + `412` | last-write-wins, silent data loss | `HTTP-CACHE-08` |
+| a strong `ETag` | `W/"v7"`, which does not decide identity | `HTTP-CACHE-09` |
+| explicit `charset=utf-8` | broken accents | `HTTP-CORE-03` |
 
-E o que **não** foi feito, deliberadamente: nada de `staleTime` como resposta ao problema de lentidão. Ele economizaria requisição do cliente e não resolveria a segunda visita nem outro dispositivo — camada diferente (§ 5).
-
----
-
+And what was deliberately **not** done: no `staleTime` as an answer to the slowness problem. It would save a client request and would resolve neither the second visit nor another device — a different layer (§ 5).

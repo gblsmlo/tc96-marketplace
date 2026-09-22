@@ -1,60 +1,57 @@
-# Formato do achado, e o corte
+# Finding format, and the cut
 
-Quatro partes, o mesmo contrato de `playwright-review`, `bun-test-review` e `react-review`:
-
-```
-`ID-DA-REGRA` — arquivo:linha
-<o que está errado, uma frase>
-Correção: <mudança concreta>
-Ver Satélite correspondente.
-```
-
-Para sonda, **a evidência é a saída do comando** — cole os headers.
-
-### Exemplo
+Four parts, the same contract as `playwright-review`, `bun-test-review` and `react-review`:
 
 ```
-`HTTP-CACHE-08` — apps/server/src/features/faturas/rotas.ts:88
-A rota PUT /faturas/:id não aceita If-Match e aplica a escrita sempre; duas edições
-concorrentes se sobrescrevem sem aviso.
-Evidência: S5 — `curl -i -X PUT -H 'If-Match: "obsoleto"'` devolveu 200, não 412.
-Correção: comparar o If-Match com o ETag atual e responder 412 quando divergir;
- o ETag precisa ser forte, sem W/ (HTTP-CACHE-09). O cliente trata o 412 como
- estado da UI, não como exceção.
-Ver HTTP - Cache e Requisições Condicionais.
+`RULE-ID` — file:line
+<what is wrong, one sentence>
+Fix: <concrete change>
+See the corresponding satellite.
+```
+
+For a probe, **the evidence is the command's output** — paste the headers.
+
+### Example
+
+```
+`HTTP-CACHE-08` — apps/server/src/features/invoices/routes.ts:88
+The PUT /invoices/:id route does not accept If-Match and always applies the write; two
+concurrent edits overwrite each other with no warning.
+Evidence: S5 — `curl -i -X PUT -H 'If-Match: "stale"'` returned 200, not 412.
+Fix: compare the If-Match with the current ETag and answer 412 when they diverge;
+ the ETag has to be strong, without W/ (HTTP-CACHE-09). The client treats the 412 as
+ UI state, not as an exception.
+See HTTP - Cache e Requisições Condicionais.
 ```
 
 ```
-`HTTP-CORE-06` — apps/server/src/features/pedidos/rotas.ts:41
-Erro de domínio devolvido como 200 com {ok: false}; o hc do Hono não lança em status
-de erro, então a query do cliente fica em success com o erro dentro de data —
-isError é false, o retry não roda, o Error Boundary não pega.
-Correção: 422 para regra de negócio reprovada (HTTP-STATUS-11), com problem+json.
-Ver HTTP § 6, e Hono - Validação e RPC para o lado do cliente.
+`HTTP-CORE-06` — apps/server/src/features/orders/routes.ts:41
+A domain error returned as 200 with {ok: false}; Hono's hc does not throw on an error
+status, so the client's query stays in success with the error inside data —
+isError is false, the retry does not run, the Error Boundary does not catch.
+Fix: 422 for a rejected business rule (HTTP-STATUS-11), with problem+json.
+See HTTP § 6, and Hono - Validação e RPC for the client side.
 ```
 
-Regras do formato: **ID conferido na § 6**, e **nunca apelido** (§ 6.2); localização sempre; correção concreta — se outra rota do serviço já faz certo, aponte-a; um link de satélite.
+Rules of the format: **ID checked against § 6**, and **never an alias** (§ 6.2); location always; a concrete fix — if another route in the service already does it right, point at it; one satellite link.
 
 ---
 
-## Passo 5 — O corte: achado × opinião
+## Step 5 — The cut: finding × opinion
 
-**Achado sem ID é opinião**, com três saídas:
+**A finding without an ID is an opinion**, with three ways out:
 
-1. **Existe ID** → achado, cite o ID.
-2. **Não existe ID, mas há nota normativa** → cite a nota: `OWASP - Sessão e Autorização`. Não invente `HTTP-*`.
-3. **Nem uma coisa nem outra** → seção separada "Sugestões (sem regra)".
+1. **There is an ID** → a finding, cite the ID.
+2. **There is no ID, but there is a normative note** → cite the note: `OWASP - Sessão e Autorização`. Do not invent `HTTP-*`.
+3. **Neither** → a separate "Suggestions (no rule)" section.
 
-Quatro casos que **não** são achado:
+Four cases that are **not** findings:
 
-- **Estilo de URL.** `/faturas/42/aprovacao` × `/faturas/42:aprovar` não tem ID. É convenção, e vira achado só se violar semântica de método.
-- **Verbosidade do corpo de resposta.** Não há regra sobre quanto devolver — há sobre ter **um** formato de erro (`HTTP-SPEC-08`).
-- **Ausência de cache.** `Cache-Control: no-store` numa rota que poderia cachear é decisão, não violação — o que **é** violação é a **ausência** do header (`HTTP-CACHE-01`).
-- **O framework não fazer sozinho.** "Bun.serve não faz CORS" não é achado contra o time; o achado é a rota sem CORS onde ela precisa.
+- **URL style.** `/invoices/42/approval` × `/invoices/42:approve` has no ID. It is convention, and becomes a finding only if it violates method semantics.
+- **Verbosity of the response body.** There is no rule about how much to return — there is one about having **one** error format (`HTTP-SPEC-08`).
+- **Absence of caching.** `Cache-Control: no-store` on a route that could cache is a decision, not a violation — what **is** a violation is the **absence** of the header (`HTTP-CACHE-01`).
+- **The framework not doing it on its own.** "Bun.serve does not do CORS" is not a finding against the team; the finding is the route without CORS where it needs it.
 
-E um **inválido**: citar `HTTP-STATUS-01`. É apelido de `HTTP-CORE-06` (§ 6.2).
+And one **invalid** case: citing `HTTP-STATUS-01`. It is an alias of `HTTP-CORE-06` (§ 6.2).
 
-Se a varredura encontrar defeito real e recorrente sem regra, o produto é uma **proposta de regra** para [HTTP](../../../../knowledge-base/docs/http.md) § 6 — ID sugerido, texto, e o caso que a motivou.
-
----
-
+If the scan finds a real, recurring defect with no rule, the product is a **rule proposal** for [HTTP](../../../../knowledge-base/docs/http.md) § 6 — suggested ID, text, and the case that motivated it.

@@ -1,44 +1,41 @@
-# Formato do achado, e o corte
+# Finding format, and the cut
 
 ```
-`ID-DA-REGRA` — <onde>
-Sintoma: <como a falha se apresenta, e para quem>
-Evidência: <a saída da sonda — cole os headers>
-Causa: <uma frase>
-Correção: <mudança concreta>
-Ver Satélite correspondente.
+`RULE-ID` — <where>
+Symptom: <how the failure presents, and to whom>
+Evidence: <the probe's output — paste the headers>
+Cause: <one sentence>
+Fix: <concrete change>
+See the corresponding satellite.
 ```
 
-### Exemplo
+### Example
 
 ```
-`HTTP-CORS-05` — apps/server/src/app.ts:22 (ordem dos middlewares)
-Sintoma: toda chamada do SPA falha com "CORS policy" no console; curl direto funciona.
-Evidência: sonda 2 devolveu `401 Unauthorized` no OPTIONS, sem nenhum
- Access-Control-Allow-*. No log do servidor há o OPTIONS, e o middleware de auth
- registrou "missing bearer token".
-Causa: o middleware de autenticação está montado antes do de CORS, e o browser
- não envia credencial no preflight — então o OPTIONS é rejeitado antes de o CORS responder.
-Correção: montar o middleware de CORS antes do de auth, ou isentar OPTIONS da auth.
-Ver HTTP - CORS, e Hono - Middleware e Ciclo de Vida para a ordem do onion model.
+`HTTP-CORS-05` — apps/server/src/app.ts:22 (middleware order)
+Symptom: every SPA call fails with "CORS policy" in the console; direct curl works.
+Evidence: probe 2 returned `401 Unauthorized` on the OPTIONS, with no
+ Access-Control-Allow-* at all. The server log has the OPTIONS, and the auth middleware
+ recorded "missing bearer token".
+Cause: the authentication middleware is mounted before the CORS one, and the browser
+ does not send credentials on the preflight — so the OPTIONS is rejected before CORS answers.
+Fix: mount the CORS middleware before the auth one, or exempt OPTIONS from auth.
+See HTTP - CORS, and Hono - Middleware e Ciclo de Vida for the onion model's order.
 ```
 
-Regras do formato: **ID conferido na § 6**; **evidência é a saída da sonda**, não "parece CORS"; correção concreta; um link de satélite.
+Rules of the format: **ID checked against § 6**; **evidence is the probe's output**, not "looks like CORS"; a concrete fix; one satellite link.
 
 ---
 
-## Passo 6 — O corte: o que não é CORS
+## Step 6 — The cut: what is not CORS
 
-Quatro falhas que se apresentam como CORS e não são. Confundi-las custa horas.
+Four failures that present as CORS and are not. Confusing them costs hours.
 
-| Sintoma | Não é CORS — é |
+| Symptom | It is not CORS — it is |
 | --- | --- |
-| console diz CORS, e o servidor não tem log do request | servidor caído, TLS, DNS, porta |
-| requisição chega, `401` na chamada **real** | autorização — `OWASP - Sessão e Autorização` |
-| cookie não é enviado cross-site | `SameSite` — `RFC 6265 - Cookies HTTP` |
-| funciona no curl, falha no browser, sem menção a CORS | mixed content, CSP, ou service worker |
+| the console says CORS, and the server has no log of the request | server down, TLS, DNS, port |
+| the request arrives, `401` on the **real** call | authorization — `OWASP - Sessão e Autorização` |
+| the cookie is not sent cross-site | `SameSite` — `RFC 6265 - Cookies HTTP` |
+| works in curl, fails in the browser, with no mention of CORS | mixed content, CSP, or a service worker |
 
-**E o inverso, que é o mais perigoso:** "resolvi o CORS liberando `*`" numa rota que aceita credenciais não resolveu — é inválido, e o browser continua recusando (`HTTP-CORS-02`). Quem "resolve" desligando o CORS geralmente moveu o bug para produção.
-
----
-
+**And the inverse, which is the most dangerous:** "I fixed the CORS by allowing `*`" on a route that accepts credentials did not fix it — it is invalid, and the browser keeps refusing (`HTTP-CORS-02`). Whoever "fixes" it by switching CORS off has generally moved the bug to production.
