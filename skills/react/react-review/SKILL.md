@@ -125,7 +125,7 @@ See the corresponding satellite.
 3. **Order by severity**, not by file order.
 4. **Declare what was not verified.** An API outside [React.js](../../../knowledge-base/docs/react-js.md) § 4 has not been verified in this doc; silence about an unread file is read as approval.
 
-If `Docs/React*` changed since the last review, regenerate the map before citing:
+If the `react*` notes changed since the last review, regenerate the map before citing:
 
 ```bash
 bash plugins/hermes-frontend/skills/react-review/scripts/gerar-mapa-de-ids.sh # rewrites both skills' map
@@ -145,13 +145,13 @@ A frontend PR is almost never only React. When the finding belongs to another la
 | a form with validation, conditionals, field arrays | `react-hook-form` | [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) |
 | a story, controls, component docs | `storybook-story` · `storybook-setup` | [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md) |
 | an interaction test inside the story, the **Vitest runner** | `storybook-test` | [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4 |
-| **at which level** this test should be (unit × integration × e2e) | `test-design` | `Docs/Teste de Software - Níveis e Escopo.md` |
-| does the suite protect anything? · nobody trusts it | `test-review` · `test-diagnose` | `Docs/Teste de Software.md` |
-| **unit and integration tests** under `bun test` | `bun-test-build` · `bun-test-review` | `Docs/Bun - Testes.md` |
-| **e2e tests** — writing, auditing, diagnosing | `playwright-build` · `playwright-review` · `playwright-diagnose` | `Docs/Playwright.md` |
-| an API route, handler, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `Docs/Elysia.md` |
-| schema, migration, query, N+1 | `drizzle-review` | `Docs/Drizzle ORM.md` |
-| method, status, cache, CORS, the API contract | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | `Docs/HTTP.md` |
+| **at which level** this test should be (unit × integration × e2e) | `test-design` | [Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
+| does the suite protect anything? · nobody trusts it | `test-review` · `test-diagnose` | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) |
+| **unit and integration tests** under `bun test` | `bun-test-build` · `bun-test-review` | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) |
+| **e2e tests** — writing, auditing, diagnosing | `playwright-build` · `playwright-review` · `playwright-diagnose` | [Playwright](../../../knowledge-base/docs/playwright.md) |
+| an API route, handler, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | [Elysia](../../../knowledge-base/docs/elysia.md) |
+| schema, migration, query, N+1 | `drizzle-review` | [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) |
+| method, status, cache, CORS, the API contract | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [HTTP](../../../knowledge-base/docs/http.md) |
 
 Two observations that prevent a wrong finding:
 

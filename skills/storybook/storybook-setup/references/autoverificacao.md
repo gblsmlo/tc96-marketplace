@@ -6,7 +6,7 @@ TanStack Router asks for `declare module '@tanstack/react-router'` to register t
 
 **The fix:** separate the augmentation into its own module (`router.ts`), export it, and import it **as a type** wherever needed.
 
-**The symptom, which does not point at the cause:** the router's types fall back to the generic one inside the stories, and `params` stops being checked against the path — which makes `SB-TS-02` catch nothing. Verified by sabotage in `Pages/Monorepo com Bun - estrutura e tooling.md` § 5.7.
+**The symptom, which does not point at the cause:** the router's types fall back to the generic one inside the stories, and `params` stops being checked against the path — which makes `SB-TS-02` catch nothing. Verify it by sabotage: break a `params` type on purpose and confirm the story goes red.
 
 ---
 

@@ -111,4 +111,4 @@ Detail: `references/enumerar-e-lacunas.md`.
 - [Bun - Shell, FFI e Compat Node](../../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md) — source of this skill
 - [Bun](../../../knowledge-base/docs/bun.md) § 6
 - `bun-runtime` · `bun-workspace` · `bun-test-build` · `bun-test-review` — the family
-- `Docs/Node.js.md` — what is being left behind
+- Node.js — what is being left behind; its API surface resolves through Context7, `/nodejs/node`

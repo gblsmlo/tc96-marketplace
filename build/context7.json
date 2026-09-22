@@ -6,46 +6,162 @@
     "",
     "Regra do corte: Context7 responde 'como esta API funciona nesta versão'.",
     "A knowledge-base responde 'o que é certo, e com que ID eu cito num review'.",
-    "Skill sem biblioteca upstream (teste, http) não declara nada — e isso é",
+    "Skill sem biblioteca upstream (test, http) não declara nada — e isso é",
     "informação, não lacuna.",
+    "",
+    "hono, typescript, zod e node não são donos de skill: entram porque a prosa",
+    "citava notas do vault que não vieram para a knowledge-base. Onde a citação",
+    "era de superfície de API, ela passou a resolver pelo Context7.",
     "",
     "Reverificar: bash build/context7.sh --verificar"
   ],
   "verificado_em": "2026-09-22",
   "fonte": "https://context7.com/api/v1/search",
   "bibliotecas": {
-    "react": { "id": "/reactjs/react.dev", "titulo": "React", "snippets": 4274, "trust": 10 },
-    "tanstack-router": { "id": "/websites/tanstack_router", "titulo": "TanStack Router", "snippets": 1634, "trust": 10 },
-    "tanstack-query": { "id": "/websites/tanstack_query", "titulo": "TanStack Query", "snippets": 2246, "trust": 10 },
-    "react-hook-form": { "id": "/react-hook-form/documentation", "titulo": "React Hook Form", "snippets": 792, "trust": 9.1 },
-    "storybook": { "id": "/storybookjs/storybook", "titulo": "Storybook", "snippets": 6862, "trust": 8.8 },
-    "playwright": { "id": "/microsoft/playwright", "titulo": "Playwright", "snippets": 7465, "trust": 9.9 },
-    "bun": { "id": "/oven-sh/bun", "titulo": "Bun", "snippets": 8901, "trust": 9.4 },
-    "elysia": { "id": "/websites/elysiajs", "titulo": "ElysiaJS", "snippets": 1767, "trust": 8.5 },
-    "drizzle": { "id": "/drizzle-team/drizzle-orm-docs", "titulo": "Drizzle ORM", "snippets": 5193, "trust": 7.6 }
+    "react": {
+      "id": "/reactjs/react.dev",
+      "titulo": "React",
+      "snippets": 4274,
+      "trust": 10
+    },
+    "tanstack-router": {
+      "id": "/websites/tanstack_router",
+      "titulo": "TanStack Router",
+      "snippets": 1634,
+      "trust": 10
+    },
+    "tanstack-query": {
+      "id": "/websites/tanstack_query",
+      "titulo": "TanStack Query",
+      "snippets": 2246,
+      "trust": 10
+    },
+    "react-hook-form": {
+      "id": "/react-hook-form/documentation",
+      "titulo": "React Hook Form",
+      "snippets": 792,
+      "trust": 9.1
+    },
+    "storybook": {
+      "id": "/storybookjs/storybook",
+      "titulo": "Storybook",
+      "snippets": 6862,
+      "trust": 8.8
+    },
+    "playwright": {
+      "id": "/microsoft/playwright",
+      "titulo": "Playwright",
+      "snippets": 7465,
+      "trust": 9.9
+    },
+    "bun": {
+      "id": "/oven-sh/bun",
+      "titulo": "Bun",
+      "snippets": 8901,
+      "trust": 9.4
+    },
+    "elysia": {
+      "id": "/websites/elysiajs",
+      "titulo": "ElysiaJS",
+      "snippets": 1767,
+      "trust": 8.5
+    },
+    "drizzle": {
+      "id": "/drizzle-team/drizzle-orm-docs",
+      "titulo": "Drizzle ORM",
+      "snippets": 5193,
+      "trust": 7.6
+    },
+    "hono": {
+      "id": "/websites/hono_dev",
+      "titulo": "Hono",
+      "snippets": 1199,
+      "trust": 9.6
+    },
+    "typescript": {
+      "id": "/microsoft/typescript",
+      "titulo": "TypeScript",
+      "snippets": 8776,
+      "trust": 9.9
+    },
+    "zod": {
+      "id": "/colinhacks/zod",
+      "titulo": "Zod",
+      "snippets": 899,
+      "trust": 9.6
+    },
+    "node": {
+      "id": "/nodejs/node",
+      "titulo": "Node.js",
+      "snippets": 20841,
+      "trust": 9.1
+    }
   },
   "skills": {
-    "react-developer": ["react"],
-    "react-review": ["react"],
-    "react-structure": ["react"],
-    "react-hook-form": ["react-hook-form", "react"],
-    "tanstack-query": ["tanstack-query"],
-    "tanstack-router": ["tanstack-router"],
-    "storybook-setup": ["storybook"],
-    "storybook-story": ["storybook"],
-    "storybook-test": ["storybook"],
-    "playwright-build": ["playwright"],
-    "playwright-review": ["playwright"],
-    "playwright-diagnose": ["playwright"],
-    "bun-runtime": ["bun"],
-    "bun-workspace": ["bun"],
-    "bun-migrate": ["bun"],
-    "bun-test-build": ["bun"],
-    "bun-test-review": ["bun"],
-    "elysia-build": ["elysia"],
-    "elysia-schema": ["elysia"],
-    "elysia-diagnose": ["elysia"],
-    "drizzle-review": ["drizzle"]
+    "react-developer": [
+      "react"
+    ],
+    "react-review": [
+      "react"
+    ],
+    "react-structure": [
+      "react"
+    ],
+    "react-hook-form": [
+      "react-hook-form",
+      "react"
+    ],
+    "tanstack-query": [
+      "tanstack-query"
+    ],
+    "tanstack-router": [
+      "tanstack-router"
+    ],
+    "storybook-setup": [
+      "storybook"
+    ],
+    "storybook-story": [
+      "storybook"
+    ],
+    "storybook-test": [
+      "storybook"
+    ],
+    "playwright-build": [
+      "playwright"
+    ],
+    "playwright-review": [
+      "playwright"
+    ],
+    "playwright-diagnose": [
+      "playwright"
+    ],
+    "bun-runtime": [
+      "bun"
+    ],
+    "bun-workspace": [
+      "bun"
+    ],
+    "bun-migrate": [
+      "bun"
+    ],
+    "bun-test-build": [
+      "bun"
+    ],
+    "bun-test-review": [
+      "bun"
+    ],
+    "elysia-build": [
+      "elysia"
+    ],
+    "elysia-schema": [
+      "elysia"
+    ],
+    "elysia-diagnose": [
+      "elysia"
+    ],
+    "drizzle-review": [
+      "drizzle"
+    ]
   },
   "sem_biblioteca": {
     "test-design": "conceito, não ferramenta — o nível do teste não é API de ninguém",

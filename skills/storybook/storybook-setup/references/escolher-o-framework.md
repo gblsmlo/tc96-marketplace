@@ -43,4 +43,4 @@ Two line-10 constraints that break a project coming from 8 or 9:
 | **ESM-only** — `main.ts` and presets have to be valid ESM; `require`/`module.exports` do not start | `SB-CORE-03` |
 | **Node ≥ 20.19 or ≥ 22.12** | `SB-CORE-04` |
 
-> **Watch the Node floor when Playwright is in the project:** `Docs/Playwright.md` requires Node **≥ 22** (22.x, 24.x or 26.x). A project on Node 20.19 runs Storybook and does **not** run Playwright 1.62 — and addon-vitest uses Playwright. In practice, the monorepo's effective floor is 22.12.
+> **Watch the Node floor when Playwright is in the project:** [Playwright](../../../../knowledge-base/docs/playwright.md) requires Node **≥ 22** (22.x, 24.x or 26.x). A project on Node 20.19 runs Storybook and does **not** run Playwright 1.62 — and addon-vitest uses Playwright. In practice, the monorepo's effective floor is 22.12.

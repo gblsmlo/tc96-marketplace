@@ -33,7 +33,7 @@ queryFn: async => {
 
 `ELYSIA-TYPE-10`: an Eden client feeding a TanStack Query cache uses **`parseDate: false`**. A `Date` is a new object on every parse, so Query's structural sharing fails and **every component re-renders** on each refetch, even with no data change.
 
-Symptom: an unexplained re-render in a list that did not change. See `Docs/TanStack Query - Cache e Frescor.md`.
+Symptom: an unexplained re-render in a list that did not change. See [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md).
 
 ### 6.4 Parity
 
@@ -61,4 +61,4 @@ Error Boundary and the UI's error state.
 
 - [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) § 6 — Eden in full
 - `tanstack-query` — the cache on the other side of the bridge
-- `Docs/TanStack Query - Cache e Frescor.md` — structural sharing
+- [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md) — structural sharing

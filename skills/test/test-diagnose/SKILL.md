@@ -155,4 +155,4 @@ Full diagnosis, with both reports: `references/exemplo-diagnostico.md`.
 - [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — § 2 (claim 5), § 4.5 (the tree), § 6, § 7
 - `test-design` · `test-review` — the sibling skills
 - `playwright-diagnose` · `bun-test-review` — they diagnose **one test**; this one diagnoses the **suite**
-- `Docs/Playwright.md` § 5.2 · `Docs/Bun - Testes - Ciclo de Vida e Isolamento.md` — the concrete forms per tool
+- [Playwright](../../../knowledge-base/docs/playwright.md) § 5.2 · [Bun - Testes - Ciclo de Vida e Isolamento](../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md) — the concrete forms per tool

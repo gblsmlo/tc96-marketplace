@@ -18,7 +18,7 @@ tags:
 > **Source of this skill:** [Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md) (structure, rules and enforcement), with [Architecture in React](../../../knowledge-base/pages/architecture-in-react.md) as the router for the other decision axes.
 > This skill **contains** neither the text of the rules nor the Biome configuration — it says what to load, in what order to decide and how to report. A rule rewritten here would become an outdated copy.
 >
-> **Resolving the links:** the source note is `Pages/Feature-Based Architecture.md`. Do not confuse it with `Weblink/Feature-Based Architecture in React.md`, which is the external article it came from and is **not** normative here.
+> **Resolving the links:** the source note is [Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md). It condenses an external article of the same name, which is **not** normative here: what the note says wins.
 > **API surface:** resolve it through Context7 — `/reactjs/react.dev`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
 Contract this skill implements: [Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md) § 10, which in turn implements [React.js](../../../knowledge-base/docs/react-js.md) § 7.

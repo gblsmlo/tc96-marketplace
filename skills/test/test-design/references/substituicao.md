@@ -25,7 +25,7 @@ NO → replace it, and pick the right kind:
 - **Clock and randomness: always replace them** (`TS-DUB-05`). That is where determinism is
  bought cheaply, and it is the antidote to every wait on real time.
 - **Server state: do not mock it — create it for real** through the API when there is an endpoint
- (`TS-CORE-03`, and `PW-NET-06` in `Docs/Playwright - Rede e Mocking.md`).
+ (`TS-CORE-03`, and `PW-NET-06` in [Playwright - Rede e Mocking](../../../../knowledge-base/docs/playwright-rede-e-mocking.md)).
 
 ---
 

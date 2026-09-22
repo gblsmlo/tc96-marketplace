@@ -161,12 +161,12 @@ Before writing the raw primitive, confirm whose layer it is. [React.js](../../..
 | where the file lives and who imports whom | `react-structure` | [Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md) |
 | a story, args, controls, the docs page | `storybook-story` · `storybook-setup` | [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md) |
 | an interaction test in the story, the **Vitest runner** | `storybook-test` | [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4 |
-| **at which level** this test goes (unit × integration × e2e) | `test-design` | `Docs/Teste de Software - Níveis e Escopo.md` |
-| **unit and integration** under `bun test` | `bun-test-build` · `bun-test-review` | `Docs/Bun - Testes.md` |
-| **e2e** — writing, auditing, diagnosing | `playwright-build` · `playwright-review` · `playwright-diagnose` | `Docs/Playwright.md` |
-| an API route, handler, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `Docs/Elysia.md` |
-| schema, migration, query, N+1 | `drizzle-review` | `Docs/Drizzle ORM.md` |
-| method, status, cache, CORS, the API contract | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | `Docs/HTTP.md` |
+| **at which level** this test goes (unit × integration × e2e) | `test-design` | [Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
+| **unit and integration** under `bun test` | `bun-test-build` · `bun-test-review` | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) |
+| **e2e** — writing, auditing, diagnosing | `playwright-build` · `playwright-review` · `playwright-diagnose` | [Playwright](../../../knowledge-base/docs/playwright.md) |
+| an API route, handler, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | [Elysia](../../../knowledge-base/docs/elysia.md) |
+| schema, migration, query, N+1 | `drizzle-review` | [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) |
+| method, status, cache, CORS, the API contract | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [HTTP](../../../knowledge-base/docs/http.md) |
 
 Three boundaries that tend to be crossed in the wrong direction:
 

@@ -52,7 +52,7 @@ There are **two generators**, because the families do not mix:
 | `bun-test-review/scripts/gerar-mapa-de-ids.sh` | `BUN-TEST-*` | **29** — the full `01`–`29` range, checked against invented IDs |
 | `bun-runtime/scripts/gerar-mapa-de-ids.sh` | `BUN-CORE/RT/PKG/SYS-*` | **43** |
 
-The second one **excludes** `Docs/Bun - Testes*` on purpose: mixing the two families into a
+The second one **excludes** the `bun-testes*` notes on purpose: mixing the two families into a
 single map would make the satellite column meaningless.
 
 Because the **whole** family is declared in § 6 of the hub, a "declared in" column would be

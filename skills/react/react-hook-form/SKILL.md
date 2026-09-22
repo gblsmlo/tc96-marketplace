@@ -16,7 +16,7 @@ tags:
 
 # react-hook-form
 
-> **Source of this skill:** [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) and its three satellites in `Docs/`.
+> **Source of this skill:** [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) and its three satellites in the knowledge base.
 > A **task → note** router, not an API summary. It contains neither the text of the `RHF-*` rules, nor signatures, options, nor the behavior of the `formState` Proxy: that lives in the satellites, and that is where it is read and updated. Technical procedure written here becomes a copy that goes stale on its own.
 > **API surface:** resolve it through Context7 — `/react-hook-form/documentation` · `/reactjs/react.dev`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 

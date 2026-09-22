@@ -53,8 +53,8 @@ of both worlds, by construction.
 | the same test 20× | confirms it is intermittent |
 | in a container with the CI image | environment parity |
 
-Concrete forms per tool: `Docs/Playwright.md` § 5.2 (the most detailed tree in the vault) and
-`Docs/Bun - Testes - Ciclo de Vida e Isolamento.md`.
+Concrete forms per tool: [Playwright](../../../../knowledge-base/docs/playwright.md) § 5.2 (the most detailed tree in the vault) and
+[Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md).
 
 > **Diagnosing is not fixing.** One worker makes the failure disappear and **keeps** the
 > coupling, with the suite N times slower. Prefixing files with `001-`, `002-`

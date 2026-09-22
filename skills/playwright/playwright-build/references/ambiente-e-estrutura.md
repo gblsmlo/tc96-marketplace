@@ -21,7 +21,7 @@ One question decides it:
 | **none of the above: server state** | create it for real through `request` | `PW-NET-06` |
 
 A mock that reproduces the shape of a response **derives from the type exported by the server**, never
-retyped by hand (`PW-NET-04`) — `elysia-schema`, `Docs/Hono - Validação e RPC.md`.
+retyped by hand (`PW-NET-04`) — `elysia-schema`, or Hono through Context7, `/websites/hono_dev`.
 
 ---
 

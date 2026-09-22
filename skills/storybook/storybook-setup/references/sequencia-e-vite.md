@@ -4,7 +4,7 @@ The official docs document each piece in isolation and **never the order**. For 
 
 | # | Step | Reference |
 | --- | --- | --- |
-| 1 | create `apps/storybook` with its own `package.json`, declared in the workspace | `Docs/Bun - Gerenciador de Pacotes.md` |
+| 1 | create `apps/storybook` with its own `package.json`, declared in the workspace | [Bun - Gerenciador de Pacotes](../../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md) |
 | 2 | install the framework and addons, **all on the same version** | `SB-CFG-04` |
 | 3 | create `apps/storybook/vite.config.ts` inheriting the shared base | Step 4 |
 | 4 | write `main.ts` with `framework`, `stories`, `addons` | `SB-CFG-01`, `SB-CFG-02` |

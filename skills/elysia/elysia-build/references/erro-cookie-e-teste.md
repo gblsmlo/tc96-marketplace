@@ -46,7 +46,8 @@ new Elysia({ cookie: { secrets: env.COOKIE_SECRET, sign: ['session'] } })
  });
 ```
 
-The semantics of `SameSite`, `Domain` and the prefixes come from `Docs/RFC 6265 - Cookies HTTP.md` —
+The semantics of `SameSite`, `Domain` and the prefixes come from RFC 6265 — read through
+[HTTP - Specs e RFCs](../../../../knowledge-base/docs/http-specs-e-rfcs.md), which records what the RFC does **not** say —
 Elysia is the mechanism, not the criterion.
 
 **Streaming:** `ELYSIA-CORE-06` — `set.headers` is **never** changed after the first `yield`

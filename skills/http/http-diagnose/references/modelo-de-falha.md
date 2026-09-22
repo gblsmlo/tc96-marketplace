@@ -59,7 +59,7 @@ Does the call use a cookie, Authorization, or credentials: 'include'?
  (HTTP-CORS-03)
 ```
 
-**Hono's default is `origin: '*'`**, which is invalid with `credentials: true` — `HONO-MW-08` in `Docs/Hono - Middleware e Ciclo de Vida.md`. It is the most common concrete case of this branch in this stack.
+**Hono's default is `origin: '*'`**, which is invalid with `credentials: true` — confirm it in Hono's own docs through Context7, `/websites/hono_dev`. It is the most common concrete case of this branch in this stack.
 
 ### 2.3 A header that arrives `undefined`
 

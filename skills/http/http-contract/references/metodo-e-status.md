@@ -38,7 +38,7 @@ The full tree is § 5.2 of the hub. The obligations that come with each choice:
 
 **The rule that dominates the step:** a failure is never `2xx` with an error in the body. The status carries the result (`HTTP-CORE-06` — canonical; `HTTP-STATUS-01` is an alias and must not be cited).
 
-> **The bridge that avoids the stack's most common bug:** neither Hono's `hc` nor Elysia's Eden Treaty **throws** on an error status. A naive `queryFn` stays in `success` with the error inside `data` — see `Docs/Hono - Validação e RPC.md` and `Docs/Elysia - Schema e Eden.md`. In other words: honoring `HTTP-CORE-06` on the server **is not enough** if the typed client does not check `res.ok`.
+> **The bridge that avoids the stack's most common bug:** neither Hono's `hc` nor Elysia's Eden Treaty **throws** on an error status. A naive `queryFn` stays in `success` with the error inside `data` — see Hono — resolve it through Context7, `/websites/hono_dev` — and [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md). In other words: honoring `HTTP-CORE-06` on the server **is not enough** if the typed client does not check `res.ok`.
 
 ### 2.1 Redirects
 

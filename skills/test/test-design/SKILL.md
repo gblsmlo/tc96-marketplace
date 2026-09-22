@@ -127,8 +127,8 @@ Then go through `references/antipadroes.md` line by line.
 | E2E | `playwright-build` |
 | unit, integration | `bun-test-build` |
 | component | `storybook-story` · `storybook-test` |
-| contract | `elysia-schema` · `Docs/Hono - Validação e RPC.md` |
-| static | `Docs/TypeScript.md` · `Docs/Zod - Validação de Ambiente.md` |
+| contract | `elysia-schema` · Hono via Context7, `/websites/hono_dev` |
+| static | TypeScript via Context7, `/microsoft/typescript` · Zod, `/colinhacks/zod` |
 
 **Hand the decision over with it:** level, derived cases, and what will be replaced. The tool skill implements — it does not reopen those questions.
 

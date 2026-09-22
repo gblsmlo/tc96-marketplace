@@ -21,6 +21,6 @@ bash ${CLAUDE_PLUGIN_ROOT}/skills/storybook-test/scripts/autoverificar.sh src
 | 13 | `a11y.test` is `'error'` where CI is expected to fail | `SB-TEST-04` |
 | 14 | the `Meta`/`StoryObj` import is from the framework's package | `SB-CORE-02` |
 
-And the check worth more than the fourteen: **break the component on purpose and confirm the story goes red.** Invert a condition, remove the handler. If nothing breaks, the `play` asserts nothing — `TS-TEC-08` in `Docs/Teste de Software - Técnicas de Design de Caso.md`.
+And the check worth more than the fourteen: **break the component on purpose and confirm the story goes red.** Invert a condition, remove the handler. If nothing breaks, the `play` asserts nothing — `TS-TEC-08` in [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md).
 
 **Then run:** `vitest run --project=storybook`. Not `vitest` — without `run` it enters watch mode.

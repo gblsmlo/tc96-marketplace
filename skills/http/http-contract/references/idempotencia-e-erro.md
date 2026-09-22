@@ -35,4 +35,4 @@ And what does **not** go in the error: sensitive data never in the query string 
 | Hono | there are built-ins for CORS, `etag`, `compress`, `bodyLimit`, and **`methodNotAllowed`** |
 | Elysia | `@elysia/cors`, and the schema produces validation + type + OpenAPI + client |
 
-**The Hono trap that is a silent violation of `HTTP-METH-07`:** without the `methodNotAllowed` middleware, an unsupported method on an existing route returns **`404`**, not `405` with `Allow`. See `Docs/Hono - Middleware e Ciclo de Vida.md` § 5.
+**The Hono trap that is a silent violation of `HTTP-METH-07`:** without the `methodNotAllowed` middleware, an unsupported method on an existing route returns **`404`**, not `405` with `Allow`. Hono's middleware surface resolves through Context7 — `/websites/hono_dev`.

@@ -127,4 +127,4 @@ Full audit, with the report and the "not verified" section: `references/exemplo-
 - `test-design` · `test-diagnose` — the sibling skills
 - `playwright-review` · `bun-test-review` — they audit the **tests**; this one audits the **shape**
 - `Github Actions` — where the gates live
-- `Docs/Bun - Testes - Cobertura e CI.md` · `Docs/Playwright - Execução, Retries e CI.md` — the mechanism of the gates
+- [Bun - Testes - Cobertura e CI](../../../knowledge-base/docs/bun-testes-cobertura-e-ci.md) · [Playwright - Execução, Retries e CI](../../../knowledge-base/docs/playwright-execucao-retries-e-ci.md) — the mechanism of the gates

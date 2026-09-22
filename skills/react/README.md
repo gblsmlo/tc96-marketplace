@@ -80,7 +80,7 @@ replica. Three generators, one per family, because the sources and the columns d
 | Generator | Family | Source | Columns |
 | --- | --- | --- | --- |
 | `react-review/scripts/gerar-mapa-de-ids.sh` | 105 `REACT-*` | `Docs/React*` | satellite · section · aliases |
-| `react-structure/scripts/gerar-mapa-de-ids.sh` | 12 `REACT-ARCH-*` | `Pages/Feature-Based Architecture.md` | **severity** · **who enforces it** · section |
+| `react-structure/scripts/gerar-mapa-de-ids.sh` | 12 `REACT-ARCH-*` | [Feature-Based Architecture](../../knowledge-base/pages/feature-based-architecture.md) | **severity** · **who enforces it** · section |
 | `react-hook-form/scripts/gerar-mapa-de-ids.sh` | 81 `RHF-*` | `Docs/React Hook Form*` | satellite · section · cross-doc citation |
 
 After editing any source note, run the corresponding generator and reinstall:
@@ -108,14 +108,14 @@ procedure and the IDs belong to that layer's skill:
 | a component confirmed slow, a measured fix | *(rota vaga — ver `memory/STACK.md`)* | — |
 | configuring Storybook, writing a story | `storybook-setup` · `storybook-story` | [Storybook](../../knowledge-base/docs/storybook.md) |
 | an interaction test in the story, the **Vitest** runner | `storybook-test` | [Storybook - Testes e Interações](../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4 |
-| the test's **level**: unit × integration × e2e | `test-design` | `Docs/Teste de Software - Níveis e Escopo.md` |
-| the suite as a system: does it protect? is it trustworthy? | `test-review` · `test-diagnose` | `Docs/Teste de Software.md` |
-| **unit and integration** in `bun test` | `bun-test-build` · `bun-test-review` | `Docs/Bun - Testes.md` |
-| **e2e** | `playwright-build` · `playwright-review` · `playwright-diagnose` | `Docs/Playwright.md` |
-| an API route, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `Docs/Elysia.md` |
-| persistence: schema, migration, query | `drizzle-review` | `Docs/Drizzle ORM.md` |
-| the HTTP contract: method, status, cache, CORS | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | `Docs/HTTP.md` |
-| runtime, dependencies, migrating from Node | `bun-runtime` · `bun-workspace` · `bun-migrate` | `Docs/Bun.md` |
+| the test's **level**: unit × integration × e2e | `test-design` | [Teste de Software - Níveis e Escopo](../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
+| the suite as a system: does it protect? is it trustworthy? | `test-review` · `test-diagnose` | [Teste de Software](../../knowledge-base/docs/teste-de-software.md) |
+| **unit and integration** in `bun test` | `bun-test-build` · `bun-test-review` | [Bun - Testes](../../knowledge-base/docs/bun-testes.md) |
+| **e2e** | `playwright-build` · `playwright-review` · `playwright-diagnose` | [Playwright](../../knowledge-base/docs/playwright.md) |
+| an API route, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | [Elysia](../../knowledge-base/docs/elysia.md) |
+| persistence: schema, migration, query | `drizzle-review` | [Drizzle ORM](../../knowledge-base/docs/drizzle-orm.md) |
+| the HTTP contract: method, status, cache, CORS | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [HTTP](../../knowledge-base/docs/http.md) |
+| runtime, dependencies, migrating from Node | `bun-runtime` · `bun-workspace` · `bun-migrate` | [Bun](../../knowledge-base/docs/bun.md) |
 
 Two boundaries that tend to be crossed in the wrong direction:
 

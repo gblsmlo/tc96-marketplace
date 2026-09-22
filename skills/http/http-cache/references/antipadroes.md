@@ -16,6 +16,6 @@
 | Resposta comprimida sem `Vary: Accept-Encoding` | `HTTP-NEG-01` | [HTTP - Negociação de Conteúdo e Range](../../../../knowledge-base/docs/http-negociacao-de-conteudo-e-range.md) |
 | Origem dinâmica sem `Vary: Origin` | `HTTP-CORS-03` | [HTTP - CORS](../../../../knowledge-base/docs/http-cors.md) |
 | `POST`/`PATCH` declarando frescor sem `Content-Location` | `HTTP-METH-10` | [HTTP - Métodos e Semântica](../../../../knowledge-base/docs/http-metodos-e-semantica.md) |
-| `staleTime` do Query tratado como política de cache do recurso | § 8.3 do hub | `Docs/TanStack Query - Cache e Frescor.md` |
+| `staleTime` do Query tratado como política de cache do recurso | § 8.3 do hub | [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md) |
 | `invalidateQueries` esperando derrubar cache de CDN | § 8.3 do hub | |
 

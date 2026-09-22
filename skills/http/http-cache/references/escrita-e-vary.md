@@ -20,7 +20,7 @@ Without it, the default is **last-write-wins**: whoever saved later erases the c
 
 **The `ETag` used in `If-Match` has to be strong** — without the `W/` prefix (`HTTP-CACHE-09`). A weak `ETag` declares semantic equivalence, not byte identity, and does not serve to decide whether there was a concurrent write.
 
-> **Bridge with the client:** the `412` is an **expected error**, not an exception — it is UI state ("someone edited; reload?"), not a case for an Error Boundary. See `REACT-ASYNC-09` in `Docs/React - Suspense e Assincronia.md` and the optimistic update in `Docs/TanStack Query - Mutations e Invalidação.md`, which needs a rollback when the `412` arrives.
+> **Bridge with the client:** the `412` is an **expected error**, not an exception — it is UI state ("someone edited; reload?"), not a case for an Error Boundary. See `REACT-ASYNC-09` in [React - Suspense e Assincronia](../../../../knowledge-base/docs/react-suspense-e-assincronia.md) and the optimistic update in [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md), which needs a rollback when the `412` arrives.
 
 ---
 

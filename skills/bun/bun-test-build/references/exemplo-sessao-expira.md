@@ -43,7 +43,7 @@ test('expiration is audited once', => {
 | `setSystemTime` to freeze the date | `useFakeTimers` — it does not swap `Date`, and the test passes by chance | `BUN-TEST-20` |
 | `afterEach( => setSystemTime)` | the clock leaking into the following tests | `BUN-TEST-20` |
 | explicit `log.mockRestore` | the spy leaking across the whole suite | `BUN-TEST-02` |
-| 29 / 30 / 31 min | just "a lot of time passed" — does not catch `>` × `>=` | boundary value, `Docs/Teste de Software - Técnicas de Design de Caso.md` |
+| 29 / 30 / 31 min | just "a lot of time passed" — does not catch `>` × `>=` | boundary value, [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
 | absolute instant in UTC | a real `new Date`, and the test fails at the day boundary | `BUN-TEST-21` |
 | `expect` in the body, not in `catch` | an assertion that never runs | `BUN-TEST-06` |
 

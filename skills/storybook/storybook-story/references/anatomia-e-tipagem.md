@@ -10,7 +10,7 @@ Each answer is a story. The name describes the **condition**, not what the reade
 
 If the name does not describe a state, it is probably not a story — it is documentation, and its place is MDX or `docs.page` (`SB-DOC-03`).
 
-**Cover the five states of a flow:** loading, empty, success, error, recovery. That is `TS-TIPO-02` in `Docs/Teste de Software - Tipos e Atributos de Qualidade.md`, and at the component level they are cheap — this is where you pay least to cover what the user suffers most.
+**Cover the five states of a flow:** loading, empty, success, error, recovery. That is `TS-TIPO-02` in [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md), and at the component level they are cheap — this is where you pay least to cover what the user suffers most.
 
 ---
 

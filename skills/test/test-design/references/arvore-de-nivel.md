@@ -31,10 +31,10 @@ the level, not intuition:
 | --- | --- | --- |
 | calculation, parsing, validation, domain invariant | **unit** | `bun-test-build` |
 | two of my pieces talking (use case + repository) | **integration**, with a controlled real dependency | `bun-test-build` |
-| the format crossing the boundary with a system that is not mine | **contract** — and much of it is the compiler | `Docs/Hono - Validação e RPC.md` · `Docs/Elysia - Schema e Eden.md` |
+| the format crossing the boundary with a system that is not mine | **contract** — and much of it is the compiler | Hono via Context7, `/websites/hono_dev` · [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) |
 | visual/interactive state of a component | **component** | `storybook-story` · `storybook-test` |
 | the critical journey works with routing, session and network | **E2E** | `playwright-build` |
-| incompatible type, incorrect API use | **static** | `Docs/TypeScript.md` |
+| incompatible type, incorrect API use | **static** | TypeScript via Context7, `/microsoft/typescript` |
 
 Three cuts decide most cases:
 
