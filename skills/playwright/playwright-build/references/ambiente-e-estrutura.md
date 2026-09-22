@@ -1,56 +1,56 @@
-# Ambiente e estrutura
+# Environment and structure
 
-> Passos 4 e 5. As árvores são a § 5.4 do hub [Playwright](../../../../knowledge-base/docs/playwright.md).
+> Steps 4 and 5. The trees are § 5.4 of the [Playwright](../../../../knowledge-base/docs/playwright.md) hub.
 
 ---
 
-## O que substituir
+## What to replace
 
-A pergunta que decide é uma:
+One question decides it:
 
-> **Se a dependência real divergisse, este teste deveria quebrar?**
-> Sim → não substitua. Não → substitua.
+> **If the real dependency diverged, should this test break?**
+> Yes → do not replace it. No → replace it.
 
-| Substituir | Como | Regra |
+| Replace | How | Rule |
 | --- | --- | --- |
-| terceiro que não possuo | `page.route(…)` + `fulfill` | `PW-NET-01` |
-| resposta real com um ajuste | `route.fetch` + `fulfill({ response, json })` | — |
-| API de browser | `page.addInitScript` **antes** do `goto` | `PW-NET-02` |
-| relógio e aleatoriedade | `page.clock` | `PW-NET-07` |
-| sessão | `storageState` por setup project | `PW-AUTH-01` |
-| **nada disso: o estado do servidor** | crie de verdade via `request` | `PW-NET-06` |
+| a third party I do not own | `page.route(…)` + `fulfill` | `PW-NET-01` |
+| a real response with one adjustment | `route.fetch` + `fulfill({ response, json })` | — |
+| a browser API | `page.addInitScript` **before** the `goto` | `PW-NET-02` |
+| clock and randomness | `page.clock` | `PW-NET-07` |
+| the session | `storageState` through a setup project | `PW-AUTH-01` |
+| **none of the above: server state** | create it for real through `request` | `PW-NET-06` |
 
-Mock que reproduz o shape de uma resposta **deriva do tipo exportado pelo servidor**, nunca
-redigitado à mão (`PW-NET-04`) — `elysia-schema`, `Docs/Hono - Validação e RPC.md`.
+A mock that reproduces the shape of a response **derives from the type exported by the server**, never
+retyped by hand (`PW-NET-04`) — `elysia-schema`, `Docs/Hono - Validação e RPC.md`.
 
 ---
 
-## Estrutura
+## Structure
 
-| Precisa de… | Use | Regra |
+| You need… | Use | Rule |
 | --- | --- | --- |
-| sequência de ações numa tela | page object, locators `readonly` no construtor | `PW-STR-01` |
-| setup com ciclo de vida, reusado entre arquivos | fixture, entregue por `await use(v)` | `PW-FIX-01`, `PW-FIX-03` |
-| parâmetro da suíte | option fixture + `projects[].use` | `PW-FIX-04` |
-| estado externo criado uma vez | setup project com `dependencies` | `PW-CFG-03` |
-| login | setup project + `storageState` | `PW-AUTH-01` |
+| a sequence of actions on one screen | a page object, `readonly` locators in the constructor | `PW-STR-01` |
+| setup with a lifecycle, reused across files | a fixture, delivered through `await use(v)` | `PW-FIX-01`, `PW-FIX-03` |
+| a suite parameter | an option fixture + `projects[].use` | `PW-FIX-04` |
+| external state created once | a setup project with `dependencies` | `PW-CFG-03` |
+| login | a setup project + `storageState` | `PW-AUTH-01` |
 
-Três invariantes que geram retrabalho quando ignoradas:
+Three invariants that generate rework when ignored:
 
-- **Page object não contém asserção de regra de negócio** (`PW-STR-02`) — senão o teste do
- caminho negativo não consegue reusar o método.
-- **Page object não devolve `Promise<string>`** — devolve `Locator`, senão empurra
- `PW-EXP-01` para todos os testes que o usam.
-- **`test` e `expect` vêm de um módulo único do projeto** (`PW-FIX-05`) — importar o base e
- o derivado no mesmo arquivo faz as fixtures desaparecerem **sem erro de compilação**.
- Reexporte os dois de `fixtures.ts`.
+- **A page object contains no business-rule assertion** (`PW-STR-02`) — otherwise the negative-path
+ test cannot reuse the method.
+- **A page object does not return `Promise<string>`** — it returns a `Locator`, otherwise it pushes
+ `PW-EXP-01` onto every test that uses it.
+- **`test` and `expect` come from a single module in the project** (`PW-FIX-05`) — importing the base
+ and the derived one in the same file makes the fixtures disappear **with no compilation error**.
+ Re-export both from `fixtures.ts`.
 
-Teste com mais de um passo de negócio recebe `test.step` (`PW-DBG-03`) — é o que transforma
-"falhou na ação 19" em "falhou ao finalizar".
+A test with more than one business step gets `test.step` (`PW-DBG-03`) — that is what turns
+"failed on action 19" into "failed while checking out".
 
 ---
 
-## Relacionados
+## Related
 
 - [Playwright - Rede e Mocking](../../../../knowledge-base/docs/playwright-rede-e-mocking.md) · [Playwright - Autenticação e Isolamento](../../../../knowledge-base/docs/playwright-autenticacao-e-isolamento.md) · [Playwright - Fixtures](../../../../knowledge-base/docs/playwright-fixtures.md) · [Playwright - Estrutura de Testes](../../../../knowledge-base/docs/playwright-estrutura-de-testes.md)
-- `autoverificacao.md` — o que conferir depois de escrever
+- `autoverificacao.md` — what to check after writing

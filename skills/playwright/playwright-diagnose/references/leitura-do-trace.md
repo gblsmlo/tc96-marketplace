@@ -1,53 +1,53 @@
-# Obter e ler o trace
+# Obtaining and reading the trace
 
-> Passos 1 e 2. **Ler o trace vem antes de tocar no código** (`PW-DBG-01`) — é o que
-> distingue esta skill de tentativa e erro.
+> Steps 1 and 2. **Reading the trace comes before touching the code** (`PW-DBG-01`) — it is what
+> separates this skill from trial and error.
 
 ---
 
-## Obter
+## Obtaining it
 
-| Situação | Comando |
+| Situation | Command |
 | --- | --- |
-| falhou em CI | baixe o artefato `playwright-report`, então `npx playwright show-report <pasta>` |
-| tem o `.zip` | `npx playwright show-trace test-results/…/trace.zip` |
-| quer reproduzir local | `npx playwright test <arquivo>:<linha> --trace on` |
-| não há trace nenhum | **este é o primeiro achado** — `PW-CFG-02`, `PW-DBG-05` |
+| it failed in CI | download the `playwright-report` artifact, then `npx playwright show-report <folder>` |
+| you have the `.zip` | `npx playwright show-trace test-results/…/trace.zip` |
+| you want to reproduce locally | `npx playwright test <file>:<line> --trace on` |
+| there is no trace at all | **that is the first finding** — `PW-CFG-02`, `PW-DBG-05` |
 
-Sem trace configurado, toda falha de CI é adivinhação. Se `trace` está `'off'`, o conserto é
-a **configuração**, não o teste — e o diagnóstico só começa na próxima execução.
+Without a configured trace, every CI failure is guesswork. If `trace` is `'off'`, the fix is the
+**configuration**, not the test — and the diagnosis only begins on the next run.
 
-> **Nunca** use `--debug` para decidir se é flake: ele força `timeout=0` e `workers=1`, então
-> **sempre passa** (`PW-DBG-02`). Concluir "sob debug passa, então não é flake" é inválido.
-
----
-
-## Ler, em quatro passos
-
-| # | Aba | Responde |
-| --- | --- | --- |
-| 1 | **Errors** | qual ação falhou |
-| 2 | **Log** daquela ação | **em qual checagem** ela travou |
-| 3 | **Snapshot Before** | o que estava na tela naquele instante |
-| 4 | **Network** | qual requisição falhou ou não voltou |
-
-O passo 2 é o que nenhum `console.log` dá, e é onde a causa aparece:
-
-| Mensagem no Log | Causa | Regra |
-| --- | --- | --- |
-| `waiting for element to be visible` | o alvo nunca apareceu: locator errado, ou a tela é outra | `PW-LOC-01` |
-| `element is not stable` | animação em curso | § 1 do satélite de ações |
-| `element intercepts pointer events` | **overlay roubando o clique** — é defeito de produto | `PW-ACT-01` |
-| `element is not enabled` | botão desabilitado: hidratação, ou pré-condição não cumprida | § 7.2 do satélite de ações |
-| `strict mode violation` | locator ambíguo | `PW-LOC-02` |
-
-O passo 3 costuma encerrar o caso: no snapshot aparece o modal aberto, o spinner girando, a
-tela de erro, ou **a página de login que ninguém esperava** — que é setup de autenticação
-falhando (`PW-AUTH-06`).
+> **Never** use `--debug` to decide whether it is flakiness: it forces `timeout=0` and `workers=1`, so
+> it **always passes** (`PW-DBG-02`). Concluding "it passes under debug, so it is not flaky" is invalid.
 
 ---
 
-## Relacionados
+## Reading it, in four steps
 
-- [Playwright - Debug e Trace](../../../../knowledge-base/docs/playwright-debug-e-trace.md) § 3 — a fonte desta leitura
-- `arvore-de-hipoteses.md` — o que fazer quando o trace não encerra o caso
+| # | Tab | Answers |
+| --- | --- | --- |
+| 1 | **Errors** | which action failed |
+| 2 | the **Log** for that action | **at which check** it stalled |
+| 3 | **Snapshot Before** | what was on screen at that moment |
+| 4 | **Network** | which request failed or never came back |
+
+Step 2 is what no `console.log` gives, and it is where the cause appears:
+
+| Message in the Log | Cause | Rule |
+| --- | --- | --- |
+| `waiting for element to be visible` | the target never appeared: wrong locator, or a different screen | `PW-LOC-01` |
+| `element is not stable` | an animation in progress | § 1 of the actions satellite |
+| `element intercepts pointer events` | **an overlay stealing the click** — that is a product defect | `PW-ACT-01` |
+| `element is not enabled` | a disabled button: hydration, or an unmet precondition | § 7.2 of the actions satellite |
+| `strict mode violation` | an ambiguous locator | `PW-LOC-02` |
+
+Step 3 usually closes the case: the snapshot shows the open modal, the spinner turning, the
+error screen, or **the login page nobody expected** — which is the authentication setup
+failing (`PW-AUTH-06`).
+
+---
+
+## Related
+
+- [Playwright - Debug e Trace](../../../../knowledge-base/docs/playwright-debug-e-trace.md) § 3 — the source of this reading
+- `arvore-de-hipoteses.md` — what to do when the trace does not close the case

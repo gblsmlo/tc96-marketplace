@@ -1,35 +1,35 @@
-# Falha que só acontece em CI
+# A failure that only happens in CI
 
-> Quatro causas, em ordem de frequência.
+> Four causes, in order of frequency.
 
-| Causa | Sinal | Conserto |
+| Cause | Signal | Fix |
 | --- | --- | --- |
-| **CI é mais lento** | timeout de 30 s numa espera legítima | leia o trace **antes** de subir timeout; normalmente o alvo nunca ficou acionável |
-| **paridade de ambiente** | screenshot difere por antialiasing de fonte | gere a referência em container com a imagem do CI (`PW-SNAP-02`) |
-| **estado de servidor** | workers disputando a mesma conta | conta por worker via `parallelIndex` (`PW-AUTH-03`) |
-| **setup não rodou** | tudo falha apontando a tela de login | o setup gravou `storageState` sem verificar o login (`PW-AUTH-06`) |
+| **CI is slower** | a 30 s timeout on a legitimate wait | read the trace **before** raising the timeout; usually the target never became actionable |
+| **environment parity** | a screenshot differs because of font antialiasing | generate the reference in a container with the CI image (`PW-SNAP-02`) |
+| **server state** | workers competing for the same account | one account per worker through `parallelIndex` (`PW-AUTH-03`) |
+| **setup did not run** | everything fails pointing at the login screen | the setup wrote `storageState` without verifying the login (`PW-AUTH-06`) |
 
 ---
 
-## Duas armadilhas específicas de CI que aparecem como flake
+## Two CI-specific traps that look like flakiness
 
-- **Service Worker interceptando antes do `route`** — os eventos de rede simplesmente não
- aparecem. `serviceWorkers: 'block'` é a **primeira** hipótese a verificar, não a última
+- **A Service Worker intercepting before the `route`** — the network events simply do not
+ appear. `serviceWorkers: 'block'` is the **first** hypothesis to check, not the last
  (`PW-NET-03`).
-- **Imagens bloqueadas por `route` numa suíte com screenshot** — a referência tem as
- imagens, a execução não (`PW-SNAP-06`).
+- **Images blocked by a `route` in a suite with screenshots** — the reference has the
+ images, the run does not (`PW-SNAP-06`).
 
 ---
 
-## A regra que atravessa as quatro
+## The rule that runs through all four
 
-Subir o timeout é a resposta certa **apenas** quando o trace mostra que o alvo ficou
-acionável e o tempo não bastou. Nos outros três casos o timeout maior só adia a falha e
-alonga toda execução.
+Raising the timeout is the right answer **only** when the trace shows the target became
+actionable and the time was not enough. In the other three cases a larger timeout only delays the
+failure and lengthens every run.
 
 ---
 
-## Relacionados
+## Related
 
 - [Playwright - Execução, Retries e CI](../../../../knowledge-base/docs/playwright-execucao-retries-e-ci.md) · [Playwright - Snapshots e Visual](../../../../knowledge-base/docs/playwright-snapshots-e-visual.md) · [Playwright - Autenticação e Isolamento](../../../../knowledge-base/docs/playwright-autenticacao-e-isolamento.md)
-- `arvore-de-hipoteses.md` — de onde esta ramificação sai
+- `arvore-de-hipoteses.md` — where this branch comes from

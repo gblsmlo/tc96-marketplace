@@ -1,61 +1,61 @@
-# Locator e asserção — o par inseparável
+# Locator and assertion — the inseparable pair
 
-> Passos 2 e 3. As árvores completas são a § 5.1 do hub [Playwright](../../../../knowledge-base/docs/playwright.md),
-> [Playwright - Locators](../../../../knowledge-base/docs/playwright-locators.md) e [Playwright - Assertions](../../../../knowledge-base/docs/playwright-assertions.md).
-
----
-
-## Locator, na ordem de prioridade
-
-1. `getByRole('papel', { name })` — o default, e o caminho certo na maioria dos casos (`PW-LOC-01`).
-2. `getByLabel` / `getByPlaceholder` / `getByAltText` / `getByText` — por caso.
-3. `getByTestId` — escape hatch, e **registre a dívida** (`PW-LOC-04`).
-4. `locator('css=…')` — último recurso, com justificativa na linha acima.
-
-**Resolveu para mais de um elemento?** A resposta **não** é `.first` (`PW-LOC-02`). É, nesta
-ordem: `filter({ hasText })`, encadear dentro de um container, `filter({ has: … })`.
-
-**`getByRole` não alcança o elemento?** Na maioria dos casos o achado é sobre o
-**componente**, não sobre o teste — falta papel ou nome acessível. Siga a ponte da § 8 do
-hub em vez de descer para CSS.
-
-**Gere o locator, não escreva de cabeça.** `npx playwright codegen <url>` ou o pick locator
-do UI mode já prioriza papel, texto e test id — resolve `PW-LOC-01` sem exigir disciplina.
-Mas **a saída do codegen não é o teste** (`PW-DBG-06`): extraia os locators e reescreva.
+> Steps 2 and 3. The full trees are § 5.1 of the [Playwright](../../../../knowledge-base/docs/playwright.md) hub,
+> [Playwright - Locators](../../../../knowledge-base/docs/playwright-locators.md) and [Playwright - Assertions](../../../../knowledge-base/docs/playwright-assertions.md).
 
 ---
 
-## Asserção
+## Locator, in priority order
 
-Uma regra domina todas: **afirme sobre a condição, nunca sobre um valor lido** (`PW-EXP-01`).
+1. `getByRole('role', { name })` — the default, and the right path in most cases (`PW-LOC-01`).
+2. `getByLabel` / `getByPlaceholder` / `getByAltText` / `getByText` — case by case.
+3. `getByTestId` — the escape hatch, and **record the debt** (`PW-LOC-04`).
+4. `locator('css=…')` — last resort, with a justification on the line above.
+
+**Resolved to more than one element?** The answer is **not** `.first` (`PW-LOC-02`). It is, in this
+order: `filter({ hasText })`, chaining inside a container, `filter({ has: … })`.
+
+**`getByRole` cannot reach the element?** In most cases the finding is about the
+**component**, not about the test — a missing role or accessible name. Follow the bridge in § 8 of
+the hub instead of dropping down to CSS.
+
+**Generate the locator, do not write it from memory.** `npx playwright codegen <url>` or the UI mode's
+pick locator already prioritizes role, text and test id — it solves `PW-LOC-01` without requiring
+discipline. But **codegen's output is not the test** (`PW-DBG-06`): extract the locators and rewrite.
+
+---
+
+## Assertions
+
+One rule dominates all of them: **assert on the condition, never on a read value** (`PW-EXP-01`).
 
 ```ts
-// ✗ congela um instante
-expect(await page.getByText('Salvo').isVisible).toBe(true);
-// ✓ reespera
-await expect(page.getByText('Salvo')).toBeVisible;
+// ✗ freezes one instant
+expect(await page.getByText('Saved').isVisible).toBe(true);
+// ✓ re-waits
+await expect(page.getByText('Saved')).toBeVisible;
 ```
 
-E o defeito gêmeo, que passa **sempre**: asserção web-first sem `await` (`PW-CORE-04`). A
-única defesa automática é `@typescript-eslint/no-floating-promises` — confirme que está
-ligada. Os dois **não** são o mesmo defeito e exigem correções diferentes (§ 6.2 do hub).
+And the twin defect, which passes **always**: a web-first assertion without `await` (`PW-CORE-04`). The
+only automatic defense is `@typescript-eslint/no-floating-promises` — confirm it is switched on. The
+two are **not** the same defect and require different fixes (§ 6.2 of the hub).
 
-| Situação | Use |
+| Situation | Use |
 | --- | --- |
-| estado da UI | `expect(locator).…` |
-| lista inteira | `toHaveText([...])` — verifica ordem e conteúdo com retry |
-| resposta HTTP | `await expect(resposta).toBeOK` |
-| valor fora da UI que demora | `expect.poll(...)` |
-| bloco com várias asserções que demora | `expect(fn).toPass({ timeout })` — **timeout obrigatório** (`PW-EXP-03`) |
-| estrutura de UI | `toMatchAriaSnapshot` **antes** de `toHaveScreenshot` (`PW-SNAP-01`) |
+| UI state | `expect(locator).…` |
+| a whole list | `toHaveText([...])` — checks order and content with retry |
+| an HTTP response | `await expect(response).toBeOK` |
+| a value outside the UI that takes time | `expect.poll(...)` |
+| a block with several assertions that takes time | `expect(fn).toPass({ timeout })` — **timeout required** (`PW-EXP-03`) |
+| UI structure | `toMatchAriaSnapshot` **before** `toHaveScreenshot` (`PW-SNAP-01`) |
 
-**Nunca** afirme ausência sozinha: `not.toBeVisible` passa também com locator errado.
-Afirme o estado positivo esperado (`PW-EXP-06`).
+**Never** assert absence on its own: `not.toBeVisible` also passes with the wrong locator.
+Assert the expected positive state (`PW-EXP-06`).
 
 ---
 
-## Relacionados
+## Related
 
-- [Playwright - Locators](../../../../knowledge-base/docs/playwright-locators.md) · [Playwright - Assertions](../../../../knowledge-base/docs/playwright-assertions.md) — as duas fontes desta skill
-- `ambiente-e-estrutura.md` — o que substituir, e como organizar
-- `mapa-de-ids.md` — onde cada `PW-*` está declarado
+- [Playwright - Locators](../../../../knowledge-base/docs/playwright-locators.md) · [Playwright - Assertions](../../../../knowledge-base/docs/playwright-assertions.md) — this skill's two sources
+- `ambiente-e-estrutura.md` — what to replace, and how to organize
+- `mapa-de-ids.md` — where each `PW-*` is declared

@@ -1,55 +1,55 @@
-# As oito sondas — antes de ler o código
+# The eight probes — before reading the code
 
-> Numa suíte E2E, os piores defeitos são **invisíveis à leitura**: os arquivos parecem
-> certos, o CI está verde, e mesmo assim o trace nunca foi gravado, o portão nunca fechou,
-> ou a suíte só passa porque um `test.only` está reduzindo tudo a um caso.
+> In an E2E suite, the worst defects are **invisible to reading**: the files look
+> right, CI is green, and even so the trace was never recorded, the gate never closed,
+> or the suite only passes because a `test.only` is reducing everything to one case.
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-review/scripts/sondas.sh e2e
 ```
 
-| Sonda | O que mede | O que revela |
+| Probe | What it measures | What it reveals |
 | --- | --- | --- |
-| **S1. Versão e piso de Node** | `node -v`, versões de `@playwright/test` e `playwright` | `PW-CORE-01`, `PW-CORE-03` — Node < 22 não roda 1.62; os dois pacotes fora de lockstep é bug de instalação |
-| **S2. `test.only` e o portão** | `.only(` na suíte + `forbidOnly` no config | `PW-CFG-01` — um `.only` esquecido faz o CI verde rodando **um** teste |
-| **S3. Trace existe?** | `trace:` no config | `PW-CFG-02`, `PW-DBG-05` — `'off'` em CI torna toda falha adivinhação |
-| **S4. Espera por tempo** | `waitForTimeout`, `networkidle` | `PW-CORE-05`, `PW-ACT-04` — as duas causas nº 1 de flake |
-| **S5. Asserção que congela o instante** | `expect(await ` | `PW-EXP-01` — o defeito mais comum, e o que nenhum linter pega |
-| **S6. Asserção sem `await`** | `no-floating-promises` no lint | `PW-CORE-04` — sem essa regra, asserção sem `await` passa **sempre** e ninguém vê |
-| **S7. Shard, `fullyParallel`, blob** | config + workflow | `PW-RUN-01`, `PW-RUN-06` — shard sem `fullyParallel` divide por **arquivo**; sem blob produz N relatórios |
-| **S8. `storageState` versionado** | config/suíte + `.gitignore` | `PW-AUTH-02` — credencial de sessão viva no histórico do git |
+| **S1. Version and Node floor** | `node -v`, versions of `@playwright/test` and `playwright` | `PW-CORE-01`, `PW-CORE-03` — Node < 22 does not run 1.62; the two packages out of lockstep is an install bug |
+| **S2. `test.only` and the gate** | `.only(` in the suite + `forbidOnly` in the config | `PW-CFG-01` — a forgotten `.only` makes CI green running **one** test |
+| **S3. Does a trace exist?** | `trace:` in the config | `PW-CFG-02`, `PW-DBG-05` — `'off'` in CI makes every failure guesswork |
+| **S4. Time-based waits** | `waitForTimeout`, `networkidle` | `PW-CORE-05`, `PW-ACT-04` — the two #1 causes of flakiness |
+| **S5. An assertion that freezes the instant** | `expect(await ` | `PW-EXP-01` — the most common defect, and the one no linter catches |
+| **S6. An assertion without `await`** | `no-floating-promises` in the lint config | `PW-CORE-04` — without that rule, an assertion without `await` passes **always** and nobody sees it |
+| **S7. Shard, `fullyParallel`, blob** | config + workflow | `PW-RUN-01`, `PW-RUN-06` — a shard without `fullyParallel` splits by **file**; without blob it produces N reports |
+| **S8. Committed `storageState`** | config/suite + `.gitignore` | `PW-AUTH-02` — a live session credential in the git history |
 
-S1, S2, S3, S6, S7 e S8 rodam em segundos. S4 e S5 são varredura sobre a suíte.
+S1, S2, S3, S6, S7 and S8 run in seconds. S4 and S5 are a scan over the suite.
 
 ---
 
-## Três paradas obrigatórias
+## Three mandatory stops
 
-| Se a sonda mostrar… | Pare e reporte antes de continuar |
+| If the probe shows… | Stop and report before continuing |
 | --- | --- |
-| **S2**: `.only` sem `forbidOnly` | a suíte inteira pode estar decorativa — o CI está verde rodando 1 de N |
-| **S8**: `storageState` fora do `.gitignore` | **achado de segurança**, não de teste: prazo e canal diferentes |
-| **S3**: `trace: 'off'` | a auditoria de flake **para aqui** — sem trace não há diagnóstico, e o primeiro achado é a configuração |
+| **S2**: `.only` without `forbidOnly` | the whole suite may be decorative — CI is green running 1 of N |
+| **S8**: `storageState` outside `.gitignore` | a **security finding**, not a test one: different deadline and channel |
+| **S3**: `trace: 'off'` | the flakiness audit **stops here** — without a trace there is no diagnosis, and the first finding is the configuration |
 
-E uma quarta, que é bloqueante mas não interrompe: **S6 sem `no-floating-promises`** — pode
-haver qualquer quantidade de asserção que não afirma nada, e nenhuma aparece como falha.
+And a fourth, which is blocking but does not interrupt: **S6 without `no-floating-promises`** — there
+may be any number of assertions that assert nothing, and none shows up as a failure.
 
 ---
 
-## O que a sonda não pega
+## What the probe does not catch
 
-| Não detectável por grep | ID | Como achar |
+| Not detectable by grep | ID | How to find it |
 | --- | --- | --- |
-| regra de negócio verificada em E2E | `TS-CORE-02` | ler o que cada asserção afirma |
-| asserção apagada por um healer | `PW-AGT-05` | comparar o diff do teste com a spec `.md` correspondente |
-| page object com asserção de negócio | `PW-STR-02` | ler os page objects |
-| conta compartilhada entre workers | `PW-AUTH-03` | ler o setup de autenticação |
-| teste que faz tudo (falha por seis motivos) | § 8.1 do satélite | ler o título e contar os passos de negócio |
+| a business rule verified in E2E | `TS-CORE-02` | read what each assertion asserts |
+| an assertion erased by a healer | `PW-AGT-05` | compare the test's diff with the corresponding `.md` spec |
+| a page object with a business assertion | `PW-STR-02` | read the page objects |
+| an account shared between workers | `PW-AUTH-03` | read the authentication setup |
+| a test that does everything (fails for six reasons) | § 8.1 of the satellite | read the title and count the business steps |
 
 ---
 
-## Relacionados
+## Related
 
-- `ordem-da-varredura.md` — o que fazer com o que as sondas apontaram
-- `severidade-e-relatorio.md` — classificar e escrever
+- `ordem-da-varredura.md` — what to do with what the probes pointed at
+- `severidade-e-relatorio.md` — classify and write
 - [Playwright - Configuração e Projects](../../../../knowledge-base/docs/playwright-configuracao-e-projects.md) · [Playwright - Debug e Trace](../../../../knowledge-base/docs/playwright-debug-e-trace.md)

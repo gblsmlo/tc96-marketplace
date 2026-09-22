@@ -1,60 +1,60 @@
-# Exemplo trabalhado — o pedido criado aparece na lista
+# Worked example — the created order appears in the list
 
-Tarefa: *"teste que o pedido criado aparece na lista"*.
+Task: *"test that the created order appears in the list"*.
 
 ---
 
-## Passo 1 — as três perguntas
+## Step 1 — the three questions
 
-| Pergunta | Resposta |
+| Question | Answer |
 | --- | --- |
-| o que pode dar errado? | a listagem não reflete o pedido recém-criado |
-| é jornada ou regra? | **jornada** — se fosse regra, iria para `bun-test-build` |
-| o estado existe ou preciso criá-lo? | criar — e **por API** (`PW-NET-06`) |
+| what can go wrong? | the listing does not reflect the just-created order |
+| journey or rule? | **journey** — were it a rule, it would go to `bun-test-build` |
+| does the state exist or do I have to create it? | create — and **through the API** (`PW-NET-06`) |
 
-A terceira é a que mais economiza tempo: doze cliques para chegar ao assunto do teste viram
-um `POST`, e o teste passa a falhar por **um** motivo em vez de por qualquer defeito no
-caminho.
+The third is the one that saves most time: twelve clicks to reach the test's subject become
+one `POST`, and the test starts failing for **one** reason instead of for any defect along the
+way.
 
-## O teste
+## The test
 
 ```ts
-import { test, expect } from './fixtures'; // PW-FIX-05: nunca de '@playwright/test'
+import { test, expect } from './fixtures'; // PW-FIX-05: never from '@playwright/test'
 
-test('pedido criado aparece na lista imediatamente', async ({ page, request }) => {
- const r = await request.post('/pedidos', { data: { item: 'Café' } });
+test('created order appears in the list immediately', async ({ page, request }) => {
+ const r = await request.post('/orders', { data: { item: 'Coffee' } });
  await expect(r).toBeOK;
  const { id } = await r.json;
 
- await page.goto('/pedidos'); // relativo — PW-CFG-05
+ await page.goto('/orders'); // relative — PW-CFG-05
 
  await expect(
- page.getByRole('row').filter({ hasText: String(id) }) // PW-LOC-01 + filter, não.first
+ page.getByRole('row').filter({ hasText: String(id) }) // PW-LOC-01 + filter, not.first
  ).toBeVisible; // web-first — PW-EXP-01
 });
 ```
 
-## O que as decisões evitaram
+## What these decisions prevented
 
-| Decisão | Alternativa ruim | Regra |
+| Decision | Bad alternative | Rule |
 | --- | --- | --- |
-| criar o pedido por `request` | 12 cliques no formulário de criação | `PW-NET-06` |
+| creating the order through `request` | 12 clicks in the creation form | `PW-NET-06` |
 | `getByRole('row').filter(…)` | `page.locator('tr').nth(1)` | `PW-LOC-01`, `PW-LOC-02` |
 | `await expect(...).toBeVisible` | `expect(await....isVisible).toBe(true)` | `PW-EXP-01` |
-| `page.goto('/pedidos')` | `page.goto('http://localhost:3000/pedidos')` | `PW-CFG-05` |
-| título com o comportamento | `test('pedidos')` | `PW-STR-04` |
-| `test`/`expect` de `./fixtures` | de `@playwright/test` | `PW-FIX-05` |
+| `page.goto('/orders')` | `page.goto('http://localhost:3000/orders')` | `PW-CFG-05` |
+| a title with the behavior | `test('orders')` | `PW-STR-04` |
+| `test`/`expect` from `./fixtures` | from `@playwright/test` | `PW-FIX-05` |
 
-Nenhum `waitForTimeout`: a asserção web-first reespera por conta própria.
+No `waitForTimeout`: the web-first assertion re-waits on its own.
 
-## Autoverificação
+## Self-check
 
 ```
-$ bash scripts/autoverificar.sh e2e/pedidos.spec.ts
- 1. ✓ nenhum waitForTimeout
+$ bash scripts/autoverificar.sh e2e/orders.spec.ts
+ 1. ✓ no waitForTimeout
 ...
-12. ✓ test/expect vêm do módulo do projeto
+12. ✓ test/expect come from the project's module
 ```
 
-Depois, as três que valem mais: quebrar o código de propósito (a asserção **fica** vermelha),
-`--repeat-each=5`, e a suíte inteira.
+Then, the three that are worth most: breaking the code on purpose (the assertion **does** go red),
+`--repeat-each=5`, and the whole suite.

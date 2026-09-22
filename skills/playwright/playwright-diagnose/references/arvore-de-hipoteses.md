@@ -1,54 +1,54 @@
-# A árvore, e a bissecção
+# The tree, and the bisection
 
-> Passos 3 e 4. A árvore completa é a § 5.2 do hub [Playwright](../../../../knowledge-base/docs/playwright.md) — a mais detalhada do vault.
+> Steps 3 and 4. The full tree is § 5.2 of the [Playwright](../../../../knowledge-base/docs/playwright.md) hub — the most detailed one in the vault.
 
 ---
 
-## Percorra sem pular
+## Walk it without skipping
 
-| # | Verifique | Se sim, a causa é | Regra |
+| # | Check | If yes, the cause is | Rule |
 | --- | --- | --- | --- |
-| 1 | há `waitForTimeout` no teste? | é a causa, não o sintoma | `PW-CORE-05` |
-| 2 | alguma asserção lê valor antes de afirmar? | instante congelado | `PW-EXP-01` |
-| 3 | espera armada **depois** da ação? | o evento já passou | `PW-ACT-03` |
-| 4 | há `waitUntil: 'networkidle'`? | indeterminístico por natureza | `PW-ACT-04` |
-| 5 | depende de dado que outro teste criou? | dependência de ordem | `PW-CORE-06` |
-| 6 | falha só em CI? | ver `falha-so-em-ci.md` | — |
-| 7 | falha só com paralelismo? | estado compartilhado | `PW-AUTH-03` |
-| 8 | nada acima | volte ao trace | `PW-DBG-01` |
+| 1 | is there a `waitForTimeout` in the test? | that is the cause, not the symptom | `PW-CORE-05` |
+| 2 | does any assertion read a value before asserting? | a frozen instant | `PW-EXP-01` |
+| 3 | is the wait armed **after** the action? | the event already passed | `PW-ACT-03` |
+| 4 | is there a `waitUntil: 'networkidle'`? | non-deterministic by nature | `PW-ACT-04` |
+| 5 | does it depend on data another test created? | order dependence | `PW-CORE-06` |
+| 6 | does it fail only in CI? | see `falha-so-em-ci.md` | — |
+| 7 | does it fail only with parallelism? | shared state | `PW-AUTH-03` |
+| 8 | none of the above | go back to the trace | `PW-DBG-01` |
 
-**O que nunca é a resposta:** subir `retries` (`PW-RUN-03`). Retry absorve instabilidade
-**residual** de uma suíte sã; usá-lo contra um teste que falha 30% das vezes converte um
-defeito diagnosticável em custo permanente de CI.
+**What is never the answer:** raising `retries` (`PW-RUN-03`). Retry absorbs **residual**
+instability in a healthy suite; using it against a test that fails 30% of the time converts a
+diagnosable defect into a permanent CI cost.
 
 ---
 
-## Bissecção
+## Bisection
 
-Script: `scripts/isolar.sh <arquivo[:linha]> [repeticoes]`.
+Script: `scripts/isolar.sh <file[:line]> [repetitions]`.
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-diagnose/scripts/isolar.sh e2e/checkout.spec.ts:52 20
 ```
 
-| Comando | Se o comportamento mudar, a causa é |
+| Command | If the behavior changes, the cause is |
 | --- | --- |
-| `--repeat-each=20` | confirma que é intermitente e não determinístico |
-| `--workers=1` | **estado compartilhado** entre workers (`PW-AUTH-03`) |
-| só o caso (`arquivo:linha`) | **dependência de outro teste** (`PW-CORE-06`) |
-| `--project=chromium` | específico de browser |
-| `--headed` | dependente de headless — raro, mas existe |
-| container com a imagem do CI | **paridade de ambiente** (`PW-SNAP-02`) |
+| `--repeat-each=20` | confirms it is intermittent and not deterministic |
+| `--workers=1` | **shared state** between workers (`PW-AUTH-03`) |
+| the case alone (`file:line`) | **dependence on another test** (`PW-CORE-06`) |
+| `--project=chromium` | browser-specific |
+| `--headed` | headless-dependent — rare, but real |
+| a container with the CI image | **environment parity** (`PW-SNAP-02`) |
 
-> **`--workers=1` diagnostica; ele não conserta.** Configurar `workers: 1` porque a suíte
-> passa em série mantém o acoplamento e deixa a suíte N vezes mais lenta. O mesmo vale para
-> prefixar arquivos com `001-`, `002-`: isso **codifica** a dependência, e a próxima
-> inserção quebra tudo.
+> **`--workers=1` diagnoses; it does not fix.** Configuring `workers: 1` because the suite
+> passes serially keeps the coupling and leaves the suite N times slower. The same goes for
+> prefixing files with `001-`, `002-`: that **encodes** the dependence, and the next
+> insertion breaks everything.
 
 ---
 
-## Relacionados
+## Related
 
-- [Playwright](../../../../knowledge-base/docs/playwright.md) § 5.2 — a árvore completa
-- `falha-so-em-ci.md` — a ramificação 6
-- `conserto-x-anestesico.md` — o que **não** propor
+- [Playwright](../../../../knowledge-base/docs/playwright.md) § 5.2 — the full tree
+- `falha-so-em-ci.md` — branch 6
+- `conserto-x-anestesico.md` — what **not** to propose

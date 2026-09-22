@@ -1,8 +1,9 @@
 ---
 nome: playwright-build
-descricao: Escrever teste E2E novo com Playwright — locator na ordem de prioridade, asserção web-first, estrutura, e autoverificação executável de 12 itens antes de entregar, citando IDs `PW-*` da doc do vault — use quando a tarefa for escrever ou editar um `*.spec.ts`, cobrir uma jornada de usuário, montar page object ou fixture, preparar estado por API, ou substituir rede, relógio e sessão num teste. Não use para revisar suíte existente, que é playwright-review, para diagnosticar teste que já falha, que é playwright-diagnose, nem para decidir se o teste deveria ser E2E — essa decisão vem antes, em test-design.
+descricao: Write a new E2E test with Playwright — locators in priority order, web-first assertions, structure, and an executable 12-item self-check before delivering, citing `PW-*` IDs from the vault docs — use when the task is writing or editing a `*.spec.ts`, covering a user journey, building a page object or fixture, preparing state through the API, or replacing network, clock and session in a test. Do not use to review an existing suite, which is playwright-review, to diagnose a test that already fails, which is playwright-diagnose, nor to decide whether the test should be E2E — that decision comes earlier, in test-design.
 tipo: skill
 familia: playwright
+idioma: en
 fonte: "[Playwright - Locators](../../../knowledge-base/docs/playwright-locators.md)"
 docs:
   - /microsoft/playwright
@@ -15,134 +16,134 @@ tags:
 
 # playwright-build
 
-> **Fonte desta skill:** [Playwright - Locators](../../../knowledge-base/docs/playwright-locators.md) e [Playwright - Assertions](../../../knowledge-base/docs/playwright-assertions.md), com o hub [Playwright](../../../knowledge-base/docs/playwright.md) como roteador. As 85 regras da família `PW-*` moram na § 6 do hub, com o corpo completo no satélite dono de cada ID.
-> Esta skill **não contém** o texto das regras — ela diz o que carregar, em que ordem decidir e o que conferir antes de entregar.
-> **Superfície de API:** resolva pelo Context7 — `/microsoft/playwright`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [Playwright - Locators](../../../knowledge-base/docs/playwright-locators.md) and [Playwright - Assertions](../../../knowledge-base/docs/playwright-assertions.md), with the [Playwright](../../../knowledge-base/docs/playwright.md) hub as the router. The 85 rules of the `PW-*` family live in § 6 of the hub, with the full body in the satellite that owns each ID.
+> This skill **does not contain** the text of the rules — it says what to load, in what order to decide and what to check before delivering.
+> **API surface:** resolve it through Context7 — `/microsoft/playwright`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contrato que esta skill implementa: [Playwright](../../../knowledge-base/docs/playwright.md) § 7 ("Contrato de skill").
-Estrutura verificada contra playwright.dev em **2026-08-20**, sobre `@playwright/test` 1.62.1.
+Contract this skill implements: [Playwright](../../../knowledge-base/docs/playwright.md) § 7 ("Contrato de skill").
+Structure verified against playwright.dev on **2026-08-20**, over `@playwright/test` 1.62.1.
 
 ---
 
-## Quando usar
+## When to use
 
-Escrever ou editar teste que **vai existir**: um `*.spec.ts` novo, um caso a mais, um page object, uma fixture, um setup de autenticação.
+Writing or editing a test that **will exist**: a new `*.spec.ts`, one more case, a page object, a fixture, an authentication setup.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| revisar suíte que já existe | `playwright-review` |
-| teste que falha, ou falha às vezes | `playwright-diagnose` — **leia o trace antes de editar** |
-| decidir **se** isto deveria ser E2E | `test-design` — e a resposta costuma ser "não" |
-| teste de unidade ou integração sob Bun | `bun-test-build` |
-| estado visual de um componente | `storybook-story` · `storybook-test` |
-| ligar agentes de teste no repositório | [Playwright - Agents, CLI e MCP](../../../knowledge-base/docs/playwright-agents-cli-e-mcp.md) |
+| reviewing a suite that already exists | `playwright-review` |
+| a test that fails, or fails sometimes | `playwright-diagnose` — **read the trace before editing** |
+| deciding **whether** this should be E2E | `test-design` — and the answer is usually "no" |
+| a unit or integration test under Bun | `bun-test-build` |
+| a component's visual state | `storybook-story` · `storybook-test` |
+| wiring test agents into the repository | [Playwright - Agents, CLI e MCP](../../../knowledge-base/docs/playwright-agents-cli-e-mcp.md) |
 
-**O corte que esta skill aplica antes de qualquer coisa:** se o que pode dar errado é uma **regra de negócio**, o teste não é E2E (`TS-CORE-02`). E2E cobre jornada crítica; regra vai para a camada mais barata.
+**The cut this skill applies before anything:** if what can go wrong is a **business rule**, the test is not E2E (`TS-CORE-02`). E2E covers critical journeys; a rule goes to the cheapest layer.
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Playwright](../../../knowledge-base/docs/playwright.md) § 0 | o piso de Node e a tabela de timeouts — `actionTimeout` é `0`, não 30 s |
-| 2 | [Playwright](../../../knowledge-base/docs/playwright.md) § 2 | locator é consulta preguiçosa; a espera é da ferramenta |
-| 3 | [Playwright](../../../knowledge-base/docs/playwright.md) § 6 e § 6.1 | as regras invioláveis e as críticas dos satélites |
-| 4 | [Playwright - Locators](../../../knowledge-base/docs/playwright-locators.md) | nenhum teste existe sem locator |
-| 5 | [Playwright - Assertions](../../../knowledge-base/docs/playwright-assertions.md) | o par inseparável do passo 4 |
-| 6 | o satélite da superfície tocada | via § 4 do hub — rede, auth, fixture, snapshot |
+| 1 | [Playwright](../../../knowledge-base/docs/playwright.md) § 0 | the Node floor and the timeout table — `actionTimeout` is `0`, not 30 s |
+| 2 | [Playwright](../../../knowledge-base/docs/playwright.md) § 2 | a locator is a lazy query; the waiting belongs to the tool |
+| 3 | [Playwright](../../../knowledge-base/docs/playwright.md) § 6 and § 6.1 | the inviolable rules and the satellites' critical ones |
+| 4 | [Playwright - Locators](../../../knowledge-base/docs/playwright-locators.md) | no test exists without a locator |
+| 5 | [Playwright - Assertions](../../../knowledge-base/docs/playwright-assertions.md) | the inseparable pair of step 4 |
+| 6 | the satellite for the surface touched | via § 4 of the hub — network, auth, fixtures, snapshots |
 
-**Nunca carregue os doze satélites.** Um teste de fluxo simples precisa de 1–5.
+**Never load all twelve satellites.** A simple flow test needs 1–5.
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/locator-e-assercao.md` | a ordem de prioridade, o que fazer com ambiguidade, a tabela de asserção |
-| `references/ambiente-e-estrutura.md` | o que substituir, page object, fixture, as três invariantes |
-| `references/autoverificacao.md` | os 12 itens e as três verificações que valem mais |
-| `references/antipadroes.md` | 30 antipadrões com ID e satélite |
-| `references/mapa-de-ids.md` | os 85 `PW-*` por satélite e seção, e os dois apelidos |
-| `references/exemplo-pedido-na-lista.md` | caso trabalhado, das três perguntas à autoverificação |
-| `scripts/autoverificar.sh` | roda os 12 itens sobre o arquivo que você acabou de escrever |
+| `references/locator-e-assercao.md` | the priority order, what to do with ambiguity, the assertion table |
+| `references/ambiente-e-estrutura.md` | what to replace, page objects, fixtures, the three invariants |
+| `references/autoverificacao.md` | the 12 items and the three checks that are worth most |
+| `references/antipadroes.md` | 30 antipatterns with ID and satellite |
+| `references/mapa-de-ids.md` | the 85 `PW-*` by satellite and section, and the two aliases |
+| `references/exemplo-pedido-na-lista.md` | worked case, from the three questions to the self-check |
+| `scripts/autoverificar.sh` | runs the 12 items over the file you just wrote |
 
 ---
 
-## Passo 1 — Três perguntas antes da primeira linha
+## Step 1 — Three questions before the first line
 
-| Pergunta | Se a resposta for… |
+| Question | If the answer is… |
 | --- | --- |
-| **O que pode dar errado aqui?** | não sei dizer → o teste não deveria ser escrito ainda |
-| **Isto é jornada, ou é regra?** | regra → não é E2E. Vá para `bun-test-build` |
-| **Este estado já existe, ou preciso criá-lo?** | criar → **por API**, não pela UI (`PW-NET-06`) |
+| **What can go wrong here?** | I cannot say → the test should not be written yet |
+| **Is this a journey, or a rule?** | a rule → it is not E2E. Go to `bun-test-build` |
+| **Does this state already exist, or do I have to create it?** | create → **through the API**, not through the UI (`PW-NET-06`) |
 
 ---
 
-## Passo 2 — Locator, na ordem de prioridade
+## Step 2 — Locator, in priority order
 
-`getByRole` → `getByLabel`/`getByPlaceholder`/`getByAltText`/`getByText` → `getByTestId` (com dívida registrada) → CSS (com justificativa).
+`getByRole` → `getByLabel`/`getByPlaceholder`/`getByAltText`/`getByText` → `getByTestId` (with the debt recorded) → CSS (with justification).
 
-**Ambiguidade não se resolve com `.first`** (`PW-LOC-02`): `filter({ hasText })`, container, `filter({ has })`. Se `getByRole` não alcança, o achado costuma ser sobre o **componente**.
+**Ambiguity is not resolved with `.first`** (`PW-LOC-02`): `filter({ hasText })`, a container, `filter({ has })`. If `getByRole` cannot reach it, the finding is usually about the **component**.
 
-Detalhe: `references/locator-e-assercao.md`.
-
----
-
-## Passo 3 — Asserção
-
-**Afirme sobre a condição, nunca sobre um valor lido** (`PW-EXP-01`). E o defeito gêmeo, que passa **sempre**: asserção web-first sem `await` (`PW-CORE-04`) — a única defesa automática é `no-floating-promises`.
-
-Nunca afirme ausência sozinha (`PW-EXP-06`). `toPass` sem `timeout` é achado (`PW-EXP-03`).
+Detail: `references/locator-e-assercao.md`.
 
 ---
 
-## Passo 4 — Ambiente: o que substituir
+## Step 3 — Assertions
 
-> **Se a dependência real divergisse, este teste deveria quebrar?** Sim → não substitua.
+**Assert on the condition, never on a read value** (`PW-EXP-01`). And the twin defect, which passes **always**: a web-first assertion without `await` (`PW-CORE-04`) — the only automatic defense is `no-floating-promises`.
 
-Rede de terceiro, API de browser, relógio e sessão se substituem; **estado de servidor se cria de verdade** via `request` (`PW-NET-06`). Shape de mock deriva do tipo do servidor (`PW-NET-04`). Tabela: `references/ambiente-e-estrutura.md`.
-
----
-
-## Passo 5 — Estrutura
-
-Page object para sequência de ações; fixture para setup com ciclo de vida; setup project para login. Três invariantes que geram retrabalho: page object **sem** asserção de negócio (`PW-STR-02`), page object devolve `Locator` e não `Promise<string>`, e `test`/`expect` de um **módulo único** do projeto (`PW-FIX-05`).
+Never assert absence on its own (`PW-EXP-06`). `toPass` without a `timeout` is a finding (`PW-EXP-03`).
 
 ---
 
-## Passo 6 — Autoverificar antes de entregar
+## Step 4 — Environment: what to replace
+
+> **If the real dependency diverged, should this test break?** Yes → do not replace it.
+
+Third-party network, browser APIs, the clock and the session get replaced; **server state gets created for real** through `request` (`PW-NET-06`). The mock's shape derives from the server's type (`PW-NET-04`). Table: `references/ambiente-e-estrutura.md`.
+
+---
+
+## Step 5 — Structure
+
+A page object for a sequence of actions; a fixture for setup with a lifecycle; a setup project for login. Three invariants that generate rework: a page object **without** business assertions (`PW-STR-02`), a page object returns a `Locator` and not a `Promise<string>`, and `test`/`expect` from a **single** module in the project (`PW-FIX-05`).
+
+---
+
+## Step 6 — Self-check before delivering
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-build/scripts/autoverificar.sh e2e/pedidos.spec.ts
+bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-build/scripts/autoverificar.sh e2e/orders.spec.ts
 ```
 
-Doze itens, mais as três que valem mais: **quebrar o código de propósito** e ver o teste ficar vermelho (`TS-TEC-08`), `--repeat-each=5`, e rodar a suíte inteira.
+Twelve items, plus the three that are worth most: **break the code on purpose** and watch the test go red (`TS-TEC-08`), `--repeat-each=5`, and running the whole suite.
 
 ---
 
-## Passo 7 — Fechar
+## Step 7 — Closing
 
-1. **`--repeat-each=5`** no arquivo novo. Verde cinco vezes, não uma.
-2. **A suíte inteira ainda passa** — teste novo que suja estado quebra o vizinho.
-3. **Se precisou de `getByTestId` ou CSS**, registre a dívida (`PW-LOC-04`).
-4. **Se ficou lento ou frágil**, a pergunta é de nível — `test-design`.
-5. **Declare o que não cobriu** (`TS-TIPO-02`).
-
----
-
-## Exemplo
-
-*"O pedido criado aparece na lista."* A terceira pergunta do Passo 1 troca doze cliques por um `POST`, e o teste passa a falhar por **um** motivo. O locator é `getByRole('row').filter({ hasText })` — não `.nth(1)`; a asserção é web-first; a navegação é relativa.
-
-Caso completo: `references/exemplo-pedido-na-lista.md`.
+1. **`--repeat-each=5`** on the new file. Green five times, not once.
+2. **The whole suite still passes** — a new test that dirties state breaks its neighbor.
+3. **If you needed `getByTestId` or CSS**, record the debt (`PW-LOC-04`).
+4. **If it turned out slow or fragile**, the question is about level — `test-design`.
+5. **Declare what you did not cover** (`TS-TIPO-02`).
 
 ---
 
-## Relacionados
+## Example
 
-- [Playwright - Locators](../../../knowledge-base/docs/playwright-locators.md) — fonte desta skill
-- [Playwright - Assertions](../../../knowledge-base/docs/playwright-assertions.md) — a segunda fonte, inseparável da primeira
-- [Playwright](../../../knowledge-base/docs/playwright.md) — o hub: § 0, § 2, § 5, § 6, § 7
-- `playwright-review` · `playwright-diagnose` — as skills irmãs
-- `test-design` — decide **se** o teste é E2E, antes desta skill começar
-- `bun-test-build` · `storybook-test` — os outros níveis
+*"The created order appears in the list."* The third question in Step 1 swaps twelve clicks for one `POST`, and the test starts failing for **one** reason. The locator is `getByRole('row').filter({ hasText })` — not `.nth(1)`; the assertion is web-first; the navigation is relative.
+
+Full case: `references/exemplo-pedido-na-lista.md`.
+
+---
+
+## Related
+
+- [Playwright - Locators](../../../knowledge-base/docs/playwright-locators.md) — source of this skill
+- [Playwright - Assertions](../../../knowledge-base/docs/playwright-assertions.md) — the second source, inseparable from the first
+- [Playwright](../../../knowledge-base/docs/playwright.md) — the hub: § 0, § 2, § 5, § 6, § 7
+- `playwright-review` · `playwright-diagnose` — the sibling skills
+- `test-design` — decides **whether** the test is E2E, before this skill starts
+- `bun-test-build` · `storybook-test` — the other levels

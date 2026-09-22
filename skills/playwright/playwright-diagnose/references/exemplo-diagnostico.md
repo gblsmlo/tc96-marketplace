@@ -1,67 +1,67 @@
-# Exemplo trabalhado — clique que falha 1 em 4 no CI
+# Worked example — a click that fails 1 in 4 in CI
 
-`e2e/checkout.spec.ts:52` falha ~25% das execuções em CI. Passa local, sempre.
+`e2e/checkout.spec.ts:52` fails ~25% of runs in CI. It passes locally, always.
 
 ---
 
-## Passo 0 — é defeito real do produto?
+## Step 0 — is it a real product defect?
 
-A falha é **intermitente** e o produto funciona manualmente. Segue.
+The failure is **intermittent** and the product works manually. Continue.
 
-## Passo 1 — o trace
+## Step 1 — the trace
 
-`trace: 'on-first-retry'` está ligado — o artefato existe. (Se estivesse `'off'`, o
-**primeiro achado** seria a configuração, e o diagnóstico só começaria na próxima execução.)
+`trace: 'on-first-retry'` is on — the artifact exists. (Were it `'off'`, the
+**first finding** would be the configuration, and the diagnosis would only begin on the next run.)
 
-## Passo 2 — a leitura, em quatro passos
+## Step 2 — the reading, in four steps
 
-| Aba | O que mostrou |
+| Tab | What it showed |
 | --- | --- |
-| Errors | falhou o `click` em "Confirmar" |
-| **Log** da ação | `element intercepts pointer events` |
-| **Snapshot Before** | o toast "item adicionado" ainda na tela, **sobre** o botão |
-| Network | nada anormal |
+| Errors | the `click` on "Confirm" failed |
+| **Log** of the action | `element intercepts pointer events` |
+| **Snapshot Before** | the "item added" toast still on screen, **over** the button |
+| Network | nothing abnormal |
 
-O passo 2 encerrou o caso. Nenhum `console.log` daria essa linha.
+Step 2 closed the case. No `console.log` would give that line.
 
-## Passo 3 — a árvore
+## Step 3 — the tree
 
-Itens 1 a 4: não há `waitForTimeout`, nem asserção que lê valor, nem espera fora de ordem,
-nem `networkidle`. Item 6: **falha só em CI** → a causa é que o passo anterior termina mais
-rápido lá, e o toast de 3 s ainda está na tela.
+Items 1 to 4: there is no `waitForTimeout`, no assertion reading a value, no out-of-order wait,
+no `networkidle`. Item 6: **it fails only in CI** → the cause is that the previous step finishes
+faster there, and the 3 s toast is still on screen.
 
-## Passo 4 — bissecção (confirmação)
+## Step 4 — bisection (confirmation)
 
 ```
 $ bash scripts/isolar.sh e2e/checkout.spec.ts:52 20
-== 1. É intermitente? 20 execuções → FALHOU
-== 2. Estado compartilhado? --workers=1 → passou
-== 3. Dependência de outro teste? → passou
+== 1. Is it intermittent? 20 runs → FAILED
+== 2. Shared state? --workers=1 → passed
+== 3. Dependence on another test? → passed
 ```
 
-O item 2 passar **não** significa que a causa é paralelismo: significa que em série o timing
-muda. `--workers=1` diagnostica, não conserta.
+Item 2 passing does **not** mean the cause is parallelism: it means the timing changes when run
+serially. `--workers=1` diagnoses, it does not fix.
 
-## O achado
+## The finding
 
 ```
 `PW-ACT-01` — e2e/checkout.spec.ts:52
-Sintoma: falha ~1 em 4 execuções em CI, sempre no clique em "Confirmar"; passa local.
-Evidência: trace, aba Log da ação click — "element intercepts pointer events";
- Snapshot Before mostra o toast de "item adicionado" ainda na tela, sobre o botão.
-Causa: o toast tem 3 s de duração e cobre o botão; em CI o passo anterior termina mais rápido.
-Correção: NÃO usar force: true. Aguardar o toast sair antes de clicar —
- await expect(page.getByRole('status')).toBeHidden — ou corrigir o z-index/posição do toast,
- que é o defeito real: o usuário também não consegue clicar.
-Ver Playwright - Ações e Auto-waiting.
+Symptom: fails ~1 in 4 runs in CI, always on the click on "Confirm"; passes locally.
+Evidence: trace, Log tab of the click action — "element intercepts pointer events";
+ Snapshot Before shows the "item added" toast still on screen, over the button.
+Cause: the toast lasts 3 s and covers the button; in CI the previous step finishes faster.
+Fix: do NOT use force: true. Wait for the toast to leave before clicking —
+ await expect(page.getByRole('status')).toBeHidden — or fix the toast's z-index/position,
+ which is the real defect: the user cannot click either.
+See Playwright - Ações e Auto-waiting.
 ```
 
-## O que este exemplo demonstra
+## What this example demonstrates
 
-| Decisão | Onde está a regra |
+| Decision | Where the rule is |
 | --- | --- |
-| a aba **Log** deu a causa, não o Errors | `leitura-do-trace.md` |
-| `force: true` foi explicitamente descartado | `conserto-x-anestesico.md` |
-| a correção aponta o **defeito de produto**, não só o teste | § *Formato*, terceira regra |
-| `--workers=1` foi usado para confirmar, não para consertar | `arvore-de-hipoteses.md` |
-| o fechamento é `--repeat-each=20`, não uma execução verde | § *Fechar*, item 1 |
+| the **Log** tab gave the cause, not Errors | `leitura-do-trace.md` |
+| `force: true` was explicitly discarded | `conserto-x-anestesico.md` |
+| the fix points at the **product defect**, not just the test | § *Format*, third rule |
+| `--workers=1` was used to confirm, not to fix | `arvore-de-hipoteses.md` |
+| the closing is `--repeat-each=20`, not one green run | § *Closing*, item 1 |

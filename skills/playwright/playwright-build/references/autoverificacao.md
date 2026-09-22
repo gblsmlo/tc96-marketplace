@@ -1,49 +1,49 @@
-# Autoverificação antes de entregar
+# Self-check before delivering
 
-> É a mesma varredura que `playwright-review` aplicaria. Script: `scripts/autoverificar.sh`.
+> It is the same scan `playwright-review` would apply. Script: `scripts/autoverificar.sh`.
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-build/scripts/autoverificar.sh e2e/pedidos.spec.ts
+bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-build/scripts/autoverificar.sh e2e/orders.spec.ts
 ```
 
-| # | Confira | Regra |
+| # | Check | Rule |
 | --- | --- | --- |
-| 1 | nenhum `waitForTimeout` | `PW-CORE-05` |
-| 2 | toda `expect` sobre `Locator`/`Page` tem `await` | `PW-CORE-04` |
-| 3 | nenhuma asserção lê valor antes de afirmar | `PW-EXP-01` |
-| 4 | nenhum `.first`/`.nth` calando strict mode | `PW-LOC-02` |
-| 5 | nenhum `force: true` sem motivo escrito | `PW-ACT-01` |
-| 6 | espera por evento **armada antes** da ação | `PW-ACT-03` |
-| 7 | nenhum `waitUntil: 'networkidle'` | `PW-ACT-04` |
-| 8 | navegação por caminho relativo, via `baseURL` | `PW-CFG-05` |
-| 9 | título descreve o comportamento que deixa de funcionar | `PW-STR-04` |
-| 10 | `toPass` tem `timeout` explícito | `PW-EXP-03` |
-| 11 | nenhum `test.only` sobrando | `PW-CFG-01` |
-| 12 | `skip`/`fixme` com motivo textual | `PW-STR-05` |
+| 1 | no `waitForTimeout` | `PW-CORE-05` |
+| 2 | every `expect` over a `Locator`/`Page` has `await` | `PW-CORE-04` |
+| 3 | no assertion reads a value before asserting | `PW-EXP-01` |
+| 4 | no `.first`/`.nth` silencing strict mode | `PW-LOC-02` |
+| 5 | no `force: true` without a written reason | `PW-ACT-01` |
+| 6 | the event wait is **armed before** the action | `PW-ACT-03` |
+| 7 | no `waitUntil: 'networkidle'` | `PW-ACT-04` |
+| 8 | navigation by relative path, through `baseURL` | `PW-CFG-05` |
+| 9 | the title describes the behavior that stops working | `PW-STR-04` |
+| 10 | `toPass` has an explicit `timeout` | `PW-EXP-03` |
+| 11 | no leftover `test.only` | `PW-CFG-01` |
+| 12 | `skip`/`fixme` with a textual reason | `PW-STR-05` |
 
-O item 2 é o único que **nenhum grep pega bem** — a defesa é
-`@typescript-eslint/no-floating-promises` ligada no projeto.
-
----
-
-## As três verificações que valem mais que as doze
-
-1. **Quebre o código de propósito** e confirme que o teste fica vermelho. Troque um sinal,
- inverta uma condição, remova a chamada. Se nada quebrar, a asserção não existe
- (`TS-TEC-08` em `Docs/Teste de Software - Técnicas de Design de Caso.md`). Trinta segundos, e
- separa teste real de teste decorativo.
-2. **`npx playwright test <arquivo> --repeat-each=5`** — cinco execuções verdes valem mais
- que uma.
-3. **Rode a suíte inteira.** Um teste novo que suja estado quebra o vizinho, e o sintoma
- aparece em **outro** arquivo.
+Item 2 is the only one **no grep catches well** — the defense is
+`@typescript-eslint/no-floating-promises` switched on in the project.
 
 ---
 
-## Fechar
+## The three checks worth more than the twelve
 
-1. **Se o teste precisou de `getByTestId` ou de CSS**, registre a dívida: o achado é sobre o
- componente (`PW-LOC-04`).
-2. **Se o teste ficou lento ou frágil**, a pergunta é se ele deveria estar neste nível —
+1. **Break the code on purpose** and confirm the test goes red. Flip a sign,
+ invert a condition, remove the call. If nothing breaks, the assertion does not exist
+ (`TS-TEC-08` in `Docs/Teste de Software - Técnicas de Design de Caso.md`). Thirty seconds, and it
+ separates a real test from a decorative one.
+2. **`npx playwright test <file> --repeat-each=5`** — five green runs are worth more
+ than one.
+3. **Run the whole suite.** A new test that dirties state breaks its neighbor, and the symptom
+ shows up in **another** file.
+
+---
+
+## Closing
+
+1. **If the test needed `getByTestId` or CSS**, record the debt: the finding is about the
+ component (`PW-LOC-04`).
+2. **If the test turned out slow or fragile**, the question is whether it belongs at this level —
  `test-design`.
-3. **Declare o que não cobriu.** Erro, vazio e carregando são estados distintos e merecem
- caso próprio (`TS-TIPO-02`). "Não coberto" não é "não existe".
+3. **Declare what you did not cover.** Error, empty and loading are distinct states and deserve
+ their own case (`TS-TIPO-02`). "Not covered" is not "does not exist".

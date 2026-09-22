@@ -1,8 +1,9 @@
 ---
 nome: playwright-review
-descricao: Auditar uma suíte Playwright existente com oito sondas executáveis antes de ler código, varredura em onze níveis por frequência de defeito, checklist extra para teste gerado por agente, e achados com ID `PW-*` — use quando a tarefa for revisar a suíte E2E de um repositório ou de um PR, caçar asserção que não afirma nada, espera por tempo, locator frágil, sessão versionada, `test.only` sem portão, trace desligado ou shard mal configurado. Não use para escrever teste novo, que é playwright-build, para diagnosticar uma falha concreta, que é playwright-diagnose, nem para auditar a forma da suíte entre níveis, que é test-review.
+descricao: Audit an existing Playwright suite with eight executable probes before reading code, an eleven-level scan by defect frequency, an extra checklist for agent-generated tests, and findings with `PW-*` IDs — use when the task is reviewing a repository's or a PR's E2E suite, hunting for an assertion that asserts nothing, a time-based wait, a fragile locator, a committed session, a `test.only` with no gate, a disabled trace or a misconfigured shard. Do not use to write a new test, which is playwright-build, to diagnose a concrete failure, which is playwright-diagnose, nor to audit the shape of the suite across levels, which is test-review.
 tipo: skill
 familia: playwright
+idioma: en
 fonte: "[Playwright](../../../knowledge-base/docs/playwright.md)"
 docs:
   - /microsoft/playwright
@@ -15,113 +16,113 @@ tags:
 
 # playwright-review
 
-> **Fonte desta skill:** [Playwright](../../../knowledge-base/docs/playwright.md) — a § 6 normativa (85 regras), a § 6.1 com as críticas dos satélites, e a § 6.2 com os IDs canônicos. O corpo de cada família vive no satélite dono do ID.
-> Esta skill **não contém** o texto das regras — ela diz o que executar, em que ordem varrer, como classificar e como reportar.
-> **Superfície de API:** resolva pelo Context7 — `/microsoft/playwright`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [Playwright](../../../knowledge-base/docs/playwright.md) — the normative § 6 (85 rules), § 6.1 with the satellites' critical ones, and § 6.2 with the canonical IDs. The body of each family lives in the satellite that owns the ID.
+> This skill **does not contain** the text of the rules — it says what to run, in what order to scan, how to classify and how to report.
+> **API surface:** resolve it through Context7 — `/microsoft/playwright`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contrato que esta skill implementa: [Playwright](../../../knowledge-base/docs/playwright.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Playwright](../../../knowledge-base/docs/playwright.md) § 7 ("Contrato de skill").
 
 ---
 
-## Quando usar
+## When to use
 
-Auditar uma suíte E2E que **já existe**: o repositório inteiro, um diretório, ou os testes de um PR.
+Auditing an E2E suite that **already exists**: the whole repository, a directory, or a PR's tests.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| escrever ou reescrever teste | `playwright-build` |
-| uma falha concreta, ou flake com trace disponível | `playwright-diagnose` |
-| a **forma** da suíte entre níveis (E2E × unidade × componente) | `test-review` |
-| suíte instável como sistema, taxa de flakiness | `test-diagnose` |
-| revisar teste sob `bun test` | `bun-test-review` |
+| writing or rewriting a test | `playwright-build` |
+| one concrete failure, or flakiness with a trace available | `playwright-diagnose` |
+| the **shape** of the suite across levels (E2E × unit × component) | `test-review` |
+| an unstable suite as a system, flakiness rate | `test-diagnose` |
+| reviewing a test under `bun test` | `bun-test-review` |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Playwright](../../../knowledge-base/docs/playwright.md) § 0 | piso de Node e a tabela de timeouts |
-| 2 | [Playwright](../../../knowledge-base/docs/playwright.md) § 6 e § 6.1 | as regras invioláveis e as críticas |
-| 3 | `references/mapa-de-ids.md` | **obrigatório antes de citar** — dois IDs são apelidos |
-| 4 | o satélite do achado | via § 4 do hub |
+| 1 | [Playwright](../../../knowledge-base/docs/playwright.md) § 0 | the Node floor and the timeout table |
+| 2 | [Playwright](../../../knowledge-base/docs/playwright.md) § 6 and § 6.1 | the inviolable rules and the critical ones |
+| 3 | `references/mapa-de-ids.md` | **required before citing** — two IDs are aliases |
+| 4 | the satellite for the finding | via § 4 of the hub |
 
-**Nunca carregue os doze satélites.**
+**Never load all twelve satellites.**
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/sondas.md` | as oito sondas, as três paradas obrigatórias, e o que elas não pegam |
-| `references/ordem-da-varredura.md` | os 11 níveis, e a checklist extra de teste gerado por agente |
-| `references/severidade-e-relatorio.md` | classificação, formato com evidência de sonda, o corte, o fechamento |
-| `references/antipadroes.md` | ~70 antipadrões com ID e satélite |
-| `references/mapa-de-ids.md` | os 85 `PW-*` por satélite e seção |
-| `references/exemplo-auditoria.md` | auditoria inteira, da sonda ao "não verificado" |
-| `scripts/sondas.sh` | roda as oito sondas |
-| `scripts/gerar-mapa-de-ids.sh` | regenera o mapa nas três skills de Playwright |
+| `references/sondas.md` | the eight probes, the three mandatory stops, and what they do not catch |
+| `references/ordem-da-varredura.md` | the 11 levels, and the extra checklist for agent-generated tests |
+| `references/severidade-e-relatorio.md` | classification, format with probe evidence, the cut, the closing |
+| `references/antipadroes.md` | ~70 antipatterns with ID and satellite |
+| `references/mapa-de-ids.md` | the 85 `PW-*` by satellite and section |
+| `references/exemplo-auditoria.md` | a whole audit, from the probe to the "not verified" |
+| `scripts/sondas.sh` | runs the eight probes |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map across the three Playwright skills |
 
 ---
 
-## Passo 1 — Sondar antes de ler
+## Step 1 — Probe before reading
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-review/scripts/sondas.sh e2e
 ```
 
-**Três paradas obrigatórias:**
+**Three mandatory stops:**
 
-| Sonda | Se mostrar… | Por quê |
+| Probe | If it shows… | Why |
 | --- | --- | --- |
-| S2 | `.only` sem `forbidOnly` | o CI pode estar verde rodando **1 de N** |
-| S8 | `storageState` fora do `.gitignore` | **achado de segurança**, reporte separado e primeiro |
-| S3 | `trace: 'off'` | a auditoria de flake **para aqui**: o primeiro achado é a configuração |
+| S2 | `.only` without `forbidOnly` | CI may be green running **1 of N** |
+| S8 | `storageState` outside `.gitignore` | a **security finding**, report it separately and first |
+| S3 | `trace: 'off'` | the flakiness audit **stops here**: the first finding is the configuration |
 
-E uma quarta, bloqueante sem interromper: **S6 sem `no-floating-promises`** — asserção sem `await` passa sempre e ninguém vê.
-
----
-
-## Passo 2 — Varrer na ordem que falha mais
-
-`references/ordem-da-varredura.md`: asserção que não afirma → espera inventada → locator frágil → ação que desliga verificação → isolamento e sessão → **nível errado** → estrutura → rede e dado → snapshot → configuração e CI → estilo.
-
-Se a suíte tem testes de agente, aplique **também** a checklist extra — o item central é **asserção deletada por um healer**: a forma mais fácil de fazer um teste passar é remover o que ele afirmava (`PW-AGT-05`).
+And a fourth, blocking without interrupting: **S6 without `no-floating-promises`** — an assertion without `await` always passes and nobody sees it.
 
 ---
 
-## Passo 3 — Classificar e reportar
+## Step 2 — Scan in the order that fails most
 
-`references/severidade-e-relatorio.md`. Bloqueante é o que **faz o CI mentir**; Alta é o que produz flake hoje; Média é dívida.
+`references/ordem-da-varredura.md`: an assertion that asserts nothing → an invented wait → a fragile locator → an action that switches off verification → isolation and session → **wrong level** → structure → network and data → snapshots → configuration and CI → style.
 
-Para sonda, **a evidência é a saída do comando** — cole-a, incluindo o exit code quando ele for o achado.
-
-**Três coisas não são achado:** ausência de teste, `getByTestId` com dívida registrada, e escolha de proporção da suíte (essa é `TS-CORE-02`, em `test-review`).
+If the suite has agent tests, **also** apply the extra checklist — the central item is **an assertion deleted by a healer**: the easiest way to make a test pass is to remove what it asserted (`PW-AGT-05`).
 
 ---
 
-## Passo 4 — Fechar
+## Step 3 — Classify and report
 
-1. **Transforme sonda em portão** — `forbidOnly`, `trace`, lint, `.gitignore`.
-2. **Separe "não protegido" de "quebrado"**, e **"nível errado" de "teste ruim"**: o segundo se corrige movendo, não melhorando.
-3. **Ordene por severidade**, não por arquivo.
-4. **Credencial exposta vai separada e primeiro.**
-5. **Declare o que não foi verificado.**
-6. **Se a correção for escrever teste**, a fonte passa a ser `playwright-build`.
+`references/severidade-e-relatorio.md`. Blocking is what **makes CI lie**; High is what produces flakiness today; Medium is debt.
 
----
+For a probe, **the evidence is the command's output** — paste it, including the exit code when the exit code is the finding.
 
-## Exemplo
-
-Suíte de 214 testes, CI verde. As sondas encontram `.only` sem `forbidOnly`, `trace: 'off'`, `storageState` fora do `.gitignore` e as versões dos dois pacotes fora de lockstep sob Node 20. **Três paradas disparam.** A credencial sai primeiro e separada; "tem E2E demais" é devolvido para a skill de estratégia; o que o grep não cobriu é declarado.
-
-Auditoria completa: `references/exemplo-auditoria.md`.
+**Three things are not findings:** the absence of a test, `getByTestId` with the debt recorded, and the choice of suite proportion (that is `TS-CORE-02`, in `test-review`).
 
 ---
 
-## Relacionados
+## Step 4 — Closing
 
-- [Playwright](../../../knowledge-base/docs/playwright.md) — fonte desta skill: § 6, § 6.1, § 6.2, § 7
-- `playwright-build` · `playwright-diagnose` — as skills irmãs
-- `test-review` — audita a **forma** entre níveis; esta audita os **testes**
-- `bun-test-review` — a auditoria equivalente sob Bun
-- `react-review` · `drizzle-review` — de onde vem o formato de achado
+1. **Turn a probe into a gate** — `forbidOnly`, `trace`, lint, `.gitignore`.
+2. **Separate "not protected" from "broken"**, and **"wrong level" from "bad test"**: the second is fixed by moving, not by improving.
+3. **Order by severity**, not by file.
+4. **An exposed credential goes separately and first.**
+5. **Declare what was not verified.**
+6. **If the fix is writing a test**, the source becomes `playwright-build`.
+
+---
+
+## Example
+
+A suite of 214 tests, CI green. The probes find `.only` without `forbidOnly`, `trace: 'off'`, `storageState` outside `.gitignore` and the two packages' versions out of lockstep under Node 20. **Three stops fire.** The credential goes first and separately; "there is too much E2E" is handed back to the strategy skill; what the grep did not cover is declared.
+
+Full audit: `references/exemplo-auditoria.md`.
+
+---
+
+## Related
+
+- [Playwright](../../../knowledge-base/docs/playwright.md) — source of this skill: § 6, § 6.1, § 6.2, § 7
+- `playwright-build` · `playwright-diagnose` — the sibling skills
+- `test-review` — audits the **shape** across levels; this one audits the **tests**
+- `bun-test-review` — the equivalent audit under Bun
+- `react-review` · `drizzle-review` — where the finding format comes from

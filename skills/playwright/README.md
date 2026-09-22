@@ -1,34 +1,34 @@
-# Skills de Playwright — a tríade E2E
+# Playwright skills — the E2E triad
 
-Três skills, um diretório cada. A divisão é **escrever · auditar · diagnosticar**, e em
-Playwright ela é deliberada: o diagnóstico começa **fora do código**, no trace.
+Three skills, one directory each. The split is **write · audit · diagnose**, and in
+Playwright it is deliberate: diagnosis starts **outside the code**, in the trace.
 
-| Skill | A pergunta que responde | Fonte | Apoio interno |
+| Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
-| `playwright-build` | como escrevo este teste E2E? | [Playwright - Locators](../../knowledge-base/docs/playwright-locators.md) | 5 referências + 1 exemplo + 1 script |
-| `playwright-review` | esta suíte tem defeito? | [Playwright](../../knowledge-base/docs/playwright.md) | 5 referências + 1 auditoria + 2 scripts |
-| `playwright-diagnose` | por que **este** teste falha? | [Playwright - Debug e Trace](../../knowledge-base/docs/playwright-debug-e-trace.md) | 5 referências + 1 diagnóstico + 1 script |
+| `playwright-build` | how do I write this E2E test? | [Playwright - Locators](../../knowledge-base/docs/playwright-locators.md) | 5 references + 1 example + 1 script |
+| `playwright-review` | does this suite have defects? | [Playwright](../../knowledge-base/docs/playwright.md) | 5 references + 1 audit + 2 scripts |
+| `playwright-diagnose` | why does **this** test fail? | [Playwright - Debug e Trace](../../knowledge-base/docs/playwright-debug-e-trace.md) | 5 references + 1 diagnosis + 1 script |
 
-**Antes das três vem `test-design`:** se o que pode dar errado é regra de negócio, o
-teste **não é E2E** (`TS-CORE-02`).
+**Before all three comes `test-design`:** if what can go wrong is a business rule, the
+test **is not E2E** (`TS-CORE-02`).
 
-## O que cada pacote acrescentou
+## What each package added
 
-| Skill | Ganhou | Lacuna que fechou |
+| Skill | Gained | Gap it closed |
 | --- | --- | --- |
-| `playwright-build` | **`scripts/autoverificar.sh`** — os 12 itens do Passo 6 executáveis | a checklist existia; rodá-la era manual |
-| `playwright-review` | **`scripts/sondas.sh`** — S1 a S8 executáveis | as oito sondas eram comandos soltos numa tabela |
-| `playwright-diagnose` | **`scripts/isolar.sh`** — a bissecção inteira, com a leitura de cada resultado | a bateria estava descrita, mas montá-la era do leitor |
+| `playwright-build` | **`scripts/autoverificar.sh`** — the 12 items of Step 6, executable | the checklist existed; running it was manual |
+| `playwright-review` | **`scripts/sondas.sh`** — S1 to S8, executable | the eight probes were loose commands in a table |
+| `playwright-diagnose` | **`scripts/isolar.sh`** — the whole bisection, with the reading of each result | the battery was described, but assembling it was the reader's job |
 
-`isolar.sh` imprime, para cada execução, **a hipótese que ela elimina** — e repete a
-advertência que a skill faz duas vezes: `--workers=1` **diagnostica, não conserta**.
+`isolar.sh` prints, for each run, **the hypothesis it eliminates** — and repeats the
+warning the skill makes twice: `--workers=1` **diagnoses, it does not fix**.
 
-## O mapa de IDs
+## The ID map
 
-`mapa-de-ids.md` é **gerado** e igual nas três, por
-`playwright-review/scripts/gerar-mapa-de-ids.sh`. Indexa os **85** `PW-*` por satélite e
-seção — o número que a própria skill declara — mais a § 6.2 completa: os dois apelidos
-(`PW-ACT-07`, `PW-LOC-07`) **e** as quatro regras que *parecem* apelido e continuam citáveis.
+`mapa-de-ids.md` is **generated** and identical across the three, by
+`playwright-review/scripts/gerar-mapa-de-ids.sh`. It indexes the **85** `PW-*` by satellite and
+section — the number the skill itself declares — plus the whole of § 6.2: the two aliases
+(`PW-ACT-07`, `PW-LOC-07`) **and** the four rules that *look* like aliases and remain citable.
 
 ```bash
 bash plugins/hermes-e2e/skills/playwright-review/scripts/gerar-mapa-de-ids.sh
@@ -36,26 +36,26 @@ bash scripts/instalar.sh
 ```
 
 <!-- tokens:inicio -->
-## Orçamento de contexto
+## Context budget
 
-Medido por `skill-validator` (tiktoken), em 2026-09-05. **O número que importa é o da
-coluna `SKILL.md`**: é o que entra no contexto antes de a skill decidir o que abrir.
-As referências carregam sob demanda, uma por vez.
+Measured by `skill-validator` (tiktoken), on 2026-09-05. **The number that matters is the
+`SKILL.md` column**: it is what enters the context before the skill decides what to open.
+References load on demand, one at a time.
 
-| Skill | `SKILL.md` | maior `references/` | total | refs |
+| Skill | `SKILL.md` | largest `references/` | total | refs |
 | --- | ---: | --- | ---: | ---: |
 | `playwright-build` | 1.767 | `mapa-de-ids.md` (4.032) | 9.531 | 6 |
 | `playwright-diagnose` | 1.676 | `mapa-de-ids.md` (4.032) | 9.059 | 6 |
 | `playwright-review` | 1.412 | `mapa-de-ids.md` (4.032) | 12.033 | 6 |
 
-Carregar as 3 skills deste grupo de uma vez custaria **4.855 tokens** só de `SKILL.md`,
-e **30.623** com todas as referências. É por isso que cada skill declara o que **nunca** carregar.
+Loading all 3 skills in this group at once would cost **4.855 tokens** in `SKILL.md` alone,
+and **30.623** with every reference. That is why each skill declares what it must **never** load.
 
-Regenerar: `bash scripts/medir.sh`
+Regenerate: `bash scripts/medir.sh`
 <!-- tokens:fim -->
 
-## Relacionados
+## Related
 
-- [Skill — Índice](../README.md) · [Playwright](../../knowledge-base/docs/playwright.md) § 7 — o contrato
-- `hermes-core: família teste` — a camada de conceito, que vem antes
-- `hermes-backend: família bun` — unidade e integração
+- [Skills index](../README.md) · [Playwright](../../knowledge-base/docs/playwright.md) § 7 — the contract
+- `hermes-core: test family` — the concept layer, which comes first
+- `hermes-backend: bun family` — unit and integration

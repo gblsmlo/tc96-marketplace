@@ -1,8 +1,9 @@
 ---
 nome: playwright-diagnose
-descricao: Diagnosticar teste Playwright que falha ou falha de forma intermitente, lendo o trace antes de tocar no código, com bissecção executável e IDs `PW-*` — use quando a tarefa for investigar teste flaky, falha que só acontece em CI, falha que só acontece em paralelo, screenshot que difere sem motivo, ou timeout de 30 s sem causa aparente. Não use para escrever teste novo, que é playwright-build, para auditar uma suíte inteira sem falha concreta, que é playwright-review, nem para a suíte como sistema e taxa de flakiness, que é test-diagnose.
+descricao: Diagnose a Playwright test that fails or fails intermittently, reading the trace before touching the code, with executable bisection and `PW-*` IDs — use when the task is investigating a flaky test, a failure that only happens in CI, a failure that only happens in parallel, a screenshot that differs for no reason, or a 30 s timeout with no apparent cause. Do not use to write a new test, which is playwright-build, to audit a whole suite with no concrete failure, which is playwright-review, nor for the suite as a system and its flakiness rate, which is test-diagnose.
 tipo: skill
 familia: playwright
+idioma: en
 fonte: "[Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md)"
 docs:
   - /microsoft/playwright
@@ -15,138 +16,138 @@ tags:
 
 # playwright-diagnose
 
-> **Fonte desta skill:** [Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md), com a § 5.2 do hub [Playwright](../../../knowledge-base/docs/playwright.md) como árvore de diagnóstico. As 85 regras da família `PW-*` moram na § 6 do hub.
-> Esta skill **não contém** o texto das regras — ela diz o que obter, em que ordem ler e como eliminar hipóteses.
-> **Superfície de API:** resolva pelo Context7 — `/microsoft/playwright`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md), with § 5.2 of the [Playwright](../../../knowledge-base/docs/playwright.md) hub as the diagnostic tree. The 85 rules of the `PW-*` family live in § 6 of the hub.
+> This skill **does not contain** the text of the rules — it says what to obtain, in what order to read and how to eliminate hypotheses.
+> **API surface:** resolve it through Context7 — `/microsoft/playwright`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contrato que esta skill implementa: [Playwright](../../../knowledge-base/docs/playwright.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Playwright](../../../knowledge-base/docs/playwright.md) § 7 ("Contrato de skill").
 
-> **Nota de desenho.** Esta skill diagnostica **um teste**. Para a **suíte como sistema** — taxa de flakiness, confiança, capacidade de detectar quebra — é `test-diagnose`. A diferença prática: aqui se lê um trace; lá se lê o histórico do CI. Chegar lá com um teste vermelho, ou aqui com "a suíte é flaky", é usar a ferramenta errada.
+> **Design note.** This skill diagnoses **one test**. For the **suite as a system** — flakiness rate, trust, ability to detect a break — that is `test-diagnose`. The practical difference: here you read a trace; there you read the CI history. Arriving there with one red test, or here with "the suite is flaky", is using the wrong tool.
 
 ---
 
-## Quando usar
+## When to use
 
-Um teste concreto falha, ou falha às vezes.
+One concrete test fails, or fails sometimes.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| escrever ou reescrever teste | `playwright-build` |
-| auditar suíte sem falha concreta | `playwright-review` |
-| a **suíte** perdeu credibilidade; medir flakiness | `test-diagnose` |
-| teste sob `bun test` que falha | `bun-test-review` |
-| a falha é defeito real do produto | então **o teste funcionou** — reporte o defeito e pare |
+| writing or rewriting a test | `playwright-build` |
+| auditing a suite with no concrete failure | `playwright-review` |
+| the **suite** has lost credibility; measuring flakiness | `test-diagnose` |
+| a failing test under `bun test` | `bun-test-review` |
+| the failure is a real product defect | then **the test worked** — report the defect and stop |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Playwright](../../../knowledge-base/docs/playwright.md) § 0 | a tabela de timeouts — quem estourou, e qual |
-| 2 | [Playwright](../../../knowledge-base/docs/playwright.md) § 5.2 | a árvore de diagnóstico |
-| 3 | [Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md) § 3 | a leitura do trace em quatro passos |
-| 4 | `references/mapa-de-ids.md` | antes de citar — dois IDs são apelidos |
-| 5 | o satélite da causa | só **depois** de ter a causa |
+| 1 | [Playwright](../../../knowledge-base/docs/playwright.md) § 0 | the timeout table — which one blew, and which |
+| 2 | [Playwright](../../../knowledge-base/docs/playwright.md) § 5.2 | the diagnostic tree |
+| 3 | [Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md) § 3 | reading the trace in four steps |
+| 4 | `references/mapa-de-ids.md` | before citing — two IDs are aliases |
+| 5 | the satellite for the cause | only **after** you have the cause |
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/leitura-do-trace.md` | como obter o trace e as quatro abas, com a tabela de mensagens do Log |
-| `references/arvore-de-hipoteses.md` | os oito itens da árvore e a bissecção |
-| `references/falha-so-em-ci.md` | as quatro causas de CI, e as duas armadilhas que parecem flake |
-| `references/conserto-x-anestesico.md` | os sete anestésicos, o formato do achado e o fechamento |
-| `references/mapa-de-ids.md` | os 85 `PW-*` por satélite e seção |
-| `references/exemplo-diagnostico.md` | diagnóstico inteiro, do trace ao achado |
-| `scripts/isolar.sh` | roda a bateria de bissecção e imprime a hipótese que cada execução elimina |
+| `references/leitura-do-trace.md` | how to obtain the trace and the four tabs, with the Log message table |
+| `references/arvore-de-hipoteses.md` | the eight items of the tree and the bisection |
+| `references/falha-so-em-ci.md` | the four CI causes, and the two traps that look like flakiness |
+| `references/conserto-x-anestesico.md` | the seven anesthetics, the finding format and the closing |
+| `references/mapa-de-ids.md` | the 85 `PW-*` by satellite and section |
+| `references/exemplo-diagnostico.md` | a whole diagnosis, from the trace to the finding |
+| `scripts/isolar.sh` | runs the bisection battery and prints the hypothesis each run eliminates |
 
 ---
 
-## Passo 0 — A pergunta que vem antes de tudo
+## Step 0 — The question that comes before everything
 
-> **A falha é um defeito real do produto?**
+> **Is the failure a real product defect?**
 
-Se sim, **o teste fez o trabalho dele**: reporte o defeito e pare. Confundir "teste vermelho" com "teste ruim" é como uma suíte perde a capacidade de dar sinal.
-
----
-
-## Passo 1 — Obter o trace
-
-Sem trace configurado, toda falha de CI é adivinhação — e se `trace` está `'off'`, **o primeiro achado é a configuração** (`PW-CFG-02`), não o teste.
-
-> **Nunca** use `--debug` para decidir se é flake: ele força `timeout=0` e `workers=1`, então **sempre passa** (`PW-DBG-02`).
-
-Comandos por situação: `references/leitura-do-trace.md`.
+If so, **the test did its job**: report the defect and stop. Confusing "red test" with "bad test" is how a suite loses its ability to give signal.
 
 ---
 
-## Passo 2 — Ler o trace em quatro passos
+## Step 1 — Obtain the trace
 
-**Errors** (qual ação falhou) → **Log** daquela ação (**em qual checagem** travou) → **Snapshot Before** (o que estava na tela) → **Network**.
+Without a configured trace, every CI failure is guesswork — and if `trace` is `'off'`, **the first finding is the configuration** (`PW-CFG-02`), not the test.
 
-O passo 2 é o que nenhum `console.log` dá, e é onde a causa aparece: `element intercepts pointer events` é overlay; `strict mode violation` é locator ambíguo; `waiting for element to be visible` é alvo que nunca apareceu. Tabela completa na referência.
+> **Never** use `--debug` to decide whether it is flakiness: it forces `timeout=0` and `workers=1`, so it **always passes** (`PW-DBG-02`).
 
----
-
-## Passo 3 — Percorrer a árvore, na ordem
-
-`references/arvore-de-hipoteses.md`, oito itens, **sem pular**. **O que nunca é a resposta:** subir `retries` (`PW-RUN-03`).
+Commands per situation: `references/leitura-do-trace.md`.
 
 ---
 
-## Passo 4 — Isolar por bissecção
+## Step 2 — Read the trace in four steps
+
+**Errors** (which action failed) → the **Log** for that action (**at which check** it stalled) → **Snapshot Before** (what was on screen) → **Network**.
+
+Step 2 is what no `console.log` gives, and it is where the cause appears: `element intercepts pointer events` is an overlay; `strict mode violation` is an ambiguous locator; `waiting for element to be visible` is a target that never appeared. Full table in the reference.
+
+---
+
+## Step 3 — Walk the tree, in order
+
+`references/arvore-de-hipoteses.md`, eight items, **without skipping**. **What is never the answer:** raising `retries` (`PW-RUN-03`).
+
+---
+
+## Step 4 — Isolate by bisection
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-diagnose/scripts/isolar.sh e2e/checkout.spec.ts:52 20
 ```
 
-`--repeat-each` confirma intermitência; `--workers=1` aponta estado compartilhado; só-o-caso aponta dependência de ordem; container do CI aponta paridade de ambiente.
+`--repeat-each` confirms intermittency; `--workers=1` points at shared state; the case alone points at order dependence; the CI container points at environment parity.
 
-> **`--workers=1` diagnostica; não conserta.**
-
----
-
-## Passo 5 — Falha que só acontece em CI
-
-`references/falha-so-em-ci.md`: CI mais lento, paridade de ambiente, estado de servidor, setup que não rodou. Mais duas armadilhas que aparecem como flake — Service Worker interceptando antes do `route` (`PW-NET-03`) e imagens bloqueadas numa suíte com screenshot (`PW-SNAP-06`).
+> **`--workers=1` diagnoses; it does not fix.**
 
 ---
 
-## Passo 6 — Reportar
+## Step 5 — A failure that only happens in CI
 
-Cinco partes, com **evidência do trace e a aba**. "Parece timing" não é evidência. Se a causa é defeito de produto, a correção é no produto — dizer isso explicitamente é o valor principal desta skill. Formato e exemplo: `references/conserto-x-anestesico.md`.
-
----
-
-## Passo 7 — Conserto × anestésico
-
-Sete correções que fazem o vermelho sumir sem resolver nada: `waitForTimeout`, `retries`, `force: true`, `workers: 1`, `expect.timeout` global, `skip` sem issue, e **remover a asserção** — a mais grave, e a que um healer sem spec declarada faz sozinho (`PW-AGT-05`).
+`references/falha-so-em-ci.md`: a slower CI, environment parity, server state, setup that did not run. Plus two traps that look like flakiness — a Service Worker intercepting before the `route` (`PW-NET-03`) and blocked images in a suite with screenshots (`PW-SNAP-06`).
 
 ---
 
-## Passo 8 — Fechar
+## Step 6 — Report
 
-1. **`--repeat-each=20`** confirma a correção. Uma execução verde não prova nada num flake de 1 em 4.
-2. **Defeito de produto**: o teste não muda — diga isso.
-3. **Paridade de ambiente**: o conserto é o pipeline.
-4. **Transforme o diagnóstico em portão** — trace ligado, flaky não contando como verde.
-5. **Se o mesmo teste volta a flakear**, a causa raiz não foi encontrada (`TS-PROC-08`).
-6. **Declare o que não foi verificado.**
+Five parts, with **evidence from the trace and the tab**. "Looks like timing" is not evidence. If the cause is a product defect, the fix is in the product — saying so explicitly is this skill's main value. Format and example: `references/conserto-x-anestesico.md`.
 
 ---
 
-## Exemplo
+## Step 7 — Fix × anesthetic
 
-Clique que falha ~25% no CI e passa local. A aba **Log** dá a causa em uma linha — `element intercepts pointer events` — e o Snapshot Before mostra o toast sobre o botão. `force: true` é explicitamente descartado: o defeito é do produto, porque o usuário também não consegue clicar.
-
-Diagnóstico completo: `references/exemplo-diagnostico.md`.
+Seven fixes that make the red disappear without solving anything: `waitForTimeout`, `retries`, `force: true`, `workers: 1`, a global `expect.timeout`, a `skip` without an issue, and **removing the assertion** — the worst, and the one a healer with no declared spec does on its own (`PW-AGT-05`).
 
 ---
 
-## Relacionados
+## Step 8 — Closing
 
-- [Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md) — fonte desta skill
-- [Playwright](../../../knowledge-base/docs/playwright.md) § 5.2 — a árvore de diagnóstico
-- `playwright-build` · `playwright-review` — as skills irmãs
-- `test-diagnose` — diagnostica a **suíte**; esta diagnostica **um teste**
+1. **`--repeat-each=20`** confirms the fix. One green run proves nothing on a 1-in-4 flake.
+2. **A product defect**: the test does not change — say so.
+3. **Environment parity**: the fix is the pipeline.
+4. **Turn the diagnosis into a gate** — trace on, flaky not counting as green.
+5. **If the same test goes flaky again**, the root cause was not found (`TS-PROC-08`).
+6. **Declare what was not verified.**
+
+---
+
+## Example
+
+A click that fails ~25% in CI and passes locally. The **Log** tab gives the cause in one line — `element intercepts pointer events` — and the Snapshot Before shows the toast over the button. `force: true` is explicitly discarded: the defect belongs to the product, because the user cannot click either.
+
+Full diagnosis: `references/exemplo-diagnostico.md`.
+
+---
+
+## Related
+
+- [Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md) — source of this skill
+- [Playwright](../../../knowledge-base/docs/playwright.md) § 5.2 — the diagnostic tree
+- `playwright-build` · `playwright-review` — the sibling skills
+- `test-diagnose` — diagnoses the **suite**; this one diagnoses **one test**
