@@ -19,7 +19,7 @@ An HTTP contract is **invisible in the code**: the handler looks right, the test
 
 **S5 is the gravest and the least run.** If the write is applied, the service has silent data loss under concurrency — that is not a style finding.
 
-**S3 is the most likely to light up in this stack:** in Hono, without the `methodNotAllowed` middleware, an unsupported method returns `404` — confirm the middleware through Context7, `/websites/hono_dev`.
+**S3 is the most likely to light up in this stack:** in Hono, without the `methodNotAllowed` middleware, an unsupported method returns `404` ([Hono - Middleware e Ciclo de Vida](../../../../knowledge-base/docs/hono-middleware-e-ciclo-de-vida.md) § 5).
 
 **If S8 shows two error formats, report before continuing** — that is an inconsistent public contract, and every new route widens the problem.
 

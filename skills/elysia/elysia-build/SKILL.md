@@ -95,7 +95,7 @@ Destructure the context **inline** (`ELYSIA-CORE-02`). An external function anno
 
 ## Step 4 — Cookies and streaming
 
-A session cookie is **signed and `httpOnly`** (`ELYSIA-CORE-05`); the semantics of `SameSite` and prefixes come from RFC 6265, read through [HTTP - Specs e RFCs](../../../knowledge-base/docs/http-specs-e-rfcs.md). In a stream, `set.headers` after the first `yield` is **silently ignored** (`ELYSIA-CORE-06`) — and `Bun.serve`'s `idleTimeout` drops SSE on its own.
+A session cookie is **signed and `httpOnly`** (`ELYSIA-CORE-05`); the semantics of `SameSite` and prefixes come from [RFC 6265 - Cookies HTTP](../../../knowledge-base/docs/rfc-6265-cookies-http.md). In a stream, `set.headers` after the first `yield` is **silently ignored** (`ELYSIA-CORE-06`) — and `Bun.serve`'s `idleTimeout` drops SSE on its own.
 
 ---
 

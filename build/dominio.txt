@@ -1,0 +1,53 @@
+# Quais notas do vault foram extraidas para esta knowledge-base.
+#
+# Registro de proveniencia da extracao unica de 2026-09-22 — nao e configuracao
+# de build. O vault deixou de ser origem: as notas sao conteudo deste projeto.
+# Um glob por linha, relativo a raiz do vault.
+
+# --- frontend ---
+Docs/React*
+Docs/TanStack*
+Docs/Storybook*
+Pages/Architecture in React.md
+Pages/Feature-Based Architecture.md
+Pages/Frontend roadmap.md
+Pages/Storybook estruturado por Atomic Design.md
+
+# --- test ---
+Docs/Teste de Software*
+
+# --- e2e ---
+Docs/Playwright*
+
+# --- backend ---
+Docs/Bun*
+Docs/Elysia*
+Docs/Hono*
+Docs/HTTP*
+Docs/Drizzle*
+Docs/Zod - Validação de Ambiente.md
+Pages/Monorepo com Bun - estrutura e tooling.md
+Pages/Fronteira do BFF - forma, jornada e regra.md
+
+# --- seguranca e protocolo (citadas pelos agentes) ---
+Docs/OWASP - Sessão e Autorização.md
+Docs/NIST RBAC - ANSI INCITS 359.md
+Docs/OAuth 2.0 for Browser-Based Applications.md
+Docs/RFC 6265 - Cookies HTTP.md
+Docs/RFC 8725 - JWT Best Current Practices.md
+Docs/RFC 9700 - OAuth 2.0 Security BCP.md
+Docs/WorkOS - AuthKit.md
+Docs/WorkOS - RBAC.md
+
+# --- plataforma e processo (citadas pelos agentes) ---
+Docs/Claude Code*
+Docs/Claude API Docs.md
+Docs/Backend no runtime Bun.md
+Docs/Backend - Pendências de revisão.md
+Docs/Github Actions.md
+Docs/Pull Request*
+Pages/Trunk-based development.md
+Pages/Feature Flags — modelo visual do fluxo.md
+Pages/Forward Deployed Engineering.md
+Pages/Auth e cripto — siglas da decisão de framework.md
+Pages/Application Strategies.md

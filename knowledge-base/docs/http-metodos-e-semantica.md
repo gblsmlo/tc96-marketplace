@@ -257,7 +257,7 @@ Content-Length: 0
 
 A distinção com `501`: `405` é *método conhecido, recurso não aceita*; `501` é *o servidor não implementa esse método em lugar nenhum*. Um `DELETE` numa coleção que só lê e escreve é `405`; um `PROPFIND` numa API REST é `501`.
 
-**O ponto prático que mais custa:** vários frameworks devolvem `404` quando o path existe mas o método não. Isso é indistinguível de "recurso inexistente" para quem depura, e viola a obrigação do `Allow`. Em Hono, o middleware `hono/method-not-allowed` é o que corrige — sem ele, *método não suportado em rota existente devolve `404`* (`Hono - Middleware e Ciclo de Vida` § 5).
+**O ponto prático que mais custa:** vários frameworks devolvem `404` quando o path existe mas o método não. Isso é indistinguível de "recurso inexistente" para quem depura, e viola a obrigação do `Allow`. Em Hono, o middleware `hono/method-not-allowed` é o que corrige — sem ele, *método não suportado em rota existente devolve `404`* ([Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) § 5).
 
 | ID | Regra |
 | --- | --- |
@@ -401,7 +401,7 @@ Vale a recíproca também, e ela é menos lembrada: **um `PUT` só é retentáve
 - [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) · [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) · [HTTP - CORS](http-cors.md) · [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) · [HTTP - Specs e RFCs](http-specs-e-rfcs.md)
 - · ·
 - · ·
-- `Hono - Middleware e Ciclo de Vida` · `Hono - Validação e RPC` · [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md)
+- [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) · [Hono - Validação e RPC](hono-validacao-e-rpc.md) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md)
 - · ·
 
 ## Fontes consultadas

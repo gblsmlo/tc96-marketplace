@@ -357,7 +357,7 @@ Reimplementa `route` pior: não pega XHR, não pega navegação, não pega recur
 await route.fulfill({ json: { id: 1, name: 'Café', qty: 2 } }); // o servidor manda "quantidade"
 ```
 
-O mock passa, a aplicação real quebra. Reuse o tipo do servidor — `Hono - Validação e RPC`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) (`PW-NET-04`).
+O mock passa, a aplicação real quebra. Reuse o tipo do servidor — [Hono - Validação e RPC](hono-validacao-e-rpc.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) (`PW-NET-04`).
 
 ### 9.5 Criar dado pela UI para testar outra coisa
 
@@ -399,7 +399,7 @@ Ver § 1.3 e [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md)
 - [Playwright - Autenticação e Isolamento](playwright-autenticacao-e-isolamento.md) — `storageState` entre API e browser
 - [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) — por que bloquear imagem quebra screenshot
 - [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) · [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) · [HTTP - CORS](http-cors.md) — a semântica que o mock precisa preservar
-- `Hono - Validação e RPC` · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — de onde vem o tipo da resposta
+- [Hono - Validação e RPC](hono-validacao-e-rpc.md) · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — de onde vem o tipo da resposta
 - [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) — por que a query não refaz o fetch que o teste esperava
 - — o critério de quando mock não basta
 - [Storybook - Mocking](storybook-mocking.md) — o mesmo problema, um nível abaixo, com MSW

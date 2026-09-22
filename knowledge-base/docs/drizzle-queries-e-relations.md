@@ -597,8 +597,8 @@ Segundo argumento por coluna: uma função recebe o schema gerado e o estende; u
 
 - [Drizzle ORM](drizzle-orm.md) — entrada, § 0 sobre qual versão esta doc documenta
 - [Drizzle - Schema e Migrations](drizzle-schema-e-migrations.md) — schema e `drizzle-kit`
-- `Zod - Validação de Ambiente` · [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md) — o mesmo Zod, outra fronteira
-- `Hono - Validação e RPC` · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — onde `createInsertSchema` alimenta a validação de rota
+- [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md) · [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md) — o mesmo Zod, outra fronteira
+- [Hono - Validação e RPC](hono-validacao-e-rpc.md) · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — onde `createInsertSchema` alimenta a validação de rota
 
 ## Fontes consultadas
 

@@ -68,8 +68,8 @@ cache — e vai sofrer do mesmo jeito.
 | --- | --- |
 | Direção do dado | |
 | Contrato verificável entre front e back | |
-| **Quem é dono de cada decisão na fronteira do servidor** | **`Fronteira do BFF - forma, jornada e regra`** |
-| Quando o código vira pacote, e o que o CI precisa verificar | `Monorepo com Bun - estrutura e tooling` |
+| **Quem é dono de cada decisão na fronteira do servidor** | **[Fronteira do BFF - forma, jornada e regra](fronteira-do-bff-forma-jornada-e-regra.md)** |
+| Quando o código vira pacote, e o que o CI precisa verificar | [Monorepo com Bun - estrutura e tooling](monorepo-com-bun-estrutura-e-tooling.md) |
 | Onde validar, e quantas vezes | |
 | Schema em runtime | |
 | Captura separada de validação | |
@@ -154,7 +154,7 @@ A hierarquia de fontes do vault, da mais forte para a mais fraca: `Docs/` (docum
 página. Ver [React.js](../docs/react-js.md) § 7, e `react-build` como exemplo de skill que implementa esse contrato.
 
 **Três exceções, explícitas.** [Feature-Based Architecture](feature-based-architecture.md),
-`Fronteira do BFF - forma, jornada e regra` e `Monorepo com Bun - estrutura e tooling` moram em
+[Fronteira do BFF - forma, jornada e regra](fronteira-do-bff-forma-jornada-e-regra.md) e [Monorepo com Bun - estrutura e tooling](monorepo-com-bun-estrutura-e-tooling.md) moram em
 `Pages/` mas são **normativas**: têm IDs citáveis (`REACT-ARCH-*`, `BFF-*` e `MONO-*`), invariantes e
 contrato de skill. Ela está aqui, e não em `Docs/`,
 porque não resume documentação externa de uma ferramenta — ela registra uma decisão desta casa, com

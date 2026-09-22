@@ -202,7 +202,7 @@ webServer: [
 ],
 ```
 
-No stack deste vault isso é o caso normal: `apps/web` e `apps/server` sobem juntos (`Monorepo com Bun - estrutura e tooling`). O `name` é o que torna o log legível quando os dois falham.
+No stack deste vault isso é o caso normal: `apps/web` e `apps/server` sobem juntos ([Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md)). O `name` é o que torna o log legível quando os dois falham.
 
 ---
 
@@ -373,8 +373,8 @@ Project é matriz de **configuração**, não de ambiente: isso põe um alvo de 
 - [Playwright - Execução, Retries e CI](playwright-execucao-retries-e-ci.md) — `workers`, `fullyParallel`, shard, reporters
 - [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) — as opções de rede de `use`
 - [Playwright - Debug e Trace](playwright-debug-e-trace.md) — os valores completos de `trace`, `video` e `screenshot`
-- `Monorepo com Bun - estrutura e tooling` — dois `webServer` e onde a suíte vive
-- · `Zod - Validação de Ambiente` — como `BASE_URL` deveria chegar
+- [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) — dois `webServer` e onde a suíte vive
+- · [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md) — como `BASE_URL` deveria chegar
 
 ## Fontes consultadas
 

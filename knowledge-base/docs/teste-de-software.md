@@ -93,8 +93,8 @@ Esta nota decide o nível. A partir daí, o "como" está aqui — e este mapa é
 | unidade e integração (Node/Bun, backend, funções puras) | `bun test` | [Bun - Testes](bun-testes.md) |
 | componente isolado, estados de UI, a11y de componente | Storybook + addon-vitest | [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) |
 | jornada de usuário atravessando rota, rede e sessão | Playwright | [Playwright](playwright.md) |
-| contrato entre cliente tipado e servidor | tipo exportado do servidor | `Hono - Validação e RPC`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
-| validação de entrada em runtime | Zod / TypeBox | `Zod - Validação de Ambiente`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
+| contrato entre cliente tipado e servidor | tipo exportado do servidor | [Hono - Validação e RPC](hono-validacao-e-rpc.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
+| validação de entrada em runtime | Zod / TypeBox | [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 | estático (tipo e lint) | TypeScript + Biome | `TypeScript` |
 | persistência e migração | Drizzle + Postgres local | [Drizzle - Schema e Migrations](drizzle-schema-e-migrations.md) |
 
@@ -358,14 +358,14 @@ NUNCA: esta estrutura inteira para uma tarefa de escrever um teste
 | Verificar regra de negócio | escrever E2E | unidade em [Bun - Testes](bun-testes.md) (`TS-CORE-02`) |
 | Verificar estado visual de componente | E2E que navega até a tela | story em [Storybook - Stories e Args](storybook-stories-e-args.md) |
 | Verificar jornada crítica | teste de unidade que simula a jornada | [Playwright](playwright.md) |
-| Verificar o contrato com o BFF | redigitar o shape no mock | reusar o tipo do servidor — `Hono - Validação e RPC`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
+| Verificar o contrato com o BFF | redigitar o shape no mock | reusar o tipo do servidor — [Hono - Validação e RPC](hono-validacao-e-rpc.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 | Verificar entrada inválida | só o caminho feliz | valor limite + Zod na fronteira — [Teste de Software - Técnicas de Design de Caso](teste-de-software-tecnicas-de-design-de-caso.md) |
 | Preparar estado para um teste de UI | criar pela interface | criar por API — [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 5 |
 | Isolar dado entre execuções paralelas | um banco compartilhado | schema/banco efêmero por worker — [Drizzle - Schema e Migrations](drizzle-schema-e-migrations.md) |
 | Testar expiração e "há 3 dias" | esperar o tempo passar | relógio controlado (`TS-DUB-05`) — [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 7, [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) |
-| Testar autorização por papel | um usuário com tudo liberado | um estado por papel — [Playwright - Autenticação e Isolamento](playwright-autenticacao-e-isolamento.md), e o critério de achado em `OWASP - Sessão e Autorização` |
+| Testar autorização por papel | um usuário com tudo liberado | um estado por papel — [Playwright - Autenticação e Isolamento](playwright-autenticacao-e-isolamento.md), e o critério de achado em [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) |
 | Garantir contrato de status e cache | afirmar `200` sempre | [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md), [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) |
-| Portão de qualidade no PR | revisão manual como único portão | política + CI — `Github Actions` |
+| Portão de qualidade no PR | revisão manual como único portão | política + CI — [Github Actions](github-actions.md) |
 | "melhorar a qualidade" | mais teste, sem dizer qual problema | decidir se é QA (processo) ou QC (entregável) — |
 | Achar a causa de defeitos recorrentes | corrigir sintoma | análise de causa — |
 
@@ -385,7 +385,7 @@ NUNCA: esta estrutura inteira para uma tarefa de escrever um teste
 - — o que a suíte existe para viabilizar
 - · ·
 - **Ferramentas:** [Bun - Testes](bun-testes.md) · [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) · [Playwright](playwright.md) · `TypeScript`
-- `Github Actions` · · `Trunk-based development`
+- [Github Actions](github-actions.md) · · [Trunk-based development](../pages/trunk-based-development.md)
 - — causa raiz de defeito recorrente
 -
 

@@ -245,8 +245,8 @@ O outro extremo do erro. Num time que entrega continuamente, produzir plano de t
 - · — a mesma matéria pelo lado da gestão
 - — causa raiz do defeito reaberto
 - [Playwright - Debug e Trace](playwright-debug-e-trace.md) — o trace como evidência anexável
-- `Github Actions` · — os portões executáveis
-- `Pull Request` · `Pull Request Template` — onde o critério de saída vive num repositório
+- [Github Actions](github-actions.md) · — os portões executáveis
+- [Pull Request](pull-request.md) · [Pull Request Template](pull-request-template.md) — onde o critério de saída vive num repositório
 -
 - — as fases comprimidas em prática de time
 

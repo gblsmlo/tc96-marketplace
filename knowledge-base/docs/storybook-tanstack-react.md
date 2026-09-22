@@ -35,7 +35,7 @@ O ponto 2 é o que mais muda o dia a dia: uma story de `apps/web` que renderiza 
 
 A fonte é explícita: o framework atende **tanto SPA usando só `@tanstack/react-router` quanto app TanStack Start completo**. Os stubs de server function são a metade que só acende sob Start.
 
-Num app SPA com BFF separado — o desenho de `Backend no runtime Bun` — essa metade fica inerte, e isso é o esperado, não sintoma de configuração errada. O que se aproveita é o router mockado, que já justifica sozinho.
+Num app SPA com BFF separado — o desenho de [Backend no runtime Bun](backend-no-runtime-bun.md) — essa metade fica inerte, e isso é o esperado, não sintoma de configuração errada. O que se aproveita é o router mockado, que já justifica sozinho.
 
 ---
 
@@ -296,7 +296,7 @@ O framework torna trivial dar rota a uma story. Isso é bom para `apps/web` e é
 
 **A story funciona como detector.** Se o componente de `packages/ui` só renderiza com `parameters.tanstack.router` configurado, ele conhece rota — e um design system que conhece rota não é reutilizável fora daquele app. O conserto é no componente, não na story: navegação entra por prop (`onSelecionar`, `href`, ou um `as`/`asChild` que o consumidor preenche com `Link`).
 
-Isso é a mesma direção de dependência de `Monorepo com Bun - estrutura e tooling` § 2 vista de outro ângulo, e o mesmo critério de [React - Patterns](react-patterns.md) sobre o que pertence a um componente reutilizável (`SB-TS-08`).
+Isso é a mesma direção de dependência de [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) § 2 vista de outro ângulo, e o mesmo critério de [React - Patterns](react-patterns.md) sobre o que pertence a um componente reutilizável (`SB-TS-08`).
 
 ---
 
@@ -353,8 +353,8 @@ Os stubs de `createServerFn` existem para app Start. Numa SPA com BFF, a chamada
 - [TanStack Router - Carregamento de Dados](tanstack-router-carregamento-de-dados.md) — `loader` e `beforeLoad` no app real
 - [TanStack Router - Search Params](tanstack-router-search-params.md) — `validateSearch`, sobrescrevível por `routeOverrides`
 - [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) — `staleTime`, `retry` e invalidação
-- `Backend no runtime Bun` — por que a metade Start fica inerte numa SPA com BFF
-- `Monorepo com Bun - estrutura e tooling` — a direção de dependência que a § 10 invoca
+- [Backend no runtime Bun](backend-no-runtime-bun.md) — por que a metade Start fica inerte numa SPA com BFF
+- [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) — a direção de dependência que a § 10 invoca
 
 ## Fontes consultadas
 

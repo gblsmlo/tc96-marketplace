@@ -342,7 +342,7 @@ Três superfícies num projeto que precisa de uma significa três coisas para ma
 - [Playwright - Estrutura de Testes](playwright-estrutura-de-testes.md) — o que o generator não faz: estrutura
 - `Skill` — o contrato de skill deste vault
 - — a camada de decisão, e por que ela é separada da de operação
-- `Claude API Docs` — tool use, do outro lado da mesma fronteira
+- [Claude API Docs](claude-api-docs.md) — tool use, do outro lado da mesma fronteira
 - [Teste de Software](teste-de-software.md) — o que faz sentido automatizar antes de automatizar a automação
 
 ## Fontes consultadas

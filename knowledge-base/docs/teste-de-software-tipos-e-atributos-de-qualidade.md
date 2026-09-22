@@ -71,8 +71,8 @@ Isto já está registrado no vault, com o exemplo completo, em — e é o ponto 
 
 | Atributo | Ponte |
 | --- | --- |
-| segurança de sessão e autorização | `OWASP - Sessão e Autorização`, `RFC 8725 - JWT Best Current Practices`, `NIST RBAC - ANSI INCITS 359` |
-| segurança de fronteira HTTP | [HTTP - CORS](http-cors.md), `RFC 6265 - Cookies HTTP` |
+| segurança de sessão e autorização | [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md), [RFC 8725 - JWT Best Current Practices](rfc-8725-jwt-best-current-practices.md), [NIST RBAC - ANSI INCITS 359](nist-rbac-ansi-incits-359.md) |
+| segurança de fronteira HTTP | [HTTP - CORS](http-cors.md), [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) |
 | acessibilidade (componente) | [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) |
 | acessibilidade (página) | [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) § 5 |
 | compatibilidade de browser | projects — [Playwright - Configuração e Projects](playwright-configuracao-e-projects.md) § 3.1 |
@@ -137,7 +137,7 @@ No stack deste vault a camada estática é substancial e frequentemente esquecid
 
 É a base do Testing Trophy, e a razão de ela estar lá: é a camada mais barata de todas, e a única que roda no editor.
 
-> **O par que precisa dos dois:** TypeScript não protege nada depois do build. Tipo é compile-time; a fronteira precisa de validação em runtime. É por isso que Zod na borda não é redundância com o tipo — é a outra metade. Ver `Zod - Validação de Ambiente` e.
+> **O par que precisa dos dois:** TypeScript não protege nada depois do build. Tipo é compile-time; a fronteira precisa de validação em runtime. É por isso que Zod na borda não é redundância com o tipo — é a outra metade. Ver [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md) e.
 
 ---
 
@@ -217,9 +217,9 @@ Rodar a carga esperada e concluir que o sistema "aguenta estresse". Estresse é 
 - [Teste de Software - Técnicas de Design de Caso](teste-de-software-tecnicas-de-design-de-caso.md) — o eixo da técnica
 - [Teste de Software - Processo e Artefatos](teste-de-software-processo-e-artefatos.md) — critério de aceite e de saída
 - — o critério numérico, com exemplo completo
-- `OWASP - Sessão e Autorização` · [HTTP - CORS](http-cors.md) · `RFC 6265 - Cookies HTTP` — o atributo segurança
+- [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) · [HTTP - CORS](http-cors.md) · [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) — o atributo segurança
 - [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) · [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) — o atributo acessibilidade
-- `TypeScript` · `Zod - Validação de Ambiente` · — a camada estática e a fronteira
+- `TypeScript` · [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md) · — a camada estática e a fronteira
 - `PostgreSQL` · [Drizzle - Queries e Relations](drizzle-queries-e-relations.md) — performance de dado
 - — os cinco estados de um fluxo
 

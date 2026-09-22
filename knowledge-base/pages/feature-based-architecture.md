@@ -257,7 +257,7 @@ até o terceiro caso revelar a forma real. Esta é a mesma disciplina do Zettel 
 
 ### Import entre features irmãs — a decisão adotada
 
-> **O dono desta regra é `MONO-12`**, em `Monorepo com Bun - estrutura e tooling` § 6: a aresta
+> **O dono desta regra é `MONO-12`**, em [Monorepo com Bun - estrutura e tooling](monorepo-com-bun-estrutura-e-tooling.md) § 6: a aresta
 > lateral é o mesmo invariante para package e para feature, e é lá que ela tem ID, severidade e
 > sonda executável. Esta seção **aplica** o invariante ao caso React. `REACT-ARCH-05` é o *como
 > atravessar* uma aresta que existe, e `REACT-ARCH-08` é o *quando extrair* — nenhum dos dois é a
@@ -303,7 +303,7 @@ ninguém perceber.** O sinal de alerta é uma feature aparecendo em três ou mai
 ponto `features/core/` deixou de ser opcional.
 
 Esse sinal deixou de ser intenção: a sonda de fan-in lateral de
-`Monorepo com Bun - estrutura e tooling` § 7 o conta, e três ou mais é achado de `MONO-12`. Até
+[Monorepo com Bun - estrutura e tooling](monorepo-com-bun-estrutura-e-tooling.md) § 7 o conta, e três ou mais é achado de `MONO-12`. Até
 que ela existisse, a permissão desta seção era prosa sem portão — `MONO-11` contra esta nota.
 
 ### `REACT-ARCH-09` — teste de bancada
@@ -831,9 +831,9 @@ sem `entities/`/`widgets/`, sem numeração de camadas.
 
 ## Relacionados
 
-- `Fronteira do BFF - forma, jornada e regra` — nota irmã: esta decide onde o código do frontend
+- [Fronteira do BFF - forma, jornada e regra](fronteira-do-bff-forma-jornada-e-regra.md) — nota irmã: esta decide onde o código do frontend
  mora; ela decide o que atravessa a fronteira do servidor e quem é dono de cada decisão
-- `Monorepo com Bun - estrutura e tooling` — quando uma camada desta nota vira pacote próprio
+- [Monorepo com Bun - estrutura e tooling](monorepo-com-bun-estrutura-e-tooling.md) — quando uma camada desta nota vira pacote próprio
 - [Architecture in React](architecture-in-react.md) — nota mãe: os eixos de decisão arquitetural
 - `react-structure` — a skill que implementa o contrato da § 10
 - — a ideia conceitual

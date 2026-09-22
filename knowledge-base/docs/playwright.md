@@ -565,23 +565,23 @@ O corpo desta doc é Playwright fiel à fonte. Mas no meu stack várias decisõe
 | `getByRole` não alcança o elemento | descer para `locator('css=…')` | o defeito é o componente sem papel/nome acessível — [React - Patterns](react-patterns.md), e a auditoria de a11y de [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) |
 | Campo só localizável por placeholder | `getByPlaceholder` e seguir a vida | falta `<label>`; é achado de acessibilidade — [React Hook Form - Registro e Controle](react-hook-form-registro-e-controle.md) |
 | Componente busca dado remoto e o teste corre demais | `waitForTimeout` | asserção web-first no estado de carregado; e o estado de erro merece teste próprio — [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) |
-| Estado de erro do BFF não dispara | `try/catch` no teste | nem `hc` (Hono) nem Eden Treaty lançam em status de erro — `Hono - Validação e RPC`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
-| Mock de resposta com shape redigitado à mão | duplicar o tipo no teste | reusar o tipo exportado do servidor — `Hono - Validação e RPC`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
+| Estado de erro do BFF não dispara | `try/catch` no teste | nem `hc` (Hono) nem Eden Treaty lançam em status de erro — [Hono - Validação e RPC](hono-validacao-e-rpc.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
+| Mock de resposta com shape redigitado à mão | duplicar o tipo no teste | reusar o tipo exportado do servidor — [Hono - Validação e RPC](hono-validacao-e-rpc.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 | Preparar dado de teste pela UI | clicar 12 vezes para criar um registro | criar via `request` (API), navegar depois — [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 5 |
 | Semear e limpar banco entre execuções | `beforeEach` que apaga tabela | setup/teardown project + dado por worker — [Drizzle - Schema e Migrations](drizzle-schema-e-migrations.md), e |
-| Cookie de sessão não persiste | recriar login em cada teste | `storageState`; e a semântica de `SameSite`/`__Host-` é de `RFC 6265 - Cookies HTTP` |
-| Teste de autorização por papel | um só usuário com tudo liberado | um `storageState` por papel — `OWASP - Sessão e Autorização`, `WorkOS - RBAC` |
+| Cookie de sessão não persiste | recriar login em cada teste | `storageState`; e a semântica de `SameSite`/`__Host-` é de [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) |
+| Teste de autorização por papel | um só usuário com tudo liberado | um `storageState` por papel — [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md), [WorkOS - RBAC](workos-rbac.md) |
 | Asserção sobre status HTTP inesperado | afirmar `200` sempre | a semântica do status é contrato — [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) |
 | Requisição do teste barrada por origem | desligar CORS na aplicação | [HTTP - CORS](http-cors.md) |
 | Suíte E2E cobrindo toda regra de negócio | um E2E por rota | E2E cobre jornada crítica; regra vai para camada mais barata — [Teste de Software](teste-de-software.md) |
 | Teste acoplado a estado interno do componente | espiar hook ou render count | |
-| CI lento com a suíte inteira em série | aumentar a máquina | `fullyParallel` + `--shard` + `merge-reports` — `Github Actions` |
+| CI lento com a suíte inteira em série | aumentar a máquina | `fullyParallel` + `--shard` + `merge-reports` — [Github Actions](github-actions.md) |
 
 **A ponte que mais importa: Playwright e Storybook não competem, e a fronteira mudou na 1.62.** [Storybook](storybook.md) testa **componente** em browser real (via addon-vitest, que por baixo usa Playwright); o Playwright testa **jornada** atravessando rotas, rede e sessão. A regra prática: se o teste precisa de rota, login ou mais de uma tela, é Playwright; se ele varia props de um componente, é story.
 
 O que mudou: a 1.62 tornou component testing não-experimental, com um modelo de **stories e galleries** (`*.story.tsx` + `window.mount` + a fixture `mount`) que substitui `@playwright/experimental-ct-react`. Isso põe as duas ferramentas em sobreposição real onde antes havia divisão limpa. **Esta doc não recomenda migrar** stories de Storybook para o modelo do Playwright num projeto que já tem [Storybook - Stories e Args](storybook-stories-e-args.md) funcionando: o Storybook entrega sidebar, docs, controles e a11y no mesmo arquivo, e o modelo do Playwright entrega teste. Registrado aqui como decisão desta doc, não da fonte.
 
-**A ponte de runner.** O monorepo já tem dois runners por desenho (`bun test` para `apps/server`, `vitest --project=storybook` para stories — ver [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) `SB-TEST-05`). Playwright é o **terceiro**, e isso é deliberado: ele não roda sob `bun test` nem sob Vitest. O CI roda os três, e nenhum `--filter` do Bun alcança os outros dois — ver `Monorepo com Bun - estrutura e tooling` § 4.
+**A ponte de runner.** O monorepo já tem dois runners por desenho (`bun test` para `apps/server`, `vitest --project=storybook` para stories — ver [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) `SB-TEST-05`). Playwright é o **terceiro**, e isso é deliberado: ele não roda sob `bun test` nem sob Vitest. O CI roda os três, e nenhum `--filter` do Bun alcança os outros dois — ver [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) § 4.
 
 ---
 
@@ -597,8 +597,8 @@ O que mudou: a 1.62 tornou component testing não-experimental, com um modelo de
 - [Storybook](storybook.md) — o outro lado da fronteira componente × jornada
 - ·
 - [React.js](react-js.md) · [TanStack Query](tanstack-query.md) · [TanStack Router](tanstack-router.md) · [React Hook Form](react-hook-form.md)
-- [HTTP](http.md) · `OWASP - Sessão e Autorização` · `Github Actions`
-- `Monorepo com Bun - estrutura e tooling` — onde a suíte E2E vive
+- [HTTP](http.md) · [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) · [Github Actions](github-actions.md)
+- [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) — onde a suíte E2E vive
 -
 
 ## Fontes consultadas

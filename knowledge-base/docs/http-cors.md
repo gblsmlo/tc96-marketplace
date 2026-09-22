@@ -14,7 +14,7 @@ verificado-em: 2026-08-15
 
 > A direção real do mecanismo · o que é uma origem · requisição simples × preflighted e o que exatamente dispara o preflight · o `OPTIONS` e os `Access-Control-Request-*` · `Access-Control-Allow-Origin` e o veto do `*` com credenciais · `Allow-Credentials`, `Expose-Headers`, `Allow-Methods`, `Allow-Headers`, `Max-Age` · `Vary: Origin` · o modelo de falha e o que CORS não protege.
 >
-> **Não cobre:** política de cookie, `SameSite` e prefixos (`RFC 6265 - Cookies HTTP`) · autenticação, sessão e autorização (`OWASP - Sessão e Autorização` · `RFC 9700 - OAuth 2.0 Security BCP`) · `Vary` como mecanismo de chave de cache ([HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) § 6) · a semântica geral do método `OPTIONS` ([HTTP - Métodos e Semântica](http-metodos-e-semantica.md)).
+> **Não cobre:** política de cookie, `SameSite` e prefixos ([RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md)) · autenticação, sessão e autorização ([OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) · [RFC 9700 - OAuth 2.0 Security BCP](rfc-9700-oauth-2-0-security-bcp.md)) · `Vary` como mecanismo de chave de cache ([HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) § 6) · a semântica geral do método `OPTIONS` ([HTTP - Métodos e Semântica](http-metodos-e-semantica.md)).
 
 Entrada: [HTTP](http.md) · Base normativa: [HTTP](http.md) § 6
 
@@ -49,7 +49,7 @@ Origem é a **tupla esquema + host + porta**. Qualquer um dos três diferente é
 | `https://exemplo.com` | `http://exemplo.com` | **não** | esquema diferente |
 | `http://localhost:5173` | `http://localhost:3000` | **não** | porta diferente |
 
-A última linha é o dia 1 de qualquer stack Vite + API separada, e a razão de "em dev não precisa de CORS" ser falso. [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7.1 e `Hono - Middleware e Ciclo de Vida` § 5 tratam exatamente desse cenário.
+A última linha é o dia 1 de qualquer stack Vite + API separada, e a razão de "em dev não precisa de CORS" ser falso. [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7.1 e [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) § 5 tratam exatamente desse cenário.
 
 Duas notas da fonte: o header `Origin` *"is **always** sent"* em requisição de controle de acesso, e *"the `origin` value can be `null`"* — o que acontece com `file://`, sandbox de iframe e alguns redirects. Comparar `origin` contra allowlist precisa tratar `null` como não pertencente, nunca como coringa.
 
@@ -102,7 +102,7 @@ Access-Control-Max-Age: 86400
 Vary: Origin
 ```
 
-**O preflight nunca carrega credenciais.** A fonte é categórica: *"CORS-preflight requests must never include credentials."* Consequência direta e frequentemente violada: **um middleware de autenticação que responde `401` a requisição sem sessão vai responder `401` ao `OPTIONS`** — e o browser trata isso como preflight falho (`CORSPreflightDidNotSucceed`). O `OPTIONS` precisa passar antes da auth. Em `Hono - Middleware e Ciclo de Vida` isso é uma questão de ordem: `cors` antes de `auth`.
+**O preflight nunca carrega credenciais.** A fonte é categórica: *"CORS-preflight requests must never include credentials."* Consequência direta e frequentemente violada: **um middleware de autenticação que responde `401` a requisição sem sessão vai responder `401` ao `OPTIONS`** — e o browser trata isso como preflight falho (`CORSPreflightDidNotSucceed`). O `OPTIONS` precisa passar antes da auth. Em [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) isso é uma questão de ordem: `cors` antes de `auth`.
 
 **Depois do preflight, a requisição real acontece.** *"Once the preflight request is complete, the real request is sent."* Não são duas tentativas — são duas requisições, e a segunda é a que grava.
 
@@ -130,7 +130,7 @@ O `*` não é "permissivo demais mas funciona". Com credenciais, ele **não func
 
 > "When responding to a credentialed request, the server **must** specify an origin in the value of the `Access-Control-Allow-Origin` header, instead of specifying the `*` wildcard."
 
-Isto é decisivo porque `origin: '*'` é o **default** de vários middlewares — `cors` do Hono entre eles (`Hono - Middleware e Ciclo de Vida` § 4, `HONO-MW-08`). A combinação `origin: '*'` + `credentials: true` é a configuração que o navegador recusa, e o sintoma (*"blocked by CORS policy"*) não menciona qual das duas está errada.
+Isto é decisivo porque `origin: '*'` é o **default** de vários middlewares — `cors` do Hono entre eles ([Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) § 4, `HONO-MW-08`). A combinação `origin: '*'` + `credentials: true` é a configuração que o navegador recusa, e o sintoma (*"blocked by CORS policy"*) não menciona qual das duas está errada.
 
 A restrição vale para os outros três headers também. Em requisição com credenciais, o servidor *"must not specify the `*` wildcard"* para `Access-Control-Allow-Methods`, `Access-Control-Allow-Headers` nem `Access-Control-Expose-Headers` — cada um precisa da lista explícita.
 
@@ -242,9 +242,9 @@ A última linha merece atenção em stack com proxy reverso, CDN ou dev server: 
 
 ### O que CORS **não** é
 
-**Não é controle de acesso ao endpoint.** A requisição chegou, autenticou, executou e respondeu. O browser barrou só a leitura. Um `POST /pedidos/8814/cancelar` bloqueado por CORS **cancelou o pedido**. Autorização mora no handler, sempre — `OWASP - Sessão e Autorização`.
+**Não é controle de acesso ao endpoint.** A requisição chegou, autenticou, executou e respondeu. O browser barrou só a leitura. Um `POST /pedidos/8814/cancelar` bloqueado por CORS **cancelou o pedido**. Autorização mora no handler, sempre — [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md).
 
-**Não é proteção contra CSRF.** São problemas ortogonais: CORS governa leitura cross-origin por script; CSRF explora o browser **enviando cookies** numa requisição que o atacante provoca e cujo resultado ele não precisa ler. Um formulário HTML cross-origin com `Content-Type: application/x-www-form-urlencoded` é requisição simples — não preflighta, o cookie vai junto, a escrita acontece. A defesa é `SameSite` (`RFC 6265 - Cookies HTTP`) mais token anti-CSRF.
+**Não é proteção contra CSRF.** São problemas ortogonais: CORS governa leitura cross-origin por script; CSRF explora o browser **enviando cookies** numa requisição que o atacante provoca e cujo resultado ele não precisa ler. Um formulário HTML cross-origin com `Content-Type: application/x-www-form-urlencoded` é requisição simples — não preflighta, o cookie vai junto, a escrita acontece. A defesa é `SameSite` ([RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md)) mais token anti-CSRF.
 
 **Não vale fora do browser.** `curl`, cliente HTTP de servidor, script, mobile: nada disso executa a same-origin policy. Como diz *"CORS não impede chamadas feitas por servidores, scripts ou clientes HTTP."*
 
@@ -295,8 +295,8 @@ A última linha merece atenção em stack com proxy reverso, CDN ou dev server: 
 - [HTTP](http.md) — hub; § 5 tem a árvore "minha requisição foi bloqueada pelo browser — é CORS?"
 - [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) · [HTTP - Métodos e Semântica](http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) · [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) · [HTTP - Specs e RFCs](http-specs-e-rfcs.md)
 - — Zettel conceitual · (`mode`, `credentials`)
-- `Hono - Middleware e Ciclo de Vida` (`cors`, `origin` default `*`) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7.1 (sem CORS nativo) · [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md)
-- `RFC 6265 - Cookies HTTP` · `OWASP - Sessão e Autorização` · ·
+- [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) (`cors`, `origin` default `*`) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7.1 (sem CORS nativo) · [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md)
+- [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) · [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) · ·
 - · · ·
 
 ## Fontes consultadas

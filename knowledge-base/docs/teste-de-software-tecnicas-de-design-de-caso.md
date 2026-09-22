@@ -271,7 +271,7 @@ Trinta segundos de verificação que separa suíte real de suíte decorativa (`T
 - [Teste de Software - Níveis e Escopo](teste-de-software-niveis-e-escopo.md) — técnica e nível são ortogonais
 - [Bun - Testes - Cobertura e CI](bun-testes-cobertura-e-ci.md) — a operação de cobertura no stack
 - [Bun - Testes - Escrita e Asserções](bun-testes-escrita-e-assercoes.md) — onde os casos derivados aqui são escritos
-- `Zod - Validação de Ambiente` — a fronteira que as classes inválidas atacam
+- [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md) — a fronteira que as classes inválidas atacam
 - · · — complexidade como sinal
 - — checklist como instrumento de processo
 

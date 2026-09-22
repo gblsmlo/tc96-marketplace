@@ -65,7 +65,7 @@ Termos usados sem redefinição nos satélites:
 
 Cinco afirmações. Quase todo erro de HTTP que um agente comete viola uma delas.
 
-**1. HTTP é sem estado, e todo mecanismo de estado é uma camada por cima que herda esse problema.** A definição é literal em RFC 9110 § 3.3: cada mensagem *"can be understood in isolation"*, e — a consequência que se esquece — *"a server MUST NOT assume that two requests on the same connection are from the same user agent unless the connection is secured and specific to that agent"*. Sessão, token e cache são reconstruções de estado feitas com headers, e cada uma carrega a pergunta "e se esta requisição chegar sozinha, fora de ordem, ou duplicada?". É por isso que idempotência é um assunto de protocolo e não de biblioteca, e por que cookie é um mecanismo à parte (`RFC 6265 - Cookies HTTP`).
+**1. HTTP é sem estado, e todo mecanismo de estado é uma camada por cima que herda esse problema.** A definição é literal em RFC 9110 § 3.3: cada mensagem *"can be understood in isolation"*, e — a consequência que se esquece — *"a server MUST NOT assume that two requests on the same connection are from the same user agent unless the connection is secured and specific to that agent"*. Sessão, token e cache são reconstruções de estado feitas com headers, e cada uma carrega a pergunta "e se esta requisição chegar sozinha, fora de ordem, ou duplicada?". É por isso que idempotência é um assunto de protocolo e não de biblioteca, e por que cookie é um mecanismo à parte ([RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md)).
 
 **2. A semântica do método não é convenção de estilo — proxies, browsers e CDNs agem sobre ela.** Um cliente pode **repetir automaticamente** uma requisição idempotente cuja resposta se perdeu; RFC 9110 § 9.2.2 é explícito de que *"a proxy MUST NOT automatically retry non-idempotent requests"*. Um crawler faz `GET` em toda URL que encontra. Um cache guarda resposta de `GET` e de `HEAD` sem perguntar. Escrever num handler de `GET` não é feio: é entregar a alguém que você não controla a permissão de executar aquilo quantas vezes quiser. Ver [HTTP - Métodos e Semântica](http-metodos-e-semantica.md) § 1.
 
@@ -138,7 +138,7 @@ HTTP/2 troca o texto por framing binário, multiplexa streams numa conexão e co
 
 Uma linha por mecanismo que uma tarefa pede sozinho. A coluna **Onde** diz o que carregar.
 
-**Deliberadamente fora deste mapa:** autenticação como política (esquemas, sessão, escopo) — cobertos por `RFC 9700 - OAuth 2.0 Security BCP`, `RFC 8725 - JWT Best Current Practices` e `OWASP - Sessão e Autorização`; sintaxe e atributos de cookie — `RFC 6265 - Cookies HTTP`; `CONNECT` e `TRACE`; WebSocket e SSE como protocolos; HTTP/2 e HTTP/3 como transporte; e headers de segurança (`CSP`, `HSTS`, `X-Frame-Options`). Ausência aqui significa **"não verificado nesta doc"**, não "não existe".
+**Deliberadamente fora deste mapa:** autenticação como política (esquemas, sessão, escopo) — cobertos por [RFC 9700 - OAuth 2.0 Security BCP](rfc-9700-oauth-2-0-security-bcp.md), [RFC 8725 - JWT Best Current Practices](rfc-8725-jwt-best-current-practices.md) e [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md); sintaxe e atributos de cookie — [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md); `CONNECT` e `TRACE`; WebSocket e SSE como protocolos; HTTP/2 e HTTP/3 como transporte; e headers de segurança (`CSP`, `HSTS`, `X-Frame-Options`). Ausência aqui significa **"não verificado nesta doc"**, não "não existe".
 
 Todo ponteiro de seção abaixo foi verificado contra o satélite. Uma linha da § 4 que aponte para seção que não cobre o item é bug desta nota.
 
@@ -517,7 +517,7 @@ Derive-a de um satélite, não desta nota inteira: uma skill de cache carrega [H
 
 ## 8. Pontes com o stack
 
-O corpo desta doc é HTTP puro. Mas quase tudo que os satélites descrevem, o stack do vault ([Bun.serve](bun-http-e-servidor.md), `Hono`, [Elysia](elysia.md), [TanStack Query](tanstack-query.md)) **já resolve ou já erra por você**. Implementar à mão o que o framework embute é como a maioria dos bugs de header nasce.
+O corpo desta doc é HTTP puro. Mas quase tudo que os satélites descrevem, o stack do vault ([Bun.serve](bun-http-e-servidor.md), [Hono](hono.md), [Elysia](elysia.md), [TanStack Query](tanstack-query.md)) **já resolve ou já erra por você**. Implementar à mão o que o framework embute é como a maioria dos bugs de header nasce.
 
 ### 8.1 O que `Bun.serve` faz sozinho — e o que não faz
 
@@ -529,7 +529,7 @@ O corpo desta doc é HTTP puro. Mas quase tudo que os satélites descrevem, o st
 | `Range` | suportado ao servir `Bun.file` diretamente, com `Content-Range`; `Bun.file(p).slice(a, b)` preenche `Content-Range` e `Content-Length` |
 | Transferência | `sendfile(2)` quando possível — cópia zero no kernel |
 
-E a lista do que **não** existe é o motivo de `Hono` e [Elysia](elysia.md) existirem — verificado como ausente na doc de `Bun.serve`, ver [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7:
+E a lista do que **não** existe é o motivo de [Hono](hono.md) e [Elysia](elysia.md) existirem — verificado como ausente na doc de `Bun.serve`, ver [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7:
 
 - **CORS**: nada. O preflight `OPTIONS` é tratado por você, rota a rota, incluindo `Vary: Origin`.
 - **Middleware componível**: nada. Cada rota repete auth, log e headers de cache.
@@ -540,7 +540,7 @@ O ponto para um agente: em `Bun.serve` cru, **toda regra desta estrutura é sua 
 
 ### 8.2 O que Hono e Elysia embutem
 
-Hono traz built-ins no próprio pacote, em subcaminhos, verificados em `Hono - Middleware e Ciclo de Vida` § 5:
+Hono traz built-ins no próprio pacote, em subcaminhos, verificados em [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) § 5:
 
 | Middleware | Import | O que resolve desta estrutura | Cuidado |
 | --- | --- | --- | --- |
@@ -586,9 +586,9 @@ Regra prática de divisão: **o servidor decide por quanto tempo a resposta é v
 
 | Problema desta doc | Onde o stack resolve |
 | --- | --- |
-| Validar corpo e devolver `400`/`422` com formato próprio | `zValidator` + `hook` — `Hono - Validação e RPC` § 4 |
-| Status literal chegando tipado ao cliente | `c.json(body, status)` + `hc` — `Hono - Validação e RPC` § 5 |
-| `hc` não lança em `4xx`/`5xx` e a query fica em `success` | `parseResponse` — `Hono - Validação e RPC` § 6.1 |
+| Validar corpo e devolver `400`/`422` com formato próprio | `zValidator` + `hook` — [Hono - Validação e RPC](hono-validacao-e-rpc.md) § 4 |
+| Status literal chegando tipado ao cliente | `c.json(body, status)` + `hc` — [Hono - Validação e RPC](hono-validacao-e-rpc.md) § 5 |
+| `hc` não lança em `4xx`/`5xx` e a query fica em `success` | `parseResponse` — [Hono - Validação e RPC](hono-validacao-e-rpc.md) § 6.1 |
 | `AbortSignal` do cliente chegando à rede | `{ init: { signal } }` — |
 | Correlacionar requisição em log | `hono/request-id` — |
 | Cache de borda e invalidação | |
@@ -601,8 +601,8 @@ Regra prática de divisão: **o servidor decide por quanto tempo a resposta é v
 - [HTTP - Métodos e Semântica](http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) · [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) · [HTTP - CORS](http-cors.md) · [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) · [HTTP - Specs e RFCs](http-specs-e-rfcs.md)
 - · · · ·
 - · ·
-- `RFC 6265 - Cookies HTTP` · `RFC 9700 - OAuth 2.0 Security BCP` · `RFC 8725 - JWT Best Current Practices` · `OWASP - Sessão e Autorização`
-- [Bun - HTTP e Servidor](bun-http-e-servidor.md) · `Hono` · `Hono - Middleware e Ciclo de Vida` · `Hono - Validação e RPC` · [Elysia](elysia.md) · `Backend no runtime Bun`
+- [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) · [RFC 9700 - OAuth 2.0 Security BCP](rfc-9700-oauth-2-0-security-bcp.md) · [RFC 8725 - JWT Best Current Practices](rfc-8725-jwt-best-current-practices.md) · [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md)
+- [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Hono](hono.md) · [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) · [Hono - Validação e RPC](hono-validacao-e-rpc.md) · [Elysia](elysia.md) · [Backend no runtime Bun](backend-no-runtime-bun.md)
 - [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) · [React.js](react-js.md) ·
 - · · · · ·
 

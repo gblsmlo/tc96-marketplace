@@ -237,7 +237,7 @@ Sob `--parallel`, o coordenador funde cobertura, XML e escrita de snapshot: um r
 - [Bun - Testes](bun-testes.md) — hub, modelo mental, mapa da API, árvores de decisão
 - [Bun - Testes - Execução e Configuração](bun-testes-execucao-e-configuracao.md) · [Bun - Testes - Escrita e Asserções](bun-testes-escrita-e-assercoes.md) · [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) · [Bun - Testes - Ciclo de Vida e Isolamento](bun-testes-ciclo-de-vida-e-isolamento.md) · [Bun - Testes - DOM e Componentes](bun-testes-dom-e-componentes.md)
 - [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) — `bun ci`, lockfile, pin de versão
-- `Github Actions` — workflows e matriz
+- [Github Actions](github-actions.md) — workflows e matriz
 - — o que testar, antes de como
 
 ## Fontes consultadas

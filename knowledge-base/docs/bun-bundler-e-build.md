@@ -402,7 +402,7 @@ Sobre publicação de estático, ver.
 - [Bun](bun.md) — hub
 - [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Bun - Runtime e APIs](bun-runtime-e-apis.md) · [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) · [Bun - Dados e Persistência](bun-dados-e-persistencia.md) · [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) · [Bun - Testes](bun-testes.md)
 - · `TypeScript` · [React.js](react-js.md) · `Next.js` · `Tailwindcss`
-- · `Github Actions`
+- · [Github Actions](github-actions.md)
 
 ## Fontes consultadas
 

@@ -14,7 +14,7 @@ verificado-em: 2026-08-15
 
 > Diferença entre MDN e documento normativo · a reorganização de 2022 (7230–7235 → 9110–9114) · mapa spec → o que rege → nota do vault · onde confirmar cada assunto · registros do IANA · o que o vault já cobre e o que é lacuna.
 >
-> **Não cobre:** semântica de método ([HTTP - Métodos e Semântica](http-metodos-e-semantica.md)) · significado de cada status ([HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md)) · diretivas de cache ([HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md)) · mecânica de preflight ([HTTP - CORS](http-cors.md)) · `Accept-*` e `Range` ([HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md)) · atributos de cookie (`RFC 6265 - Cookies HTTP`) · política de OAuth/JWT (`RFC 9700 - OAuth 2.0 Security BCP`, `RFC 8725 - JWT Best Current Practices`).
+> **Não cobre:** semântica de método ([HTTP - Métodos e Semântica](http-metodos-e-semantica.md)) · significado de cada status ([HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md)) · diretivas de cache ([HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md)) · mecânica de preflight ([HTTP - CORS](http-cors.md)) · `Accept-*` e `Range` ([HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md)) · atributos de cookie ([RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md)) · política de OAuth/JWT ([RFC 9700 - OAuth 2.0 Security BCP](rfc-9700-oauth-2-0-security-bcp.md), [RFC 8725 - JWT Best Current Practices](rfc-8725-jwt-best-current-practices.md)).
 
 Entrada: [HTTP](http.md) · Base normativa: [HTTP](http.md) § 6
 
@@ -122,17 +122,17 @@ Duas armadilhas nessa lista. **`PATCH` não está na RFC 9110** — quem procura
 
 | Spec | O que governa | Nota do vault |
 | --- | --- | --- |
-| **RFC 6265** · Proposed Standard, abr/2011 | `Set-Cookie`, `Cookie`, `Domain`, `Path`, `Secure`, `HttpOnly` | `RFC 6265 - Cookies HTTP` |
-| **draft-ietf-httpbis-rfc6265bis** · rev. **-22** de 2025-12-01, **RFC Ed Queue** (ainda sem número de RFC) | `SameSite`, prefixos `__Host-`/`__Secure-`, limite de 400 dias | `RFC 6265 - Cookies HTTP` |
+| **RFC 6265** · Proposed Standard, abr/2011 | `Set-Cookie`, `Cookie`, `Domain`, `Path`, `Secure`, `HttpOnly` | [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) |
+| **draft-ietf-httpbis-rfc6265bis** · rev. **-22** de 2025-12-01, **RFC Ed Queue** (ainda sem número de RFC) | `SameSite`, prefixos `__Host-`/`__Secure-`, limite de 400 dias | [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) |
 | **RFC 9110 § 11** | framework de auth: `Authorization`, `WWW-Authenticate`, `Proxy-Authenticate`, `401`, `407`, `realm` | [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) |
 | **RFC 7617** · Proposed Standard, set/2015 | esquema `Basic` e o parâmetro `charset` | — |
-| **RFC 6750** · Proposed Standard, out/2012 · atualizada por 8996 e **9700** | esquema `Bearer`, três formas de transmissão, erros `invalid_token`/`insufficient_scope` | `RFC 9700 - OAuth 2.0 Security BCP` |
-| **RFC 9700** · BCP 240 | política de segurança de OAuth 2.0 | `RFC 9700 - OAuth 2.0 Security BCP` |
-| **RFC 8725** · BCP 225 | validação de JWT | `RFC 8725 - JWT Best Current Practices` |
-| **RFC 6797** · Proposed Standard, nov/2012 | HSTS: `Strict-Transport-Security`, `max-age`, `includeSubDomains` | `OWASP - Sessão e Autorização` |
+| **RFC 6750** · Proposed Standard, out/2012 · atualizada por 8996 e **9700** | esquema `Bearer`, três formas de transmissão, erros `invalid_token`/`insufficient_scope` | [RFC 9700 - OAuth 2.0 Security BCP](rfc-9700-oauth-2-0-security-bcp.md) |
+| **RFC 9700** · BCP 240 | política de segurança de OAuth 2.0 | [RFC 9700 - OAuth 2.0 Security BCP](rfc-9700-oauth-2-0-security-bcp.md) |
+| **RFC 8725** · BCP 225 | validação de JWT | [RFC 8725 - JWT Best Current Practices](rfc-8725-jwt-best-current-practices.md) |
+| **RFC 6797** · Proposed Standard, nov/2012 | HSTS: `Strict-Transport-Security`, `max-age`, `includeSubDomains` | [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) |
 | **RFC 6454** · Proposed Standard, dez/2011 | conceito de origin (scheme + host + port) e o header `Origin` | |
 
-O ponto que o vault já registra e que esta tabela só reforça: **`SameSite` não existe na RFC 6265.** Citar 6265 para justificar `SameSite=Lax` é citar um documento de 2011 que não menciona o atributo. O documento certo é o 6265bis, e ele ainda é draft — a nota `RFC 6265 - Cookies HTTP` tem a revisão e o estado.
+O ponto que o vault já registra e que esta tabela só reforça: **`SameSite` não existe na RFC 6265.** Citar 6265 para justificar `SameSite=Lax` é citar um documento de 2011 que não menciona o atributo. O documento certo é o 6265bis, e ele ainda é draft — a nota [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) tem a revisão e o estado.
 
 ### 3.4 O que é WHATWG, não IETF
 
@@ -201,11 +201,11 @@ Declaração explícita, para que ninguém reescreva o que já existe nem assuma
 
 | Território | Nota | Profundidade |
 | --- | --- | --- |
-| Cookies: `Domain`, `Path`, `Secure`, `HttpOnly`, `SameSite`, prefixos, limites, estado do 6265bis | `RFC 6265 - Cookies HTTP` | completa, verificada, com a tabela de decisão app-em-host-distinto |
-| Segurança de OAuth 2.0: PKCE, `redirect_uri`, mix-up, rotação de refresh token, ROPC | `RFC 9700 - OAuth 2.0 Security BCP` | completa, com roteiro de leitura das seções 4.x |
-| Validação de JWT: allowlist de `alg`, `iss`, `aud`, `kid`, `typ` | `RFC 8725 - JWT Best Current Practices` | completa, com checklist |
-| OAuth em SPA e padrão BFF | `OAuth 2.0 for Browser-Based Applications` | completa |
-| Sessão e autorização como checklist auditável (ASVS) | `OWASP - Sessão e Autorização` | completa |
+| Cookies: `Domain`, `Path`, `Secure`, `HttpOnly`, `SameSite`, prefixos, limites, estado do 6265bis | [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) | completa, verificada, com a tabela de decisão app-em-host-distinto |
+| Segurança de OAuth 2.0: PKCE, `redirect_uri`, mix-up, rotação de refresh token, ROPC | [RFC 9700 - OAuth 2.0 Security BCP](rfc-9700-oauth-2-0-security-bcp.md) | completa, com roteiro de leitura das seções 4.x |
+| Validação de JWT: allowlist de `alg`, `iss`, `aud`, `kid`, `typ` | [RFC 8725 - JWT Best Current Practices](rfc-8725-jwt-best-current-practices.md) | completa, com checklist |
+| OAuth em SPA e padrão BFF | [OAuth 2.0 for Browser-Based Applications](oauth-2-0-for-browser-based-applications.md) | completa |
+| Sessão e autorização como checklist auditável (ASVS) | [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) | completa |
 | Cache **de cliente** em app React | [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) | completa — camada diferente do cache HTTP da RFC 9111 |
 
 Nas notas de HTTP, `Authorization` e `WWW-Authenticate` entram como **mecanismo de protocolo** (RFC 9110 § 11: o servidor desafia, o cliente responde, `401` × `403`). Tudo que é **política** — qual grant, onde guardar o token, como rotacionar — pertence ao cluster acima e é referência, não conteúdo.
@@ -250,7 +250,7 @@ Nas notas de HTTP, `Authorization` e `WWW-Authenticate` entram como **mecanismo 
 | --- | --- | --- |
 | Citar "RFC 7231" para semântica de método | documento de 2014, obsoletado pela RFC 9110 em junho de 2022; quem abrir o link vê o banner de obsoleto e desconta o argumento inteiro | RFC 9110 § 9 — `HTTP-SPEC-02` |
 | Citar "o RFC de CORS" | não existe; CORS é o Fetch Standard da WHATWG, e nenhum número de RFC contém a regra que se quis citar | Fetch Standard § 3.3 — `HTTP-SPEC-04` |
-| Justificar `SameSite=Lax` com a RFC 6265 | a 6265 é de abril de 2011 e não menciona `SameSite` em lugar nenhum | 6265bis, e `RFC 6265 - Cookies HTTP` — `HTTP-SPEC-05` |
+| Justificar `SameSite=Lax` com a RFC 6265 | a 6265 é de abril de 2011 e não menciona `SameSite` em lugar nenhum | 6265bis, e [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) — `HTTP-SPEC-05` |
 | Fechar decisão de protocolo com link do MDN | MDN descreve browsers, não define o protocolo; um implementador de proxy ou cache não está vinculado a ele | RFC com seção ao lado — `HTTP-SPEC-03` |
 | Devolver `419` ou `499` | não estão no registro do IANA; ficam na faixa `419-420` (unassigned) e no `4xx` genérico; cliente e intermediário tratam como `400` opaco | status do registro — `HTTP-SPEC-06` |
 | Inventar `X-Request-Id` sem namespace | o prefixo `X-` foi depreciado e o nome sem namespace colide com futuro registro do IANA | nome prefixado pelo produto — `HTTP-SPEC-07` |
@@ -264,7 +264,7 @@ Nas notas de HTTP, `Authorization` e `WWW-Authenticate` entram como **mecanismo 
 
 - [HTTP](http.md) — hub
 - [HTTP - Métodos e Semântica](http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) · [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) · [HTTP - CORS](http-cors.md) · [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md)
-- `RFC 6265 - Cookies HTTP` · `RFC 9700 - OAuth 2.0 Security BCP` · `RFC 8725 - JWT Best Current Practices` · `OAuth 2.0 for Browser-Based Applications` · `OWASP - Sessão e Autorização`
+- [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) · [RFC 9700 - OAuth 2.0 Security BCP](rfc-9700-oauth-2-0-security-bcp.md) · [RFC 8725 - JWT Best Current Practices](rfc-8725-jwt-best-current-practices.md) · [OAuth 2.0 for Browser-Based Applications](oauth-2-0-for-browser-based-applications.md) · [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md)
 - · · ·
 - · ·
 - · · ·
@@ -291,7 +291,7 @@ Verificadas em **2026-08-15**:
 - **RFC 9651 (set/2024) obsoletou a RFC 8941** para Structured Field Values, acrescentando os tipos `Date` e `Display String`. Muita referência ainda aponta para 8941.
 - **RFC 9457 (jul/2023) obsoletou a RFC 7807.** O `problem+json` que a maioria dos times conhece foi citado por número errado por seis anos de inércia.
 - **O registro do IANA marca `Accept-Charset` como `deprecated`** e lista faixas inteiras de status como *unassigned* — `419-420` entre elas, o que derruba de uma vez os códigos que frameworks inventam.
-- **A RFC 6265bis continua sem número de RFC em 2026-08-15**: revisão -22, de 2025-12-01, em `RFC Ed Queue`. Ou seja, `SameSite` e `__Host-`, implantados em todos os browsers há anos, ainda não têm RFC publicado. Consistente com `RFC 6265 - Cookies HTTP`, verificada em 2026-08-12.
+- **A RFC 6265bis continua sem número de RFC em 2026-08-15**: revisão -22, de 2025-12-01, em `RFC Ed Queue`. Ou seja, `SameSite` e `__Host-`, implantados em todos os browsers há anos, ainda não têm RFC publicado. Consistente com [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md), verificada em 2026-08-12.
 - **Não verificado:** o mês exato de publicação da RFC 9530 (confirmado apenas o ano, 2024). Status e escopo confirmados.
 - **Não verificado:** status atual de RFC 7541 (HPACK) e RFC 7725 (status `451`) — listados pelo MDN, mas não confirmados individualmente no rfc-editor nesta sessão; ficaram fora da § 3.
 - **Não verificado:** a página do MDN classifica "Content Security Policy Level 3" como obsoleta e cita "RFC 5689" para WebDAV. Nenhuma das duas afirmações foi confirmável nas fontes primárias nesta sessão, e por isso nenhuma entrou nas tabelas.

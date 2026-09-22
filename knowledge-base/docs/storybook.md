@@ -84,7 +84,7 @@ Carregue nesta ordem, parando assim que tiver o suficiente:
 
 **Todos os exemplos são TypeScript**, e escrevem o token `@storybook/tanstack-react` por convenção. Sob o outro caminho, troque por `@storybook/react-vite` — ver a tabela de divergência acima.
 
-**O caso guia é `packages/ui`**, o pacote de design system do monorepo descrito em `Monorepo com Bun - estrutura e tooling`: componentes puros, reutilizáveis, sem acoplamento a rota. Stories acopladas a rota são o assunto de [Storybook - TanStack React](storybook-tanstack-react.md).
+**O caso guia é `packages/ui`**, o pacote de design system do monorepo descrito em [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md): componentes puros, reutilizáveis, sem acoplamento a rota. Stories acopladas a rota são o assunto de [Storybook - TanStack React](storybook-tanstack-react.md).
 
 Termos usados sem redefinição nos satélites:
 
@@ -276,7 +276,7 @@ O Storybook vai renderizar ALGUMA story que importe @tanstack/react-router
 
 **Para o monorepo deste vault a resposta é `@storybook/tanstack-react`,** e a razão não é `packages/ui` — é que `apps/storybook` consome também `apps/web`, onde todo componente de página importa `Link`. Um único Storybook cobrindo os dois pacotes precisa do framework que sabe embrulhar rota.
 
-**TanStack Start não é requisito.** A doc afirma explicitamente que o framework atende tanto SPA usando só `@tanstack/react-router` quanto app Start completo; os stubs de server function e de entrypoint de runtime só entram em jogo sob Start. Numa SPA com BFF separado — o desenho de `Backend no runtime Bun` — essa metade do framework fica inerte, e isso é esperado, não sintoma.
+**TanStack Start não é requisito.** A doc afirma explicitamente que o framework atende tanto SPA usando só `@tanstack/react-router` quanto app Start completo; os stubs de server function e de entrypoint de runtime só entram em jogo sob Start. Numa SPA com BFF separado — o desenho de [Backend no runtime Bun](backend-no-runtime-bun.md) — essa metade do framework fica inerte, e isso é esperado, não sintoma.
 
 ### 5.2 Onde colocar a anotação
 
@@ -518,11 +518,11 @@ O corpo desta doc é Storybook fiel à fonte. Mas no meu stack várias decisões
 | Componente com `useEffect` de fetch | escrever a story em volta do defeito | o defeito é o `useEffect` — `REACT-EFFECT-06` em [React - Efeitos e Sincronização](react-efeitos-e-sincronizacao.md) |
 | Tema e tokens | `style` inline na story | decorator global de tema — `Tailwindcss` |
 | Erro esperado (400 de validação) | lançar para o Error Boundary | é estado, e merece story própria — `REACT-ASYNC-09` |
-| Resposta do BFF tipada | duplicar o tipo no mock | reusar o tipo exportado do servidor — `Hono - Validação e RPC`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
+| Resposta do BFF tipada | duplicar o tipo no mock | reusar o tipo exportado do servidor — [Hono - Validação e RPC](hono-validacao-e-rpc.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 
-**A ponte que mais importa: `packages/ui` não conhece rota, e isso é o desenho.** Um componente de design system que precisa de `parameters.tanstack.router` para renderizar está acoplado a rota e deveria receber a navegação por prop. A story serve como detector desse acoplamento: se a story de um componente de `packages/ui` precisa de rota, o achado é sobre o componente, não sobre a story. Ver a direção de dependência em `Monorepo com Bun - estrutura e tooling`.
+**A ponte que mais importa: `packages/ui` não conhece rota, e isso é o desenho.** Um componente de design system que precisa de `parameters.tanstack.router` para renderizar está acoplado a rota e deveria receber a navegação por prop. A story serve como detector desse acoplamento: se a story de um componente de `packages/ui` precisa de rota, o achado é sobre o componente, não sobre a story. Ver a direção de dependência em [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md).
 
-**A ponte de runner.** `bun test` cobre `apps/server`; `vitest --project=storybook` cobre as stories. São dois runners por desenho (`SB-TEST-05`). O CI roda os dois, e o filtro do Bun não alcança o segundo — ver a armadilha de `--filter` negado em `Monorepo com Bun - estrutura e tooling` § 4.
+**A ponte de runner.** `bun test` cobre `apps/server`; `vitest --project=storybook` cobre as stories. São dois runners por desenho (`SB-TEST-05`). O CI roda os dois, e o filtro do Bun não alcança o segundo — ver a armadilha de `--filter` negado em [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) § 4.
 
 ---
 
@@ -535,7 +535,7 @@ O corpo desta doc é Storybook fiel à fonte. Mas no meu stack várias decisões
 - [React - Patterns](react-patterns.md) — decide o que é componente de design system e o que não é
 - [TanStack Query](tanstack-query.md) · [TanStack Router](tanstack-router.md) · [React Hook Form](react-hook-form.md) · `Tailwindcss`
 - [Bun - Testes](bun-testes.md) — o outro runner do monorepo
-- `Monorepo com Bun - estrutura e tooling` — onde `apps/storybook` vive e por que é folha
+- [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) — onde `apps/storybook` vive e por que é folha
 
 ## Fontes consultadas
 

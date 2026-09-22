@@ -183,7 +183,7 @@ O shape a validar já EXISTE como tabela Drizzle?
 │ → segundo argumento da função create*Schema
 └── NÃO — é um shape que não é tabela (DTO, filtro de query,
  payload de webhook)
- → Zod puro, como em `Zod - Validação de Ambiente`
+ → Zod puro, como em [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md)
 ```
 
 ---
@@ -287,7 +287,7 @@ A forma 3 é a que se usa quando o projeto já gerencia o `Pool`/client em outro
 | --- | --- |
 | Conexão em runtime Bun | `drizzle-orm/node-postgres` ou `drizzle-orm/postgres-js` funcionam sob Bun; a doc do Bun também documenta um driver nativo — ver [Bun - Dados e Persistência](bun-dados-e-persistencia.md) |
 | Backend Hono/Elysia | `db` instanciado uma vez, importado pelos handlers — mesmo padrão de singleton do Prisma em `Prisma` |
-| Validação de entrada de rota | `createInsertSchema` alimentando `zValidator`/`t.Object` — mesma fronteira que `Hono - Validação e RPC` e [Elysia - Schema e Eden](elysia-schema-e-eden.md) já documentam para Zod puro |
+| Validação de entrada de rota | `createInsertSchema` alimentando `zValidator`/`t.Object` — mesma fronteira que [Hono - Validação e RPC](hono-validacao-e-rpc.md) e [Elysia - Schema e Eden](elysia-schema-e-eden.md) já documentam para Zod puro |
 | Alternativa mais pesada | `Prisma` — camada de abstração maior, migração mais opinativa, sem a filosofia "SQL explícito" |
 | Alternativa mais fina | `Knex.js` — query builder sem tipos gerados do schema e sem RQB |
 
@@ -300,7 +300,7 @@ A forma 3 é a que se usa quando o projeto já gerencia o `Pool`/client em outro
 - [Drizzle - Schema e Migrations](drizzle-schema-e-migrations.md) — declarar tabela, `drizzle-kit`
 - [Drizzle - Queries e Relations](drizzle-queries-e-relations.md) — query builder, relações, RQB, transactions, `drizzle-zod`
 - `PostgreSQL` · [Bun - Dados e Persistência](bun-dados-e-persistencia.md) · `Prisma` · `Knex.js`
-- `Zod - Validação de Ambiente` — o mesmo Zod usado em `drizzle-zod`
+- [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md) — o mesmo Zod usado em `drizzle-zod`
 
 ## Fontes consultadas
 

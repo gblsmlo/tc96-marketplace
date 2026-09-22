@@ -29,8 +29,8 @@ There is an endpoint to design or change, and the questions are **which method**
 | `Cache-Control`, `ETag`, `304`, `If-Match`, `Vary` | `http-cache` |
 | a blocked request, CORS, wrong format | `http-diagnose` |
 | auditing the contract of an existing API | `http-review` |
-| writing the handler in the framework | `elysia-build` · Hono via Context7, `/websites/hono_dev` |
-| validating the body at runtime | `elysia-schema` · Hono via Context7, `/websites/hono_dev` |
+| writing the handler in the framework | `elysia-build` · [Hono - Roteamento e Contexto](../../../knowledge-base/docs/hono-roteamento-e-contexto.md) |
+| validating the body at runtime | `elysia-schema` · [Hono - Validação e RPC](../../../knowledge-base/docs/hono-validacao-e-rpc.md) |
 | authentication, session, tokens | `OWASP - Sessão e Autorização` · `RFC 9700 - OAuth 2.0 Security BCP` |
 
 ---

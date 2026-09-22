@@ -9,9 +9,10 @@
     "Skill sem biblioteca upstream (test, http) não declara nada — e isso é",
     "informação, não lacuna.",
     "",
-    "hono, typescript, zod e node não são donos de skill: entram porque a prosa",
-    "citava notas do vault que não vieram para a knowledge-base. Onde a citação",
-    "era de superfície de API, ela passou a resolver pelo Context7.",
+    "typescript e node entram porque a prosa citava notas do vault que são stub",
+    "(1 KB e 67 bytes): não há regra local para citar, só superfície de API.",
+    "hono tem nota conduzida com IDs `HONO-*` na knowledge-base — o ID vem de lá,",
+    "e só a assinatura vem daqui.",
     "",
     "Reverificar: bash build/context7.sh --verificar"
   ],

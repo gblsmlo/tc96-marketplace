@@ -374,7 +374,7 @@ O addon exige Vitest. Ele **não roda sob `bun test`**, que é o runner do backe
 | `bun test` | `apps/server` — lógica de runtime Bun |
 | `vitest --project=storybook` | as stories — componente em browser real |
 
-Não é duplicação a eliminar: são níveis diferentes. E há um detalhe operacional em CI — o `--filter` do Bun não alcança o segundo, e filtro negado não funciona no Bun (ver `Monorepo com Bun - estrutura e tooling` § 4). Os dois comandos são invocados separadamente.
+Não é duplicação a eliminar: são níveis diferentes. E há um detalhe operacional em CI — o `--filter` do Bun não alcança o segundo, e filtro negado não funciona no Bun (ver [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) § 4). Os dois comandos são invocados separadamente.
 
 ### 4.6 Regras — `SB-TEST-05`
 
@@ -493,7 +493,7 @@ O componente roda sem decorator global. Falha por falta de provider, e o rastro 
 - [Storybook - Mocking](storybook-mocking.md) — `mocked`, `sb.mock` e MSW dentro do teste
 - [Storybook - Decorators e Contexto](storybook-decorators-e-contexto.md) — `beforeEach` e limpeza
 - [Bun - Testes](bun-testes.md) — o outro runner do monorepo
-- `Monorepo com Bun - estrutura e tooling` — o comportamento de `--filter` em CI
+- [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) — o comportamento de `--filter` em CI
 
 ## Fontes consultadas
 

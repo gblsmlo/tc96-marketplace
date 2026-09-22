@@ -391,7 +391,7 @@ process.on("SIGTERM", => desligar("SIGTERM"));
 process.on("SIGINT", => desligar("SIGINT"));
 ```
 
-O que fazer com um servidor `node:http` que já existe — manter, embrulhar ou migrar para `Bun.serve` — é decisão, não API, e está em `Backend no runtime Bun`. [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7.2 declara o mesmo limite do lado do HTTP.
+O que fazer com um servidor `node:http` que já existe — manter, embrulhar ou migrar para `Bun.serve` — é decisão, não API, e está em [Backend no runtime Bun](backend-no-runtime-bun.md). [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7.2 declara o mesmo limite do lado do HTTP.
 
 **Variáveis de ambiente.** Bun lê `.env` automaticamente, em ordem **crescente** de precedência: `.env` → `.env.production` / `.env.development` / `.env.test` (conforme `NODE_ENV`) → `.env.local`. `--env-file=...` (repetível) troca a lista; **`--no-env-file` desliga o carregamento automático**, e a doc aponta produção e CI/CD como o caso de uso — o container deve receber variáveis do orquestrador, não de um arquivo que vazou para a imagem. Contexto em `Arquivos.env não substituem secret management` e.
 
@@ -450,7 +450,7 @@ O que fazer com um servidor `node:http` que já existe — manter, embrulhar ou 
 
 - [Bun](bun.md) — hub
 - [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Bun - Runtime e APIs](bun-runtime-e-apis.md) · [Bun - Bundler e Build](bun-bundler-e-build.md) · [Bun - Dados e Persistência](bun-dados-e-persistencia.md) · [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) · [Bun - Testes](bun-testes.md)
-- `Backend no runtime Bun` — o que fazer com um servidor `node:http` que já existe, e a decisão `Bun.serve` × `Hono` × [Elysia](elysia.md)
+- [Backend no runtime Bun](backend-no-runtime-bun.md) — o que fazer com um servidor `node:http` que já existe, e a decisão `Bun.serve` × [Hono](hono.md) × [Elysia](elysia.md)
 - `Node.js` · · ·
 - · `Arquivos.env não substituem secret management`
 - · ·

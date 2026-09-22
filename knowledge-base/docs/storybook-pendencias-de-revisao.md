@@ -150,4 +150,4 @@ Nada aqui é preguiça: são pontos onde **a fonte não responde** e inventar se
 
 - [Storybook](storybook.md) — o hub da estrutura
 - [Storybook - React Vite](storybook-react-vite.md) · [Storybook - TanStack React](storybook-tanstack-react.md) — os dois caminhos
-- `Backend - Pendências de revisão` — o registro equivalente da estrutura de backend
+- [Backend - Pendências de revisão](backend-pendencias-de-revisao.md) — o registro equivalente da estrutura de backend

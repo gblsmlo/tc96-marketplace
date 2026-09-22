@@ -31,7 +31,7 @@ the level, not intuition:
 | --- | --- | --- |
 | calculation, parsing, validation, domain invariant | **unit** | `bun-test-build` |
 | two of my pieces talking (use case + repository) | **integration**, with a controlled real dependency | `bun-test-build` |
-| the format crossing the boundary with a system that is not mine | **contract** — and much of it is the compiler | Hono via Context7, `/websites/hono_dev` · [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) |
+| the format crossing the boundary with a system that is not mine | **contract** — and much of it is the compiler | [Hono - Validação e RPC](../../../../knowledge-base/docs/hono-validacao-e-rpc.md) · [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) |
 | visual/interactive state of a component | **component** | `storybook-story` · `storybook-test` |
 | the critical journey works with routing, session and network | **E2E** | `playwright-build` |
 | incompatible type, incorrect API use | **static** | TypeScript via Context7, `/microsoft/typescript` |

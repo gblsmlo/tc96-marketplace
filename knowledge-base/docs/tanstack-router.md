@@ -181,7 +181,7 @@ Três coisas que essa árvore assume e que precisam estar ditas:
 
 **`redirect` precisa ser lançado.** `redirect({...})` como statement solto cria um objeto e o descarta — a guarda não acontece, sem erro. `TSR-NAV-10`.
 
-**A guarda do router não é segurança.** Ela evita tela vazia e melhora UX; a autorização real é do backend. A tabela de camadas de enforcement está em `WorkOS - RBAC` § 4, que classifica o `beforeLoad` do TanStack Router exatamente como camada de UX. `TSR-NAV-12` e `TSR-CTX-07`.
+**A guarda do router não é segurança.** Ela evita tela vazia e melhora UX; a autorização real é do backend. A tabela de camadas de enforcement está em [WorkOS - RBAC](workos-rbac.md) § 4, que classifica o `beforeLoad` do TanStack Router exatamente como camada de UX. `TSR-NAV-12` e `TSR-CTX-07`.
 
 **Voltar ao destino depois do login** guarda-se em search param (`search: { redirect: location.href }`) e consome-se no `/login`. O lado do consumo, com a validação anti-open-redirect obrigatória, está em [TanStack Router - Search Params](tanstack-router-search-params.md).
 

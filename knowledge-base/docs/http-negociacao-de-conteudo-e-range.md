@@ -379,7 +379,7 @@ O mesmo header aparece **dentro** de um corpo `multipart/form-data`, com outro p
 - [HTTP](http.md) — hub; § 5 tem a árvore "o cliente e o servidor discordam do formato/idioma/encoding"
 - [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) (§ 6, `Vary`; `HTTP-CACHE-09`, `ETag` forte) · [HTTP - CORS](http-cors.md) · [HTTP - Métodos e Semântica](http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) · [HTTP - Specs e RFCs](http-specs-e-rfcs.md)
 - · · ·
-- [Bun - HTTP e Servidor](bun-http-e-servidor.md) (`Bun.file` serve `Range`/`ETag`/`304`) · `Hono - Middleware e Ciclo de Vida` (`compress`, `etag`)
+- [Bun - HTTP e Servidor](bun-http-e-servidor.md) (`Bun.file` serve `Range`/`ETag`/`304`) · [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) (`compress`, `etag`)
 - · · · ·
 - · ·
 

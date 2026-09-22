@@ -231,7 +231,7 @@ O passo 6 antes do 7 é deliberado: depurar glob e depurar runner ao mesmo tempo
 
 ## 4. O recorte no monorepo
 
-O desenho está em `Monorepo com Bun - estrutura e tooling`: `apps/storybook` é app deployável e **folha do grafo** — ele consome `apps/web` e `packages/ui`, e ninguém consome ele. É isso que permite tirá-lo do build de produção sem tocar em nenhum outro pacote (`SB-CFG-07`).
+O desenho está em [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md): `apps/storybook` é app deployável e **folha do grafo** — ele consome `apps/web` e `packages/ui`, e ninguém consome ele. É isso que permite tirá-lo do build de produção sem tocar em nenhum outro pacote (`SB-CFG-07`).
 
 ### 4.1 Scripts
 
@@ -255,7 +255,7 @@ O desenho está em `Monorepo com Bun - estrutura e tooling`: `apps/storybook` é
 
 Esta é a que mais custa tempo, e já está documentada no vault por outro caminho. O TanStack Router pede `declare module '@tanstack/react-router'` para registrar o tipo do router. Se essa augmentation mora no `main.tsx` do app — o arquivo que monta o DOM — ela **não alcança o programa TS do Storybook**, porque `main.tsx` não pode entrar nesse programa.
 
-O conserto é separar a augmentation num módulo próprio (`router.ts`), exportá-lo, e importar **de tipo** onde precisar. Ver `Monorepo com Bun - estrutura e tooling` § 5.7, onde isso foi verificado por sabotagem.
+O conserto é separar a augmentation num módulo próprio (`router.ts`), exportá-lo, e importar **de tipo** onde precisar. Ver [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) § 5.7, onde isso foi verificado por sabotagem.
 
 Sintoma no Storybook: tipos do router caem para o genérico dentro das stories, e `params` deixa de ser checado contra o path da rota — o que faz `SB-TS-02` passar a não pegar mais nada.
 
@@ -315,7 +315,7 @@ No momento em que outro pacote importa algo de `apps/storybook`, ele deixa de se
 - [Storybook - Decorators e Contexto](storybook-decorators-e-contexto.md) — o que colocar dentro do `preview.tsx`
 - [Storybook - TanStack React](storybook-tanstack-react.md) — a escolha do framework e seus requisitos
 - [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) — a config do Vitest, que é arquivo separado
-- `Monorepo com Bun - estrutura e tooling` — o grafo de dependências e a armadilha de augmentation
+- [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) — o grafo de dependências e a armadilha de augmentation
 - [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) — workspaces e o linker
 
 ## Fontes consultadas

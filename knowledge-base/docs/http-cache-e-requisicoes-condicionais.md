@@ -74,7 +74,7 @@ ETag: "pedido-8814-v3"
 Set-Cookie: __Host-SID=AHNtAyt3fvJrUL5g5tnGwER; Secure; Path=/; HttpOnly
 ```
 
-`private` **não** é um mecanismo de segurança — é uma instrução de armazenamento. Dado que não pode ser gravado em disco nenhum usa `no-store`. Sintaxe e semântica do cookie acima: `RFC 6265 - Cookies HTTP`.
+`private` **não** é um mecanismo de segurança — é uma instrução de armazenamento. Dado que não pode ser gravado em disco nenhum usa `no-store`. Sintaxe e semântica do cookie acima: [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md).
 
 `public` é o inverso e tem um uso específico: *"Responses for requests with `Authorization` header fields must not be stored in a shared cache; however, the `public` directive will cause such responses to be stored in a shared cache."* Fora desse caso, `public` é ruído — a MDN é explícita: *"It is not required otherwise, because a response will be stored in the shared cache as long as `max-age` is given."*
 
@@ -403,7 +403,7 @@ E a nota que fecha o assunto: `no-cache`, não `no-store` — *"since we don't w
 - · ·
 - [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) — a outra camada; § 1 desta nota traça a fronteira
 - · ·
-- `RFC 6265 - Cookies HTTP` · [Bun - HTTP e Servidor](bun-http-e-servidor.md) · `Hono - Middleware e Ciclo de Vida` ·
+- [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) ·
 
 ## Fontes consultadas
 

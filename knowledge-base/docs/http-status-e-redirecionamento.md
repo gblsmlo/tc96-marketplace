@@ -202,7 +202,7 @@ HTTP/1.1 401 Unauthorized
 WWW-Authenticate: Bearer
 ```
 
-O nome do `401` é o problema: MDN registra que *"although the HTTP standard specifies 'unauthorized', semantically this response means 'unauthenticated'"*. Um handler que responde `401` para "usuário logado sem o papel de admin" faz o cliente tentar renovar o token em loop, porque `401` é o sinal universal de "sua credencial não serve". Política de autorização é assunto de e `OWASP - Sessão e Autorização`; aqui está só o sinal de protocolo.
+O nome do `401` é o problema: MDN registra que *"although the HTTP standard specifies 'unauthorized', semantically this response means 'unauthenticated'"*. Um handler que responde `401` para "usuário logado sem o papel de admin" faz o cliente tentar renovar o token em loop, porque `401` é o sinal universal de "sua credencial não serve". Política de autorização é assunto de e [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md); aqui está só o sinal de protocolo.
 
 ### `403` × `404`
 
@@ -333,9 +333,9 @@ E a distinção com `4xx` é o que fecha o ciclo do § 1: **`5xx` autoriza o cli
 - [HTTP](http.md) — hub; § 5.2 tem a árvore completa de escolha de status
 - [HTTP - Métodos e Semântica](http-metodos-e-semantica.md) · [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) · [HTTP - CORS](http-cors.md) · [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) · [HTTP - Specs e RFCs](http-specs-e-rfcs.md)
 - · · ·
-- · `OWASP - Sessão e Autorização` ·
+- · [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) ·
 - · · ·
-- `Hono - Validação e RPC` · [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) ·
+- [Hono - Validação e RPC](hono-validacao-e-rpc.md) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) ·
 
 ## Fontes consultadas
 

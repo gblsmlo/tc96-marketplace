@@ -426,9 +426,9 @@ use: { trace: 'off' },
 - [Playwright - Debug e Trace](playwright-debug-e-trace.md) — o que fazer com o trace que a retry gravou
 - [Playwright - Autenticação e Isolamento](playwright-autenticacao-e-isolamento.md) — isolamento de conta por worker
 - [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) — por que a referência precisa vir do container do CI
-- `Github Actions` · — o pipeline em volta
+- [Github Actions](github-actions.md) · — o pipeline em volta
 - — a suíte como portão
-- `Monorepo com Bun - estrutura e tooling` — os três runners do monorepo
+- [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) — os três runners do monorepo
 - `TypeScript` — `no-floating-promises`
 
 ## Fontes consultadas

@@ -238,7 +238,7 @@ export const test = base.extend<{ adminPage: Page; userPage: Page }>({
 });
 ```
 
-> **Ponte de autorização.** Testar que o operador **não** acessa a tela do admin é teste de autorização, e o critério do que verificar (403 × 404, vazamento por resposta, escalonamento horizontal) é de `OWASP - Sessão e Autorização` e `NIST RBAC - ANSI INCITS 359`. O Playwright é o instrumento; o que constitui um achado é lá.
+> **Ponte de autorização.** Testar que o operador **não** acessa a tela do admin é teste de autorização, e o critério do que verificar (403 × 404, vazamento por resposta, escalonamento horizontal) é de [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) e [NIST RBAC - ANSI INCITS 359](nist-rbac-ansi-incits-359.md). O Playwright é o instrumento; o que constitui um achado é lá.
 
 ---
 
@@ -277,7 +277,7 @@ await context.addInitScript(storage => {
 
 > **Nota de verificação.** As notas de release da 1.61 anunciam `page.localStorage` / `page.sessionStorage`, mas esses acessores **não constam** da referência de API de `Page`. Esta doc segue a referência, e o caminho acima — `addInitScript` + `evaluate` — é o verificado. Ver as notas de verificação de [Playwright](playwright.md).
 >
-> E vale dizer: se o token de sessão está em `sessionStorage`, isso é uma decisão de segurança discutível antes de ser um problema de teste — ver `OAuth 2.0 for Browser-Based Applications` e `RFC 6265 - Cookies HTTP`.
+> E vale dizer: se o token de sessão está em `sessionStorage`, isso é uma decisão de segurança discutível antes de ser um problema de teste — ver [OAuth 2.0 for Browser-Based Applications](oauth-2-0-for-browser-based-applications.md) e [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md).
 
 ---
 
@@ -325,7 +325,7 @@ Cookie de sessão no histórico do git, recuperável por qualquer pessoa com ace
 await page.getByLabel('Senha').fill('Senha123!');
 ```
 
-Use variável de ambiente validada — `Zod - Validação de Ambiente`.
+Use variável de ambiente validada — [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md).
 
 ### 9.4 Uma conta para todos os workers em suíte que escreve
 
@@ -375,11 +375,11 @@ test('visitante vai para o login', async ({ page }) => {
 - [Playwright - Fixtures](playwright-fixtures.md) — o mecanismo de escopo de worker e de sobrescrita de opção
 - [Playwright - Configuração e Projects](playwright-configuracao-e-projects.md) — `dependencies`, `teardown`, e a pegadinha do UI mode
 - [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) — `APIRequestContext` e a diferença de cookies
-- `OWASP - Sessão e Autorização` · `NIST RBAC - ANSI INCITS 359` — o que constitui achado num teste de papel
-- `RFC 6265 - Cookies HTTP` — `SameSite`, `Domain`, prefixos, e por que a sessão não persiste
-- `OAuth 2.0 for Browser-Based Applications` · `RFC 9700 - OAuth 2.0 Security BCP` — onde o token deveria estar
-- `WorkOS - AuthKit` · `WorkOS - RBAC` — a implementação concreta no stack
-- · `Zod - Validação de Ambiente`
+- [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) · [NIST RBAC - ANSI INCITS 359](nist-rbac-ansi-incits-359.md) — o que constitui achado num teste de papel
+- [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) — `SameSite`, `Domain`, prefixos, e por que a sessão não persiste
+- [OAuth 2.0 for Browser-Based Applications](oauth-2-0-for-browser-based-applications.md) · [RFC 9700 - OAuth 2.0 Security BCP](rfc-9700-oauth-2-0-security-bcp.md) — onde o token deveria estar
+- [WorkOS - AuthKit](workos-authkit.md) · [WorkOS - RBAC](workos-rbac.md) — a implementação concreta no stack
+- · [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md)
 
 ## Fontes consultadas
 

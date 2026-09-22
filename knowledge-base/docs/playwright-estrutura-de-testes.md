@@ -219,7 +219,7 @@ playwright.config.ts
 Duas convenções que carregam peso:
 
 - **`fixtures.ts` é o ponto de entrada único.** Todo `*.spec.ts` importa `test` e `expect` de lá, nunca de `@playwright/test`. Elimina `PW-FIX-05` por construção.
-- **`e2e/` fora de `src/`.** A suíte E2E é consumidora da aplicação, não parte dela — a direção de dependência é só num sentido. Num monorepo, é um pacote folha (`Monorepo com Bun - estrutura e tooling`).
+- **`e2e/` fora de `src/`.** A suíte E2E é consumidora da aplicação, não parte dela — a direção de dependência é só num sentido. Num monorepo, é um pacote folha ([Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md)).
 
 ---
 
@@ -342,7 +342,7 @@ Cada um custa segundos e um browser. A regra pertence a teste unitário; o E2E c
 - [Teste de Software](teste-de-software.md) — que nível de teste para que risco
 - ·
 - [React - Patterns](react-patterns.md) — o mesmo critério de "quando extrair"
-- [Feature-Based Architecture](../pages/feature-based-architecture.md) · `Monorepo com Bun - estrutura e tooling` — onde `e2e/` vive
+- [Feature-Based Architecture](../pages/feature-based-architecture.md) · [Monorepo com Bun - estrutura e tooling](../pages/monorepo-com-bun-estrutura-e-tooling.md) — onde `e2e/` vive
 - ·
 
 ## Fontes consultadas
