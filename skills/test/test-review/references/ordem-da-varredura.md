@@ -13,7 +13,7 @@
 | 5 | **Atributo não funcional tem número?** | `TS-TIPO-05`, `TS-TIPO-06` | "deve ser rápido"; média em vez de percentil |
 | 6 | **O contrato com o exterior está verificado?** | `TS-NIV-09` | tipo compartilhado tratado como teste completo |
 | 7 | **A substituição está no lugar certo?** | `TS-CORE-03`, `TS-DUB-03`, `TS-DUB-08` | mock do que o teste vem provar; fake sem fidelidade |
-| 8 | **Determinismo é decisão ou acidente?** | `TS-SUI-05`, `TS-DUB-05` | se houver flake ativo, **pare** e vá para `teste-diagnose` |
+| 8 | **Determinismo é decisão ou acidente?** | `TS-SUI-05`, `TS-DUB-05` | se houver flake ativo, **pare** e vá para `test-diagnose` |
 | 9 | **Reteste virou regressão?** | `TS-TIPO-03`, `TS-TIPO-04` | correção verificada só no ticket |
 | 10 | **Exploratório existe?** | `TS-TIPO-09` | suíte automatizada como estratégia inteira: regressão excelente, descoberta zero |
 | 11 | **Há teste que não paga?** | `TS-SUI-10` | duplicata de nível, teste de getter, teste escrito para meta de cobertura |
@@ -39,4 +39,4 @@ comum: 200 dos 214 testes são E2E, todos bem escritos, e nenhum cobre o estado 
 
 - `sondas.md` — o que rodar antes
 - `severidade-e-relatorio.md` — classificar e reportar
-- `teste-diagnose` — quando a varredura encontra flake ativo
+- `test-diagnose` — quando a varredura encontra flake ativo

@@ -4,9 +4,9 @@ description: Decide que teste escrever e em que nível antes de escrever qualque
 tools: Read, Write, Edit, Grep, Glob, Bash
 model: opus
 skills:
-  - teste-design
-  - teste-review
-  - teste-diagnose
+  - test-design
+  - test-review
+  - test-diagnose
   - playwright-build
   - playwright-review
   - playwright-diagnose
@@ -31,7 +31,7 @@ Este agente carrega as **duas** famílias de teste do vault e a regra que evita 
 
 | Camada | Skills | Decide |
 | --- | --- | --- |
-| **conceito** | [[teste-design]] · [[teste-review]] · [[teste-diagnose]] | *o quê*, *em que nível*, e se a suíte protege |
+| **conceito** | [[test-design]] · [[test-review]] · [[test-diagnose]] | *o quê*, *em que nível*, e se a suíte protege |
 | **ferramenta** | [[playwright-build]] · [[playwright-review]] · [[playwright-diagnose]] · [[bun-test-build]] · [[bun-test-review]] · [[storybook-test]] | *como*, na ferramenta concreta |
 
 ---
@@ -40,15 +40,15 @@ Este agente carrega as **duas** famílias de teste do vault e a regra que evita 
 
 | A pergunta é… | Skill | Explicitamente **não** é |
 | --- | --- | --- |
-| **que teste** eu escrevo, e em que nível? | [[teste-design]] | as de ferramenta |
-| escrever o teste, nível já decidido — jornada no browser | [[playwright-build]] | [[teste-design]] |
-| escrever o teste, nível já decidido — unidade/integração | [[bun-test-build]] | [[teste-design]] |
+| **que teste** eu escrevo, e em que nível? | [[test-design]] | as de ferramenta |
+| escrever o teste, nível já decidido — jornada no browser | [[playwright-build]] | [[test-design]] |
+| escrever o teste, nível já decidido — unidade/integração | [[bun-test-build]] | [[test-design]] |
 | teste de interação dentro de uma story | [[storybook-test]] | [[playwright-build]] |
-| esta **suíte** protege alguma coisa? | [[teste-review]] | [[playwright-review]] · [[bun-test-review]] |
-| defeito **neste teste**, arquivo:linha | [[playwright-review]] · [[bun-test-review]] | [[teste-review]] |
-| ninguém confia na suíte, como sistema | [[teste-diagnose]] | [[playwright-diagnose]] |
-| **este teste** falha ou flakeia | [[playwright-diagnose]] · [[bun-test-review]] § 3 | [[teste-diagnose]] |
-| integração com serviço externo: o que dublar? | [[teste-design]] + [[Estratégia de testes para integrações externas]] | — |
+| esta **suíte** protege alguma coisa? | [[test-review]] | [[playwright-review]] · [[bun-test-review]] |
+| defeito **neste teste**, arquivo:linha | [[playwright-review]] · [[bun-test-review]] | [[test-review]] |
+| ninguém confia na suíte, como sistema | [[test-diagnose]] | [[playwright-diagnose]] |
+| **este teste** falha ou flakeia | [[playwright-diagnose]] · [[bun-test-review]] § 3 | [[test-diagnose]] |
+| integração com serviço externo: o que dublar? | [[test-design]] + [[Estratégia de testes para integrações externas]] | — |
 | a feature em si está errada | [[code-reviewer]] · quem escreveu | qa-engineer |
 
 ---
@@ -69,7 +69,7 @@ Os Zettels que carregam o raciocínio: [[Software Testing]], [[Testes de fronten
 
 ## Passo 2 — Decidir o nível (sempre, mesmo quando "óbvio")
 
-Com [[teste-design]]:
+Com [[test-design]]:
 
 1. Escreva a frase **"o que pode dar errado aqui"** para a mudança. Sem ela, não há teste (`TS-CORE-01`).
 2. Percorra a árvore de nível: regra de negócio → unidade; contrato entre módulos → integração; jornada crítica → E2E (`TS-NIV-02`: regra de negócio em E2E **nunca**).
@@ -92,8 +92,8 @@ Com [[teste-design]]:
 
 Quando a tarefa é sobre a suíte, não sobre um teste:
 
-- [[teste-review]] mede a **forma**: nove sondas de distribuição, duração, portões e classes de risco descobertas. Forma *ice-cream cone* é achado (`TS-NIV-04`). Cobertura e CI: [[Teste de Software - Confiabilidade da Suíte]], [[Bun - Testes - Cobertura e CI]], [[Playwright - Execução, Retries e CI]], [[Storybook - Cobertura e CI]].
-- [[teste-diagnose]] mede a **taxa de flakiness** antes de opinar, aplica o teste de trinta segundos e separa **conserto de anestésico** — `retries` e `test.slow()` são anestésico.
+- [[test-review]] mede a **forma**: nove sondas de distribuição, duração, portões e classes de risco descobertas. Forma *ice-cream cone* é achado (`TS-NIV-04`). Cobertura e CI: [[Teste de Software - Confiabilidade da Suíte]], [[Bun - Testes - Cobertura e CI]], [[Playwright - Execução, Retries e CI]], [[Storybook - Cobertura e CI]].
+- [[test-diagnose]] mede a **taxa de flakiness** antes de opinar, aplica o teste de trinta segundos e separa **conserto de anestésico** — `retries` e `test.slow()` são anestésico.
 - Para **um** teste que falha, [[playwright-diagnose]] lê o trace **antes** de tocar no código (`PW-DBG-01`) e elimina hipóteses em ordem.
 
 ---
@@ -120,7 +120,7 @@ Achado sem ID é opinião. Nunca inventar ID; declarar o que não foi verificado
 Tarefa: "cobrir o cálculo de juros da fatura em atraso e a tela que o exibe".
 
 1. **Frase**: "juros calculado errado na virada de mês; tela mostra valor antigo depois de pagar".
-2. **Nível** ([[teste-design]]): cálculo → **unidade** (`bun test`, valor limite: 0 dias, 1 dia, 30, 31 — `TS-TEC-01`); "tela mostra valor" → **integração de componente** com story + `play` ([[storybook-test]]), com a query mockada na fronteira HTTP; a jornada "pagar e ver quitada" já está em E2E — não duplicar (`TS-CORE-02`).
+2. **Nível** ([[test-design]]): cálculo → **unidade** (`bun test`, valor limite: 0 dias, 1 dia, 30, 31 — `TS-TEC-01`); "tela mostra valor" → **integração de componente** com story + `play` ([[storybook-test]]), com a query mockada na fronteira HTTP; a jornada "pagar e ver quitada" já está em E2E — não duplicar (`TS-CORE-02`).
 3. **Ferramenta**: `juros.test.ts` com relógio controlado ([[Bun - Testes - Mocks e Tempo]]); `FaturaResumo.stories.tsx` com `play` afirmando o texto por papel acessível.
 4. **Evidência**: saída de `bun test` e do test-runner do Storybook no relatório; o que não foi coberto, declarado.
 

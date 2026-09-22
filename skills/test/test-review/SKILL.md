@@ -1,6 +1,6 @@
 ---
-nome: teste-review
-descricao: Auditar a estratégia de teste de um repositório — a forma da suíte, não os testes individuais — com nove sondas executáveis e IDs `TS-*`, respondendo "esta suíte protege alguma coisa?" — use quando a tarefa for avaliar se a cobertura de risco é adequada, se a proporção entre níveis faz sentido, se os portões de qualidade realmente fecham, se a camada estática está contando, ou se há classe de risco sem nenhum teste. Não use para achar defeito em teste individual, que é playwright-review ou bun-test-review. Não use para suíte instável, que é teste-diagnose, nem para decidir um teste novo, que é teste-design.
+nome: test-review
+descricao: Auditar a estratégia de teste de um repositório — a forma da suíte, não os testes individuais — com nove sondas executáveis e IDs `TS-*`, respondendo "esta suíte protege alguma coisa?" — use quando a tarefa for avaliar se a cobertura de risco é adequada, se a proporção entre níveis faz sentido, se os portões de qualidade realmente fecham, se a camada estática está contando, ou se há classe de risco sem nenhum teste. Não use para achar defeito em teste individual, que é playwright-review ou bun-test-review. Não use para suíte instável, que é test-diagnose, nem para decidir um teste novo, que é test-design.
 tipo: skill
 familia: test
 fonte: "[Teste de Software](../../../knowledge-base/docs/teste-de-software.md)"
@@ -11,7 +11,7 @@ tags:
   - code-review
 ---
 
-# teste-review
+# test-review
 
 > **Fonte desta skill:** [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — a § 6 normativa (64 regras em 7 famílias), a § 6.1 com as críticas dos satélites, e a § 6.2 com os IDs canônicos. O corpo de cada família vive no satélite dono do ID.
 > Esta skill **não contém** o texto das regras — ela diz o que executar, em que ordem varrer, como classificar e como reportar.
@@ -29,8 +29,8 @@ Avaliar uma suíte **como sistema**. A pergunta é *"esta suíte protege alguma 
 | Situação | Vá para |
 | --- | --- |
 | achar defeito em teste individual | `playwright-review` (E2E) · `bun-test-review` (unidade/integração) |
-| suíte instável, flaky, ninguém confia | `teste-diagnose` |
-| decidir um teste novo | `teste-design` |
+| suíte instável, flaky, ninguém confia | `test-diagnose` |
+| decidir um teste novo | `test-design` |
 | uma falha concreta | `playwright-diagnose` |
 | revisar o código de aplicação | `react-review` · `drizzle-review` |
 | processo, defeito, severidade, métricas de time | [Teste de Software - Processo e Artefatos](../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) |
@@ -66,7 +66,7 @@ Referências desta skill:
 ## Passo 1 — Sondar antes de ler
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/teste-review/scripts/sondas-suite.sh.
+bash ${CLAUDE_PLUGIN_ROOT}/skills/test-review/scripts/sondas-suite.sh.
 ```
 
 A forma de uma suíte é **invisível** lendo arquivos: cada teste parece razoável, e o conjunto está desequilibrado.
@@ -107,7 +107,7 @@ Para achado de forma, **a evidência é a medida** — cole os números da sonda
 2. **Separe "não protegido", "no nível errado" e "quebrado"** — a do meio é das skills de ferramenta.
 3. **Ordene por severidade**, não por diretório.
 4. **Dê o próximo passo**, não a lista inteira.
-5. **Se houver flake ativo, pare aqui** e continue em `teste-diagnose` (`TS-CORE-04`).
+5. **Se houver flake ativo, pare aqui** e continue em `test-diagnose` (`TS-CORE-04`).
 6. **Declare o que não foi verificado.** "Não verificado" não é "sem achado".
 
 ---
@@ -123,7 +123,7 @@ Auditoria completa, com relatório e a seção "não verificado": `references/ex
 ## Relacionados
 
 - [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — fonte desta skill: § 6 normativa, § 6.1, § 6.2, § 7 contrato
-- `teste-design` · `teste-diagnose` — as skills irmãs
+- `test-design` · `test-diagnose` — as skills irmãs
 - `playwright-review` · `bun-test-review` — auditam os **testes**; esta audita a **forma**
 - `Github Actions` — onde os portões vivem
 - `Docs/Bun - Testes - Cobertura e CI.md` · `Docs/Playwright - Execução, Retries e CI.md` — o mecanismo dos portões

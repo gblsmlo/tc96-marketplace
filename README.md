@@ -82,10 +82,19 @@ plugin por recorte habilitável em `plugins/` (core, frontend, backend, e2e). Ap
 marketplace `hermes` para esse diretório, ou copie `skills/` e `agents/` de um plugin
 para `~/.claude/`.
 
-> O marketplace `hermes` registrado hoje em `~/.claude/plugins/known_marketplaces.json`
-> aponta para `~/www/Workspaces/hermes`, **que não existe mais**. Os plugins instalados
-> continuam funcionando pelo cache em `~/.claude/plugins/cache/hermes/`, mas não recebem
-> atualização até o caminho ser corrigido.
+O marketplace `hermes` já aponta para cá desde 2026-09-22:
+
+```bash
+claude plugin marketplace list          # hermes -> Directory (…/Workspaces/dist/claude-code)
+claude plugin install hermes-core@hermes
+```
+
+> `dist/` é ignorado pelo git e todo build o apaga antes de reescrever. O marketplace
+> referencia o diretório, então **rode um adaptador antes de instalar ou atualizar
+> plugin** — marketplace apontando para dist vazio falha com `cache-miss`.
+
+`hermes-backend` não existe enquanto bun, elysia e drizzle não forem migradas: o
+adaptador só emite plugin para recorte que tem alguma família migrada.
 
 ## Estado da migração
 

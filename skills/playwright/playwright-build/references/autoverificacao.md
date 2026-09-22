@@ -44,6 +44,6 @@ O item 2 é o único que **nenhum grep pega bem** — a defesa é
 1. **Se o teste precisou de `getByTestId` ou de CSS**, registre a dívida: o achado é sobre o
  componente (`PW-LOC-04`).
 2. **Se o teste ficou lento ou frágil**, a pergunta é se ele deveria estar neste nível —
- `teste-design`.
+ `test-design`.
 3. **Declare o que não cobriu.** Erro, vazio e carregando são estados distintos e merecem
  caso próprio (`TS-TIPO-02`). "Não coberto" não é "não existe".

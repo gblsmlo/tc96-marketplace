@@ -6,7 +6,7 @@
 Script: `scripts/sondas-suite.sh [raiz]` — roda S1, S3–S9 e prepara S2.
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/teste-review/scripts/sondas-suite.sh.
+bash ${CLAUDE_PLUGIN_ROOT}/skills/test-review/scripts/sondas-suite.sh.
 ```
 
 ---
@@ -46,7 +46,7 @@ S1, S3, S5, S6, S7 e S9 são leitura mecânica. **S2 exige rodar**; **S4 exige l
 | mesma lógica em três níveis | `TS-CORE-02` | procurar o mesmo nome de domínio em níveis diferentes |
 | mock do que o teste vem provar | `TS-CORE-03` | ler os dublês dos testes de integração |
 | fake sem fidelidade declarada | `TS-DUB-03` | ler o fake e perguntar se ele honra o contrato real |
-| asserção que não detecta quebra | `TS-SUI-04` | o teste de trinta segundos — é de `teste-diagnose` |
+| asserção que não detecta quebra | `TS-SUI-04` | o teste de trinta segundos — é de `test-diagnose` |
 
 **Cobertura não substitui nenhuma dessas.** Um teste que chama a função e não afirma nada
 dá cobertura total (`TS-CORE-05`).

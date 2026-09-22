@@ -1,6 +1,6 @@
 ---
 name: bun-test-build
-description: Escrever teste novo sob `bun test` e configurar a suíte de um projeto, seguindo as árvores de decisão e as regras `BUN-TEST-*` da doc do vault, com autoverificação executável — use quando a tarefa for escrever teste de unidade, substituir uma dependência por mock ou duplo, controlar data e tempo, testar componente React, configurar `bunfig.toml` e preloads, ou montar o comando de CI. Não use para revisar suíte existente nem diagnosticar flaky, que é bun-test-review, e não use para decidir *o que* testar e em que nível, que é teste-design.
+description: Escrever teste novo sob `bun test` e configurar a suíte de um projeto, seguindo as árvores de decisão e as regras `BUN-TEST-*` da doc do vault, com autoverificação executável — use quando a tarefa for escrever teste de unidade, substituir uma dependência por mock ou duplo, controlar data e tempo, testar componente React, configurar `bunfig.toml` e preloads, ou montar o comando de CI. Não use para revisar suíte existente nem diagnosticar flaky, que é bun-test-review, e não use para decidir *o que* testar e em que nível, que é test-design.
 tags:
   - skill
   - bun
@@ -24,7 +24,7 @@ Escrever teste que **vai existir**, ou configurar a suíte de um projeto sob `bu
 | Situação | Vá para |
 | --- | --- |
 | revisar suíte existente, diagnosticar flaky | [[bun-test-review]] |
-| decidir **o quê** testar e **em que nível** | [[teste-design]] — vem antes desta |
+| decidir **o quê** testar e **em que nível** | [[test-design]] — vem antes desta |
 | teste E2E | [[playwright-build]] |
 | story e teste de interação em browser real | [[storybook-test]] |
 | revisar o componente, não o teste dele | [[react-review]] · [[react-developer]] |
@@ -121,7 +121,7 @@ Caso completo, com o que foi executado e o que ficou por verificar: `references/
 | Se a tarefa passar a ser… | Vá para |
 | --- | --- |
 | revisar a suíte inteira, diagnosticar flaky, classificar severidade | [[bun-test-review]] |
-| a **forma** da suíte entre níveis | [[teste-review]] |
+| a **forma** da suíte entre níveis | [[test-review]] |
 | revisar a persistência que o teste exercita | [[drizzle-review]] |
 | escrever ou revisar o componente, não o teste dele | [[react-developer]] · [[react-review]] |
 | decidir cache e invalidação que o teste observa | [[tanstack-query]] |
@@ -135,4 +135,4 @@ Quando a fronteira for atravessada, **declare a troca** em vez de opinar fora da
 - [[Bun - Testes]] — fonte desta skill: § 2, § 5, § 6, § 7
 - [[Bun - Testes - Escrita e Asserções]] · [[Bun - Testes - Mocks e Tempo]] · [[Bun - Testes - DOM e Componentes]] · [[Bun - Testes - Ciclo de Vida e Isolamento]] · [[Bun - Testes - Execução e Configuração]] · [[Bun - Testes - Cobertura e CI]]
 - [[bun-test-review]] — a skill irmã
-- [[teste-design]] — decide o nível, antes desta skill começar
+- [[test-design]] — decide o nível, antes desta skill começar

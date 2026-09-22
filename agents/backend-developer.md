@@ -47,7 +47,7 @@ A regra de maior consequência de cada família, que este agente confere **antes
 | arquivo, `.env`, processo, shell, hash em Bun | [[bun-runtime]] | [[bun-workspace]] |
 | dependência, lockfile, workspace, `bun ci` | [[bun-workspace]] | [[bun-runtime]] |
 | vim do Node e não roda; container; Dockerfile | [[bun-migrate]] | [[bun-runtime]] |
-| teste unitário ou de integração sob `bun test` | [[bun-test-build]] | [[teste-design]] (nível já decidido) |
+| teste unitário ou de integração sob `bun test` | [[bun-test-build]] | [[test-design]] (nível já decidido) |
 | schema Drizzle, migration, query com relations | — sem skill de construção; ler [[Drizzle ORM]] § 6 e [[Drizzle - Schema e Migrations]] direto; revisar com [[drizzle-review]] | — |
 | rota em Hono | — sem skill ainda; ler [[Hono]] § 6.1 e § 8 direto | — |
 | onde mora a regra: browser, BFF ou backend | [[software-architect]] | backend-developer |

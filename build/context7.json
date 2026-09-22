@@ -48,9 +48,9 @@
     "drizzle-review": ["drizzle"]
   },
   "sem_biblioteca": {
-    "teste-design": "conceito, não ferramenta — o nível do teste não é API de ninguém",
-    "teste-review": "conceito, não ferramenta",
-    "teste-diagnose": "conceito, não ferramenta",
+    "test-design": "conceito, não ferramenta — o nível do teste não é API de ninguém",
+    "test-review": "conceito, não ferramenta",
+    "test-diagnose": "conceito, não ferramenta",
     "http-contract": "a fonte são RFCs, não uma biblioteca",
     "http-cache": "a fonte são RFCs, não uma biblioteca",
     "http-diagnose": "a fonte são RFCs, não uma biblioteca",

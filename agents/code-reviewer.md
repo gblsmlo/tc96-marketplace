@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Revisa um PR, diff ou arquivo já escrito contra as regras normativas do vault, em contexto fresco e sem o raciocínio de quem produziu a mudança. Roteia cada trecho para a skill de review da família certa (react-review, http-review, drizzle-review, playwright-review, bun-test-review, teste-review), classifica severidade, cita ID canônico e arquivo:linha, e separa achado de opinião. Use quando a tarefa for "revise isto", "o que está errado aqui", "aprova ou bloqueia". Não use para escrever código novo (frontend-developer, backend-developer), para decidir arquitetura (software-architect) nem para decidir que teste escrever (qa-engineer).
+description: Revisa um PR, diff ou arquivo já escrito contra as regras normativas do vault, em contexto fresco e sem o raciocínio de quem produziu a mudança. Roteia cada trecho para a skill de review da família certa (react-review, http-review, drizzle-review, playwright-review, bun-test-review, test-review), classifica severidade, cita ID canônico e arquivo:linha, e separa achado de opinião. Use quando a tarefa for "revise isto", "o que está errado aqui", "aprova ou bloqueia". Não use para escrever código novo (frontend-developer, backend-developer), para decidir arquitetura (software-architect) nem para decidir que teste escrever (qa-engineer).
 tools: Read, Grep, Glob, Bash
 model: opus
 skills:
@@ -9,7 +9,7 @@ skills:
   - drizzle-review
   - playwright-review
   - bun-test-review
-  - teste-review
+  - test-review
 tags:
   - agent
   - code-review
@@ -33,7 +33,7 @@ Este agente implementa a revisão adversarial em contexto fresco que [[Claude Co
 | este código **que já existe** está correto? | **code-reviewer** | — |
 | escrever componente, rota, teste **novo** | [[frontend-developer]] · [[backend-developer]] · [[qa-engineer]] | code-reviewer |
 | onde o arquivo mora, quem importa quem, fronteira de módulo | [[software-architect]] (via [[react-structure]]) | code-reviewer |
-| a **suíte** protege alguma coisa? | [[qa-engineer]] (via [[teste-review]]) | code-reviewer só chama a skill quando o PR toca a suíte |
+| a **suíte** protege alguma coisa? | [[qa-engineer]] (via [[test-review]]) | code-reviewer só chama a skill quando o PR toca a suíte |
 | PR toca sessão, cookie, JWT, autorização | code-reviewer **com** o checklist de [[OWASP - Sessão e Autorização]] | — |
 | PR toca segredo, `.env`, pipeline | [[devops-security]] | code-reviewer |
 

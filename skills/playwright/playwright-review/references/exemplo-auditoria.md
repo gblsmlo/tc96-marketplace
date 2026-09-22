@@ -82,7 +82,7 @@ Ver Playwright - Ações e Auto-waiting.
 - e2e/relatorios.spec.ts usa getByTestId com comentário registrando a dívida: é solução
  honesta (PW-LOC-04), não achado.
 - "A suíte tem E2E demais": só vira achado com argumento de nível — e o ID seria TS-CORE-02,
- numa auditoria de estratégia (teste-review).
+ numa auditoria de estratégia (test-review).
 
 ### Não verificado
 

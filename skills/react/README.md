@@ -108,8 +108,8 @@ procedimento e os IDs pertencem à skill daquela camada:
 | componente confirmado lento, fix medido | *(rota vaga — ver `memory/STACK.md`)* | — |
 | configurar Storybook, escrever story | `storybook-setup` · `storybook-story` | [Storybook](../../knowledge-base/docs/storybook.md) |
 | teste de interação na story, runner **Vitest** | `storybook-test` | [Storybook - Testes e Interações](../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4 |
-| **nível** do teste: unidade × integração × e2e | `teste-design` | `Docs/Teste de Software - Níveis e Escopo.md` |
-| a suíte como sistema: protege? é confiável? | `teste-review` · `teste-diagnose` | `Docs/Teste de Software.md` |
+| **nível** do teste: unidade × integração × e2e | `test-design` | `Docs/Teste de Software - Níveis e Escopo.md` |
+| a suíte como sistema: protege? é confiável? | `test-review` · `test-diagnose` | `Docs/Teste de Software.md` |
 | **unidade e integração** em `bun test` | `bun-test-build` · `bun-test-review` | `Docs/Bun - Testes.md` |
 | **e2e** | `playwright-build` · `playwright-review` · `playwright-diagnose` | `Docs/Playwright.md` |
 | rota, schema e lifecycle de API | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `Docs/Elysia.md` |
@@ -119,7 +119,7 @@ procedimento e os IDs pertencem à skill daquela camada:
 
 Duas fronteiras que costumam ser cruzadas na direção errada:
 
-- **Teste: conceito antes de ferramenta.** *Em que nível* é `teste-design`; *como escrever*
+- **Teste: conceito antes de ferramenta.** *Em que nível* é `test-design`; *como escrever*
  é a skill da ferramenta. Pular a primeira produz E2E por default.
 - **Vitest não é skill deste vault.** Aparece como runner do `@storybook/addon-vitest`,
  rodando story em browser real via Playwright ([Storybook - Testes e Interações](../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4;

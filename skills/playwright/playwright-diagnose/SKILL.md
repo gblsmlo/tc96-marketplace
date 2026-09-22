@@ -1,6 +1,6 @@
 ---
 nome: playwright-diagnose
-descricao: Diagnosticar teste Playwright que falha ou falha de forma intermitente, lendo o trace antes de tocar no código, com bissecção executável e IDs `PW-*` — use quando a tarefa for investigar teste flaky, falha que só acontece em CI, falha que só acontece em paralelo, screenshot que difere sem motivo, ou timeout de 30 s sem causa aparente. Não use para escrever teste novo, que é playwright-build, para auditar uma suíte inteira sem falha concreta, que é playwright-review, nem para a suíte como sistema e taxa de flakiness, que é teste-diagnose.
+descricao: Diagnosticar teste Playwright que falha ou falha de forma intermitente, lendo o trace antes de tocar no código, com bissecção executável e IDs `PW-*` — use quando a tarefa for investigar teste flaky, falha que só acontece em CI, falha que só acontece em paralelo, screenshot que difere sem motivo, ou timeout de 30 s sem causa aparente. Não use para escrever teste novo, que é playwright-build, para auditar uma suíte inteira sem falha concreta, que é playwright-review, nem para a suíte como sistema e taxa de flakiness, que é test-diagnose.
 tipo: skill
 familia: playwright
 fonte: "[Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md)"
@@ -21,7 +21,7 @@ tags:
 
 Contrato que esta skill implementa: [Playwright](../../../knowledge-base/docs/playwright.md) § 7 ("Contrato de skill").
 
-> **Nota de desenho.** Esta skill diagnostica **um teste**. Para a **suíte como sistema** — taxa de flakiness, confiança, capacidade de detectar quebra — é `teste-diagnose`. A diferença prática: aqui se lê um trace; lá se lê o histórico do CI. Chegar lá com um teste vermelho, ou aqui com "a suíte é flaky", é usar a ferramenta errada.
+> **Nota de desenho.** Esta skill diagnostica **um teste**. Para a **suíte como sistema** — taxa de flakiness, confiança, capacidade de detectar quebra — é `test-diagnose`. A diferença prática: aqui se lê um trace; lá se lê o histórico do CI. Chegar lá com um teste vermelho, ou aqui com "a suíte é flaky", é usar a ferramenta errada.
 
 ---
 
@@ -33,7 +33,7 @@ Um teste concreto falha, ou falha às vezes.
 | --- | --- |
 | escrever ou reescrever teste | `playwright-build` |
 | auditar suíte sem falha concreta | `playwright-review` |
-| a **suíte** perdeu credibilidade; medir flakiness | `teste-diagnose` |
+| a **suíte** perdeu credibilidade; medir flakiness | `test-diagnose` |
 | teste sob `bun test` que falha | `bun-test-review` |
 | a falha é defeito real do produto | então **o teste funcionou** — reporte o defeito e pare |
 
@@ -149,4 +149,4 @@ Diagnóstico completo: `references/exemplo-diagnostico.md`.
 - [Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md) — fonte desta skill
 - [Playwright](../../../knowledge-base/docs/playwright.md) § 5.2 — a árvore de diagnóstico
 - `playwright-build` · `playwright-review` — as skills irmãs
-- `teste-diagnose` — diagnostica a **suíte**; esta diagnostica **um teste**
+- `test-diagnose` — diagnostica a **suíte**; esta diagnostica **um teste**

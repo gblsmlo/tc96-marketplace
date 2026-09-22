@@ -1,6 +1,6 @@
 ---
-nome: teste-design
-descricao: Decidir em que nível um teste vai e derivar os casos antes de escrever uma linha, citando IDs `TS-*` da doc do vault — use quando a tarefa for responder "que teste eu escrevo para isto?", escolher entre unidade/integração/componente/contrato/E2E, definir a proporção da suíte de um módulo, derivar casos de uma entrada (faixa, limite, combinação, estado), ou decidir o que substituir por dublê. Não use para escrever o teste em si — depois de decidido o nível, a fonte passa a ser playwright-build ou bun-test-build. Não use para auditar suíte existente, que é teste-review, nem para suíte instável, que é teste-diagnose.
+nome: test-design
+descricao: Decidir em que nível um teste vai e derivar os casos antes de escrever uma linha, citando IDs `TS-*` da doc do vault — use quando a tarefa for responder "que teste eu escrevo para isto?", escolher entre unidade/integração/componente/contrato/E2E, definir a proporção da suíte de um módulo, derivar casos de uma entrada (faixa, limite, combinação, estado), ou decidir o que substituir por dublê. Não use para escrever o teste em si — depois de decidido o nível, a fonte passa a ser playwright-build ou bun-test-build. Não use para auditar suíte existente, que é test-review, nem para suíte instável, que é test-diagnose.
 tipo: skill
 familia: test
 fonte: "[Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md)"
@@ -11,7 +11,7 @@ tags:
   - test-design
 ---
 
-# teste-design
+# test-design
 
 > **Fonte desta skill:** [Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) e [Teste de Software - Técnicas de Design de Caso](../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md), com o hub [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) como roteador. As 64 regras da família `TS-*` moram na § 6 do hub.
 > Esta skill **não contém** o texto das regras — ela diz o que decidir, em que ordem, e para quem entregar depois.
@@ -29,8 +29,8 @@ Há uma feature, um bug, uma regra, uma jornada — e a pergunta é *que teste c
 | Situação | Vá para |
 | --- | --- |
 | o nível já está decidido, quero escrever | `playwright-build` (E2E) · `bun-test-build` (unidade/integração) · `storybook-test` (componente) |
-| auditar a estratégia de uma suíte existente | `teste-review` |
-| suíte em que ninguém confia | `teste-diagnose` |
+| auditar a estratégia de uma suíte existente | `test-review` |
+| suíte em que ninguém confia | `test-diagnose` |
 | um teste concreto falhando | `playwright-diagnose` · `bun-test-review` |
 | critério de aceite de requisito não funcional | [Teste de Software - Processo e Artefatos](../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) |
 
@@ -155,5 +155,5 @@ Caso completo: `references/exemplo-desconto-por-volume.md`.
 - [Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) — fonte desta skill
 - [Teste de Software - Técnicas de Design de Caso](../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) — a segunda fonte, do Passo 4
 - [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — o hub: § 2, § 4.1, § 4.2, § 4.3, § 6, § 7
-- `teste-review` · `teste-diagnose` — as skills irmãs
+- `test-review` · `test-diagnose` — as skills irmãs
 - `playwright-build` · `bun-test-build` · `storybook-test` — para onde o bastão vai

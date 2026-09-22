@@ -1,6 +1,6 @@
 ---
 name: bun-test-review
-description: Revisar uma suíte `bun test` existente e diagnosticar teste flaky, citando IDs `BUN-TEST-*`, com sete sondas executáveis para os defeitos que a leitura de código não encontra — use quando a tarefa for revisar os testes de um projeto, investigar "passa sozinho e falha na suíte", achar teste que nunca roda, conferir se o portão de cobertura e o de tipo realmente fecham, ou classificar severidade de achado em teste. Não use para escrever teste novo nem configurar suíte do zero, que é bun-test-build, nem para a forma da suíte entre níveis, que é teste-review.
+description: Revisar uma suíte `bun test` existente e diagnosticar teste flaky, citando IDs `BUN-TEST-*`, com sete sondas executáveis para os defeitos que a leitura de código não encontra — use quando a tarefa for revisar os testes de um projeto, investigar "passa sozinho e falha na suíte", achar teste que nunca roda, conferir se o portão de cobertura e o de tipo realmente fecham, ou classificar severidade de achado em teste. Não use para escrever teste novo nem configurar suíte do zero, que é bun-test-build, nem para a forma da suíte entre níveis, que é test-review.
 tags:
   - skill
   - bun
@@ -25,8 +25,8 @@ Revisar suíte que **já existe** sob `bun test`, ou diagnosticar um teste que f
 | Situação | Vá para |
 | --- | --- |
 | escrever teste novo, configurar a suíte | [[bun-test-build]] |
-| a **forma** da suíte entre níveis (E2E × unidade × componente) | [[teste-review]] |
-| a suíte como sistema: taxa de flakiness, credibilidade | [[teste-diagnose]] |
+| a **forma** da suíte entre níveis (E2E × unidade × componente) | [[test-review]] |
+| a suíte como sistema: taxa de flakiness, credibilidade | [[test-diagnose]] |
 | teste E2E que falha | [[playwright-diagnose]] |
 | revisar o componente, não o teste dele | [[react-review]] |
 
@@ -124,6 +124,6 @@ Revisão completa: `references/exemplo-revisao.md`.
 
 - [[Bun - Testes]] — fonte desta skill: § 2, § 5.1, § 6, § 6.1, § 7
 - [[bun-test-build]] — a skill irmã
-- [[teste-review]] · [[teste-diagnose]] — a camada de conceito
+- [[test-review]] · [[test-diagnose]] — a camada de conceito
 - [[playwright-review]] — a auditoria equivalente em E2E
 - [[react-review]] · [[drizzle-review]] — de onde vem o formato de achado

@@ -46,7 +46,7 @@ Amostragem de 10 arquivos de `e2e/`: **7 verificam regra de negócio**, não jor
 `TS-PROC-03` —.github/workflows/ci.yml:41
 S4: o job de testes tem continue-on-error: true. O CI nunca reprovou por teste vermelho.
 Correção: remover a linha. Se o objetivo era não bloquear enquanto a suíte é instável,
- o caminho é teste-diagnose, não um portão que mente.
+ o caminho é test-diagnose, não um portão que mente.
 Ver Teste de Software - Processo e Artefatos.
 
 `TS-TIPO-08` — tsconfig.json:4 + ausência de no-floating-promises

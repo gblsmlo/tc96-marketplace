@@ -29,7 +29,7 @@ skills/<familia>/
 | **react** | `react-developer` · `react-review` · `react-structure` · `react-hook-form` | [react/](react/README.md) |
 | **tanstack** | `tanstack-query` · `tanstack-router` | [tanstack/](tanstack/README.md) |
 | **storybook** | `storybook-setup` · `storybook-story` · `storybook-test` | [storybook/](storybook/README.md) |
-| **test** | `teste-design` · `teste-review` · `teste-diagnose` | [test/](test/README.md) |
+| **test** | `test-design` · `test-review` · `test-diagnose` | [test/](test/README.md) |
 | **playwright** | `playwright-build` · `playwright-review` · `playwright-diagnose` | [playwright/](playwright/README.md) |
 
 ## Ainda no formato antigo

@@ -52,7 +52,7 @@ Escrever ou revisar teste de interação dentro de uma story.
 | cobertura e job de CI | [Storybook - Cobertura e CI](../../../knowledge-base/docs/storybook-cobertura-e-ci.md) |
 | jornada com rota, sessão e rede | `playwright-build` |
 | unidade e integração fora do browser | `bun-test-build` |
-| **em que nível** este teste deveria estar | `teste-design` |
+| **em que nível** este teste deveria estar | `test-design` |
 
 ---
 
@@ -138,5 +138,5 @@ Caso completo: `references/exemplo.md`.
 - [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) — fonte desta skill
 - [Storybook - Mocking](../../../knowledge-base/docs/storybook-mocking.md) — módulo e rede
 - `storybook-setup` · `storybook-story` — as skills irmãs
-- `teste-design` — decide o nível, antes desta
+- `test-design` — decide o nível, antes desta
 - `playwright-build` · `bun-test-build` — os outros níveis

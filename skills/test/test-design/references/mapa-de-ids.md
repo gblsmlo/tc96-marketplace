@@ -1,12 +1,12 @@
 ---
-gerado-por: plugins/hermes-core/skills/teste-design/scripts/gerar-mapa-de-ids.sh
+gerado-por: plugins/hermes-core/skills/test-design/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-17
 ---
 
 # Mapa de IDs `TS-*`
 
 > Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> Regenerar com `bash plugins/hermes-core/skills/teste-design/scripts/gerar-mapa-de-ids.sh` —
+> Regenerar com `bash plugins/hermes-core/skills/test-design/scripts/gerar-mapa-de-ids.sh` —
 > o mesmo arquivo é escrito nas três skills de teste.
 
 ## Apelidos — citar é achado inválido

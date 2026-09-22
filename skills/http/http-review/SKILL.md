@@ -28,7 +28,7 @@ Auditar o contrato de uma API que **já existe** — o serviço inteiro, ou as r
 | política de frescor e condicional | [[http-cache]] |
 | uma falha concreta em investigação | [[http-diagnose]] |
 | o handler no framework | [[elysia-build]] |
-| a suíte que deveria cobrir isso | [[teste-review]] |
+| a suíte que deveria cobrir isso | [[test-review]] |
 
 ---
 
@@ -112,4 +112,4 @@ O formato e o corte estão em `references/relatorio-e-corte.md`.
 - [[HTTP]] — fonte desta skill: § 6, § 6.1, § 6.2, § 7
 - [[http-contract]] · [[http-cache]] · [[http-diagnose]] — as skills irmãs
 - [[elysia-build]] — onde a correção costuma ser feita
-- [[teste-review]] — a suíte que deveria proteger o contrato
+- [[test-review]] — a suíte que deveria proteger o contrato

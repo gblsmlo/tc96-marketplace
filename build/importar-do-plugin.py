@@ -39,6 +39,11 @@ FAMILIAS = {
 }
 AGENTES = {"frontend-developer": "hermes-core/0.1.10"}
 
+# O build hermes nomeia a familia de conceito em portugues; todo o resto do
+# catalogo usa identificador em ingles. O nome muda; a prosa nao.
+RENOMEAR = {"teste-design": "test-design", "teste-review": "test-review",
+            "teste-diagnose": "test-diagnose"}
+
 CONTEXT7 = json.loads((RAIZ / "build/context7.json").read_text(encoding="utf-8"))
 
 FERRAMENTA_PARA_CAPACIDADE = {"Read": "ler", "Write": "escrever", "Edit": "editar",
@@ -153,6 +158,12 @@ def ajustar_script(texto):
     return texto
 
 
+def aplicar_rename(texto):
+    for antigo, novo in RENOMEAR.items():
+        texto = texto.replace(antigo, novo)
+    return texto
+
+
 def libs_de(skill):
     """Library IDs do Context7 que esta skill usa, na ordem declarada."""
     return [CONTEXT7["bibliotecas"][b]["id"]
@@ -224,7 +235,8 @@ def importar_familia(familia, por_arquivo, por_origem):
     plugin, skills, indice = FAMILIAS[familia]
     origem_plugin = CACHE / plugin
     for skill in skills:
-        origem, destino = origem_plugin / "skills" / skill, RAIZ / "skills" / familia / skill
+        nome = RENOMEAR.get(skill, skill)
+        origem, destino = origem_plugin / "skills" / skill, RAIZ / "skills" / familia / nome
         if destino.exists():
             shutil.rmtree(destino)
         shutil.copytree(origem, destino)
@@ -232,6 +244,7 @@ def importar_familia(familia, por_arquivo, por_origem):
             if not arq.is_file():
                 continue
             texto = arq.read_text(encoding="utf-8")
+            texto = aplicar_rename(texto)
             if arq.suffix == ".md":
                 # profundidade ate a raiz: SKILL.md=3, references/X.md=4
                 subidas = len(arq.relative_to(RAIZ).parts) - 1
@@ -240,8 +253,8 @@ def importar_familia(familia, por_arquivo, por_origem):
                 texto = resolver_wikilinks(texto, subidas, por_arquivo, por_origem)
                 if arq.name == "SKILL.md":
                     campos, corpo = partir(texto)
-                    corpo = marcar_superficie(corpo, skill)
-                    texto = frontmatter_skill(campos, corpo, skill, familia)
+                    corpo = marcar_superficie(corpo, nome)
+                    texto = frontmatter_skill(campos, corpo, nome, familia)
                 arq.write_text(texto, encoding="utf-8")
             elif arq.suffix == ".sh":
                 arq.write_text(ajustar_script(texto), encoding="utf-8")
@@ -249,7 +262,7 @@ def importar_familia(familia, por_arquivo, por_origem):
 
     mapa = origem_plugin / "referencias/familias" / f"{indice}.md"
     if mapa.exists():
-        texto = tirar_zettels(mapa.read_text(encoding="utf-8"))
+        texto = aplicar_rename(tirar_zettels(mapa.read_text(encoding="utf-8")))
         texto = re.sub(r"\[([^\]]*)\]\(\.\./([^)/]+\.md)\)",
                        lambda m: (f"[{m.group(1)}](../../knowledge-base/"
                                   f"{por_arquivo[m.group(2)]}/{m.group(2)})"
@@ -269,7 +282,7 @@ def importar_familia(familia, por_arquivo, por_origem):
 
 def importar_agente(nome, por_arquivo, por_origem):
     texto = (CACHE / AGENTES[nome] / "agents" / f"{nome}.md").read_text(encoding="utf-8")
-    texto = tirar_zettels(texto)
+    texto = aplicar_rename(tirar_zettels(texto))
     texto = re.sub(r"`((?:Docs|Pages)/[^`]+\.md)`",
                    lambda m: (f"[{Path(m.group(1)).stem}](../knowledge-base/"
                               f"{por_origem[m.group(1)][0]}/{por_origem[m.group(1)][1]})"

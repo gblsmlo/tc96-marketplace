@@ -1,6 +1,6 @@
 ---
-nome: teste-diagnose
-descricao: Diagnosticar uma suíte em que ninguém confia — medir a taxa de flakiness antes de opinar, achar a causa e separar conserto de anestésico, citando IDs `TS-*` — use quando a tarefa for investigar suíte instável como sistema, responder "por que passamos verde e o defeito chega em produção?", avaliar se as asserções detectam quebra, decidir se retry está mascarando defeito, ou quando o mesmo teste volta a flakear depois de corrigido. Não use para um teste concreto falhando, que é playwright-diagnose ou bun-test-review. Não use para auditar a forma da suíte, que é teste-review, nem para decidir teste novo, que é teste-design.
+nome: test-diagnose
+descricao: Diagnosticar uma suíte em que ninguém confia — medir a taxa de flakiness antes de opinar, achar a causa e separar conserto de anestésico, citando IDs `TS-*` — use quando a tarefa for investigar suíte instável como sistema, responder "por que passamos verde e o defeito chega em produção?", avaliar se as asserções detectam quebra, decidir se retry está mascarando defeito, ou quando o mesmo teste volta a flakear depois de corrigido. Não use para um teste concreto falhando, que é playwright-diagnose ou bun-test-review. Não use para auditar a forma da suíte, que é test-review, nem para decidir teste novo, que é test-design.
 tipo: skill
 familia: test
 fonte: "[Teste de Software - Confiabilidade da Suíte](../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md)"
@@ -10,7 +10,7 @@ tags:
   - software-quality
   - flaky-tests
 ---
-# teste-diagnose
+# test-diagnose
 
 > **Fonte desta skill:** [Teste de Software - Confiabilidade da Suíte](../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md), com a § 4.5 do hub [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) como árvore de diagnóstico. As 64 regras da família `TS-*` moram na § 6 do hub.
 > Esta skill **não contém** o texto das regras — ela diz o que medir, em que ordem eliminar hipóteses e como reportar.
@@ -28,8 +28,8 @@ A suíte, como conjunto, perdeu credibilidade: falhas intermitentes, gente reexe
 | Situação | Vá para |
 | --- | --- |
 | **um** teste falhando ou flakeando | `playwright-diagnose` (E2E) · `bun-test-review` (Bun) |
-| auditar a forma e a cobertura de risco | `teste-review` |
-| decidir teste novo | `teste-design` |
+| auditar a forma e a cobertura de risco | `test-review` |
+| decidir teste novo | `test-design` |
 | a falha é defeito real do produto | então **a suíte funcionou** — pare e conserte o produto |
 | defeito recorrente, causa organizacional | [Teste de Software - Processo e Artefatos](../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) |
 
@@ -69,7 +69,7 @@ Se sim, **a suíte fez o trabalho dela**. Falha **determinística** é defeito; 
 ## Passo 1 — Medir antes de opinar
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/teste-diagnose/scripts/medir-flakiness.sh "bun test" 20
+bash ${CLAUDE_PLUGIN_ROOT}/skills/test-diagnose/scripts/medir-flakiness.sh "bun test" 20
 ```
 
 O script inventaria os **anestésicos já instalados** (retry, `workers: 1`, `skip`, espera por tempo fixo, relógio real, prefixo numérico, `try/catch` no corpo) e **mede a taxa**.
@@ -133,7 +133,7 @@ Ver Satélite correspondente.
 1. **Reporte a taxa, antes e depois.** "Caiu de 17% para 0,4%" é o único fechamento verificável.
 2. **Confirme com repetição.** 20 execuções verdes; uma não prova nada num flake de 1 em 6.
 3. **Se a causa foi defeito de produto**, a suíte não muda. Diga isso.
-4. **Se a causa foi a forma da suíte**, continue em `teste-review` — é reestruturação, não conserto.
+4. **Se a causa foi a forma da suíte**, continue em `test-review` — é reestruturação, não conserto.
 5. **Transforme o diagnóstico em portão:** ordem aleatória no pipeline, flaky não contando como verde, repetição no job noturno, o teste de trinta segundos como passo de revisão.
 6. **Se o mesmo teste volta a flakear**, a causa raiz não foi encontrada (`TS-PROC-08`).
 7. **Declare o que não foi medido.** "Não medido" não é "sem problema".
@@ -152,6 +152,6 @@ Diagnóstico completo, com os dois relatórios: `references/exemplo-diagnostico.
 
 - [Teste de Software - Confiabilidade da Suíte](../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) — fonte desta skill: a aritmética, as dez causas, test smells
 - [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — § 2 (afirmação 5), § 4.5 (a árvore), § 6, § 7
-- `teste-design` · `teste-review` — as skills irmãs
+- `test-design` · `test-review` — as skills irmãs
 - `playwright-diagnose` · `bun-test-review` — diagnosticam **um teste**; esta diagnostica a **suíte**
 - `Docs/Playwright.md` § 5.2 · `Docs/Bun - Testes - Ciclo de Vida e Isolamento.md` — as formas concretas por ferramenta

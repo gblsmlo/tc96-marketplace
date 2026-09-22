@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sondas da FORMA da suíte — S1 a S9 de teste-review. Uso: bash sondas-suite.sh [raiz]
+# Sondas da FORMA da suíte — S1 a S9 de test-review. Uso: bash sondas-suite.sh [raiz]
 #
 # Medem o conjunto, não os testes. Sonda não é achado: achado de forma exige o NÚMERO
 # colado no relatório. S2 e S4 exigem rodar/ler o CI — este script prepara, não conclui.

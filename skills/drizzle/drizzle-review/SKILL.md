@@ -26,7 +26,7 @@ Revisar persistência que **já existe**: schema, migrações, repositórios, qu
 | escrever schema ou query nova | [[Drizzle ORM]] § 5, direto — **não há skill de construção ainda** |
 | modelagem, índice, constraint, RLS no banco | [[PostgreSQL]] |
 | a rota que chama o repositório | [[elysia-build]] |
-| a suíte que deveria cobrir isso | [[bun-test-review]] · [[teste-review]] |
+| a suíte que deveria cobrir isso | [[bun-test-review]] · [[test-review]] |
 | o contrato HTTP que a rota expõe | [[http-review]] |
 
 ---

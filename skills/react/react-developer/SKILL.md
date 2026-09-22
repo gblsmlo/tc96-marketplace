@@ -160,7 +160,7 @@ Antes de escrever a primitiva crua, confirme de quem é a camada. [React.js](../
 | onde o arquivo mora e quem importa quem | `react-structure` | [Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md) |
 | story, args, controle, página de docs | `storybook-story` · `storybook-setup` | [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md) |
 | teste de interação na story, **runner Vitest** | `storybook-test` | [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4 |
-| **em que nível** este teste vai (unidade × integração × e2e) | `teste-design` | `Docs/Teste de Software - Níveis e Escopo.md` |
+| **em que nível** este teste vai (unidade × integração × e2e) | `test-design` | `Docs/Teste de Software - Níveis e Escopo.md` |
 | **unidade e integração** sob `bun test` | `bun-test-build` · `bun-test-review` | `Docs/Bun - Testes.md` |
 | **e2e** — escrever, auditar, diagnosticar | `playwright-build` · `playwright-review` · `playwright-diagnose` | `Docs/Playwright.md` |
 | rota, handler, schema e lifecycle de API | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `Docs/Elysia.md` |
@@ -169,7 +169,7 @@ Antes de escrever a primitiva crua, confirme de quem é a camada. [React.js](../
 
 Três fronteiras que costumam ser cruzadas na direção errada:
 
-- **Teste: conceito antes de ferramenta.** Decidir *o nível* é `teste-design`; escrever é a skill da ferramenta. Pular a primeira produz E2E por default — o antipadrão de maior custo do stack.
+- **Teste: conceito antes de ferramenta.** Decidir *o nível* é `test-design`; escrever é a skill da ferramenta. Pular a primeira produz E2E por default — o antipadrão de maior custo do stack.
 - **Vitest não tem skill própria neste vault.** Ele é o *runner* do `@storybook/addon-vitest`, executando story em browser real via Playwright ([Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4; o corte entre Vitest 3 e 4 está na § 4.2). Unidade fora do Storybook é `bun test`.
 - **Otimismo tem dois donos.** Se o dado vive no cache da Query, o otimismo é da mutation, com snapshot e rollback; `useOptimistic` é para o que não vive em cache. Empilhar os dois viola `REACT-FORM-07`.
 

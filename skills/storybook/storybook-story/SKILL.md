@@ -40,7 +40,7 @@ Criar ou revisar `*.stories.tsx`.
 | --- | --- |
 | a `play` dentro da story | `storybook-test` |
 | configurar o projeto, sidebar vazia, versões | `storybook-setup` |
-| decidir **em que nível** o teste vai | `teste-design` |
+| decidir **em que nível** o teste vai | `test-design` |
 | o componente em si | `react-developer` · `react-review` |
 
 ---

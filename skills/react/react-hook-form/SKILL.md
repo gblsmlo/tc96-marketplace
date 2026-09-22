@@ -118,7 +118,7 @@ Ao reportar, use o formato de `react-review`: ID canônico + `arquivo:linha` + c
 | o componente em volta: pureza, Hooks, fronteiras | `react-review` · `react-developer` |
 | onde o arquivo do form mora, quem importa quem | `react-structure` |
 | story e teste de interação do formulário | `storybook-story` · `storybook-test` |
-| **nível** do teste do formulário (unidade × integração × e2e) | `teste-design` |
+| **nível** do teste do formulário (unidade × integração × e2e) | `test-design` |
 | teste de unidade · e2e da jornada de submissão | `bun-test-build` · `playwright-build` |
 | o endpoint que recebe o submit: schema, status, erro | `elysia-schema` · `http-contract` |
 

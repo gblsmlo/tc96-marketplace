@@ -6,7 +6,7 @@
 
 | Severidade | O que entra |
 | --- | --- |
-| **Bloqueante** | portão de CI que não reprova (`TS-PROC-03`); `no-floating-promises` desligada com Playwright no projeto; defeito de produção recorrente sem teste (`TS-CORE-06`); flake acima de ~1% (`TS-CORE-04` — e vá para `teste-diagnose`) |
+| **Bloqueante** | portão de CI que não reprova (`TS-PROC-03`); `no-floating-promises` desligada com Playwright no projeto; defeito de produção recorrente sem teste (`TS-CORE-06`); flake acima de ~1% (`TS-CORE-04` — e vá para `test-diagnose`) |
 | **Alta** | forma invertida (`TS-NIV-04`); regra de negócio em E2E (`TS-NIV-02`); estado de erro sem cobertura em fluxo crítico (`TS-TIPO-02`); mock do que o teste vem provar (`TS-CORE-03`); meta de cobertura como indicador (`TS-CORE-05`) |
 | **Média** | `strict` desligado (`TS-TIPO-08`); requisito não funcional sem número (`TS-TIPO-05`); dado pré-existente compartilhado (`TS-SUI-05`); reteste sem regressão (`TS-TIPO-04`); `skip` sem motivo (`TS-SUI-11`); proporção global (`TS-NIV-08`) |
 | **Baixa** | preferência sem ID — **não é achado** |
@@ -75,5 +75,5 @@ caso que a motivou — não uma citação falsa.
 2. **Separe as três conclusões** — não protegido, no nível errado, quebrado.
 3. **Ordene por severidade**, não por diretório.
 4. **Dê o próximo passo, não a lista inteira.** Aponte o arquivo com maior razão entre casos e valor.
-5. **Se houver flake ativo, o relatório para aqui** e continua em `teste-diagnose`: com a suíte não confiável, nenhuma conclusão sobre cobertura é interpretável (`TS-CORE-04`).
+5. **Se houver flake ativo, o relatório para aqui** e continua em `test-diagnose`: com a suíte não confiável, nenhuma conclusão sobre cobertura é interpretável (`TS-CORE-04`).
 6. **Declare o que não foi verificado.** Sonda que não rodou — suíte não sobe, CI inacessível, sem histórico de git — diga qual e por quê. **"Não verificado" não é "sem achado"**.

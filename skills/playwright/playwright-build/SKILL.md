@@ -1,6 +1,6 @@
 ---
 nome: playwright-build
-descricao: Escrever teste E2E novo com Playwright — locator na ordem de prioridade, asserção web-first, estrutura, e autoverificação executável de 12 itens antes de entregar, citando IDs `PW-*` da doc do vault — use quando a tarefa for escrever ou editar um `*.spec.ts`, cobrir uma jornada de usuário, montar page object ou fixture, preparar estado por API, ou substituir rede, relógio e sessão num teste. Não use para revisar suíte existente, que é playwright-review, para diagnosticar teste que já falha, que é playwright-diagnose, nem para decidir se o teste deveria ser E2E — essa decisão vem antes, em teste-design.
+descricao: Escrever teste E2E novo com Playwright — locator na ordem de prioridade, asserção web-first, estrutura, e autoverificação executável de 12 itens antes de entregar, citando IDs `PW-*` da doc do vault — use quando a tarefa for escrever ou editar um `*.spec.ts`, cobrir uma jornada de usuário, montar page object ou fixture, preparar estado por API, ou substituir rede, relógio e sessão num teste. Não use para revisar suíte existente, que é playwright-review, para diagnosticar teste que já falha, que é playwright-diagnose, nem para decidir se o teste deveria ser E2E — essa decisão vem antes, em test-design.
 tipo: skill
 familia: playwright
 fonte: "[Playwright - Locators](../../../knowledge-base/docs/playwright-locators.md)"
@@ -32,7 +32,7 @@ Escrever ou editar teste que **vai existir**: um `*.spec.ts` novo, um caso a mai
 | --- | --- |
 | revisar suíte que já existe | `playwright-review` |
 | teste que falha, ou falha às vezes | `playwright-diagnose` — **leia o trace antes de editar** |
-| decidir **se** isto deveria ser E2E | `teste-design` — e a resposta costuma ser "não" |
+| decidir **se** isto deveria ser E2E | `test-design` — e a resposta costuma ser "não" |
 | teste de unidade ou integração sob Bun | `bun-test-build` |
 | estado visual de um componente | `storybook-story` · `storybook-test` |
 | ligar agentes de teste no repositório | [Playwright - Agents, CLI e MCP](../../../knowledge-base/docs/playwright-agents-cli-e-mcp.md) |
@@ -125,7 +125,7 @@ Doze itens, mais as três que valem mais: **quebrar o código de propósito** e 
 1. **`--repeat-each=5`** no arquivo novo. Verde cinco vezes, não uma.
 2. **A suíte inteira ainda passa** — teste novo que suja estado quebra o vizinho.
 3. **Se precisou de `getByTestId` ou CSS**, registre a dívida (`PW-LOC-04`).
-4. **Se ficou lento ou frágil**, a pergunta é de nível — `teste-design`.
+4. **Se ficou lento ou frágil**, a pergunta é de nível — `test-design`.
 5. **Declare o que não cobriu** (`TS-TIPO-02`).
 
 ---
@@ -144,5 +144,5 @@ Caso completo: `references/exemplo-pedido-na-lista.md`.
 - [Playwright - Assertions](../../../knowledge-base/docs/playwright-assertions.md) — a segunda fonte, inseparável da primeira
 - [Playwright](../../../knowledge-base/docs/playwright.md) — o hub: § 0, § 2, § 5, § 6, § 7
 - `playwright-review` · `playwright-diagnose` — as skills irmãs
-- `teste-design` — decide **se** o teste é E2E, antes desta skill começar
+- `test-design` — decide **se** o teste é E2E, antes desta skill começar
 - `bun-test-build` · `storybook-test` — os outros níveis

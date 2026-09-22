@@ -9,7 +9,7 @@ Playwright ela é deliberada: o diagnóstico começa **fora do código**, no tra
 | `playwright-review` | esta suíte tem defeito? | [Playwright](../../knowledge-base/docs/playwright.md) | 5 referências + 1 auditoria + 2 scripts |
 | `playwright-diagnose` | por que **este** teste falha? | [Playwright - Debug e Trace](../../knowledge-base/docs/playwright-debug-e-trace.md) | 5 referências + 1 diagnóstico + 1 script |
 
-**Antes das três vem `teste-design`:** se o que pode dar errado é regra de negócio, o
+**Antes das três vem `test-design`:** se o que pode dar errado é regra de negócio, o
 teste **não é E2E** (`TS-CORE-02`).
 
 ## O que cada pacote acrescentou

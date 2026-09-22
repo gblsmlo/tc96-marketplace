@@ -144,8 +144,8 @@ Um PR de frontend quase nunca é só React. Quando o achado for de outra camada,
 | formulário com validação, condicional, array de campos | `react-hook-form` | [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) |
 | story, controle, docs de componente | `storybook-story` · `storybook-setup` | [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md) |
 | teste de interação dentro da story, **runner Vitest** | `storybook-test` | [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4 |
-| **em que nível** este teste deve estar (unidade × integração × e2e) | `teste-design` | `Docs/Teste de Software - Níveis e Escopo.md` |
-| a suíte protege alguma coisa? · ninguém confia nela | `teste-review` · `teste-diagnose` | `Docs/Teste de Software.md` |
+| **em que nível** este teste deve estar (unidade × integração × e2e) | `test-design` | `Docs/Teste de Software - Níveis e Escopo.md` |
+| a suíte protege alguma coisa? · ninguém confia nela | `test-review` · `test-diagnose` | `Docs/Teste de Software.md` |
 | **teste de unidade e integração** sob `bun test` | `bun-test-build` · `bun-test-review` | `Docs/Bun - Testes.md` |
 | **teste e2e** — escrever, auditar, diagnosticar | `playwright-build` · `playwright-review` · `playwright-diagnose` | `Docs/Playwright.md` |
 | rota, handler, schema e lifecycle de API | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `Docs/Elysia.md` |
@@ -155,7 +155,7 @@ Um PR de frontend quase nunca é só React. Quando o achado for de outra camada,
 Duas observações que evitam achado errado:
 
 - **Vitest não tem skill própria neste vault.** Ele aparece como *runner* do `@storybook/addon-vitest`, rodando story em browser real via Playwright — [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4, e o corte entre Vitest 3 e 4 está na § 4.2. Teste de unidade fora do Storybook é `bun test`, não Vitest.
-- **A camada de conceito vem antes da de ferramenta.** "Este teste deveria existir, e neste nível?" é `teste-design`; "este teste está certo?" é a skill da ferramenta. Pular a primeira produz E2E por default, que é o antipadrão de maior custo do stack.
+- **A camada de conceito vem antes da de ferramenta.** "Este teste deveria existir, e neste nível?" é `test-design`; "este teste está certo?" é a skill da ferramenta. Pular a primeira produz E2E por default, que é o antipadrão de maior custo do stack.
 
 ---
 

@@ -61,7 +61,7 @@ Regras do formato:
 
 | Não é achado | Por quê |
 | --- | --- |
-| **ausência de teste** | "esta jornada não tem E2E" é decisão de estratégia — reporte como pergunta, e o ID seria de `teste-review` |
+| **ausência de teste** | "esta jornada não tem E2E" é decisão de estratégia — reporte como pergunta, e o ID seria de `test-review` |
 | **`getByTestId` com dívida registrada** | é solução honesta quando o componente não tem semântica e não vai ser corrigido neste PR (`PW-LOC-04`). Achado é o test id **sem** registro |
 | **escolha de proporção da suíte** | "tem E2E demais" só é achado com o argumento de nível — e aí o ID é `TS-CORE-02`, não `PW-*` |
 

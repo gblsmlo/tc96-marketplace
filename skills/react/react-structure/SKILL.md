@@ -180,7 +180,7 @@ Um PR por passo. Se uma regra do Biome não está na tabela de § 7, ela não fo
 | rota, navegação, search params, loader | `tanstack-router` |
 | dado remoto, `queryKey`, invalidação | `tanstack-query` |
 | story e teste de componente | `storybook-story` · `storybook-test` |
-| **nível** do teste (unidade × integração × e2e) | `teste-design` |
+| **nível** do teste (unidade × integração × e2e) | `test-design` |
 | unidade e integração em `bun test` · e2e | `bun-test-build` · `playwright-build` |
 | rota e schema de API · persistência · contrato HTTP | `elysia-build` · `drizzle-review` · `http-contract` |
 | workspace, alias de monorepo, lockfile | `bun-workspace` |

@@ -99,7 +99,7 @@ Checklist executável (`CC-SES-01` — a entrega mostra a evidência):
 - [ ] `biome check` passa com zero warnings; as regras de [Feature-Based Architecture](../knowledge-base/pages/feature-based-architecture.md) § 7 (`noImportCycles`, `noRestrictedImports`) estão ativas — se não estão, isso é o primeiro item do relatório.
 - [ ] Nenhum import cruza fronteira de feature fora do barrel (`REACT-ARCH-05`).
 - [ ] Nenhum `useState` guarda dado remoto; nenhum `useEffect` faz fetch.
-- [ ] Testes que **observam comportamento** cobrem loading, vazio, sucesso e falha; o nível do teste foi decidido com `teste-design` ou passado ao `qa-engineer`.
+- [ ] Testes que **observam comportamento** cobrem loading, vazio, sucesso e falha; o nível do teste foi decidido com `test-design` ou passado ao `qa-engineer`.
 - [ ] Autoverificação da skill carregada rodou por inteiro (`react-developer` traz a sua; `playwright-build` tem 12 itens; `storybook-test` tem 14).
 - [ ] O que não foi verificado contra a doc está **declarado**, não afirmado.
 

@@ -40,14 +40,14 @@ scan() {
 TMP="$(mktemp)"
 {
   echo "---"
-  echo "gerado-por: plugins/hermes-core/skills/teste-design/scripts/gerar-mapa-de-ids.sh"
+  echo "gerado-por: plugins/hermes-core/skills/test-design/scripts/gerar-mapa-de-ids.sh"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
   echo "# Mapa de IDs \`TS-*\`"
   echo
   echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
-  echo "> Regenerar com \`bash plugins/hermes-core/skills/teste-design/scripts/gerar-mapa-de-ids.sh\` —"
+  echo "> Regenerar com \`bash plugins/hermes-core/skills/test-design/scripts/gerar-mapa-de-ids.sh\` —"
   echo "> o mesmo arquivo é escrito nas três skills de teste."
   echo
   echo "## Apelidos — citar é achado inválido"
@@ -65,4 +65,4 @@ for s in design review diagnose; do
   cp "$TMP" "$PLUGIN/skills/teste-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 3 skills ($(grep -c '^| `TS' "$PLUGIN/skills/teste-design/references/mapa-de-ids.md") IDs)"
+echo "gerado nas 3 skills ($(grep -c '^| `TS' "$PLUGIN/skills/test-design/references/mapa-de-ids.md") IDs)"

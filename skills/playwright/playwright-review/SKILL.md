@@ -1,6 +1,6 @@
 ---
 nome: playwright-review
-descricao: Auditar uma suíte Playwright existente com oito sondas executáveis antes de ler código, varredura em onze níveis por frequência de defeito, checklist extra para teste gerado por agente, e achados com ID `PW-*` — use quando a tarefa for revisar a suíte E2E de um repositório ou de um PR, caçar asserção que não afirma nada, espera por tempo, locator frágil, sessão versionada, `test.only` sem portão, trace desligado ou shard mal configurado. Não use para escrever teste novo, que é playwright-build, para diagnosticar uma falha concreta, que é playwright-diagnose, nem para auditar a forma da suíte entre níveis, que é teste-review.
+descricao: Auditar uma suíte Playwright existente com oito sondas executáveis antes de ler código, varredura em onze níveis por frequência de defeito, checklist extra para teste gerado por agente, e achados com ID `PW-*` — use quando a tarefa for revisar a suíte E2E de um repositório ou de um PR, caçar asserção que não afirma nada, espera por tempo, locator frágil, sessão versionada, `test.only` sem portão, trace desligado ou shard mal configurado. Não use para escrever teste novo, que é playwright-build, para diagnosticar uma falha concreta, que é playwright-diagnose, nem para auditar a forma da suíte entre níveis, que é test-review.
 tipo: skill
 familia: playwright
 fonte: "[Playwright](../../../knowledge-base/docs/playwright.md)"
@@ -31,8 +31,8 @@ Auditar uma suíte E2E que **já existe**: o repositório inteiro, um diretório
 | --- | --- |
 | escrever ou reescrever teste | `playwright-build` |
 | uma falha concreta, ou flake com trace disponível | `playwright-diagnose` |
-| a **forma** da suíte entre níveis (E2E × unidade × componente) | `teste-review` |
-| suíte instável como sistema, taxa de flakiness | `teste-diagnose` |
+| a **forma** da suíte entre níveis (E2E × unidade × componente) | `test-review` |
+| suíte instável como sistema, taxa de flakiness | `test-diagnose` |
 | revisar teste sob `bun test` | `bun-test-review` |
 
 ---
@@ -95,7 +95,7 @@ Se a suíte tem testes de agente, aplique **também** a checklist extra — o it
 
 Para sonda, **a evidência é a saída do comando** — cole-a, incluindo o exit code quando ele for o achado.
 
-**Três coisas não são achado:** ausência de teste, `getByTestId` com dívida registrada, e escolha de proporção da suíte (essa é `TS-CORE-02`, em `teste-review`).
+**Três coisas não são achado:** ausência de teste, `getByTestId` com dívida registrada, e escolha de proporção da suíte (essa é `TS-CORE-02`, em `test-review`).
 
 ---
 
@@ -122,6 +122,6 @@ Auditoria completa: `references/exemplo-auditoria.md`.
 
 - [Playwright](../../../knowledge-base/docs/playwright.md) — fonte desta skill: § 6, § 6.1, § 6.2, § 7
 - `playwright-build` · `playwright-diagnose` — as skills irmãs
-- `teste-review` — audita a **forma** entre níveis; esta audita os **testes**
+- `test-review` — audita a **forma** entre níveis; esta audita os **testes**
 - `bun-test-review` — a auditoria equivalente sob Bun
 - `react-review` · `drizzle-review` — de onde vem o formato de achado

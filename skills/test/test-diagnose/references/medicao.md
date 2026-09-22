@@ -29,7 +29,7 @@ mensagem) é defeito; falha **intermitente** é a suíte. Só o segundo caso é 
 | **`skip` acumulado** | inventário do script | dívida, e frequentemente flake escondido |
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/teste-diagnose/scripts/medir-flakiness.sh "bun test" 20
+bash ${CLAUDE_PLUGIN_ROOT}/skills/test-diagnose/scripts/medir-flakiness.sh "bun test" 20
 ```
 
 O script faz duas coisas: **inventaria os anestésicos já instalados** (retry, workers=1,
