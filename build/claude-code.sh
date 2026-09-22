@@ -10,7 +10,7 @@ set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="${1:-$RAIZ/dist/claude-code}"
-VERSAO="${VERSAO:-0.3.0}"   # 0.3.0: hermes -> twincam, nome de plugin e de marketplace
+VERSAO="${VERSAO:-0.3.1}"   # 0.3.0: hermes -> twincam · 0.3.1: link do gerador dentro do plugin
 
 rm -rf "$DEST"
 
