@@ -58,7 +58,7 @@ react-structure/
 │ └── exemplo-revisao-de-estrutura.md a whole PR review
 └── scripts/
  ├── sondas-imports.sh 8 boundary probes, starting with enforcement
- └── gerar-mapa-de-ids.sh regenerates from Pages/Feature-Based Architecture.md
+ └── gerar-mapa-de-ids.sh regenerates from knowledge-base/pages/feature-based-architecture.md
 
 react-hook-form/
 ├── SKILL.md
@@ -70,7 +70,7 @@ react-hook-form/
 │ └── exemplo-lancamento-de-fatura.md from Step 0 to the submit
 └── scripts/
  ├── sondas.sh 12 probes for an existing form
- └── gerar-mapa-de-ids.sh regenerates from Docs/React Hook Form*
+ └── gerar-mapa-de-ids.sh regenerates from knowledge-base/docs/react-hook-form*
 ```
 
 **`mapa-de-ids.md` is generated, not written** — in all four. It indexes the IDs by satellite and
@@ -79,9 +79,9 @@ replica. Three generators, one per family, because the sources and the columns d
 
 | Generator | Family | Source | Columns |
 | --- | --- | --- | --- |
-| `react-review/scripts/gerar-mapa-de-ids.sh` | 105 `REACT-*` | `Docs/React*` | satellite · section · aliases |
+| `react-review/scripts/gerar-mapa-de-ids.sh` | 105 `REACT-*` | `knowledge-base/docs/react*` | satellite · section · aliases |
 | `react-structure/scripts/gerar-mapa-de-ids.sh` | 12 `REACT-ARCH-*` | [Feature-Based Architecture](../../knowledge-base/pages/feature-based-architecture.md) | **severity** · **who enforces it** · section |
-| `react-hook-form/scripts/gerar-mapa-de-ids.sh` | 81 `RHF-*` | `Docs/React Hook Form*` | satellite · section · cross-doc citation |
+| `react-hook-form/scripts/gerar-mapa-de-ids.sh` | 81 `RHF-*` | `knowledge-base/docs/react-hook-form*` | satellite · section · cross-doc citation |
 
 After editing any source note, run the corresponding generator and reinstall:
 

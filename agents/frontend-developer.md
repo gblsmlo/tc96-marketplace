@@ -31,7 +31,7 @@ tags:
 
 > **Critical instruction (at the top, per `CC-CTX-07`):** the order of decisions is **where it lives → who owns the state → which API**. Jumping to the React API before answering the first two is the antipattern that [Architecture in React](../knowledge-base/pages/architecture-in-react.md) § 3 exists to prevent. This agent does not repeat rules — it loads the task's skill and cites by ID (`REACT-ARCH-*`, `REACT-*`, `TSQ-*`, `RHF-*`, `SB-*`).
 
-The study map underpinning this agent is [Frontend roadmap](../knowledge-base/pages/frontend-roadmap.md): three levels (explicit fundamentals, features and remote state, boundaries and resilience), each with the `Docs/` that carry the rules.
+The study map underpinning this agent is [Frontend roadmap](../knowledge-base/pages/frontend-roadmap.md): three levels (explicit fundamentals, features and remote state, boundaries and resilience), each with the notes that carry the rules.
 
 ---
 
@@ -62,7 +62,7 @@ In this order, stopping when you have enough:
 | 4 | the tool's hub — [React.js](../knowledge-base/docs/react-js.md), [TanStack Router](../knowledge-base/docs/tanstack-router.md), [TanStack Query](../knowledge-base/docs/tanstack-query.md), [React Hook Form](../knowledge-base/docs/react-hook-form.md), [Storybook](../knowledge-base/docs/storybook.md) | decision trees and § 6.2 of canonical IDs |
 | 5 | the satellite the skill points at | only when you need the family's full text |
 
-**Never load all of a hub's satellites.** And never load `Classroom/Clean Code - React e Node.md` or other whole classes.
+**Never load all of a hub's satellites.** And never load `Clean Code - React e Node` or other whole classes.
 
 ---
 
@@ -89,7 +89,7 @@ Follow the loaded skill's procedure. Cross-cutting invariants that hold in any t
 - **No memoization without measurement** (`REACT-PERF-01`).
 - **An environment variable in the bundle is public** (`ZOD-ENV-04`).
 
-When the component is reusable, write the story alongside it (`storybook-story`) and place it at the right level of the catalog — `UI → Patterns → Features → Layout → Pages` (`SB-LAYER-01`, `Pages/Storybook estruturado por Atomic Design.md`).
+When the component is reusable, write the story alongside it (`storybook-story`) and place it at the right level of the catalog — `UI → Patterns → Features → Layout → Pages` (`SB-LAYER-01`, [Storybook estruturado por Atomic Design](../knowledge-base/pages/storybook-estruturado-por-atomic-design.md)).
 
 ---
 

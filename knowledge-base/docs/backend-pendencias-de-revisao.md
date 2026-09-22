@@ -79,4 +79,4 @@ Notas preexistentes que o caminho mínimo referencia e que estão vazias ou quas
 ## Relacionados
 
 - [Bun](bun.md) · [Hono](hono.md) · [Elysia](elysia.md) · [Backend no runtime Bun](backend-no-runtime-bun.md)
-- `README` — índice de `Docs/`
+- `README` — índice de `docs/`

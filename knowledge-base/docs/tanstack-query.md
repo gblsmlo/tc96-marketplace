@@ -177,14 +177,14 @@ As causas 4 e 5 são as que mais custam a achar, porque a invalidação roda, n�
 ## 7. Contrato de skill
 
 ```
-SEMPRE: Docs/TanStack Query.md § 2 (modelo mental)
+SEMPRE: docs/TanStack Query.md § 2 (modelo mental)
  § 5 (árvores de decisão)
 
 SOB DEMANDA, via § 4:
  o satélite da tarefa
 
 SE a tarefa envolve rota/loader:
- Docs/TanStack Router - Carregamento de Dados.md
+ docs/TanStack Router - Carregamento de Dados.md
 
 NUNCA: todos os satélites de uma vez
 ```

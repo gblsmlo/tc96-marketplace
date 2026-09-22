@@ -10,7 +10,7 @@ tags:
 # Architecture in React
 
 Mapa das decisões arquiteturais de uma aplicação React e da nota que responde cada uma. Esta página
-**roteia**; o conteúdo mora nos Zettels e em `Docs/`.
+**roteia**; o conteúdo mora nos Zettels e em `docs/`.
 
 React é uma biblioteca de renderização. Ele define como a UI é descrita e reconciliada, e
 deliberadamente **não** opina sobre pasta, roteamento, busca de dados, cache ou fronteira de módulo.
@@ -149,14 +149,14 @@ CONSULTA DE API
  → [React.js](../docs/react-js.md) § 4 (mapa da API) → o satélite indicado
 ```
 
-A hierarquia de fontes do vault, da mais forte para a mais fraca: `Docs/` (documentação verificada)
-→ Zettels (ideias consolidadas) → `Pages/` (mapas). Divergência entre uma página e um Doc é bug da
+A hierarquia de fontes do vault, da mais forte para a mais fraca: `docs/` (documentação verificada)
+→ Zettels (ideias consolidadas) → `pages/` (mapas). Divergência entre uma página e um Doc é bug da
 página. Ver [React.js](../docs/react-js.md) § 7, e `react-build` como exemplo de skill que implementa esse contrato.
 
 **Três exceções, explícitas.** [Feature-Based Architecture](feature-based-architecture.md),
 [Fronteira do BFF - forma, jornada e regra](fronteira-do-bff-forma-jornada-e-regra.md) e [Monorepo com Bun - estrutura e tooling](monorepo-com-bun-estrutura-e-tooling.md) moram em
-`Pages/` mas são **normativas**: têm IDs citáveis (`REACT-ARCH-*`, `BFF-*` e `MONO-*`), invariantes e
-contrato de skill. Ela está aqui, e não em `Docs/`,
+`pages/` mas são **normativas**: têm IDs citáveis (`REACT-ARCH-*`, `BFF-*` e `MONO-*`), invariantes e
+contrato de skill. Ela está aqui, e não em `docs/`,
 porque não resume documentação externa de uma ferramenta — ela registra uma decisão desta casa, com
 convenções que só existem neste vault. Uma página com contrato de skill é citável como regra; esta
 página, que só roteia, não é. Quando um Doc contradisser a filha em fato verificável — comportamento

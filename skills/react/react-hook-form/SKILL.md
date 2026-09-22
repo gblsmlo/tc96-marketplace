@@ -72,7 +72,7 @@ References in this skill — open only the one the task asks for:
 | `references/mapa-de-ids.md` | where each `RHF-*` is declared, and the cross-doc citation rule |
 | `references/exemplo-lancamento-de-fatura.md` | worked case, from Step 0 to the submit |
 | `scripts/sondas.sh` | twelve executable probes for reviewing an existing form |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates `mapa-de-ids.md` from `Docs/React Hook Form*` |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates `mapa-de-ids.md` from `knowledge-base/docs/react-hook-form*` |
 
 Below, the satellites appear by their short names: **Registro**, **Validação**, **Estado**; the **hub** is [React Hook Form](../../../knowledge-base/docs/react-hook-form.md).
 

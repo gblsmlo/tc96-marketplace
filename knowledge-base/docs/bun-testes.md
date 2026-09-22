@@ -427,28 +427,28 @@ Como uma skill de teste em Bun deve consumir esta doc.
 ### O que carregar
 
 ```
-SEMPRE: Docs/Bun - Testes.md § 2 (modelo mental)
- Docs/Bun - Testes.md § 3 (fronteiras de import)
- Docs/Bun - Testes.md § 6.1 (o caminho mínimo)
+SEMPRE: docs/Bun - Testes.md § 2 (modelo mental)
+ docs/Bun - Testes.md § 3 (fronteiras de import)
+ docs/Bun - Testes.md § 6.1 (o caminho mínimo)
 
 AO ESCREVER teste novo:
- Docs/Bun - Testes - Escrita e Asserções.md
+ docs/Bun - Testes - Escrita e Asserções.md
 
 AO SUBSTITUIR dependência (mock, spy, duplo) ou controlar tempo:
- Docs/Bun - Testes - Mocks e Tempo.md + § 5.2 / § 5.3
+ docs/Bun - Testes - Mocks e Tempo.md + § 5.2 / § 5.3
 
 AO DIAGNOSTICAR "passa sozinho, falha na suíte" ou flaky:
- § 5.1 + Docs/Bun - Testes - Ciclo de Vida e Isolamento.md
+ § 5.1 + docs/Bun - Testes - Ciclo de Vida e Isolamento.md
 
 AO TESTAR componente React:
- Docs/Bun - Testes - DOM e Componentes.md
+ docs/Bun - Testes - DOM e Componentes.md
 
 AO MEXER em CI, cobertura ou reporter:
- Docs/Bun - Testes - Cobertura e CI.md
+ docs/Bun - Testes - Cobertura e CI.md
 
 AO CONFIGURAR o projeto do zero:
- Docs/Bun - Testes - Execução e Configuração.md § 5
- + Docs/Bun - Testes - DOM e Componentes.md § 2 (se houver componente)
+ docs/Bun - Testes - Execução e Configuração.md § 5
+ + docs/Bun - Testes - DOM e Componentes.md § 2 (se houver componente)
 
 NUNCA: os seis satélites de uma vez
  inventar flag, chave de bunfig ou assinatura de matcher

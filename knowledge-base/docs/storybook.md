@@ -452,19 +452,19 @@ Como uma skill de Storybook deve consumir esta doc.
 ### O que carregar
 
 ```
-SEMPRE: Docs/Storybook.md § 2 (modelo mental)
- Docs/Storybook.md § 5 (árvores de decisão)
- Docs/Storybook.md § 6 + § 6.1 (regras normativas e críticas)
+SEMPRE: docs/Storybook.md § 2 (modelo mental)
+ docs/Storybook.md § 5 (árvores de decisão)
+ docs/Storybook.md § 6 + § 6.1 (regras normativas e críticas)
 
 AO ESCREVER/EDITAR arquivo de stories:
- Docs/Storybook - Stories e Args.md
+ docs/Storybook - Stories e Args.md
 
 ANTES DE QUALQUER COISA, para descobrir o caminho do projeto:
  leia o campo `framework` de.storybook/main.ts
 
 AO CONFIGURAR o projeto, ou em qualquer story que toque rota:
- Docs/Storybook - TanStack React.md (se framework = @storybook/tanstack-react)
- Docs/Storybook - React Vite.md (se framework = @storybook/react-vite)
+ docs/Storybook - TanStack React.md (se framework = @storybook/tanstack-react)
+ docs/Storybook - React Vite.md (se framework = @storybook/react-vite)
 
 SOB DEMANDA, via § 4 (mapa da API):
  o satélite da superfície tocada pela tarefa

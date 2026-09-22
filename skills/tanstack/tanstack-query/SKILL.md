@@ -61,7 +61,7 @@ References in this skill:
 | `references/mapa-de-ids.md` | the 55 `TSQ-*` by satellite and section |
 | `references/exemplo.md` | worked case |
 | `scripts/sondas.sh` | twelve probes over the code |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `Docs/TanStack Query*` |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `knowledge-base/docs/tanstack-query*` |
 
 ---
 

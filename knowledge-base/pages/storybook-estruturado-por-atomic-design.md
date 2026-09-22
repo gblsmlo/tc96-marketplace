@@ -280,7 +280,7 @@ NUNCA: citar SB-LAYER-* como se fosse da § 6 de [Storybook](../docs/storybook.m
 
 > `SB-LAYER-05` — `src/stories/layouts/auth-layout.stories.tsx:22`
 > A story do template monta `SignInForm` em vez de um placeholder.
-> Correção: renderizar conteúdo de espaço reservado; a composição real pertence a `Pages/Login`.
+> Correção: renderizar conteúdo de espaço reservado; a composição real pertence a `pages/Login`.
 > Regra desta nota, não da § 6 de [Storybook](../docs/storybook.md).
 
 ### Invariantes
@@ -313,7 +313,7 @@ Features/Leads/Preview
 Features/Auth/Password/{SignIn,SignUp,ForgottenPassword,ResetPassword}
 Features/Auth/TwoFactor
 Layout/Auth
-Pages/{Login,Register,ResetPassword}
+pages/{Login,Register,ResetPassword}
 ```
 
 Dois detalhes que só aparecem na aplicação real:

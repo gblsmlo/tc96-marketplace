@@ -228,14 +228,14 @@ E dois princípios do React que o Router **não** redefine — cite o ID do Reac
 ## 7. Contrato de skill
 
 ```
-SEMPRE: Docs/TanStack Router.md § 2 (modelo mental)
+SEMPRE: docs/TanStack Router.md § 2 (modelo mental)
  § 5 (árvores de decisão)
 
 SOB DEMANDA, via § 4:
  o satélite da tarefa
 
 SE a tarefa também mexe em componente/estado:
- Docs/React.js.md
+ docs/React.js.md
 
 NUNCA: todos os satélites de uma vez
 ```

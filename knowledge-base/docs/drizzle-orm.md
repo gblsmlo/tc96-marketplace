@@ -231,16 +231,16 @@ Regras citáveis por ID. `MUST`/`NEVER` são normativos.
 ## 7. Contrato de skill
 
 ```
-SEMPRE: Docs/Drizzle ORM.md § 0 (qual versão) — NÃO É OPCIONAL
+SEMPRE: docs/Drizzle ORM.md § 0 (qual versão) — NÃO É OPCIONAL
  § 2 (modelo mental)
  § 5 (árvores de decisão)
  § 6 (regras)
 
 AO DECLARAR SCHEMA ou RODAR drizzle-kit:
- Docs/Drizzle - Schema e Migrations.md
+ docs/Drizzle - Schema e Migrations.md
 
 AO ESCREVER QUERY, RELAÇÃO ou TRANSACTION:
- Docs/Drizzle - Queries e Relations.md
+ docs/Drizzle - Queries e Relations.md
 
 NUNCA: seguir um link para orm.drizzle.team sem confirmar
  que o projeto não está em @rc/@beta primeiro

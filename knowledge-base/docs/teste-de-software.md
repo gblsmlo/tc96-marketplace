@@ -307,16 +307,16 @@ Caminho mínimo (§ 6 + § 6.1, sem abrir satélite): **24 regras**.
 
 ```
 SEMPRE, ao decidir ou revisar ESTRATÉGIA de teste:
- Docs/Teste de Software.md § 0, § 2, § 4, § 6
+ docs/Teste de Software.md § 0, § 2, § 4, § 6
 
 AO DECIDIR o nível de um teste novo:
  § 4.1 (e § 3 para saber qual ferramenta é aquele nível)
 
 AO DECIDIR o que substituir:
- § 4.2 + Docs/Teste de Software - Dublês de Teste.md
+ § 4.2 + docs/Teste de Software - Dublês de Teste.md
 
 AO DIAGNOSTICAR suíte em que ninguém confia:
- § 4.5 + Docs/Teste de Software - Confiabilidade da Suíte.md
+ § 4.5 + docs/Teste de Software - Confiabilidade da Suíte.md
 
 DEPOIS de decidido o nível, para o "como":
  a nota de FERRAMENTA da § 3 — Bun - Testes, Storybook, ou Playwright

@@ -4,8 +4,8 @@
 #   bash build/verificar.sh
 #
 # Checa o que a leitura nao pega: link relativo que nao resolve, sintaxe de vault
-# que sobreviveu a projecao, frontmatter incompleto, e skill declarada por agente
-# que nao existe. Sai != 0 no primeiro grupo com falha.
+# que sobreviveu, caminho apontando para fora do repositorio, frontmatter incompleto,
+# e skill declarada por agente que nao existe. Sai != 0 no primeiro grupo com falha.
 set -uo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -66,6 +66,19 @@ zettels = [f"{md.relative_to(raiz)}" for md in mds("agents", "skills", "knowledg
            if "Zettels/" in md.read_text(encoding="utf-8")
            and "MANIFESTO" not in md.name and "README" not in md.name]
 sondar("citacoes a Zettels/ (devem ter saido)", sorted(set(zettels)))
+
+# --- 2b. nada aponta para fora do projeto ----------------------------------
+# sintaxe de pasta de vault e caminho absoluto de maquina. `~/.claude` fica de
+# fora de proposito: e caminho real do runtime, documentado, nao link da fonte.
+FORA = re.compile(r"(?<![\w/])(?:Docs|Pages|Zettels|Classroom|Weblink)/"
+                  r"|(?<![\w])/home/")
+de_fora = []
+for md in mds("agents", "skills", "knowledge-base"):
+    for linha_n, linha in enumerate(md.read_text(encoding="utf-8").splitlines(), 1):
+        m = FORA.search(linha)
+        if m:
+            de_fora.append(f"{md.relative_to(raiz)}:{linha_n}: {m.group(0)}")
+sondar("caminhos para fora do projeto", de_fora)
 
 # --- 3. frontmatter neutro completo ----------------------------------------
 faltando, declaradas, existentes = [], {}, set()

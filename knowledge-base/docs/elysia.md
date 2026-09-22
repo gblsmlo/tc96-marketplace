@@ -448,23 +448,23 @@ Como uma skill de Elysia deve consumir esta doc.
 ### O que uma skill de Elysia deve carregar
 
 ```
-SEMPRE: Docs/Elysia.md § 2 (modelo mental)
- Docs/Elysia.md § 5 (árvores de decisão)
- Docs/Elysia.md § 6 + § 6.1 (regras normativas e críticas)
+SEMPRE: docs/Elysia.md § 2 (modelo mental)
+ docs/Elysia.md § 5 (árvores de decisão)
+ docs/Elysia.md § 6 + § 6.1 (regras normativas e críticas)
 
 AO ESCREVER/EDITAR rotas e respostas:
- Docs/Elysia - Roteamento e Handler.md
+ docs/Elysia - Roteamento e Handler.md
 
 AO ESCREVER plugin, hook, auth, ou ao investigar
 "o plugin não está sendo aplicado":
- Docs/Elysia - Lifecycle e Plugins.md
+ docs/Elysia - Lifecycle e Plugins.md
 
 AO DECLARAR schema, response, OpenAPI,
 ou ao consumir a API no frontend:
- Docs/Elysia - Schema e Eden.md
+ docs/Elysia - Schema e Eden.md
 
 EM CONSUMO PELO REACT:
- Docs/Elysia.md § 8 + Docs/Elysia - Schema e Eden.md § 7
+ docs/Elysia.md § 8 + docs/Elysia - Schema e Eden.md § 7
  (§ 7 é Eden, queryFn/mutationFn e envelope paginado.
  § 6 é OpenAPI — só carregue se a tarefa for documentação.)
 

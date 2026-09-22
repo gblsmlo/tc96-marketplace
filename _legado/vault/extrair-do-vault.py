@@ -64,6 +64,32 @@ def tirar_links_de_fora(texto, arquivos):
     return re.sub(r"\[([^\]]+)\]\((\.\.?/(?:[^()\s]|\([^()]*\))+\.md)\)", alvo, texto)
 
 
+def tirar_pastas_do_vault(texto, indice):
+    """`Docs/Nota.md` -> link relativo, ou o titulo em code span.
+
+    Sobra: nome de pasta do vault em prosa ("as notas de `Docs/`"), que vira o
+    nome da pasta daqui. Depois disto nenhum caminho do vault sobrevive.
+    """
+    def nota(m):
+        pasta, titulo = m.group(1), m.group(2)
+        destino = indice.get(titulo)
+        if destino:
+            sub, arquivo = destino
+            prefixo = "" if sub == SUB_ATUAL[0] else f"../{sub}/"
+            return f"[{titulo}]({prefixo}{arquivo})"
+        return f"`{titulo}`"
+    texto = re.sub(r"`(Docs|Pages)/([^`*]+?)\.md`", nota, texto)
+    texto = re.sub(r"`(Docs|Pages)/([^`]*)`",
+                   lambda m: "`" + m.group(1).lower() + "/" + m.group(2) + "`", texto)
+    texto = re.sub(r"(?<![\w/])(Docs|Pages)/", lambda m: m.group(1).lower() + "/", texto)
+    texto = re.sub(r"(?<![\w/])(Zettels|Classroom|Weblink)/(\S*)",
+                   lambda m: m.group(2).replace("%20", " ").removesuffix(".md") or m.group(1), texto)
+    return texto.replace("~/www/l/elysia-bff-lab", "elysia-bff-lab")
+
+
+SUB_ATUAL = ["docs"]
+
+
 def com_titulo(texto, titulo):
     if re.match(r"^---\n", texto):
         if re.search(r"^titulo:", texto, re.M):
@@ -92,6 +118,8 @@ for origem in origens:
     sub = "pages" if origem.parent.name == "Pages" else "docs"
     destino = KB / sub / slug(origem.stem)
     conteudo = resolver_wikilinks(tirar_zettels(origem.read_text(encoding="utf-8")), sub, indice, zettels)
+    SUB_ATUAL[0] = sub
+    conteudo = tirar_pastas_do_vault(conteudo, indice)
     conteudo = com_titulo(tirar_links_de_fora(conteudo, arquivos), origem.stem)
     if not destino.exists():
         novas.append(f"{sub}/{destino.name}")

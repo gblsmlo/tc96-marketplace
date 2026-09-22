@@ -54,7 +54,7 @@ References in this skill:
 | `references/mapa-de-ids.md` | the 102 `TSR-*` by satellite and section |
 | `references/exemplo.md` | worked case |
 | `scripts/sondas.sh` | sixteen probes over routing, navigation, search and loaders |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `Docs/TanStack Router*` |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `knowledge-base/docs/tanstack-router*` |
 
 ---
 

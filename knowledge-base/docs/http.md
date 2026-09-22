@@ -474,22 +474,22 @@ Como uma skill de backend ou de cliente HTTP deve consumir esta doc.
 ### O que carregar
 
 ```
-SEMPRE: Docs/HTTP.md § 2 (modelo mental)
- Docs/HTTP.md § 5 (árvores de decisão)
- Docs/HTTP.md § 6 + § 6.1 (regras normativas e críticas)
+SEMPRE: docs/HTTP.md § 2 (modelo mental)
+ docs/HTTP.md § 5 (árvores de decisão)
+ docs/HTTP.md § 6 + § 6.1 (regras normativas e críticas)
 
 AO DESENHAR OU ALTERAR ENDPOINT:
- Docs/HTTP - Métodos e Semântica.md
- Docs/HTTP - Status e Redirecionamento.md
+ docs/HTTP - Métodos e Semântica.md
+ docs/HTTP - Status e Redirecionamento.md
 
 SOB DEMANDA, via § 4 (mapa da superfície):
  o satélite do mecanismo tocado
 
 ANTES DE IMPLEMENTAR À MÃO:
- Docs/HTTP.md § 8 (pontes com o stack)
+ docs/HTTP.md § 8 (pontes com o stack)
 
 EM DÚVIDA NORMATIVA ("a spec obriga?"):
- Docs/HTTP - Specs e RFCs.md
+ docs/HTTP - Specs e RFCs.md
 
 NUNCA: todos os satélites de uma vez
 ```

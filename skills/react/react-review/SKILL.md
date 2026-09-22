@@ -60,7 +60,7 @@ References in this skill — open only the one the step asks for:
 | `references/mapa-de-ids.md` | where each `REACT-*` is declared, and the list of aliases |
 | `references/exemplo-relatorio-de-pr.md` | a whole report, from the probes to the closing |
 | `scripts/sondas.sh` | runs the fifteen probes and prints the ID to cite in each block |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates `mapa-de-ids.md` from `Docs/React*` |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates `mapa-de-ids.md` from `knowledge-base/docs/react*` |
 
 ---
 

@@ -60,7 +60,7 @@ References in this skill:
 | `references/fechamento.md` | turning a probe into a test, and what requires a product decision |
 | `references/mapa-de-ids.md` | the 32 `DRZ-*`: declaration, satellite of the body and section |
 | `scripts/sondas.sh` | runs all eleven |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `Docs/Drizzle*` |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `knowledge-base/docs/drizzle*` |
 
 ---
 

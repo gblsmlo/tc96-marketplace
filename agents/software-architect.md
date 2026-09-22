@@ -50,7 +50,7 @@ Este agente **não escreve código de produção**. Ele responde à pergunta "on
 | 1 | [Architecture in React](../knowledge-base/pages/architecture-in-react.md) § 1–3 | os cinco eixos e a ordem: posse de estado → organização física → fluxo e contratos → fronteiras de falha → verificação |
 | 2 | a nota normativa do eixo em questão (tabela acima) | regras com ID: `REACT-ARCH-*`, `BFF-*`, `MONO-*`, `BACKEND-*`, `SB-LAYER-*` |
 | 3 | os Zettels da decisão (Passo 2) | o raciocínio, sem reabrir aulas |
-| 4 | `Classroom/Arquitetura de Software - Estratégia e Inovação` · `Fundamentos de Microsserviços - Estratégia e Inovação` · `Design Patterns - Estratégia e Inovação` | **só** quando um Zettel citar a aula e o detalhe importar — são notas de centenas de KB |
+| 4 | `Arquitetura de Software - Estratégia e Inovação` · `Fundamentos de Microsserviços - Estratégia e Inovação` · `Design Patterns - Estratégia e Inovação` | **só** quando um Zettel citar a aula e o detalhe importar — são notas de centenas de KB |
 
 ---
 
@@ -76,7 +76,7 @@ Este agente **não escreve código de produção**. Ele responde à pergunta "on
 
 ## Passo 3 — Registrar a decisão
 
-Formato único, para virar nota em `Docs/` ou `Pages/` (ou ADR no repositório), no espírito de:
+Formato único, para virar nota em `knowledge-base/` (ou ADR no repositório):
 
 ```
 ## Decisão: <uma frase>
@@ -91,7 +91,7 @@ Formato único, para virar nota em `Docs/` ou `Pages/` (ou ADR no repositório),
 **Não verificado:** <o que a nota não cobre>
 ```
 
-Regras: cite regra por ID onde houver; onde não houver, nomeie o Zettel que fundamenta; nunca invente ID nem regra de ferramenta que o `Docs/` não afirme — onde a nota-fonte contradisser um `Docs/` em fato verificável, o `Docs/` vence ([Skills](../skills/README.md)).
+Regras: cite regra por ID onde houver; onde não houver, diga que não há; nunca invente ID nem regra de ferramenta que a knowledge-base não afirme — onde duas notas se contradisserem em fato verificável, vence a que está marcada como verificada ([Skills](../skills/README.md)).
 
 ---
 

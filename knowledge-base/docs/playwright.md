@@ -498,25 +498,25 @@ Como uma skill de Playwright deve consumir esta doc. O contrato geral de skills 
 ### O que carregar
 
 ```
-SEMPRE: Docs/Playwright.md § 0 (os três fatos)
- Docs/Playwright.md § 2 (modelo mental)
- Docs/Playwright.md § 5 (árvores de decisão)
- Docs/Playwright.md § 6 + § 6.1 + § 6.2 (regras e IDs canônicos)
+SEMPRE: docs/Playwright.md § 0 (os três fatos)
+ docs/Playwright.md § 2 (modelo mental)
+ docs/Playwright.md § 5 (árvores de decisão)
+ docs/Playwright.md § 6 + § 6.1 + § 6.2 (regras e IDs canônicos)
 
 AO ESCREVER OU EDITAR um teste:
- Docs/Playwright - Locators.md
- Docs/Playwright - Assertions.md
+ docs/Playwright - Locators.md
+ docs/Playwright - Assertions.md
 
 ANTES DE ALTERAR um teste que já falha:
- Docs/Playwright - Debug e Trace.md ← e leia o trace de verdade
+ docs/Playwright - Debug e Trace.md ← e leia o trace de verdade
 
 AO CONFIGURAR o projeto:
- Docs/Playwright - Configuração e Projects.md
- Docs/Playwright - Execução, Retries e CI.md
+ docs/Playwright - Configuração e Projects.md
+ docs/Playwright - Execução, Retries e CI.md
 
 AO DECIDIR arquitetura de suíte (setup, page object, parametrização):
- Docs/Playwright - Fixtures.md
- Docs/Playwright - Estrutura de Testes.md
+ docs/Playwright - Fixtures.md
+ docs/Playwright - Estrutura de Testes.md
 
 SOB DEMANDA, via § 4 (mapa da API):
  o satélite da superfície tocada pela tarefa

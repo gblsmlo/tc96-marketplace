@@ -385,18 +385,18 @@ Como uma skill de React deve consumir esta doc.
 ### O que uma skill de React deve carregar
 
 ```
-SEMPRE: Docs/React.js.md § 2 (modelo mental)
- Docs/React.js.md § 5 (árvores de decisão)
- Docs/React.js.md § 6 + § 6.1 (regras normativas e críticas)
+SEMPRE: docs/React.js.md § 2 (modelo mental)
+ docs/React.js.md § 5 (árvores de decisão)
+ docs/React.js.md § 6 + § 6.1 (regras normativas e críticas)
 
 AO ESCREVER/EDITAR componentes:
- Docs/React - Rules of React.md
+ docs/React - Rules of React.md
 
 SOB DEMANDA, via § 4 (mapa da API):
  o satélite do domínio tocado pela tarefa
 
 EM DECISÃO DE ESTRUTURA:
- Docs/React - Patterns.md
+ docs/React - Patterns.md
 
 NUNCA: todos os satélites de uma vez
 ```

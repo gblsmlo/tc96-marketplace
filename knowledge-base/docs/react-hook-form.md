@@ -520,26 +520,26 @@ Como uma skill de formulários deve consumir esta doc.
 ### O que carregar
 
 ```
-SEMPRE: Docs/React Hook Form.md § 2 (modelo mental)
+SEMPRE: docs/React Hook Form.md § 2 (modelo mental)
  § 5 (árvores de decisão)
  § 6 + § 6.1 (regras)
  § 8.3 (regras de ponte) ← não omita
- Docs/React.js.md § 6 (REACT-PURE-*, REACT-HOOK-*)
+ docs/React.js.md § 6 (REACT-PURE-*, REACT-HOOK-*)
 
 ANTES de decidir usar RHF:
  § 5.4 — pode ser que Actions nativas bastem
- Docs/React - Formulários e Actions.md, se a árvore apontar para lá
+ docs/React - Formulários e Actions.md, se a árvore apontar para lá
 
 AO CONECTAR CAMPOS, com campo formatado (moeda, máscara),
 ou ao rotular/associar erro para leitor de tela:
- Docs/React Hook Form - Registro e Controle.md
+ docs/React Hook Form - Registro e Controle.md
 
 AO DEFINIR VALIDAÇÃO ou TRATAR ERRO DE SERVIDOR:
- Docs/React Hook Form - Validação e Resolvers.md
+ docs/React Hook Form - Validação e Resolvers.md
 
 AO LER ESTADO, REAGIR A VALORES, LISTAS, FORMULÁRIO EM ETAPAS,
 ou INVESTIGAR RE-RENDER:
- Docs/React Hook Form - Estado e Performance.md
+ docs/React Hook Form - Estado e Performance.md
 
 NUNCA: abrir um satélite ANTES de saber que precisa dele
 ```

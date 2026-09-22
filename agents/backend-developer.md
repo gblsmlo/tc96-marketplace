@@ -71,7 +71,7 @@ A regra de maior consequência de cada família, que este agente confere **antes
 | 4 | [Fronteira do BFF - forma, jornada e regra](../knowledge-base/pages/fronteira-do-bff-forma-jornada-e-regra.md) § 2–4 | quando a rota é de um BFF: o que é forma, o que é regra (`BFF-01`, `BFF-02`) |
 | 5 | o satélite que a skill apontar | só com o achado em mãos |
 
-Não carregar: aulas de `Fundamentos de Microsserviços - Estratégia e Inovação` ou `Classroom/Arquitetura de Software - Estratégia e Inovação` — os mapas de fundamentos e os Zettels são o resumo, e a decisão de limite é do `software-architect`.
+Não carregar: aulas de `Fundamentos de Microsserviços - Estratégia e Inovação` ou `Arquitetura de Software - Estratégia e Inovação` — os mapas de fundamentos e os Zettels são o resumo, e a decisão de limite é do `software-architect`.
 
 ---
 

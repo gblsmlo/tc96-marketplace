@@ -19,8 +19,8 @@ verificado-em: 2026-08-15
 >; esta nota transforma a ideia em corte,
 > regras citáveis e testes decidíveis.
 
-Como a nota irmã, esta mora em `Pages/` mas é **normativa**: tem IDs (`BFF-*`), invariantes e
-contrato de skill. Ela está aqui, e não em `Docs/`, porque não resume documentação de uma ferramenta
+Como a nota irmã, esta mora em `pages/` mas é **normativa**: tem IDs (`BFF-*`), invariantes e
+contrato de skill. Ela está aqui, e não em `docs/`, porque não resume documentação de uma ferramenta
 — registra uma decisão desta casa. Ver a exceção explicada em [Architecture in React](architecture-in-react.md) § 5.
 
 ---
@@ -346,6 +346,6 @@ NUNCA: decidir camada por conveniência de digitação
 ## Procedência
 
 Esta nota foi destilada de uma investigação sobre `bai-web` em 2026-08-15, com estrutura de
-referência executável em `~/www/l/elysia-bff-lab` (34 testes, CI verde). Os números citados na § 9 e
+referência executável em `elysia-bff-lab` (34 testes, CI verde). Os números citados na § 9 e
 na § 10 foram medidos naquele momento, não estimados. As afirmações sobre comportamento de
-ferramenta foram verificadas rodando — quando divergirem de `Docs/`, o Doc vence.
+ferramenta foram verificadas rodando — quando divergirem de `docs/`, o Doc vence.

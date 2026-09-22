@@ -427,27 +427,27 @@ Como uma skill de Hono deve consumir esta doc.
 ### O que uma skill de Hono deve carregar
 
 ```
-SEMPRE: Docs/Hono.md § 2 (modelo mental)
- Docs/Hono.md § 5 (árvores de decisão)
- Docs/Hono.md § 6 + § 6.1 (regras normativas e críticas)
+SEMPRE: docs/Hono.md § 2 (modelo mental)
+ docs/Hono.md § 5 (árvores de decisão)
+ docs/Hono.md § 6 + § 6.1 (regras normativas e críticas)
 
 AO DECLARAR ROTA ou ler/escrever no Context:
- Docs/Hono - Roteamento e Contexto.md
+ docs/Hono - Roteamento e Contexto.md
 
 AO TOCAR auth, CORS, log, cache, timeout, headers:
- Docs/Hono - Middleware e Ciclo de Vida.md
+ docs/Hono - Middleware e Ciclo de Vida.md
 
 AO RECEBER INPUT do request, ou quando o tipo tiver que chegar no frontend:
- Docs/Hono - Validação e RPC.md
+ docs/Hono - Validação e RPC.md
 
 EM CONSUMO PELO REACT (queryFn, mutationFn, hc, formulário, cancelamento):
- Docs/Hono - Validação e RPC.md § 6.1 ← a ponte normativa
- Docs/Hono.md § 8 ← o panorama e o critério de adoção
- Docs/Hono - Middleware e Ciclo de Vida.md § 5 ← CORS: SPA + API é
+ docs/Hono - Validação e RPC.md § 6.1 ← a ponte normativa
+ docs/Hono.md § 8 ← o panorama e o critério de adoção
+ docs/Hono - Middleware e Ciclo de Vida.md § 5 ← CORS: SPA + API é
  origem cruzada já em dev
 
 ANTES DE ESCOLHER import, adaptador ou alvo de deploy:
- Docs/Hono.md § 3
+ docs/Hono.md § 3
 
 NUNCA: todos os satélites de uma vez
 ```

@@ -17,10 +17,10 @@ verificado-em: 2026-08-16
 > fronteira do servidor**. Esta decide **o que vira pacote, o que não vira, e o que precisa estar no
 > CI para a divisão não apodrecer em silêncio**.
 
-Como as duas irmãs, esta mora em `Pages/` mas é **normativa**: tem IDs (`MONO-*`), invariantes e
+Como as duas irmãs, esta mora em `pages/` mas é **normativa**: tem IDs (`MONO-*`), invariantes e
 contrato de skill. Ver a exceção explicada em [Architecture in React](architecture-in-react.md) § 5.
 
-Tudo aqui foi executado, não deduzido. A referência é `~/www/l/elysia-bff-lab`, migrado de pacote
+Tudo aqui foi executado, não deduzido. A referência é `elysia-bff-lab`, migrado de pacote
 único para workspace em seis passos, com CI verde a cada um. Onde a nota cita comportamento de
 ferramenta, ele foi verificado com Bun 1.3.14.
 
@@ -425,7 +425,7 @@ NUNCA: criar pacote por simetria, sem duplicação que o justifique
 
 ## Procedência
 
-Destilada da migração de `~/www/l/elysia-bff-lab` de pacote único para workspace Bun, em 2026-08-16.
+Destilada da migração de `elysia-bff-lab` de pacote único para workspace Bun, em 2026-08-16.
 Seis passos, cada um com CI verde, seguidos de auditoria adversarial. As armadilhas da § 5 são todas
 falhas reais encontradas na execução, não hipóteses — cinco durante os passos, duas na auditoria.
 Comportamento de ferramenta verificado com Bun 1.3.14.

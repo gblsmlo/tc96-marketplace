@@ -79,7 +79,7 @@ Objetivo: integrar ações, contratos, cache e recuperação de falhas sem acopl
 
 ## Referência do stack
 
-Os Zettels acima carregam o raciocínio; a referência de API e as regras normativas ficam em `Docs/`, em três estruturas conduzidas de mesmo formato — hub que roteia, satélites com conceito → exemplo → regras citáveis → antipadrões.
+Os Zettels acima carregam o raciocínio; a referência de API e as regras normativas ficam em `docs/`, em três estruturas conduzidas de mesmo formato — hub que roteia, satélites com conceito → exemplo → regras citáveis → antipadrões.
 
 | Hub | Cobre | Entradas diretas |
 | --- | --- | --- |

@@ -299,5 +299,5 @@ A doc anota comportamento por versão de patch (`v2.1.198`, `v2.1.211`, `v2.1.23
 ## Relacionados
 
 - [Claude API Docs](claude-api-docs.md) — tool use na API da Anthropic; é a camada de baixo, não o Claude Code
-- `Skill` — índice das skills do vault, que consomem as notas de `Docs/` como fonte
+- `Skill` — índice das skills do vault, que consomem as notas de `docs/` como fonte
 -

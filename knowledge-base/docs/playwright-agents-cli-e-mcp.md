@@ -252,7 +252,7 @@ O objetivo declarado desta estrutura é ser a primeira parada de um agente e a b
 | Camada | Onde vive | Responde |
 | --- | --- | --- |
 | **operação** | skills do `playwright-cli`, ferramentas do MCP | como clicar, navegar, tirar snapshot |
-| **decisão** | esta estrutura — `Docs/Playwright*.md` | qual locator, qual asserção, onde o setup mora, o que é achado |
+| **decisão** | esta estrutura — `docs/Playwright*.md` | qual locator, qual asserção, onde o setup mora, o que é achado |
 | **procedimento** | `Skill/*.md` | em que ordem carregar, o que varrer, como reportar |
 
 Uma skill deste vault para Playwright deve, no mínimo:

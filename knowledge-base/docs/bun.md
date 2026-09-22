@@ -466,19 +466,19 @@ Como uma skill de Bun deve consumir esta doc.
 ### O que uma skill de Bun deve carregar
 
 ```
-SEMPRE: Docs/Bun.md § 2 (modelo mental)
- Docs/Bun.md § 3 (fronteiras de import)
- Docs/Bun.md § 5 (árvores de decisão)
- Docs/Bun.md § 6 + § 6.1 (regras normativas e críticas)
+SEMPRE: docs/Bun.md § 2 (modelo mental)
+ docs/Bun.md § 3 (fronteiras de import)
+ docs/Bun.md § 5 (árvores de decisão)
+ docs/Bun.md § 6 + § 6.1 (regras normativas e críticas)
 
 AO ESCREVER código de aplicação:
- Docs/Bun - Runtime e APIs.md
+ docs/Bun - Runtime e APIs.md
 
 AO TOCAR package.json, lockfile, CI ou monorepo:
- Docs/Bun - Gerenciador de Pacotes.md
+ docs/Bun - Gerenciador de Pacotes.md
 
 AO ESCREVER ou CORRIGIR teste:
- Docs/Bun - Testes.md
+ docs/Bun - Testes.md
 
 SOB DEMANDA, via § 4 (mapa da API):
  o satélite do domínio tocado pela tarefa

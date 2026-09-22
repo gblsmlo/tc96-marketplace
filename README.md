@@ -13,7 +13,7 @@ reescrever conteúdo — custa escrever um adaptador.
 | **regra** | [`knowledge-base/`](knowledge-base/MANIFESTO.md) | *o que* é certo, por ID | divergiu da skill → bug da skill |
 
 Nenhuma camada copia o texto da camada abaixo. Ela **cita por ID** (`REACT-*`, `TSQ-*`,
-`RHF-*`, `SB-*`, `REACT-ARCH-*`). Cópia de regra dentro de skill vira réplica
+`RHF-*`, `SB-*`, `HTTP-*`, `BUN-*`, `ELYSIA-*`, `DRZ-*`, `PW-*`, `TS-*`). Cópia de regra dentro de skill vira réplica
 desatualizada no dia seguinte.
 
 ### Superfície de API não mora aqui
@@ -34,14 +34,25 @@ ID foi verificado.
 Skill que não declara nada **não tem biblioteca upstream**: teste é conceito e HTTP são
 RFCs, não API de ninguém. Ausência ali é informação, não lacuna.
 
-`knowledge-base/` é projetado do vault Obsidian em `~/Sync/Vaults/Notes`, **num sentido
-só**. Editar a regra continua sendo editar a nota lá. O que entra está declarado em
-[`knowledge-base/dominio.txt`](knowledge-base/dominio.txt), e a integridade de cada cópia
-(sha256 da origem) no `MANIFESTO.md`.
+Quando a nota existe aqui **e** a biblioteca está no Context7, o ID de regra vem da nota e
+só a assinatura vem do Context7 — é assim com Hono, que tem `HONO-*` na knowledge-base.
 
-> **Zettels não entram.** Decisão de 2026-09-22: a camada de raciocínio do vault não é
-> projetada, e as citações a ela são removidas do texto na projeção. A cadeia é papel →
-> procedimento → regra.
+### O workspace resolve como projeto
+
+**Nada aqui aponta para arquivo fora daqui.** Não há caminho absoluto nem
+referência a pasta de vault: todo link é markdown relativo e resolve dentro do
+repositório. `bash build/verificar.sh` falha quando um aparece.
+
+Até 2026-09-22 a `knowledge-base/` era projeção de um vault Obsidian. Deixou de ser: as
+**129 notas** são conteúdo deste projeto, cada uma com o próprio `titulo:` no frontmatter
+— que é o rótulo com que as skills linkam para ela. O índice sai de
+[`build/indexar.sh`](build/indexar.sh), que lê as notas daqui e de mais nada.
+O registro da extração única está em [`_legado/vault/`](_legado/vault/).
+
+> **Zettels não entram.** Decisão de 2026-09-22: a camada de raciocínio não é extraída, e
+> as citações a ela saem do texto. A cadeia é papel → procedimento → regra. Pelo mesmo
+> corte, os mapas de fundamentos de curso ficaram de fora — os agentes de produto e gestão
+> os citam **por nome, em code span**, e declaram que não têm regra com ID para citar.
 
 ## O que torna a fonte neutra
 
@@ -64,9 +75,10 @@ adaptador reescreve a profundidade que o layout do alvo exige.
 ## Build
 
 ```bash
-bash build/sincronizar.sh              # vault -> knowledge-base (regenera o MANIFESTO)
-bash build/sincronizar.sh --verificar  # não escreve; falha se a origem mudou
+bash build/indexar.sh                  # regenera knowledge-base/MANIFESTO.md
+bash build/indexar.sh --verificar      # não escreve; falha se o índice estiver velho
 bash build/context7.sh --verificar     # confere os library IDs contra o catálogo
+bash build/verificar.sh                # link quebrado, sintaxe de vault, frontmatter
 bash build/claude-code.sh              # -> dist/claude-code/plugins/<plugin>/
 bash build/agents-md.sh                # -> dist/agents-md/
 ```
@@ -93,27 +105,22 @@ claude plugin install hermes-core@hermes
 > referencia o diretório, então **rode um adaptador antes de instalar ou atualizar
 > plugin** — marketplace apontando para dist vazio falha com `cache-miss`.
 
-`hermes-backend` não existe enquanto bun, elysia e drizzle não forem migradas: o
-adaptador só emite plugin para recorte que tem alguma família migrada.
+## Estado
 
-## Estado da migração
-
-| | Migrado | Pendente |
+| | Quantos | Idioma |
 | --- | --- | --- |
-| **skills** | **as 28, em 9 famílias** | — |
-| **agents** | `frontend-developer` | os outros 10 |
+| **skills** | 28, em 9 famílias | inglês |
+| **scripts de skill** | 40 | inglês |
+| **agents** | 11 | `frontend-developer` em inglês; os outros dez em português |
+| **knowledge-base** | 129 notas (`docs/` 118 · `pages/` 11) | português — é a regra, e o ID vem dela |
 
-O conteúdo migrado veio de `hermes-frontend/0.1.5` (build de 17/09) para a estrutura, e as
-47 notas de regra vieram **frescas do vault**, não do build. `_legado/snapshot-2026-09-08/`
-guarda a versão anterior do frontend, de antes da migração para o Hermes.
+Os `mapa-de-ids.md` são **gerados** por `skills/<familia>/<skill>/scripts/gerar-mapa-de-ids.sh`
+a partir da knowledge-base; não edite à mão. Rodar o gerador reproduz byte a byte o que
+está versionado, tirando a data.
 
-### Migrar a próxima família
+`monorepo-auditor` está declarado em `build/claude-code.sh` mas não tem arquivo em
+`agents/` — é a única lacuna conhecida entre o que o build declara e o que a fonte tem.
 
-1. Acrescente o domínio dela em `knowledge-base/dominio.txt` e rode
-   `bash build/sincronizar.sh`.
-2. Declare a família em `FAMILIAS`, dentro de `build/importar-do-plugin.py`, e o library
-   ID dela em `build/context7.json` (ou em `sem_biblioteca`, com o porquê).
-3. Importe: `python3 build/importar-do-plugin.py <familia>`.
-4. Verifique e builde: `bash build/verificar.sh && bash build/claude-code.sh`.
-
-Todas as 9 famílias já estão migradas; o importador fica como registro de proveniência.
+`_legado/` guarda o que saiu do caminho vivo: `snapshot-2026-09-08/` é a versão do
+frontend anterior ao Hermes, e `vault/` é a proveniência da extração. Nada em `_legado/`
+roda.
