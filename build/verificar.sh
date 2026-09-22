@@ -35,7 +35,7 @@ def mds(*raizes):
 
 
 # --- 1. links relativos ----------------------------------------------------
-for escopo, pastas in [("fonte", ("agents", "skills", "knowledge-base")),
+for escopo, pastas in [("fonte", ("agents", "skills", "commands", "knowledge-base")),
                        ("dist/claude-code", ("dist/claude-code",)),
                        ("dist/agents-md", ("dist/agents-md",))]:
     if not any((raiz / p).exists() for p in pastas):
@@ -50,7 +50,7 @@ for escopo, pastas in [("fonte", ("agents", "skills", "knowledge-base")),
 
 # --- 2. sintaxe de vault que sobreviveu ------------------------------------
 vazados = []
-for md in mds("agents", "skills", "knowledge-base"):
+for md in mds("agents", "skills", "commands", "knowledge-base"):
     texto = md.read_text(encoding="utf-8")
     campos = re.match(r"^---\n(.*?)\n---\n", texto, re.S)
     migrado = campos and re.search(r"^tipo: (skill|agente)$", campos.group(1), re.M)
@@ -62,7 +62,7 @@ for md in mds("agents", "skills", "knowledge-base"):
                 vazados.append(f"{md.relative_to(raiz)}:{linha_n}")
 sondar("wikilinks [[...]] fora de code span", vazados)
 
-zettels = [f"{md.relative_to(raiz)}" for md in mds("agents", "skills", "knowledge-base")
+zettels = [f"{md.relative_to(raiz)}" for md in mds("agents", "skills", "commands", "knowledge-base")
            if "Zettels/" in md.read_text(encoding="utf-8")
            and "MANIFESTO" not in md.name and "README" not in md.name]
 sondar("citacoes a Zettels/ (devem ter saido)", sorted(set(zettels)))
@@ -73,7 +73,7 @@ sondar("citacoes a Zettels/ (devem ter saido)", sorted(set(zettels)))
 FORA = re.compile(r"(?<![\w/])(?:Docs|Pages|Zettels|Classroom|Weblink)/"
                   r"|(?<![\w])/home/")
 de_fora = []
-for md in mds("agents", "skills", "knowledge-base"):
+for md in mds("agents", "skills", "commands", "knowledge-base"):
     for linha_n, linha in enumerate(md.read_text(encoding="utf-8").splitlines(), 1):
         m = FORA.search(linha)
         if m:
@@ -95,6 +95,22 @@ for skill in sorted((raiz / "skills").glob("*/*/SKILL.md")):
     if campos.get("nome") != skill.parent.name:
         faltando.append(f"{skill.relative_to(raiz)}: nome != diretório")
 sondar("frontmatter neutro completo nas skills", faltando)
+
+falta_cmd = []
+for cmd in sorted((raiz / "commands").glob("*.md")):
+    if cmd.name == "README.md":
+        continue
+    m = re.match(r"^---\n(.*?)\n---\n", cmd.read_text(encoding="utf-8"), re.S)
+    campos = dict(re.findall(r"^(\w+):\s*(.*)$", m.group(1), re.M)) if m else {}
+    if campos.get("tipo") != "comando":
+        falta_cmd.append(f"{cmd.relative_to(raiz)}: sem `tipo: comando`")
+        continue
+    for chave in ("nome", "descricao"):
+        if not campos.get(chave):
+            falta_cmd.append(f"{cmd.relative_to(raiz)}: sem `{chave}`")
+    if campos.get("nome") != cmd.stem:
+        falta_cmd.append(f"{cmd.relative_to(raiz)}: nome != arquivo")
+sondar("frontmatter neutro completo nos comandos", falta_cmd)
 
 # --- 4. agente declara skill que existe ------------------------------------
 orfas = []

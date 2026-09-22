@@ -17,7 +17,7 @@ A relação com as outras pastas é uma cadeia, e cada elo tem dono:
 | **procedimento** | `skills/` | *como* fazer, em que ordem, e como reportar | `react-review` |
 | **regra** | `knowledge-base/` | *o que* é certo, por ID | [React - Rules of React](../knowledge-base/docs/react-rules-of-react.md) `REACT-*` |
 
-São três elos, não quatro: a camada de raciocínio foi cortada em 2026-09-22 e não se cita mais. Divergência entre agente e skill é bug do agente; entre skill e nota, bug da skill ([Skills](../skills/README.md)).
+São três elos, não quatro: a camada de raciocínio foi cortada em 2026-09-22 e não se cita mais. `commands/` fica ao lado, como quarto **tipo de artefato**, não como camada: um comando é roteiro fixo que a pessoa invoca, e um agente é papel que decide o que carregar. Divergência entre agente e skill é bug do agente; entre skill e nota, bug da skill ([Skills](../skills/README.md)).
 
 **Superfície de API não mora aqui.** Assinatura, opção e comportamento por versão de uma biblioteca resolvem pelo Context7, com o library ID que a skill declara em `docs:`. A knowledge-base responde o que é certo e com que ID citar num review — não o que a função aceita nesta minor.
 

@@ -6,6 +6,7 @@
 #   - .claude-plugin/plugin.json
 #   - layout achatado: skills/<familia>/<skill>/ -> skills/<skill>/
 #   - knowledge-base/ -> referencias/
+#   - commands/ -> commands/ (so os declarados em PLUGINS)
 set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -32,6 +33,19 @@ PLUGINS = {
         "agentes": ["code-reviewer", "software-architect", "qa-engineer",
                     "product-manager", "product-designer", "project-manager",
                     "devops-security", "ai-engineer", "monorepo-auditor"],
+        # comando e ponto de entrada nomeado, invocado pela pessoa — nao e uma
+        # quarta camada da cadeia, e um quarto tipo de artefato ao lado de
+        # skill e agente. Como os agentes, entra por nome, nao por familia.
+        "comandos": ["scaffold-projeto",
+                     "scaffold-01-tanstack-start", "scaffold-02-biome",
+                     "scaffold-03-vitest", "scaffold-04-git-hooks",
+                     "scaffold-05-fba", "scaffold-06-shadcn",
+                     "scaffold-07-workos-authkit", "scaffold-08-scripts",
+                     "scaffold-09-feature-exemplo", "scaffold-10-verificacao",
+                     "scaffold-fba-01-start", "scaffold-fba-02-biome",
+                     "scaffold-fba-03-vitest", "scaffold-fba-04-git-hooks",
+                     "scaffold-fba-05-fba",
+                     "configurar-antigravity"],
         "descricao": "Teste e contrato HTTP, e os papéis que atravessam qualquer stack. "
                      "Habilite sempre.",
         "keywords": ["teste", "http", "review", "arquitetura"],
@@ -111,7 +125,7 @@ def citadas_entre_notas(caminho):
 
 resumo, publicados = [], []
 for plugin, cfg in PLUGINS.items():
-    skills, agentes, notas = [], [], set()
+    skills, agentes, comandos, notas = [], [], [], set()
 
     for familia in cfg["familias"]:
         for skill_md in sorted((raiz / "skills" / familia).glob("*/SKILL.md")):
@@ -128,7 +142,15 @@ for plugin, cfg in PLUGINS.items():
         if campos:
             agentes.append((nome, campos, corpo))
 
-    if not skills and not agentes:
+    for nome in cfg.get("comandos", []):
+        arq = raiz / "commands" / f"{nome}.md"
+        if not arq.exists():
+            continue
+        campos, corpo = neutro(arq, "comando")
+        if campos:
+            comandos.append((nome, campos, corpo))
+
+    if not skills and not agentes and not comandos:
         continue  # nada migrado ainda para este recorte
 
     alvo = dest / "plugins" / plugin
@@ -182,6 +204,15 @@ for plugin, cfg in PLUGINS.items():
         (alvo / "agents").mkdir(exist_ok=True)
         (alvo / "agents" / f"{nome}.md").write_text(texto, encoding="utf-8")
 
+    for nome, campos, corpo in comandos:
+        notas |= citadas(corpo)
+        fm = ["---", f"description: {campos['descricao']}"]
+        fm += listas(campos, ["tags"])
+        fm.append("---\n")
+        texto = ("\n".join(fm) + corpo).replace("../knowledge-base/", "../referencias/")
+        (alvo / "commands").mkdir(exist_ok=True)
+        (alvo / "commands" / f"{nome}.md").write_text(texto, encoding="utf-8")
+
     # fecho transitivo: as notas se citam entre si, e link quebrado no plugin
     # e pior que nota a mais
     fila = list(notas)
@@ -213,7 +244,8 @@ for plugin, cfg in PLUGINS.items():
     publicados.append({"name": plugin, "source": f"./plugins/{plugin}",
                        "description": cfg["descricao"]})
     resumo.append(f"  {plugin}: {len(skills)} skills · {len(agentes)} agente(s) · "
-                  f"{len(notas)} notas")
+                  + (f"{len(comandos)} comando(s) · " if comandos else "")
+                  + f"{len(notas)} notas")
 
 (dest / ".claude-plugin").mkdir(parents=True, exist_ok=True)
 (dest / ".claude-plugin/marketplace.json").write_text(json.dumps({

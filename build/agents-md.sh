@@ -50,7 +50,7 @@ def sem_frontmatter(campos, corpo):
     return "\n".join(saida) + "\n"
 
 
-skills, agentes = [], []
+skills, agentes, comandos = [], [], []
 
 for skill_dir in sorted((raiz / "skills").glob("*/*/")):
     fonte = skill_dir / "SKILL.md"
@@ -86,6 +86,21 @@ for agente in sorted((raiz / "agents").glob("*.md")):
     (dest / "agents").mkdir(exist_ok=True)
     (dest / "agents" / agente.name).write_text(sem_frontmatter(campos, corpo), encoding="utf-8")
     agentes.append((campos["nome"], campos["descricao"], campos.get("skills__lista", [])))
+
+for comando in sorted((raiz / "commands").glob("*.md")):
+    campos, corpo = partir(comando.read_text(encoding="utf-8"))
+    if not campos or campos.get("tipo") != "comando":
+        continue
+    (dest / "commands").mkdir(exist_ok=True)
+    (dest / "commands" / comando.name).write_text(
+        sem_frontmatter(campos, corpo), encoding="utf-8")
+    comandos.append((campos["nome"], campos["descricao"]))
+
+indice_cmd = raiz / "commands/README.md"
+if indice_cmd.exists():
+    (dest / "commands").mkdir(exist_ok=True)
+    shutil.copy2(indice_cmd, dest / "commands/README.md")
+
 
 # --- AGENTS.md: o roteador -------------------------------------------------
 linhas = [
@@ -138,6 +153,13 @@ if com_docs:
     linhas += ["", "Skill que não declara nada não tem biblioteca upstream — teste e HTTP são",
                "conceito e RFC, não API de ninguém. Ausência aqui é informação, não lacuna."]
 
+if comandos:
+    linhas += ["", "## Comandos", "",
+               "Ponto de entrada nomeado, que a pessoa invoca. Não é uma quarta camada:",
+               "um comando roteia para as mesmas skills e para a mesma regra.", "",
+               "| Comando | O que faz |", "| --- | --- |"]
+    linhas += [f"| [`{n}`](commands/{n}.md) | {d} |" for n, d in comandos]
+
 linhas += ["", "## Regra", "",
            "`knowledge-base/docs/` é a regra (IDs canônicos) e `knowledge-base/pages/` são os mapas.",
            "Todo achado cita o ID e o arquivo:linha. Cópia de regra dentro de skill vira",
@@ -146,5 +168,6 @@ linhas += ["", "## Regra", "",
            ""]
 
 (dest / "AGENTS.md").write_text("\n".join(linhas), encoding="utf-8")
-print(f"agents-md: {len(skills)} skills, {len(agentes)} agente(s) -> {dest}")
+print(f"agents-md: {len(skills)} skills, {len(agentes)} agente(s), "
+      f"{len(comandos)} comando(s) -> {dest}")
 PYEOF

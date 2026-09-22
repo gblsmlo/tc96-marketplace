@@ -12,6 +12,10 @@ reescrever conteúdo — custa escrever um adaptador.
 | **procedimento** | [`skills/`](skills/README.md) | *como* fazer, em que ordem, e como reportar | divergiu do agente → bug do agente |
 | **regra** | [`knowledge-base/`](knowledge-base/MANIFESTO.md) | *o que* é certo, por ID | divergiu da skill → bug da skill |
 
+[`commands/`](commands/README.md) não é uma quarta camada: é um quarto **tipo de
+artefato**, ao lado de skill e agente. Um comando é um ponto de entrada nomeado, que a
+pessoa invoca (`/scaffold-projeto`) e que roteia para as mesmas skills e a mesma regra.
+
 Nenhuma camada copia o texto da camada abaixo. Ela **cita por ID** (`REACT-*`, `TSQ-*`,
 `RHF-*`, `SB-*`, `HTTP-*`, `BUN-*`, `ELYSIA-*`, `DRZ-*`, `PW-*`, `TS-*`). Cópia de regra dentro de skill vira réplica
 desatualizada no dia seguinte.
@@ -65,7 +69,7 @@ adaptador traduz:
 | `descricao:` | `description:` | blockquote **Quando usar** |
 | `capacidades: [ler, buscar, executar]` | `tools: Read, Grep, Glob, Bash` | — |
 | `modelo: alto \| medio \| rapido` | `model: opus \| sonnet \| haiku` | — |
-| `tipo: skill \| agente` | (some — é o layout que separa) | (some) |
+| `tipo: skill \| agente \| comando` | (some — é o layout que separa) | (some) |
 | `docs: [/websites/tanstack_query]` | `docs:` (o runtime resolve pelo Context7) | tabela **Superfície de API** |
 | `familia:` | (some — layout achatado) | subdiretório |
 
@@ -112,6 +116,7 @@ claude plugin install twincam-core@twincam
 | **skills** | 28, em 9 famílias | inglês |
 | **scripts de skill** | 40 | inglês |
 | **agents** | 12 | `frontend-developer` em inglês; os outros onze em português |
+| **commands** | 17 | inglês no corpo, `descricao` em português |
 | **knowledge-base** | 129 notas (`docs/` 118 · `pages/` 11) | português — é a regra, e o ID vem dela |
 
 Os `mapa-de-ids.md` são **gerados** por `skills/<familia>/<skill>/scripts/gerar-mapa-de-ids.sh`
