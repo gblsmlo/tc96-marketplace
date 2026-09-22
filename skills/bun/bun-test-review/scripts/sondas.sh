@@ -8,19 +8,24 @@ set -uo pipefail
 RODAR=0; [ "${1:-}" = "--rodar" ] && RODAR=1
 titulo() { printf '\n\033[1m== %s\033[0m  %s\n' "$1" "${2:-}"; }
 vazio() { echo "   (nada)"; }
+ou_vazio() {  # imprime a entrada; se vier vazia, a mensagem
+  local saida; saida="$(cat)"
+  if [ -n "$saida" ]; then printf '%s
+' "$saida"; else echo "   ${1:-(nada)}"; fi
+}
 
 titulo "S1. Teste que nunca roda" "BUN-TEST-01 — fora do padrão de descoberta, sem aviso"
 find . -path ./node_modules -prune -o -name '*[Tt]est*' -print 2>/dev/null \
   | grep -Ev '\.(test|spec)\.[cm]?[jt]sx?$|_(test|spec)\.[cm]?[jt]sx?$|/node_modules/' \
-  | grep -E '\.[cm]?[jt]sx?$' | head -10 | sed 's|^|   |' | grep . || vazio
+  | grep -E '\.[cm]?[jt]sx?$' | head -10 | sed 's|^|   |' | grep . | ou_vazio
 
 titulo "S6. Restauração de mock existe?" "BUN-TEST-02 — sem isso, todo spyOn é candidato a vazar"
 rg -n --no-messages 'preload' bunfig.toml 2>/dev/null || echo "   sem preload declarado em bunfig.toml"
-rg -rn --no-messages 'mock\.restore\(\)' . -g '!node_modules' 2>/dev/null | head -5 || echo "   NENHUM mock.restore() na suíte"
+rg -rn --no-messages 'mock\.restore\(\)' . -g '!node_modules' 2>/dev/null | head -5 | ou_vazio "NENHUM mock.restore() na suíte"
 
 titulo "S7. Marcas e comandos" "BUN-TEST-05, -08, -11, -18"
 echo "   -- .only / .skip commitados:"
-rg -n --no-messages -g '*.{test,spec}.*' '\.(only|skip)\(' . 2>/dev/null | head -8 || vazio
+rg -n --no-messages -g '*.{test,spec}.*' '\.(only|skip)\(' . 2>/dev/null | head -8 | ou_vazio
 echo "   -- -u / --retry global / typecheck no CI:"
 rg -n --no-messages 'update-snapshots| -u\b|--retry|tsc --noEmit' package.json .github/workflows/*.y*ml 2>/dev/null || vazio
 

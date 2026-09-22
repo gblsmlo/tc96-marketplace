@@ -100,7 +100,7 @@ adaptador só emite plugin para recorte que tem alguma família migrada.
 
 | | Migrado | Pendente |
 | --- | --- | --- |
-| **skills** | react (4) · tanstack (2) · storybook (3) · test (3) · playwright (3) | http (4) · bun (5) · elysia (3) · drizzle (1) |
+| **skills** | react (4) · tanstack (2) · storybook (3) · test (3) · playwright (3) · bun (5) · elysia (3) | http (4) · drizzle (1) |
 | **agents** | `frontend-developer` | os outros 10 |
 
 O conteúdo migrado veio de `hermes-frontend/0.1.5` (build de 17/09) para a estrutura, e as
@@ -116,5 +116,5 @@ guarda a versão anterior do frontend, de antes da migração para o Hermes.
 3. Importe: `python3 build/importar-do-plugin.py <familia>`.
 4. Verifique e builde: `bash build/verificar.sh && bash build/claude-code.sh`.
 
-Os library IDs de bun, elysia e drizzle já estão verificados em `build/context7.json` —
-a importação dessas famílias já sai com a declaração pronta.
+O library ID de drizzle já está verificado em `build/context7.json` — a importação dessa
+família já sai com a declaração pronta.

@@ -1,6 +1,6 @@
 # A instância e o handler
 
-> Passos 0 a 2. O texto das regras mora em [[Elysia]] § 6 e [[Elysia - Roteamento e Handler]].
+> Passos 0 a 2. O texto das regras mora em [Elysia](../../../../knowledge-base/docs/elysia.md) § 6 e [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md).
 
 ---
 
@@ -18,12 +18,12 @@
 
 ```ts
 // ✓ method chaining contínuo — ELYSIA-APP-01
-const app = new Elysia()
-  .use(auth)
-  .get('/faturas', () => listar())
-  .post('/faturas', ({ body }) => criar(body));
+const app = new Elysia
+.use(auth)
+.get('/faturas', => listar)
+.post('/faturas', ({ body }) => criar(body));
 
-export type App = typeof app;   // exportado como TIPO — ELYSIA-APP-05
+export type App = typeof app; // exportado como TIPO — ELYSIA-APP-05
 ```
 
 | Regra | O que exige |
@@ -48,7 +48,7 @@ de `elysia`. E segredo nunca é literal (`ELYSIA-APP-08`).
 .post('/faturas', ({ body, status, cookie, set }) => { /* … */ })
 
 // ✗ recebe o Context inteiro, ou é função externa anotada
-.post('/faturas', criarFatura)     // ELYSIA-CORE-02 (apelido: ELYSIA-APP-03)
+.post('/faturas', criarFatura) // ELYSIA-CORE-02 (apelido: ELYSIA-APP-03)
 ```
 
 Não é estilo: o contexto de Elysia é construído **por tipo** a partir do que a rota declara,
@@ -61,6 +61,6 @@ como runtime alvo — nenhum dos três é portável.
 
 ## Relacionados
 
-- [[Elysia - Roteamento e Handler]] — a fonte
+- [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) — a fonte
 - `erro-cookie-e-teste.md` — o passo seguinte
 - `mapa-de-ids.md` — onde cada `ELYSIA-*` tem corpo

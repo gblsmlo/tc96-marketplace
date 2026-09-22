@@ -342,7 +342,7 @@ Preciso executar a play function fora da UI do Storybook?
  → portable stories: composeStories + setProjectAnnotations
 ```
 
-> **A restrição do monorepo.** O addon-vitest exige **Vitest**. Ele não roda sob `bun test`, que é o runner do backend em `Bun - Testes`. O monorepo convive com dois runners por desenho: `bun test` para `apps/server`, `vitest --project=storybook` para as stories. Não é duplicação a resolver — é a fronteira entre teste de runtime Bun e teste de componente em browser real (`SB-TEST-05`).
+> **A restrição do monorepo.** O addon-vitest exige **Vitest**. Ele não roda sob `bun test`, que é o runner do backend em [Bun - Testes](bun-testes.md). O monorepo convive com dois runners por desenho: `bun test` para `apps/server`, `vitest --project=storybook` para as stories. Não é duplicação a resolver — é a fronteira entre teste de runtime Bun e teste de componente em browser real (`SB-TEST-05`).
 
 ### 5.6 A story não renderiza
 
@@ -517,7 +517,7 @@ O corpo desta doc é Storybook fiel à fonte. Mas no meu stack várias decisões
 | Componente com `useEffect` de fetch | escrever a story em volta do defeito | o defeito é o `useEffect` — `REACT-EFFECT-06` em [React - Efeitos e Sincronização](react-efeitos-e-sincronizacao.md) |
 | Tema e tokens | `style` inline na story | decorator global de tema — `Tailwindcss` |
 | Erro esperado (400 de validação) | lançar para o Error Boundary | é estado, e merece story própria — `REACT-ASYNC-09` |
-| Resposta do BFF tipada | duplicar o tipo no mock | reusar o tipo exportado do servidor — `Hono - Validação e RPC`, `Elysia - Schema e Eden` |
+| Resposta do BFF tipada | duplicar o tipo no mock | reusar o tipo exportado do servidor — `Hono - Validação e RPC`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 
 **A ponte que mais importa: `packages/ui` não conhece rota, e isso é o desenho.** Um componente de design system que precisa de `parameters.tanstack.router` para renderizar está acoplado a rota e deveria receber a navegação por prop. A story serve como detector desse acoplamento: se a story de um componente de `packages/ui` precisa de rota, o achado é sobre o componente, não sobre a story. Ver a direção de dependência em `Monorepo com Bun - estrutura e tooling`.
 
@@ -533,7 +533,7 @@ O corpo desta doc é Storybook fiel à fonte. Mas no meu stack várias decisões
 - [React.js](react-js.md) — o hub de React; esta doc pressupõe o modelo mental de lá
 - [React - Patterns](react-patterns.md) — decide o que é componente de design system e o que não é
 - [TanStack Query](tanstack-query.md) · [TanStack Router](tanstack-router.md) · [React Hook Form](react-hook-form.md) · `Tailwindcss`
-- `Bun - Testes` — o outro runner do monorepo
+- [Bun - Testes](bun-testes.md) — o outro runner do monorepo
 - `Monorepo com Bun - estrutura e tooling` — onde `apps/storybook` vive e por que é folha
 
 ## Fontes consultadas

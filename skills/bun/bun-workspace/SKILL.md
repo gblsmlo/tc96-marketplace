@@ -1,16 +1,21 @@
 ---
-name: bun-workspace
-description: Gerenciar dependências e workspace com o package manager do Bun — `bun install`, lockfile, `trustedDependencies`, linker, catalogs, `overrides`, `bun patch` — citando IDs `BUN-PKG-*`, com oito sondas executáveis e uma checagem JSON de `trustedDependencies` — use quando a tarefa for adicionar dependência, configurar instalação de CI, liberar script de instalação de um pacote, alinhar versão compartilhada num monorepo, declarar workspace, aplicar patch em pacote, ou montar imagem de produção. Não use para escrever código de aplicação, que é bun-runtime, para migrar código de Node, que é bun-migrate, nem para bundle e build, que é o satélite Bundler e Build.
+nome: bun-workspace
+descricao: Gerenciar dependências e workspace com o package manager do Bun — `bun install`, lockfile, `trustedDependencies`, linker, catalogs, `overrides`, `bun patch` — citando IDs `BUN-PKG-*`, com oito sondas executáveis e uma checagem JSON de `trustedDependencies` — use quando a tarefa for adicionar dependência, configurar instalação de CI, liberar script de instalação de um pacote, alinhar versão compartilhada num monorepo, declarar workspace, aplicar patch em pacote, ou montar imagem de produção. Não use para escrever código de aplicação, que é bun-runtime, para migrar código de Node, que é bun-migrate, nem para bundle e build, que é o satélite Bundler e Build.
+tipo: skill
+familia: bun
+fonte: "[Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md)"
+docs:
+  - /oven-sh/bun
 tags:
   - skill
   - bun
   - backend
-fonte: "[[Bun - Gerenciador de Pacotes]]"
 ---
 
 # bun-workspace
 
-> **Fonte desta skill:** [[Bun - Gerenciador de Pacotes]], com o hub [[Bun]] como roteador.
+> **Fonte desta skill:** [Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md), com o hub [Bun](../../../knowledge-base/docs/bun.md) como roteador.
+> **Superfície de API:** resolva pelo Context7 — `/oven-sh/bun`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
 ---
 
@@ -20,10 +25,10 @@ Dependência, lockfile, workspace, instalação.
 
 | Situação | Vá para |
 | --- | --- |
-| escrever código de aplicação | [[bun-runtime]] |
-| código de Node que não roda | [[bun-migrate]] |
-| suíte de teste e portões de CI | [[bun-test-review]] |
-| bundle e build | [[Bun - Bundler e Build]] |
+| escrever código de aplicação | `bun-runtime` |
+| código de Node que não roda | `bun-migrate` |
+| suíte de teste e portões de CI | `bun-test-review` |
+| bundle e build | [Bun - Bundler e Build](../../../knowledge-base/docs/bun-bundler-e-build.md) |
 
 ---
 
@@ -31,8 +36,8 @@ Dependência, lockfile, workspace, instalação.
 
 | Ordem | Carregar |
 | --- | --- |
-| 1 | [[Bun]] § 6 — `BUN-PKG-*` |
-| 2 | [[Bun - Gerenciador de Pacotes]] |
+| 1 | [Bun](../../../knowledge-base/docs/bun.md) § 6 — `BUN-PKG-*` |
+| 2 | [Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md) |
 
 Referências desta skill:
 
@@ -55,7 +60,7 @@ Referências desta skill:
 Declarar um pacote ali **desliga os scripts de instalação de todo o resto** — `sharp`, `esbuild`, `better-sqlite3`. O sintoma **não é erro de instalação**: é um binário que não foi compilado, e a falha aparece em **runtime**, longe da causa (`BUN-PKG-04`).
 
 ```bash
-bash ~/.claude/skills/bun-workspace/scripts/sondas.sh .
+bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-workspace/scripts/sondas.sh.
 ```
 
 A sonda S1 lê o `package.json` **como JSON** e diz quais pacotes conhecidos da lista padrão ficaram de fora — é a checagem que um `grep` não faz direito.
@@ -101,6 +106,6 @@ Caso completo: `references/exemplo.md`.
 
 ## Relacionados
 
-- [[Bun - Gerenciador de Pacotes]] — fonte desta skill
-- [[bun-runtime]] · [[bun-migrate]] · [[bun-test-build]] · [[bun-test-review]] — a família
-- [[Bun - Bundler e Build]] — bundle, que fica fora desta skill
+- [Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md) — fonte desta skill
+- `bun-runtime` · `bun-migrate` · `bun-test-build` · `bun-test-review` — a família
+- [Bun - Bundler e Build](../../../knowledge-base/docs/bun-bundler-e-build.md) — bundle, que fica fora desta skill

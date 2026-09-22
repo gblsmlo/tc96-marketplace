@@ -4,11 +4,11 @@ Cinco skills: duas de teste, três de runtime, pacote e migração.
 
 | Skill | A pergunta que responde | Fonte | Apoio interno |
 | --- | --- | --- | --- |
-| [[bun-test-build]] | como escrevo este teste, e como configuro a suíte? | [[Bun - Testes]] | 4 referências + 1 script |
-| [[bun-test-review]] | esta suíte tem defeito? por que este teste flakeia? | [[Bun - Testes]] | 5 referências + 2 scripts |
-| [[bun-runtime]] | como escrevo isto com as APIs do runtime? | [[Bun - Runtime e APIs]] | 6 referências + 2 scripts |
-| [[bun-workspace]] | dependência, lockfile, workspace, instalação | [[Bun - Gerenciador de Pacotes]] | 5 referências + 1 script |
-| [[bun-migrate]] | veio do Node e não roda — é incompatibilidade? | [[Bun - Shell, FFI e Compat Node]] | 4 referências + 1 script |
+| `bun-test-build` | como escrevo este teste, e como configuro a suíte? | [Bun - Testes](../../knowledge-base/docs/bun-testes.md) | 4 referências + 1 script |
+| `bun-test-review` | esta suíte tem defeito? por que este teste flakeia? | [Bun - Testes](../../knowledge-base/docs/bun-testes.md) | 5 referências + 2 scripts |
+| `bun-runtime` | como escrevo isto com as APIs do runtime? | [Bun - Runtime e APIs](../../knowledge-base/docs/bun-runtime-e-apis.md) | 6 referências + 2 scripts |
+| `bun-workspace` | dependência, lockfile, workspace, instalação | [Bun - Gerenciador de Pacotes](../../knowledge-base/docs/bun-gerenciador-de-pacotes.md) | 5 referências + 1 script |
+| `bun-migrate` | veio do Node e não roda — é incompatibilidade? | [Bun - Shell, FFI e Compat Node](../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md) | 4 referências + 1 script |
 
 ## As três novas, e o que cada script faz
 
@@ -40,7 +40,7 @@ enumeração é parcial** em vez de fingir cobertura.
 | `bun-test-review` | **`scripts/sondas.sh`** (com `--rodar`) | S2, S3, S4 e S5 exigem a suíte de pé — o script separa o que roda sem ela |
 
 `autoverificar.sh` marca explicitamente os quatro itens **heurísticos** (asserção em
-`catch`, fuso, `cleanup()`, `userEvent` aguardado): ele aponta o arquivo, e a confirmação é
+`catch`, fuso, `cleanup`, `userEvent` aguardado): ele aponta o arquivo, e a confirmação é
 leitura. Sonda que finge certeza é pior que sonda ausente.
 
 ## Os mapas de IDs — dois, e a coluna que só esta família tem
@@ -61,8 +61,8 @@ satélites carrega o raciocínio, e em que seção. É a informação que a skil
 carregar **um** satélite em vez de seis.
 
 ```bash
-bash Skills/bun/bun-test-review/scripts/gerar-mapa-de-ids.sh
-bash Skills/instalar.sh
+bash plugins/hermes-backend/skills/bun-test-review/scripts/gerar-mapa-de-ids.sh
+bash scripts/instalar.sh
 ```
 
 <!-- tokens:inicio -->
@@ -74,20 +74,20 @@ As referências carregam sob demanda, uma por vez.
 
 | Skill | `SKILL.md` | maior `references/` | total | refs |
 | --- | ---: | --- | ---: | ---: |
-| [[bun-migrate]] | 1.036 | `mapa-de-ids.md` (1.772) | 5.365 | 5 |
-| [[bun-runtime]] | 1.035 | `mapa-de-ids.md` (1.772) | 5.856 | 7 |
-| [[bun-test-build]] | 1.718 | `por-tarefa.md` (1.938) | 7.344 | 5 |
-| [[bun-test-review]] | 1.565 | `mapa-de-ids.md` (1.632) | 8.899 | 6 |
-| [[bun-workspace]] | 973 | `mapa-de-ids.md` (1.772) | 5.436 | 6 |
+| `bun-migrate` | 1.036 | `mapa-de-ids.md` (1.772) | 5.365 | 5 |
+| `bun-runtime` | 1.035 | `mapa-de-ids.md` (1.772) | 5.856 | 7 |
+| `bun-test-build` | 1.718 | `por-tarefa.md` (1.938) | 7.344 | 5 |
+| `bun-test-review` | 1.565 | `mapa-de-ids.md` (1.632) | 8.899 | 6 |
+| `bun-workspace` | 973 | `mapa-de-ids.md` (1.772) | 5.436 | 6 |
 
 Carregar as 5 skills deste grupo de uma vez custaria **6.327 tokens** só de `SKILL.md`,
 e **32.900** com todas as referências. É por isso que cada skill declara o que **nunca** carregar.
 
-Regenerar: `bash Skills/tokens.sh`
+Regenerar: `bash scripts/medir.sh`
 <!-- tokens:fim -->
 
 ## Relacionados
 
-- [[Skills/README|Skill — Índice]] · [[Bun - Testes]] § 7 — o contrato
-- [[Skills/teste/README|Skills/teste/]] — decide o nível, antes destas
-- [[Skills/playwright/README|Skills/playwright/]] — o nível E2E
+- [Skill — Índice](../README.md) · [Bun - Testes](../../knowledge-base/docs/bun-testes.md) § 7 — o contrato
+- `hermes-core: família teste` — decide o nível, antes destas
+- `hermes-e2e: família playwright` — o nível E2E

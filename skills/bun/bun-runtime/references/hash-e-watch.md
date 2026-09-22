@@ -2,8 +2,8 @@
 
 ```
 É senha, token ou segredo?
-├── SIM → Bun.password         (argon2id por default)
-└── NÃO → Bun.hash             (não criptográfico — cache key, dedup)
+├── SIM → Bun.password (argon2id por default)
+└── NÃO → Bun.hash (não criptográfico — cache key, dedup)
 ```
 
 `BUN-RT-10` é categórica: `Bun.hash` **nunca** toca senha, token ou segredo. Os nomes são parecidos e as garantias são opostas.

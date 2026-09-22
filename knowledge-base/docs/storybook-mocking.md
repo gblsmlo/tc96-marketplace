@@ -266,7 +266,7 @@ GraphQL segue a mesma forma com `graphql.query(...)`.
 
 `ErroDoServidor` acima não é caso de borda: é o estado que o design system precisa mostrar e que o time esquece de desenhar. É também onde a ponte com o React vale: erro esperado é **estado**, não exceção lançada para um boundary — `REACT-ASYNC-09` em [React - Suspense e Assincronia](react-suspense-e-assincronia.md).
 
-E é onde a ponte com o backend vale: nem o cliente `hc` do Hono nem o Eden Treaty do Elysia lançam em status de erro. Uma `queryFn` ingênua deixa a query em `success` com o erro dentro de `data`. Se a story de erro renderiza o estado de sucesso, o defeito pode estar aí, não no mock — ver `Hono - Validação e RPC` e `Elysia - Schema e Eden`.
+E é onde a ponte com o backend vale: nem o cliente `hc` do Hono nem o Eden Treaty do Elysia lançam em status de erro. Uma `queryFn` ingênua deixa a query em `success` com o erro dentro de `data`. Se a story de erro renderiza o estado de sucesso, o defeito pode estar aí, não no mock — ver `Hono - Validação e RPC` e [Elysia - Schema e Eden](elysia-schema-e-eden.md).
 
 ### 3.4 Regra — `SB-MOCK-07`
 
@@ -349,7 +349,7 @@ Quando o servidor muda o contrato, o mock continua verde e a story documenta uma
 - [Storybook - TanStack React](storybook-tanstack-react.md) — mocks de router e de server function
 - [Storybook - React Vite](storybook-react-vite.md) — onde `routeOverrides` não existe e o mock de módulo o substitui
 - [React - Patterns](react-patterns.md) — de quem é a responsabilidade de buscar dado
-- `Hono - Validação e RPC` · `Elysia - Schema e Eden` — os tipos que o mock deve reusar
+- `Hono - Validação e RPC` · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — os tipos que o mock deve reusar
 - [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) — o cache que o mock alimenta
 
 ## Fontes consultadas

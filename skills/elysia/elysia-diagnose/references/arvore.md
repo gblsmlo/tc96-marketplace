@@ -3,15 +3,15 @@
 ```
 O hook não roda para esta rota.
 ├── ele foi registrado ANTES da rota?
-│   └── NÃO → é isso.                                  ELYSIA-CORE-01
+│ └── NÃO → é isso. ELYSIA-CORE-01
 ├── ele vem de um plugin, e a rota é da instância CONSUMIDORA?
-│   └── SIM, e o escopo não foi declarado → é isso.     ELYSIA-LIFE-01
+│ └── SIM, e o escopo não foi declarado → é isso. ELYSIA-LIFE-01
 ├── o plugin é aplicado por mais de uma instância?
-│   └── e não tem `name` → o lifecycle roda uma vez só. ELYSIA-LIFE-03
+│ └── e não tem `name` → o lifecycle roda uma vez só. ELYSIA-LIFE-03
 ├── o hook precisa de body/query/params/cookie?
-│   └── e está em onRequest → o PreContext não os tem.  ELYSIA-LIFE-04
+│ └── e está em onRequest → o PreContext não os tem. ELYSIA-LIFE-04
 └── o plugin é um callback (app) => app?
-    └── troque por instância `new Elysia()`.            ELYSIA-LIFE-07
+ └── troque por instância `new Elysia`. ELYSIA-LIFE-07
 ```
 
 **`ELYSIA-LIFE-03` produz o bug mais desconcertante:** sem `name`, o plugin aplicado duas vezes tem o lifecycle executado **uma** vez. O sintoma é o hook rodando para metade das rotas.

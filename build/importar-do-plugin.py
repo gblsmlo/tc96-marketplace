@@ -33,6 +33,11 @@ FAMILIAS = {
     "test": ("hermes-core/0.1.10", ["teste-design", "teste-review", "teste-diagnose"], "teste"),
     "http": ("hermes-core/0.1.10",
              ["http-contract", "http-cache", "http-diagnose", "http-review"], "http"),
+    "bun": ("hermes-backend/0.1.6",
+            ["bun-runtime", "bun-workspace", "bun-migrate",
+             "bun-test-build", "bun-test-review"], "bun"),
+    "elysia": ("hermes-backend/0.1.6",
+               ["elysia-build", "elysia-schema", "elysia-diagnose"], "elysia"),
     "playwright": ("hermes-e2e/0.1.4",
                    ["playwright-build", "playwright-review", "playwright-diagnose"],
                    "playwright"),
@@ -85,6 +90,9 @@ def partir(texto):
 
 def tirar_zettels(texto):
     z = r"`Zettels/[^`]*\.md`"
+    # linha que e so um caminho de Zettel, em texto puro dentro de bloco de
+    # codigo: sai a linha inteira, senao sobra um "+" orfao
+    texto = re.sub(r"^[ \t]*[-+]?[ \t]*Zettels/[^\n]*\.md[ \t]*\n", "", texto, flags=re.M)
     texto = re.sub(r"\s*\((?:" + z + r")(?:,\s*(?:" + z + r"))*\)", "", texto)
     texto = re.sub(r",\s*" + z, "", texto)
     texto = re.sub(z + r",\s*", "", texto)
@@ -274,7 +282,9 @@ def importar_familia(familia, por_arquivo, por_origem):
         texto = re.sub(
             r"\[([^\]]*)\]\(([a-z0-9-]+)\.md\)",
             lambda m: (f"[{m.group(1)}](../{por_indice[m.group(2)]}/README.md)"
-                       if m.group(2) in por_indice else m.group(0)), texto)
+                       if m.group(2) in por_indice
+                       and (RAIZ / "skills" / por_indice[m.group(2)]).exists()
+                       else f"`{m.group(1)}`"), texto)
         texto = resolver_wikilinks(texto, 2, por_arquivo, por_origem)
         (RAIZ / "skills" / familia / "README.md").write_text(texto, encoding="utf-8")
     print(f"familia {familia}: {len(skills)} skills")

@@ -5,15 +5,15 @@
 ```
 `ELYSIA-LIFE-01` — packages/auth/src/plugin.ts:14
 Sintoma: as rotas de apps/server passam sem credencial; as rotas de teste dentro do
-  próprio plugin são rejeitadas corretamente.
+ próprio plugin são rejeitadas corretamente.
 Evidência: o teste do Passo 6 sobre a instância consumidora devolveu 200, não 401.
-  O plugin declara `.onBeforeHandle(verificar)` sem escopo.
+ O plugin declara `.onBeforeHandle(verificar)` sem escopo.
 Causa: o default do escopo é `local` — o hook não atravessa para a instância que usa
-  o plugin. O teste que existia rodava dentro do plugin, então nunca pegou.
+ o plugin. O teste que existia rodava dentro do plugin, então nunca pegou.
 Correção: declarar `.onBeforeHandle({ as: 'scoped' }, verificar)`, e mover o teste
-  para a instância consumidora (ELYSIA-LIFE-08). Se o hook deve valer em toda a
-  árvore, o escopo é `global` (ELYSIA-LIFE-09).
-Ver [[Elysia - Lifecycle e Plugins]].
+ para a instância consumidora (ELYSIA-LIFE-08). Se o hook deve valer em toda a
+ árvore, o escopo é `global` (ELYSIA-LIFE-09).
+Ver Elysia - Lifecycle e Plugins.
 ```
 
 Regras do formato: **ID conferido na § 6**; **evidência é teste ou ordem de registro**, não impressão; correção concreta; um link de satélite.
@@ -29,10 +29,10 @@ Regras do formato: **ID conferido na § 6**; **evidência é teste ou ordem de r
 $ bash scripts/sondas.sh src
 
 == S1. Hook registrado DEPOIS da rota
-   (nada)                                   ← a hipótese mais comum caiu
+ (nada) ← a hipótese mais comum caiu
 == S2. Escopo não declarado em plugin
-   packages/auth/src/plugin.ts:14  .onBeforeHandle(verificar)
-   -- plugins com `name` declarado: NENHUM  ← ELYSIA-LIFE-03 também em aberto
+ packages/auth/src/plugin.ts:14.onBeforeHandle(verificar)
+ -- plugins com `name` declarado: NENHUM ← ELYSIA-LIFE-03 também em aberto
 ```
 
 S1 limpo e S2 apontando o plugin: a hipótese é escopo. **A sonda não prova** — quem prova é

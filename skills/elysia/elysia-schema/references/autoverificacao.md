@@ -1,13 +1,13 @@
 # Autoverificação antes de entregar
 
 ```bash
-bash ~/.claude/skills/elysia-schema/scripts/autoverificar.sh src
+bash ${CLAUDE_PLUGIN_ROOT}/skills/elysia-schema/scripts/autoverificar.sh src
 ```
 
 | # | Confira | Regra |
 | --- | --- | --- |
 | 1 | tipo derivado por `typeof S.static`, não reescrito | `ELYSIA-TYPE-01` |
-| 2 | upload usa `fileType()` | `ELYSIA-TYPE-02` |
+| 2 | upload usa `fileType` | `ELYSIA-TYPE-02` |
 | 3 | nomes de header em minúsculas | `ELYSIA-TYPE-03` |
 | 4 | campo numérico de `body` não conta com coerção | `ELYSIA-TYPE-04` |
 | 5 | `guard` que soma declara `schema: 'standalone'` | `ELYSIA-TYPE-05` |

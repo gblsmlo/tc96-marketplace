@@ -39,6 +39,9 @@ def sha(dados):
 
 def tirar_zettels(texto):
     z = r"`Zettels/[^`]*\.md`"
+    # linha que e so um caminho de Zettel, em texto puro dentro de bloco de
+    # codigo: sai a linha inteira, senao sobra um "+" orfao
+    texto = re.sub(r"^[ \t]*[-+]?[ \t]*Zettels/[^\n]*\.md[ \t]*\n", "", texto, flags=re.M)
     texto = re.sub(r"\s*\((?:" + z + r")(?:,\s*(?:" + z + r"))*\)", "", texto)
     texto = re.sub(r",\s*" + z, "", texto)
     texto = re.sub(z + r",\s*", "", texto)

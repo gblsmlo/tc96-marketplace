@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # Autoverificação de schema e Eden — os 14 itens do Passo 7. Uso: bash autoverificar.sh <alvo>
 set -uo pipefail
+
+ou_vazio() {  # imprime a entrada; se vier vazia, a mensagem
+  local saida; saida="$(cat)"
+  if [ -n "$saida" ]; then printf '%s
+' "$saida"; else echo "   ${1:-(nada)}"; fi
+}
 ALVO="${1:-src}"
 RG=(rg --type-add 'rx:*.{ts,tsx}' -trx -nU --no-messages)
 n=0
@@ -24,10 +30,10 @@ mau 7 "allowUnsafeValidationDetails desligado"            ELYSIA-TYPE-12 'allowU
 mau 8 "nenhum @elysiajs/swagger"                          ELYSIA-APP-07  '@elysiajs/swagger'
 echo
 echo "-- response como mapa por status (ELYSIA-TYPE-06): declarações encontradas"
-"${RG[@]}" 'response:\s*\{' "$ALVO" | head -8 || echo "   NENHUMA — rota multi-status sem mapa faz o erro chegar como unknown no Eden"
+"${RG[@]}" 'response:\s*\{' "$ALVO" | head -8 | ou_vazio "NENHUMA — rota multi-status sem mapa faz o erro chegar como unknown no Eden"
 echo
 echo "-- queryFn/mutationFn que chamam Eden (ELYSIA-TYPE-09): confira se TODAS lançam"
-"${RG[@]}" -U '(queryFn|mutationFn):(?s:.{0,300}?)await api\.' "$ALVO" | head -8 || echo "   (nenhuma)"
+"${RG[@]}" -U '(queryFn|mutationFn):(?s:.{0,300}?)await api\.' "$ALVO" | head -8 | ou_vazio "(nenhuma)"
 echo
 cat <<'FIM'
 Itens que exigem leitura:

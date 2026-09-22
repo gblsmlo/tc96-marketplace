@@ -162,7 +162,7 @@ test('calcula', => { calcularFrete(pedido); });
 
 Isso não é hipótese: é o resultado direto de tratar cobertura como meta (`TS-CORE-05`). A métrica que mede o que se queria está na § 4.
 
-**O que cobertura serve para:** achar código **não** coberto. Um relatório de cobertura é bom para responder "que ramo ninguém testou?" e péssimo como número de meta. Ver `Bun - Testes - Cobertura e CI` para a operação.
+**O que cobertura serve para:** achar código **não** coberto. Um relatório de cobertura é bom para responder "que ramo ninguém testou?" e péssimo como número de meta. Ver [Bun - Testes - Cobertura e CI](bun-testes-cobertura-e-ci.md) para a operação.
 
 ---
 
@@ -268,8 +268,8 @@ Trinta segundos de verificação que separa suíte real de suíte decorativa (`T
 - [Teste de Software - Confiabilidade da Suíte](teste-de-software-confiabilidade-da-suite.md) — cobertura, mutação e test smells em detalhe
 - [Teste de Software - Tipos e Atributos de Qualidade](teste-de-software-tipos-e-atributos-de-qualidade.md) — os cinco estados de um fluxo
 - [Teste de Software - Níveis e Escopo](teste-de-software-niveis-e-escopo.md) — técnica e nível são ortogonais
-- `Bun - Testes - Cobertura e CI` — a operação de cobertura no stack
-- `Bun - Testes - Escrita e Asserções` — onde os casos derivados aqui são escritos
+- [Bun - Testes - Cobertura e CI](bun-testes-cobertura-e-ci.md) — a operação de cobertura no stack
+- [Bun - Testes - Escrita e Asserções](bun-testes-escrita-e-assercoes.md) — onde os casos derivados aqui são escritos
 - `Zod - Validação de Ambiente` — a fronteira que as classes inválidas atacam
 - · · — complexidade como sinal
 - — checklist como instrumento de processo

@@ -15,7 +15,7 @@ verificado-em: 2026-08-20
 >
 > **O que não é.** Não é documentação de ferramenta. Nenhum exemplo aqui é específico de runner. Quando a pergunta for "como escrevo isso", a resposta está numa das notas de ferramenta da § 3 — e esta nota existe para você chegar lá tendo decidido **o quê** e **em que nível**.
 >
-> **Por que ela existe.** O vault tinha três estruturas de ferramenta de teste (`Bun - Testes`, [Storybook - Testes e Interações](storybook-testes-e-interacoes.md), [Playwright](playwright.md)) e nenhuma camada que decidisse entre elas. O resultado previsível é o que a economia da pirâmide descreve: asserção caindo na camada mais cara que a comporta, em vez da mais barata que ainda pega o defeito.
+> **Por que ela existe.** O vault tinha três estruturas de ferramenta de teste ([Bun - Testes](bun-testes.md), [Storybook - Testes e Interações](storybook-testes-e-interacoes.md), [Playwright](playwright.md)) e nenhuma camada que decidisse entre elas. O resultado previsível é o que a economia da pirâmide descreve: asserção caindo na camada mais cara que a comporta, em vez da mais barata que ainda pega o defeito.
 
 Fontes verificadas em **2026-08-20**. Ver [Fontes consultadas](#fontes-consultadas) — incluindo o que **não** foi possível verificar na fonte primária.
 
@@ -89,11 +89,11 @@ Esta nota decide o nível. A partir daí, o "como" está aqui — e este mapa é
 
 | Nível / propósito | Ferramenta no stack | Nota |
 | --- | --- | --- |
-| unidade e integração (Node/Bun, backend, funções puras) | `bun test` | `Bun - Testes` |
+| unidade e integração (Node/Bun, backend, funções puras) | `bun test` | [Bun - Testes](bun-testes.md) |
 | componente isolado, estados de UI, a11y de componente | Storybook + addon-vitest | [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) |
 | jornada de usuário atravessando rota, rede e sessão | Playwright | [Playwright](playwright.md) |
-| contrato entre cliente tipado e servidor | tipo exportado do servidor | `Hono - Validação e RPC`, `Elysia - Schema e Eden` |
-| validação de entrada em runtime | Zod / TypeBox | `Zod - Validação de Ambiente`, `Elysia - Schema e Eden` |
+| contrato entre cliente tipado e servidor | tipo exportado do servidor | `Hono - Validação e RPC`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
+| validação de entrada em runtime | Zod / TypeBox | `Zod - Validação de Ambiente`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 | estático (tipo e lint) | TypeScript + Biome | `TypeScript` |
 | persistência e migração | Drizzle + Postgres local | `Drizzle - Schema e Migrations` |
 
@@ -354,14 +354,14 @@ NUNCA: esta estrutura inteira para uma tarefa de escrever um teste
 
 | Decisão | O que **não** fazer | A ponte |
 | --- | --- | --- |
-| Verificar regra de negócio | escrever E2E | unidade em `Bun - Testes` (`TS-CORE-02`) |
+| Verificar regra de negócio | escrever E2E | unidade em [Bun - Testes](bun-testes.md) (`TS-CORE-02`) |
 | Verificar estado visual de componente | E2E que navega até a tela | story em [Storybook - Stories e Args](storybook-stories-e-args.md) |
 | Verificar jornada crítica | teste de unidade que simula a jornada | [Playwright](playwright.md) |
-| Verificar o contrato com o BFF | redigitar o shape no mock | reusar o tipo do servidor — `Hono - Validação e RPC`, `Elysia - Schema e Eden` |
+| Verificar o contrato com o BFF | redigitar o shape no mock | reusar o tipo do servidor — `Hono - Validação e RPC`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 | Verificar entrada inválida | só o caminho feliz | valor limite + Zod na fronteira — [Teste de Software - Técnicas de Design de Caso](teste-de-software-tecnicas-de-design-de-caso.md) |
 | Preparar estado para um teste de UI | criar pela interface | criar por API — [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 5 |
 | Isolar dado entre execuções paralelas | um banco compartilhado | schema/banco efêmero por worker — `Drizzle - Schema e Migrations` |
-| Testar expiração e "há 3 dias" | esperar o tempo passar | relógio controlado (`TS-DUB-05`) — [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 7, `Bun - Testes - Mocks e Tempo` |
+| Testar expiração e "há 3 dias" | esperar o tempo passar | relógio controlado (`TS-DUB-05`) — [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 7, [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) |
 | Testar autorização por papel | um usuário com tudo liberado | um estado por papel — [Playwright - Autenticação e Isolamento](playwright-autenticacao-e-isolamento.md), e o critério de achado em `OWASP - Sessão e Autorização` |
 | Garantir contrato de status e cache | afirmar `200` sempre | `HTTP - Status e Redirecionamento`, `HTTP - Cache e Requisições Condicionais` |
 | Portão de qualidade no PR | revisão manual como único portão | política + CI — `Github Actions` |
@@ -383,7 +383,7 @@ NUNCA: esta estrutura inteira para uma tarefa de escrever um teste
 - — TDD e integração contínua como prática
 - — o que a suíte existe para viabilizar
 - · ·
-- **Ferramentas:** `Bun - Testes` · [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) · [Playwright](playwright.md) · `TypeScript`
+- **Ferramentas:** [Bun - Testes](bun-testes.md) · [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) · [Playwright](playwright.md) · `TypeScript`
 - `Github Actions` · · `Trunk-based development`
 - — causa raiz de defeito recorrente
 -

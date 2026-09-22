@@ -4,6 +4,12 @@
 #
 # BUN-SYS-07: é o passo que não se pode pular. A segunda busca é a que muda o plano.
 set -uo pipefail
+
+ou_vazio() {  # imprime a entrada; se vier vazia, a mensagem
+  local saida; saida="$(cat)"
+  if [ -n "$saida" ]; then printf '%s
+' "$saida"; else echo "   ${1:-(nada)}"; fi
+}
 DIR="${1:-src}"; [ -d "$DIR" ] || DIR=.
 titulo() { printf '\n\033[1m== %s\033[0m  %s\n' "$1" "${2:-}"; }
 
@@ -15,7 +21,7 @@ saida=$({ rg -no "from ['\"]node:[a-z_/]+" "$DIR" 2>/dev/null; rg -no "require\(
 titulo "2. Nas dependências transitivas" "a metade que costuma faltar"
 if [ -d node_modules ]; then
   rg -ho "require\(['\"](node:)?(async_hooks|worker_threads|crypto|vm|cluster|dgram|inspector|perf_hooks|v8|repl|child_process|http2|tls|net)['\"]" node_modules 2>/dev/null \
-    | sed -E "s/.*['\"](node:)?([a-z_2]+)['\"].*/\2/" | sort | uniq -c | sort -rn | head -20 | sed 's|^|   |' || echo "   (nada)"
+    | sed -E "s/.*['\"](node:)?([a-z_2]+)['\"].*/\2/" | sort | uniq -c | sort -rn | head -20 | sed 's|^|   |' | ou_vazio "(nada)"
 else
   echo "   node_modules ausente — rode \`bun install\` antes; sem isso a enumeração é parcial"
 fi
@@ -31,10 +37,10 @@ cat <<'FIM'
 FIM
 
 titulo "4. O que não vai para produção"
-rg -n --no-messages 'node-gyp|\.node"' package.json 2>/dev/null | sed 's|^|   |' || echo "   (sem addon nativo aparente)"
+rg -n --no-messages 'node-gyp|\.node"' package.json 2>/dev/null | sed 's|^|   |' | ou_vazio "(sem addon nativo aparente)"
 
 titulo "5. Container" "encerrar sem derrubar requisição"
-ls Dockerfile* 2>/dev/null | sed 's|^|   |' || echo "   sem Dockerfile"
+ls Dockerfile* 2>/dev/null | sed 's|^|   |' | ou_vazio "sem Dockerfile"
 [ -f Dockerfile ] && rg -n --no-messages 'FROM|CMD|ENTRYPOINT|STOPSIGNAL|--smol' Dockerfile | sed 's|^|   |'
 echo "   → sem tratamento de SIGTERM, o container encerra no meio da requisição"
 

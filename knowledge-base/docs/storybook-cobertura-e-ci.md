@@ -290,7 +290,7 @@ Os testes rodam e o status check aponta uma falha sem link para a story. Funcion
 - [Teste de Software - Técnicas de Design de Caso](teste-de-software-tecnicas-de-design-de-caso.md) — o uso legítimo de cobertura
 - [Playwright](playwright.md) — o terceiro runner do monorepo, e a mesma exigência de binário em CI
 - [Playwright - Execução, Retries e CI](playwright-execucao-retries-e-ci.md) — o pipeline do lado do E2E
-- `Bun - Testes - Cobertura e CI` — o equivalente sob `bun test`, com os dois portões silenciosos
+- [Bun - Testes - Cobertura e CI](bun-testes-cobertura-e-ci.md) — o equivalente sob `bun test`, com os dois portões silenciosos
 - `Monorepo com Bun - estrutura e tooling` — por que os runners são separados
 - `Github Actions` ·
 

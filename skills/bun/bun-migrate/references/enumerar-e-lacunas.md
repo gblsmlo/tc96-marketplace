@@ -25,7 +25,7 @@ Isto elimina migrações inteiras: uma biblioteca de assinatura de blockchain (`
 
 ### 2.2 Async hooks são stub
 
-`BUN-SYS-09`: **observabilidade nunca se apoia em `createHook`, `executionAsyncId` ou `eventLoopUtilization()`** em Bun — são stubs que **devolvem valor** em vez de lançar.
+`BUN-SYS-09`: **observabilidade nunca se apoia em `createHook`, `executionAsyncId` ou `eventLoopUtilization`** em Bun — são stubs que **devolvem valor** em vez de lançar.
 
 Este é o pior tipo de incompatibilidade: o APM instala, roda, não dá erro, e produz trace vazio ou métrica constante. A ausência de exceção é o que faz a falha passar pela migração e aparecer semanas depois, como "perdemos observabilidade".
 
@@ -45,7 +45,7 @@ Sintoma: mensagem chega deformada ou vazia num pipeline híbrido, sem erro claro
 
 ## Passo 3 — O que não vai para produção
 
-`BUN-SYS-05`: **`bun:ffi` e `cc()` nunca entram em caminho de produção** — a própria doc os declara experimentais e recomenda Node-API. Se a migração depende de FFI, o caminho é Node-API, não `bun:ffi`.
+`BUN-SYS-05`: **`bun:ffi` e `cc` nunca entram em caminho de produção** — a própria doc os declara experimentais e recomenda Node-API. Se a migração depende de FFI, o caminho é Node-API, não `bun:ffi`.
 
 ---
 

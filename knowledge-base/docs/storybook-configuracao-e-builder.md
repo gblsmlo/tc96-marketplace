@@ -216,7 +216,7 @@ Casos legítimos de `viteFinal` são os que existem só no Storybook: excluir do
 
 A doc oficial documenta cada peça isolada e nunca a ordem. Para um monorepo partindo do zero:
 
-1. **Criar o pacote** `apps/storybook` com `package.json` próprio, e declará-lo no workspace — `Bun - Gerenciador de Pacotes`.
+1. **Criar o pacote** `apps/storybook` com `package.json` próprio, e declará-lo no workspace — [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md).
 2. **Instalar** o framework e os addons (§ 1.3 sobre lockstep; § 4.1 sobre `npm` × `bun`).
 3. **Criar `apps/storybook/vite.config.ts`** herdando a base compartilhada (§ 3.1).
 4. **Escrever `main.ts`** com `framework`, `stories` e `addons` (§ 1.1).
@@ -248,7 +248,7 @@ O desenho está em `Monorepo com Bun - estrutura e tooling`: `apps/storybook` é
 
 `storybook build` gera `storybook-static/`. É diretório estático — publica como qualquer SPA.
 
-> **Num monorepo Bun, os comandos de instalação da doc oficial são `npm`/`npx`.** `npm create storybook@latest`, `npx storybook add …`, `npx msw init …`. Rodar `npm install` dentro de um workspace Bun gera `package-lock.json` e mexe no linker — ver `Bun - Gerenciador de Pacotes`. Use `bun add` / `bunx` para o equivalente. As formas `bunx` dos comandos de setup **não foram verificadas contra a fonte**; o que está verificado são as formas `npm`.
+> **Num monorepo Bun, os comandos de instalação da doc oficial são `npm`/`npx`.** `npm create storybook@latest`, `npx storybook add …`, `npx msw init …`. Rodar `npm install` dentro de um workspace Bun gera `package-lock.json` e mexe no linker — ver [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md). Use `bun add` / `bunx` para o equivalente. As formas `bunx` dos comandos de setup **não foram verificadas contra a fonte**; o que está verificado são as formas `npm`.
 
 ### 4.2 A armadilha de augmentation de tipo — **só caminho TanStack**
 
@@ -315,7 +315,7 @@ No momento em que outro pacote importa algo de `apps/storybook`, ele deixa de se
 - [Storybook - TanStack React](storybook-tanstack-react.md) — a escolha do framework e seus requisitos
 - [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) — a config do Vitest, que é arquivo separado
 - `Monorepo com Bun - estrutura e tooling` — o grafo de dependências e a armadilha de augmentation
-- `Bun - Gerenciador de Pacotes` — workspaces e o linker
+- [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) — workspaces e o linker
 
 ## Fontes consultadas
 

@@ -15,3 +15,7 @@ Docs/Teste de Software*
 
 # --- e2e ---
 Docs/Playwright*
+
+# --- backend ---
+Docs/Bun*
+Docs/Elysia*

@@ -8,12 +8,12 @@
 
 ```
 O erro é ESPERADO (validação, 404 de negócio, limite)?
-├── SIM → return status(código, corpo)          ELYSIA-CORE-03
-│         (o tipo chega tipado ao Eden)
+├── SIM → return status(código, corpo) ELYSIA-CORE-03
+│ (o tipo chega tipado ao Eden)
 └── NÃO — é inesperado
-    └── throw → cai no onError
-        └── e onError NUNCA devolve error.message de UNKNOWN
-                                                  ELYSIA-CORE-07
+ └── throw → cai no onError
+ └── e onError NUNCA devolve error.message de UNKNOWN
+ ELYSIA-CORE-07
 ```
 
 | Regra | O que exige |
@@ -38,15 +38,15 @@ Cookie de sessão é **assinado e `httpOnly`** (`ELYSIA-CORE-05`):
 
 ```ts
 new Elysia({ cookie: { secrets: env.COOKIE_SECRET, sign: ['sessao'] } })
-  .get('/eu', ({ cookie: { sessao } }) => {
-    sessao.value = { id };
-    sessao.httpOnly = true;
-    sessao.secure = true;
-    sessao.sameSite = 'lax';
-  });
+.get('/eu', ({ cookie: { sessao } }) => {
+ sessao.value = { id };
+ sessao.httpOnly = true;
+ sessao.secure = true;
+ sessao.sameSite = 'lax';
+ });
 ```
 
-A semântica de `SameSite`, `Domain` e dos prefixos é de [[RFC 6265 - Cookies HTTP]] —
+A semântica de `SameSite`, `Domain` e dos prefixos é de `Docs/RFC 6265 - Cookies HTTP.md` —
 Elysia é o mecanismo, não o critério.
 
 **Stream:** `ELYSIA-CORE-06` — `set.headers` **nunca** é alterado depois do primeiro `yield`
@@ -54,7 +54,7 @@ de um handler generator. A alteração é **silenciosamente ignorada**.
 
 > **A armadilha que vem do runtime, não do framework:** o `idleTimeout` de 10 s do
 > `Bun.serve` **conta durante a resposta**, não só antes — é a causa de SSE que cai sozinho.
-> Ver [[Bun - HTTP e Servidor]].
+> Ver [Bun - HTTP e Servidor](../../../../knowledge-base/docs/bun-http-e-servidor.md).
 
 ---
 
@@ -63,26 +63,26 @@ de um handler generator. A alteração é **silenciosamente ignorada**.
 | Regra | O que exige |
 | --- | --- |
 | `ELYSIA-CORE-09` | teste de rota usa `app.fetch`/`app.handle` — **nunca** subir servidor e requisitar por rede |
-| `ELYSIA-CORE-10` | app com plugin assíncrono ou `import()` lazy **aguarda `app.modules`** antes das asserções |
+| `ELYSIA-CORE-10` | app com plugin assíncrono ou `import` lazy **aguarda `app.modules`** antes das asserções |
 
 ```ts
-test('cria fatura', async () => {
-  await app.modules;                       // ELYSIA-CORE-10
-  const res = await app.handle(new Request('http://localhost/faturas', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ valor: 100 }),
-  }));
-  expect(res.status).toBe(201);
+test('cria fatura', async => {
+ await app.modules; // ELYSIA-CORE-10
+ const res = await app.handle(new Request('http://localhost/faturas', {
+ method: 'POST',
+ headers: { 'content-type': 'application/json' },
+ body: JSON.stringify({ valor: 100 }),
+ }));
+ expect(res.status).toBe(201);
 });
 ```
 
 **`ELYSIA-CORE-10` produz flake clássico:** sem `await app.modules`, o teste roda antes de o
-plugin registrar a rota, e o resultado depende de timing. Ver [[bun-test-build]].
+plugin registrar a rota, e o resultado depende de timing. Ver `bun-test-build`.
 
 ---
 
 ## Relacionados
 
-- [[Elysia - Roteamento e Handler]] · [[Elysia]] § 5 — a árvore de erro
-- [[http-contract]] — qual status devolver é decisão de protocolo, não de framework
+- [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) · [Elysia](../../../../knowledge-base/docs/elysia.md) § 5 — a árvore de erro
+- `http-contract` — qual status devolver é decisão de protocolo, não de framework

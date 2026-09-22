@@ -4,9 +4,9 @@ Três skills, uma por satélite: **rota**, **schema**, **lifecycle**.
 
 | Skill | A pergunta que responde | Fonte | Apoio interno |
 | --- | --- | --- | --- |
-| [[elysia-build]] | como escrevo esta rota e este handler? | [[Elysia - Roteamento e Handler]] | 5 referências + 1 script |
-| [[elysia-schema]] | como valido, tipo o retorno e consumo pelo Eden? | [[Elysia - Schema e Eden]] | 5 referências + 1 script |
-| [[elysia-diagnose]] | por que este hook não afeta a rota? | [[Elysia - Lifecycle e Plugins]] | 6 referências + 2 scripts |
+| `elysia-build` | como escrevo esta rota e este handler? | [Elysia - Roteamento e Handler](../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 5 referências + 1 script |
+| `elysia-schema` | como valido, tipo o retorno e consumo pelo Eden? | [Elysia - Schema e Eden](../../knowledge-base/docs/elysia-schema-e-eden.md) | 5 referências + 1 script |
+| `elysia-diagnose` | por que este hook não afeta a rota? | [Elysia - Lifecycle e Plugins](../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 6 referências + 2 scripts |
 
 ## O que os pacotes acrescentaram
 
@@ -37,8 +37,8 @@ explicitamente como "só no hub" — batendo com a contagem da doc.
 é só deles — e o cabeçalho do mapa carrega a § 6.2 inteira por isso.
 
 ```bash
-bash Skills/elysia/elysia-diagnose/scripts/gerar-mapa-de-ids.sh
-bash Skills/instalar.sh
+bash plugins/hermes-backend/skills/elysia-diagnose/scripts/gerar-mapa-de-ids.sh
+bash scripts/instalar.sh
 ```
 
 <!-- tokens:inicio -->
@@ -50,18 +50,18 @@ As referências carregam sob demanda, uma por vez.
 
 | Skill | `SKILL.md` | maior `references/` | total | refs |
 | --- | ---: | --- | ---: | ---: |
-| [[elysia-build]] | 1.751 | `mapa-de-ids.md` (2.596) | 8.182 | 6 |
-| [[elysia-diagnose]] | 1.609 | `mapa-de-ids.md` (2.596) | 7.568 | 7 |
-| [[elysia-schema]] | 1.620 | `mapa-de-ids.md` (2.596) | 7.657 | 6 |
+| `elysia-build` | 1.751 | `mapa-de-ids.md` (2.596) | 8.182 | 6 |
+| `elysia-diagnose` | 1.609 | `mapa-de-ids.md` (2.596) | 7.568 | 7 |
+| `elysia-schema` | 1.620 | `mapa-de-ids.md` (2.596) | 7.657 | 6 |
 
 Carregar as 3 skills deste grupo de uma vez custaria **4.980 tokens** só de `SKILL.md`,
 e **23.407** com todas as referências. É por isso que cada skill declara o que **nunca** carregar.
 
-Regenerar: `bash Skills/tokens.sh`
+Regenerar: `bash scripts/medir.sh`
 <!-- tokens:fim -->
 
 ## Relacionados
 
-- [[Skills/README|Skill — Índice]] · [[Elysia]] § 7 — o contrato
-- [[Skills/http/README|Skills/http/]] — o protocolo que Elysia implementa
-- [[Skills/drizzle/README|Skills/drizzle/]] — a persistência que o handler chama
+- [Skill — Índice](../README.md) · [Elysia](../../knowledge-base/docs/elysia.md) § 7 — o contrato
+- `hermes-core: família http` — o protocolo que Elysia implementa
+- `família drizzle` — a persistência que o handler chama

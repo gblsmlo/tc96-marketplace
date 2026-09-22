@@ -11,11 +11,11 @@ import { describe, test, expect } from 'bun:test';
 import { Elysia } from 'elysia';
 import { authPlugin } from './auth';
 
-test('plugin protege rota da instância CONSUMIDORA', async () => {
-  const consumidor = new Elysia().use(authPlugin).get('/privado', () => 'ok');
-  await consumidor.modules;                        // ELYSIA-CORE-10
-  const res = await consumidor.handle(new Request('http://x/privado'));
-  expect(res.status).toBe(401);                    // se der 200, o escopo é local
+test('plugin protege rota da instância CONSUMIDORA', async => {
+ const consumidor = new Elysia.use(authPlugin).get('/privado', => 'ok');
+ await consumidor.modules; // ELYSIA-CORE-10
+ const res = await consumidor.handle(new Request('http://x/privado'));
+ expect(res.status).toBe(401); // se der 200, o escopo é local
 });
 ```
 
@@ -42,13 +42,13 @@ A linha de baixo é a única que distingue os dois — e é a que `ELYSIA-LIFE-0
 ## O corte: o que não é lifecycle
 | Sintoma | Não é lifecycle — é |
 | --- | --- |
-| erro chega ao Eden como `unknown` | `response` sem mapa por status — [[elysia-schema]] (`ELYSIA-TYPE-06`) |
+| erro chega ao Eden como `unknown` | `response` sem mapa por status — `elysia-schema` (`ELYSIA-TYPE-06`) |
 | `data` do Eden é `null` | status ≥ 300 — `ELYSIA-TYPE-08` |
 | tipo do Eden perdeu rotas | method chaining quebrado — `ELYSIA-APP-01` |
 | header obrigatório "nunca chega" | nome capitalizado no schema — `ELYSIA-TYPE-03` |
 | body numérico falha a validação | `body` não coage — `ELYSIA-TYPE-04` |
 | teste flaky com plugin assíncrono | falta `await app.modules` — `ELYSIA-CORE-10` |
-| SSE cai sozinho | `idleTimeout` do `Bun.serve` — [[Bun - HTTP e Servidor]] |
+| SSE cai sozinho | `idleTimeout` do `Bun.serve` — [Bun - HTTP e Servidor](../../../../knowledge-base/docs/bun-http-e-servidor.md) |
 
 **E o mais comum de todos:** o hook não roda porque foi registrado **depois** da rota (`ELYSIA-CORE-01`). Antes de investigar escopo, confira a ordem.
 

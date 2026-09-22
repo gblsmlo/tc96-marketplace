@@ -1,16 +1,16 @@
 # Autoverificação antes de entregar
 
 ```bash
-bash ~/.claude/skills/bun-runtime/scripts/autoverificar.sh src
+bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-runtime/scripts/autoverificar.sh src
 ```
 
 | # | Confira | Regra |
 | --- | --- | --- |
 | 1 | `tsc --noEmit` está no CI | `BUN-CORE-02` |
 | 2 | operação de diretório usa `node:fs` | `BUN-RT-01` |
-| 3 | nenhuma leitura assume que `Bun.file()` já leu | `BUN-RT-02` |
-| 4 | existência checada por `.exists()`, não por `size` | `BUN-RT-03` |
-| 5 | todo `FileSink` tem `.end()` ou `.unref()` | `BUN-RT-04` |
+| 3 | nenhuma leitura assume que `Bun.file` já leu | `BUN-RT-02` |
+| 4 | existência checada por `.exists`, não por `size` | `BUN-RT-03` |
+| 5 | todo `FileSink` tem `.end` ou `.unref` | `BUN-RT-04` |
 | 6 | env validado na inicialização | `BUN-RT-06` |
 | 7 | segredo de produção não vem de `.env` | `BUN-RT-05` |
 | 8 | nenhum `*Sync` em handler HTTP | `BUN-RT-08` |
@@ -23,8 +23,8 @@ bash ~/.claude/skills/bun-runtime/scripts/autoverificar.sh src
 **Rode de verdade:**
 
 ```bash
-tsc --noEmit                # o runtime não checa tipo
-bun run <script>            # forma explícita
+tsc --noEmit # o runtime não checa tipo
+bun run <script> # forma explícita
 ```
 
 ---

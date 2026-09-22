@@ -6,14 +6,14 @@
 
 ```ts
 // ✗ o hook não afeta /faturas
-new Elysia()
-  .get('/faturas', h)
-  .onBeforeHandle(auth)
+new Elysia
+.get('/faturas', h)
+.onBeforeHandle(auth)
 
 // ✓
-new Elysia()
-  .onBeforeHandle(auth)
-  .get('/faturas', h)
+new Elysia
+.onBeforeHandle(auth)
+.get('/faturas', h)
 ```
 
 **É a primeira hipótese, sempre.** Não dá erro, não dá aviso — a rota simplesmente não passa pelo hook.
@@ -25,9 +25,9 @@ new Elysia()
 O default é **`local`**: o hook fica dentro do plugin e **não atravessa** para a instância consumidora. Um plugin de autenticação sem escopo declarado protege as rotas dele e **nenhuma** do consumidor.
 
 ```
-local   → só a instância do próprio plugin
-scoped  → o consumidor direto
-global  → toda a árvore
+local → só a instância do próprio plugin
+scoped → o consumidor direto
+global → toda a árvore
 ```
 
 `ELYSIA-LIFE-09`: hook transversal que deve valer em toda a árvore — tracing, logging, CORS — usa **`global`**, não uma corrente de `scoped`.

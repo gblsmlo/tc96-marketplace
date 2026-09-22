@@ -4,7 +4,7 @@
 | --- | --- |
 | código que usa o global `Bun` roda sob o processo `bun` | `BUN-CORE-01` |
 | há `tsc --noEmit` no CI — **o runtime transpila sem checar tipo** | `BUN-CORE-02` |
-| módulo com top-level `await` não é carregado por `require()` | `BUN-CORE-04` |
+| módulo com top-level `await` não é carregado por `require` | `BUN-CORE-04` |
 | automação usa `bun run <script>`, na forma explícita | `BUN-CORE-06` |
 | flag de runtime vem **antes** do subcomando | `BUN-CORE-07` |
 

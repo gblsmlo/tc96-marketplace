@@ -6,7 +6,7 @@ Tarefa: *"adicionar `sharp` ao serviço de imagens, num monorepo onde `@escopo/c
 
 ```bash
 bun add sharp --cwd apps/imagens
-bun pm untrusted     # confirma que sharp NÃO ficou bloqueado
+bun pm untrusted # confirma que sharp NÃO ficou bloqueado
 ```
 
 **Se houvesse `trustedDependencies` no projeto**, aí sim: `sharp` teria de ser reincluído, porque a lista declarada substitui a padrão (`BUN-PKG-04`).
@@ -16,11 +16,11 @@ bun pm untrusted     # confirma que sharp NÃO ficou bloqueado
 ```jsonc
 // package.json da raiz
 {
-  "private": true,                       // BUN-PKG-12
-  "workspaces": {
-    "packages": ["apps/*", "packages/*"],
-    "catalog": { "zod": "^3.24.1" }       // BUN-PKG-06
-  }
+ "private": true, // BUN-PKG-12
+ "workspaces": {
+ "packages": ["apps/*", "packages/*"],
+ "catalog": { "zod": "^3.24.1" } // BUN-PKG-06
+ }
 }
 ```
 
@@ -34,8 +34,8 @@ E `sharp` **não** vai no catalog: só um pacote o usa.
 **Passo 2 — CI:**
 
 ```yaml
-- run: bun ci                # não `bun install` — BUN-PKG-02
-- run: tsc --noEmit          # o runtime não checa tipo — BUN-CORE-02
+- run: bun ci # não `bun install` — BUN-PKG-02
+- run: tsc --noEmit # o runtime não checa tipo — BUN-CORE-02
 ```
 
 **O que as decisões evitaram:**

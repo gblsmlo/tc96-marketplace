@@ -1,6 +1,6 @@
 # Coerção, response e guard
 
-> Passos 0 a 5. O texto das regras mora em [[Elysia - Schema e Eden]].
+> Passos 0 a 5. O texto das regras mora em [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md).
 
 > **Uma declaração de schema produz quatro efeitos:** validação em runtime, tipo em TypeScript, documento OpenAPI, e o tipo do cliente Eden.
 
@@ -20,7 +20,7 @@ A regra mais consequente da família, e a menos intuitiva:
 | `cookie` | **sim** |
 | **`body`** | **não** |
 
-`ELYSIA-TYPE-04`: campo numérico de `body` **nunca** conta com coerção. Um `t.Number()` no body recebendo `"100"` de um JSON malformado falha a validação — e o desenvolvedor conclui que o schema está errado.
+`ELYSIA-TYPE-04`: campo numérico de `body` **nunca** conta com coerção. Um `t.Number` no body recebendo `"100"` de um JSON malformado falha a validação — e o desenvolvedor conclui que o schema está errado.
 
 E `ELYSIA-TYPE-03`: schema de `headers` declara os nomes em **minúsculas** — Elysia normaliza, e um nome capitalizado **nunca casa**. O sintoma é um header obrigatório que "nunca é enviado".
 
@@ -31,9 +31,9 @@ E `ELYSIA-TYPE-03`: schema de `headers` declara os nomes em **minúsculas** — 
 ```ts
 // ✓ mapa por status — ELYSIA-TYPE-06
 response: {
-  200: t.Object({ id: t.String() }),
-  404: t.Object({ erro: t.String() }),
-  422: t.Object({ erro: t.String() }),
+ 200: t.Object({ id: t.String }),
+ 404: t.Object({ erro: t.String }),
+ 422: t.Object({ erro: t.String }),
 }
 ```
 
@@ -49,10 +49,10 @@ E `ELYSIA-TYPE-13`: listagem paginada declara no `response` um envelope com `ite
 
 ```ts
 // ✗ o schema da rota é substituído
-.guard({ headers: t.Object({ authorization: t.String() }) })
+.guard({ headers: t.Object({ authorization: t.String }) })
 
 // ✓ soma
-.guard({ schema: 'standalone', headers: t.Object({ authorization: t.String() }) })
+.guard({ schema: 'standalone', headers: t.Object({ authorization: t.String }) })
 ```
 
 Sintoma de esquecer: a validação do body da rota desaparece, silenciosamente, e o handler recebe qualquer coisa.
@@ -61,9 +61,9 @@ Sintoma de esquecer: a validação do body da rota desaparece, silenciosamente, 
 
 ## Passo 4 — Upload
 
-`ELYSIA-TYPE-02`: upload validado por Standard Schema usa **`fileType()`** — validadores genéricos conferem o `content-type` **declarado**, que o cliente controla. `fileType()` inspeciona o conteúdo.
+`ELYSIA-TYPE-02`: upload validado por Standard Schema usa **`fileType`** — validadores genéricos conferem o `content-type` **declarado**, que o cliente controla. `fileType` inspeciona o conteúdo.
 
-É achado de segurança: um `.exe` renomeado para `.png` passa por validação de `content-type` e não passa por `fileType()`.
+É achado de segurança: um `.exe` renomeado para `.png` passa por validação de `content-type` e não passa por `fileType`.
 
 ---
 

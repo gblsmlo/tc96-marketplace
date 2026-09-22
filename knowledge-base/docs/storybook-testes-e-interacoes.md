@@ -366,7 +366,7 @@ Quando uma tag aparece em `include` e `exclude`, **`exclude` vence**.
 
 ### 4.5 A fronteira com `bun test`
 
-O addon exige Vitest. Ele **não roda sob `bun test`**, que é o runner do backend em `Bun - Testes`. O monorepo convive com dois runners por desenho:
+O addon exige Vitest. Ele **não roda sob `bun test`**, que é o runner do backend em [Bun - Testes](bun-testes.md). O monorepo convive com dois runners por desenho:
 
 | Runner | Cobre |
 | --- | --- |
@@ -491,7 +491,7 @@ O componente roda sem decorator global. Falha por falta de provider, e o rastro 
 - [Storybook - Stories e Args](storybook-stories-e-args.md) — tags, e o que entra no runner
 - [Storybook - Mocking](storybook-mocking.md) — `mocked`, `sb.mock` e MSW dentro do teste
 - [Storybook - Decorators e Contexto](storybook-decorators-e-contexto.md) — `beforeEach` e limpeza
-- `Bun - Testes` — o outro runner do monorepo
+- [Bun - Testes](bun-testes.md) — o outro runner do monorepo
 - `Monorepo com Bun - estrutura e tooling` — o comportamento de `--filter` em CI
 
 ## Fontes consultadas

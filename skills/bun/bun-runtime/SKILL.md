@@ -1,17 +1,22 @@
 ---
-name: bun-runtime
-description: Escrever código que usa as APIs do runtime Bun — arquivo, `.env`, processo, shell, hashing, watch — citando IDs `BUN-RT-*` e `BUN-CORE-*`, com autoverificação executável — use quando a tarefa for ler ou escrever arquivo, carregar e validar variável de ambiente, rodar subprocesso ou comando externo, hashear senha, escolher entre `--watch` e `--hot`, ou decidir entre API do Bun e módulo `node:*`. Não use para instalar pacote e mexer em workspace, que é bun-workspace, para migrar código de Node que não roda, que é bun-migrate, nem para escrever teste, que é bun-test-build.
+nome: bun-runtime
+descricao: Escrever código que usa as APIs do runtime Bun — arquivo, `.env`, processo, shell, hashing, watch — citando IDs `BUN-RT-*` e `BUN-CORE-*`, com autoverificação executável — use quando a tarefa for ler ou escrever arquivo, carregar e validar variável de ambiente, rodar subprocesso ou comando externo, hashear senha, escolher entre `--watch` e `--hot`, ou decidir entre API do Bun e módulo `node:*`. Não use para instalar pacote e mexer em workspace, que é bun-workspace, para migrar código de Node que não roda, que é bun-migrate, nem para escrever teste, que é bun-test-build.
+tipo: skill
+familia: bun
+fonte: "[Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md)"
+docs:
+  - /oven-sh/bun
 tags:
   - skill
   - bun
   - backend
-fonte: "[[Bun - Runtime e APIs]]"
 ---
 
 # bun-runtime
 
-> **Fonte desta skill:** [[Bun - Runtime e APIs]], com o hub [[Bun]] como roteador.
+> **Fonte desta skill:** [Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md), com o hub [Bun](../../../knowledge-base/docs/bun.md) como roteador.
 > Esta skill **não contém** o texto das regras nem a superfície de API — ela diz o que decidir e o que conferir.
+> **Superfície de API:** resolva pelo Context7 — `/oven-sh/bun`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
 ---
 
@@ -21,10 +26,10 @@ Escrever código de aplicação que usa o runtime.
 
 | Situação | Vá para |
 | --- | --- |
-| dependência, lockfile, workspace, `trustedDependencies` | [[bun-workspace]] |
-| código que veio do Node e não roda | [[bun-migrate]] |
-| escrever teste | [[bun-test-build]] · revisar suíte | [[bun-test-review]] |
-| rota HTTP | [[elysia-build]] · persistência | [[drizzle-review]] |
+| dependência, lockfile, workspace, `trustedDependencies` | `bun-workspace` |
+| código que veio do Node e não roda | `bun-migrate` |
+| escrever teste | `bun-test-build` · revisar suíte | `bun-test-review` |
+| rota HTTP | `elysia-build` · persistência | `drizzle-review` |
 
 ---
 
@@ -32,9 +37,9 @@ Escrever código de aplicação que usa o runtime.
 
 | Ordem | Carregar |
 | --- | --- |
-| 1 | [[Bun]] § 2 (o binário é runtime, gerenciador, bundler e runner) |
-| 2 | [[Bun]] § 6 — `BUN-CORE-*` |
-| 3 | [[Bun - Runtime e APIs]] |
+| 1 | [Bun](../../../knowledge-base/docs/bun.md) § 2 (o binário é runtime, gerenciador, bundler e runner) |
+| 2 | [Bun](../../../knowledge-base/docs/bun.md) § 6 — `BUN-CORE-*` |
+| 3 | [Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md) |
 
 Referências desta skill:
 
@@ -81,7 +86,7 @@ E `BUN-CORE-03`: adicionar `jest`, `ts-node`, `nodemon` ou `dotenv` exige **just
 ## Passo 5 — Autoverificar
 
 ```bash
-bash ~/.claude/skills/bun-runtime/scripts/autoverificar.sh src
+bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-runtime/scripts/autoverificar.sh src
 tsc --noEmit
 ```
 
@@ -91,7 +96,7 @@ tsc --noEmit
 
 1. **`tsc --noEmit` roda no CI?** Se não, esse é o primeiro achado.
 2. **Se o código usa o global `Bun`**, ele só roda sob o processo `bun` — declare isso se a lib for publicada.
-3. **Se veio de Node e não roda**, é [[bun-migrate]] — e "funciona no Node" não é evidência (`BUN-CORE-05`).
+3. **Se veio de Node e não roda**, é `bun-migrate` — e "funciona no Node" não é evidência (`BUN-CORE-05`).
 4. **Declare o que não verificou.**
 
 ---
@@ -106,6 +111,6 @@ Caso completo: `references/exemplo.md`.
 
 ## Relacionados
 
-- [[Bun - Runtime e APIs]] — fonte desta skill
-- [[Bun]] § 2, § 6
-- [[bun-workspace]] · [[bun-migrate]] · [[bun-test-build]] · [[bun-test-review]] — a família
+- [Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md) — fonte desta skill
+- [Bun](../../../knowledge-base/docs/bun.md) § 2, § 6
+- `bun-workspace` · `bun-migrate` · `bun-test-build` · `bun-test-review` — a família

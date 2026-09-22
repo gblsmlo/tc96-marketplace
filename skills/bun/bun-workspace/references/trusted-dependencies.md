@@ -15,7 +15,7 @@ Declarar um pacote ali **desliga os scripts de instalação de todo o resto** �
 `BUN-PKG-04`. E `BUN-PKG-03` completa: um PR que adiciona entrada ali **precisa** trazer no corpo a saída de `bun pm untrusted`, que mostra qual comando será executado. Liberar script de instalação é decisão de segurança — o script roda com as permissões de quem instala.
 
 ```bash
-bun pm untrusted     # o que está bloqueado, e o comando de cada um
+bun pm untrusted # o que está bloqueado, e o comando de cada um
 ```
 
 ---

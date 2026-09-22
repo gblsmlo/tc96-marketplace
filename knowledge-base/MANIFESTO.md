@@ -12,6 +12,24 @@ Origem: `/home/gabs/Sync/Vaults/Notes` · o que entra: `knowledge-base/dominio.t
 
 | Arquivo | Origem no vault | sha256 |
 | --- | --- | --- |
+| `docs/bun-bundler-e-build.md` | `Docs/Bun - Bundler e Build.md` | `105ee93c0dbe` |
+| `docs/bun-dados-e-persistencia.md` | `Docs/Bun - Dados e Persistência.md` | `c14aaa909ba3` |
+| `docs/bun-gerenciador-de-pacotes.md` | `Docs/Bun - Gerenciador de Pacotes.md` | `8861a4ebf5fb` |
+| `docs/bun-http-e-servidor.md` | `Docs/Bun - HTTP e Servidor.md` | `4881ac0f2f35` |
+| `docs/bun-runtime-e-apis.md` | `Docs/Bun - Runtime e APIs.md` | `c3e9ba4de578` |
+| `docs/bun-shell-ffi-e-compat-node.md` | `Docs/Bun - Shell, FFI e Compat Node.md` | `e2ffe1dfa8cd` |
+| `docs/bun-testes-ciclo-de-vida-e-isolamento.md` | `Docs/Bun - Testes - Ciclo de Vida e Isolamento.md` | `861c522507fe` |
+| `docs/bun-testes-cobertura-e-ci.md` | `Docs/Bun - Testes - Cobertura e CI.md` | `093d80449f43` |
+| `docs/bun-testes-dom-e-componentes.md` | `Docs/Bun - Testes - DOM e Componentes.md` | `13573e70f954` |
+| `docs/bun-testes-escrita-e-assercoes.md` | `Docs/Bun - Testes - Escrita e Asserções.md` | `ad16857d3d78` |
+| `docs/bun-testes-execucao-e-configuracao.md` | `Docs/Bun - Testes - Execução e Configuração.md` | `a3e30c71fe25` |
+| `docs/bun-testes-mocks-e-tempo.md` | `Docs/Bun - Testes - Mocks e Tempo.md` | `deaac722c6a2` |
+| `docs/bun-testes.md` | `Docs/Bun - Testes.md` | `6e3d86500eeb` |
+| `docs/bun.md` | `Docs/Bun.md` | `dd93a6e634eb` |
+| `docs/elysia-lifecycle-e-plugins.md` | `Docs/Elysia - Lifecycle e Plugins.md` | `b42b6dfd93d0` |
+| `docs/elysia-roteamento-e-handler.md` | `Docs/Elysia - Roteamento e Handler.md` | `c6f7a491c2ce` |
+| `docs/elysia-schema-e-eden.md` | `Docs/Elysia - Schema e Eden.md` | `d67a2e1ba479` |
+| `docs/elysia.md` | `Docs/Elysia.md` | `62afa6ebfb27` |
 | `docs/playwright-acoes-e-auto-waiting.md` | `Docs/Playwright - Ações e Auto-waiting.md` | `ae113f294517` |
 | `docs/playwright-agents-cli-e-mcp.md` | `Docs/Playwright - Agents, CLI e MCP.md` | `e770573ba504` |
 | `docs/playwright-assertions.md` | `Docs/Playwright - Assertions.md` | `25425fef67e4` |

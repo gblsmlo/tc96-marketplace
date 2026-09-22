@@ -1,20 +1,25 @@
 ---
-name: bun-test-review
-description: Revisar uma suíte `bun test` existente e diagnosticar teste flaky, citando IDs `BUN-TEST-*`, com sete sondas executáveis para os defeitos que a leitura de código não encontra — use quando a tarefa for revisar os testes de um projeto, investigar "passa sozinho e falha na suíte", achar teste que nunca roda, conferir se o portão de cobertura e o de tipo realmente fecham, ou classificar severidade de achado em teste. Não use para escrever teste novo nem configurar suíte do zero, que é bun-test-build, nem para a forma da suíte entre níveis, que é test-review.
+nome: bun-test-review
+descricao: Revisar uma suíte `bun test` existente e diagnosticar teste flaky, citando IDs `BUN-TEST-*`, com sete sondas executáveis para os defeitos que a leitura de código não encontra — use quando a tarefa for revisar os testes de um projeto, investigar "passa sozinho e falha na suíte", achar teste que nunca roda, conferir se o portão de cobertura e o de tipo realmente fecham, ou classificar severidade de achado em teste. Não use para escrever teste novo nem configurar suíte do zero, que é bun-test-build, nem para a forma da suíte entre níveis, que é test-review.
+tipo: skill
+familia: bun
+fonte: "[Bun - Testes](../../../knowledge-base/docs/bun-testes.md)"
+docs:
+  - /oven-sh/bun
 tags:
   - skill
   - bun
   - testing
   - code-review
-fonte: "[[Bun - Testes]]"
 ---
 
 # bun-test-review
 
-> **Fonte desta skill:** [[Bun - Testes]] — a § 6 normativa (`BUN-TEST-01` a `BUN-TEST-29`), a § 6.1 com as sete regras de violação silenciosa, e a § 5.1 com a árvore de flaky.
+> **Fonte desta skill:** [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — a § 6 normativa (`BUN-TEST-01` a `BUN-TEST-29`), a § 6.1 com as sete regras de violação silenciosa, e a § 5.1 com a árvore de flaky.
 > Esta skill **não contém** o texto das regras — ela diz o que executar, em que ordem varrer, como classificar e como reportar.
+> **Superfície de API:** resolva pelo Context7 — `/oven-sh/bun`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
-Contrato que esta skill implementa: [[Bun - Testes]] § 7 ("Contrato de skill").
+Contrato que esta skill implementa: [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -24,11 +29,11 @@ Revisar suíte que **já existe** sob `bun test`, ou diagnosticar um teste que f
 
 | Situação | Vá para |
 | --- | --- |
-| escrever teste novo, configurar a suíte | [[bun-test-build]] |
-| a **forma** da suíte entre níveis (E2E × unidade × componente) | [[test-review]] |
-| a suíte como sistema: taxa de flakiness, credibilidade | [[test-diagnose]] |
-| teste E2E que falha | [[playwright-diagnose]] |
-| revisar o componente, não o teste dele | [[react-review]] |
+| escrever teste novo, configurar a suíte | `bun-test-build` |
+| a **forma** da suíte entre níveis (E2E × unidade × componente) | `test-review` |
+| a suíte como sistema: taxa de flakiness, credibilidade | `test-diagnose` |
+| teste E2E que falha | `playwright-diagnose` |
+| revisar o componente, não o teste dele | `react-review` |
 
 ---
 
@@ -36,10 +41,10 @@ Revisar suíte que **já existe** sob `bun test`, ou diagnosticar um teste que f
 
 | Ordem | Carregar | Por quê |
 | --- | --- | --- |
-| 1 | [[Bun - Testes]] § 2 | um `globalThis` compartilhado por todos os arquivos é o default |
-| 2 | [[Bun - Testes]] § 6 e § 6.1 | as regras, e as sete de violação silenciosa |
+| 1 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 2 | um `globalThis` compartilhado por todos os arquivos é o default |
+| 2 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 6 e § 6.1 | as regras, e as sete de violação silenciosa |
 | 3 | `references/mapa-de-ids.md` | antes de citar — e para achar **em qual satélite** mora o corpo |
-| 4 | [[Bun - Testes]] § 5.1 | a árvore de flaky |
+| 4 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 5.1 | a árvore de flaky |
 | 5 | o satélite do achado | só depois de ter a causa |
 
 **Nunca carregue os seis satélites.** E **nunca invente ID** — a família vai de `BUN-TEST-01` a `BUN-TEST-29`.
@@ -62,7 +67,7 @@ Referências desta skill:
 ## Passo 1 — Sondar antes de ler
 
 ```bash
-bash ~/.claude/skills/bun-test-review/scripts/sondas.sh --rodar
+bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-test-review/scripts/sondas.sh --rodar
 ```
 
 **Duas paradas obrigatórias:**
@@ -108,7 +113,7 @@ Formato de quatro partes, com `arquivo:linha` sempre, e **evidência da sonda co
 1. **Transforme sonda em portão** — `--randomize` no CI, `tsc --noEmit` como passo próprio, limiar em `lines`.
 2. **Ordene por severidade**, não por diretório.
 3. **Declare o que não foi verificado** — sonda que rodou sobre suíte já quebrada não é conclusiva.
-4. **Se a correção for escrever teste**, a fonte passa a ser [[bun-test-build]].
+4. **Se a correção for escrever teste**, a fonte passa a ser `bun-test-build`.
 
 ---
 
@@ -122,8 +127,8 @@ Revisão completa: `references/exemplo-revisao.md`.
 
 ## Relacionados
 
-- [[Bun - Testes]] — fonte desta skill: § 2, § 5.1, § 6, § 6.1, § 7
-- [[bun-test-build]] — a skill irmã
-- [[test-review]] · [[test-diagnose]] — a camada de conceito
-- [[playwright-review]] — a auditoria equivalente em E2E
-- [[react-review]] · [[drizzle-review]] — de onde vem o formato de achado
+- [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — fonte desta skill: § 2, § 5.1, § 6, § 6.1, § 7
+- `bun-test-build` — a skill irmã
+- `test-review` · `test-diagnose` — a camada de conceito
+- `playwright-review` — a auditoria equivalente em E2E
+- `react-review` · `drizzle-review` — de onde vem o formato de achado

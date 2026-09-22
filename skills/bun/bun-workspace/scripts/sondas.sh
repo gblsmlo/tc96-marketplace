@@ -6,6 +6,11 @@ set -uo pipefail
 RAIZ="${1:-.}"; cd "$RAIZ" 2>/dev/null || { echo "raiz inexistente" >&2; exit 1; }
 titulo() { printf '\n\033[1m== %s\033[0m  %s\n' "$1" "${2:-}"; }
 vazio() { echo "   (nada)"; }
+ou_vazio() {  # imprime a entrada; se vier vazia, a mensagem
+  local saida; saida="$(cat)"
+  if [ -n "$saida" ]; then printf '%s
+' "$saida"; else echo "   ${1:-(nada)}"; fi
+}
 
 titulo "S1. trustedDependencies SUBSTITUI a lista padrão" "BUN-PKG-04 — não estende"
 python3 - <<'PYJSON' 2>/dev/null || echo "   (python3 ausente: confira trustedDependencies à mão)"
@@ -33,19 +38,19 @@ echo "   $ bun pm untrusted"
 echo "   → BUN-PKG-03: PR que adiciona entrada ali traz essa saída no corpo"
 
 titulo "S2. Lockfile e CI" "BUN-PKG-02 — bun ci, não bun install"
-ls bun.lock bun.lockb 2>/dev/null | sed 's|^|   |' || echo "   SEM LOCKFILE versionado"
-rg -n --no-messages 'bun install|bun ci' .github/workflows/*.y*ml 2>/dev/null | sed 's|^|   |' || vazio
+ls bun.lock bun.lockb 2>/dev/null | sed 's|^|   |' | ou_vazio "SEM LOCKFILE versionado"
+rg -n --no-messages 'bun install|bun ci' .github/workflows/*.y*ml 2>/dev/null | sed 's|^|   |' | ou_vazio
 echo "   → \`bun install\` em CI pode atualizar o lockfile; \`bun ci\` falha se ele divergir"
 
 titulo "S3. Workspace declarado" "monorepo"
-rg -n --no-messages -A4 '"workspaces"' package.json 2>/dev/null | sed 's|^|   |' || echo "   não é workspace"
+rg -n --no-messages -A4 '"workspaces"' package.json 2>/dev/null | sed 's|^|   |' | ou_vazio "não é workspace"
 
 titulo "S4. Catalogs e overrides" "versão compartilhada, e resolução forçada"
-rg -n --no-messages -A4 '"catalog"|"catalogs"|"overrides"|"resolutions"' package.json 2>/dev/null | sed 's|^|   |' || vazio
+rg -n --no-messages -A4 '"catalog"|"catalogs"|"overrides"|"resolutions"' package.json 2>/dev/null | sed 's|^|   |' | ou_vazio
 echo "   → \"resolutions\" é do Yarn; no Bun a chave é \"overrides\""
 
 titulo "S5. Linker" "isolated × hoisted muda o que um pacote enxerga"
-rg -n --no-messages 'linker' bunfig.toml package.json 2>/dev/null | sed 's|^|   |' || echo "   não declarado — vale o default"
+rg -n --no-messages 'linker' bunfig.toml package.json 2>/dev/null | sed 's|^|   |' | ou_vazio "não declarado — vale o default"
 
 titulo "S6. Patch versionado" "bun patch"
 ls -d patches 2>/dev/null && ls patches | sed 's|^|   |' || echo "   sem patches/"
@@ -55,6 +60,6 @@ rg -n --no-messages 'bunx ' package.json .github/workflows/*.y*ml 2>/dev/null | 
 echo "   → bunx sem @versão executa o que estiver publicado no momento"
 
 titulo "S8. Versão do Bun pinada" "BUN-TEST-15 e paridade local × CI"
-rg -n --no-messages 'bun-version|BUN_VERSION|"packageManager"' .github/workflows/*.y*ml package.json .tool-versions 2>/dev/null | sed 's|^|   |' || echo "   NÃO PINADA"
+rg -n --no-messages 'bun-version|BUN_VERSION|"packageManager"' .github/workflows/*.y*ml package.json .tool-versions 2>/dev/null | sed 's|^|   |' | ou_vazio "NÃO PINADA"
 
 printf '\n\033[1m== Fim.\033[0m S1 é a que quebra o build inteiro — e o sintoma aparece em runtime, não na instalação.\n'

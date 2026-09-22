@@ -3,11 +3,14 @@
 # Cobre BUN-CORE-*, BUN-RT-*, BUN-PKG-* e BUN-SYS-*. A família BUN-TEST-* tem gerador
 # próprio, em bun-test-review/scripts/.
 set -euo pipefail
-VAULT="${1:-$HOME/Sync/Vaults/Notes}"
-DOCS="$VAULT/Docs"
+BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
+# O mapa é gerado na autoria e vai versionado no plugin: o destino é o repo,
+# a origem continua sendo o vault (passe outro caminho como $1 se preciso).
+PLUGIN="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+DOCS="$BASE/docs"
 
 scan() {
-  for f in "$DOCS"/Bun*.md; do
+  for f in "$DOCS"/bun*.md; do
     base="$(basename "$f" .md)"
     case "$base" in "Bun - Testes"*) continue;; esac
     awk -v sat="$base" -v hub="Bun" '
@@ -33,7 +36,7 @@ scan() {
 TMP="$(mktemp)"
 {
   echo "---"
-  echo "gerado-por: Skills/bun/bun-runtime/scripts/gerar-mapa-de-ids.sh"
+  echo "gerado-por: plugins/hermes-backend/skills/bun-runtime/scripts/gerar-mapa-de-ids.sh"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
@@ -41,7 +44,7 @@ TMP="$(mktemp)"
   echo
   echo "> Índice, não cópia. A família \`BUN-TEST-*\` **não** está aqui — ela tem gerador"
   echo "> próprio, em \`bun-test-review/scripts/gerar-mapa-de-ids.sh\`."
-  echo "> Regenerar com \`bash Skills/bun/bun-runtime/scripts/gerar-mapa-de-ids.sh\`."
+  echo "> Regenerar com \`bash plugins/hermes-backend/skills/bun-runtime/scripts/gerar-mapa-de-ids.sh\`."
   echo
   echo "| ID | Satélite | Seção |"
   echo "| --- | --- | --- |"
@@ -49,7 +52,7 @@ TMP="$(mktemp)"
 } > "$TMP"
 
 for s in runtime workspace migrate; do
-  cp "$TMP" "$VAULT/Skills/bun/bun-$s/references/mapa-de-ids.md"
+  cp "$TMP" "$PLUGIN/skills/bun-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 3 skills ($(grep -c '^| `BUN' "$VAULT/Skills/bun/bun-runtime/references/mapa-de-ids.md") IDs)"
+echo "gerado nas 3 skills ($(grep -c '^| `BUN' "$PLUGIN/skills/bun-runtime/references/mapa-de-ids.md") IDs)"

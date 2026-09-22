@@ -6,14 +6,14 @@ A árvore está na § 5 do hub. O resumo, e os quatro erros que ela evita:
 É conteúdo de arquivo (ler, escrever, stream)?
 ├── SIM → Bun.file / Bun.write
 └── NÃO — é operação de DIRETÓRIO (mkdir, readdir, rm, stat)
-    → node:fs                                   (BUN-RT-01)
+ → node:fs (BUN-RT-01)
 ```
 
 | Erro | Por quê | Regra |
 | --- | --- | --- |
-| tratar `Bun.file(path)` como leitura | a referência é **preguiçosa**; nada é lido até `.text()`/`.json()`/`.bytes()` | `BUN-RT-02` |
-| checar existência por `size === 0` | é também o tamanho de um arquivo que não existe — use `await file.exists()` | `BUN-RT-03` |
-| esquecer `.end()` num `FileSink` | o processo **não termina** | `BUN-RT-04` |
+| tratar `Bun.file(path)` como leitura | a referência é **preguiçosa**; nada é lido até `.text`/`.json`/`.bytes` | `BUN-RT-02` |
+| checar existência por `size === 0` | é também o tamanho de um arquivo que não existe — use `await file.exists` | `BUN-RT-03` |
+| esquecer `.end` num `FileSink` | o processo **não termina** | `BUN-RT-04` |
 | usar `Bun.file` para `readdir`/`mkdir` | ele só trata conteúdo | `BUN-RT-01` |
 
 `BUN-RT-03` é a mais insidiosa: o código parece funcionar, e o ramo de "arquivo ausente" nunca é exercitado.
@@ -28,7 +28,7 @@ A árvore está na § 5 do hub. O resumo, e os quatro erros que ela evita:
 | `BUN-RT-06` | variável de ambiente **validada na inicialização**; o tipo por interface merging não é garantia |
 | `BUN-RT-07` | `$` literal num valor de `.env` **precisa** de `\` — Bun expande variáveis por padrão |
 
-**`BUN-RT-06` é a que o stack já resolve:** validar com Zod na inicialização — [[Zod - Validação de Ambiente]] e [[Variáveis de ambiente validadas]]. Interface merging dá autocomplete e **não** garante que a variável existe; o tipo diz `string` e o valor é `undefined`.
+**`BUN-RT-06` é a que o stack já resolve:** validar com Zod na inicialização — `Zod - Validação de Ambiente` e. Interface merging dá autocomplete e **não** garante que a variável existe; o tipo diz `string` e o valor é `undefined`.
 
 **`BUN-RT-07` produz um bug que ninguém procura no lugar certo:** uma senha com `$` no `.env` chega truncada, e o sintoma é falha de autenticação.
 
@@ -38,9 +38,9 @@ A árvore está na § 5 do hub. O resumo, e os quatro erros que ela evita:
 
 ```
 Preciso rodar algo externo?
-├── comando com valor de runtime → Bun.$ com INTERPOLAÇÃO  (BUN-SYS-01)
-├── processo de longa duração    → Bun.spawn
-└── e NUNCA em handler HTTP      → Bun.spawnSync / *Sync de node:fs  (BUN-RT-08)
+├── comando com valor de runtime → Bun.$ com INTERPOLAÇÃO (BUN-SYS-01)
+├── processo de longa duração → Bun.spawn
+└── e NUNCA em handler HTTP → Bun.spawnSync / *Sync de node:fs (BUN-RT-08)
 ```
 
 | Regra | O que exige |

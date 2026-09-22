@@ -8,8 +8,8 @@
 **`bun install` puro em CI reescreve o lockfile e não falha** — então um `package.json` divergente do lock passa silenciosamente, e a build usa versões que ninguém revisou. É a violação com maior distância entre causa e sintoma desta família.
 
 ```bash
-bun ci                                # CI
-bun install --frozen-lockfile         # equivalente explícito
+bun ci # CI
+bun install --frozen-lockfile # equivalente explícito
 ```
 
 E `BUN-PKG-05`, que engana pelo nome: **`--production` não é limpeza.** Ele não remove `devDependencies` já presentes em `node_modules` — para isso é `bun pm`. Numa imagem em camadas, `--production` depois de um install completo não reduz nada.
@@ -27,7 +27,7 @@ E `BUN-PKG-05`, que engana pelo nome: **`--production` não é limpeza.** Ele n�
 
 **`BUN-PKG-08` falha em silêncio:** um `overrides` num pacote de workspace é simplesmente ignorado, e a versão que o autor queria fixar continua flutuando.
 
-**`BUN-PKG-12` é sobre direção de dependência:** dependência na raiz que um pacote importa faz o pacote funcionar por acidente — ele resolve pelo hoisting e quebra quando alguém o move ou publica. Ver [[Monorepo com Bun - estrutura e tooling]].
+**`BUN-PKG-12` é sobre direção de dependência:** dependência na raiz que um pacote importa faz o pacote funcionar por acidente — ele resolve pelo hoisting e quebra quando alguém o move ou publica. Ver `Monorepo com Bun - estrutura e tooling`.
 
 **`BUN-PKG-07`** é o par de `BUN-PKG-06`: catalog resolve a versão na instalação do workspace, e o protocolo `catalog:` não é entendido por quem instala do registry. `bun publish` reescreve; `npm publish` cru publica o protocolo literal.
 

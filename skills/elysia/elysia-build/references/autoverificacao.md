@@ -1,7 +1,7 @@
 # Autoverificação antes de entregar
 
 ```bash
-bash ~/.claude/skills/elysia-build/scripts/autoverificar.sh src
+bash ${CLAUDE_PLUGIN_ROOT}/skills/elysia-build/scripts/autoverificar.sh src
 ```
 
 | # | Confira | Regra |
@@ -30,16 +30,16 @@ Os itens que o script **não** decide, e por quê:
 | `ELYSIA-CORE-03` — erro esperado com `return status` | distinguir esperado de inesperado é semântica de domínio |
 | `ELYSIA-CORE-08` — erro de domínio com `code` próprio | idem |
 | `ELYSIA-CORE-06` — `set.headers` depois do `yield` | exige ordem dentro do generator |
-| `ELYSIA-CORE-01` — ordem de registro | a sonda S1 de [[elysia-diagnose]] mede isso por número de linha |
+| `ELYSIA-CORE-01` — ordem de registro | a sonda S1 de `elysia-diagnose` mede isso por número de linha |
 
 **Rode**, sempre:
 
 ```bash
-tsc --noEmit    # Bun transpila sem checar tipo — BUN-CORE-02
-bun test        # por app.handle, com await app.modules
+tsc --noEmit # Bun transpila sem checar tipo — BUN-CORE-02
+bun test # por app.handle, com await app.modules
 ```
 
 ## Relacionados
 
 - `antipadroes.md` — a grade com ID
-- [[elysia-diagnose]] — quando o hook não afeta a rota
+- `elysia-diagnose` — quando o hook não afeta a rota

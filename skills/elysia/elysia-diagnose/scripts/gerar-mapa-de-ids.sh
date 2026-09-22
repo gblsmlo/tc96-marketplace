@@ -3,12 +3,15 @@
 # Índice, não cópia: ID -> satélite -> seção.
 set -euo pipefail
 
-VAULT="${1:-$HOME/Sync/Vaults/Notes}"
-DOCS="$VAULT/Docs"
-HUB="$DOCS/Elysia.md"
+BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
+# O mapa é gerado na autoria e vai versionado no plugin: o destino é o repo,
+# a origem continua sendo o vault (passe outro caminho como $1 se preciso).
+PLUGIN="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+DOCS="$BASE/docs"
+HUB="$DOCS/elysia.md"
 
 scan() {
-  for f in "$DOCS"/Elysia*.md; do
+  for f in "$DOCS"/elysia*.md; do
     base="$(basename "$f" .md)"
     awk -v sat="$base" -v hub="Elysia" '
       /^## / { h2 = $0; sub(/^## /, "", h2) }
@@ -33,14 +36,14 @@ scan() {
 TMP="$(mktemp)"
 {
   echo "---"
-  echo "gerado-por: Skills/elysia/elysia-diagnose/scripts/gerar-mapa-de-ids.sh"
+  echo "gerado-por: plugins/hermes-backend/skills/elysia-diagnose/scripts/gerar-mapa-de-ids.sh"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
   echo "# Mapa de IDs \`ELYSIA-*\`"
   echo
   echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
-  echo "> Regenerar com \`bash Skills/elysia/elysia-diagnose/scripts/gerar-mapa-de-ids.sh\` —"
+  echo "> Regenerar com \`bash plugins/hermes-backend/skills/elysia-diagnose/scripts/gerar-mapa-de-ids.sh\` —"
   echo "> o mesmo arquivo é escrito nas três skills de Elysia."
   echo
   echo "## Apelidos parciais — a peculiaridade desta família"
@@ -67,7 +70,7 @@ TMP="$(mktemp)"
 } > "$TMP"
 
 for s in build schema diagnose; do
-  cp "$TMP" "$VAULT/Skills/elysia/elysia-$s/references/mapa-de-ids.md"
+  cp "$TMP" "$PLUGIN/skills/elysia-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 3 skills ($(grep -c '^| `ELYSIA' "$VAULT/Skills/elysia/elysia-build/references/mapa-de-ids.md") IDs)"
+echo "gerado nas 3 skills ($(grep -c '^| `ELYSIA' "$PLUGIN/skills/elysia-build/references/mapa-de-ids.md") IDs)"

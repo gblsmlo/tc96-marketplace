@@ -38,7 +38,7 @@ O nível de aceitação subdivide em **UAT** (o usuário valida), **alpha** (int
 
 **Teste de contrato.** Verifica o **formato** do que atravessa a fronteira entre dois sistemas, sem exercitar a lógica de nenhum. Na variante *consumer-driven* (Fowler), quem consome escreve testes que expressam suas expectativas, e quem provê os verifica contra a implementação — é o que permite equipes autônomas sem quebrar integração.
 
-> **No stack deste vault, boa parte do teste de contrato é feita pelo compilador.** Quando o cliente importa o tipo exportado do servidor (`Hono - Validação e RPC`, `Elysia - Schema e Eden`), uma mudança de shape quebra o build em vez de quebrar em runtime. Isso é teste de contrato estático, e é a forma mais barata que existe.
+> **No stack deste vault, boa parte do teste de contrato é feita pelo compilador.** Quando o cliente importa o tipo exportado do servidor (`Hono - Validação e RPC`, [Elysia - Schema e Eden](elysia-schema-e-eden.md)), uma mudança de shape quebra o build em vez de quebrar em runtime. Isso é teste de contrato estático, e é a forma mais barata que existe.
 >
 > **Mas ele não cobre tudo, e o limite é preciso:** o tipo garante o formato, não o **comportamento** — e não garante nada se a resposta real divergir do tipo declarado. É o mesmo achado das notas de backend: nem `hc` nem Eden lançam em status de erro, então o tipo diz "isto é um `Pedido`" enquanto o corpo carrega um erro.
 
@@ -148,9 +148,9 @@ A leitura combinada: teste de nível alto verifica **integração e caminho**, n
 
 | O que pode dar errado | Nível | Ferramenta |
 | --- | --- | --- |
-| cálculo, parse, validação, invariante | unidade (small, estreito) | `Bun - Testes` |
-| caso de uso + repositório real | integração (medium) | `Bun - Testes` + Postgres local |
-| shape que atravessa a fronteira | contrato — em boa parte estático | `Hono - Validação e RPC`, `Elysia - Schema e Eden` |
+| cálculo, parse, validação, invariante | unidade (small, estreito) | [Bun - Testes](bun-testes.md) |
+| caso de uso + repositório real | integração (medium) | [Bun - Testes](bun-testes.md) + Postgres local |
+| shape que atravessa a fronteira | contrato — em boa parte estático | `Hono - Validação e RPC`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 | estado visual de um componente | componente (estreito, medium) | [Storybook - Stories e Args](storybook-stories-e-args.md) |
 | jornada crítica com sessão e rota | E2E (amplo, large) | [Playwright](playwright.md) |
 | tipo e uso incorreto de API | estático | `TypeScript` |
@@ -221,8 +221,8 @@ Sem esse nível na cabeça, todo teste de estado visual vira E2E (`TS-NIV-07`).
 - [Teste de Software - Dublês de Teste](teste-de-software-dubles-de-teste.md) — o que substituir, decidido na § 3
 - [Teste de Software - Confiabilidade da Suíte](teste-de-software-confiabilidade-da-suite.md) — por que tamanho decide determinismo
 - [Teste de Software - Tipos e Atributos de Qualidade](teste-de-software-tipos-e-atributos-de-qualidade.md) — o eixo ortogonal ao nível
-- `Bun - Testes` · [Storybook - Stories e Args](storybook-stories-e-args.md) · [Playwright](playwright.md) · `TypeScript`
-- `Hono - Validação e RPC` · `Elysia - Schema e Eden` — contrato como tipo
+- [Bun - Testes](bun-testes.md) · [Storybook - Stories e Args](storybook-stories-e-args.md) · [Playwright](playwright.md) · `TypeScript`
+- `Hono - Validação e RPC` · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — contrato como tipo
 - — a mesma decisão, com caso concreto
 - — por que a junta é onde o defeito mora
 

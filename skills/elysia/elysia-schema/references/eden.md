@@ -5,8 +5,8 @@
 `ELYSIA-TYPE-08`: o retorno do Eden **tem `error` verificado antes de `data`** — `data` é `null` em **qualquer** status ≥ 300.
 
 ```ts
-const { data, error } = await api.faturas.get();
-if (error) throw error;      // sem isso, data é null e o código segue
+const { data, error } = await api.faturas.get;
+if (error) throw error; // sem isso, data é null e o código segue
 ```
 
 ### 6.2 O Eden não lança
@@ -22,10 +22,10 @@ if (error) throw error;      // sem isso, data é null e o código segue
 
 ```ts
 // ✓
-queryFn: async () => {
-  const { data, error } = await api.faturas.get();
-  if (error) throw error;
-  return data;
+queryFn: async => {
+ const { data, error } = await api.faturas.get;
+ if (error) throw error;
+ return data;
 }
 ```
 
@@ -33,7 +33,7 @@ queryFn: async () => {
 
 `ELYSIA-TYPE-10`: cliente Eden que alimenta cache do TanStack Query usa **`parseDate: false`**. `Date` é objeto novo a cada parse, então o structural sharing do Query falha e **todo componente re-renderiza** a cada refetch, mesmo sem mudança de dado.
 
-Sintoma: re-render inexplicável numa lista que não mudou. Ver [[TanStack Query - Cache e Frescor]].
+Sintoma: re-render inexplicável numa lista que não mudou. Ver `Docs/TanStack Query - Cache e Frescor.md`.
 
 ### 6.4 Paridade
 
@@ -59,6 +59,6 @@ Error Boundary e o estado de erro da UI.
 
 ## Relacionados
 
-- [[Elysia - Schema e Eden]] § 6 — o Eden completo
-- [[tanstack-query]] — o cache do outro lado da ponte
-- [[TanStack Query - Cache e Frescor]] — structural sharing
+- [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) § 6 — o Eden completo
+- `tanstack-query` — o cache do outro lado da ponte
+- `Docs/TanStack Query - Cache e Frescor.md` — structural sharing

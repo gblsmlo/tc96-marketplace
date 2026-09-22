@@ -126,7 +126,7 @@ E no stack, as ferramentas por nível:
 
 | Ferramenta | Mecanismo | Nota |
 | --- | --- | --- |
-| `bun test` | `mock`, `spyOn`, `mock.module` | `Bun - Testes - Mocks e Tempo` |
+| `bun test` | `mock`, `spyOn`, `mock.module` | [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) |
 | Storybook | `sb.mock` no preview, `fn`, MSW | [Storybook - Mocking](storybook-mocking.md) |
 | Playwright | `route`, `addInitScript`, `clock` | [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) |
 
@@ -145,7 +145,7 @@ Sem relógio controlado, todo teste que envolve tempo é ou lento (espera de ver
 | debounce de 300 ms | espera arbitrária | avançar timers |
 | `id` aleatório | asserção frouxa | semente fixa |
 
-`TS-DUB-05`. As APIs concretas: [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 7 e `Bun - Testes - Mocks e Tempo`.
+`TS-DUB-05`. As APIs concretas: [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 7 e [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md).
 
 ---
 
@@ -228,8 +228,8 @@ Produz o pior dos dois: o custo de infraestrutura do E2E, com a fidelidade de um
 - [Teste de Software](teste-de-software.md) — o hub; a § 4.2 é a árvore de substituição
 - [Teste de Software - Níveis e Escopo](teste-de-software-niveis-e-escopo.md) — a regra de substituir o que atravessa fronteira de processo
 - [Teste de Software - Confiabilidade da Suíte](teste-de-software-confiabilidade-da-suite.md) — determinismo, que o § 5 compra
-- `Bun - Testes - Mocks e Tempo` · [Storybook - Mocking](storybook-mocking.md) · [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) — as ferramentas por nível
-- `Hono - Validação e RPC` · `Elysia - Schema e Eden` — de onde o shape deve vir
+- [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) · [Storybook - Mocking](storybook-mocking.md) · [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) — as ferramentas por nível
+- `Hono - Validação e RPC` · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — de onde o shape deve vir
 - — o critério de quando mock não basta
 - `Drizzle - Schema e Migrations` — por que fake de repositório perde o que importa
 - — a fronteira que torna a substituição possível

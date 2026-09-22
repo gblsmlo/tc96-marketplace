@@ -3,11 +3,14 @@
 # Índice, não cópia: ID -> satélite -> seção.
 set -euo pipefail
 
-VAULT="${1:-$HOME/Sync/Vaults/Notes}"
-DOCS="$VAULT/Docs"
+BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
+# O mapa é gerado na autoria e vai versionado no plugin: o destino é o repo,
+# a origem continua sendo o vault (passe outro caminho como $1 se preciso).
+PLUGIN="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+DOCS="$BASE/docs"
 
 scan() {
-  for f in "$DOCS"/Bun\ -\ Testes*.md; do
+  for f in "$DOCS"/bun-testes*.md; do
     base="$(basename "$f" .md)"
     awk -v sat="$base" -v hub="Bun - Testes" '
       /^## / { h2 = $0; sub(/^## /, "", h2) }
@@ -32,7 +35,7 @@ scan() {
 TMP="$(mktemp)"
 {
   echo "---"
-  echo "gerado-por: Skills/bun/bun-test-review/scripts/gerar-mapa-de-ids.sh"
+  echo "gerado-por: plugins/hermes-backend/skills/bun-test-review/scripts/gerar-mapa-de-ids.sh"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
@@ -41,7 +44,7 @@ TMP="$(mktemp)"
   echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
   echo "> A família inteira mora na § 6 do hub \`Bun - Testes\`, e o corpo no satélite dono."
   echo "> Vai de \`BUN-TEST-01\` a \`BUN-TEST-29\` — **nunca invente ID fora dessa faixa**."
-  echo "> Regenerar com \`bash Skills/bun/bun-test-review/scripts/gerar-mapa-de-ids.sh\`."
+  echo "> Regenerar com \`bash plugins/hermes-backend/skills/bun-test-review/scripts/gerar-mapa-de-ids.sh\`."
   echo
   echo "| ID | Declarada em | Corpo no satélite | Seção do corpo |"
   echo "| --- | --- | --- | --- |"
@@ -61,7 +64,7 @@ TMP="$(mktemp)"
 } > "$TMP"
 
 for s in build review; do
-  cp "$TMP" "$VAULT/Skills/bun/bun-test-$s/references/mapa-de-ids.md"
+  cp "$TMP" "$PLUGIN/skills/bun-test-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 2 skills ($(grep -c '^| `BUN-TEST' "$VAULT/Skills/bun/bun-test-build/references/mapa-de-ids.md") IDs)"
+echo "gerado nas 2 skills ($(grep -c '^| `BUN-TEST' "$PLUGIN/skills/bun-test-build/references/mapa-de-ids.md") IDs)"

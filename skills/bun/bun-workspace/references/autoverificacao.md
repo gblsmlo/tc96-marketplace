@@ -1,7 +1,7 @@
 # Autoverificação antes de entregar
 
 ```bash
-bash ~/.claude/skills/bun-workspace/scripts/sondas.sh .
+bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-workspace/scripts/sondas.sh.
 ```
 
 | # | Confira | Regra |
@@ -22,10 +22,10 @@ bash ~/.claude/skills/bun-workspace/scripts/sondas.sh .
 **As sondas:**
 
 ```bash
-bun pm untrusted                 # o que está bloqueado, e por qual comando
-bun install --frozen-lockfile    # o lock corresponde ao package.json?
-bun pm ls                        # a árvore resolvida é a esperada?
-git status --short bun.lock      # o install reescreveu o lock?
+bun pm untrusted # o que está bloqueado, e por qual comando
+bun install --frozen-lockfile # o lock corresponde ao package.json?
+bun pm ls # a árvore resolvida é a esperada?
+git status --short bun.lock # o install reescreveu o lock?
 ```
 
 A última é a mais reveladora depois de qualquer mexida: se o `bun.lock` mudou e você não esperava, algum `package.json` estava divergente.
