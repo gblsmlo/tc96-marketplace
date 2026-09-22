@@ -11,7 +11,7 @@ set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="${1:-$RAIZ/dist/claude-code}"
-VERSAO="${VERSAO:-0.3.1}"   # 0.3.0: hermes -> twincam · 0.3.1: link do gerador dentro do plugin
+VERSAO="${VERSAO:-0.4.0}"   # 0.3: hermes -> twincam · 0.4: camada commands/
 
 rm -rf "$DEST"
 
