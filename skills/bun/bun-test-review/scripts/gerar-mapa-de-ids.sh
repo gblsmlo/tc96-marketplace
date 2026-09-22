@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Regenera references/mapa-de-ids.md das duas skills de teste sob Bun, de Docs/Bun - Testes*.
-# Índice, não cópia: ID -> satélite -> seção.
+# Regenerates references/mapa-de-ids.md for the two Bun test skills, from bun-testes*.
+# An index, not a copy: ID -> satellite -> section.
 set -euo pipefail
 
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
@@ -52,14 +52,14 @@ TMP="$(mktemp)"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
-  echo "# Mapa de IDs \`BUN-TEST-*\`"
+  echo "# ID map \`BUN-TEST-*\`"
   echo
-  echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
-  echo "> A família inteira mora na § 6 do hub \`Bun - Testes\`, e o corpo no satélite dono."
-  echo "> Vai de \`BUN-TEST-01\` a \`BUN-TEST-29\` — **nunca invente ID fora dessa faixa**."
-  echo "> Regenerar com \`bash skills/bun/bun-test-review/scripts/gerar-mapa-de-ids.sh\`."
+  echo "> An index, not a copy: it says **where** the rule is declared, never what it says."
+  echo "> The whole family lives in § 6 of the \`Bun - Testes\` hub, and the body in the owning satellite."
+  echo "> It runs from \`BUN-TEST-01\` to \`BUN-TEST-29\` — **never invent an ID outside that range**."
+  echo "> Regenerate with \`bash skills/bun/bun-test-review/scripts/gerar-mapa-de-ids.sh\`."
   echo
-  echo "| ID | Declarada em | Corpo no satélite | Seção do corpo |"
+  echo "| ID | Declared in | Body in the satellite | Section of the body |"
   echo "| --- | --- | --- | --- |"
   scan | sort -t$'\t' -k1,1V -k2,2n \
     | awk -F'\t' -v hub="bun-testes" '
@@ -73,7 +73,7 @@ TMP="$(mktemp)"
       for (i = 1; i <= k; i++) {
         id = ordem[i]
         printf "| `%s` | %s | %s | %s |\n", id, nota(decl[id]),
-          (id in corpo ? nota(corpo[id]) : "— (só no hub)"),
+          (id in corpo ? nota(corpo[id]) : "— (hub only)"),
           (id in sec ? sec[id] : "—")
       }
     }' <(titulos) -
@@ -83,4 +83,4 @@ for s in build review; do
   cp "$TMP" "$FAMILIA/bun-test-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 2 skills ($(grep -c '^| `BUN-TEST' "$FAMILIA/bun-test-build/references/mapa-de-ids.md") IDs)"
+echo "written into 2 skills ($(grep -c '^| `BUN-TEST' "$FAMILIA/bun-test-build/references/mapa-de-ids.md") IDs)"

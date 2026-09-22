@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Regenera references/mapa-de-ids.md a partir de Docs/TanStack Router*.
+# Regenerates references/mapa-de-ids.md from knowledge-base/docs/tanstack-router*.
 set -euo pipefail
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
 # The map is generated at authoring time and committed: source and destination are
@@ -51,16 +51,16 @@ scan() {
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
-  echo "# Mapa de IDs \`TSR-*\`"
+  echo "# ID map \`TSR-*\`"
   echo
-  echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
-  echo "> Regenerar com \`bash skills/tanstack/tanstack-router/scripts/gerar-mapa-de-ids.sh\`."
+  echo "> An index, not a copy: it says **where** the rule is declared, never what it says."
+  echo "> Regenerate with \`bash skills/tanstack/tanstack-router/scripts/gerar-mapa-de-ids.sh\`."
   echo
-  echo "| ID | Satélite | Seção |"
+  echo "| ID | Satellite | Section |"
   echo "| --- | --- | --- |"
   scan | sort -t$'\t' -k1,1 -k2,2n \
     | awk -F'\t' 'NR == FNR { titulo[$1] = $2; next }
                   !seen[$1]++ { printf "| `%s` | [%s](../../../../knowledge-base/docs/%s.md) | %s |\n", \
                                 $1, ($3 in titulo ? titulo[$3] : $3), $3, $4 }' <(titulos) -
 } > "$OUT"
-echo "gerado: $OUT ($(grep -c '^| `TSR' "$OUT") IDs)"
+echo "written: $OUT ($(grep -c '^| `TSR' "$OUT") IDs)"

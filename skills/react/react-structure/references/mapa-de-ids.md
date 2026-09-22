@@ -3,14 +3,14 @@ gerado-por: skills/react/react-structure/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-22
 ---
 
-# Mapa de IDs `REACT-ARCH-*`
+# ID map `REACT-ARCH-*`
 
-> Índice, não cópia: o texto de cada regra mora em `Pages/Feature-Based Architecture.md` § 4.
-> A coluna **Faz valer** diz se o lint pega ou se depende de revisão humana — é o que decide
-> se um achado se repete no próximo PR. Regenerar com:
+> An index, not a copy: each rule's text lives in [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 4.
+> The **Enforced by** column says whether lint catches it or it depends on human review — that is what decides
+> whether a finding comes back in the next PR. Regenerate with:
 > `bash skills/react/react-structure/scripts/gerar-mapa-de-ids.sh`
 
-| ID | Severidade | Faz valer | Seção do corpo estendido |
+| ID | Severity | Enforced by | Section of the extended body |
 | --- | --- | --- | --- |
 | `REACT-ARCH-01` | crítica | revisão | — |
 | `REACT-ARCH-02` | crítica | revisão | — |
@@ -25,5 +25,5 @@ gerado-em: 2026-09-22
 | `REACT-ARCH-11` | média | revisão | — |
 | `REACT-ARCH-12` | média | revisão | — |
 
-Linha com `—` na última coluna: a regra é declarada na tabela da § 4 e não tem
-subseção própria de corpo estendido. As demais têm, e é onde mora o raciocínio.
+A row with `—` in the last column: the rule is declared in the § 4 table and has no
+extended-body subsection of its own. The others do, and that is where the reasoning lives.

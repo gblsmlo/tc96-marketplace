@@ -3,12 +3,12 @@ gerado-por: skills/tanstack/tanstack-router/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-22
 ---
 
-# Mapa de IDs `TSR-*`
+# ID map `TSR-*`
 
-> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> Regenerar com `bash skills/tanstack/tanstack-router/scripts/gerar-mapa-de-ids.sh`.
+> An index, not a copy: it says **where** the rule is declared, never what it says.
+> Regenerate with `bash skills/tanstack/tanstack-router/scripts/gerar-mapa-de-ids.sh`.
 
-| ID | Satélite | Seção |
+| ID | Satellite | Section |
 | --- | --- | --- |
 | `TSR-CTX-01` | [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) | 1. Conceito: contexto é injeção de dependência tipada por rota |
 | `TSR-CTX-02` | [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) | 2. Definindo o contexto raiz |

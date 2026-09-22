@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Regenera references/mapa-de-ids.md das quatro skills de HTTP, a partir de Docs/HTTP*.
+# Regenerates references/mapa-de-ids.md for the four HTTP skills, from http*.
 set -euo pipefail
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
 # The map is generated at authoring time and committed: source and destination are
@@ -51,19 +51,19 @@ TMP="$(mktemp)"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
-  echo "# Mapa de IDs \`HTTP-*\`"
+  echo "# ID map \`HTTP-*\`"
   echo
-  echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
-  echo "> Regenerar com \`bash skills/http/http-review/scripts/gerar-mapa-de-ids.sh\` —"
-  echo "> o mesmo arquivo é escrito nas quatro skills de HTTP."
+  echo "> An index, not a copy: it says **where** the rule is declared, never what it says."
+  echo "> Regenerate with \`bash skills/http/http-review/scripts/gerar-mapa-de-ids.sh\` —"
+  echo "> the same file is written into all four HTTP skills."
   echo
-  echo "## Canônicos e apelidos"
+  echo "## Canonical IDs and aliases"
   echo
   awk '/^### 6\.2/,/^### Fam|^## 7/' "$HUB" | grep -vE '^### ' | cat -s | links || true
   echo
-  echo "## Índice completo"
+  echo "## Full index"
   echo
-  echo "| ID | Satélite | Seção |"
+  echo "| ID | Satellite | Section |"
   echo "| --- | --- | --- |"
   scan | sort -t$'\t' -k1,1 -k2,2n \
     | awk -F'\t' 'NR == FNR { titulo[$1] = $2; next }
@@ -75,4 +75,4 @@ for s in contract cache diagnose review; do
   cp "$TMP" "$FAMILIA/http-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 4 skills ($(grep -c '^| `HTTP' "$FAMILIA/http-review/references/mapa-de-ids.md") IDs)"
+echo "written into 4 skills ($(grep -c '^| `HTTP' "$FAMILIA/http-review/references/mapa-de-ids.md") IDs)"

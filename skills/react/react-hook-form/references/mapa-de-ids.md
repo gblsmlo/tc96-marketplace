@@ -3,16 +3,16 @@ gerado-por: skills/react/react-hook-form/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-22
 ---
 
-# Mapa de IDs `RHF-*`
+# ID map `RHF-*`
 
-> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> Regenerar com `bash skills/react/react-hook-form/scripts/gerar-mapa-de-ids.sh`.
+> An index, not a copy: it says **where** the rule is declared, never what it says.
+> Regenerate with `bash skills/react/react-hook-form/scripts/gerar-mapa-de-ids.sh`.
 
-## Citação entre docs
+## Citing across docs
 
-Dentro de uma revisão de formulário, o ID `RHF-*` basta. **Ao citar entre docs**
-— uma revisão de React que encosta em formulário, ou o contrário — use o canônico,
-senão quem for corrigir não acha o texto. Tabelas abaixo extraídas da § 6.2 do hub.
+Inside a form review, the `RHF-*` ID is enough. **When citing across docs**
+— a React review that touches a form, or the other way round — use the canonical one,
+or whoever fixes it will not find the text. The tables below come from § 6.2 of the hub.
 
 
 **Regra de citação:** dentro de uma revisão restrita a formulários, o ID `RHF-*` é suficiente e é o que as tabelas dos satélites usam. **Ao citar entre docs** — um review de React que encosta em formulário, ou vice-versa — use o canônico, senão o revisor não acha o texto.
@@ -45,9 +45,9 @@ E os pares internos do próprio RHF, onde a mesma norma aparece em mais de um lu
 | O componente encaminha `ref`? decide `register` × `Controller` | `RHF-CORE-03` | `RHF-CTRL-08` é a outra metade do mesmo predicado |
 
 
-## Índice completo
+## Full index
 
-| ID | Satélite | Seção |
+| ID | Satellite | Section |
 | --- | --- | --- |
 | `RHF-A11Y-01` | [React Hook Form - Registro e Controle](../../../../knowledge-base/docs/react-hook-form-registro-e-controle.md) | 5. Acessibilidade |
 | `RHF-A11Y-02` | [React Hook Form - Registro e Controle](../../../../knowledge-base/docs/react-hook-form-registro-e-controle.md) | 5. Acessibilidade |

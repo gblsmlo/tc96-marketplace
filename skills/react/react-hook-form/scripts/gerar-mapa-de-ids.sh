@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Regenera references/mapa-de-ids.md a partir de Docs/React Hook Form*.md.
-# Índice, não cópia: ID -> satélite -> seção. O texto da regra fica na nota.
+# Regenerates references/mapa-de-ids.md from knowledge-base/docs/react-hook-form*.
+# An index, not a copy: ID -> satellite -> section. The rule's text stays in the note.
 #
-# Prioridade quando o mesmo ID aparece em vários lugares:
-#   0  heading próprio      1  linha de tabela com MUST/NEVER no satélite
-#   2  a mesma no hub       3  menção em checklist ou tabela de diagnóstico
+# Priority when the same ID shows up in several places:
+#   0  its own heading      1  table row with MUST/NEVER in the satellite
+#   2  the same in the hub   3  mention in a checklist or diagnosis table
 set -euo pipefail
 
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
@@ -56,23 +56,23 @@ scan() {
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
-  echo "# Mapa de IDs \`RHF-*\`"
+  echo "# ID map \`RHF-*\`"
   echo
-  echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
-  echo "> Regenerar com \`bash skills/react/react-hook-form/scripts/gerar-mapa-de-ids.sh\`."
+  echo "> An index, not a copy: it says **where** the rule is declared, never what it says."
+  echo "> Regenerate with \`bash skills/react/react-hook-form/scripts/gerar-mapa-de-ids.sh\`."
   echo
-  echo "## Citação entre docs"
+  echo "## Citing across docs"
   echo
-  echo "Dentro de uma revisão de formulário, o ID \`RHF-*\` basta. **Ao citar entre docs**"
-  echo "— uma revisão de React que encosta em formulário, ou o contrário — use o canônico,"
-  echo "senão quem for corrigir não acha o texto. Tabelas abaixo extraídas da § 6.2 do hub."
+  echo "Inside a form review, the \`RHF-*\` ID is enough. **When citing across docs**"
+  echo "— a React review that touches a form, or the other way round — use the canonical one,"
+  echo "or whoever fixes it will not find the text. The tables below come from § 6.2 of the hub."
   echo
   awk '/^### 6\.2/,/^### Fam/' "$DOCS/react-hook-form.md" \
     | grep -vE '^#|^Dois princípios' | cat -s | links || true
   echo
-  echo "## Índice completo"
+  echo "## Full index"
   echo
-  echo "| ID | Satélite | Seção |"
+  echo "| ID | Satellite | Section |"
   echo "| --- | --- | --- |"
   scan | sort -t$'\t' -k1,1 -k2,2n \
     | awk -F'\t' 'NR == FNR { titulo[$1] = $2; next }
@@ -80,4 +80,4 @@ scan() {
                                 $1, ($3 in titulo ? titulo[$3] : $3), $3, $4 }' <(titulos) -
 } > "$OUT"
 
-echo "gerado: $OUT ($(grep -c '^| `RHF' "$OUT") IDs)"
+echo "written: $OUT ($(grep -c '^| `RHF' "$OUT") IDs)"

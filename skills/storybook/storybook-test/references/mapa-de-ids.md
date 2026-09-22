@@ -3,14 +3,14 @@ gerado-por: skills/storybook/storybook-setup/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-22
 ---
 
-# Mapa de IDs `SB-*`
+# ID map `SB-*`
 
-> Índice, não cópia. **`SB-TS-*` e `SB-RV-*` são mutuamente exclusivas:**
-> citar a família do caminho errado é achado inválido. Descubra o caminho primeiro —
+> An index, not a copy. **`SB-TS-*` and `SB-RV-*` are mutually exclusive:**
+> citing the wrong path's family is an invalid finding. Discover the path first —
 > `bash ${CLAUDE_PLUGIN_ROOT}/skills/storybook-setup/scripts/descobrir-caminho.sh`.
-> Regenerar com `bash skills/storybook/storybook-setup/scripts/gerar-mapa-de-ids.sh`.
+> Regenerate with `bash skills/storybook/storybook-setup/scripts/gerar-mapa-de-ids.sh`.
 
-## Canônicos, apelidos e os pares por caminho
+## Canonical IDs, aliases and the per-path pairs
 
 
 **Dois** princípios aparecem em mais de um satélite com IDs diferentes, porque cada satélite precisa se sustentar sozinho. **Para citar, use sempre o ID canônico** — o outro é apelido e não deve aparecer em revisão.
@@ -35,9 +35,9 @@ gerado-em: 2026-09-22
 > - `SB-CTX-06` é **condicional ao framework** e por isso mais ampla que `SB-TS-03`: sob `react-vite` ela continua valendo e simplesmente não é acionada.
 
 
-## Índice completo
+## Full index
 
-| ID | Satélite | Seção |
+| ID | Satellite | Section |
 | --- | --- | --- |
 | `SB-CFG-01` | [Storybook - Configuração e Builder](../../../../knowledge-base/docs/storybook-configuracao-e-builder.md) | 1. Os dois arquivos, e a divisão entre eles |
 | `SB-CFG-02` | [Storybook - Configuração e Builder](../../../../knowledge-base/docs/storybook-configuracao-e-builder.md) | 1. Os dois arquivos, e a divisão entre eles |

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Regenera references/mapa-de-ids.md das três skills de runtime/pacote/migração do Bun.
-# Cobre BUN-CORE-*, BUN-RT-*, BUN-PKG-* e BUN-SYS-*. A família BUN-TEST-* tem gerador
-# próprio, em bun-test-review/scripts/.
+# Regenerates references/mapa-de-ids.md for the three Bun runtime/package/migration skills.
+# Covers BUN-CORE-*, BUN-RT-*, BUN-PKG-* and BUN-SYS-*. The BUN-TEST-* family has a
+# generator of its own, in bun-test-review/scripts/.
 set -euo pipefail
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
 # The map is generated at authoring time and committed: source and destination are
@@ -53,13 +53,13 @@ TMP="$(mktemp)"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
-  echo "# Mapa de IDs \`BUN-CORE/RT/PKG/SYS-*\`"
+  echo "# ID map \`BUN-CORE/RT/PKG/SYS-*\`"
   echo
-  echo "> Índice, não cópia. A família \`BUN-TEST-*\` **não** está aqui — ela tem gerador"
-  echo "> próprio, em \`bun-test-review/scripts/gerar-mapa-de-ids.sh\`."
-  echo "> Regenerar com \`bash skills/bun/bun-runtime/scripts/gerar-mapa-de-ids.sh\`."
+  echo "> An index, not a copy. The \`BUN-TEST-*\` family is **not** here — it has a generator"
+  echo "> of its own, in \`bun-test-review/scripts/gerar-mapa-de-ids.sh\`."
+  echo "> Regenerate with \`bash skills/bun/bun-runtime/scripts/gerar-mapa-de-ids.sh\`."
   echo
-  echo "| ID | Satélite | Seção |"
+  echo "| ID | Satellite | Section |"
   echo "| --- | --- | --- |"
   scan | sort -t$'\t' -k1,1 -k2,2n \
     | awk -F'\t' 'NR == FNR { titulo[$1] = $2; next }
@@ -71,4 +71,4 @@ for s in runtime workspace migrate; do
   cp "$TMP" "$FAMILIA/bun-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 3 skills ($(grep -c '^| `BUN' "$FAMILIA/bun-runtime/references/mapa-de-ids.md") IDs)"
+echo "written into 3 skills ($(grep -c '^| `BUN' "$FAMILIA/bun-runtime/references/mapa-de-ids.md") IDs)"

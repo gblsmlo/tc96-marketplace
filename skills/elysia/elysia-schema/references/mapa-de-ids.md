@@ -3,13 +3,13 @@ gerado-por: skills/elysia/elysia-diagnose/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-22
 ---
 
-# Mapa de IDs `ELYSIA-*`
+# ID map `ELYSIA-*`
 
-> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> Regenerar com `bash skills/elysia/elysia-diagnose/scripts/gerar-mapa-de-ids.sh` —
-> o mesmo arquivo é escrito nas três skills de Elysia.
+> An index, not a copy: it says **where** the rule is declared, never what it says.
+> Regenerate with `bash skills/elysia/elysia-diagnose/scripts/gerar-mapa-de-ids.sh` —
+> the same file is written into all three Elysia skills.
 
-## Apelidos parciais — a peculiaridade desta família
+## Partial aliases — this family's quirk
 
 
 Três princípios aparecem em mais de uma família, porque cada satélite precisa se sustentar sozinho. **Para citar, use sempre o ID canônico** — o outro é apelido e não deve aparecer em revisão.
@@ -27,19 +27,19 @@ Os dois "só nesta cláusula" são deliberados, porque as duas regras não são 
 - **`ELYSIA-APP-03` continua citável por si** para o que é só dele: a legitimidade de valor literal e `file` no lugar do handler. Ao citar a desestruturação do contexto, use `ELYSIA-CORE-02`.
 
 
-## Índice completo
+## Full index
 
-| ID | Declarada em | Corpo no satélite | Seção do corpo |
+| ID | Declared in | Body in the satellite | Section of the body |
 | --- | --- | --- | --- |
-| `ELYSIA-APP-01` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (família ELYSIA-APP-*, só no hub) | — |
-| `ELYSIA-APP-02` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (família ELYSIA-APP-*, só no hub) | — |
-| `ELYSIA-APP-03` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (família ELYSIA-APP-*, só no hub) | — |
-| `ELYSIA-APP-04` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (família ELYSIA-APP-*, só no hub) | — |
-| `ELYSIA-APP-05` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (família ELYSIA-APP-*, só no hub) | — |
-| `ELYSIA-APP-06` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (família ELYSIA-APP-*, só no hub) | — |
-| `ELYSIA-APP-07` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (família ELYSIA-APP-*, só no hub) | — |
-| `ELYSIA-APP-08` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (família ELYSIA-APP-*, só no hub) | — |
-| `ELYSIA-APP-09` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (família ELYSIA-APP-*, só no hub) | — |
+| `ELYSIA-APP-01` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-02` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-03` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-04` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-05` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-06` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-07` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-08` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-09` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
 | `ELYSIA-CORE-01` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 2. Instância, rotas e precedência de caminho |
 | `ELYSIA-CORE-02` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 1. Conceito: o contexto é um acúmulo de decisões anteriores, não um objeto fixo |
 | `ELYSIA-CORE-03` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 5. Erros: taxonomia, retorno × exceção, e customização |

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Regenera references/mapa-de-ids.md das três skills de teste, a partir de Docs/Teste*.
-# Índice, não cópia: ID -> satélite -> seção. O texto da regra fica na nota.
+# Regenerates references/mapa-de-ids.md for the three test skills, from teste-de-software*.
+# An index, not a copy: ID -> satellite -> section. The rule's text stays in the note.
 #
-# Prioridade quando o mesmo ID aparece em vários lugares:
-#   0  heading próprio   1  tabela com MUST/NEVER no satélite
-#   2  a mesma no hub    3  menção em checklist ou tabela de antipadrão
+# Priority when the same ID shows up in several places:
+#   0  its own heading   1  table with MUST/NEVER in the satellite
+#   2  the same in the hub  3  mention in a checklist or antipattern table
 set -euo pipefail
 
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
@@ -57,19 +57,19 @@ TMP="$(mktemp)"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
-  echo "# Mapa de IDs \`TS-*\`"
+  echo "# ID map \`TS-*\`"
   echo
-  echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
-  echo "> Regenerar com \`bash skills/test/test-design/scripts/gerar-mapa-de-ids.sh\` —"
-  echo "> o mesmo arquivo é escrito nas três skills de teste."
+  echo "> An index, not a copy: it says **where** the rule is declared, never what it says."
+  echo "> Regenerate with \`bash skills/test/test-design/scripts/gerar-mapa-de-ids.sh\` —"
+  echo "> the same file is written into all three test skills."
   echo
-  echo "## Apelidos — citar é achado inválido"
+  echo "## Aliases — citing one is an invalid finding"
   echo
   awk '/^### 6\.2/,/^### Contagem/' "$HUB" | grep -vE '^#|^### Contagem' | cat -s | links || true
   echo
-  echo "## Índice completo"
+  echo "## Full index"
   echo
-  echo "| ID | Satélite | Seção |"
+  echo "| ID | Satellite | Section |"
   echo "| --- | --- | --- |"
   scan | sort -t$'\t' -k1,1 -k2,2n \
     | awk -F'\t' 'NR == FNR { titulo[$1] = $2; next }
@@ -81,4 +81,4 @@ for s in design review diagnose; do
   cp "$TMP" "$FAMILIA/test-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 3 skills ($(grep -c '^| `TS' "$FAMILIA/test-design/references/mapa-de-ids.md") IDs)"
+echo "written into 3 skills ($(grep -c '^| `TS' "$FAMILIA/test-design/references/mapa-de-ids.md") IDs)"

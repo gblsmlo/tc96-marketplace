@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Regenera references/mapa-de-ids.md das duas skills de React a partir de Docs/.
-# O mapa é um roteador: ID -> satélite -> seção. Ele nunca copia o texto da regra,
-# porque cópia de regra dentro de skill vira réplica desatualizada (Skills/README.md).
+# Regenerates references/mapa-de-ids.md for the two React skills, from the knowledge base.
+# The map is a router: ID -> satellite -> section. It never copies the rule's text,
+# because a rule copied into a skill becomes a stale replica (skills/README.md).
 #
-# Prioridade de declaração, quando o mesmo ID aparece em vários lugares:
-#   0  heading próprio (`### `REACT-X-NN` — título`) — é onde a regra é definida
-#   1  linha de tabela com MUST/NEVER num satélite
-#   2  linha de tabela com MUST/NEVER no hub React.js (redeclaração da § 6)
-#   3  menção em checklist ou tabela de varredura
+# Declaration priority, when the same ID shows up in several places:
+#   0  its own heading (`### `REACT-X-NN` — title`) — where the rule is defined
+#   1  table row with MUST/NEVER in a satellite
+#   2  table row with MUST/NEVER in the React.js hub (redeclaring § 6)
+#   3  mention in a checklist or scan table
 set -euo pipefail
 
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
@@ -61,21 +61,21 @@ scan() {
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
-  echo "# Mapa de IDs \`REACT-*\` — onde cada regra mora"
+  echo "# ID map \`REACT-*\` — where each rule lives"
   echo
-  echo "> Roteador, não cópia: este arquivo diz **onde** a regra está declarada, nunca o que ela diz."
-  echo "> Para o texto, abra o satélite. Regenerar com:"
+  echo "> A router, not a copy: this file says **where** the rule is declared, never what it says."
+  echo "> For the text, open the satellite. Regenerate with:"
   echo "> \`bash skills/react/react-review/scripts/gerar-mapa-de-ids.sh\`"
   echo
-  echo "## Apelidos — nunca citar em revisão"
+  echo "## Aliases — never cite one in a review"
   echo
-  echo "De \`Docs/React.js.md\` § 6.2. Cite sempre o canônico; apelido em achado é achado inválido."
+  echo "From [React.js](../../../../knowledge-base/docs/react-js.md) § 6.2. Always cite the canonical ID; an alias in a finding is an invalid finding."
   echo
   awk '/^### 6\.2/,/^### Fam/' "$DOCS/react-js.md" | grep -E '^\|' | links || true
   echo
-  echo "## Índice completo"
+  echo "## Full index"
   echo
-  echo "| ID | Satélite | Seção |"
+  echo "| ID | Satellite | Section |"
   echo "| --- | --- | --- |"
   scan | sort -t$'\t' -k1,1 -k2,2n \
     | awk -F'\t' 'NR == FNR { titulo[$1] = $2; next }
@@ -85,5 +85,5 @@ scan() {
 
 cp "$TMP" "$OUT_DEV"
 mv "$TMP" "$OUT_REV"
-echo "gerado: $OUT_DEV ($(grep -c '^| `REACT' "$OUT_DEV") IDs)"
-echo "gerado: $OUT_REV"
+echo "written: $OUT_DEV ($(grep -c '^| `REACT' "$OUT_DEV") IDs)"
+echo "written: $OUT_REV"

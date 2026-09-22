@@ -3,12 +3,12 @@ gerado-por: skills/tanstack/tanstack-query/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-22
 ---
 
-# Mapa de IDs `TSQ-*`
+# ID map `TSQ-*`
 
-> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> Regenerar com `bash skills/tanstack/tanstack-query/scripts/gerar-mapa-de-ids.sh`.
+> An index, not a copy: it says **where** the rule is declared, never what it says.
+> Regenerate with `bash skills/tanstack/tanstack-query/scripts/gerar-mapa-de-ids.sh`.
 
-| ID | Satélite | Seção |
+| ID | Satellite | Section |
 | --- | --- | --- |
 | `TSQ-BASE-01` | [TanStack Query - O que um Dev Frontend Precisa Saber](../../../../knowledge-base/docs/tanstack-query-o-que-um-dev-frontend-precisa-saber.md) | 2. Setup |
 | `TSQ-BASE-02` | [TanStack Query - O que um Dev Frontend Precisa Saber](../../../../knowledge-base/docs/tanstack-query-o-que-um-dev-frontend-precisa-saber.md) | 3. Query Keys — a identidade do dado no cache |

@@ -3,13 +3,13 @@ gerado-por: skills/test/test-design/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-22
 ---
 
-# Mapa de IDs `TS-*`
+# ID map `TS-*`
 
-> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> Regenerar com `bash skills/test/test-design/scripts/gerar-mapa-de-ids.sh` —
-> o mesmo arquivo é escrito nas três skills de teste.
+> An index, not a copy: it says **where** the rule is declared, never what it says.
+> Regenerate with `bash skills/test/test-design/scripts/gerar-mapa-de-ids.sh` —
+> the same file is written into all three test skills.
 
-## Apelidos — citar é achado inválido
+## Aliases — citing one is an invalid finding
 
 
 | Princípio | Canônico | Apelido |
@@ -21,9 +21,9 @@ gerado-em: 2026-09-22
 > **Duas que parecem apelido e não são:** `TS-CORE-05` (cobertura não é meta) e `TS-SUI-04` (teste de mutação mede o que cobertura não mede) — a primeira proíbe uma meta, a segunda prescreve a métrica substituta; um projeto pode cumprir uma e violar a outra. E `TS-CORE-07` (observar comportamento) não é `TS-SUI-06` (test smell de acoplamento a implementação): o primeiro é critério de escrita, o segundo é sintoma detectável numa suíte já existente.
 
 
-## Índice completo
+## Full index
 
-| ID | Satélite | Seção |
+| ID | Satellite | Section |
 | --- | --- | --- |
 | `TS-CORE-01` | [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) | 6. Regras normativas |
 | `TS-CORE-02` | [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) | 6. Regras normativas |

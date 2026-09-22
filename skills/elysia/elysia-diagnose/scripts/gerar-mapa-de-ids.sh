@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Regenera references/mapa-de-ids.md das três skills de Elysia, de Docs/Elysia*.
-# Índice, não cópia: ID -> satélite -> seção.
+# Regenerates references/mapa-de-ids.md for the three Elysia skills, from elysia*.
+# An index, not a copy: ID -> satellite -> section.
 set -euo pipefail
 
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
@@ -53,19 +53,19 @@ TMP="$(mktemp)"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
-  echo "# Mapa de IDs \`ELYSIA-*\`"
+  echo "# ID map \`ELYSIA-*\`"
   echo
-  echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
-  echo "> Regenerar com \`bash skills/elysia/elysia-diagnose/scripts/gerar-mapa-de-ids.sh\` —"
-  echo "> o mesmo arquivo é escrito nas três skills de Elysia."
+  echo "> An index, not a copy: it says **where** the rule is declared, never what it says."
+  echo "> Regenerate with \`bash skills/elysia/elysia-diagnose/scripts/gerar-mapa-de-ids.sh\` —"
+  echo "> the same file is written into all three Elysia skills."
   echo
-  echo "## Apelidos parciais — a peculiaridade desta família"
+  echo "## Partial aliases — this family's quirk"
   echo
   awk '/^### 6\.2/,/^### Famílias/' "$HUB" | grep -vE '^### ' | cat -s | links || true
   echo
-  echo "## Índice completo"
+  echo "## Full index"
   echo
-  echo "| ID | Declarada em | Corpo no satélite | Seção do corpo |"
+  echo "| ID | Declared in | Body in the satellite | Section of the body |"
   echo "| --- | --- | --- | --- |"
   scan | sort -t$'\t' -k1,1 -k2,2n \
     | awk -F'\t' -v hub="elysia" '
@@ -79,7 +79,7 @@ TMP="$(mktemp)"
       for (i = 1; i <= k; i++) {
         id = ordem[i]
         printf "| `%s` | %s | %s | %s |\n", id, nota(decl[id]),
-          (id in corpo ? nota(corpo[id]) : "— (família ELYSIA-APP-*, só no hub)"),
+          (id in corpo ? nota(corpo[id]) : "— (ELYSIA-APP-* family, hub only)"),
           (id in sec ? sec[id] : "—")
       }
     }' <(titulos) -
@@ -89,4 +89,4 @@ for s in build schema diagnose; do
   cp "$TMP" "$FAMILIA/elysia-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 3 skills ($(grep -c '^| `ELYSIA' "$FAMILIA/elysia-build/references/mapa-de-ids.md") IDs)"
+echo "written into 3 skills ($(grep -c '^| `ELYSIA' "$FAMILIA/elysia-build/references/mapa-de-ids.md") IDs)"

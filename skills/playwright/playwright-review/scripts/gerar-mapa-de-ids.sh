@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Regenera references/mapa-de-ids.md das três skills de Playwright, a partir de Docs/Playwright*.
-# Índice, não cópia: ID -> satélite -> seção. O texto da regra fica na nota.
+# Regenerates references/mapa-de-ids.md for the three Playwright skills, from playwright*.
+# An index, not a copy: ID -> satellite -> section. The rule's text stays in the note.
 set -euo pipefail
 
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
@@ -53,19 +53,19 @@ TMP="$(mktemp)"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
-  echo "# Mapa de IDs \`PW-*\`"
+  echo "# ID map \`PW-*\`"
   echo
-  echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
-  echo "> Regenerar com \`bash skills/playwright/playwright-review/scripts/gerar-mapa-de-ids.sh\` —"
-  echo "> o mesmo arquivo é escrito nas três skills de Playwright."
+  echo "> An index, not a copy: it says **where** the rule is declared, never what it says."
+  echo "> Regenerate with \`bash skills/playwright/playwright-review/scripts/gerar-mapa-de-ids.sh\` —"
+  echo "> the same file is written into all three Playwright skills."
   echo
-  echo "## Apelidos e quase-apelidos"
+  echo "## Aliases and near-aliases"
   echo
   awk '/^### 6\.2/,/^### Famílias/' "$HUB" | grep -vE '^### ' | cat -s | links || true
   echo
-  echo "## Índice completo"
+  echo "## Full index"
   echo
-  echo "| ID | Satélite | Seção |"
+  echo "| ID | Satellite | Section |"
   echo "| --- | --- | --- |"
   scan | sort -t$'\t' -k1,1 -k2,2n \
     | awk -F'\t' 'NR == FNR { titulo[$1] = $2; next }
@@ -77,4 +77,4 @@ for s in build review diagnose; do
   cp "$TMP" "$FAMILIA/playwright-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 3 skills ($(grep -c '^| `PW' "$FAMILIA/playwright-build/references/mapa-de-ids.md") IDs)"
+echo "written into 3 skills ($(grep -c '^| `PW' "$FAMILIA/playwright-build/references/mapa-de-ids.md") IDs)"

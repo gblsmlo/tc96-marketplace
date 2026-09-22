@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Regenera references/mapa-de-ids.md a partir de Pages/Feature-Based Architecture.md.
-# Índice, não cópia: ID -> severidade -> quem faz valer -> seção onde a regra mora.
+# Regenerates references/mapa-de-ids.md from knowledge-base/pages/feature-based-architecture.md.
+# An index, not a copy: ID -> severity -> what enforces it -> section where the rule lives.
 set -euo pipefail
 
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
@@ -10,7 +10,7 @@ FAMILIA="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 FONTE="$BASE/pages/feature-based-architecture.md"
 OUT="$FAMILIA/react-structure/references/mapa-de-ids.md"
 
-[ -f "$FONTE" ] || { echo "nota-fonte não encontrada: $FONTE" >&2; exit 1; }
+[ -f "$FONTE" ] || { echo "source note not found: $FONTE" >&2; exit 1; }
 
 {
   echo "---"
@@ -18,14 +18,14 @@ OUT="$FAMILIA/react-structure/references/mapa-de-ids.md"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
-  echo "# Mapa de IDs \`REACT-ARCH-*\`"
+  echo "# ID map \`REACT-ARCH-*\`"
   echo
-  echo "> Índice, não cópia: o texto de cada regra mora em \`Pages/Feature-Based Architecture.md\` § 4."
-  echo "> A coluna **Faz valer** diz se o lint pega ou se depende de revisão humana — é o que decide"
-  echo "> se um achado se repete no próximo PR. Regenerar com:"
+  echo "> An index, not a copy: each rule's text lives in [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 4."
+  echo "> The **Enforced by** column says whether lint catches it or it depends on human review — that is what decides"
+  echo "> whether a finding comes back in the next PR. Regenerate with:"
   echo "> \`bash skills/react/react-structure/scripts/gerar-mapa-de-ids.sh\`"
   echo
-  echo "| ID | Severidade | Faz valer | Seção do corpo estendido |"
+  echo "| ID | Severity | Enforced by | Section of the extended body |"
   echo "| --- | --- | --- | --- |"
   awk '
     /^#{2,4} / { h = $0; sub(/^#+ /, "", h) }
@@ -55,8 +55,8 @@ OUT="$FAMILIA/react-structure/references/mapa-de-ids.md"
     }
   ' "$FONTE"
   echo
-  echo "Linha com \`—\` na última coluna: a regra é declarada na tabela da § 4 e não tem"
-  echo "subseção própria de corpo estendido. As demais têm, e é onde mora o raciocínio."
+  echo "A row with \`—\` in the last column: the rule is declared in the § 4 table and has no"
+  echo "extended-body subsection of its own. The others do, and that is where the reasoning lives."
 } > "$OUT"
 
-echo "gerado: $OUT ($(grep -c '^| `REACT-ARCH' "$OUT") IDs)"
+echo "written: $OUT ($(grep -c '^| `REACT-ARCH' "$OUT") IDs)"

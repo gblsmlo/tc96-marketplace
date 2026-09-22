@@ -3,15 +3,15 @@ gerado-por: skills/drizzle/drizzle-review/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-22
 ---
 
-# Mapa de IDs `DRZ-*`
+# ID map `DRZ-*`
 
-> Índice, não cópia. `DRZ-SCHEMA-01` é **apelido** de `DRZ-CORE-02` e não aparece em revisão.
-> Regenerar com `bash skills/drizzle/drizzle-review/scripts/gerar-mapa-de-ids.sh`.
+> An index, not a copy. `DRZ-SCHEMA-01` is an **alias** of `DRZ-CORE-02` and never appears in a review.
+> Regenerate with `bash skills/drizzle/drizzle-review/scripts/gerar-mapa-de-ids.sh`.
 
-| ID | Declarada em | Corpo no satélite | Seção do corpo |
+| ID | Declared in | Body in the satellite | Section of the body |
 | --- | --- | --- | --- |
-| `DRZ-CORE-01` | [Drizzle ORM](../../../../knowledge-base/docs/drizzle-orm.md) | — (só no hub) | — |
-| `DRZ-CORE-02` | [Drizzle ORM](../../../../knowledge-base/docs/drizzle-orm.md) | — (só no hub) | — |
+| `DRZ-CORE-01` | [Drizzle ORM](../../../../knowledge-base/docs/drizzle-orm.md) | — (hub only) | — |
+| `DRZ-CORE-02` | [Drizzle ORM](../../../../knowledge-base/docs/drizzle-orm.md) | — (hub only) | — |
 | `DRZ-MIG-01` | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) | 2. `drizzle-kit`: o que cada comando faz |
 | `DRZ-MIG-02` | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) | 2. `drizzle-kit`: o que cada comando faz |
 | `DRZ-MIG-03` | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) | 2. `drizzle-kit`: o que cada comando faz |

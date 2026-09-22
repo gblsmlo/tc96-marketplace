@@ -3,13 +3,13 @@ gerado-por: skills/playwright/playwright-review/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-22
 ---
 
-# Mapa de IDs `PW-*`
+# ID map `PW-*`
 
-> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> Regenerar com `bash skills/playwright/playwright-review/scripts/gerar-mapa-de-ids.sh` —
-> o mesmo arquivo é escrito nas três skills de Playwright.
+> An index, not a copy: it says **where** the rule is declared, never what it says.
+> Regenerate with `bash skills/playwright/playwright-review/scripts/gerar-mapa-de-ids.sh` —
+> the same file is written into all three Playwright skills.
 
-## Apelidos e quase-apelidos
+## Aliases and near-aliases
 
 
 **Dois** princípios aparecem em mais de um satélite com IDs diferentes, porque cada satélite precisa se sustentar sozinho. **Para citar, use sempre o ID canônico** — o outro é apelido e não deve aparecer em revisão.
@@ -27,9 +27,9 @@ gerado-em: 2026-09-22
 > - `PW-SNAP-01` (preferir aria snapshot) não substitui `PW-SNAP-02` (paridade de SO): quem escolhe screenshot conscientemente ainda precisa da segunda.
 
 
-## Índice completo
+## Full index
 
-| ID | Satélite | Seção |
+| ID | Satellite | Section |
 | --- | --- | --- |
 | `PW-ACT-01` | [Playwright - Ações e Auto-waiting](../../../../knowledge-base/docs/playwright-acoes-e-auto-waiting.md) | 8. Regras — `PW-ACT-01` a `PW-ACT-07` |
 | `PW-ACT-02` | [Playwright - Ações e Auto-waiting](../../../../knowledge-base/docs/playwright-acoes-e-auto-waiting.md) | 8. Regras — `PW-ACT-01` a `PW-ACT-07` |

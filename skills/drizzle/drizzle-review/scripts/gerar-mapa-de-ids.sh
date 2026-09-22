@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Regenera references/mapa-de-ids.md a partir de Docs/Drizzle*.
+# Regenerates references/mapa-de-ids.md from knowledge-base/docs/drizzle*.
 set -euo pipefail
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
 # The map is generated at authoring time and committed: source and destination are
@@ -50,12 +50,12 @@ scan() {
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
-  echo "# Mapa de IDs \`DRZ-*\`"
+  echo "# ID map \`DRZ-*\`"
   echo
-  echo "> Índice, não cópia. \`DRZ-SCHEMA-01\` é **apelido** de \`DRZ-CORE-02\` e não aparece em revisão."
-  echo "> Regenerar com \`bash skills/drizzle/drizzle-review/scripts/gerar-mapa-de-ids.sh\`."
+  echo "> An index, not a copy. \`DRZ-SCHEMA-01\` is an **alias** of \`DRZ-CORE-02\` and never appears in a review."
+  echo "> Regenerate with \`bash skills/drizzle/drizzle-review/scripts/gerar-mapa-de-ids.sh\`."
   echo
-  echo "| ID | Declarada em | Corpo no satélite | Seção do corpo |"
+  echo "| ID | Declared in | Body in the satellite | Section of the body |"
   echo "| --- | --- | --- | --- |"
   scan | sort -t$'\t' -k1,1 -k2,2n \
     | awk -F'\t' -v hub="drizzle-orm" '
@@ -69,9 +69,9 @@ scan() {
       for (i = 1; i <= k; i++) {
         id = ordem[i]
         printf "| `%s` | %s | %s | %s |\n", id, nota(decl[id]),
-          (id in corpo ? nota(corpo[id]) : "— (só no hub)"),
+          (id in corpo ? nota(corpo[id]) : "— (hub only)"),
           (id in sec ? sec[id] : "—")
       }
     }' <(titulos) -
 } > "$OUT"
-echo "gerado: $OUT ($(grep -c '^| `DRZ' "$OUT") IDs)"
+echo "written: $OUT ($(grep -c '^| `DRZ' "$OUT") IDs)"

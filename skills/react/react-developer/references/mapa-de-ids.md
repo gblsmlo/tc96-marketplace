@@ -3,15 +3,15 @@ gerado-por: skills/react/react-review/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-22
 ---
 
-# Mapa de IDs `REACT-*` — onde cada regra mora
+# ID map `REACT-*` — where each rule lives
 
-> Roteador, não cópia: este arquivo diz **onde** a regra está declarada, nunca o que ela diz.
-> Para o texto, abra o satélite. Regenerar com:
+> A router, not a copy: this file says **where** the rule is declared, never what it says.
+> For the text, open the satellite. Regenerate with:
 > `bash skills/react/react-review/scripts/gerar-mapa-de-ids.sh`
 
-## Apelidos — nunca citar em revisão
+## Aliases — never cite one in a review
 
-De `Docs/React.js.md` § 6.2. Cite sempre o canônico; apelido em achado é achado inválido.
+From [React.js](../../../../knowledge-base/docs/react-js.md) § 6.2. Always cite the canonical ID; an alias in a finding is an invalid finding.
 
 | Princípio | Canônico | Apelidos |
 | --- | --- | --- |
@@ -21,9 +21,9 @@ De `Docs/React.js.md` § 6.2. Cite sempre o canônico; apelido em achado é acha
 | `'use client'` o mais baixo possível | `REACT-RSC-03` | `REACT-PAT-08` |
 | Props e estado nunca são mutados | `REACT-PURE-03` | `REACT-STATE-02` |
 
-## Índice completo
+## Full index
 
-| ID | Satélite | Seção |
+| ID | Satellite | Section |
 | --- | --- | --- |
 | `REACT-ASYNC-01` | [React - Suspense e Assincronia](../../../../knowledge-base/docs/react-suspense-e-assincronia.md) | 1. Conceito: espera como posição na árvore |
 | `REACT-ASYNC-02` | [React - Suspense e Assincronia](../../../../knowledge-base/docs/react-suspense-e-assincronia.md) | 1. Conceito: espera como posição na árvore |

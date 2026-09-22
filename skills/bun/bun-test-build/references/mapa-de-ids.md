@@ -3,14 +3,14 @@ gerado-por: skills/bun/bun-test-review/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-22
 ---
 
-# Mapa de IDs `BUN-TEST-*`
+# ID map `BUN-TEST-*`
 
-> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> A família inteira mora na § 6 do hub `Bun - Testes`, e o corpo no satélite dono.
-> Vai de `BUN-TEST-01` a `BUN-TEST-29` — **nunca invente ID fora dessa faixa**.
-> Regenerar com `bash skills/bun/bun-test-review/scripts/gerar-mapa-de-ids.sh`.
+> An index, not a copy: it says **where** the rule is declared, never what it says.
+> The whole family lives in § 6 of the `Bun - Testes` hub, and the body in the owning satellite.
+> It runs from `BUN-TEST-01` to `BUN-TEST-29` — **never invent an ID outside that range**.
+> Regenerate with `bash skills/bun/bun-test-review/scripts/gerar-mapa-de-ids.sh`.
 
-| ID | Declarada em | Corpo no satélite | Seção do corpo |
+| ID | Declared in | Body in the satellite | Section of the body |
 | --- | --- | --- | --- |
 | `BUN-TEST-01` | [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) | [Bun - Testes - Execução e Configuração](../../../../knowledge-base/docs/bun-testes-execucao-e-configuracao.md) | 2. Descoberta: o que entra na suíte |
 | `BUN-TEST-02` | [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) | [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) | 3. As três limpezas, e o que cada uma não faz |

@@ -3,13 +3,13 @@ gerado-por: skills/http/http-review/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-22
 ---
 
-# Mapa de IDs `HTTP-*`
+# ID map `HTTP-*`
 
-> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz.
-> Regenerar com `bash skills/http/http-review/scripts/gerar-mapa-de-ids.sh` —
-> o mesmo arquivo é escrito nas quatro skills de HTTP.
+> An index, not a copy: it says **where** the rule is declared, never what it says.
+> Regenerate with `bash skills/http/http-review/scripts/gerar-mapa-de-ids.sh` —
+> the same file is written into all four HTTP skills.
 
-## Canônicos e apelidos
+## Canonical IDs and aliases
 
 
 Dois princípios aparecem em mais de um arquivo, com IDs diferentes, porque cada satélite precisa se sustentar sozinho. **Para citar, use o ID canônico.**
@@ -31,9 +31,9 @@ Dois princípios aparecem em mais de um arquivo, com IDs diferentes, porque cada
 O mesmo vale para `ETag` forte: `HTTP-CACHE-09` é o canônico, e `HTTP-NEG-12` é a aplicação dele em retomada de download.
 
 
-## Índice completo
+## Full index
 
-| ID | Satélite | Seção |
+| ID | Satellite | Section |
 | --- | --- | --- |
 | `HTTP-CACHE-01` | [HTTP - Cache e Requisições Condicionais](../../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md) | 3. `Cache-Control`, diretiva a diretiva, no que decide código |
 | `HTTP-CACHE-02` | [HTTP - Cache e Requisições Condicionais](../../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md) | 3. `Cache-Control`, diretiva a diretiva, no que decide código |

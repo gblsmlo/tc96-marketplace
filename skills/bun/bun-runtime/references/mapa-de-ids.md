@@ -3,13 +3,13 @@ gerado-por: skills/bun/bun-runtime/scripts/gerar-mapa-de-ids.sh
 gerado-em: 2026-09-22
 ---
 
-# Mapa de IDs `BUN-CORE/RT/PKG/SYS-*`
+# ID map `BUN-CORE/RT/PKG/SYS-*`
 
-> Índice, não cópia. A família `BUN-TEST-*` **não** está aqui — ela tem gerador
-> próprio, em `bun-test-review/scripts/gerar-mapa-de-ids.sh`.
-> Regenerar com `bash skills/bun/bun-runtime/scripts/gerar-mapa-de-ids.sh`.
+> An index, not a copy. The `BUN-TEST-*` family is **not** here — it has a generator
+> of its own, in `bun-test-review/scripts/gerar-mapa-de-ids.sh`.
+> Regenerate with `bash skills/bun/bun-runtime/scripts/gerar-mapa-de-ids.sh`.
 
-| ID | Satélite | Seção |
+| ID | Satellite | Section |
 | --- | --- | --- |
 | `BUN-CORE-01` | [Bun](../../../../knowledge-base/docs/bun.md) | 6. Regras normativas |
 | `BUN-CORE-02` | [Bun](../../../../knowledge-base/docs/bun.md) | 6. Regras normativas |

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Regenera references/mapa-de-ids.md das três skills de Storybook, de Docs/Storybook*.
+# Regenerates references/mapa-de-ids.md for the three Storybook skills, from storybook*.
 set -euo pipefail
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
 # The map is generated at authoring time and committed: source and destination are
@@ -51,20 +51,20 @@ TMP="$(mktemp)"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
-  echo "# Mapa de IDs \`SB-*\`"
+  echo "# ID map \`SB-*\`"
   echo
-  echo "> Índice, não cópia. **\`SB-TS-*\` e \`SB-RV-*\` são mutuamente exclusivas:**"
-  echo "> citar a família do caminho errado é achado inválido. Descubra o caminho primeiro —"
+  echo "> An index, not a copy. **\`SB-TS-*\` and \`SB-RV-*\` are mutually exclusive:**"
+  echo "> citing the wrong path's family is an invalid finding. Discover the path first —"
   echo "> \`bash \${CLAUDE_PLUGIN_ROOT}/skills/storybook-setup/scripts/descobrir-caminho.sh\`."
-  echo "> Regenerar com \`bash skills/storybook/storybook-setup/scripts/gerar-mapa-de-ids.sh\`."
+  echo "> Regenerate with \`bash skills/storybook/storybook-setup/scripts/gerar-mapa-de-ids.sh\`."
   echo
-  echo "## Canônicos, apelidos e os pares por caminho"
+  echo "## Canonical IDs, aliases and the per-path pairs"
   echo
   awk '/^### 6\.2/,/^### Famílias/' "$HUB" | grep -vE '^### ' | cat -s | links || true
   echo
-  echo "## Índice completo"
+  echo "## Full index"
   echo
-  echo "| ID | Satélite | Seção |"
+  echo "| ID | Satellite | Section |"
   echo "| --- | --- | --- |"
   scan | sort -t$'\t' -k1,1 -k2,2n \
     | awk -F'\t' 'NR == FNR { titulo[$1] = $2; next }
@@ -76,4 +76,4 @@ for s in setup story test; do
   cp "$TMP" "$FAMILIA/storybook-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 3 skills ($(grep -c '^| `SB' "$FAMILIA/storybook-setup/references/mapa-de-ids.md") IDs)"
+echo "written into 3 skills ($(grep -c '^| `SB' "$FAMILIA/storybook-setup/references/mapa-de-ids.md") IDs)"
