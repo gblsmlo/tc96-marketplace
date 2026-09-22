@@ -108,7 +108,7 @@ Keep [React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.
 - state is a snapshot, not a variable;
 - an Effect is synchronization with an external system, not "code that runs afterwards".
 
-Vault convention: **every example in the docs is TypeScript**. No rule depends on types, but write TS by default.
+House convention: **every example in the docs is TypeScript**. No rule depends on types, but write TS by default.
 
 ---
 
@@ -171,7 +171,7 @@ Before writing the raw primitive, confirm whose layer it is. [React.js](../../..
 Three boundaries that tend to be crossed in the wrong direction:
 
 - **Testing: concept before tool.** Deciding *the level* is `test-design`; writing is the tool's skill. Skipping the first produces E2E by default — the highest-cost antipattern in this stack.
-- **Vitest has no skill of its own in this vault.** It is the *runner* of `@storybook/addon-vitest`, executing a story in a real browser through Playwright ([Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4; the cut between Vitest 3 and 4 is in § 4.2). A unit test outside Storybook is `bun test`.
+- **Vitest has no skill of its own here.** It is the *runner* of `@storybook/addon-vitest`, executing a story in a real browser through Playwright ([Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4; the cut between Vitest 3 and 4 is in § 4.2). A unit test outside Storybook is `bun test`.
 - **Optimism has two owners.** If the data lives in Query's cache, the optimism belongs to the mutation, with a snapshot and a rollback; `useOptimistic` is for what does not live in a cache. Stacking the two violates `REACT-FORM-07`.
 
 ---

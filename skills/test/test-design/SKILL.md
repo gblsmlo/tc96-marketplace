@@ -1,6 +1,6 @@
 ---
 nome: test-design
-descricao: Decide which level a test belongs at and derive the cases before writing a line, citing `TS-*` IDs from the vault docs — use when the task is answering "what test do I write for this?", choosing between unit/integration/component/contract/E2E, setting the suite proportion for a module, deriving cases from an input (range, boundary, combination, state), or deciding what to replace with a double. Do not use to write the test itself — once the level is decided, the source becomes playwright-build or bun-test-build. Do not use to audit an existing suite, which is test-review, nor for an unstable suite, which is test-diagnose.
+descricao: Decide which level a test belongs at and derive the cases before writing a line, citing `TS-*` IDs from the knowledge base — use when the task is answering "what test do I write for this?", choosing between unit/integration/component/contract/E2E, setting the suite proportion for a module, deriving cases from an input (range, boundary, combination, state), or deciding what to replace with a double. Do not use to write the test itself — once the level is decided, the source becomes playwright-build or bun-test-build. Do not use to audit an existing suite, which is test-review, nor for an unstable suite, which is test-diagnose.
 tipo: skill
 familia: test
 idioma: en

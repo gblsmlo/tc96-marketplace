@@ -1,6 +1,6 @@
 ---
 nome: playwright-build
-descricao: Write a new E2E test with Playwright — locators in priority order, web-first assertions, structure, and an executable 12-item self-check before delivering, citing `PW-*` IDs from the vault docs — use when the task is writing or editing a `*.spec.ts`, covering a user journey, building a page object or fixture, preparing state through the API, or replacing network, clock and session in a test. Do not use to review an existing suite, which is playwright-review, to diagnose a test that already fails, which is playwright-diagnose, nor to decide whether the test should be E2E — that decision comes earlier, in test-design.
+descricao: Write a new E2E test with Playwright — locators in priority order, web-first assertions, structure, and an executable 12-item self-check before delivering, citing `PW-*` IDs from the knowledge base — use when the task is writing or editing a `*.spec.ts`, covering a user journey, building a page object or fixture, preparing state through the API, or replacing network, clock and session in a test. Do not use to review an existing suite, which is playwright-review, to diagnose a test that already fails, which is playwright-diagnose, nor to decide whether the test should be E2E — that decision comes earlier, in test-design.
 tipo: skill
 familia: playwright
 idioma: en

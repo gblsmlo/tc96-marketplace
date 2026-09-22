@@ -1,6 +1,6 @@
 # The tree, and the bisection
 
-> Steps 3 and 4. The full tree is § 5.2 of the [Playwright](../../../../knowledge-base/docs/playwright.md) hub — the most detailed one in the vault.
+> Steps 3 and 4. The full tree is § 5.2 of the [Playwright](../../../../knowledge-base/docs/playwright.md) hub — the most detailed one in the knowledge base.
 
 ---
 

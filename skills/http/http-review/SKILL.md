@@ -1,6 +1,6 @@
 ---
 nome: http-review
-descricao: Audit an existing API's HTTP contract against the normative rules in the vault docs, citing `HTTP-*` IDs, with eight executable `curl` probes for what reading code does not show — use when the task is reviewing a service's routes or a PR's, checking whether statuses and headers are right, finding a write without concurrency protection, verifying whether CORS was designed or improvised, or checking RFC citations in an ADR or documentation. Do not use to design a new route, which is http-contract, for freshness policy, which is http-cache, nor for one concrete failure under investigation, which is http-diagnose.
+descricao: Audit an existing API's HTTP contract against the normative rules in the knowledge base, citing `HTTP-*` IDs, with eight executable `curl` probes for what reading code does not show — use when the task is reviewing a service's routes or a PR's, checking whether statuses and headers are right, finding a write without concurrency protection, verifying whether CORS was designed or improvised, or checking RFC citations in an ADR or documentation. Do not use to design a new route, which is http-contract, for freshness policy, which is http-cache, nor for one concrete failure under investigation, which is http-diagnose.
 tipo: skill
 familia: http
 idioma: en

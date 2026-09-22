@@ -1,6 +1,6 @@
 ---
 nome: bun-test-build
-descricao: Write a new test under `bun test` and configure a project's suite, following the decision trees and the `BUN-TEST-*` rules from the vault docs, with an executable self-check — use when the task is writing a unit test, replacing a dependency with a mock or double, controlling date and time, testing a React component, configuring `bunfig.toml` and preloads, or assembling the CI command. Do not use to review an existing suite or diagnose flakiness, which is bun-test-review, and do not use to decide *what* to test and at which level, which is test-design.
+descricao: Write a new test under `bun test` and configure a project's suite, following the decision trees and the `BUN-TEST-*` rules from the knowledge base, with an executable self-check — use when the task is writing a unit test, replacing a dependency with a mock or double, controlling date and time, testing a React component, configuring `bunfig.toml` and preloads, or assembling the CI command. Do not use to review an existing suite or diagnose flakiness, which is bun-test-review, and do not use to decide *what* to test and at which level, which is test-design.
 tipo: skill
 familia: bun
 idioma: en

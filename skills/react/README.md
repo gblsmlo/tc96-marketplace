@@ -1,7 +1,7 @@
 # React skills — a grouped family
 
 Four skills, one directory each, with their own `references/` and `scripts/`. It is the first
-group in the vault organized as a **package** rather than as loose files: the common anatomy
+family here organized as a **package** rather than as loose files: the common anatomy
 described in [Skills index](../README.md) still holds, and the only change is that the
 supporting material got its own files instead of bloating the `SKILL.md`.
 
@@ -121,14 +121,14 @@ Two boundaries that tend to be crossed in the wrong direction:
 
 - **Testing: concept before tool.** *At which level* is `test-design`; *how to write it*
  is the tool's skill. Skipping the first produces E2E by default.
-- **Vitest is not a skill in this vault.** It appears as the runner of `@storybook/addon-vitest`,
+- **Vitest is not a skill here.** It appears as the runner of `@storybook/addon-vitest`,
  running a story in a real browser through Playwright ([Storybook - Testes e Interações](../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4;
  the cut between Vitest 3 and 4 in § 4.2). A unit test outside Storybook is `bun test`.
 
 ## Validation
 
 All four pass `skill-validator check` with **0 errors**. Two warnings remain per skill,
-`unrecognized field: "tags"` and `unrecognized field: "fonte"` — they are this vault's convention
+`unrecognized field: "tags"` and `unrecognized field: "fonte"` — they are this project's convention
 (the common anatomy requires `fonte:` in the frontmatter so that a docs update propagates) and
 they stay by decision, not by oversight.
 
