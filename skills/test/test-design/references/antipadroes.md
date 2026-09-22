@@ -1,34 +1,34 @@
-# Antipadrões que esta skill evita, com ID
+# Antipatterns this skill prevents, with IDs
 
-> Grade de conferência do Passo 6. Cada linha é uma decisão que, tomada por hábito,
-> produz teste que custa e não paga. O texto da regra mora no satélite.
+> Step 6's check grid. Every row is a decision that, taken out of habit,
+> produces a test that costs and does not pay. The text of the rule lives in the satellite.
 
-| Antipadrão | ID | Satélite |
+| Antipattern | ID | Satellite |
 | --- | --- | --- |
-| Escrever teste sem saber o que pode dar errado | `TS-CORE-01` | [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) |
-| E2E como default para qualquer coisa | `TS-CORE-02` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
-| Regra de negócio verificada em E2E | `TS-NIV-02` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
-| Mesma lógica verificada em três níveis | `TS-CORE-02` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
-| Forma invertida da suíte (*ice-cream cone*) | `TS-NIV-04` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
-| Proporção tratada como política global do repositório | `TS-NIV-08` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
-| Substituir colaborador interno que é código próprio | `TS-NIV-05` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
-| Confiar só no tipo compartilhado como teste de contrato | `TS-NIV-09` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
-| Não nomear o nível de componente (tudo vira E2E) | `TS-NIV-07` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
-| Testar só o caminho feliz | `TS-TIPO-02` | [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md) |
-| Um valor inventado no meio da faixa | `TS-TEC-01` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
-| Só as classes válidas | `TS-TEC-02` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
-| Lista sempre com três itens, nunca vazia | `TS-TEC-03` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
-| Só transições válidas de estado | `TS-TEC-04` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
-| Combinação reduzida por escolha arbitrária | `TS-TEC-09` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
-| Substituir o que o teste vem provar | `TS-CORE-03` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
-| Chamar todo dublê de "mock" | `TS-DUB-01` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
-| Fake sem fidelidade declarada | `TS-DUB-03` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
-| Verificação de comportamento por default | `TS-DUB-04` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
-| Esperar o tempo real passar | `TS-DUB-05` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
-| Fake de repositório no lugar de banco controlado | `TS-DUB-08` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
-| Requisito não funcional sem número | `TS-TIPO-05` | [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md) |
-| Média em vez de percentil | `TS-TIPO-06` | [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md) |
-| Não contar a camada estática na estratégia | `TS-TIPO-08` | [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md) |
+| Writing a test without knowing what can go wrong | `TS-CORE-01` | [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) |
+| E2E as the default for anything | `TS-CORE-02` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
+| Business rule verified in E2E | `TS-NIV-02` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
+| The same logic verified at three levels | `TS-CORE-02` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
+| Inverted suite shape (*ice-cream cone*) | `TS-NIV-04` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
+| Proportion treated as a repository-wide policy | `TS-NIV-08` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
+| Replacing an internal collaborator that is your own code | `TS-NIV-05` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
+| Relying on the shared type alone as a contract test | `TS-NIV-09` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
+| Not naming the component level (everything becomes E2E) | `TS-NIV-07` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
+| Testing only the happy path | `TS-TIPO-02` | [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md) |
+| One made-up value in the middle of the range | `TS-TEC-01` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
+| Only the valid classes | `TS-TEC-02` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
+| A list always with three items, never empty | `TS-TEC-03` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
+| Only valid state transitions | `TS-TEC-04` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
+| Combination reduced by arbitrary choice | `TS-TEC-09` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
+| Replacing what the test came to prove | `TS-CORE-03` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
+| Calling every double a "mock" | `TS-DUB-01` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
+| Fake without declared fidelity | `TS-DUB-03` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
+| Behavior verification by default | `TS-DUB-04` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
+| Waiting for real time to pass | `TS-DUB-05` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
+| Repository fake in place of a controlled database | `TS-DUB-08` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
+| Non-functional requirement without a number | `TS-TIPO-05` | [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md) |
+| Mean instead of percentile | `TS-TIPO-06` | [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md) |
+| Not counting the static layer in the strategy | `TS-TIPO-08` | [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md) |
 
-**Antes de citar qualquer ID, confira `mapa-de-ids.md`:** `TS-NIV-01`, `TS-DUB-02` e
-`TS-SUI-02` são **apelidos** e citá-los é achado inválido.
+**Before citing any ID, check `mapa-de-ids.md`:** `TS-NIV-01`, `TS-DUB-02` and
+`TS-SUI-02` are **aliases** and citing them makes the finding invalid.

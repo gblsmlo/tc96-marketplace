@@ -1,37 +1,37 @@
-# Skills de teste — a camada de conceito
+# Test skills — the concept layer
 
-Três skills, um diretório cada. Elas decidem **o quê**, **em que nível** e **se a suíte
-protege** — e nunca escrevem teste: isso é da camada de ferramenta
-(`hermes-e2e: família playwright`, `hermes-backend: família bun`, `storybook-test`).
+Three skills, one directory each. They decide **what**, **at which level** and **whether the
+suite protects** — and they never write tests: that belongs to the tool layer
+(`hermes-e2e: playwright family`, `hermes-backend: bun family`, `storybook-test`).
 
-| Skill | A pergunta que responde | Fonte | Apoio interno |
+| Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
-| `test-design` | que teste eu escrevo, e em que nível? | [Teste de Software - Níveis e Escopo](../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) | 4 referências + 1 exemplo + 1 script |
-| `test-review` | esta suíte protege alguma coisa? | [Teste de Software](../../knowledge-base/docs/teste-de-software.md) | 4 referências + 1 auditoria + 1 script |
-| `test-diagnose` | por que ninguém confia nesta suíte? | [Teste de Software - Confiabilidade da Suíte](../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) | 4 referências + 1 diagnóstico + 1 script |
+| `test-design` | what test do I write, and at which level? | [Teste de Software - Níveis e Escopo](../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) | 4 references + 1 example + 1 script |
+| `test-review` | does this suite protect anything? | [Teste de Software](../../knowledge-base/docs/teste-de-software.md) | 4 references + 1 audit + 1 script |
+| `test-diagnose` | why does nobody trust this suite? | [Teste de Software - Confiabilidade da Suíte](../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) | 4 references + 1 diagnosis + 1 script |
 
-**A ordem é conceito → ferramenta.** Pular esta camada produz **E2E por default**, que é o
-antipadrão de maior custo do stack (`TS-CORE-02`).
+**The order is concept → tool.** Skipping this layer produces **E2E by default**, the
+highest-cost antipattern in this stack (`TS-CORE-02`).
 
-## O que cada pacote acrescentou
+## What each package added
 
-| Skill | Ganhou | Lacuna que fechou |
+| Skill | Gained | Gap it closed |
 | --- | --- | --- |
-| `test-design` | `references/` por passo, e a grade de 24 antipadrões separada | o SKILL.md tinha 291 linhas e afogava o procedimento em tabela |
-| `test-review` | **`scripts/sondas-suite.sh`** — S1 a S9 executáveis | as nove sondas existiam só como descrição em tabela |
-| `test-diagnose` | **`scripts/medir-flakiness.sh`** — inventário de anestésicos + taxa medida | "sem a taxa não há diagnóstico" era regra sem instrumento |
+| `test-design` | `references/` per step, and the 24-antipattern grid split out | the SKILL.md had 291 lines and drowned the procedure in tables |
+| `test-review` | **`scripts/sondas-suite.sh`** — S1 to S9, executable | the nine probes existed only as a description in a table |
+| `test-diagnose` | **`scripts/medir-flakiness.sh`** — anesthetic inventory + measured rate | "without the rate there is no diagnosis" was a rule with no instrument |
 
-`medir-flakiness.sh` faz as duas coisas que a skill exige antes de opinar: **inventaria os
-anestésicos já instalados** (retry, `workers: 1`, `skip`, espera por tempo fixo, relógio
-real, prefixo numérico, `try/catch` no corpo) e **mede a taxa** repetindo o comando N vezes,
-comparando com o limiar de ~1%.
+`medir-flakiness.sh` does the two things the skill requires before opining: it **inventories the
+anesthetics already installed** (retry, `workers: 1`, `skip`, fixed-time waits, real clock,
+numeric prefix, `try/catch` in the body) and **measures the rate** by repeating the command N
+times, comparing against the ~1% threshold.
 
-## O mapa de IDs
+## The ID map
 
-`mapa-de-ids.md` é **gerado** e igual nas três, por
-`test-design/scripts/gerar-mapa-de-ids.sh`. Ele indexa os **64** `TS-*` por satélite e
-seção — o mesmo número que a § 6.2 do hub declara, o que serve de conferência — e carrega a
-tabela de apelidos: `TS-NIV-01`, `TS-DUB-02` e `TS-SUI-02` **não** se citam.
+`mapa-de-ids.md` is **generated** and identical across the three, by
+`test-design/scripts/gerar-mapa-de-ids.sh`. It indexes the **64** `TS-*` by satellite and
+section — the same number § 6.2 of the hub declares, which serves as the check — and carries
+the alias table: `TS-NIV-01`, `TS-DUB-02` and `TS-SUI-02` are **not** cited.
 
 ```bash
 bash plugins/hermes-core/skills/test-design/scripts/gerar-mapa-de-ids.sh
@@ -39,25 +39,25 @@ bash scripts/instalar.sh
 ```
 
 <!-- tokens:inicio -->
-## Orçamento de contexto
+## Context budget
 
-Medido por `skill-validator` (tiktoken), em 2026-09-05. **O número que importa é o da
-coluna `SKILL.md`**: é o que entra no contexto antes de a skill decidir o que abrir.
-As referências carregam sob demanda, uma por vez.
+Measured by `skill-validator` (tiktoken), on 2026-09-05. **The number that matters is the
+`SKILL.md` column**: it is what enters the context before the skill decides what to open.
+References load on demand, one at a time.
 
-| Skill | `SKILL.md` | maior `references/` | total | refs |
+| Skill | `SKILL.md` | largest `references/` | total | refs |
 | --- | ---: | --- | ---: | ---: |
 | `test-design` | 2.032 | `mapa-de-ids.md` (3.085) | 8.482 | 6 |
 | `test-diagnose` | 1.994 | `mapa-de-ids.md` (3.085) | 9.365 | 6 |
 | `test-review` | 1.631 | `mapa-de-ids.md` (3.085) | 9.941 | 6 |
 
-Carregar as 3 skills deste grupo de uma vez custaria **5.657 tokens** só de `SKILL.md`,
-e **27.788** com todas as referências. É por isso que cada skill declara o que **nunca** carregar.
+Loading all 3 skills in this group at once would cost **5.657 tokens** in `SKILL.md` alone,
+and **27.788** with every reference. That is why each skill declares what it must **never** load.
 
-Regenerar: `bash scripts/medir.sh`
+Regenerate: `bash scripts/medir.sh`
 <!-- tokens:fim -->
 
-## Relacionados
+## Related
 
-- [Skill — Índice](../README.md) · [Teste de Software](../../knowledge-base/docs/teste-de-software.md) § 7 — o contrato que as três implementam
-- `hermes-e2e: família playwright` · `hermes-backend: família bun` — a camada de ferramenta
+- [Skills index](../README.md) · [Teste de Software](../../knowledge-base/docs/teste-de-software.md) § 7 — the contract all three implement
+- `hermes-e2e: playwright family` · `hermes-backend: bun family` — the tool layer

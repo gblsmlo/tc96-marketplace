@@ -1,34 +1,34 @@
-# Antipadrões mais frequentes, com ID
+# Most frequent antipatterns, with IDs
 
-> Confira em `mapa-de-ids.md`: `DRZ-SCHEMA-01` é apelido de `DRZ-CORE-02`.
-> As linhas **sem ID** citam a nota normativa, nunca um `DRZ-*` inventado.
+> Check `mapa-de-ids.md`: `DRZ-SCHEMA-01` is an alias of `DRZ-CORE-02`.
+> The rows **without an ID** cite the normative note, never an invented `DRZ-*`.
 
-| Antipadrão | ID canônico | Satélite |
+| Antipattern | Canonical ID | Satellite |
 | --- | --- | --- |
-| `drizzle({ schema })` sem os `relations` — `with` lança em runtime | `DRZ-REL-05` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| Tabela exportada mas ausente do objeto de schema do cliente | `DRZ-CORE-02` (adjacente; ver Passo 6) | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) |
-| Relação declarada de um lado só | `DRZ-REL-01` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| Duas relações entre as mesmas tabelas sem `relationName` | `DRZ-REL-04` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| Uma query por item dentro de `map`/`for` | `DRZ-RQB-01` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| `offset` dentro de `with` aninhado | `DRZ-RQB-02` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| `eq`/`and` importados dentro do `where` de RQB | `DRZ-RQB-03` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| Escritas atômicas fora de uma transaction comum | `DRZ-TX-01` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| `db` externo usado dentro do bloco de transaction | `DRZ-TX-03` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| `update`/`delete` sem `where` | `DRZ-QUERY-04` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| `select` seguido de `insert`/`update` condicional em vez de upsert | `DRZ-QUERY-06` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| `undefined` usado para limpar campo (o `set` ignora) | `DRZ-QUERY-05` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| ``sql`...` `` como via padrão de filtro | `DRZ-QUERY-03` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| `select` sem projeção onde o subconjunto importa | `DRZ-QUERY-01` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| Zod escrito à mão duplicando colunas | `DRZ-ZOD-01` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| Regra extra por `.extend` em vez do 2º argumento de `create*Schema` | `DRZ-ZOD-02` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
-| `push` em staging ou produção | `DRZ-MIG-02` | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) |
-| `push` e `generate` convivendo no mesmo ambiente | `DRZ-MIG-04` | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) |
-| `.default` confundido com `.$default` | `DRZ-SCHEMA-04` | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) |
-| FK autorreferente sem `AnyPgColumn` | `DRZ-SCHEMA-02` | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) |
-| Snapshot não atualizado por migração escrita à mão | sem ID — ver Passo 6 | |
-| Índice prefixo estrito de outro índice | sem ID — ver Passo 6 | — |
-| Filtro por faixa de data sem índice que o cubra | sem ID — ver Passo 6 | — |
-| Expressão sobre coluna no predicado (`split_part`, `lower`) | sem ID — ver Passo 6 | — |
-| Listagem sem `limit` em tela de volume aberto | sem ID — ver Passo 6 | |
-| `updated_at` mantido por disciplina, sem `$onUpdate` nem trigger | sem ID — ver Passo 6 | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) |
+| `drizzle({ schema })` without the `relations` — `with` throws at runtime | `DRZ-REL-05` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| Table exported but absent from the client's schema object | `DRZ-CORE-02` (adjacent; see Step 6) | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) |
+| Relation declared on one side only | `DRZ-REL-01` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| Two relations between the same tables without `relationName` | `DRZ-REL-04` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| One query per item inside `map`/`for` | `DRZ-RQB-01` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| `offset` inside a nested `with` | `DRZ-RQB-02` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| `eq`/`and` imported inside an RQB `where` | `DRZ-RQB-03` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| Atomic writes outside a shared transaction | `DRZ-TX-01` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| External `db` used inside the transaction block | `DRZ-TX-03` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| `update`/`delete` without `where` | `DRZ-QUERY-04` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| `select` followed by a conditional `insert`/`update` instead of an upsert | `DRZ-QUERY-06` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| `undefined` used to clear a field (`set` ignores it) | `DRZ-QUERY-05` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| ``sql`...` `` as the default filtering route | `DRZ-QUERY-03` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| `select` without a projection where the subset matters | `DRZ-QUERY-01` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| Hand-written Zod duplicating columns | `DRZ-ZOD-01` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| Extra rule via `.extend` instead of the 2nd argument of `create*Schema` | `DRZ-ZOD-02` | [Drizzle - Queries e Relations](../../../../knowledge-base/docs/drizzle-queries-e-relations.md) |
+| `push` in staging or production | `DRZ-MIG-02` | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) |
+| `push` and `generate` coexisting in the same environment | `DRZ-MIG-04` | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) |
+| `.default` confused with `.$default` | `DRZ-SCHEMA-04` | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) |
+| Self-referencing FK without `AnyPgColumn` | `DRZ-SCHEMA-02` | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) |
+| Snapshot not updated by a hand-written migration | no ID — see Step 6 | |
+| Index that is a strict prefix of another index | no ID — see Step 6 | — |
+| Date-range filter with no index covering it | no ID — see Step 6 | — |
+| Expression over a column in the predicate (`split_part`, `lower`) | no ID — see Step 6 | — |
+| Listing without `limit` on an open-volume screen | no ID — see Step 6 | |
+| `updated_at` kept by discipline, with neither `$onUpdate` nor a trigger | no ID — see Step 6 | [Drizzle - Schema e Migrations](../../../../knowledge-base/docs/drizzle-schema-e-migrations.md) |
 

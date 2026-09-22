@@ -1,60 +1,60 @@
-# Exemplo trabalhado — desconto por volume no checkout
+# Worked example — volume discount at checkout
 
-Tarefa: *"cobrir o desconto por volume no checkout"*.
+Task: *"cover the volume discount at checkout"*.
 
 ---
 
-## Passo 1 — a frase
+## Step 1 — the sentence
 
-> "Um desconto acima de 50% pode ser aplicado sem passar pela aprovação do gerente."
+> "A discount above 50% can be applied without going through manager approval."
 
-Sujeito e comportamento errado: acionável. Compare com "o checkout pode quebrar", que não
-aponta nível nenhum.
+Subject and wrong behavior: actionable. Compare with "checkout might break", which points at no
+level at all.
 
-## Passo 2 — o nível
+## Step 2 — the level
 
-É **regra de negócio**, não jornada → unidade (`TS-NIV-02`). O E2E ganha **um** caso: a
-tela exibe o valor que o cálculo produziu.
+It is a **business rule**, not a journey → unit (`TS-NIV-02`). E2E gets **one** case: the
+screen displays the value the calculation produced.
 
-## Passo 3 — a proporção
+## Step 3 — the proportion
 
-O módulo de precificação é cálculo denso → **pirâmide**, massa em unidade (`TS-NIV-08`).
+The pricing module is dense calculation → **pyramid**, mass in unit tests (`TS-NIV-08`).
 
-## Passo 4 — os casos
+## Step 4 — the cases
 
-A regra tem faixa (0–50% livre, acima exige aprovação) → **valor limite** (`TS-TEC-01`):
+The rule has a range (0–50% free, above that requires approval) → **boundary value** (`TS-TEC-01`):
 
-| Desconto | Esperado | Por quê |
+| Discount | Expected | Why |
 | --- | --- | --- |
-| 0% | aplica | fronteira inferior |
-| 50% | aplica | **o limite** |
-| 50,01% | exige aprovação | logo acima |
-| 100% | exige aprovação | extremo |
-| −5% | rejeita | classe inválida (`TS-TEC-02`) |
+| 0% | applies | lower boundary |
+| 50% | applies | **the limit** |
+| 50.01% | requires approval | just above |
+| 100% | requires approval | extreme |
+| −5% | rejects | invalid class (`TS-TEC-02`) |
 
-Mais transição de estado: aprovar um desconto **já aprovado**, e aplicar um **rejeitado**
+Plus state transition: approving an **already approved** discount, and applying a **rejected** one
 (`TS-TEC-04`).
 
-## Passo 5 — substituição
+## Step 5 — replacement
 
-O cálculo é puro: **nada a substituir**. O E2E precisa de um pedido existente → cria por
-API, não pela UI (`TS-CORE-03`). Se a regra usa "data da promoção", o relógio é controlado
-(`TS-DUB-05`).
+The calculation is pure: **nothing to replace**. E2E needs an existing order → create it through
+the API, not through the UI (`TS-CORE-03`). If the rule uses "promotion date", the clock is
+controlled (`TS-DUB-05`).
 
-## O resultado
+## The result
 
-**5 testes de unidade + 2 de transição + 1 E2E.**
+**5 unit tests + 2 transition tests + 1 E2E.**
 
-A alternativa intuitiva — 8 E2E percorrendo o checkout — custaria minutos por execução,
-falharia por qualquer defeito no caminho, e diagnosticaria pior. É o mesmo número de
-casos comprando muito menos informação.
+The intuitive alternative — 8 E2E runs through checkout — would cost minutes per run, would fail
+on any defect along the way, and would diagnose worse. It is the same number of cases buying far
+less information.
 
-## Passo 7 — o bastão
+## Step 7 — the handoff
 
-| Nível | Continua em |
+| Level | Continues in |
 | --- | --- |
-| unidade, transição | `bun-test-build` |
+| unit, transition | `bun-test-build` |
 | E2E | `playwright-build` |
 
-Entregue junto: **nível, casos derivados e o que será substituído**. A skill de ferramenta
-implementa; ela não reabre essas perguntas.
+Deliver together: **level, derived cases and what will be replaced**. The tool skill implements;
+it does not reopen those questions.

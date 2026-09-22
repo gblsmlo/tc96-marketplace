@@ -1,107 +1,107 @@
-# Exemplo trabalhado — auditoria de uma suíte
+# Worked example — auditing a suite
 
-Repositório de e-commerce, 214 casos, CI verde há meses, e defeito chegando em produção.
+An e-commerce repository, 214 cases, CI green for months, and defects reaching production.
 
 ---
 
-## Passo 1 — as sondas, antes de abrir teste nenhum
+## Step 1 — the probes, before opening a single test
 
 ```
 $ bash scripts/sondas-suite.sh.
 
-== S1. A forma da suíte
- e2e/ 187 casos
- packages/ 22 casos
- apps/ 5 casos
- ─── total: 214 casos ← 87% em E2E
-== S3. A camada estática conta?
- tsconfig.json:4: "strict": false ← e há Playwright no projeto
- -- no-floating-promises: AUSENTE ← bloqueante
-== S4. O portão fecha?
+== S1. The suite's shape
+ e2e/ 187 cases
+ packages/ 22 cases
+ apps/ 5 cases
+ ─── total: 214 cases ← 87% in E2E
+== S3. Does the static layer count?
+ tsconfig.json:4: "strict": false ← and there is Playwright in the project
+ -- no-floating-promises: ABSENT ← blocking
+== S4. Does the gate close?
 .github/workflows/ci.yml:41: continue-on-error: true
-== S5. Meta de cobertura
+== S5. Coverage target
  package.json:22: "coverageThreshold": { "global": { "lines": 80 } }
-== S6. Classes de risco
- error 2 arquivos ← de 214 casos
- vazio 0 arquivos
+== S6. Risk classes
+ error 2 files ← out of 214 cases
+ empty 0 files
 == S9. skip
- e2e/pagamento.spec.ts:14: test.skip("3DS",...)
+ e2e/payment.spec.ts:14: test.skip("3DS",...)
 ```
 
-**Duas paradas dispararam ao mesmo tempo** (S1 invertida, S4 sem reprovação). Reporte-as
-antes de auditar qualquer interior.
+**Two stops fired at the same time** (S1 inverted, S4 with no failure). Report them
+before auditing any interior.
 
-## Passo 2 — o que a leitura acrescenta
+## Step 2 — what reading adds
 
-Amostragem de 10 arquivos de `e2e/`: **7 verificam regra de negócio**, não jornada
-(`TS-NIV-02`). Isso não é forma ruim por acaso — é a causa da forma.
+Sampling 10 files from `e2e/`: **7 verify business rules**, not journeys
+(`TS-NIV-02`). That is not a bad shape by accident — it is the cause of the shape.
 
-## Passo 3 — o relatório
+## Step 3 — the report
 
 ```markdown
-## Auditoria de estratégia de teste — loja
+## Test strategy audit — store
 
-### Bloqueante (2)
+### Blocking (2)
 
 `TS-PROC-03` —.github/workflows/ci.yml:41
-S4: o job de testes tem continue-on-error: true. O CI nunca reprovou por teste vermelho.
-Correção: remover a linha. Se o objetivo era não bloquear enquanto a suíte é instável,
- o caminho é test-diagnose, não um portão que mente.
-Ver Teste de Software - Processo e Artefatos.
+S4: the test job has continue-on-error: true. CI has never failed on a red test.
+Fix: remove the line. If the goal was not to block while the suite is unstable,
+ the way is test-diagnose, not a gate that lies.
+See Teste de Software - Processo e Artefatos.
 
-`TS-TIPO-08` — tsconfig.json:4 + ausência de no-floating-promises
-S3: strict desligado, e sem no-floating-promises num projeto com Playwright — pode haver
- qualquer quantidade de `expect(...)` sem await, e nenhuma aparece como falha.
-Correção: ligar strict e a regra de lint; rodar uma vez e tratar o que aparecer como
- inventário de asserções que não afirmam nada.
-Ver Teste de Software - Tipos e Atributos de Qualidade, e Playwright PW-CORE-04.
+`TS-TIPO-08` — tsconfig.json:4 + absence of no-floating-promises
+S3: strict off, and no no-floating-promises in a project with Playwright — there may be
+ any number of `expect(...)` without await, and none shows up as a failure.
+Fix: turn on strict and the lint rule; run it once and treat what appears as an
+ inventory of assertions that assert nothing.
+See Teste de Software - Tipos e Atributos de Qualidade, and Playwright PW-CORE-04.
 
-### Alta (3)
+### High (3)
 
-`TS-NIV-04` — e2e/ (187 casos) × packages/ (22 casos)
-S1: 87% dos casos são E2E. Amostragem de 10 arquivos: 7 verificam regra de negócio.
-Correção: mover asserções de regra para unidade; um E2E por jornada. Começar por
- e2e/desconto.spec.ts (23 casos sobre faixas de desconto).
-Ver Teste de Software - Níveis e Escopo.
+`TS-NIV-04` — e2e/ (187 cases) × packages/ (22 cases)
+S1: 87% of the cases are E2E. Sampling 10 files: 7 verify business rules.
+Fix: move rule assertions to unit tests; one E2E per journey. Start with
+ e2e/discount.spec.ts (23 cases about discount ranges).
+See Teste de Software - Níveis e Escopo.
 
-`TS-TIPO-02` — toda a suíte
-S6: 2 arquivos mencionam erro, nenhum menciona estado vazio, em 214 casos.
-Correção: por fluxo crítico, listar os cinco estados e cobrir erro e vazio no nível de
- componente, que é onde eles custam menos. Começar por checkout e pagamento.
-Ver Teste de Software - Tipos e Atributos de Qualidade.
+`TS-TIPO-02` — the whole suite
+S6: 2 files mention errors, none mentions the empty state, across 214 cases.
+Fix: per critical flow, list the five states and cover error and empty at the
+ component level, which is where they cost least. Start with checkout and payments.
+See Teste de Software - Tipos e Atributos de Qualidade.
 
 `TS-CORE-05` — package.json:22
-S5: coverageThreshold de 80% tratado como portão de qualidade.
-Correção: substituir a meta por classe de risco coberta. A cobertura pode continuar
- sendo medida — só não como critério de aprovação.
-Ver Teste de Software - Técnicas de Design de Caso.
+S5: a coverageThreshold of 80% treated as a quality gate.
+Fix: replace the target with risk classes covered. Coverage can still be measured —
+ just not as an approval criterion.
+See Teste de Software - Técnicas de Design de Caso.
 
-### Média (1)
+### Medium (1)
 
-`TS-SUI-11` — e2e/pagamento.spec.ts:14
-S9: test.skip("3DS") sem motivo nem issue. Pagamento é o fluxo de maior risco do produto.
-Correção: issue com prazo, ou remover o teste. Skip anônimo em fluxo crítico é a pior
- combinação: parece coberto e não está.
-Ver Teste de Software - Confiabilidade da Suíte.
+`TS-SUI-11` — e2e/payment.spec.ts:14
+S9: test.skip("3DS") with no reason and no issue. Payments is the product's highest-risk flow.
+Fix: an issue with a deadline, or remove the test. An anonymous skip in a critical flow is the
+ worst combination: it looks covered and is not.
+See Teste de Software - Confiabilidade da Suíte.
 
-### Não é achado (registrado para não voltar à discussão)
+### Not a finding (recorded so it does not come back to the discussion)
 
-- Cobertura de 62% em packages/: cobertura baixa não é achado (TS-CORE-05).
-- Massa em integração em apps/bff: é trophy, não forma invertida.
+- 62% coverage in packages/: low coverage is not a finding (TS-CORE-05).
+- Mass in integration in apps/bff: that is a trophy, not an inverted shape.
 
-### Não verificado
+### Not verified
 
-- S2 (duração): a suíte não sobe nesta máquina — sem Docker do banco. A medida por nível
- fica aberta, e ela decide se o portão é executável antes do PR.
-- S8 (escape): sem acesso ao histórico completo; o clone é raso.
+- S2 (duration): the suite does not start on this machine — no Docker for the database. The
+ per-level measurement stays open, and it decides whether the gate is runnable before the PR.
+- S8 (escapes): no access to the full history; the clone is shallow.
 ```
 
-## O que este exemplo demonstra
+## What this example demonstrates
 
-| Decisão | Onde está a regra |
+| Decision | Where the rule is |
 | --- | --- |
-| duas paradas dispararam e vieram antes de tudo | `sondas.md` § *Três paradas obrigatórias* |
-| a amostragem de leitura explicou a forma que a sonda mediu | `sondas.md` § *O que a sonda não mede* |
-| cobertura baixa e massa em integração **não** viraram achado | `severidade-e-relatorio.md` § *O corte* |
-| cada correção tem ponto de partida nomeado | `severidade-e-relatorio.md` § *Formato* |
-| o que não rodou foi declarado, não omitido | `severidade-e-relatorio.md` § *Fechar* |
+| two stops fired and came before everything | `sondas.md` § *Three mandatory stops* |
+| the reading sample explained the shape the probe measured | `sondas.md` § *What the probe does not measure* |
+| low coverage and mass in integration did **not** become findings | `severidade-e-relatorio.md` § *The cut* |
+| every fix has a named starting point | `severidade-e-relatorio.md` § *Format* |
+| what did not run was declared, not omitted | `severidade-e-relatorio.md` § *Closing* |

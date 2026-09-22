@@ -1,80 +1,79 @@
-# A frase, o nível e a proporção
+# The sentence, the level and the proportion
 
-> Passos 1 a 3 da skill. A árvore completa é a § 4.1 de [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md); aqui está o
-> percurso e o que ele elimina.
+> Steps 1 to 3 of the skill. The full tree is § 4.1 of [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md); here is the
+> path and what it eliminates.
 
 ---
 
-## A frase, antes de tudo
+## The sentence, before anything else
 
-> **O que exatamente pode dar errado aqui?**
+> **What exactly can go wrong here?**
 
-Escreva-a. Se não conseguir, **o teste não deveria ser escrito ainda** (`TS-CORE-01`): não
-há como julgar se ele vale o custo, nem em que nível ele pertence.
+Write it down. If you cannot, **the test should not be written yet** (`TS-CORE-01`): there is
+no way to judge whether it is worth the cost, nor which level it belongs to.
 
-A frase boa **nomeia um sujeito e um comportamento errado** — e é ela que decide o nível,
-não a intuição:
+A good sentence **names a subject and a wrong behavior** — and it is the sentence that decides
+the level, not intuition:
 
-| ✗ vago | ✓ acionável | Nível que a frase revela |
+| ✗ vague | ✓ actionable | Level the sentence reveals |
 | --- | --- | --- |
-| "o checkout pode quebrar" | "o desconto acima de 50% pode ser aplicado sem aprovação" | unidade |
-| "a listagem pode falhar" | "um pedido recém-criado pode não aparecer na lista" | E2E |
-| "o form pode dar erro" | "o campo de CPF pode aceitar 10 dígitos" | unidade |
-| "a tela pode ficar estranha" | "a lista vazia pode renderizar sem o estado de vazio" | componente |
-| "a API pode mudar" | "o servidor pode renomear `quantidade` e o cliente não perceber" | contrato |
+| "checkout might break" | "a discount above 50% might be applied without manager approval" | unit |
+| "the listing might fail" | "a just-created order might not appear in the list" | E2E |
+| "the form might error" | "the tax-ID field might accept 10 digits" | unit |
+| "the screen might look odd" | "an empty list might render without the empty state" | component |
+| "the API might change" | "the server might rename `quantity` and the client not notice" | contract |
 
 ---
 
-## O nível
+## The level
 
-| O que pode dar errado | Nível | Ferramenta |
+| What can go wrong | Level | Tool |
 | --- | --- | --- |
-| cálculo, parse, validação, invariante de domínio | **unidade** | `bun-test-build` |
-| duas peças minhas conversando (caso de uso + repositório) | **integração**, com dependência real controlada | `bun-test-build` |
-| o formato que atravessa a fronteira com um sistema que não é meu | **contrato** — e boa parte é o compilador | `Docs/Hono - Validação e RPC.md` · `Docs/Elysia - Schema e Eden.md` |
-| estado visual/interativo de um componente | **componente** | `storybook-story` · `storybook-test` |
-| a jornada crítica funciona com rota, sessão e rede | **E2E** | `playwright-build` |
-| tipo incompatível, uso incorreto de API | **estático** | `Docs/TypeScript.md` |
+| calculation, parsing, validation, domain invariant | **unit** | `bun-test-build` |
+| two of my pieces talking (use case + repository) | **integration**, with a controlled real dependency | `bun-test-build` |
+| the format crossing the boundary with a system that is not mine | **contract** — and much of it is the compiler | `Docs/Hono - Validação e RPC.md` · `Docs/Elysia - Schema e Eden.md` |
+| visual/interactive state of a component | **component** | `storybook-story` · `storybook-test` |
+| the critical journey works with routing, session and network | **E2E** | `playwright-build` |
+| incompatible type, incorrect API use | **static** | `Docs/TypeScript.md` |
 
-Três cortes decidem a maioria dos casos:
+Three cuts decide most cases:
 
-- **Regra de negócio nunca é E2E** (`TS-NIV-02`). O E2E verifica que a tela exibe o valor calculado; o cálculo é unidade.
-- **Se precisa de rota, login ou mais de uma tela** → E2E. Se varia **props** → componente.
-- **Se o defeito está na junta entre peças**, unidade de cada peça passa e o sistema quebra — é integração.
+- **A business rule is never E2E** (`TS-NIV-02`). E2E verifies that the screen displays the calculated value; the calculation is a unit test.
+- **If it needs routing, login or more than one screen** → E2E. If it varies **props** → component.
+- **If the defect is in the joint between pieces**, a unit test of each piece passes and the system breaks — that is integration.
 
-E o corte que separa esta skill da intuição: **E2E é a menor fatia da suíte**, e escrever
-E2E por default é o erro mais caro que um agente comete (`TS-CORE-02`).
+And the cut that separates this skill from intuition: **E2E is the smallest slice of the suite**, and writing E2E by default is the most expensive mistake an agent makes (`TS-CORE-02`).
 
 ---
 
-## A proporção — por módulo, não por repositório
+## The proportion — per module, not per repository
 
-`TS-NIV-08`. Não é política global:
+`TS-NIV-08`. It is not a global policy:
 
 ```
-A complexidade deste módulo está DENTRO de funções?
- (cálculo, domínio rico, regra densa, parsing)
- → pirâmide: a massa vai para unidade
+Is this module's complexity INSIDE functions?
+ (calculation, rich domain, dense rules, parsing)
+ → pyramid: the mass goes to unit
 
-A complexidade está ENTRE as peças?
- (BFF, adaptação de dado, orquestração, mapeamento de contrato)
- → trophy: a massa vai para integração
+Is the complexity BETWEEN the pieces?
+ (BFF, data adaptation, orchestration, contract mapping)
+ → trophy: the mass goes to integration
 ```
 
-O pacote que calcula imposto é pirâmide. A rota que orquestra três chamadas é trophy.
-**O mesmo repositório tem os dois**, e tratar a proporção como política global é o que
-produz suíte desequilibrada.
+The package that computes tax is a pyramid. The route that orchestrates three calls is a trophy.
+**The same repository has both**, and treating the proportion as a global policy is what
+produces an unbalanced suite.
 
-Os dois modelos concordam em uma coisa, e ela vale como regra: **E2E é a menor fatia**, e
-a forma invertida — massa em E2E — é o antipadrão (`TS-NIV-04`).
+The two models agree on one thing, and it holds as a rule: **E2E is the smallest slice**, and
+the inverted shape — mass in E2E — is the antipattern (`TS-NIV-04`).
 
-**Conte a camada estática.** TypeScript e lint pegam uma classe de defeito inteira antes de
-qualquer teste rodar, e são a camada mais barata que existe (`TS-TIPO-08`).
+**Count the static layer.** TypeScript and lint catch a whole class of defect before any test
+runs, and they are the cheapest layer there is (`TS-TIPO-08`).
 
 ---
 
-## Relacionados
+## Related
 
-- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 4.1 — a árvore completa
-- [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) — a fonte
-- `tecnicas-de-caso.md` — o passo seguinte, quando houver entrada a exercitar
+- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 4.1 — the full tree
+- [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) — the source
+- `tecnicas-de-caso.md` — the next step, when there is input to exercise

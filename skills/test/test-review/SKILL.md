@@ -1,8 +1,9 @@
 ---
 nome: test-review
-descricao: Auditar a estratégia de teste de um repositório — a forma da suíte, não os testes individuais — com nove sondas executáveis e IDs `TS-*`, respondendo "esta suíte protege alguma coisa?" — use quando a tarefa for avaliar se a cobertura de risco é adequada, se a proporção entre níveis faz sentido, se os portões de qualidade realmente fecham, se a camada estática está contando, ou se há classe de risco sem nenhum teste. Não use para achar defeito em teste individual, que é playwright-review ou bun-test-review. Não use para suíte instável, que é test-diagnose, nem para decidir um teste novo, que é test-design.
+descricao: Audit a repository's test strategy — the shape of the suite, not the individual tests — with nine executable probes and `TS-*` IDs, answering "does this suite protect anything?" — use when the task is assessing whether risk coverage is adequate, whether the proportion across levels makes sense, whether the quality gates actually close, whether the static layer is counting, or whether there is a risk class with no test at all. Do not use to find a defect in an individual test, which is playwright-review or bun-test-review. Do not use for an unstable suite, which is test-diagnose, nor to decide a new test, which is test-design.
 tipo: skill
 familia: test
+idioma: en
 fonte: "[Teste de Software](../../../knowledge-base/docs/teste-de-software.md)"
 tags:
   - skill
@@ -13,117 +14,117 @@ tags:
 
 # test-review
 
-> **Fonte desta skill:** [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — a § 6 normativa (64 regras em 7 famílias), a § 6.1 com as críticas dos satélites, e a § 6.2 com os IDs canônicos. O corpo de cada família vive no satélite dono do ID.
-> Esta skill **não contém** o texto das regras — ela diz o que executar, em que ordem varrer, como classificar e como reportar.
+> **Source of this skill:** [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — the normative § 6 (64 rules in 7 families), § 6.1 with the satellites' critical ones, and § 6.2 with the canonical IDs. The body of each family lives in the satellite that owns the ID.
+> This skill **does not contain** the text of the rules — it says what to run, in what order to scan, how to classify and how to report.
 
-Contrato que esta skill implementa: [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 7 ("Contrato de skill").
 
-> **Nota de desenho.** Esta skill audita a **forma** da suíte; `playwright-review` e `bun-test-review` auditam os **testes**. A diferença é operacional: elas encontram `waitForTimeout` na linha 41; esta encontra que 200 dos 214 testes são E2E e que nenhum cobre o estado de erro. Um repositório pode passar nas duas de ferramenta e falhar aqui — e é o caso mais comum.
+> **Design note.** This skill audits the **shape** of the suite; `playwright-review` and `bun-test-review` audit the **tests**. The difference is operational: they find `waitForTimeout` on line 41; this one finds that 200 of the 214 tests are E2E and that none covers the error state. A repository can pass both tool skills and fail here — and that is the most common case.
 
 ---
 
-## Quando usar
+## When to use
 
-Avaliar uma suíte **como sistema**. A pergunta é *"esta suíte protege alguma coisa?"* — diferente de *"os testes passam?"* e diferente de *"os testes estão bem escritos?"*.
+Assessing a suite **as a system**. The question is *"does this suite protect anything?"* — different from *"do the tests pass?"* and different from *"are the tests well written?"*.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| achar defeito em teste individual | `playwright-review` (E2E) · `bun-test-review` (unidade/integração) |
-| suíte instável, flaky, ninguém confia | `test-diagnose` |
-| decidir um teste novo | `test-design` |
-| uma falha concreta | `playwright-diagnose` |
-| revisar o código de aplicação | `react-review` · `drizzle-review` |
-| processo, defeito, severidade, métricas de time | [Teste de Software - Processo e Artefatos](../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) |
+| finding a defect in an individual test | `playwright-review` (E2E) · `bun-test-review` (unit/integration) |
+| an unstable, flaky suite nobody trusts | `test-diagnose` |
+| deciding a new test | `test-design` |
+| one concrete failure | `playwright-diagnose` |
+| reviewing the application code | `react-review` · `drizzle-review` |
+| process, defects, severity, team metrics | [Teste de Software - Processo e Artefatos](../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 2 | o teste compra informação a um preço — o critério de toda avaliação aqui |
-| 2 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 6 + § 6.1 | as regras invioláveis e as críticas |
-| 3 | `references/mapa-de-ids.md` | **obrigatório antes de citar** — três IDs são apelidos |
-| 4 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 4.1 e § 4.4 | a árvore de nível, e "quando parar de escrever teste" |
-| 5 | o satélite do achado | via § 5 do hub |
+| 1 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 2 | a test buys information at a price — the criterion for every judgment here |
+| 2 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 6 + § 6.1 | the inviolable rules and the critical ones |
+| 3 | `references/mapa-de-ids.md` | **required before citing** — three IDs are aliases |
+| 4 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 4.1 and § 4.4 | the level tree, and "when to stop writing tests" |
+| 5 | the satellite for the finding | via § 5 of the hub |
 
-**Nunca carregue os seis satélites.**
+**Never load all six satellites.**
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/sondas.md` | as nove sondas, as três paradas obrigatórias, e o que elas **não** medem |
-| `references/ordem-da-varredura.md` | os 11 passos por impacto, e as três conclusões que não se misturam |
-| `references/severidade-e-relatorio.md` | classificação, formato com medida, o corte, e o fechamento |
-| `references/antipadroes.md` | 29 antipadrões com ID e satélite |
-| `references/mapa-de-ids.md` | os 64 `TS-*` por satélite e seção, e os três apelidos |
-| `references/exemplo-auditoria.md` | auditoria inteira, das sondas ao "não verificado" |
-| `scripts/sondas-suite.sh` | roda S1, S3–S9 e prepara S2 |
+| `references/sondas.md` | the nine probes, the three mandatory stops, and what they do **not** measure |
+| `references/ordem-da-varredura.md` | the 11 steps by impact, and the three conclusions that do not mix |
+| `references/severidade-e-relatorio.md` | classification, format with measurement, the cut, and the closing |
+| `references/antipadroes.md` | 29 antipatterns with ID and satellite |
+| `references/mapa-de-ids.md` | the 64 `TS-*` by satellite and section, and the three aliases |
+| `references/exemplo-auditoria.md` | a whole audit, from the probes to the "not verified" |
+| `scripts/sondas-suite.sh` | runs S1, S3–S9 and prepares S2 |
 
 ---
 
-## Passo 1 — Sondar antes de ler
+## Step 1 — Probe before reading
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/test-review/scripts/sondas-suite.sh.
 ```
 
-A forma de uma suíte é **invisível** lendo arquivos: cada teste parece razoável, e o conjunto está desequilibrado.
+The shape of a suite is **invisible** when reading files: each test looks reasonable, and the whole is unbalanced.
 
-**Três paradas obrigatórias** — se qualquer uma disparar, reporte antes de continuar:
+**Three mandatory stops** — if any of them fires, report before continuing:
 
-| Sonda | Se mostrar… | Por quê |
+| Probe | If it shows… | Why |
 | --- | --- | --- |
-| S1 | forma invertida | criticar teste individual vira ruído; a correção reescreve boa parte da suíte |
-| S4 | portão que não reprova | torna toda discussão de cobertura decorativa |
-| S3 | `no-floating-promises` desligada com Playwright | **bloqueante**: asserção que não afirma nada não aparece como falha |
+| S1 | an inverted shape | criticizing an individual test becomes noise; the fix rewrites much of the suite |
+| S4 | a gate that does not fail | it makes every discussion of coverage decorative |
+| S3 | `no-floating-promises` off with Playwright | **blocking**: an assertion that asserts nothing does not show up as a failure |
 
-Detalhe das nove e o que elas não medem: `references/sondas.md`.
-
----
-
-## Passo 2 — Varrer a estratégia, na ordem
-
-`references/ordem-da-varredura.md`, 11 passos por impacto: portão → forma → classe de risco descoberta → camada estática → atributo não funcional → contrato → substituição → determinismo → reteste → exploratório → teste que não paga.
-
-Se um passo produz achado que invalida o seguinte, **pare de auditar o interior** e reporte a mudança de forma.
+Detail of the nine and what they do not measure: `references/sondas.md`.
 
 ---
 
-## Passo 3 — Classificar e reportar
+## Step 2 — Scan the strategy, in order
 
-`references/severidade-e-relatorio.md`. Bloqueante é o que produz **verde falso**; Alta é risco descoberto **hoje**; Média é dívida estrutural.
+`references/ordem-da-varredura.md`, 11 steps by impact: gate → shape → uncovered risk class → static layer → non-functional attribute → contract → replacement → determinism → retest → exploratory → tests that do not pay.
 
-Para achado de forma, **a evidência é a medida** — cole os números da sonda. "Tem E2E demais" sem contagem é opinião.
-
-**Quatro coisas não são achado:** ausência de teste isolada, proporção que não bate com pirâmide *ou* trophy, cobertura baixa, e preferência de ferramenta. Confundi-las queima a credibilidade do relatório inteiro.
+If a step produces a finding that invalidates the next one, **stop auditing the interior** and report the change of shape.
 
 ---
 
-## Passo 4 — Fechar
+## Step 3 — Classify and report
 
-1. **Transforme sonda em portão** — achado que só existe no relatório volta em seis meses.
-2. **Separe "não protegido", "no nível errado" e "quebrado"** — a do meio é das skills de ferramenta.
-3. **Ordene por severidade**, não por diretório.
-4. **Dê o próximo passo**, não a lista inteira.
-5. **Se houver flake ativo, pare aqui** e continue em `test-diagnose` (`TS-CORE-04`).
-6. **Declare o que não foi verificado.** "Não verificado" não é "sem achado".
+`references/severidade-e-relatorio.md`. Blocking is what produces **false green**; High is risk uncovered **today**; Medium is structural debt.
 
----
+For a finding about shape, **the evidence is the measurement** — paste the probe's numbers. "There is too much E2E" without a count is an opinion.
 
-## Exemplo
-
-Suíte de 214 casos, CI verde há meses, defeito chegando em produção. As sondas mostram 87% em E2E, `continue-on-error` no CI, `strict` desligado sem `no-floating-promises`, e **dois** arquivos mencionando estado de erro. Duas paradas disparam ao mesmo tempo; a leitura de 10 arquivos de E2E explica a forma (7 verificam regra de negócio). Cobertura de 62% e massa em integração no BFF **não** viram achado.
-
-Auditoria completa, com relatório e a seção "não verificado": `references/exemplo-auditoria.md`.
+**Four things are not findings:** absence of a test on its own, a proportion that matches neither pyramid *nor* trophy, low coverage, and tool preference. Confusing them burns the credibility of the whole report.
 
 ---
 
-## Relacionados
+## Step 4 — Closing
 
-- [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — fonte desta skill: § 6 normativa, § 6.1, § 6.2, § 7 contrato
-- `test-design` · `test-diagnose` — as skills irmãs
-- `playwright-review` · `bun-test-review` — auditam os **testes**; esta audita a **forma**
-- `Github Actions` — onde os portões vivem
-- `Docs/Bun - Testes - Cobertura e CI.md` · `Docs/Playwright - Execução, Retries e CI.md` — o mecanismo dos portões
+1. **Turn a probe into a gate** — a finding that only exists in the report comes back in six months.
+2. **Separate "not protected", "at the wrong level" and "broken"** — the middle one belongs to the tool skills.
+3. **Order by severity**, not by directory.
+4. **Give the next step**, not the whole list.
+5. **If there is active flakiness, stop here** and continue in `test-diagnose` (`TS-CORE-04`).
+6. **Declare what was not verified.** "Not verified" is not "no findings".
+
+---
+
+## Example
+
+A suite of 214 cases, CI green for months, defects reaching production. The probes show 87% in E2E, `continue-on-error` in CI, `strict` off without `no-floating-promises`, and **two** files mentioning the error state. Two stops fire at once; reading 10 E2E files explains the shape (7 verify business rules). 62% coverage and mass in integration in the BFF do **not** become findings.
+
+Full audit, with the report and the "not verified" section: `references/exemplo-auditoria.md`.
+
+---
+
+## Related
+
+- [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — source of this skill: normative § 6, § 6.1, § 6.2, § 7 contract
+- `test-design` · `test-diagnose` — the sibling skills
+- `playwright-review` · `bun-test-review` — they audit the **tests**; this one audits the **shape**
+- `Github Actions` — where the gates live
+- `Docs/Bun - Testes - Cobertura e CI.md` · `Docs/Playwright - Execução, Retries e CI.md` — the mechanism of the gates

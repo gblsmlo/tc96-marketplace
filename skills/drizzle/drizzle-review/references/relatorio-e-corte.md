@@ -1,40 +1,38 @@
-# Formato do achado, e o corte
+# Finding format, and the cut
 
-Quatro partes, o mesmo contrato de `react-review`:
+Four parts, the same contract as `react-review`:
 
 ```
-`ID-DA-REGRA` — arquivo:linha
-<o que está errado, uma frase>
-Correção: <mudança concreta>
-Ver Satélite correspondente.
+`RULE-ID` — file:line
+<what is wrong, one sentence>
+Fix: <concrete change>
+See the corresponding satellite.
 ```
 
-### Exemplo
+### Example
 
 ```
 `DRZ-RQB-01` — apps/api/src/features/tasks/repository.ts:265
-A listagem chama a leitura de agregado uma vez por linha da página, dentro de Promise.all.
-Correção: buscar os IDs da página e carregar referências e tags em uma query com inArray, agrupando por Map.
-Ver Drizzle - Queries e Relations.
+The listing calls the aggregate read once per row of the page, inside Promise.all.
+Fix: fetch the page's IDs and load references and tags in one query with inArray, grouping by Map.
+See Drizzle - Queries e Relations.
 ```
 
-Regras do formato:
+Rules of the format:
 
-- **ID canônico obrigatório**, conferido na § 6 antes de escrever.
-- **Arquivo:linha sempre.** Para sonda, a evidência é a saída do script — cole-a.
-- **Correção concreta.** Se o repositório já tem o padrão certo em outro arquivo, aponte esse arquivo: estender o padrão estabelecido vale mais que introduzir um novo.
-- **Um link de satélite.**
-
----
-
-## Passo 6 — O corte: achado × opinião
-
-**Achado sem ID de regra é opinião**, com duas saídas legítimas:
-
-1. **Existe ID** → achado, cite o canônico.
-2. **Não existe ID, mas há nota normativa** (offset × cursor, retenção de log, ordem de deploy destrutivo) → cite a nota e a seção: "". Não invente `DRZ-*`.
-3. **Nem ID nem nota** → seção separada "Sugestões (sem regra)", nunca misturada.
-
-**Nunca invente um ID.** Se a varredura encontrar um defeito recorrente e real sem regra correspondente, o produto certo é uma **proposta de regra** para [Drizzle ORM](../../../../knowledge-base/docs/drizzle-orm.md) § 6 — com ID sugerido, texto e o caso que a motivou — não uma citação falsa no relatório.
+- **Canonical ID required**, checked against § 6 before writing.
+- **file:line always.** For a probe, the evidence is the script's output — paste it.
+- **Concrete fix.** If the repository already has the right pattern in another file, point at that file: extending the established pattern is worth more than introducing a new one.
+- **One satellite link.**
 
 ---
+
+## Step 6 — The cut: finding × opinion
+
+**A finding without a rule ID is an opinion**, with two legitimate ways out:
+
+1. **There is an ID** → a finding, cite the canonical one.
+2. **There is no ID, but there is a normative note** (offset × cursor, log retention, destructive deploy order) → cite the note and the section: "". Do not invent `DRZ-*`.
+3. **Neither ID nor note** → a separate "Suggestions (no rule)" section, never mixed in.
+
+**Never invent an ID.** If the scan finds a recurring, real defect with no matching rule, the right product is a **rule proposal** for [Drizzle ORM](../../../../knowledge-base/docs/drizzle-orm.md) § 6 — with a suggested ID, text and the case that motivated it — not a fake citation in the report.

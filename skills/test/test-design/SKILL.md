@@ -1,8 +1,9 @@
 ---
 nome: test-design
-descricao: Decidir em que nível um teste vai e derivar os casos antes de escrever uma linha, citando IDs `TS-*` da doc do vault — use quando a tarefa for responder "que teste eu escrevo para isto?", escolher entre unidade/integração/componente/contrato/E2E, definir a proporção da suíte de um módulo, derivar casos de uma entrada (faixa, limite, combinação, estado), ou decidir o que substituir por dublê. Não use para escrever o teste em si — depois de decidido o nível, a fonte passa a ser playwright-build ou bun-test-build. Não use para auditar suíte existente, que é test-review, nem para suíte instável, que é test-diagnose.
+descricao: Decide which level a test belongs at and derive the cases before writing a line, citing `TS-*` IDs from the vault docs — use when the task is answering "what test do I write for this?", choosing between unit/integration/component/contract/E2E, setting the suite proportion for a module, deriving cases from an input (range, boundary, combination, state), or deciding what to replace with a double. Do not use to write the test itself — once the level is decided, the source becomes playwright-build or bun-test-build. Do not use to audit an existing suite, which is test-review, nor for an unstable suite, which is test-diagnose.
 tipo: skill
 familia: test
+idioma: en
 fonte: "[Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md)"
 tags:
   - skill
@@ -13,147 +14,147 @@ tags:
 
 # test-design
 
-> **Fonte desta skill:** [Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) e [Teste de Software - Técnicas de Design de Caso](../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md), com o hub [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) como roteador. As 64 regras da família `TS-*` moram na § 6 do hub.
-> Esta skill **não contém** o texto das regras — ela diz o que decidir, em que ordem, e para quem entregar depois.
+> **Source of this skill:** [Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) and [Teste de Software - Técnicas de Design de Caso](../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md), with the [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) hub as the router. The 64 rules of the `TS-*` family live in § 6 of the hub.
+> This skill **does not contain** the text of the rules — it says what to decide, in what order, and whom to hand it to afterwards.
 
-Contrato que esta skill implementa: [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 7 ("Contrato de skill").
 
-> **Nota de desenho.** Esta é a **camada de conceito**: decide *o quê* e *em que nível*. Ela **não escreve teste** — quem escreve é `playwright-build` ou `bun-test-build`, e a passagem de bastão está no Passo 7. Rodar as duas camadas como se fossem uma só desperdiça contexto; pular esta e ir direto para a ferramenta produz **E2E por default**, o antipadrão de maior custo do stack.
+> **Design note.** This is the **concept layer**: it decides *what* and *at which level*. It **does not write tests** — that is `playwright-build` or `bun-test-build`, and the handoff is in Step 7. Running both layers as if they were one wastes context; skipping this one and going straight to the tool produces **E2E by default**, the most expensive antipattern in this stack.
 
 ---
 
-## Quando usar
+## When to use
 
-Há uma feature, um bug, uma regra, uma jornada — e a pergunta é *que teste cobre isto, e onde ele mora?*
+There is a feature, a bug, a rule, a journey — and the question is *what test covers this, and where does it live?*
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| o nível já está decidido, quero escrever | `playwright-build` (E2E) · `bun-test-build` (unidade/integração) · `storybook-test` (componente) |
-| auditar a estratégia de uma suíte existente | `test-review` |
-| suíte em que ninguém confia | `test-diagnose` |
-| um teste concreto falhando | `playwright-diagnose` · `bun-test-review` |
-| critério de aceite de requisito não funcional | [Teste de Software - Processo e Artefatos](../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) |
+| the level is already decided, I want to write | `playwright-build` (E2E) · `bun-test-build` (unit/integration) · `storybook-test` (component) |
+| auditing the strategy of an existing suite | `test-review` |
+| a suite nobody trusts | `test-diagnose` |
+| one concrete test failing | `playwright-diagnose` · `bun-test-review` |
+| acceptance criteria for a non-functional requirement | [Teste de Software - Processo e Artefatos](../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 2 | o teste compra informação a um preço; a camada mais barata que ainda pega o defeito |
-| 2 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 4.1 | a árvore de nível — o núcleo desta skill |
-| 3 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 6 | as 8 `TS-CORE-*` e as críticas da § 6.1 |
-| 4 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 4.3 | a árvore de técnica, quando houver entrada a exercitar |
-| 5 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 4.2 | a árvore de substituição, quando houver dependência |
+| 1 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 2 | a test buys information at a price; the cheapest layer that still catches the defect |
+| 2 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 4.1 | the level tree — the core of this skill |
+| 3 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 6 | the 8 `TS-CORE-*` and the critical ones in § 6.1 |
+| 4 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 4.3 | the technique tree, when there is input to exercise |
+| 5 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 4.2 | the replacement tree, when there is a dependency |
 
-**Nunca carregue os seis satélites.** E não carregue a nota de ferramenta ainda — ela entra no Passo 7.
+**Never load all six satellites.** And do not load the tool note yet — it comes in at Step 7.
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/arvore-de-nivel.md` | a frase, o nível, a proporção por módulo (Passos 1–3) |
-| `references/tecnicas-de-caso.md` | técnica por forma da entrada, fronteiras não numéricas, os cinco estados (Passo 4) |
-| `references/substituicao.md` | a pergunta única do dublê e o vocabulário (Passo 5) |
-| `references/antipadroes.md` | a grade de conferência, 24 antipadrões com ID |
-| `references/mapa-de-ids.md` | os 64 `TS-*` por satélite e seção, e os três **apelidos** |
-| `references/exemplo-desconto-por-volume.md` | caso trabalhado, da frase ao bastão |
-| `scripts/gerar-mapa-de-ids.sh` | regenera o mapa nas três skills de teste |
+| `references/arvore-de-nivel.md` | the sentence, the level, the per-module proportion (Steps 1–3) |
+| `references/tecnicas-de-caso.md` | technique by input shape, non-numeric boundaries, the five states (Step 4) |
+| `references/substituicao.md` | the single question about doubles and the vocabulary (Step 5) |
+| `references/antipadroes.md` | the check grid, 24 antipatterns with IDs |
+| `references/mapa-de-ids.md` | the 64 `TS-*` by satellite and section, and the three **aliases** |
+| `references/exemplo-desconto-por-volume.md` | worked case, from the sentence to the handoff |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map across the three test skills |
 
 ---
 
-## Passo 1 — A frase, antes de tudo
+## Step 1 — The sentence, before anything else
 
-> **O que exatamente pode dar errado aqui?**
+> **What exactly can go wrong here?**
 
-Se não conseguir escrevê-la, **o teste não deveria ser escrito ainda** (`TS-CORE-01`). A frase boa nomeia **um sujeito e um comportamento errado** — e é ela que decide o nível, não a intuição. Exemplos de frase vaga × acionável: `references/arvore-de-nivel.md`.
-
----
-
-## Passo 2 — Escolher o nível
-
-`references/arvore-de-nivel.md`, ou a § 4.1 do hub. Três cortes resolvem a maioria:
-
-- **regra de negócio nunca é E2E** (`TS-NIV-02`);
-- precisa de rota, login ou mais de uma tela → **E2E**; varia props → **componente**;
-- defeito na **junta** entre peças → integração.
-
-**E2E é a menor fatia da suíte** (`TS-CORE-02`).
+If you cannot write it, **the test should not be written yet** (`TS-CORE-01`). A good sentence names **a subject and a wrong behavior** — and it is the sentence that decides the level, not intuition. Examples of vague × actionable sentences: `references/arvore-de-nivel.md`.
 
 ---
 
-## Passo 3 — Escolher a proporção do módulo
+## Step 2 — Choose the level
 
-Por **módulo**, não por repositório (`TS-NIV-08`). Complexidade dentro de funções → pirâmide; entre peças → trophy. O mesmo repositório tem os dois. Conte a camada estática (`TS-TIPO-08`).
+`references/arvore-de-nivel.md`, or § 4.1 of the hub. Three cuts settle most cases:
 
----
+- **a business rule is never E2E** (`TS-NIV-02`);
+- it needs routing, login or more than one screen → **E2E**; it varies props → **component**;
+- the defect is in the **joint** between pieces → integration.
 
-## Passo 4 — Derivar os casos
-
-`references/tecnicas-de-caso.md`. Se for para aplicar **uma** técnica, é **valor limite** (`TS-TEC-01`). Não esqueça as fronteiras não numéricas — coleção **vazia** é a que mais quebra UI — nem os cinco estados do fluxo (`TS-TIPO-02`).
-
----
-
-## Passo 5 — Decidir o que substituir
-
-`references/substituicao.md`. A pergunta única: **se a dependência real divergisse do dublê, este teste deveria quebrar?** Se sim, não substitua (`TS-CORE-03`). Relógio e aleatoriedade: substitua sempre (`TS-DUB-05`).
+**E2E is the smallest slice of the suite** (`TS-CORE-02`).
 
 ---
 
-## Passo 6 — Autoverificação antes de passar o bastão
+## Step 3 — Choose the module's proportion
 
-| # | Confira | Regra |
+Per **module**, not per repository (`TS-NIV-08`). Complexity inside functions → pyramid; between pieces → trophy. The same repository has both. Count the static layer (`TS-TIPO-08`).
+
+---
+
+## Step 4 — Derive the cases
+
+`references/tecnicas-de-caso.md`. If you are going to apply **one** technique, make it **boundary value** (`TS-TEC-01`). Do not forget the non-numeric boundaries — an **empty** collection is the one that breaks UI most — nor the five states of the flow (`TS-TIPO-02`).
+
+---
+
+## Step 5 — Decide what to replace
+
+`references/substituicao.md`. The single question: **if the real dependency diverged from the double, should this test break?** If yes, do not replace it (`TS-CORE-03`). Clock and randomness: always replace them (`TS-DUB-05`).
+
+---
+
+## Step 6 — Self-check before the handoff
+
+| # | Check | Rule |
 | --- | --- | --- |
-| 1 | a frase existe e é específica | `TS-CORE-01` |
-| 2 | o nível é o mais barato que ainda pega o defeito | `TS-CORE-02` |
-| 3 | nenhuma regra de negócio foi mandada para E2E | `TS-NIV-02` |
-| 4 | as fronteiras da entrada têm caso | `TS-TEC-01`, `TS-TEC-03` |
-| 5 | as classes/transições **inválidas** têm caso | `TS-TEC-02`, `TS-TEC-04` |
-| 6 | os cinco estados estão decididos (mesmo que "não cobrir") | `TS-TIPO-02` |
-| 7 | nada que o teste vem provar está sendo substituído | `TS-CORE-03` |
-| 8 | relógio e aleatoriedade estão controlados | `TS-DUB-05` |
-| 9 | o dublê está chamado pelo nome certo | `TS-DUB-01` |
-| 10 | requisito não funcional tem número e percentil | `TS-TIPO-05`, `TS-TIPO-06` |
+| 1 | the sentence exists and is specific | `TS-CORE-01` |
+| 2 | the level is the cheapest one that still catches the defect | `TS-CORE-02` |
+| 3 | no business rule was sent to E2E | `TS-NIV-02` |
+| 4 | the input's boundaries have cases | `TS-TEC-01`, `TS-TEC-03` |
+| 5 | the **invalid** classes/transitions have cases | `TS-TEC-02`, `TS-TEC-04` |
+| 6 | the five states are decided (even if "not covering") | `TS-TIPO-02` |
+| 7 | nothing the test came to prove is being replaced | `TS-CORE-03` |
+| 8 | clock and randomness are controlled | `TS-DUB-05` |
+| 9 | the double is called by the right name | `TS-DUB-01` |
+| 10 | a non-functional requirement has a number and a percentile | `TS-TIPO-05`, `TS-TIPO-06` |
 
-Depois, passe `references/antipadroes.md` linha a linha.
+Then go through `references/antipadroes.md` line by line.
 
 ---
 
-## Passo 7 — Passar o bastão
+## Step 7 — Hand off
 
-| Nível | Continue em |
+| Level | Continue in |
 | --- | --- |
 | E2E | `playwright-build` |
-| unidade, integração | `bun-test-build` |
-| componente | `storybook-story` · `storybook-test` |
-| contrato | `elysia-schema` · `Docs/Hono - Validação e RPC.md` |
-| estático | `Docs/TypeScript.md` · `Docs/Zod - Validação de Ambiente.md` |
+| unit, integration | `bun-test-build` |
+| component | `storybook-story` · `storybook-test` |
+| contract | `elysia-schema` · `Docs/Hono - Validação e RPC.md` |
+| static | `Docs/TypeScript.md` · `Docs/Zod - Validação de Ambiente.md` |
 
-**Entregue a decisão junto:** nível, casos derivados, e o que será substituído. A skill de ferramenta implementa — ela não reabre essas perguntas.
-
----
-
-## Passo 8 — Fechar
-
-1. **Declare o que decidiu não cobrir.** Decisão registrada não é lacuna; decisão implícita é.
-2. **Se a frase não caiu em nenhum nível**, o requisito está ambíguo — o achado é de requisito (`TS-PROC-01`).
-3. **Se o defeito veio de produção**, o teste vai no nível mais barato que o pega (`TS-CORE-06`) — é o teste com maior prova de valor que existe.
-4. **Se a decisão foi "não testar"**, escreva o porquê.
+**Hand the decision over with it:** level, derived cases, and what will be replaced. The tool skill implements — it does not reopen those questions.
 
 ---
 
-## Exemplo
+## Step 8 — Closing
 
-*"Cobrir o desconto por volume no checkout."* A frase — "desconto acima de 50% pode ser aplicado sem aprovação" — manda para **unidade**, não para o checkout inteiro. Valor limite gera 5 casos, transição de estado mais 2, e o E2E fica com **um**: a tela exibe o valor calculado. A alternativa intuitiva (8 E2E) compra menos informação por muito mais tempo de execução.
-
-Caso completo: `references/exemplo-desconto-por-volume.md`.
+1. **Declare what you decided not to cover.** A recorded decision is not a gap; an implicit one is.
+2. **If the sentence fell into no level**, the requirement is ambiguous — the finding is about the requirement (`TS-PROC-01`).
+3. **If the defect came from production**, the test goes at the cheapest level that catches it (`TS-CORE-06`) — it is the test with the strongest proof of value there is.
+4. **If the decision was "do not test"**, write down why.
 
 ---
 
-## Relacionados
+## Example
 
-- [Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) — fonte desta skill
-- [Teste de Software - Técnicas de Design de Caso](../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) — a segunda fonte, do Passo 4
-- [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — o hub: § 2, § 4.1, § 4.2, § 4.3, § 6, § 7
-- `test-review` · `test-diagnose` — as skills irmãs
-- `playwright-build` · `bun-test-build` · `storybook-test` — para onde o bastão vai
+*"Cover the volume discount at checkout."* The sentence — "a discount above 50% can be applied without approval" — sends it to **unit**, not to the whole checkout. Boundary value generates 5 cases, state transition 2 more, and E2E gets **one**: the screen displays the calculated value. The intuitive alternative (8 E2E runs) buys less information for far more execution time.
+
+Full case: `references/exemplo-desconto-por-volume.md`.
+
+---
+
+## Related
+
+- [Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) — source of this skill
+- [Teste de Software - Técnicas de Design de Caso](../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) — the second source, from Step 4
+- [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — the hub: § 2, § 4.1, § 4.2, § 4.3, § 6, § 7
+- `test-review` · `test-diagnose` — the sibling skills
+- `playwright-build` · `bun-test-build` · `storybook-test` — where the handoff goes

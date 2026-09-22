@@ -1,81 +1,81 @@
-# Exemplo trabalhado — diagnóstico de uma suíte
+# Worked example — diagnosing a suite
 
-Time reexecuta o job por reflexo. Ninguém investiga vermelho antes de tentar de novo.
+The team re-runs the job by reflex. Nobody investigates red before trying again.
 
 ---
 
-## Passo 0 — as falhas são defeitos reais?
+## Step 0 — are the failures real defects?
 
-Não: mesmo commit, mesma suíte, resultados diferentes. **Intermitente** → é desta skill.
+No: same commit, same suite, different results. **Intermittent** → this skill's job.
 
-## Passo 1 — a medida
+## Step 1 — the measurement
 
 ```
 $ bash scripts/medir-flakiness.sh "bunx playwright test" 20
 
-== Anestésicos já instalados
- -- retry configurado:
+== Anesthetics already installed
+ -- retry configured:
  playwright.config.ts:12: retries: 3
- -- espera por tempo fixo, a causa nº 1 (TS-SUI-07):
- e2e/checkout.spec.ts:22,31,44,58,63,71,88 (7 ocorrências)
- -- skip / todo acumulado:
- e2e/pagamento.spec.ts:1
-== Taxa de flakiness
+ -- fixed-time waits, cause #1 (TS-SUI-07):
+ e2e/checkout.spec.ts:22,31,44,58,63,71,88 (7 occurrences)
+ -- accumulated skip / todo:
+ e2e/payment.spec.ts:1
+== Flakiness rate
 ..F....F..F.....F..F
- execuções: 20 | falhas: 5 | taxa: 25.0%
- ACIMA DE ~1%: a suíte perdeu valor.
+ runs: 20 | failures: 5 | rate: 25.0%
+ ABOVE ~1%: the suite has lost value.
 ```
 
-Histórico do CI confirma: **34 das últimas 200 execuções** falharam e passaram na
-reexecução sem mudança de código = **17%**.
+The CI history confirms it: **34 of the last 200 runs** failed and passed on re-run with no
+code change = **17%**.
 
-## Passo 2 — as seis perguntas
+## Step 2 — the six questions
 
-Pergunta 1: sim, intermitente. **Pare aqui** — flakiness contamina todo o resto, e responder
-as outras cinco antes de resolver esta produz diagnóstico sobre ruído.
+Question 1: yes, intermittent. **Stop here** — flakiness contaminates everything else, and
+answering the other five before resolving this one produces a diagnosis about noise.
 
-## Passo 3 — a causa
+## Step 3 — the cause
 
-9 dos 12 arquivos de `e2e/` usam **espera por tempo fixo** antes da asserção (`TS-SUI-07`).
-Os outros 3 compartilham a mesma conta de teste entre workers (`TS-SUI-09`) — confirmado
-porque, com `--workers=1`, a falha some.
+9 of the 12 files in `e2e/` use a **fixed-time wait** before the assertion (`TS-SUI-07`).
+The other 3 share the same test account across workers (`TS-SUI-09`) — confirmed
+because, with `--workers=1`, the failure disappears.
 
-## O relatório
-
-```
-`TS-CORE-04` — a suíte de e2e/, últimas 200 execuções do CI
-Sintoma: o time reexecuta o job por reflexo; ninguém investiga vermelho antes de tentar de novo.
-Medida: 34 das 200 execuções falharam e passaram na reexecução sem mudança de código = 17%
- de taxa de flakiness. O limiar em que uma suíte perde valor é ~1%.
-Causa: 9 dos 12 arquivos de e2e/ usam espera por tempo fixo antes da asserção (TS-SUI-07);
- os outros 3 compartilham a mesma conta de teste entre workers (TS-SUI-09).
-Correção: (1) substituir espera por tempo por asserção que reespera — começar por
- e2e/checkout.spec.ts, que tem 7 ocorrências; (2) conta por worker.
- NÃO subir retries: com 17%, retry mascara e não resolve (TS-SUI-03).
-Ver Teste de Software - Confiabilidade da Suíte, e Playwright § 5.2 para as formas concretas.
-```
-
-E o segundo achado, de outra natureza — veio do **teste de trinta segundos**:
+## The report
 
 ```
-`TS-SUI-04` — packages/core/src/desconto.ts
-Sintoma: a suíte passa 100% e um defeito de cálculo de desconto chegou em produção.
-Medida: teste de trinta segundos — invertida a comparação `>=` para `>` na linha 22,
- a suíte inteira continuou verde (0 testes falharam).
-Causa: os 14 testes de desconto chamam a função e afirmam que não lança; nenhum
- compara o valor retornado. Cobertura do arquivo: 96%.
-Correção: asserção sobre o valor, com os casos de valor limite (TS-TEC-01):
- 0%, 50%, 50,01%, 100%, −5%.
-Ver Teste de Software - Técnicas de Design de Caso.
+`TS-CORE-04` — the e2e/ suite, last 200 CI runs
+Symptom: the team re-runs the job by reflex; nobody investigates red before trying again.
+Measurement: 34 of 200 runs failed and passed on re-run with no code change = 17%
+ flakiness rate. The threshold at which a suite loses value is ~1%.
+Cause: 9 of the 12 files in e2e/ use a fixed-time wait before the assertion (TS-SUI-07);
+ the other 3 share the same test account across workers (TS-SUI-09).
+Fix: (1) replace time waits with an assertion that re-waits — start with
+ e2e/checkout.spec.ts, which has 7 occurrences; (2) one account per worker.
+ DO NOT raise retries: at 17%, retry masks and does not resolve (TS-SUI-03).
+See Teste de Software - Confiabilidade da Suíte, and Playwright § 5.2 for the concrete forms.
 ```
 
-## O que este exemplo demonstra
+And the second finding, of another nature — it came from the **thirty-second test**:
 
-| Decisão | Onde está a regra |
+```
+`TS-SUI-04` — packages/core/src/discount.ts
+Symptom: the suite passes 100% and a discount calculation defect reached production.
+Measurement: thirty-second test — with the comparison `>=` inverted to `>` on line 22,
+ the whole suite stayed green (0 tests failed).
+Cause: the 14 discount tests call the function and assert that it does not throw; none
+ compares the returned value. File coverage: 96%.
+Fix: assert on the value, with the boundary-value cases (TS-TEC-01):
+ 0%, 50%, 50.01%, 100%, −5%.
+See Teste de Software - Técnicas de Design de Caso.
+```
+
+## What this example demonstrates
+
+| Decision | Where the rule is |
 | --- | --- |
-| a medida veio antes da opinião, e o número tem limiar | `medicao.md` |
-| a pergunta 1 interrompeu as outras cinco | `causas-de-flake.md` |
-| `--workers=1` foi usado para **diagnosticar**, não para corrigir | `conserto-x-anestesico.md` |
-| "subir retries" foi explicitamente descartado no relatório | `TS-SUI-03` |
-| 96% de cobertura e defeito em produção convivem sem contradição | `deteccao.md` |
-| cada correção tem ponto de partida nomeado | `TS-CORE-04` |
+| the measurement came before the opinion, and the number has a threshold | `medicao.md` |
+| question 1 interrupted the other five | `causas-de-flake.md` |
+| `--workers=1` was used to **diagnose**, not to fix | `conserto-x-anestesico.md` |
+| "raise retries" was explicitly discarded in the report | `TS-SUI-03` |
+| 96% coverage and a defect in production coexist without contradiction | `deteccao.md` |
+| every fix has a named starting point | `TS-CORE-04` |

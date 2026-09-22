@@ -1,46 +1,46 @@
-# O que substituir por dublê
+# What to replace with a double
 
-> Passo 5. A árvore é a § 4.2 de [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md); o corpo é
+> Step 5. The tree is § 4.2 of [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md); the body is
 > [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md).
 
 ---
 
-## A pergunta única, antes de qualquer escolha
+## The single question, before any choice
 
-> **Se a dependência real divergisse do meu dublê, este teste deveria quebrar?**
+> **If the real dependency diverged from my double, should this test break?**
 
 ```
-SIM → não substitua. Pegar a divergência é o ponto inteiro (TS-CORE-03)
-NÃO → substitua, e escolha o tipo certo:
- só preencher parâmetro → dummy
- resposta pronta → stub
- implementação que roda → fake (e declare a fidelidade — TS-DUB-03)
- verificar QUE chamou → mock ou spy
+YES → do not replace it. Catching the divergence is the whole point (TS-CORE-03)
+NO → replace it, and pick the right kind:
+ just filling a parameter → dummy
+ a canned response → stub
+ an implementation that runs → fake (and declare the fidelity — TS-DUB-03)
+ verifying THAT it was called → mock or spy
 ```
 
 ---
 
-## Duas regras que valem em qualquer nível
+## Two rules that hold at any level
 
-- **Relógio e aleatoriedade: substitua sempre** (`TS-DUB-05`). É onde determinismo se
- compra barato, e é o antídoto de toda espera por tempo real.
-- **Estado do servidor: não mocke — crie de verdade** pela API quando houver endpoint
- (`TS-CORE-03`, e `PW-NET-06` em `Docs/Playwright - Rede e Mocking.md`).
-
----
-
-## O vocabulário decide a pergunta seguinte
-
-Um servidor de mentira **que funciona** é um **fake**, não um mock (`TS-DUB-01`). Nomear
-certo faz aparecer sozinha a pergunta que decide tudo — *ele honra o contrato real?*
-
-Fake de repositório no lugar de banco controlado é `TS-DUB-08`: o fake passa, e o SQL real
-quebra em produção.
+- **Clock and randomness: always replace them** (`TS-DUB-05`). That is where determinism is
+ bought cheaply, and it is the antidote to every wait on real time.
+- **Server state: do not mock it — create it for real** through the API when there is an endpoint
+ (`TS-CORE-03`, and `PW-NET-06` in `Docs/Playwright - Rede e Mocking.md`).
 
 ---
 
-## Relacionados
+## The vocabulary decides the next question
 
-- [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) — a fonte
-- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 4.2 — a árvore
-- `arvore-de-nivel.md` — o nível que veio antes
+A fake server **that works** is a **fake**, not a mock (`TS-DUB-01`). Naming it correctly makes
+the question that decides everything appear on its own — *does it honor the real contract?*
+
+A repository fake in place of a controlled database is `TS-DUB-08`: the fake passes, and the real
+SQL breaks in production.
+
+---
+
+## Related
+
+- [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) — the source
+- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 4.2 — the tree
+- `arvore-de-nivel.md` — the level that came before

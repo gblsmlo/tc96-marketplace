@@ -1,61 +1,62 @@
-# Medir antes de opinar
+# Measure before opining
 
-> Esta skill se distingue de conversa de corredor exatamente aqui: **flakiness tem número,
-> e o número tem limiar.**
-
----
-
-## Passo 0 — a pergunta que vem antes
-
-> **As falhas são defeitos reais do produto?**
-
-Se sim, **a suíte fez o trabalho dela** e não há nada a diagnosticar. Confundir "muito
-vermelho" com "suíte ruim" é como um time desliga a única coisa que estava avisando.
-
-O sinal de distinção: falha **determinística** (sempre no mesmo lugar, com a mesma
-mensagem) é defeito; falha **intermitente** é a suíte. Só o segundo caso é desta skill.
+> This skill distinguishes itself from hallway conversation exactly here: **flakiness has a
+> number, and the number has a threshold.**
 
 ---
 
-## As medidas
+## Step 0 — the question that comes first
 
-| Métrica | Como obter | Referência |
+> **Are the failures real product defects?**
+
+If so, **the suite did its job** and there is nothing to diagnose. Confusing "too much red"
+with "bad suite" is how a team switches off the only thing that was warning them.
+
+The distinguishing signal: a **deterministic** failure (always in the same place, with the same
+message) is a defect; an **intermittent** failure is the suite. Only the second case belongs to
+this skill.
+
+---
+
+## The measurements
+
+| Metric | How to obtain it | Reference |
 | --- | --- | --- |
-| **taxa de flakiness** | execuções que falharam e passaram na reexecução ÷ total, no histórico do CI — ou `scripts/medir-flakiness.sh` | **~1% é onde a suíte perde valor**; o índice do Google é ~0,15% |
-| **investigações inúteis/dia** | taxa × nº de testes × execuções por dia | 0,1% × 10 000 = **10 por dia** |
-| **taxa de escape** | defeitos achados em produção ÷ total de defeitos | a métrica mais honesta que existe |
-| **duração** | tempo da suíte por nível | se ninguém roda antes do PR, deixou de ser portão |
-| **retry ativo** | inventário do script | retry é anestésico (`TS-SUI-03`) |
-| **`skip` acumulado** | inventário do script | dívida, e frequentemente flake escondido |
+| **flakiness rate** | runs that failed and passed on re-run ÷ total, in the CI history — or `scripts/medir-flakiness.sh` | **~1% is where the suite loses value**; Google's index is ~0.15% |
+| **useless investigations/day** | rate × number of tests × runs per day | 0.1% × 10,000 = **10 per day** |
+| **escape rate** | defects found in production ÷ total defects | the most honest metric there is |
+| **duration** | suite time per level | if nobody runs it before the PR, it has stopped being a gate |
+| **active retry** | the script's inventory | retry is an anesthetic (`TS-SUI-03`) |
+| **accumulated `skip`** | the script's inventory | debt, and frequently hidden flakiness |
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/test-diagnose/scripts/medir-flakiness.sh "bun test" 20
 ```
 
-O script faz duas coisas: **inventaria os anestésicos já instalados** (retry, workers=1,
-`skip`, espera por tempo fixo, relógio real, prefixo numérico, `try/catch` no corpo) e
-**mede a taxa** repetindo o comando N vezes.
+The script does two things: it **inventories the anesthetics already installed** (retry,
+workers=1, `skip`, fixed-time waits, real clock, numeric prefix, `try/catch` in the body) and
+**measures the rate** by repeating the command N times.
 
 ---
 
-## Por que a taxa, e não a impressão
+## Why the rate, and not the impression
 
-Uma suíte com 0,05% de flake e uma com 3% têm o **mesmo sintoma percebido** ("às vezes
-falha") e prognósticos opostos: a primeira está sã e alguém teve azar; a segunda perdeu
-valor e precisa de intervenção.
+A suite at 0.05% flakiness and one at 3% have the **same perceived symptom** ("it fails
+sometimes") and opposite prognoses: the first is healthy and someone got unlucky; the second has
+lost value and needs intervention.
 
-**O argumento que fecha qualquer discussão sobre "conviver com flaky":** acima de ~1%, as
-pessoas param de acreditar no vermelho — e o vermelho **verdadeiro** passa junto com os
-falsos. O custo não é o tempo de reexecutar; é a perda do sinal (`TS-CORE-04`).
+**The argument that closes any discussion about "living with flaky":** above ~1%, people stop
+believing the red — and the **real** red passes along with the false ones. The cost is not the
+time to re-run; it is the loss of signal (`TS-CORE-04`).
 
-**Cuidado com o zero.** 20 execuções verdes não provam ausência de um flake de 1 em 50.
-Se a taxa medida for 0 e o time relata instabilidade, a medida certa é o **histórico do
-CI**, não mais uma rodada local.
+**Beware the zero.** 20 green runs do not prove the absence of a 1-in-50 flake. If the measured
+rate is 0 and the team reports instability, the right measurement is the **CI history**, not one
+more local round.
 
 ---
 
-## Relacionados
+## Related
 
-- [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) § 1 — a aritmética
-- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 2, afirmação 5 — uma suíte não confiável é pior que nenhuma
-- `causas-de-flake.md` — o passo seguinte, depois de ter o número
+- [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) § 1 — the arithmetic
+- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 2, claim 5 — an untrustworthy suite is worse than none
+- `causas-de-flake.md` — the next step, once you have the number

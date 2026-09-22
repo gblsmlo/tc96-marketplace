@@ -1,36 +1,35 @@
-# A ordem da varredura, e a severidade
+# The scan order, and severity
 
-6. **Escrita e transaction** — `DRZ-TX-01`, `DRZ-TX-03`, `DRZ-QUERY-04`, `DRZ-QUERY-06`.
-7. **Projeção e SQL cru** — `DRZ-QUERY-01`, `DRZ-QUERY-03`.
-8. **Validação de fronteira** — `DRZ-ZOD-01`, `DRZ-ZOD-02`.
+6. **Writes and transactions** — `DRZ-TX-01`, `DRZ-TX-03`, `DRZ-QUERY-04`, `DRZ-QUERY-06`.
+7. **Projection and raw SQL** — `DRZ-QUERY-01`, `DRZ-QUERY-03`.
+8. **Boundary validation** — `DRZ-ZOD-01`, `DRZ-ZOD-02`.
 
-Se um passo produz achado que invalida o seguinte (a API relacional está desligada; a listagem inteira deveria ser paginada), **pare de revisar o interior** e reporte a mudança de forma, não o detalhe.
+If a step produces a finding that invalidates the next one (the relational API is switched off; the whole listing should be paginated), **stop reviewing the interior** and report the change of shape, not the detail.
 
 ---
 
-## Passo 4 — Classificar severidade
+## Step 4 — Classify severity
 
-| Severidade | O que entra |
+| Severity | What goes in |
 | --- | --- |
-| **Bloqueante** | perda de isolamento entre tenants, `update`/`delete` sem `where` (`DRZ-QUERY-04`), `push` em produção (`DRZ-MIG-02`), migração destrutiva sem rollback |
-| **Alta** | `DRZ-REL-05`, `DRZ-RQB-01`, `DRZ-TX-01`, `DRZ-TX-03`, snapshot dessincronizado, leitura sem teto em tela de volume aberto |
-| **Média** | índice ausente para filtro quente, índice redundante, `DRZ-QUERY-01`, `DRZ-QUERY-06`, `DRZ-ZOD-01` |
-| **Baixa** | preferência sem ID — **não é achado**, ver Passo 6 |
+| **Blocking** | loss of isolation between tenants, `update`/`delete` without `where` (`DRZ-QUERY-04`), `push` in production (`DRZ-MIG-02`), a destructive migration without a rollback |
+| **High** | `DRZ-REL-05`, `DRZ-RQB-01`, `DRZ-TX-01`, `DRZ-TX-03`, a desynchronized snapshot, an unbounded read on an open-volume screen |
+| **Medium** | a missing index for a hot filter, a redundant index, `DRZ-QUERY-01`, `DRZ-QUERY-06`, `DRZ-ZOD-01` |
+| **Low** | preference without an ID — **not a finding**, see Step 6 |
 
-Custo medido vence custo suposto. "Isso pode ficar lento" sem número nem plano de execução é Baixa, não Média.
+Measured cost beats assumed cost. "This could get slow" with no number and no execution plan is Low, not Medium.
 
 ---
 
-## Passo 5 — Formato de saída de um achado
+## Step 5 — Output format of a finding
 
-Quatro partes, o mesmo contrato de `react-review`:
+Four parts, the same contract as `react-review`:
 
 ```
-`ID-DA-REGRA` — arquivo:linha
-<o que está errado, uma frase>
-Correção: <mudança concreta>
-Ver Satélite correspondente.
+`RULE-ID` — file:line
+<what is wrong, one sentence>
+Fix: <concrete change>
+See the corresponding satellite.
 ```
 
-### Exemplo
-
+### Example

@@ -1,48 +1,48 @@
-# O teste de trinta segundos
+# The thirty-second test
 
-> Para a pergunta 3 das seis, e é a verificação de **maior retorno** desta skill.
+> For question 3 of the six, and it is the **highest-return** check in this skill.
 
 ---
 
-## O procedimento
+## The procedure
 
-**Quebre o código de propósito e veja se algo fica vermelho.** Troque um sinal, inverta uma
-condição, remova uma chamada, devolva `null`. Se nada quebrar, **a asserção não existe**
+**Break the code on purpose and see whether anything goes red.** Flip a sign, invert a
+condition, remove a call, return `null`. If nothing breaks, **the assertion does not exist**
 (`TS-SUI-04`).
 
-Faça em três lugares, escolhidos por risco:
+Do it in three places, chosen by risk:
 
-| Onde | O que quebrar |
+| Where | What to break |
 | --- | --- |
-| a regra de negócio mais crítica | inverter uma comparação |
-| a validação de entrada mais usada | remover a checagem |
-| o caminho de erro mais importante | fazer sucesso onde deveria falhar |
+| the most critical business rule | invert a comparison |
+| the most used input validation | remove the check |
+| the most important error path | make it succeed where it should fail |
 
-Se a suíte fica verde em **qualquer** um dos três, o achado é **bloqueante** — e explica
-sozinho a pergunta 6 ("passa tudo e o defeito chega em produção").
-
----
-
-## A versão rigorosa, e quando ela paga
-
-**Teste de mutação**: o mutante que **sobrevive** aponta a asserção faltante com precisão
-de linha (`TS-SUI-04`). É caro para rodar sempre; o uso realista é **pontual, no módulo
-crítico**. A versão de trinta segundos serve todo dia e não precisa de ferramenta.
+If the suite stays green in **any** of the three, the finding is **blocking** — and it explains
+question 6 all by itself ("everything passes and the defect reaches production").
 
 ---
 
-## O corolário que fecha a discussão sobre cobertura
+## The rigorous version, and when it pays
 
-**Cobertura não responde a essa pergunta.** Um teste que chama a função e não afirma nada
-dá cobertura total (`TS-CORE-05`). É por isso que "96% de cobertura" e "o defeito passou"
-convivem sem contradição.
-
-Declarar a suíte suficiente **sem ter quebrado nada** é `TS-TEC-08`.
+**Mutation testing**: the mutant that **survives** points at the missing assertion with line
+precision (`TS-SUI-04`). It is expensive to run always; the realistic use is **targeted, on the
+critical module**. The thirty-second version serves every day and needs no tooling.
 
 ---
 
-## Relacionados
+## The corollary that closes the discussion about coverage
 
-- [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) — cobertura × mutação
+**Coverage does not answer that question.** A test that calls the function and asserts nothing
+gives full coverage (`TS-CORE-05`). That is why "96% coverage" and "the defect got through"
+coexist without contradiction.
+
+Declaring the suite sufficient **without having broken anything** is `TS-TEC-08`.
+
+---
+
+## Related
+
+- [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) — coverage × mutation
 - [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) — `TS-SUI-04`
-- `medicao.md` — a outra medida obrigatória desta skill
+- `medicao.md` — the other mandatory measurement in this skill

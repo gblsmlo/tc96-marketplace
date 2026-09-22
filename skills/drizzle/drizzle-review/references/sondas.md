@@ -1,40 +1,40 @@
-# As sondas — antes de ler o código
+# The probes — before reading the code
 
-> Em persistência, os piores defeitos são **invisíveis à leitura**: o schema parece completo,
-> a query parece certa, o teste passa — e mesmo assim a API relacional está desligada ou o
-> gerador de migração está cego.
+> In persistence, the worst defects are **invisible to reading**: the schema looks complete,
+> the query looks right, the test passes — and even so the relational API is switched off or the
+> migration generator is blind.
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/drizzle-review/scripts/sondas.sh src
 ```
 
-| Sonda | Como | O que revela |
+| Probe | How | What it reveals |
 | --- | --- | --- |
-| **S1. Registro do cliente** | Comparar os `pgTable` e `relations` exportados com as chaves do objeto passado a `drizzle({ schema })` | `DRZ-REL-05` — schema sem os `relations` faz `with` lançar em runtime; tabela ausente faz `db.query.x` ser `undefined` |
-| **S2. Cadeia de snapshots** | Contar entradas de `meta/_journal.json` × arquivos `*_snapshot.json`; rodar `generate` num tree limpo | migração escrita à mão que não atualizou o snapshot faz o gerador diffar de um estado antigo e propor SQL destrutivo |
-| **S3. Índices redundantes** | Para cada tabela, achar índice que seja prefixo estrito de outro | custo de escrita e de cache sem nenhum leitor |
-| **S4. Testes de integração vivos** | Rodar a suíte com as flags que destravam os testes de banco | teste que nunca roda não é cobertura; caminho de arquivo errado passa despercebido por anos |
+| **S1. Client registration** | Compare the exported `pgTable` and `relations` with the keys of the object passed to `drizzle({ schema })` | `DRZ-REL-05` — a schema without the `relations` makes `with` throw at runtime; a missing table makes `db.query.x` `undefined` |
+| **S2. Snapshot chain** | Count entries in `meta/_journal.json` × `*_snapshot.json` files; run `generate` on a clean tree | a hand-written migration that did not update the snapshot makes the generator diff from an old state and propose destructive SQL |
+| **S3. Redundant indexes** | For each table, find an index that is a strict prefix of another | write and cache cost with no reader at all |
+| **S4. Live integration tests** | Run the suite with the flags that unlock the database tests | a test that never runs is not coverage; a wrong file path goes unnoticed for years |
 
-S1 e S3 são leitura de código — nenhum precisa de conexão. **S2** precisa de um `generate`
-num tree limpo. **S4** (testes de integração vivos) precisa do banco de pé e das migrações
-aplicadas — se não rodou, declare.
+S1 and S3 are code reading — neither needs a connection. **S2** needs a `generate` on a clean
+tree. **S4** (live integration tests) needs the database up and the migrations applied — if it
+did not run, declare it.
 
-**Se S1 falhar, pare e reporte antes de continuar.** Com a API relacional desligada, toda
-leitura montada à mão é **consequência, não causa**, e criticar cada uma é ruído.
+**If S1 fails, stop and report before continuing.** With the relational API switched off, every
+hand-built read is a **consequence, not a cause**, and criticizing each one is noise.
 
-## O que o script acrescenta às quatro sondas da doc
+## What the script adds to the four probes from the docs
 
-| Sonda extra | Regra | Por que entra aqui |
+| Extra probe | Rule | Why it belongs here |
 | --- | --- | --- |
-| S4 — query dentro de `map`/`for` | `DRZ-RQB-01` | o achado mais comum e o mais caro |
-| S5 — `update`/`delete` sem `where` | `DRZ-QUERY-04` | bloqueante, e uma linha o produz |
-| S6 — `sql\`\`` com interpolação | `DRZ-QUERY-03` | vira achado de **segurança** quando o valor vem do usuário |
-| S7 — `db` externo dentro de `transaction` | `DRZ-TX-03` | a escrita sai da transação sem erro |
-| S8 — `push` fora do local | `DRZ-MIG-02`, `DRZ-MIG-04` | grep no `package.json` e no workflow resolve |
-| S9 — `.default` com valor computado | `DRZ-SCHEMA-04` | o valor congela no SQL da migração |
-| S10 — Zod à mão | `DRZ-ZOD-01` | aponta os candidatos; a confirmação é leitura |
+| S4 — a query inside `map`/`for` | `DRZ-RQB-01` | the most common finding and the most expensive |
+| S5 — `update`/`delete` without `where` | `DRZ-QUERY-04` | blocking, and one line produces it |
+| S6 — `sql\`\`` with interpolation | `DRZ-QUERY-03` | becomes a **security** finding when the value comes from the user |
+| S7 — external `db` inside a `transaction` | `DRZ-TX-03` | the write leaves the transaction with no error |
+| S8 — `push` outside local | `DRZ-MIG-02`, `DRZ-MIG-04` | a grep over `package.json` and the workflow settles it |
+| S9 — `.default` with a computed value | `DRZ-SCHEMA-04` | the value freezes in the migration's SQL |
+| S10 — hand-written Zod | `DRZ-ZOD-01` | it points at the candidates; confirmation is reading |
 
-## Relacionados
+## Related
 
-- `varredura-e-severidade.md` — o que fazer com o que a sonda apontou
-- `mapa-de-ids.md` — onde cada `DRZ-*` tem corpo
+- `varredura-e-severidade.md` — what to do with what the probe pointed at
+- `mapa-de-ids.md` — where each `DRZ-*` has its body

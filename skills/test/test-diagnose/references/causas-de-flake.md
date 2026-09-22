@@ -1,69 +1,69 @@
-# As seis perguntas e as dez causas
+# The six questions and the ten causes
 
 ---
 
-## As seis perguntas (§ 4.5 do hub) — percorra na ordem
+## The six questions (§ 4.5 of the hub) — walk them in order
 
-| # | Pergunta | Se sim, a causa é | Regra |
+| # | Question | If yes, the cause is | Rule |
 | --- | --- | --- | --- |
-| 1 | alguma falha é intermitente? | **flakiness** — problema nº 1, contamina todo o resto | `TS-CORE-04` |
-| 2 | quando falha, dá para saber o motivo em < 1 min? | diagnóstico ruim: nome, granularidade, instrumentação | `TS-PROC-06` |
-| 3 | quebrando o código de propósito, algo fica vermelho? | **asserção fraca**, ou dublê no lugar errado | `TS-CORE-03`, `TS-SUI-04` |
-| 4 | um refactor sem mudança de comportamento quebra muitos testes? | testes observam **implementação** | `TS-CORE-07`, `TS-SUI-06` |
-| 5 | a suíte demora tanto que ninguém roda antes do PR? | forma invertida: massa no nível errado | `TS-NIV-04` |
-| 6 | passa tudo e defeito chega em produção? | **classe de risco** descoberta, não linha | `TS-CORE-05`, `TS-TIPO-02` |
+| 1 | is any failure intermittent? | **flakiness** — problem #1, it contaminates everything else | `TS-CORE-04` |
+| 2 | when it fails, can you tell why in < 1 min? | poor diagnosis: naming, granularity, instrumentation | `TS-PROC-06` |
+| 3 | if you break the code on purpose, does anything go red? | a **weak assertion**, or a double in the wrong place | `TS-CORE-03`, `TS-SUI-04` |
+| 4 | does a refactor with no behavior change break many tests? | the tests observe **implementation** | `TS-CORE-07`, `TS-SUI-06` |
+| 5 | does the suite take so long that nobody runs it before the PR? | inverted shape: mass at the wrong level | `TS-NIV-04` |
+| 6 | does everything pass and a defect reach production? | an uncovered **risk class**, not a line | `TS-CORE-05`, `TS-TIPO-02` |
 
-A pergunta **3 é a mais reveladora e a menos feita** — uma suíte pode ser 100%
-determinística, rápida, verde **e não detectar nada** (`deteccao.md`).
+Question **3 is the most revealing and the least asked** — a suite can be 100%
+deterministic, fast, green **and detect nothing** (`deteccao.md`).
 
-A pergunta **6 é a que mais traz o time até aqui**, e a resposta quase nunca é "falta
-cobertura": é **classe de risco** ausente — estado de erro, entrada no limite, transição
-inválida (`TS-TEC-01`, `TS-TEC-04`, `TS-TIPO-02`).
+Question **6 is the one that most often brings the team here**, and the answer is almost never
+"we lack coverage": it is a missing **risk class** — error state, boundary input, invalid
+transition (`TS-TEC-01`, `TS-TEC-04`, `TS-TIPO-02`).
 
 ---
 
-## As dez causas, em ordem de frequência
+## The ten causes, in order of frequency
 
-| Causa | Sintoma | Regra |
+| Cause | Symptom | Rule |
 | --- | --- | --- |
-| **espera por tempo fixo** | passa na máquina rápida, falha no CI | `TS-SUI-07` |
-| **estado compartilhado** | falha só em paralelo; passa com um worker | `TS-SUI-09` |
-| **dependência de ordem** | passa sozinho, falha na suíte | `TS-SUI-01` |
-| **relógio real** | falha à meia-noite, na virada do mês, no horário de verão | `TS-DUB-05` |
-| **aleatoriedade** | falha 1 em 50, sem padrão | `TS-DUB-05` |
-| **rede externa** | falha quando o terceiro oscila | `TS-CORE-03` |
-| **animação / render** | clique no lugar errado | — |
-| **vazamento entre testes** | o segundo teste vê o estado do primeiro | `TS-SUI-08` |
-| **paralelismo do runner** | porta, arquivo ou banco em disputa | `TS-SUI-09` |
-| **ordem de coleção** | asserção de lista falha às vezes | `TS-SUI-01` |
+| **fixed-time wait** | passes on a fast machine, fails in CI | `TS-SUI-07` |
+| **shared state** | fails only in parallel; passes with one worker | `TS-SUI-09` |
+| **order dependence** | passes alone, fails in the suite | `TS-SUI-01` |
+| **real clock** | fails at midnight, at month rollover, at daylight saving | `TS-DUB-05` |
+| **randomness** | fails 1 in 50, with no pattern | `TS-DUB-05` |
+| **external network** | fails when the third party wobbles | `TS-CORE-03` |
+| **animation / render** | click lands in the wrong place | — |
+| **leakage between tests** | the second test sees the first one's state | `TS-SUI-08` |
+| **runner parallelism** | a port, file or database in contention | `TS-SUI-09` |
+| **collection order** | a list assertion fails sometimes | `TS-SUI-01` |
 
-**A causa nº 1 é sempre a mesma, em qualquer ferramenta:** esperar **tempo** em vez de
-esperar **condição**. Ela é lenta quando a máquina está rápida e insuficiente quando está
-lenta — o pior de dois mundos, por construção.
+**Cause #1 is always the same, in any tool:** waiting on **time** instead of waiting on a
+**condition**. It is slow when the machine is fast and insufficient when it is slow — the worst
+of both worlds, by construction.
 
 ---
 
-## Separar as hipóteses
+## Separating the hypotheses
 
-| Rode | Se o comportamento mudar, a causa é |
+| Run | If the behavior changes, the cause is |
 | --- | --- |
-| o teste sozinho | dependência de outro teste |
-| com **um worker** | estado compartilhado / paralelismo |
-| em ordem aleatória | dependência de ordem |
-| 20× o mesmo teste | confirma que é intermitente |
-| em container com a imagem do CI | paridade de ambiente |
+| the test alone | dependence on another test |
+| with **one worker** | shared state / parallelism |
+| in random order | order dependence |
+| the same test 20× | confirms it is intermittent |
+| in a container with the CI image | environment parity |
 
-Formas concretas por ferramenta: `Docs/Playwright.md` § 5.2 (a árvore mais detalhada do vault) e
+Concrete forms per tool: `Docs/Playwright.md` § 5.2 (the most detailed tree in the vault) and
 `Docs/Bun - Testes - Ciclo de Vida e Isolamento.md`.
 
-> **Diagnosticar não é consertar.** Um worker faz a falha desaparecer e **mantém** o
-> acoplamento, com a suíte N vezes mais lenta. Prefixar arquivos com `001-`, `002-`
-> **codifica** a dependência em vez de removê-la, e a próxima inserção quebra tudo.
+> **Diagnosing is not fixing.** One worker makes the failure disappear and **keeps** the
+> coupling, with the suite N times slower. Prefixing files with `001-`, `002-`
+> **encodes** the dependence instead of removing it, and the next insertion breaks everything.
 
 ---
 
-## Relacionados
+## Related
 
-- [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) § 2 — as dez causas, com corpo
-- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 4.5 — a árvore das seis perguntas
-- `conserto-x-anestesico.md` — o que **não** fazer com o que você achou
+- [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) § 2 — the ten causes, with the body
+- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 4.5 — the tree of the six questions
+- `conserto-x-anestesico.md` — what **not** to do with what you found

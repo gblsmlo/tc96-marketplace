@@ -1,52 +1,52 @@
-# Conserto × anestésico
+# Fix × anesthetic
 
-> Sete "correções" que fazem o vermelho desaparecer sem resolver nada. Se você está
-> propondo uma delas, volte às dez causas.
+> Seven "fixes" that make the red disappear without solving anything. If you are
+> proposing one of them, go back to the ten causes.
 
-| Anestésico | O que esconde | Regra |
+| Anesthetic | What it hides | Rule |
 | --- | --- | --- |
-| retry | um defeito diagnosticável, e o vermelho verdadeiro junto | `TS-SUI-03` |
-| espera por tempo fixo | a condição que deveria ser esperada | `TS-SUI-07` |
-| um worker só | acoplamento entre testes | `TS-SUI-09` |
-| prefixo numérico nos arquivos | dependência de ordem, agora codificada | § 8.4 do satélite |
-| `skip` sem issue | a dívida, agora anônima | `TS-SUI-11` |
-| `try/catch` no corpo do teste | o teste inteiro — ele nunca falha | § 5 do satélite |
-| remover a asserção que falha | exatamente o que o teste verificava | `TS-SUI-04` |
+| retry | a diagnosable defect, and the real red along with it | `TS-SUI-03` |
+| fixed-time wait | the condition that should have been waited on | `TS-SUI-07` |
+| a single worker | coupling between tests | `TS-SUI-09` |
+| numeric prefix on the files | order dependence, now encoded | § 8.4 of the satellite |
+| `skip` without an issue | the debt, now anonymous | `TS-SUI-11` |
+| `try/catch` in the test body | the whole test — it never fails | § 5 of the satellite |
+| removing the failing assertion | exactly what the test was verifying | `TS-SUI-04` |
 
-**Os dois últimos são os mais graves porque são invisíveis em revisão**: o arquivo continua
-parecendo um teste. O inventário de `scripts/medir-flakiness.sh` procura os dois.
+**The last two are the worst because they are invisible in review**: the file still
+looks like a test. The inventory in `scripts/medir-flakiness.sh` looks for both.
 
-**Retry merece nota.** Ele tem uso legítimo: absorver instabilidade **residual** de uma
-suíte já sã, com o trace da tentativa gravado. Acima de ~1% de flake, deixa de ser rede e
-passa a ser tapa-olho.
+**Retry deserves a note.** It has a legitimate use: absorbing **residual** instability in an
+already healthy suite, with the attempt's trace recorded. Above ~1% flakiness, it stops being a
+safety net and becomes a blindfold.
 
 ---
 
-## Antipadrões mais frequentes, com ID
+## Most frequent antipatterns, with IDs
 
-| Antipadrão | ID | Satélite |
+| Antipattern | ID | Satellite |
 | --- | --- | --- |
-| Conviver com flaky como escolha pragmática | `TS-CORE-04` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
-| Retry para calar flake | `TS-SUI-03` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
-| Espera por tempo fixo | `TS-SUI-07` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
-| Um worker como solução | `TS-SUI-09` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
-| Limpeza no setup do próximo em vez do teardown | `TS-SUI-08` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
-| Dado pré-existente compartilhado no ambiente | `TS-SUI-05` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
-| Teste que não pode falhar, mantido | `TS-SUI-10` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
-| `skip` sem motivo nem prazo | `TS-SUI-11` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
-| Culpar o refactor pelo teste que quebrou | `TS-SUI-06` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
-| Asserção que não detecta quebra | `TS-SUI-04` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
-| Teste observando implementação | `TS-CORE-07` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
-| Cobertura como prova de detecção | `TS-CORE-05` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
-| Declarar suíte suficiente sem quebrar nada | `TS-TEC-08` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
-| Mockar o que o teste vem provar | `TS-CORE-03` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
-| Relógio real em teste sobre tempo | `TS-DUB-05` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
-| Fake infiel usado para verificar contrato | `TS-DUB-03` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
-| Suíte lenta que ninguém roda (forma invertida) | `TS-NIV-04` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
-| Estado de erro sem cobertura | `TS-TIPO-02` | [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md) |
-| Defeito recorrente corrigido pontualmente | `TS-PROC-08` | [Teste de Software - Processo e Artefatos](../../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) |
-| Defeito de produção sem teste que o pegue | `TS-CORE-06` | [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) |
-| Suíte verde tratada como adequação ao usuário | `TS-CORE-08` | [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) |
+| Living with flakiness as a pragmatic choice | `TS-CORE-04` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Retry to silence flakiness | `TS-SUI-03` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Fixed-time wait | `TS-SUI-07` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| One worker as the solution | `TS-SUI-09` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Cleanup in the next one's setup instead of teardown | `TS-SUI-08` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Shared pre-existing data in the environment | `TS-SUI-05` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| A test that cannot fail, kept | `TS-SUI-10` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| `skip` with neither reason nor deadline | `TS-SUI-11` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Blaming the refactor for the test that broke | `TS-SUI-06` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| An assertion that does not detect a break | `TS-SUI-04` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Test observing implementation | `TS-CORE-07` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Coverage as proof of detection | `TS-CORE-05` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
+| Declaring the suite sufficient without breaking anything | `TS-TEC-08` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
+| Mocking what the test came to prove | `TS-CORE-03` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
+| Real clock in a test about time | `TS-DUB-05` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
+| An unfaithful fake used to verify a contract | `TS-DUB-03` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
+| A slow suite nobody runs (inverted shape) | `TS-NIV-04` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
+| Error state without coverage | `TS-TIPO-02` | [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md) |
+| Recurring defect fixed one-off | `TS-PROC-08` | [Teste de Software - Processo e Artefatos](../../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) |
+| Production defect with no test that catches it | `TS-CORE-06` | [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) |
+| Green suite treated as fitness for the user | `TS-CORE-08` | [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) |
 
-Confira o ID em `mapa-de-ids.md` antes de citar: `TS-SUI-02`, `TS-NIV-01` e `TS-DUB-02` são
-apelidos.
+Check the ID in `mapa-de-ids.md` before citing: `TS-SUI-02`, `TS-NIV-01` and `TS-DUB-02` are
+aliases.

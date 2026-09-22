@@ -1,11 +1,10 @@
-# Fechar a revisão
+# Closing the review
 
 
-## Passo 7 — Fechar a revisão
+## Step 7 — Closing the review
 
-1. **Transforme sonda em teste.** Todo achado das sondas S1–S3 vira um teste que falha na regressão: comparar exports × schema registrado, journal × snapshots, índice × prefixo. Achado que só existe no relatório volta em seis meses.
-2. **Verifique se o banco já resolve.** Antes de propor invariante na aplicação, confira `CHECK`, unique parcial, exclusion constraint e RLS —.
-3. **Separe o que exige decisão de produto.** Regra de agregação ambígua, teto de listagem e política de retenção não são bug até alguém decidir qual é o comportamento certo. Reporte como pergunta com opções, não como correção.
-4. **Ordene por severidade**, não por arquivo.
-5. **Declare o que não foi verificado.** Se uma sonda não rodou (banco fora do ar, flag de teste não destravada), diga — não confunda "não verificado" com "sem achado".
-
+1. **Turn a probe into a test.** Every finding from probes S1–S3 becomes a test that fails on regression: exports × registered schema, journal × snapshots, index × prefix. A finding that only exists in the report comes back in six months.
+2. **Check whether the database already solves it.** Before proposing an invariant in the application, check `CHECK`, partial unique, exclusion constraint and RLS —.
+3. **Separate what requires a product decision.** An ambiguous aggregation rule, a listing ceiling and a retention policy are not bugs until someone decides which behavior is right. Report them as a question with options, not as a fix.
+4. **Order by severity**, not by file.
+5. **Declare what was not verified.** If a probe did not run (database down, test flag not unlocked), say so — do not confuse "not verified" with "no findings".
