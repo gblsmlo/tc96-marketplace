@@ -1,63 +1,60 @@
-# Exemplo trabalhado — listagem paginada consumida pelo Query
+# Worked example — a paginated listing consumed by Query
 
-Tarefa: *"listagem paginada de faturas, consumida pelo front com TanStack Query"*.
+Task: *"a paginated invoice listing, consumed by the front end with TanStack Query"*.
 
-**Servidor:**
+**Server:**
 
 ```ts
-const FaturasQuery = t.Object({
- pagina: t.Number({ default: 1 }), // query COAGE string — ELYSIA-TYPE-04
+const InvoicesQuery = t.Object({
+ page: t.Number({ default: 1 }), // query DOES coerce strings — ELYSIA-TYPE-04
  status: t.Optional(t.String),
 });
 
 const app = new Elysia
-.get('/faturas', ({ query }) => listar(query), {
- query: FaturasQuery,
- response: { // mapa por status — ELYSIA-TYPE-06
+.get('/invoices', ({ query }) => list(query), {
+ query: InvoicesQuery,
+ response: { // map by status — ELYSIA-TYPE-06
  200: t.Object({ // envelope — ELYSIA-TYPE-13
- itens: t.Array(t.Object({ id: t.String, valor: t.Number })),
+ items: t.Array(t.Object({ id: t.String, amount: t.Number })),
  total: t.Number,
  hasMore: t.Boolean,
  }),
- 401: t.Object({ erro: t.String }),
+ 401: t.Object({ error: t.String }),
  },
  });
 
 export type App = typeof app;
-export type FaturasQuery = typeof FaturasQuery.static; // ELYSIA-TYPE-01
+export type InvoicesQuery = typeof InvoicesQuery.static; // ELYSIA-TYPE-01
 ```
 
-**Cliente:**
+**Client:**
 
 ```ts
 import { treaty } from '@elysia/eden';
-import type { App } from '@escopo/server';
+import type { App } from '@scope/server';
 
 export const api = treaty<App>('http://localhost:3333', {
  parseDate: false, // structural sharing — ELYSIA-TYPE-10
 });
 
-export const faturasQuery = (p: FaturasQuery) => ({
- queryKey: ['faturas', p],
+export const invoicesQuery = (p: InvoicesQuery) => ({
+ queryKey: ['invoices', p],
  queryFn: async => {
- const { data, error } = await api.faturas.get({ query: p });
- if (error) throw error; // sem isso a query fica em success — ELYSIA-TYPE-09
- return data; // data é null em qualquer >= 300 — ELYSIA-TYPE-08
+ const { data, error } = await api.invoices.get({ query: p });
+ if (error) throw error; // without this the query stays in success — ELYSIA-TYPE-09
+ return data; // data is null on any >= 300 — ELYSIA-TYPE-08
  },
 });
 ```
 
-**O que as decisões evitaram:**
+**What these decisions prevented:**
 
-| Decisão | Alternativa que dói | Regra |
+| Decision | Alternative that hurts | Rule |
 | --- | --- | --- |
-| envelope com `total`/`hasMore` | array cru, sem como paginar depois | `ELYSIA-TYPE-13` |
-| `response` como mapa | `401` chegando ao Eden como `unknown` | `ELYSIA-TYPE-06` |
-| `if (error) throw error` | query em `success`, retry morto, Error Boundary cego | `ELYSIA-TYPE-09` |
-| `parseDate: false` | re-render de toda a lista a cada refetch | `ELYSIA-TYPE-10` |
-| `typeof FaturasQuery.static` | tipo reescrito à mão, divergindo do schema | `ELYSIA-TYPE-01` |
-| `pagina` em `query`, não em `body` | coerção que não aconteceria no body | `ELYSIA-TYPE-04` |
-| `export type App` | valor exportado, e o Eden sem as rotas | `ELYSIA-APP-05` |
-
----
-
+| envelope with `total`/`hasMore` | a raw array, with no way to paginate later | `ELYSIA-TYPE-13` |
+| `response` as a map | `401` reaching Eden as `unknown` | `ELYSIA-TYPE-06` |
+| `if (error) throw error` | query in `success`, retry dead, Error Boundary blind | `ELYSIA-TYPE-09` |
+| `parseDate: false` | the whole list re-rendering on every refetch | `ELYSIA-TYPE-10` |
+| `typeof InvoicesQuery.static` | a type rewritten by hand, diverging from the schema | `ELYSIA-TYPE-01` |
+| `page` in `query`, not in `body` | coercion that would not happen in the body | `ELYSIA-TYPE-04` |
+| `export type App` | an exported value, and Eden without the routes | `ELYSIA-APP-05` |

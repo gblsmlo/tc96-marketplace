@@ -1,38 +1,35 @@
-# As duas causas que respondem por quase tudo
+# The two causes that account for almost everything
 
-### 1.1 Registrado depois da rota
+### 1.1 Registered after the route
 
-`ELYSIA-CORE-01`: hook, plugin e `onError` **só se aplicam a rota registrada depois deles**.
+`ELYSIA-CORE-01`: hooks, plugins and `onError` **only apply to routes registered after them**.
 
 ```ts
-// ✗ o hook não afeta /faturas
+// ✗ the hook does not affect /invoices
 new Elysia
-.get('/faturas', h)
+.get('/invoices', h)
 .onBeforeHandle(auth)
 
 // ✓
 new Elysia
 .onBeforeHandle(auth)
-.get('/faturas', h)
+.get('/invoices', h)
 ```
 
-**É a primeira hipótese, sempre.** Não dá erro, não dá aviso — a rota simplesmente não passa pelo hook.
+**It is the first hypothesis, always.** No error, no warning — the route simply does not pass through the hook.
 
-### 1.2 Escopo não declarado
+### 1.2 Undeclared scope
 
-`ELYSIA-LIFE-01`: hook de plugin que precisa valer **para quem o consome** declara escopo — `{ as: 'scoped' }`, `guard({ as })` ou `.as(...)`.
+`ELYSIA-LIFE-01`: a plugin hook that has to hold **for whoever consumes it** declares a scope — `{ as: 'scoped' }`, `guard({ as })` or `.as(...)`.
 
-O default é **`local`**: o hook fica dentro do plugin e **não atravessa** para a instância consumidora. Um plugin de autenticação sem escopo declarado protege as rotas dele e **nenhuma** do consumidor.
+The default is **`local`**: the hook stays inside the plugin and **does not cross** into the consuming instance. An authentication plugin without a declared scope protects its own routes and **none** of the consumer's.
 
 ```
-local → só a instância do próprio plugin
-scoped → o consumidor direto
-global → toda a árvore
+local → only the plugin's own instance
+scoped → the direct consumer
+global → the whole tree
 ```
 
-`ELYSIA-LIFE-09`: hook transversal que deve valer em toda a árvore — tracing, logging, CORS — usa **`global`**, não uma corrente de `scoped`.
+`ELYSIA-LIFE-09`: a cross-cutting hook that must hold across the whole tree — tracing, logging, CORS — uses **`global`**, not a chain of `scoped`.
 
-> **A prova que `ELYSIA-LIFE-08` exige:** plugin de autenticação **precisa provar em teste que uma rota da instância consumidora é rejeitada sem credencial.** Testar dentro do plugin não prova nada — é exatamente o caso que passa com escopo `local` e falha em produção.
-
----
-
+> **The proof `ELYSIA-LIFE-08` requires:** an authentication plugin **has to prove in a test that a route of the consuming instance is rejected without credentials.** Testing inside the plugin proves nothing — it is exactly the case that passes with `local` scope and fails in production.

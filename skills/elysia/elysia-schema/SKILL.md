@@ -1,8 +1,9 @@
 ---
 nome: elysia-schema
-descricao: Declarar schema em Elysia e consumir a API pelo Eden — `t`/TypeBox, coerção por fonte, `response` por status, `guard` standalone, OpenAPI, e a ponte com TanStack Query — citando IDs `ELYSIA-TYPE-*`, com autoverificação executável — use quando a tarefa for validar body, query, params, headers ou upload, tipar o retorno de uma rota, montar cliente Eden, paginar listagem, gerar documentação OpenAPI, ou consertar `data` que vem `null` no cliente. Não use para escrever a rota e o handler, que é elysia-build, para plugin que não afeta rota, que é elysia-diagnose, nem para o cache do cliente, que é tanstack-query.
+descricao: Declare schemas in Elysia and consume the API through Eden — `t`/TypeBox, coercion by source, `response` per status, standalone `guard`, OpenAPI, and the bridge with TanStack Query — citing `ELYSIA-TYPE-*` IDs, with an executable self-check — use when the task is validating body, query, params, headers or uploads, typing a route's return, assembling an Eden client, paginating a listing, generating OpenAPI documentation, or fixing `data` that comes back `null` on the client. Do not use to write the route and the handler, which is elysia-build, for a plugin that does not affect the route, which is elysia-diagnose, nor for the client cache, which is tanstack-query.
 tipo: skill
 familia: elysia
+idioma: en
 fonte: "[Elysia - Schema e Eden](../../../knowledge-base/docs/elysia-schema-e-eden.md)"
 docs:
   - /websites/elysiajs
@@ -14,130 +15,130 @@ tags:
 
 # elysia-schema
 
-> **Fonte desta skill:** [Elysia - Schema e Eden](../../../knowledge-base/docs/elysia-schema-e-eden.md), com o hub [Elysia](../../../knowledge-base/docs/elysia.md) como roteador.
-> Esta skill **não contém** o texto das regras — ela diz o que decidir, em que ordem, e o que conferir antes de entregar.
-> **Superfície de API:** resolva pelo Context7 — `/websites/elysiajs`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [Elysia - Schema e Eden](../../../knowledge-base/docs/elysia-schema-e-eden.md), with the [Elysia](../../../knowledge-base/docs/elysia.md) hub as the router.
+> This skill **does not contain** the text of the rules — it says what to decide, in what order, and what to check before delivering.
+> **API surface:** resolve it through Context7 — `/websites/elysiajs`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contrato que esta skill implementa: [Elysia](../../../knowledge-base/docs/elysia.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Elysia](../../../knowledge-base/docs/elysia.md) § 7 ("Contrato de skill").
 
 ---
 
-## Quando usar
+## When to use
 
-Declarar schema, tipar retorno, ou consumir a API pelo Eden.
+Declaring a schema, typing a return, or consuming the API through Eden.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| a rota e o handler em si | `elysia-build` |
-| hook ou plugin que não afeta a rota | `elysia-diagnose` |
-| política de frescor do cache do cliente | `tanstack-query` |
-| política de cache **HTTP** (`ETag`, `Cache-Control`) | `http-cache` |
-| qual status devolver, e o corpo de erro padrão | `http-contract` |
+| the route and the handler themselves | `elysia-build` |
+| a hook or plugin that does not affect the route | `elysia-diagnose` |
+| freshness policy of the client cache | `tanstack-query` |
+| **HTTP** cache policy (`ETag`, `Cache-Control`) | `http-cache` |
+| which status to return, and the standard error body | `http-contract` |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Elysia](../../../knowledge-base/docs/elysia.md) § 2 | **uma declaração de schema produz quatro efeitos** |
-| 2 | [Elysia](../../../knowledge-base/docs/elysia.md) § 6 + § 6.1 + § 6.2 | regras, críticas e IDs canônicos |
-| 3 | [Elysia - Schema e Eden](../../../knowledge-base/docs/elysia-schema-e-eden.md) | a fonte |
-| 4 | [Elysia](../../../knowledge-base/docs/elysia.md) § 5 | as árvores, quando houver dúvida |
+| 1 | [Elysia](../../../knowledge-base/docs/elysia.md) § 2 | **one schema declaration produces four effects** |
+| 2 | [Elysia](../../../knowledge-base/docs/elysia.md) § 6 + § 6.1 + § 6.2 | rules, critical ones and canonical IDs |
+| 3 | [Elysia - Schema e Eden](../../../knowledge-base/docs/elysia-schema-e-eden.md) | the source |
+| 4 | [Elysia](../../../knowledge-base/docs/elysia.md) § 5 | the trees, when in doubt |
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/coercao-response-e-guard.md` | coerção por fonte, `response` por status, `guard`, upload, OpenAPI |
-| `references/eden.md` | as três armadilhas do Eden, e por que as três compilam |
-| `references/autoverificacao.md` | os 14 itens, e o teste que prova `ELYSIA-TYPE-09` |
-| `references/antipadroes.md` | 16 antipadrões com ID |
-| `references/mapa-de-ids.md` | os 44 `ELYSIA-*`: declaração, satélite do corpo e seção |
-| `references/exemplo-listagem-paginada.md` | caso trabalhado, do schema ao `queryFn` |
-| `scripts/autoverificar.sh` | roda os itens mecânicos e lista os que exigem leitura |
+| `references/coercao-response-e-guard.md` | coercion by source, `response` per status, `guard`, uploads, OpenAPI |
+| `references/eden.md` | Eden's three traps, and why all three compile |
+| `references/autoverificacao.md` | the 14 items, and the test that proves `ELYSIA-TYPE-09` |
+| `references/antipadroes.md` | 16 antipatterns with IDs |
+| `references/mapa-de-ids.md` | the 44 `ELYSIA-*`: declaration, satellite of the body and section |
+| `references/exemplo-listagem-paginada.md` | worked case, from the schema to the `queryFn` |
+| `scripts/autoverificar.sh` | runs the mechanical items and lists the ones that require reading |
 
 ---
 
-## Passo 0 — O modelo mental
+## Step 0 — The mental model
 
-> **Uma declaração de schema produz quatro efeitos:** validação em runtime, tipo em TypeScript, documento OpenAPI, e o tipo do cliente Eden.
+> **One schema declaration produces four effects:** runtime validation, a TypeScript type, an OpenAPI document, and the Eden client's type.
 
-Isso muda a economia: um schema mal declarado não erra em um lugar — **erra em quatro**. E é por isso que `ELYSIA-TYPE-01` proíbe reescrever o tipo à mão.
-
----
-
-## Passo 1 — Coerção depende da fonte
-
-`params`, `query`, `headers` e `cookie` **coagem**; **`body` não** (`ELYSIA-TYPE-04`). Um `t.Number` no body recebendo `"100"` falha a validação, e o desenvolvedor conclui que o schema está errado.
-
-E `ELYSIA-TYPE-03`: nomes de header em **minúsculas** — um nome capitalizado **nunca casa**, e o sintoma é um header obrigatório que "nunca é enviado".
+That changes the economics: a badly declared schema does not get one thing wrong — **it gets four wrong**. And that is why `ELYSIA-TYPE-01` forbids rewriting the type by hand.
 
 ---
 
-## Passo 2 — `response` por status
+## Step 1 — Coercion depends on the source
 
-Sem o mapa por status, **o erro chega ao Eden como `unknown`** (`ELYSIA-TYPE-06`) — o cliente perde exatamente a informação que justificava usar um cliente tipado. Listagem paginada declara **envelope**, não array cru (`ELYSIA-TYPE-13`).
+`params`, `query`, `headers` and `cookie` **coerce**; **`body` does not** (`ELYSIA-TYPE-04`). A `t.Number` in the body receiving `"100"` fails validation, and the developer concludes the schema is wrong.
 
----
-
-## Passo 3 — `guard` e composição
-
-O default é **`override`**: o schema do guard **substitui** o da rota. Para somar, `schema: 'standalone'` (`ELYSIA-TYPE-05`). Sintoma de esquecer: a validação do body da rota **desaparece em silêncio**.
+And `ELYSIA-TYPE-03`: header names in **lowercase** — a capitalized name **never matches**, and the symptom is a required header that "is never sent".
 
 ---
 
-## Passo 4 — Upload e OpenAPI
+## Step 2 — `response` per status
 
-Upload usa **`fileType`** (`ELYSIA-TYPE-02`) — validador genérico confere o `content-type` **declarado**, que o cliente controla. É achado de segurança.
-
-Rota com Zod/Valibot/Effect precisa de `mapJsonSchema` **ou some da documentação** (`ELYSIA-TYPE-07`) — falha em silêncio. E `allowUnsafeValidationDetails: true` **nunca** em produção (`ELYSIA-TYPE-12`).
+Without the map by status, **the error reaches Eden as `unknown`** (`ELYSIA-TYPE-06`) — the client loses exactly the information that justified using a typed client. A paginated listing declares an **envelope**, not a raw array (`ELYSIA-TYPE-13`).
 
 ---
 
-## Passo 5 — O Eden, e as três armadilhas
+## Step 3 — `guard` and composition
 
-`references/eden.md`. Nenhuma quebra o build:
-
-1. **`data` é `null` em qualquer status ≥ 300** — cheque `error` antes (`ELYSIA-TYPE-08`).
-2. **O Eden não lança.** `queryFn`/`mutationFn` precisa lançar, ou usar `throwHttpError: true` (`ELYSIA-TYPE-09`). Sem isso a query fica em **`success`** com o erro dentro de `data`: `isError` falso, sem retry, sem Error Boundary. **É o bug mais caro da ponte.**
-3. **`parseDate: true` quebra structural sharing** do Query e re-renderiza a lista inteira (`ELYSIA-TYPE-10`).
+The default is **`override`**: the guard's schema **replaces** the route's. To add to it, `schema: 'standalone'` (`ELYSIA-TYPE-05`). Symptom of forgetting: the route's body validation **silently disappears**.
 
 ---
 
-## Passo 6 — Autoverificar antes de entregar
+## Step 4 — Uploads and OpenAPI
+
+Uploads use **`fileType`** (`ELYSIA-TYPE-02`) — a generic validator checks the **declared** `content-type`, which the client controls. That is a security finding.
+
+A route with Zod/Valibot/Effect needs `mapJsonSchema` **or it disappears from the documentation** (`ELYSIA-TYPE-07`) — it fails silently. And `allowUnsafeValidationDetails: true` **never** in production (`ELYSIA-TYPE-12`).
+
+---
+
+## Step 5 — Eden, and the three traps
+
+`references/eden.md`. None of them breaks the build:
+
+1. **`data` is `null` on any status ≥ 300** — check `error` first (`ELYSIA-TYPE-08`).
+2. **Eden does not throw.** `queryFn`/`mutationFn` has to throw, or use `throwHttpError: true` (`ELYSIA-TYPE-09`). Without that the query stays in **`success`** with the error inside `data`: `isError` false, no retry, no Error Boundary. **It is the most expensive bug on the bridge.**
+3. **`parseDate: true` breaks Query's structural sharing** and re-renders the entire list (`ELYSIA-TYPE-10`).
+
+---
+
+## Step 6 — Self-check before delivering
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/elysia-schema/scripts/autoverificar.sh src
-tsc --noEmit # nos DOIS pacotes — a única verificação de contrato do Eden
+tsc --noEmit # in BOTH packages — the only contract check Eden has
 ```
 
-E **force um erro**: a query tem de ficar em `isError`, não em `success`.
+And **force an error**: the query has to end up in `isError`, not in `success`.
 
 ---
 
-## Passo 7 — Fechar
+## Step 7 — Closing
 
-1. **`tsc --noEmit` nos dois pacotes.**
-2. **Se a rota some do OpenAPI**, é `mapJsonSchema` (`ELYSIA-TYPE-07`), não bug do plugin.
-3. **Se há re-render inexplicável na lista**, é `parseDate` (`ELYSIA-TYPE-10`).
-4. **Três camadas de cache, três donos:** o do cliente é `tanstack-query`, o HTTP é `http-cache`, e esta skill só entrega o dado tipado.
-5. **Declare o que não verificou.** Contrato sob versão divergente de `elysia` só aparece quando alguém atualiza um lado (`ELYSIA-TYPE-11`).
-
----
-
-## Exemplo
-
-Listagem paginada de faturas consumida pelo front: o `response` é mapa por status, a listagem devolve **envelope** com `itens`/`total`/`hasMore`, o cliente Eden usa `parseDate: false`, e o `queryFn` **lança** quando `error` vem preenchido — sem isso a tela renderiza sucesso com dado nulo.
-
-Caso completo: `references/exemplo-listagem-paginada.md`.
+1. **`tsc --noEmit` in both packages.**
+2. **If the route disappears from OpenAPI**, it is `mapJsonSchema` (`ELYSIA-TYPE-07`), not a plugin bug.
+3. **If there is an unexplained re-render in the list**, it is `parseDate` (`ELYSIA-TYPE-10`).
+4. **Three cache layers, three owners:** the client's is `tanstack-query`, the HTTP one is `http-cache`, and this skill only delivers the typed data.
+5. **Declare what you did not verify.** A contract under diverging `elysia` versions only shows up when someone upgrades one side (`ELYSIA-TYPE-11`).
 
 ---
 
-## Relacionados
+## Example
 
-- [Elysia - Schema e Eden](../../../knowledge-base/docs/elysia-schema-e-eden.md) — fonte desta skill
+A paginated invoice listing consumed by the front end: `response` is a map by status, the listing returns an **envelope** with `items`/`total`/`hasMore`, the Eden client uses `parseDate: false`, and the `queryFn` **throws** when `error` comes back filled — without that the screen renders success with null data.
+
+Full case: `references/exemplo-listagem-paginada.md`.
+
+---
+
+## Related
+
+- [Elysia - Schema e Eden](../../../knowledge-base/docs/elysia-schema-e-eden.md) — source of this skill
 - [Elysia](../../../knowledge-base/docs/elysia.md) § 2, § 6, § 7
-- `elysia-build` · `elysia-diagnose` — as skills irmãs
-- `tanstack-query` — o cache do outro lado da ponte
-- `Zod - Validação de Ambiente` — quando o schema é Zod
+- `elysia-build` · `elysia-diagnose` — the sibling skills
+- `tanstack-query` — the cache on the other side of the bridge
+- `Zod - Validação de Ambiente` — when the schema is Zod

@@ -1,83 +1,80 @@
-# Coerção, response e guard
+# Coercion, response and guard
 
-> Passos 0 a 5. O texto das regras mora em [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md).
+> Steps 0 to 5. The text of the rules lives in [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md).
 
-> **Uma declaração de schema produz quatro efeitos:** validação em runtime, tipo em TypeScript, documento OpenAPI, e o tipo do cliente Eden.
+> **One schema declaration produces four effects:** runtime validation, a TypeScript type, an OpenAPI document, and the Eden client's type.
 
-Isso muda a economia: um schema mal declarado não erra em um lugar — erra em quatro. E é por isso que `ELYSIA-TYPE-01` proíbe reescrever o tipo à mão: `typeof S.static` deriva do schema, e uma cópia manual divergirá.
+That changes the economics: a badly declared schema does not get one thing wrong — it gets four wrong. And that is why `ELYSIA-TYPE-01` forbids rewriting the type by hand: `typeof S.static` derives from the schema, and a manual copy will diverge.
 
 ---
 
-## Passo 1 — Coerção depende da fonte
+## Step 1 — Coercion depends on the source
 
-A regra mais consequente da família, e a menos intuitiva:
+The most consequential rule in the family, and the least intuitive:
 
-| Fonte | `t.Number` coage string? |
+| Source | Does `t.Number` coerce a string? |
 | --- | --- |
-| `params` | **sim** |
-| `query` | **sim** |
-| `headers` | **sim** |
-| `cookie` | **sim** |
-| **`body`** | **não** |
+| `params` | **yes** |
+| `query` | **yes** |
+| `headers` | **yes** |
+| `cookie` | **yes** |
+| **`body`** | **no** |
 
-`ELYSIA-TYPE-04`: campo numérico de `body` **nunca** conta com coerção. Um `t.Number` no body recebendo `"100"` de um JSON malformado falha a validação — e o desenvolvedor conclui que o schema está errado.
+`ELYSIA-TYPE-04`: a numeric `body` field **never** relies on coercion. A `t.Number` in the body receiving `"100"` from malformed JSON fails validation — and the developer concludes the schema is wrong.
 
-E `ELYSIA-TYPE-03`: schema de `headers` declara os nomes em **minúsculas** — Elysia normaliza, e um nome capitalizado **nunca casa**. O sintoma é um header obrigatório que "nunca é enviado".
+And `ELYSIA-TYPE-03`: a `headers` schema declares names in **lowercase** — Elysia normalizes, and a capitalized name **never matches**. The symptom is a required header that "is never sent".
 
 ---
 
-## Passo 2 — `response` por status
+## Step 2 — `response` per status
 
 ```ts
-// ✓ mapa por status — ELYSIA-TYPE-06
+// ✓ map by status — ELYSIA-TYPE-06
 response: {
  200: t.Object({ id: t.String }),
- 404: t.Object({ erro: t.String }),
- 422: t.Object({ erro: t.String }),
+ 404: t.Object({ error: t.String }),
+ 422: t.Object({ error: t.String }),
 }
 ```
 
-Sem o mapa, **o erro chega ao Eden como `unknown`** — e o cliente perde exatamente a informação que justificava usar um cliente tipado.
+Without the map, **the error reaches Eden as `unknown`** — and the client loses exactly the information that justified using a typed client.
 
-E `ELYSIA-TYPE-13`: listagem paginada declara no `response` um envelope com `itens`, `total` e `hasMore`. Devolver o array cru fecha a porta para paginação sem quebrar o contrato.
+And `ELYSIA-TYPE-13`: a paginated listing declares in `response` an envelope with `items`, `total` and `hasMore`. Returning the raw array closes the door to pagination without breaking the contract.
 
 ---
 
-## Passo 3 — `guard` e composição
+## Step 3 — `guard` and composition
 
-`ELYSIA-TYPE-05`: schema de `guard` que precisa **somar-se** ao da rota declara `schema: 'standalone'`. O default é **`override`** — o schema do guard **substitui** o da rota.
+`ELYSIA-TYPE-05`: a `guard` schema that has to **add to** the route's declares `schema: 'standalone'`. The default is **`override`** — the guard's schema **replaces** the route's.
 
 ```ts
-// ✗ o schema da rota é substituído
+// ✗ the route's schema is replaced
 .guard({ headers: t.Object({ authorization: t.String }) })
 
-// ✓ soma
+// ✓ adds
 .guard({ schema: 'standalone', headers: t.Object({ authorization: t.String }) })
 ```
 
-Sintoma de esquecer: a validação do body da rota desaparece, silenciosamente, e o handler recebe qualquer coisa.
+Symptom of forgetting: the route's body validation disappears, silently, and the handler receives anything.
 
 ---
 
-## Passo 4 — Upload
+## Step 4 — Uploads
 
-`ELYSIA-TYPE-02`: upload validado por Standard Schema usa **`fileType`** — validadores genéricos conferem o `content-type` **declarado**, que o cliente controla. `fileType` inspeciona o conteúdo.
+`ELYSIA-TYPE-02`: an upload validated through Standard Schema uses **`fileType`** — generic validators check the **declared** `content-type`, which the client controls. `fileType` inspects the content.
 
-É achado de segurança: um `.exe` renomeado para `.png` passa por validação de `content-type` e não passa por `fileType`.
+It is a security finding: an `.exe` renamed to `.png` passes `content-type` validation and does not pass `fileType`.
 
 ---
 
-## Passo 5 — OpenAPI
+## Step 5 — OpenAPI
 
-| Regra | O que exige |
+| Rule | What it requires |
 | --- | --- |
-| `ELYSIA-APP-07` | `@elysia/openapi`, **nunca** `@elysiajs/swagger` (descontinuado) |
-| `ELYSIA-TYPE-07` | rota declarada com Zod/Valibot/Effect precisa de `mapJsonSchema` no plugin — **ou some da documentação** |
-| `ELYSIA-TYPE-12` | `allowUnsafeValidationDetails: true` **nunca** em produção |
+| `ELYSIA-APP-07` | `@elysia/openapi`, **never** `@elysiajs/swagger` (discontinued) |
+| `ELYSIA-TYPE-07` | a route declared with Zod/Valibot/Effect needs `mapJsonSchema` in the plugin — **or it disappears from the documentation** |
+| `ELYSIA-TYPE-12` | `allowUnsafeValidationDetails: true` **never** in production |
 
-**`ELYSIA-TYPE-07` falha em silêncio:** a rota funciona, valida, e simplesmente não aparece no OpenAPI. Num projeto que mistura `t` e Zod, metade da documentação desaparece sem aviso.
+**`ELYSIA-TYPE-07` fails silently:** the route works, validates, and simply does not appear in the OpenAPI document. In a project mixing `t` and Zod, half the documentation disappears without warning.
 
-**`ELYSIA-TYPE-12` é global e vaza contrato interno:** a opção faz a resposta de erro publicar detalhe de validação — nome de campo, formato esperado, estrutura interna.
-
----
-
+**`ELYSIA-TYPE-12` is global and leaks the internal contract:** the option makes the error response publish validation detail — field name, expected format, internal structure.

@@ -1,8 +1,9 @@
 ---
 nome: elysia-diagnose
-descricao: Diagnosticar por que um plugin ou hook não afeta uma rota em Elysia, e escolher o ponto certo do lifecycle — ordem de registro, escopo `local`/`scoped`/`global`, `name` de plugin, `derive` × `resolve`, `state` × `decorate`, macro, tracing — citando IDs `ELYSIA-LIFE-*`, com dez sondas executáveis — use quando a tarefa for investigar hook que não roda, autenticação que não protege a rota do consumidor, valor do `store` congelado, plugin cujo lifecycle roda uma vez só, ou span `anonymous` no OpenTelemetry. Não use para escrever rota e handler, que é elysia-build, nem para schema e Eden, que é elysia-schema.
+descricao: Diagnose why a plugin or hook does not affect a route in Elysia, and pick the right lifecycle point — registration order, `local`/`scoped`/`global` scope, plugin `name`, `derive` × `resolve`, `state` × `decorate`, macro, tracing — citing `ELYSIA-LIFE-*` IDs, with ten executable probes — use when the task is investigating a hook that does not run, authentication that does not protect the consumer's route, a frozen `store` value, a plugin whose lifecycle runs only once, or an `anonymous` span in OpenTelemetry. Do not use to write routes and handlers, which is elysia-build, nor for schemas and Eden, which is elysia-schema.
 tipo: skill
 familia: elysia
+idioma: en
 fonte: "[Elysia - Lifecycle e Plugins](../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md)"
 docs:
   - /websites/elysiajs
@@ -14,139 +15,139 @@ tags:
 
 # elysia-diagnose
 
-> **Fonte desta skill:** [Elysia - Lifecycle e Plugins](../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md), com o hub [Elysia](../../../knowledge-base/docs/elysia.md) como roteador.
-> Esta skill **não contém** o texto das regras — ela diz o que sondar, em que ordem eliminar hipóteses, e o que **prova** cada uma.
-> **Superfície de API:** resolva pelo Context7 — `/websites/elysiajs`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [Elysia - Lifecycle e Plugins](../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md), with the [Elysia](../../../knowledge-base/docs/elysia.md) hub as the router.
+> This skill **does not contain** the text of the rules — it says what to probe, in what order to eliminate hypotheses, and what **proves** each one.
+> **API surface:** resolve it through Context7 — `/websites/elysiajs`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contrato que esta skill implementa: [Elysia](../../../knowledge-base/docs/elysia.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Elysia](../../../knowledge-base/docs/elysia.md) § 7 ("Contrato de skill").
 
 ---
 
-## Quando usar
+## When to use
 
-Um hook, plugin, `derive`, `resolve` ou `onError` **não está afetando** a rota — ou o estado se comporta de forma inesperada.
+A hook, plugin, `derive`, `resolve` or `onError` **is not affecting** the route — or state behaves unexpectedly.
 
-| Situação | Vá para |
+| Situation | Go to |
 | --- | --- |
-| escrever rota e handler | `elysia-build` |
-| schema, `response`, cliente Eden | `elysia-schema` |
-| requisição bloqueada pelo browser, preflight | `http-diagnose` |
-| teste flaky sob `bun test` | `bun-test-review` |
+| writing routes and handlers | `elysia-build` |
+| schema, `response`, Eden client | `elysia-schema` |
+| a request blocked by the browser, preflight | `http-diagnose` |
+| a flaky test under `bun test` | `bun-test-review` |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Elysia](../../../knowledge-base/docs/elysia.md) § 2 | o modelo mental de instância e plugin |
-| 2 | [Elysia](../../../knowledge-base/docs/elysia.md) § 6 + § 6.1 + § 6.2 | regras, críticas e IDs canônicos |
-| 3 | [Elysia - Lifecycle e Plugins](../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | a fonte |
+| 1 | [Elysia](../../../knowledge-base/docs/elysia.md) § 2 | the mental model of instance and plugin |
+| 2 | [Elysia](../../../knowledge-base/docs/elysia.md) § 6 + § 6.1 + § 6.2 | rules, critical ones and canonical IDs |
+| 3 | [Elysia - Lifecycle e Plugins](../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | the source |
 
-Referências desta skill:
+References in this skill:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/duas-causas.md` | ordem de registro e escopo não declarado — quase todo caso está aqui |
-| `references/arvore.md` | os cinco ramos, e `derive` × `resolve` × `state` × `decorate` |
-| `references/macro-tracing-e-cors.md` | as três que falham sem quebrar nada |
-| `references/prova-de-escopo.md` | o teste que distingue `local` de `scoped`, e o corte do que não é lifecycle |
-| `references/antipadroes.md` | a grade com ID |
-| `references/mapa-de-ids.md` | os 44 `ELYSIA-*`: declaração, satélite do corpo e seção |
-| `references/exemplo-plugin-sem-escopo.md` | diagnóstico inteiro, da sonda ao achado |
-| `scripts/sondas.sh` | dez sondas de lifecycle |
-| `scripts/gerar-mapa-de-ids.sh` | regenera o mapa nas três skills de Elysia |
+| `references/duas-causas.md` | registration order and undeclared scope — nearly every case is here |
+| `references/arvore.md` | the five branches, and `derive` × `resolve` × `state` × `decorate` |
+| `references/macro-tracing-e-cors.md` | the three that fail without breaking anything |
+| `references/prova-de-escopo.md` | the test that tells `local` from `scoped`, and the cut of what is not lifecycle |
+| `references/antipadroes.md` | the grid, with IDs |
+| `references/mapa-de-ids.md` | the 44 `ELYSIA-*`: declaration, satellite of the body and section |
+| `references/exemplo-plugin-sem-escopo.md` | a whole diagnosis, from the probe to the finding |
+| `scripts/sondas.sh` | ten lifecycle probes |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map across the three Elysia skills |
 
 ---
 
-## Passo 1 — Sondar
+## Step 1 — Probe
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/elysia-diagnose/scripts/sondas.sh src
 ```
 
-**S1 mede a ordem por número de linha** — hook registrado depois da primeira rota do arquivo. É a **primeira hipótese, sempre** (`ELYSIA-CORE-01`), e não dá erro nem aviso: a rota simplesmente não passa pelo hook.
+**S1 measures order by line number** — a hook registered after the file's first route. It is the **first hypothesis, always** (`ELYSIA-CORE-01`), and it raises neither error nor warning: the route simply does not pass through the hook.
 
-As outras nove: escopo não declarado, plugin sem `name`, `derive` decidindo auth, `onRequest` lendo `body`/`query`, `store` desestruturado, `decorate` mutado, hook anônimo sob tracing, `cors` default, macro com `throw`, plugin como callback.
+The other nine: undeclared scope, plugin without a `name`, `derive` deciding auth, `onRequest` reading `body`/`query`, a destructured `store`, a mutated `decorate`, an anonymous hook under tracing, default `cors`, a macro with `throw`, a plugin as a callback.
 
 ---
 
-## Passo 2 — As duas causas
+## Step 2 — The two causes
 
-**1. Registrado depois da rota** (`ELYSIA-CORE-01`) — hooks só se aplicam a rota registrada **depois** deles.
+**1. Registered after the route** (`ELYSIA-CORE-01`) — hooks only apply to routes registered **after** them.
 
-**2. Escopo não declarado** (`ELYSIA-LIFE-01`) — o default é **`local`**: o hook fica dentro do plugin e **não atravessa** para a instância consumidora. Um plugin de autenticação sem escopo declarado protege as rotas dele e **nenhuma** do consumidor.
+**2. Undeclared scope** (`ELYSIA-LIFE-01`) — the default is **`local`**: the hook stays inside the plugin and **does not cross** into the consuming instance. An authentication plugin without a declared scope protects its own routes and **none** of the consumer's.
 
 ```
-local → só a instância do próprio plugin
-scoped → o consumidor direto
-global → toda a árvore
+local → only the plugin's own instance
+scoped → the direct consumer
+global → the whole tree
 ```
 
-Hook transversal — tracing, logging, CORS — usa `global` (`ELYSIA-LIFE-09`), não uma corrente de `scoped`.
+A cross-cutting hook — tracing, logging, CORS — uses `global` (`ELYSIA-LIFE-09`), not a chain of `scoped`.
 
 ---
 
-## Passo 3 — A árvore
+## Step 3 — The tree
 
-`references/arvore.md`, cinco ramos. Dois que produzem bug desconcertante:
+`references/arvore.md`, five branches. Two that produce a bewildering bug:
 
-- **`ELYSIA-LIFE-03`** — plugin sem `name` aplicado duas vezes tem o lifecycle executado **uma** vez; o sintoma é o hook rodando para metade das rotas.
-- **`ELYSIA-LIFE-04`** — `onRequest` recebe `PreContext`, que **não** tem `body`, `query`, `params` nem `cookie`; lê `undefined`, e `undefined` frequentemente passa como "sem filtro".
+- **`ELYSIA-LIFE-03`** — a plugin without a `name` applied twice has its lifecycle executed **once**; the symptom is the hook running for half the routes.
+- **`ELYSIA-LIFE-04`** — `onRequest` receives a `PreContext`, which has **no** `body`, `query`, `params` or `cookie`; it reads `undefined`, and `undefined` often passes as "no filter".
 
-**A regra de segurança:** decisão de auth/autorização **nunca** usa `derive` (`ELYSIA-LIFE-02`) — `derive` roda **antes** da validação. Use `resolve` ou `macro.resolve`.
+**The security rule:** an auth/authorization decision **never** uses `derive` (`ELYSIA-LIFE-02`) — `derive` runs **before** validation. Use `resolve` or `macro.resolve`.
 
 ---
 
-## Passo 4 — Estado
+## Step 4 — State
 
-| Sintoma | Causa | Regra |
+| Symptom | Cause | Rule |
 | --- | --- | --- |
-| valor do `store` congelado | primitivo desestruturado no parâmetro — a referência se perde | `ELYSIA-LIFE-06` |
-| `decorate` mutado, comportamento imprevisível | `decorate` é imutável; mutável é `state` | `ELYSIA-LIFE-05` |
+| frozen `store` value | a primitive destructured in the parameter — the reference is lost | `ELYSIA-LIFE-06` |
+| mutated `decorate`, unpredictable behavior | `decorate` is immutable; mutable is `state` | `ELYSIA-LIFE-05` |
 
 ---
 
-## Passo 5 — Provar
+## Step 5 — Prove it
 
-**A sonda aponta; ela não prova.** `local` e `scoped` produzem o mesmo código dentro do plugin: a diferença só aparece na instância que o consome.
+**The probe points; it does not prove.** `local` and `scoped` produce the same code inside the plugin: the difference only appears in the instance that consumes it.
 
-`references/prova-de-escopo.md` traz o teste que `ELYSIA-LIFE-08` exige — uma rota da instância **consumidora** rejeitada sem credencial. É a única asserção que distingue os dois escopos.
+`references/prova-de-escopo.md` carries the test `ELYSIA-LIFE-08` requires — a route of the **consuming** instance rejected without credentials. It is the only assertion that tells the two scopes apart.
 
 ---
 
-## Passo 6 — Reportar
+## Step 6 — Report
 
 ```
-`ID-DA-REGRA` — arquivo:linha
-Sintoma: <o que não acontece>
-Evidência: <o teste, o log, ou a ordem de registro>
-Causa: <uma frase>
-Correção: <mudança concreta>
-Ver Satélite correspondente.
+`RULE-ID` — file:line
+Symptom: <what does not happen>
+Evidence: <the test, the log, or the registration order>
+Cause: <one sentence>
+Fix: <concrete change>
+See the corresponding satellite.
 ```
 
-**Evidência é teste ou ordem de registro**, não impressão.
+**Evidence is a test or the registration order**, not an impression.
 
 ---
 
-## Passo 7 — O corte: o que não é lifecycle
+## Step 7 — The cut: what is not lifecycle
 
-Erro chegando como `unknown` no Eden, `data` `null`, tipo que perdeu rotas, header que "nunca chega", body numérico que falha, teste flaky com plugin assíncrono, SSE que cai — **nenhum é lifecycle**. A tabela com o dono de cada um está em `references/prova-de-escopo.md`.
-
----
-
-## Exemplo
-
-Plugin de auth cujas rotas de teste são rejeitadas corretamente, e as rotas do servidor passam sem credencial. S1 limpo, S2 apontando `.onBeforeHandle(verificar)` sem escopo — e o teste na instância consumidora devolvendo **200 onde deveria dar 401**. O teste que existia rodava **dentro** do plugin, e por isso nunca pegou.
-
-Diagnóstico completo: `references/exemplo-plugin-sem-escopo.md`.
+An error arriving as `unknown` in Eden, `null` `data`, a type that lost routes, a header that "never arrives", a numeric body that fails, a flaky test with an async plugin, SSE that drops — **none of these is lifecycle**. The table with the owner of each is in `references/prova-de-escopo.md`.
 
 ---
 
-## Relacionados
+## Example
 
-- [Elysia - Lifecycle e Plugins](../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) — fonte desta skill
+An auth plugin whose test routes are rejected correctly, while the server's routes pass without credentials. S1 clean, S2 pointing at `.onBeforeHandle(verify)` without a scope — and the test on the consuming instance returning **200 where it should return 401**. The test that existed ran **inside** the plugin, and that is why it never caught it.
+
+Full diagnosis: `references/exemplo-plugin-sem-escopo.md`.
+
+---
+
+## Related
+
+- [Elysia - Lifecycle e Plugins](../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) — source of this skill
 - [Elysia](../../../knowledge-base/docs/elysia.md) § 6, § 7
-- `elysia-build` · `elysia-schema` — as skills irmãs
-- `http-diagnose` — quando o sintoma é CORS no browser
+- `elysia-build` · `elysia-schema` — the sibling skills
+- `http-diagnose` — when the symptom is CORS in the browser

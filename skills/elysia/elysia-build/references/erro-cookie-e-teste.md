@@ -1,88 +1,88 @@
-# Erro, cookie, stream e teste
+# Errors, cookies, streaming and testing
 
-> Passos 3 a 5.
+> Steps 3 to 5.
 
 ---
 
-## Erro — a decisão mais consequente da skill
+## Errors — the most consequential decision in the skill
 
 ```
-O erro é ESPERADO (validação, 404 de negócio, limite)?
-├── SIM → return status(código, corpo) ELYSIA-CORE-03
-│ (o tipo chega tipado ao Eden)
-└── NÃO — é inesperado
- └── throw → cai no onError
- └── e onError NUNCA devolve error.message de UNKNOWN
+Is the error EXPECTED (validation, business 404, limit)?
+├── YES → return status(code, body) ELYSIA-CORE-03
+│ (the type reaches Eden typed)
+└── NO — it is unexpected
+ └── throw → lands in onError
+ └── and onError NEVER returns error.message from UNKNOWN
  ELYSIA-CORE-07
 ```
 
-| Regra | O que exige |
+| Rule | What it requires |
 | --- | --- |
-| `ELYSIA-CORE-03` | erro esperado é `return status(...)`, **não `throw`**, quando o tipo precisa chegar ao Eden |
-| `ELYSIA-CORE-04` | `status(code, valor)` no lugar de `set.status` sempre que a rota declarar schema de `response` |
-| `ELYSIA-CORE-07` | `onError` **nunca** devolve `error.message` de um erro `UNKNOWN` |
-| `ELYSIA-CORE-08` | erro de domínio recorrente é registrado em `.error({...})`, para ter `code` próprio e narrowing |
+| `ELYSIA-CORE-03` | an expected error is `return status(...)`, **not `throw`**, when the type has to reach Eden |
+| `ELYSIA-CORE-04` | `status(code, value)` instead of `set.status` whenever the route declares a `response` schema |
+| `ELYSIA-CORE-07` | `onError` **never** returns `error.message` from an `UNKNOWN` error |
+| `ELYSIA-CORE-08` | a recurring domain error is registered in `.error({...})`, so it has its own `code` and narrowing |
 
-**Por que `throw` perde o tipo:** o `throw` sai pelo `onError`, que é um caminho **fora do
-tipo da rota** — então o Eden não sabe que aquele status existe. `return status(...)` entra
-no tipo. É o mesmo princípio que `ELYSIA-LIFE-10` aplica dentro de `macro`.
+**Why `throw` loses the type:** a `throw` leaves through `onError`, which is a path **outside the
+route's type** — so Eden does not know that status exists. `return status(...)` goes into
+the type. It is the same principle `ELYSIA-LIFE-10` applies inside a `macro`.
 
-**`ELYSIA-CORE-07` é achado de segurança**, não de estilo: `error.message` de erro
-desconhecido vaza caminho de arquivo, query e nome de tabela.
+**`ELYSIA-CORE-07` is a security finding**, not a style one: `error.message` from an unknown
+error leaks file paths, queries and table names.
 
 ---
 
-## Cookie e stream
+## Cookies and streaming
 
-Cookie de sessão é **assinado e `httpOnly`** (`ELYSIA-CORE-05`):
+A session cookie is **signed and `httpOnly`** (`ELYSIA-CORE-05`):
 
 ```ts
-new Elysia({ cookie: { secrets: env.COOKIE_SECRET, sign: ['sessao'] } })
-.get('/eu', ({ cookie: { sessao } }) => {
- sessao.value = { id };
- sessao.httpOnly = true;
- sessao.secure = true;
- sessao.sameSite = 'lax';
+new Elysia({ cookie: { secrets: env.COOKIE_SECRET, sign: ['session'] } })
+.get('/me', ({ cookie: { session } }) => {
+ session.value = { id };
+ session.httpOnly = true;
+ session.secure = true;
+ session.sameSite = 'lax';
  });
 ```
 
-A semântica de `SameSite`, `Domain` e dos prefixos é de `Docs/RFC 6265 - Cookies HTTP.md` —
-Elysia é o mecanismo, não o critério.
+The semantics of `SameSite`, `Domain` and the prefixes come from `Docs/RFC 6265 - Cookies HTTP.md` —
+Elysia is the mechanism, not the criterion.
 
-**Stream:** `ELYSIA-CORE-06` — `set.headers` **nunca** é alterado depois do primeiro `yield`
-de um handler generator. A alteração é **silenciosamente ignorada**.
+**Streaming:** `ELYSIA-CORE-06` — `set.headers` is **never** changed after the first `yield`
+of a generator handler. The change is **silently ignored**.
 
-> **A armadilha que vem do runtime, não do framework:** o `idleTimeout` de 10 s do
-> `Bun.serve` **conta durante a resposta**, não só antes — é a causa de SSE que cai sozinho.
-> Ver [Bun - HTTP e Servidor](../../../../knowledge-base/docs/bun-http-e-servidor.md).
+> **The trap that comes from the runtime, not the framework:** `Bun.serve`'s 10 s `idleTimeout`
+> **counts during the response**, not only before it — it is the cause of SSE that drops on its own.
+> See [Bun - HTTP e Servidor](../../../../knowledge-base/docs/bun-http-e-servidor.md).
 
 ---
 
-## Teste
+## Testing
 
-| Regra | O que exige |
+| Rule | What it requires |
 | --- | --- |
-| `ELYSIA-CORE-09` | teste de rota usa `app.fetch`/`app.handle` — **nunca** subir servidor e requisitar por rede |
-| `ELYSIA-CORE-10` | app com plugin assíncrono ou `import` lazy **aguarda `app.modules`** antes das asserções |
+| `ELYSIA-CORE-09` | a route test uses `app.fetch`/`app.handle` — **never** start a server and request over the network |
+| `ELYSIA-CORE-10` | an app with an async plugin or a lazy `import` **awaits `app.modules`** before the assertions |
 
 ```ts
-test('cria fatura', async => {
+test('creates an invoice', async => {
  await app.modules; // ELYSIA-CORE-10
- const res = await app.handle(new Request('http://localhost/faturas', {
+ const res = await app.handle(new Request('http://localhost/invoices', {
  method: 'POST',
  headers: { 'content-type': 'application/json' },
- body: JSON.stringify({ valor: 100 }),
+ body: JSON.stringify({ amount: 100 }),
  }));
  expect(res.status).toBe(201);
 });
 ```
 
-**`ELYSIA-CORE-10` produz flake clássico:** sem `await app.modules`, o teste roda antes de o
-plugin registrar a rota, e o resultado depende de timing. Ver `bun-test-build`.
+**`ELYSIA-CORE-10` produces a classic flake:** without `await app.modules`, the test runs before
+the plugin registers the route, and the result depends on timing. See `bun-test-build`.
 
 ---
 
-## Relacionados
+## Related
 
-- [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) · [Elysia](../../../../knowledge-base/docs/elysia.md) § 5 — a árvore de erro
-- `http-contract` — qual status devolver é decisão de protocolo, não de framework
+- [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) · [Elysia](../../../../knowledge-base/docs/elysia.md) § 5 — the error tree
+- `http-contract` — which status to return is a protocol decision, not a framework one

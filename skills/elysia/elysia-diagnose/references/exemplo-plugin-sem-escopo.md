@@ -1,48 +1,48 @@
-# Exemplo trabalhado — plugin de auth que não protege o consumidor
+# Worked example — an auth plugin that does not protect the consumer
 
-### Exemplo
+### Example
 
 ```
 `ELYSIA-LIFE-01` — packages/auth/src/plugin.ts:14
-Sintoma: as rotas de apps/server passam sem credencial; as rotas de teste dentro do
- próprio plugin são rejeitadas corretamente.
-Evidência: o teste do Passo 6 sobre a instância consumidora devolveu 200, não 401.
- O plugin declara `.onBeforeHandle(verificar)` sem escopo.
-Causa: o default do escopo é `local` — o hook não atravessa para a instância que usa
- o plugin. O teste que existia rodava dentro do plugin, então nunca pegou.
-Correção: declarar `.onBeforeHandle({ as: 'scoped' }, verificar)`, e mover o teste
- para a instância consumidora (ELYSIA-LIFE-08). Se o hook deve valer em toda a
- árvore, o escopo é `global` (ELYSIA-LIFE-09).
-Ver Elysia - Lifecycle e Plugins.
+Symptom: the routes in apps/server pass without credentials; the test routes inside the
+ plugin itself are rejected correctly.
+Evidence: the Step 6 test on the consuming instance returned 200, not 401.
+ The plugin declares `.onBeforeHandle(verify)` without a scope.
+Cause: the default scope is `local` — the hook does not cross into the instance that uses
+ the plugin. The test that existed ran inside the plugin, so it never caught it.
+Fix: declare `.onBeforeHandle({ as: 'scoped' }, verify)`, and move the test to the
+ consuming instance (ELYSIA-LIFE-08). If the hook must hold across the whole tree,
+ the scope is `global` (ELYSIA-LIFE-09).
+See Elysia - Lifecycle e Plugins.
 ```
 
-Regras do formato: **ID conferido na § 6**; **evidência é teste ou ordem de registro**, não impressão; correção concreta; um link de satélite.
+Rules of the format: **ID checked against § 6**; **evidence is a test or the registration order**, not an impression; concrete fix; one satellite link.
 
 ---
 
 
 ---
 
-## O percurso que levou até ali
+## The path that led there
 
 ```
 $ bash scripts/sondas.sh src
 
-== S1. Hook registrado DEPOIS da rota
- (nada) ← a hipótese mais comum caiu
-== S2. Escopo não declarado em plugin
- packages/auth/src/plugin.ts:14.onBeforeHandle(verificar)
- -- plugins com `name` declarado: NENHUM ← ELYSIA-LIFE-03 também em aberto
+== S1. Hook registered AFTER the route
+ (nothing) ← the most common hypothesis fell
+== S2. Undeclared scope in a plugin
+ packages/auth/src/plugin.ts:14.onBeforeHandle(verify)
+ -- plugins with a declared `name`: NONE ← ELYSIA-LIFE-03 also open
 ```
 
-S1 limpo e S2 apontando o plugin: a hipótese é escopo. **A sonda não prova** — quem prova é
-o teste na instância consumidora (`prova-de-escopo.md`), que devolveu 200 onde deveria dar 401.
+S1 clean and S2 pointing at the plugin: the hypothesis is scope. **The probe does not prove it** — what proves it is
+the test on the consuming instance (`prova-de-escopo.md`), which returned 200 where it should have returned 401.
 
-## O que este exemplo demonstra
+## What this example demonstrates
 
-| Decisão | Onde está a regra |
+| Decision | Where the rule is |
 | --- | --- |
-| a ordem foi conferida **antes** do escopo | `duas-causas.md` |
-| a evidência é um teste, não impressão | § *Formato do achado* |
-| o teste que existia rodava dentro do plugin, e por isso nunca pegou | `prova-de-escopo.md` |
-| a correção nomeia `scoped` **e** diz quando seria `global` | `ELYSIA-LIFE-09` |
+| order was checked **before** scope | `duas-causas.md` |
+| the evidence is a test, not an impression | § *Finding format* |
+| the test that existed ran inside the plugin, and that is why it never caught it | `prova-de-escopo.md` |
+| the fix names `scoped` **and** says when it would be `global` | `ELYSIA-LIFE-09` |

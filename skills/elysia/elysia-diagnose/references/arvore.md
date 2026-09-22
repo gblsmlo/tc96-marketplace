@@ -1,59 +1,56 @@
-# A árvore, e o que ela elimina
+# The tree, and what it eliminates
 
 ```
-O hook não roda para esta rota.
-├── ele foi registrado ANTES da rota?
-│ └── NÃO → é isso. ELYSIA-CORE-01
-├── ele vem de um plugin, e a rota é da instância CONSUMIDORA?
-│ └── SIM, e o escopo não foi declarado → é isso. ELYSIA-LIFE-01
-├── o plugin é aplicado por mais de uma instância?
-│ └── e não tem `name` → o lifecycle roda uma vez só. ELYSIA-LIFE-03
-├── o hook precisa de body/query/params/cookie?
-│ └── e está em onRequest → o PreContext não os tem. ELYSIA-LIFE-04
-└── o plugin é um callback (app) => app?
- └── troque por instância `new Elysia`. ELYSIA-LIFE-07
+The hook does not run for this route.
+├── was it registered BEFORE the route?
+│ └── NO → that is it. ELYSIA-CORE-01
+├── does it come from a plugin, and is the route on the CONSUMING instance?
+│ └── YES, and the scope was not declared → that is it. ELYSIA-LIFE-01
+├── is the plugin applied by more than one instance?
+│ └── and it has no `name` → the lifecycle runs only once. ELYSIA-LIFE-03
+├── does the hook need body/query/params/cookie?
+│ └── and it is in onRequest → the PreContext does not have them. ELYSIA-LIFE-04
+└── is the plugin a callback (app) => app?
+ └── swap it for a `new Elysia` instance. ELYSIA-LIFE-07
 ```
 
-**`ELYSIA-LIFE-03` produz o bug mais desconcertante:** sem `name`, o plugin aplicado duas vezes tem o lifecycle executado **uma** vez. O sintoma é o hook rodando para metade das rotas.
+**`ELYSIA-LIFE-03` produces the most bewildering bug:** without a `name`, a plugin applied twice has its lifecycle executed **once**. The symptom is the hook running for half the routes.
 
-**`ELYSIA-LIFE-04`:** `onRequest` recebe `PreContext`, que **não** tem `body`, `query`, `params` nem `cookie`. Lógica que precisa deles ali lê `undefined` — e o `undefined` frequentemente passa como "sem filtro".
+**`ELYSIA-LIFE-04`:** `onRequest` receives a `PreContext`, which has **no** `body`, `query`, `params` or `cookie`. Logic that needs them there reads `undefined` — and `undefined` often passes as "no filter".
 
 ---
 
 
 ---
 
-## Passo 3 — `derive` × `resolve`: a regra de segurança
+## Step 3 — `derive` × `resolve`: the security rule
 
-`ELYSIA-LIFE-02`: **decisão de autenticação ou autorização nunca usa `derive`** — usa `resolve` ou `macro.resolve`, que rodam **depois** da validação.
+`ELYSIA-LIFE-02`: **an authentication or authorization decision never uses `derive`** — it uses `resolve` or `macro.resolve`, which run **after** validation.
 
-`derive` roda **antes** da validação. Uma decisão de autorização ali opera sobre entrada não validada — é o caso clássico de checar um campo que a validação depois rejeitaria, ou de confiar num valor coagido de forma diferente.
+`derive` runs **before** validation. An authorization decision there operates on unvalidated input — the classic case of checking a field that validation would later reject, or trusting a value coerced differently.
 
-| Precisa de… | Use |
+| You need… | Use |
 | --- | --- |
-| valor derivado, sem decisão de segurança | `derive` |
-| **decisão de auth/autorização** | `resolve` ou `macro.resolve` |
-| estado **mutável** | `state` |
-| valor imutável injetado | `decorate` |
+| a derived value, with no security decision | `derive` |
+| an **auth/authorization decision** | `resolve` or `macro.resolve` |
+| **mutable** state | `state` |
+| an injected immutable value | `decorate` |
 
 ---
 
-## Passo 4 — Estado que não muda, ou muda demais
+## Step 4 — State that does not change, or changes too much
 
-| Sintoma | Causa | Regra |
+| Symptom | Cause | Rule |
 | --- | --- | --- |
-| valor do `store` fica congelado | primitivo desestruturado no parâmetro do handler — a referência se perde | `ELYSIA-LIFE-06` |
-| valor de `decorate` foi mutado e o comportamento ficou imprevisível | `decorate` é imutável; estado mutável é `state` | `ELYSIA-LIFE-05` |
+| the `store` value stays frozen | a primitive destructured in the handler's parameter — the reference is lost | `ELYSIA-LIFE-06` |
+| a `decorate` value was mutated and behavior became unpredictable | `decorate` is immutable; mutable state is `state` | `ELYSIA-LIFE-05` |
 
 ```ts
-// ✗ contador congela no valor do momento do registro
-.get('/x', ({ store: { contador } }) => contador)
+// ✗ counter freezes at its value at registration time
+.get('/x', ({ store: { counter } }) => counter)
 
-// ✓ lê pela referência
-.get('/x', ({ store }) => store.contador)
+// ✓ reads through the reference
+.get('/x', ({ store }) => store.counter)
 ```
 
-`ELYSIA-LIFE-06` é sutil e comum: a desestruturação copia o primitivo, e toda leitura seguinte devolve o valor antigo.
-
----
-
+`ELYSIA-LIFE-06` is subtle and common: destructuring copies the primitive, and every later read returns the old value.

@@ -1,55 +1,53 @@
-# A prova de escopo — o teste que ELYSIA-LIFE-08 exige
+# The scope proof — the test ELYSIA-LIFE-08 requires
 
 ```bash
-# a rota passa pelo hook? instrumente temporariamente e conte
-# (e prefira função nomeada, para o span não virar anonymous)
+# does the route pass through the hook? instrument temporarily and count
+# (and prefer a named function, so the span does not become anonymous)
 ```
 
 ```ts
-// prova de escopo — o teste que ELYSIA-LIFE-08 exige
+// scope proof — the test ELYSIA-LIFE-08 requires
 import { describe, test, expect } from 'bun:test';
 import { Elysia } from 'elysia';
 import { authPlugin } from './auth';
 
-test('plugin protege rota da instância CONSUMIDORA', async => {
- const consumidor = new Elysia.use(authPlugin).get('/privado', => 'ok');
- await consumidor.modules; // ELYSIA-CORE-10
- const res = await consumidor.handle(new Request('http://x/privado'));
- expect(res.status).toBe(401); // se der 200, o escopo é local
+test('plugin protects a route of the CONSUMING instance', async => {
+ const consumer = new Elysia.use(authPlugin).get('/private', => 'ok');
+ await consumer.modules; // ELYSIA-CORE-10
+ const res = await consumer.handle(new Request('http://x/private'));
+ expect(res.status).toBe(401); // if it returns 200, the scope is local
 });
 ```
 
-Esse teste é a sonda mais valiosa desta skill: ele distingue `local` de `scoped` em uma asserção, e é o único jeito de provar `ELYSIA-LIFE-01` sem ler o código do plugin.
+This test is the most valuable probe in this skill: it tells `local` from `scoped` in a single assertion, and it is the only way to prove `ELYSIA-LIFE-01` without reading the plugin's code.
 
 ---
 
 
 ---
 
-## Por que este teste, e não a leitura do plugin
+## Why this test, and not reading the plugin
 
-`local` e `scoped` **produzem o mesmo código** dentro do plugin: a diferença só aparece na
-instância que o consome. Um teste escrito **dentro** do plugin passa nos dois casos — e é
-exatamente o teste que a maioria dos projetos tem.
+`local` and `scoped` **produce the same code** inside the plugin: the difference only appears in the
+instance that consumes it. A test written **inside** the plugin passes in both cases — and it is
+exactly the test most projects have.
 
-| Onde o teste roda | Escopo `local` | Escopo `scoped` |
+| Where the test runs | `local` scope | `scoped` scope |
 | --- | --- | --- |
-| dentro do plugin | rejeita ✓ | rejeita ✓ |
-| **na instância consumidora** | **passa (200)** ✗ | rejeita (401) ✓ |
+| inside the plugin | rejects ✓ | rejects ✓ |
+| **on the consuming instance** | **passes (200)** ✗ | rejects (401) ✓ |
 
-A linha de baixo é a única que distingue os dois — e é a que `ELYSIA-LIFE-08` exige.
+The bottom row is the only one that tells the two apart — and it is the one `ELYSIA-LIFE-08` requires.
 
-## O corte: o que não é lifecycle
-| Sintoma | Não é lifecycle — é |
+## The cut: what is not lifecycle
+| Symptom | It is not lifecycle — it is |
 | --- | --- |
-| erro chega ao Eden como `unknown` | `response` sem mapa por status — `elysia-schema` (`ELYSIA-TYPE-06`) |
-| `data` do Eden é `null` | status ≥ 300 — `ELYSIA-TYPE-08` |
-| tipo do Eden perdeu rotas | method chaining quebrado — `ELYSIA-APP-01` |
-| header obrigatório "nunca chega" | nome capitalizado no schema — `ELYSIA-TYPE-03` |
-| body numérico falha a validação | `body` não coage — `ELYSIA-TYPE-04` |
-| teste flaky com plugin assíncrono | falta `await app.modules` — `ELYSIA-CORE-10` |
-| SSE cai sozinho | `idleTimeout` do `Bun.serve` — [Bun - HTTP e Servidor](../../../../knowledge-base/docs/bun-http-e-servidor.md) |
+| an error reaching Eden as `unknown` | `response` without a map by status — `elysia-schema` (`ELYSIA-TYPE-06`) |
+| Eden's `data` is `null` | status ≥ 300 — `ELYSIA-TYPE-08` |
+| Eden's type lost routes | broken method chaining — `ELYSIA-APP-01` |
+| a required header "never arrives" | a capitalized name in the schema — `ELYSIA-TYPE-03` |
+| a numeric body fails validation | `body` does not coerce — `ELYSIA-TYPE-04` |
+| a flaky test with an async plugin | missing `await app.modules` — `ELYSIA-CORE-10` |
+| SSE drops on its own | `Bun.serve`'s `idleTimeout` — [Bun - HTTP e Servidor](../../../../knowledge-base/docs/bun-http-e-servidor.md) |
 
-**E o mais comum de todos:** o hook não roda porque foi registrado **depois** da rota (`ELYSIA-CORE-01`). Antes de investigar escopo, confira a ordem.
-
----
+**And the most common of all:** the hook does not run because it was registered **after** the route (`ELYSIA-CORE-01`). Before investigating scope, check the order.

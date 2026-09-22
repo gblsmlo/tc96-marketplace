@@ -1,21 +1,21 @@
-# Antipadrões, com ID
+# Antipatterns, with IDs
 
-> Confira em `mapa-de-ids.md`. `ELYSIA-LIFE-10` é a aplicação de `ELYSIA-CORE-03` dentro de `macro` — cite o canônico ao falar do princípio, e `LIFE-10` ao falar do macro.
+> Check `mapa-de-ids.md`. `ELYSIA-LIFE-10` is the application of `ELYSIA-CORE-03` inside a `macro` — cite the canonical one when talking about the principle, and `LIFE-10` when talking about the macro.
 
-| Antipadrão | ID | Satélite |
+| Antipattern | ID | Satellite |
 | --- | --- | --- |
-| Hook, plugin ou `onError` registrado depois das rotas | `ELYSIA-CORE-01` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) |
-| Hook de plugin sem escopo declarado | `ELYSIA-LIFE-01` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
-| `derive` para decisão de auth ou autorização | `ELYSIA-LIFE-02` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
-| Plugin sem `name` aplicado por mais de uma instância | `ELYSIA-LIFE-03` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
-| `onRequest` lendo `body`/`query`/`params`/`cookie` | `ELYSIA-LIFE-04` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
-| Mutar valor de `decorate` | `ELYSIA-LIFE-05` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
-| Primitivo do `store` desestruturado no parâmetro | `ELYSIA-LIFE-06` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
-| Plugin como callback `(app) => app` | `ELYSIA-LIFE-07` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
-| Testar auth só dentro do plugin | `ELYSIA-LIFE-08` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
-| Corrente de `scoped` onde cabia `global` | `ELYSIA-LIFE-09` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
-| `throw` dentro de macro | `ELYSIA-LIFE-10` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
-| Hook como arrow anônima sob OpenTelemetry | `ELYSIA-LIFE-11` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
-| `cors` com `origin` default em API autenticada | `ELYSIA-LIFE-12` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
-| Asserção antes de `await app.modules` | `ELYSIA-CORE-10` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) |
+| Hook, plugin or `onError` registered after the routes | `ELYSIA-CORE-01` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) |
+| Plugin hook without a declared scope | `ELYSIA-LIFE-01` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
+| `derive` for an auth or authorization decision | `ELYSIA-LIFE-02` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
+| Plugin without a `name` applied by more than one instance | `ELYSIA-LIFE-03` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
+| `onRequest` reading `body`/`query`/`params`/`cookie` | `ELYSIA-LIFE-04` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
+| Mutating a `decorate` value | `ELYSIA-LIFE-05` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
+| `store` primitive destructured in the parameter | `ELYSIA-LIFE-06` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
+| Plugin as an `(app) => app` callback | `ELYSIA-LIFE-07` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
+| Testing auth only inside the plugin | `ELYSIA-LIFE-08` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
+| A chain of `scoped` where `global` would fit | `ELYSIA-LIFE-09` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
+| `throw` inside a macro | `ELYSIA-LIFE-10` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
+| Hook as an anonymous arrow under OpenTelemetry | `ELYSIA-LIFE-11` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
+| `cors` with the default `origin` in an authenticated API | `ELYSIA-LIFE-12` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) |
+| Assertion before `await app.modules` | `ELYSIA-CORE-10` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) |
 

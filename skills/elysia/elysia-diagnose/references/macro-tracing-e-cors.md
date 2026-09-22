@@ -1,32 +1,32 @@
-# Macro, tracing e CORS
+# Macro, tracing and CORS
 
-| Regra | O que exige |
+| Rule | What it requires |
 | --- | --- |
-| `ELYSIA-LIFE-10` | macro sinaliza falha com `return status(...)` — **`throw` vira 500** e perde a inferência para Eden e OpenAPI |
-| `ELYSIA-LIFE-11` | hook em app instrumentada com OpenTelemetry é **função nomeada** — arrow anônima produz span `anonymous` |
-| `ELYSIA-LIFE-12` | `cors` em API autenticada **nunca** fica com `origin` default (`*`) |
+| `ELYSIA-LIFE-10` | a macro signals failure with `return status(...)` — **`throw` becomes a 500** and loses inference for Eden and OpenAPI |
+| `ELYSIA-LIFE-11` | a hook in an app instrumented with OpenTelemetry is a **named function** — an anonymous arrow produces an `anonymous` span |
+| `ELYSIA-LIFE-12` | `cors` in an authenticated API **never** keeps the default `origin` (`*`) |
 
-**`ELYSIA-LIFE-11` inutiliza o tracing sem quebrar nada:** todos os spans se chamam `anonymous`, e a instrumentação existe sem informar.
+**`ELYSIA-LIFE-11` makes tracing useless without breaking anything:** every span is called `anonymous`, and the instrumentation exists without informing.
 
-**`ELYSIA-LIFE-12` é o mesmo achado que `HTTP-CORS-02`** por outro caminho: `origin: '*'` com `credentials: true` é inválido, e o browser recusa. Ver `http-diagnose` § 2.2 — o default permissivo do plugin é a causa concreta mais comum no stack.
-
----
-
+**`ELYSIA-LIFE-12` is the same finding as `HTTP-CORS-02`** by another path: `origin: '*'` with `credentials: true` is invalid, and the browser refuses. See `http-diagnose` § 2.2 — the plugin's permissive default is the most common concrete cause in this stack.
 
 ---
 
-## As três falham sem quebrar nada
 
-| Regra | O que se perde | Como o sintoma aparece |
+---
+
+## All three fail without breaking anything
+
+| Rule | What is lost | How the symptom appears |
 | --- | --- | --- |
-| `ELYSIA-LIFE-10` | inferência para Eden e OpenAPI | o `throw` dentro do macro vira **500**, e o status esperado some do tipo |
-| `ELYSIA-LIFE-11` | o tracing inteiro | todos os spans se chamam `anonymous`; a instrumentação existe sem informar |
-| `ELYSIA-LIFE-12` | a proteção de origem | `origin: '*'` com `credentials: true` é **inválido**, e o browser recusa |
+| `ELYSIA-LIFE-10` | inference for Eden and OpenAPI | the `throw` inside the macro becomes a **500**, and the expected status disappears from the type |
+| `ELYSIA-LIFE-11` | the whole of tracing | every span is called `anonymous`; the instrumentation exists without informing |
+| `ELYSIA-LIFE-12` | origin protection | `origin: '*'` with `credentials: true` is **invalid**, and the browser refuses |
 
-`ELYSIA-LIFE-12` é o mesmo achado que `HTTP-CORS-02` por outro caminho — o default permissivo
-do plugin é a causa concreta mais comum no stack. Ver `http-diagnose`.
+`ELYSIA-LIFE-12` is the same finding as `HTTP-CORS-02` by another path — the plugin's permissive
+default is the most common concrete cause in this stack. See `http-diagnose`.
 
-## Relacionados
+## Related
 
-- [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) — a fonte
-- `http-diagnose` — quando o sintoma é o browser bloqueando
+- [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) — the source
+- `http-diagnose` — when the symptom is the browser blocking
