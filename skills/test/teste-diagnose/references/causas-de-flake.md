@@ -53,8 +53,8 @@ lenta — o pior de dois mundos, por construção.
 | 20× o mesmo teste | confirma que é intermitente |
 | em container com a imagem do CI | paridade de ambiente |
 
-Formas concretas por ferramenta: [[Playwright]] § 5.2 (a árvore mais detalhada do vault) e
-[[Bun - Testes - Ciclo de Vida e Isolamento]].
+Formas concretas por ferramenta: `Docs/Playwright.md` § 5.2 (a árvore mais detalhada do vault) e
+`Docs/Bun - Testes - Ciclo de Vida e Isolamento.md`.
 
 > **Diagnosticar não é consertar.** Um worker faz a falha desaparecer e **mantém** o
 > acoplamento, com a suíte N vezes mais lenta. Prefixar arquivos com `001-`, `002-`
@@ -64,6 +64,6 @@ Formas concretas por ferramenta: [[Playwright]] § 5.2 (a árvore mais detalhada
 
 ## Relacionados
 
-- [[Teste de Software - Confiabilidade da Suíte]] § 2 — as dez causas, com corpo
-- [[Teste de Software]] § 4.5 — a árvore das seis perguntas
+- [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) § 2 — as dez causas, com corpo
+- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 4.5 — a árvore das seis perguntas
 - `conserto-x-anestesico.md` — o que **não** fazer com o que você achou

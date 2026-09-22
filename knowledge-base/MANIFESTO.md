@@ -56,6 +56,13 @@ Origem: `/home/gabs/Sync/Vaults/Notes` · o que entra: `knowledge-base/dominio.t
 | `docs/tanstack-router-search-params.md` | `Docs/TanStack Router - Search Params.md` | `e5ebef0ff38a` |
 | `docs/tanstack-router-virtual-file-routes.md` | `Docs/TanStack Router - Virtual File Routes.md` | `90bc170bce9d` |
 | `docs/tanstack-router.md` | `Docs/TanStack Router.md` | `b960fc87f674` |
+| `docs/teste-de-software-confiabilidade-da-suite.md` | `Docs/Teste de Software - Confiabilidade da Suíte.md` | `84614ed66963` |
+| `docs/teste-de-software-dubles-de-teste.md` | `Docs/Teste de Software - Dublês de Teste.md` | `c6513efd0ba5` |
+| `docs/teste-de-software-niveis-e-escopo.md` | `Docs/Teste de Software - Níveis e Escopo.md` | `9f7110a5bf7a` |
+| `docs/teste-de-software-processo-e-artefatos.md` | `Docs/Teste de Software - Processo e Artefatos.md` | `e908dcfbfcce` |
+| `docs/teste-de-software-tecnicas-de-design-de-caso.md` | `Docs/Teste de Software - Técnicas de Design de Caso.md` | `4e81a684fb62` |
+| `docs/teste-de-software-tipos-e-atributos-de-qualidade.md` | `Docs/Teste de Software - Tipos e Atributos de Qualidade.md` | `85455ef67c3a` |
+| `docs/teste-de-software.md` | `Docs/Teste de Software.md` | `7a4d9e35b13f` |
 | `pages/architecture-in-react.md` | `Pages/Architecture in React.md` | `f850876d8983` |
 | `pages/feature-based-architecture.md` | `Pages/Feature-Based Architecture.md` | `fde924d86b1a` |
 | `pages/frontend-roadmap.md` | `Pages/Frontend roadmap.md` | `195b5b9744e3` |

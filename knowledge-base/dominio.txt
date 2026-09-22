@@ -9,3 +9,6 @@ Docs/Storybook*
 Pages/Architecture in React.md
 Pages/Feature-Based Architecture.md
 Pages/Frontend roadmap.md
+
+# --- test ---
+Docs/Teste de Software*

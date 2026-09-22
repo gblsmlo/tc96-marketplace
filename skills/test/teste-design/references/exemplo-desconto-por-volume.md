@@ -53,8 +53,8 @@ casos comprando muito menos informação.
 
 | Nível | Continua em |
 | --- | --- |
-| unidade, transição | [[bun-test-build]] |
-| E2E | [[playwright-build]] |
+| unidade, transição | `bun-test-build` |
+| E2E | `playwright-build` |
 
 Entregue junto: **nível, casos derivados e o que será substituído**. A skill de ferramenta
 implementa; ela não reabre essas perguntas.

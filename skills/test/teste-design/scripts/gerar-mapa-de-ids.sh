@@ -7,12 +7,15 @@
 #   2  a mesma no hub    3  menção em checklist ou tabela de antipadrão
 set -euo pipefail
 
-VAULT="${1:-$HOME/Sync/Vaults/Notes}"
-DOCS="$VAULT/Docs"
-HUB="$DOCS/Teste de Software.md"
+BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
+# O mapa é gerado na autoria e vai versionado no plugin: o destino é o repo,
+# a origem continua sendo o vault (passe outro caminho como $1 se preciso).
+PLUGIN="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+DOCS="$BASE/docs"
+HUB="$DOCS/teste-de-software.md"
 
 scan() {
-  for f in "$DOCS"/Teste\ de\ Software*.md; do
+  for f in "$DOCS"/teste-de-software*.md; do
     base="$(basename "$f" .md)"
     awk -v sat="$base" -v hub="Teste de Software" '
       /^## / { h2 = $0; sub(/^## /, "", h2) }
@@ -37,14 +40,14 @@ scan() {
 TMP="$(mktemp)"
 {
   echo "---"
-  echo "gerado-por: Skills/teste/teste-design/scripts/gerar-mapa-de-ids.sh"
+  echo "gerado-por: plugins/hermes-core/skills/teste-design/scripts/gerar-mapa-de-ids.sh"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
   echo "# Mapa de IDs \`TS-*\`"
   echo
   echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
-  echo "> Regenerar com \`bash Skills/teste/teste-design/scripts/gerar-mapa-de-ids.sh\` —"
+  echo "> Regenerar com \`bash plugins/hermes-core/skills/teste-design/scripts/gerar-mapa-de-ids.sh\` —"
   echo "> o mesmo arquivo é escrito nas três skills de teste."
   echo
   echo "## Apelidos — citar é achado inválido"
@@ -59,7 +62,7 @@ TMP="$(mktemp)"
 } > "$TMP"
 
 for s in design review diagnose; do
-  cp "$TMP" "$VAULT/Skills/teste/teste-$s/references/mapa-de-ids.md"
+  cp "$TMP" "$PLUGIN/skills/teste-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 3 skills ($(grep -c '^| `TS' "$VAULT/Skills/teste/teste-design/references/mapa-de-ids.md") IDs)"
+echo "gerado nas 3 skills ($(grep -c '^| `TS' "$PLUGIN/skills/teste-design/references/mapa-de-ids.md") IDs)"

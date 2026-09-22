@@ -1,7 +1,7 @@
 # O que substituir por dublê
 
-> Passo 5. A árvore é a § 4.2 de [[Teste de Software]]; o corpo é
-> [[Teste de Software - Dublês de Teste]].
+> Passo 5. A árvore é a § 4.2 de [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md); o corpo é
+> [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md).
 
 ---
 
@@ -12,10 +12,10 @@
 ```
 SIM → não substitua. Pegar a divergência é o ponto inteiro (TS-CORE-03)
 NÃO → substitua, e escolha o tipo certo:
-      só preencher parâmetro  → dummy
-      resposta pronta         → stub
-      implementação que roda  → fake  (e declare a fidelidade — TS-DUB-03)
-      verificar QUE chamou    → mock ou spy
+ só preencher parâmetro → dummy
+ resposta pronta → stub
+ implementação que roda → fake (e declare a fidelidade — TS-DUB-03)
+ verificar QUE chamou → mock ou spy
 ```
 
 ---
@@ -23,9 +23,9 @@ NÃO → substitua, e escolha o tipo certo:
 ## Duas regras que valem em qualquer nível
 
 - **Relógio e aleatoriedade: substitua sempre** (`TS-DUB-05`). É onde determinismo se
-  compra barato, e é o antídoto de toda espera por tempo real.
+ compra barato, e é o antídoto de toda espera por tempo real.
 - **Estado do servidor: não mocke — crie de verdade** pela API quando houver endpoint
-  (`TS-CORE-03`, e `PW-NET-06` em [[Playwright - Rede e Mocking]]).
+ (`TS-CORE-03`, e `PW-NET-06` em `Docs/Playwright - Rede e Mocking.md`).
 
 ---
 
@@ -41,6 +41,6 @@ quebra em produção.
 
 ## Relacionados
 
-- [[Teste de Software - Dublês de Teste]] — a fonte
-- [[Teste de Software]] § 4.2 — a árvore
+- [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) — a fonte
+- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 4.2 — a árvore
 - `arvore-de-nivel.md` — o nível que veio antes

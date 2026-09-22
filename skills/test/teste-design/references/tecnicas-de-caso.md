@@ -1,6 +1,6 @@
 # Derivar os casos
 
-> Passo 4. A árvore é a § 4.3 de [[Teste de Software]]. Quando há entrada a exercitar,
+> Passo 4. A árvore é a § 4.3 de [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md). Quando há entrada a exercitar,
 > esta é a etapa de maior retorno da skill.
 
 ---
@@ -41,7 +41,7 @@ exige.
 Carregando · vazio · sucesso · erro · recuperação (`TS-TIPO-02`).
 
 Cobrir só o caminho feliz é a omissão mais comum. Os estados não-felizes são **baratos no
-nível de componente** — é onde eles custam menos e valem mais ([[storybook-story]]).
+nível de componente** — é onde eles custam menos e valem mais (`storybook-story`).
 
 Decidir "não cobrir" é resposta válida; **não decidir** é a lacuna.
 
@@ -49,6 +49,6 @@ Decidir "não cobrir" é resposta válida; **não decidir** é a lacuna.
 
 ## Relacionados
 
-- [[Teste de Software - Técnicas de Design de Caso]] — a fonte
-- [[Teste de Software - Tipos e Atributos de Qualidade]] — os cinco estados e os atributos
+- [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) — a fonte
+- [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md) — os cinco estados e os atributos
 - `substituicao.md` — o passo seguinte, quando houver dependência

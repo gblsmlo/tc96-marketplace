@@ -26,27 +26,27 @@ passa a ser tapa-olho.
 
 | Antipadrão | ID | Satélite |
 | --- | --- | --- |
-| Conviver com flaky como escolha pragmática | `TS-CORE-04` | [[Teste de Software - Confiabilidade da Suíte]] |
-| Retry para calar flake | `TS-SUI-03` | [[Teste de Software - Confiabilidade da Suíte]] |
-| Espera por tempo fixo | `TS-SUI-07` | [[Teste de Software - Confiabilidade da Suíte]] |
-| Um worker como solução | `TS-SUI-09` | [[Teste de Software - Confiabilidade da Suíte]] |
-| Limpeza no setup do próximo em vez do teardown | `TS-SUI-08` | [[Teste de Software - Confiabilidade da Suíte]] |
-| Dado pré-existente compartilhado no ambiente | `TS-SUI-05` | [[Teste de Software - Confiabilidade da Suíte]] |
-| Teste que não pode falhar, mantido | `TS-SUI-10` | [[Teste de Software - Confiabilidade da Suíte]] |
-| `skip` sem motivo nem prazo | `TS-SUI-11` | [[Teste de Software - Confiabilidade da Suíte]] |
-| Culpar o refactor pelo teste que quebrou | `TS-SUI-06` | [[Teste de Software - Confiabilidade da Suíte]] |
-| Asserção que não detecta quebra | `TS-SUI-04` | [[Teste de Software - Confiabilidade da Suíte]] |
-| Teste observando implementação | `TS-CORE-07` | [[Teste de Software - Confiabilidade da Suíte]] |
-| Cobertura como prova de detecção | `TS-CORE-05` | [[Teste de Software - Técnicas de Design de Caso]] |
-| Declarar suíte suficiente sem quebrar nada | `TS-TEC-08` | [[Teste de Software - Técnicas de Design de Caso]] |
-| Mockar o que o teste vem provar | `TS-CORE-03` | [[Teste de Software - Dublês de Teste]] |
-| Relógio real em teste sobre tempo | `TS-DUB-05` | [[Teste de Software - Dublês de Teste]] |
-| Fake infiel usado para verificar contrato | `TS-DUB-03` | [[Teste de Software - Dublês de Teste]] |
-| Suíte lenta que ninguém roda (forma invertida) | `TS-NIV-04` | [[Teste de Software - Níveis e Escopo]] |
-| Estado de erro sem cobertura | `TS-TIPO-02` | [[Teste de Software - Tipos e Atributos de Qualidade]] |
-| Defeito recorrente corrigido pontualmente | `TS-PROC-08` | [[Teste de Software - Processo e Artefatos]] |
-| Defeito de produção sem teste que o pegue | `TS-CORE-06` | [[Teste de Software]] |
-| Suíte verde tratada como adequação ao usuário | `TS-CORE-08` | [[Teste de Software]] |
+| Conviver com flaky como escolha pragmática | `TS-CORE-04` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Retry para calar flake | `TS-SUI-03` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Espera por tempo fixo | `TS-SUI-07` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Um worker como solução | `TS-SUI-09` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Limpeza no setup do próximo em vez do teardown | `TS-SUI-08` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Dado pré-existente compartilhado no ambiente | `TS-SUI-05` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Teste que não pode falhar, mantido | `TS-SUI-10` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| `skip` sem motivo nem prazo | `TS-SUI-11` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Culpar o refactor pelo teste que quebrou | `TS-SUI-06` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Asserção que não detecta quebra | `TS-SUI-04` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Teste observando implementação | `TS-CORE-07` | [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) |
+| Cobertura como prova de detecção | `TS-CORE-05` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
+| Declarar suíte suficiente sem quebrar nada | `TS-TEC-08` | [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) |
+| Mockar o que o teste vem provar | `TS-CORE-03` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
+| Relógio real em teste sobre tempo | `TS-DUB-05` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
+| Fake infiel usado para verificar contrato | `TS-DUB-03` | [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) |
+| Suíte lenta que ninguém roda (forma invertida) | `TS-NIV-04` | [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
+| Estado de erro sem cobertura | `TS-TIPO-02` | [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md) |
+| Defeito recorrente corrigido pontualmente | `TS-PROC-08` | [Teste de Software - Processo e Artefatos](../../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) |
+| Defeito de produção sem teste que o pegue | `TS-CORE-06` | [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) |
+| Suíte verde tratada como adequação ao usuário | `TS-CORE-08` | [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) |
 
 Confira o ID em `mapa-de-ids.md` antes de citar: `TS-SUI-02`, `TS-NIV-01` e `TS-DUB-02` são
 apelidos.

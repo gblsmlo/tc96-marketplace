@@ -6,7 +6,7 @@
 Script: `scripts/sondas-suite.sh [raiz]` — roda S1, S3–S9 e prepara S2.
 
 ```bash
-bash ~/.claude/skills/teste-review/scripts/sondas-suite.sh .
+bash ${CLAUDE_PLUGIN_ROOT}/skills/teste-review/scripts/sondas-suite.sh.
 ```
 
 ---
@@ -34,7 +34,7 @@ S1, S3, S5, S6, S7 e S9 são leitura mecânica. **S2 exige rodar**; **S4 exige l
 | --- | --- |
 | **S1 com forma invertida** | criticar teste individual vira ruído: a correção é mover asserções para baixo, e ela reescreve boa parte da suíte |
 | **S4 com portão que não reprova** | um CI que sai `0` de qualquer forma torna toda discussão de cobertura decorativa — é o achado que mais explica "temos testes e mesmo assim quebra" |
-| **S3 com `no-floating-promises` desligada** num projeto com Playwright | **bloqueante**: pode haver qualquer quantidade de asserção que não afirma nada, e nenhuma aparece como falha ([[Playwright]] `PW-CORE-04`) |
+| **S3 com `no-floating-promises` desligada** num projeto com Playwright | **bloqueante**: pode haver qualquer quantidade de asserção que não afirma nada, e nenhuma aparece como falha (`Docs/Playwright.md` `PW-CORE-04`) |
 
 ---
 
@@ -46,7 +46,7 @@ S1, S3, S5, S6, S7 e S9 são leitura mecânica. **S2 exige rodar**; **S4 exige l
 | mesma lógica em três níveis | `TS-CORE-02` | procurar o mesmo nome de domínio em níveis diferentes |
 | mock do que o teste vem provar | `TS-CORE-03` | ler os dublês dos testes de integração |
 | fake sem fidelidade declarada | `TS-DUB-03` | ler o fake e perguntar se ele honra o contrato real |
-| asserção que não detecta quebra | `TS-SUI-04` | o teste de trinta segundos — é de [[teste-diagnose]] |
+| asserção que não detecta quebra | `TS-SUI-04` | o teste de trinta segundos — é de `teste-diagnose` |
 
 **Cobertura não substitui nenhuma dessas.** Um teste que chama a função e não afirma nada
 dá cobertura total (`TS-CORE-05`).
@@ -57,4 +57,4 @@ dá cobertura total (`TS-CORE-05`).
 
 - `ordem-da-varredura.md` — o que fazer com o que as sondas apontaram
 - `severidade-e-relatorio.md` — como classificar e escrever
-- [[Teste de Software - Processo e Artefatos]] — os portões
+- [Teste de Software - Processo e Artefatos](../../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) — os portões

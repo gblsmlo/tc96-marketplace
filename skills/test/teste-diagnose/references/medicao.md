@@ -29,7 +29,7 @@ mensagem) é defeito; falha **intermitente** é a suíte. Só o segundo caso é 
 | **`skip` acumulado** | inventário do script | dívida, e frequentemente flake escondido |
 
 ```bash
-bash ~/.claude/skills/teste-diagnose/scripts/medir-flakiness.sh "bun test" 20
+bash ${CLAUDE_PLUGIN_ROOT}/skills/teste-diagnose/scripts/medir-flakiness.sh "bun test" 20
 ```
 
 O script faz duas coisas: **inventaria os anestésicos já instalados** (retry, workers=1,
@@ -56,6 +56,6 @@ CI**, não mais uma rodada local.
 
 ## Relacionados
 
-- [[Teste de Software - Confiabilidade da Suíte]] § 1 — a aritmética
-- [[Teste de Software]] § 2, afirmação 5 — uma suíte não confiável é pior que nenhuma
+- [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) § 1 — a aritmética
+- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 2, afirmação 5 — uma suíte não confiável é pior que nenhuma
 - `causas-de-flake.md` — o passo seguinte, depois de ter o número

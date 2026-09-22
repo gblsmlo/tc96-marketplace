@@ -2,13 +2,13 @@
 
 Três skills, um diretório cada. Elas decidem **o quê**, **em que nível** e **se a suíte
 protege** — e nunca escrevem teste: isso é da camada de ferramenta
-([[Skills/playwright/README|playwright]], [[Skills/bun/README|bun]], [[storybook-test]]).
+(`hermes-e2e: família playwright`, `hermes-backend: família bun`, `storybook-test`).
 
 | Skill | A pergunta que responde | Fonte | Apoio interno |
 | --- | --- | --- | --- |
-| [[teste-design]] | que teste eu escrevo, e em que nível? | [[Teste de Software - Níveis e Escopo]] | 4 referências + 1 exemplo + 1 script |
-| [[teste-review]] | esta suíte protege alguma coisa? | [[Teste de Software]] | 4 referências + 1 auditoria + 1 script |
-| [[teste-diagnose]] | por que ninguém confia nesta suíte? | [[Teste de Software - Confiabilidade da Suíte]] | 4 referências + 1 diagnóstico + 1 script |
+| `teste-design` | que teste eu escrevo, e em que nível? | [Teste de Software - Níveis e Escopo](../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) | 4 referências + 1 exemplo + 1 script |
+| `teste-review` | esta suíte protege alguma coisa? | [Teste de Software](../../knowledge-base/docs/teste-de-software.md) | 4 referências + 1 auditoria + 1 script |
+| `teste-diagnose` | por que ninguém confia nesta suíte? | [Teste de Software - Confiabilidade da Suíte](../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) | 4 referências + 1 diagnóstico + 1 script |
 
 **A ordem é conceito → ferramenta.** Pular esta camada produz **E2E por default**, que é o
 antipadrão de maior custo do stack (`TS-CORE-02`).
@@ -34,8 +34,8 @@ seção — o mesmo número que a § 6.2 do hub declara, o que serve de conferê
 tabela de apelidos: `TS-NIV-01`, `TS-DUB-02` e `TS-SUI-02` **não** se citam.
 
 ```bash
-bash Skills/teste/teste-design/scripts/gerar-mapa-de-ids.sh
-bash Skills/instalar.sh
+bash plugins/hermes-core/skills/teste-design/scripts/gerar-mapa-de-ids.sh
+bash scripts/instalar.sh
 ```
 
 <!-- tokens:inicio -->
@@ -47,17 +47,17 @@ As referências carregam sob demanda, uma por vez.
 
 | Skill | `SKILL.md` | maior `references/` | total | refs |
 | --- | ---: | --- | ---: | ---: |
-| [[teste-design]] | 2.032 | `mapa-de-ids.md` (3.085) | 8.482 | 6 |
-| [[teste-diagnose]] | 1.994 | `mapa-de-ids.md` (3.085) | 9.365 | 6 |
-| [[teste-review]] | 1.631 | `mapa-de-ids.md` (3.085) | 9.941 | 6 |
+| `teste-design` | 2.032 | `mapa-de-ids.md` (3.085) | 8.482 | 6 |
+| `teste-diagnose` | 1.994 | `mapa-de-ids.md` (3.085) | 9.365 | 6 |
+| `teste-review` | 1.631 | `mapa-de-ids.md` (3.085) | 9.941 | 6 |
 
 Carregar as 3 skills deste grupo de uma vez custaria **5.657 tokens** só de `SKILL.md`,
 e **27.788** com todas as referências. É por isso que cada skill declara o que **nunca** carregar.
 
-Regenerar: `bash Skills/tokens.sh`
+Regenerar: `bash scripts/medir.sh`
 <!-- tokens:fim -->
 
 ## Relacionados
 
-- [[Skills/README|Skill — Índice]] · [[Teste de Software]] § 7 — o contrato que as três implementam
-- [[Skills/playwright/README|Skills/playwright/]] · [[Skills/bun/README|Skills/bun/]] — a camada de ferramenta
+- [Skill — Índice](../README.md) · [Teste de Software](../../knowledge-base/docs/teste-de-software.md) § 7 — o contrato que as três implementam
+- `hermes-e2e: família playwright` · `hermes-backend: família bun` — a camada de ferramenta

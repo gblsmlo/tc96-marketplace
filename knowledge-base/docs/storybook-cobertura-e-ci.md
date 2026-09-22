@@ -47,7 +47,7 @@ A fonte é explícita nas três limitações, e a primeira reescreve o significa
 
 A limitação 1 é a que importa: **isto não é cobertura de projeto.** O denominador é o que as stories alcançam. Um componente sem story nenhuma não aparece como 0% — ele frequentemente não aparece. Ler "82%" como "82% do código testado" é erro de leitura, não de medição (`SB-TEST-11`).
 
-O que o número **de fato** responde é útil e mais estreito: *das stories que existem, quanto do código que elas exercitam foi executado.* Serve para achar ramo de componente que nenhuma story alcança — que é o uso certo de cobertura em qualquer ferramenta (`Teste de Software - Técnicas de Design de Caso` § 3.3).
+O que o número **de fato** responde é útil e mais estreito: *das stories que existem, quanto do código que elas exercitam foi executado.* Serve para achar ramo de componente que nenhuma story alcança — que é o uso certo de cobertura em qualquer ferramenta ([Teste de Software - Técnicas de Design de Caso](teste-de-software-tecnicas-de-design-de-caso.md) § 3.3).
 
 ### 2.2 Instalar o provider
 
@@ -106,7 +106,7 @@ Para número confiável: watch desligado, ou CLI.
 
 ### 2.6 Cobertura não é meta
 
-Vale aqui a mesma regra que vale em qualquer lugar do vault: cobertura mede **execução**, não **verificação** — uma story que renderiza sem `play` cobre linhas e não afirma nada. Ver `TS-CORE-05` em `Teste de Software` e o teste de trinta segundos em `Teste de Software - Confiabilidade da Suíte` § 4.
+Vale aqui a mesma regra que vale em qualquer lugar do vault: cobertura mede **execução**, não **verificação** — uma story que renderiza sem `play` cobre linhas e não afirma nada. Ver `TS-CORE-05` em [Teste de Software](teste-de-software.md) e o teste de trinta segundos em [Teste de Software - Confiabilidade da Suíte](teste-de-software-confiabilidade-da-suite.md) § 4.
 
 E como o denominador aqui é "as stories que existem" (§ 2.1), a métrica é ainda mais frágil como meta do que o normal: ela sobe escrevendo story, não escrevendo asserção.
 
@@ -250,7 +250,7 @@ Vale pela CLI, não pelo widget (`SB-TEST-14`).
 
 ### 5.4 Meta de cobertura de stories no CI
 
-Pior que meta de cobertura comum: aqui o número sobe **escrevendo story**, não escrevendo asserção. Uma story sem `play` cobre linhas e não afirma nada (`SB-TEST-11`, e `TS-CORE-05` em `Teste de Software`).
+Pior que meta de cobertura comum: aqui o número sobe **escrevendo story**, não escrevendo asserção. Uma story sem `play` cobre linhas e não afirma nada (`SB-TEST-11`, e `TS-CORE-05` em [Teste de Software](teste-de-software.md)).
 
 ### 5.5 `vitest` sem `run` em CI
 
@@ -285,9 +285,9 @@ Os testes rodam e o status check aponta uma falha sem link para a story. Funcion
 - [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) — o satélite irmão: escrever o teste, e a config do addon-vitest
 - [Storybook - Configuração e Builder](storybook-configuracao-e-builder.md) — `main.ts`, Vite, e o recorte de `apps/storybook`
 - [Storybook - Pendências de revisão](storybook-pendencias-de-revisao.md) — o registro do que continua aberto
-- `Teste de Software` — por que cobertura não é meta (`TS-CORE-05`)
-- `Teste de Software - Confiabilidade da Suíte` — cobertura × mutação, e o teste de trinta segundos
-- `Teste de Software - Técnicas de Design de Caso` — o uso legítimo de cobertura
+- [Teste de Software](teste-de-software.md) — por que cobertura não é meta (`TS-CORE-05`)
+- [Teste de Software - Confiabilidade da Suíte](teste-de-software-confiabilidade-da-suite.md) — cobertura × mutação, e o teste de trinta segundos
+- [Teste de Software - Técnicas de Design de Caso](teste-de-software-tecnicas-de-design-de-caso.md) — o uso legítimo de cobertura
 - `Playwright` — o terceiro runner do monorepo, e a mesma exigência de binário em CI
 - `Playwright - Execução, Retries e CI` — o pipeline do lado do E2E
 - `Bun - Testes - Cobertura e CI` — o equivalente sob `bun test`, com os dois portões silenciosos

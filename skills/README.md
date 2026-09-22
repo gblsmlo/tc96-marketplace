@@ -24,6 +24,7 @@ skills/<familia>/
 | **react** | `react-developer` · `react-review` · `react-structure` · `react-hook-form` | [react/](react/README.md) |
 | **tanstack** | `tanstack-query` · `tanstack-router` | [tanstack/](tanstack/README.md) |
 | **storybook** | `storybook-setup` · `storybook-story` · `storybook-test` | [storybook/](storybook/README.md) |
+| **test** | `teste-design` · `teste-review` · `teste-diagnose` | [test/](test/README.md) |
 
 ## Ainda no formato antigo
 
@@ -33,7 +34,6 @@ Estas famílias seguem com o frontmatter do Claude Code (`name:`/`description:`)
 
 | Família | Skills | Agente que as carrega |
 | --- | --- | --- |
-| **test** | `teste-design` · `teste-review` · `teste-diagnose` | `qa-engineer` |
 | **playwright** | `playwright-build` · `playwright-review` · `playwright-diagnose` | `qa-engineer` |
 | **http** | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | `backend-developer` |
 | **bun** | `bun-runtime` · `bun-workspace` · `bun-migrate` · `bun-test-build` · `bun-test-review` | `backend-developer` |

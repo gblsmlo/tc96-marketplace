@@ -43,6 +43,6 @@ Declarar a suíte suficiente **sem ter quebrado nada** é `TS-TEC-08`.
 
 ## Relacionados
 
-- [[Teste de Software - Técnicas de Design de Caso]] — cobertura × mutação
-- [[Teste de Software - Confiabilidade da Suíte]] — `TS-SUI-04`
+- [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) — cobertura × mutação
+- [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) — `TS-SUI-04`
 - `medicao.md` — a outra medida obrigatória desta skill

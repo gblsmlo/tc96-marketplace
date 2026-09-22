@@ -9,6 +9,11 @@ set -uo pipefail
 
 titulo() { printf '\n\033[1m== %s\033[0m  %s\n' "$1" "${2:-}"; }
 vazio() { echo "   (nada)"; }
+ou_vazio() {  # imprime a entrada; se vier vazia, a mensagem
+  local saida; saida="$(cat)"
+  if [ -n "$saida" ]; then printf '%s
+' "$saida"; else echo "   ${1:-(nada)}"; fi
+}
 
 inventario() {
   titulo "Anestésicos já instalados" "cada um esconde uma causa (TS-SUI-03, -09, -11)"
@@ -21,13 +26,13 @@ inventario() {
   echo "   -- skip / todo acumulado (TS-SUI-11):"
   rg -c --no-messages -g '*.{spec,test}.*' '\.(skip|todo|failing)\(' . 2>/dev/null || vazio
   echo "   -- espera por tempo fixo, a causa nº 1 (TS-SUI-07):"
-  rg -n --no-messages -g '*.{spec,test}.*' 'waitForTimeout|sleep\(|setTimeout\(.*(resolve|done)' . 2>/dev/null | head -10 || vazio
+  rg -n --no-messages -g '*.{spec,test}.*' 'waitForTimeout|sleep\(|setTimeout\(.*(resolve|done)' . 2>/dev/null | head -10 | ou_vazio
   echo "   -- relógio real em teste sobre tempo (TS-DUB-05):"
-  rg -ln --no-messages -g '*.{spec,test}.*' 'new Date\(\)|Date\.now\(\)|Math\.random\(\)' . 2>/dev/null | head -8 || vazio
+  rg -ln --no-messages -g '*.{spec,test}.*' 'new Date\(\)|Date\.now\(\)|Math\.random\(\)' . 2>/dev/null | head -8 | ou_vazio
   echo "   -- prefixo numérico codificando ordem (§ 8.4 do satélite):"
-  rg --files --no-messages -g '*[0-9][0-9]-*.{spec,test}.*' . 2>/dev/null | head -5 || vazio
+  rg --files --no-messages -g '*[0-9][0-9]-*.{spec,test}.*' . 2>/dev/null | head -5 | ou_vazio
   echo "   -- try/catch no corpo do teste, invisível em revisão (§ 5 do satélite):"
-  rg -nU --no-messages -g '*.{spec,test}.*' '(test|it)\((?s:.{0,200}?)try\s*\{' . 2>/dev/null | head -5 || vazio
+  rg -nU --no-messages -g '*.{spec,test}.*' '(test|it)\((?s:.{0,200}?)try\s*\{' . 2>/dev/null | head -5 | ou_vazio
 }
 
 if [ "${1:-}" = "--inventario" ] || [ $# -eq 0 ]; then

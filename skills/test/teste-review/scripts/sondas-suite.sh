@@ -9,6 +9,11 @@ RAIZ="${1:-.}"
 cd "$RAIZ" 2>/dev/null || { echo "raiz inexistente: $RAIZ" >&2; exit 1; }
 titulo() { printf '\n\033[1m== %s\033[0m  %s\n' "$1" "${2:-}"; }
 vazio() { echo "   (nada)"; }
+ou_vazio() {  # imprime a entrada; se vier vazia, a mensagem
+  local saida; saida="$(cat)"
+  if [ -n "$saida" ]; then printf '%s
+' "$saida"; else echo "   ${1:-(nada)}"; fi
+}
 CASO='^\s*(test|it)\s*[(.]'
 
 titulo "S1. A forma da suíte" "TS-NIV-04 — massa em E2E é ice-cream cone"
@@ -36,7 +41,7 @@ rg -n --no-messages 'no-floating-promises|noFloatingPromises' .eslintrc* eslint.
 titulo "S4. O portão fecha?" "TS-PROC-03 — passo que roda e não reprova é decorativo"
 rg -n --no-messages 'continue-on-error|\|\| true|exit 0' .github/workflows/*.y*ml 2>/dev/null || vazio
 echo "   -- passos de teste no CI (confira o exit code de cada um, não a presença):"
-rg -n --no-messages 'run:.*(test|playwright|coverage)' .github/workflows/*.y*ml 2>/dev/null | head -10 || vazio
+rg -n --no-messages 'run:.*(test|playwright|coverage)' .github/workflows/*.y*ml 2>/dev/null | head -10 | ou_vazio
 
 titulo "S5. Portão de cobertura como META?" "TS-CORE-05 — meta de cobertura é achado, não virtude"
 rg -n --no-messages 'coverageThreshold|coverageSkipTestFiles|codecov|--coverage' \
@@ -49,7 +54,7 @@ for termo in loading carregando empty vazio error erro retry recupera; do
 done
 
 titulo "S7. Atributo não funcional" "TS-TIPO-05 — requisito sem número não é verificado"
-rg -ln --no-messages 'p95|percentil|lighthouse|\bk6\b|axe-core|@axe|toHaveNoViolations' . 2>/dev/null | head -8 || vazio
+rg -ln --no-messages 'p95|percentil|lighthouse|\bk6\b|axe-core|@axe|toHaveNoViolations' . 2>/dev/null | head -8 | ou_vazio
 
 titulo "S8. Escape" "TS-CORE-06 — defeito de produção sem teste volta"
 git log --oneline -i --grep='fix\|hotfix' --since='6 months ago' 2>/dev/null | wc -l \
