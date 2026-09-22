@@ -1,123 +1,123 @@
-# Exemplo trabalhado — revisão de um PR
+# Worked example — reviewing a PR
 
-PR: *"adiciona busca de clientes com filtro e exportação"*. Três arquivos tocados.
+PR: *"adds customer search with a filter and export"*. Three files touched.
 
 ---
 
-## Passo 1 — sondas antes de abrir qualquer arquivo
+## Step 1 — probes before opening any file
 
 ```
 $ bash scripts/sondas.sh src
 
-== 0. Ambiente
+== 0. Environment
  "react": "^19.1.0"
- -- React Compiler: (nada)
- -- rede de lint para REACT-HOOK-* e REACT-EFFECT-02/03:
- Biome presente (biome.json), mas o domínio react NÃO está ligado
- NENHUMA rede ativa ← já é achado
+ -- React Compiler: (nothing)
+ -- lint net for REACT-HOOK-* and REACT-EFFECT-02/03:
+ Biome present (biome.json), but the react domain is NOT switched on
+ NO active net ← already a finding
  -- <StrictMode>: src/main.tsx
-== 1. Fetch dentro de Effect
- src/features/clientes/ListaClientes.tsx:31
-== 2. Estado derivado por Effect
- src/features/clientes/ListaClientes.tsx:44
-== 6. Memoização — inventário
- src/features/clientes/ListaClientes.tsx:3
-== 7. index como key
- src/features/clientes/ListaClientes.tsx:78
-== 9. Suspense sem Error Boundary
- src/features/clientes/rota.tsx
-== 12. Server Function — validação na fronteira
- sem validação aparente: src/features/clientes/exportar.ts
+== 1. Fetch inside an Effect
+ src/features/customers/CustomerList.tsx:31
+== 2. State derived through an Effect
+ src/features/customers/CustomerList.tsx:44
+== 6. Memoization — inventory
+ src/features/customers/CustomerList.tsx:3
+== 7. index as a key
+ src/features/customers/CustomerList.tsx:78
+== 9. Suspense without an Error Boundary
+ src/features/customers/route.tsx
+== 12. Server Function — boundary validation
+ no apparent validation: src/features/customers/export.ts
 ```
 
-Cinco minutos, e a revisão já sabe **quais** arquivos ler e em que ordem. Nenhum desses
-seis é achado ainda — são candidatos.
+Five minutes, and the review already knows **which** files to read and in what order. None of those
+six is a finding yet — they are candidates.
 
-## Passo 2 — leitura, na ordem da grade
+## Step 2 — reading, in the grid's order
 
-Nível 1 primeiro. A leitura de `ListaClientes.tsx` encontra o que a sonda não vê:
+Level 1 first. Reading `CustomerList.tsx` finds what the probe cannot see:
 
 ```tsx
-export function ListaClientes({ termo }: { termo: string }) {
- const [clientes, setClientes] = useState<Cliente[]>([]);
- if (!termo) return <Vazio />; // ← early return
- const [pagina, setPagina] = useState(1); // ← Hook depois dele
+export function CustomerList({ term }: { term: string }) {
+ const [customers, setCustomers] = useState<Customer[]>([]);
+ if (!term) return <Empty />; // ← early return
+ const [page, setPage] = useState(1); // ← a Hook after it
  …
 ```
 
-Isso muda a ordem do relatório: `REACT-HOOK-01` é bloqueante e vem antes de tudo que a sonda achou.
+That changes the report's order: `REACT-HOOK-01` is blocking and comes before everything the probe found.
 
-## Passo 3 — o relatório
+## Step 3 — the report
 
 ```markdown
-## Revisão React — PR #482 (busca de clientes)
+## React review — PR #482 (customer search)
 
-**Ambiente** (sonda 0): react 19.1.0 · React Compiler ausente ·
-rede de lint **AUSENTE** (Biome sem o domínio react) · StrictMode ok
+**Environment** (probe 0): react 19.1.0 · React Compiler absent ·
+lint net **ABSENT** (Biome without the react domain) · StrictMode ok
 
-### Bloqueante (1)
+### Blocking (1)
 
-`REACT-HOOK-01` — src/features/clientes/ListaClientes.tsx:12
-`useState(1)` é chamado depois do early return da linha 10; a ordem dos Hooks muda entre renders.
-Correção: mover os dois `useState` para antes do `if (!termo)`.
-Ver React - Rules of React.
+`REACT-HOOK-01` — src/features/customers/CustomerList.tsx:12
+`useState(1)` is called after the early return on line 10; the Hook order changes between renders.
+Fix: move both `useState` calls above the `if (!term)`.
+See React - Rules of React.
 
-### Alta (3)
+### High (3)
 
-`REACT-EFFECT-06` — src/features/clientes/ListaClientes.tsx:31
-`fetch('/api/clientes?q=' + termo)` dentro de `useEffect`, sem cancelamento: duas buscas
-em voo retornam fora de ordem e a antiga sobrescreve a nova.
-Correção: substituir por `useQuery(clientesQuery(termo))`; remover `clientes`, `carregando` e `erro`.
-Ver React - Efeitos e Sincronização.
+`REACT-EFFECT-06` — src/features/customers/CustomerList.tsx:31
+`fetch('/api/customers?q=' + term)` inside a `useEffect`, with no cancellation: two searches
+in flight return out of order and the old one overwrites the new.
+Fix: replace it with `useQuery(customersQuery(term))`; remove `customers`, `loading` and `error`.
+See React - Efeitos e Sincronização.
 
-`REACT-RSC-06` — src/features/clientes/exportar.ts:4
-A Server Function `exportarClientes(filtro)` usa `filtro` direto na query, sem sessão nem validação.
-Correção: ler a sessão, validar `filtro` com Zod na própria função e filtrar por `orgId` da sessão.
-Ver React - Server Components e Diretivas.
+`REACT-RSC-06` — src/features/customers/export.ts:4
+The Server Function `exportCustomers(filter)` uses `filter` straight in the query, with no session and no validation.
+Fix: read the session, validate `filter` with Zod in the function itself and filter by the session's `orgId`.
+See React - Server Components e Diretivas.
 
-`REACT-ASYNC-08` — src/features/clientes/rota.tsx:18
-`<Suspense>` na fronteira de dados sem Error Boundary: falha da query vira tela branca.
-Correção: envolver com o `<ErrorBoundary>` da feature, com botão de retry.
-Ver React - Suspense e Assincronia.
+`REACT-ASYNC-08` — src/features/customers/route.tsx:18
+A `<Suspense>` at the data boundary with no Error Boundary: a query failure becomes a white screen.
+Fix: wrap it with the feature's `<ErrorBoundary>`, with a retry button.
+See React - Suspense e Assincronia.
 
-### Média (3)
+### Medium (3)
 
-`REACT-PAT-01` — src/features/clientes/ListaClientes.tsx:44
-`totalPaginas` é estado sincronizado por Effect a partir de `clientes.length`.
-Correção: `const totalPaginas = Math.ceil(clientes.length / POR_PAGINA)` no render; remover estado e Effect.
-Ver React - Patterns.
+`REACT-PAT-01` — src/features/customers/CustomerList.tsx:44
+`totalPages` is state synchronized through an Effect from `customers.length`.
+Fix: `const totalPages = Math.ceil(customers.length / PER_PAGE)` in the render; remove the state and the Effect.
+See React - Patterns.
 
-`REACT-PAT-10` — src/features/clientes/ListaClientes.tsx:13
-`pagina` em `useState`: não sobrevive a refresh e não é compartilhável por link.
-Correção: mover para search param da rota (`Route.useSearch`).
-Ver React - Patterns.
+`REACT-PAT-10` — src/features/customers/CustomerList.tsx:13
+`page` in `useState`: it does not survive a refresh and is not shareable by link.
+Fix: move it to the route's search param (`Route.useSearch`).
+See React - Patterns.
 
-antipadrão de React - Patterns § 8 — src/features/clientes/ListaClientes.tsx:78
-`key={i}` numa lista que é reordenada pelo seletor de ordenação.
-Correção: `key={cliente.id}`.
+antipattern from React - Patterns § 8 — src/features/customers/CustomerList.tsx:78
+`key={i}` in a list that is reordered by the sort selector.
+Fix: `key={customer.id}`.
 
-### Sugestões (sem regra)
+### Suggestions (no rule)
 
-- `ListaClientes.tsx` tem 210 linhas e três responsabilidades. Não há ID para isso;
- a extração só se justifica se cada parte tiver nome de domínio (`REACT-PAT-05` é sobre
- o oposto: extrair sem justificativa).
+- `CustomerList.tsx` has 210 lines and three responsibilities. There is no ID for that;
+ the extraction is only justified if each part has a domain name (`REACT-PAT-05` is about
+ the opposite: extracting with no justification).
 
-### Não verificado
+### Not verified
 
-- `exportar.ts` usa `after` do runtime do framework — não está em React.js § 4,
- logo não foi verificado nesta doc. Não opinei sobre o comportamento.
-- O projeto usa Biome com `recommended`, mas **sem o domínio `react`**: `useHookAtTopLevel` e
- `useExhaustiveDependencies` não rodam, e nada avisa. `REACT-HOOK-*` e parte de
- `REACT-CALL-*` dependem de revisão humana. Ligar `linter.domains.react` é uma linha, e é o
- item de maior retorno deste PR.
+- `export.ts` uses the framework runtime's `after` — it is not in React.js § 4,
+ so it has not been verified in this doc. I did not opine on its behavior.
+- The project uses Biome with `recommended`, but **without the `react` domain**: `useHookAtTopLevel` and
+ `useExhaustiveDependencies` do not run, and nothing warns. `REACT-HOOK-*` and part of
+ `REACT-CALL-*` depend on human review. Switching on `linter.domains.react` is one line, and it is the
+ highest-return item in this PR.
 ```
 
-## O que este exemplo demonstra
+## What this example demonstrates
 
-| Decisão | Onde está a regra |
+| Decision | Where the rule is |
 | --- | --- |
-| o achado de `REACT-HOOK-01` veio da **leitura**, não da sonda | `sondas.md` § *O que as sondas não pegam* |
-| a memoização da sonda 6 **não** virou achado — o `useMemo` tinha comentário com medição | `REACT-PERF-01` |
-| o tamanho do arquivo foi para "Sugestões", não para achados | `severidade-e-relatorio.md` § *O corte* |
-| o `after` desconhecido virou declaração de limitação, não opinião | [React.js](../../../../knowledge-base/docs/react-js.md) § 7, invariante 1 |
-| a ausência de lint entrou como fechamento, não como nota de rodapé | `severidade-e-relatorio.md` § *Estrutura do relatório* |
+| the `REACT-HOOK-01` finding came from **reading**, not from the probe | `sondas.md` § *What the probes do not catch* |
+| the memoization from probe 6 did **not** become a finding — the `useMemo` had a comment with a measurement | `REACT-PERF-01` |
+| the file's size went to "Suggestions", not to findings | `severidade-e-relatorio.md` § *The cut* |
+| the unknown `after` became a declaration of limitation, not an opinion | [React.js](../../../../knowledge-base/docs/react-js.md) § 7, invariant 1 |
+| the absence of lint came in as the closing, not as a footnote | `severidade-e-relatorio.md` § *The report's structure* |

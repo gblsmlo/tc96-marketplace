@@ -1,109 +1,109 @@
-# Grade de varredura — na ordem que falha mais
+# Scan grid — in the order that fails most
 
-> A ordem não é arbitrária. Ela vai do que **quebra o contrato do React** ao que é
-> preferência, e cada nível tem precedência normativa sobre o seguinte
-> ([React.js](../../../../knowledge-base/docs/react-js.md) § 7, invariante 3).
+> The order is not arbitrary. It goes from what **breaks React's contract** to what is
+> preference, and each level has normative precedence over the next
+> ([React.js](../../../../knowledge-base/docs/react-js.md) § 7, invariant 3).
 >
-> Se um nível produz achado que invalida o código do nível seguinte — o Effect inteiro
-> não deveria existir — **pare de revisar o interior dele** e reporte a remoção, não a
-> correção de detalhe.
+> If one level produces a finding that invalidates the next level's code — the whole Effect
+> should not exist — **stop reviewing its interior** and report the removal, not the
+> detail fix.
 
 ---
 
-## Nível 1 — contrato do React (bloqueante)
+## Level 1 — React's contract (blocking)
 
-Checklist da § 5 de [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md), ordenada por frequência de falha.
+The § 5 checklist of [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md), ordered by failure frequency.
 
-| Antipadrão | ID canônico | Satélite |
+| Antipattern | Canonical ID | Satellite |
 | --- | --- | --- |
-| Hook depois de early return, dentro de `if`, loop ou callback | `REACT-HOOK-01` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
-| Hook chamado de função que não é componente nem Hook | `REACT-HOOK-02` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
-| Hook customizado que viola as regras internamente | `REACT-HOOK-07` | [React - Hooks](../../../../knowledge-base/docs/react-hooks.md) |
-| `fetch`, `localStorage`, `Date.now`, `Math.random` ou log no corpo do render | `REACT-PURE-01` / `REACT-PURE-02` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
-| `.push`, `.sort`, `.splice` ou atribuição direta em props/estado | `REACT-PURE-03` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
-| Valor mutado depois de já ter ido para o JSX | `REACT-PURE-05` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
-| `Componente(props)` em vez de `<Componente />` | `REACT-CALL-01` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
-| Hook guardado em variável, objeto, ou passado como argumento | `REACT-CALL-02` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
-| `ref.current` lido ou escrito no render | `REACT-REF-01` | [React - Refs e DOM](../../../../knowledge-base/docs/react-refs-e-dom.md) |
+| A Hook after an early return, inside an `if`, loop or callback | `REACT-HOOK-01` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
+| A Hook called from a function that is neither a component nor a Hook | `REACT-HOOK-02` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
+| A custom Hook that violates the rules internally | `REACT-HOOK-07` | [React - Hooks](../../../../knowledge-base/docs/react-hooks.md) |
+| `fetch`, `localStorage`, `Date.now`, `Math.random` or a log in the render body | `REACT-PURE-01` / `REACT-PURE-02` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
+| `.push`, `.sort`, `.splice` or direct assignment to props/state | `REACT-PURE-03` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
+| A value mutated after it already went into the JSX | `REACT-PURE-05` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
+| `Component(props)` instead of `<Component />` | `REACT-CALL-01` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
+| A Hook stored in a variable or object, or passed as an argument | `REACT-CALL-02` | [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) |
+| `ref.current` read or written in the render | `REACT-REF-01` | [React - Refs e DOM](../../../../knowledge-base/docs/react-refs-e-dom.md) |
 
-## Nível 2 — regras críticas (alta)
+## Level 2 — critical rules (high)
 
-De [React.js](../../../../knowledge-base/docs/react-js.md) § 6.1: bug latente, não estilo. Race condition, tela branca, endpoint sem autorização.
+From [React.js](../../../../knowledge-base/docs/react-js.md) § 6.1: a latent bug, not style. A race condition, a white screen, an endpoint with no authorization.
 
-| Antipadrão | ID canônico | Satélite |
+| Antipattern | Canonical ID | Satellite |
 | --- | --- | --- |
-| `fetch` em `useEffect` em código novo | `REACT-EFFECT-06` | [React - Efeitos e Sincronização](../../../../knowledge-base/docs/react-efeitos-e-sincronizacao.md) |
-| Estado espelhando props/estado via `useEffect` | `REACT-PAT-01` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
-| Dado remoto guardado em `useState` como fonte de verdade | `REACT-PAT-03` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
-| Lógica de interação dentro de Effect em vez do handler | `REACT-EFFECT-05` | [React - Efeitos e Sincronização](../../../../knowledge-base/docs/react-efeitos-e-sincronizacao.md) |
-| `<Suspense>` esperando fetch feito em `useEffect` | `REACT-ASYNC-03` | [React - Suspense e Assincronia](../../../../knowledge-base/docs/react-suspense-e-assincronia.md) |
-| Boundary de Suspense em fronteira de dados sem Error Boundary | `REACT-ASYNC-08` | [React - Suspense e Assincronia](../../../../knowledge-base/docs/react-suspense-e-assincronia.md) |
-| Erro esperado lançado para boundary em vez de virar estado | `REACT-ASYNC-09` | [React - Suspense e Assincronia](../../../../knowledge-base/docs/react-suspense-e-assincronia.md) |
-| Memoização sem medição | `REACT-PERF-01` | [React - Performance e Concorrência](../../../../knowledge-base/docs/react-performance-e-concorrencia.md) |
-| `'use client'` no topo da árvore | `REACT-RSC-03` | [React - Server Components e Diretivas](../../../../knowledge-base/docs/react-server-components-e-diretivas.md) |
-| Server Function sem autenticar, validar e autorizar | `REACT-RSC-06` | [React - Server Components e Diretivas](../../../../knowledge-base/docs/react-server-components-e-diretivas.md) |
-| HTML de servidor montado com `createRoot` | `REACT-DOM-01` | [React - Renderização e Entrypoints](../../../../knowledge-base/docs/react-renderizacao-e-entrypoints.md) |
+| A `fetch` in a `useEffect` in new code | `REACT-EFFECT-06` | [React - Efeitos e Sincronização](../../../../knowledge-base/docs/react-efeitos-e-sincronizacao.md) |
+| State mirroring props/state through a `useEffect` | `REACT-PAT-01` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
+| Remote data kept in `useState` as the source of truth | `REACT-PAT-03` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
+| Interaction logic inside an Effect instead of the handler | `REACT-EFFECT-05` | [React - Efeitos e Sincronização](../../../../knowledge-base/docs/react-efeitos-e-sincronizacao.md) |
+| A `<Suspense>` waiting on a fetch done in a `useEffect` | `REACT-ASYNC-03` | [React - Suspense e Assincronia](../../../../knowledge-base/docs/react-suspense-e-assincronia.md) |
+| A Suspense boundary at a data boundary with no Error Boundary | `REACT-ASYNC-08` | [React - Suspense e Assincronia](../../../../knowledge-base/docs/react-suspense-e-assincronia.md) |
+| An expected error thrown to a boundary instead of becoming state | `REACT-ASYNC-09` | [React - Suspense e Assincronia](../../../../knowledge-base/docs/react-suspense-e-assincronia.md) |
+| Memoization without measurement | `REACT-PERF-01` | [React - Performance e Concorrência](../../../../knowledge-base/docs/react-performance-e-concorrencia.md) |
+| `'use client'` at the top of the tree | `REACT-RSC-03` | [React - Server Components e Diretivas](../../../../knowledge-base/docs/react-server-components-e-diretivas.md) |
+| A Server Function without authenticating, validating and authorizing | `REACT-RSC-06` | [React - Server Components e Diretivas](../../../../knowledge-base/docs/react-server-components-e-diretivas.md) |
+| Server HTML mounted with `createRoot` | `REACT-DOM-01` | [React - Renderização e Entrypoints](../../../../knowledge-base/docs/react-renderizacao-e-entrypoints.md) |
 
-## Nível 3 — estrutura (média)
+## Level 3 — structure (medium)
 
-Antipadrões de [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 8 e das famílias dos satélites. Corrigíveis no mesmo PR.
+Antipatterns from [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 8 and from the satellites' families. Fixable in the same PR.
 
-| Antipadrão | ID canônico | Satélite |
+| Antipattern | Canonical ID | Satellite |
 | --- | --- | --- |
-| Estado elevado acima do ancestral comum mais próximo | `REACT-PAT-02` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
-| Prop booleana nova por variação de conteúdo | `REACT-PAT-04` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
-| Componente extraído sem justificativa conceitual | `REACT-PAT-05` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
-| Error Boundary só na raiz | `REACT-PAT-06` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
-| Boundary sem caminho de recuperação | `REACT-ASYNC-11` | [React - Suspense e Assincronia](../../../../knowledge-base/docs/react-suspense-e-assincronia.md) |
-| Filtro/aba/paginação em `useState` em vez da URL | `REACT-PAT-10` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
-| `setState(x + 1)` onde o valor anterior importa | `REACT-STATE-01` | [React - Estado e Reatividade](../../../../knowledge-base/docs/react-estado-e-reatividade.md) |
-| Booleanos paralelos onde cabe union discriminada | `REACT-STATE-06` | [React - Estado e Reatividade](../../../../knowledge-base/docs/react-estado-e-reatividade.md) |
-| Context para estado de escrita frequente | `REACT-STATE-08` | [React - Estado e Reatividade](../../../../knowledge-base/docs/react-estado-e-reatividade.md) |
-| Effect sem cleanup em subscription/timer/listener | `REACT-EFFECT-01` | [React - Efeitos e Sincronização](../../../../knowledge-base/docs/react-efeitos-e-sincronizacao.md) |
-| `eslint-disable` em `exhaustive-deps` | `REACT-EFFECT-03` | [React - Efeitos e Sincronização](../../../../knowledge-base/docs/react-efeitos-e-sincronizacao.md) |
+| State lifted above the nearest common ancestor | `REACT-PAT-02` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
+| A new boolean prop for a content variation | `REACT-PAT-04` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
+| A component extracted with no conceptual justification | `REACT-PAT-05` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
+| An Error Boundary only at the root | `REACT-PAT-06` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
+| A boundary with no recovery path | `REACT-ASYNC-11` | [React - Suspense e Assincronia](../../../../knowledge-base/docs/react-suspense-e-assincronia.md) |
+| Filter/tab/pagination in `useState` instead of the URL | `REACT-PAT-10` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
+| `setState(x + 1)` where the previous value matters | `REACT-STATE-01` | [React - Estado e Reatividade](../../../../knowledge-base/docs/react-estado-e-reatividade.md) |
+| Parallel booleans where a discriminated union fits | `REACT-STATE-06` | [React - Estado e Reatividade](../../../../knowledge-base/docs/react-estado-e-reatividade.md) |
+| Context for frequently written state | `REACT-STATE-08` | [React - Estado e Reatividade](../../../../knowledge-base/docs/react-estado-e-reatividade.md) |
+| An Effect with no cleanup on a subscription/timer/listener | `REACT-EFFECT-01` | [React - Efeitos e Sincronização](../../../../knowledge-base/docs/react-efeitos-e-sincronizacao.md) |
+| `eslint-disable` on `exhaustive-deps` | `REACT-EFFECT-03` | [React - Efeitos e Sincronização](../../../../knowledge-base/docs/react-efeitos-e-sincronizacao.md) |
 | `useEffect(async …)` | `REACT-EFFECT-12` | [React - Efeitos e Sincronização](../../../../knowledge-base/docs/react-efeitos-e-sincronizacao.md) |
-| `memo` sem estabilização das props | `REACT-PERF-03` | [React - Performance e Concorrência](../../../../knowledge-base/docs/react-performance-e-concorrencia.md) |
-| `useMemo` usado para identidade obrigatória | `REACT-PERF-05` | [React - Performance e Concorrência](../../../../knowledge-base/docs/react-performance-e-concorrencia.md) |
-| Lista de milhares de itens tratada com memoização | `REACT-PERF-09` | [React - Performance e Concorrência](../../../../knowledge-base/docs/react-performance-e-concorrencia.md) |
-| Transição controlando campo de texto | `REACT-PERF-10` | [React - Performance e Concorrência](../../../../knowledge-base/docs/react-performance-e-concorrencia.md) |
-| `forwardRef` em código atual | `REACT-REF-03` | [React - Refs e DOM](../../../../knowledge-base/docs/react-refs-e-dom.md) |
-| Portal sem foco, `Esc` e `aria-modal` | `REACT-REF-07` | [React - Refs e DOM](../../../../knowledge-base/docs/react-refs-e-dom.md) |
-| `e.preventDefault` com `<form action>` | `REACT-FORM-01` | [React - Formulários e Actions](../../../../knowledge-base/docs/react-formularios-e-actions.md) |
-| Campo sem `name` lido por `FormData` | `REACT-FORM-02` | [React - Formulários e Actions](../../../../knowledge-base/docs/react-formularios-e-actions.md) |
-| `useFormStatus` no componente que renderiza o `<form>` | `REACT-FORM-05` | [React - Formulários e Actions](../../../../knowledge-base/docs/react-formularios-e-actions.md) |
-| `useOptimistic` sobre dado que vive no cache da Query | `REACT-FORM-07` | [React - Formulários e Actions](../../../../knowledge-base/docs/react-formularios-e-actions.md) |
-| Client Component importando Server Component | `REACT-RSC-04` | [React - Server Components e Diretivas](../../../../knowledge-base/docs/react-server-components-e-diretivas.md) |
-| Prop não serializável cruzando a fronteira | `REACT-RSC-05` | [React - Server Components e Diretivas](../../../../knowledge-base/docs/react-server-components-e-diretivas.md) |
-| `cache` usado como cache entre requests | `REACT-RSC-08` | [React - Server Components e Diretivas](../../../../knowledge-base/docs/react-server-components-e-diretivas.md) |
-| Render ramificando em `typeof window` | `REACT-DOM-03` | [React - Renderização e Entrypoints](../../../../knowledge-base/docs/react-renderizacao-e-entrypoints.md) |
-| `<StrictMode>` removido para "consertar" execução dupla | `REACT-DOM-06` | [React - Renderização e Entrypoints](../../../../knowledge-base/docs/react-renderizacao-e-entrypoints.md) |
-| ID de acessibilidade sem `useId` | `REACT-UTIL-01` | [React - Hooks Utilitários](../../../../knowledge-base/docs/react-hooks-utilitarios.md) |
-| `subscribe` com identidade instável em `useSyncExternalStore` | `REACT-UTIL-04` | [React - Hooks Utilitários](../../../../knowledge-base/docs/react-hooks-utilitarios.md) |
-| `index` como `key` em lista reordenável | sem ID — [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 8 | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
+| `memo` without stabilizing the props | `REACT-PERF-03` | [React - Performance e Concorrência](../../../../knowledge-base/docs/react-performance-e-concorrencia.md) |
+| `useMemo` used for required identity | `REACT-PERF-05` | [React - Performance e Concorrência](../../../../knowledge-base/docs/react-performance-e-concorrencia.md) |
+| A list of thousands of items treated with memoization | `REACT-PERF-09` | [React - Performance e Concorrência](../../../../knowledge-base/docs/react-performance-e-concorrencia.md) |
+| A transition controlling a text field | `REACT-PERF-10` | [React - Performance e Concorrência](../../../../knowledge-base/docs/react-performance-e-concorrencia.md) |
+| `forwardRef` in current code | `REACT-REF-03` | [React - Refs e DOM](../../../../knowledge-base/docs/react-refs-e-dom.md) |
+| A portal without focus, `Esc` and `aria-modal` | `REACT-REF-07` | [React - Refs e DOM](../../../../knowledge-base/docs/react-refs-e-dom.md) |
+| `e.preventDefault` with `<form action>` | `REACT-FORM-01` | [React - Formulários e Actions](../../../../knowledge-base/docs/react-formularios-e-actions.md) |
+| A field with no `name` read through `FormData` | `REACT-FORM-02` | [React - Formulários e Actions](../../../../knowledge-base/docs/react-formularios-e-actions.md) |
+| `useFormStatus` in the component that renders the `<form>` | `REACT-FORM-05` | [React - Formulários e Actions](../../../../knowledge-base/docs/react-formularios-e-actions.md) |
+| `useOptimistic` over data that lives in Query's cache | `REACT-FORM-07` | [React - Formulários e Actions](../../../../knowledge-base/docs/react-formularios-e-actions.md) |
+| A Client Component importing a Server Component | `REACT-RSC-04` | [React - Server Components e Diretivas](../../../../knowledge-base/docs/react-server-components-e-diretivas.md) |
+| A non-serializable prop crossing the boundary | `REACT-RSC-05` | [React - Server Components e Diretivas](../../../../knowledge-base/docs/react-server-components-e-diretivas.md) |
+| `cache` used as a cache across requests | `REACT-RSC-08` | [React - Server Components e Diretivas](../../../../knowledge-base/docs/react-server-components-e-diretivas.md) |
+| A render branching on `typeof window` | `REACT-DOM-03` | [React - Renderização e Entrypoints](../../../../knowledge-base/docs/react-renderizacao-e-entrypoints.md) |
+| `<StrictMode>` removed to "fix" double execution | `REACT-DOM-06` | [React - Renderização e Entrypoints](../../../../knowledge-base/docs/react-renderizacao-e-entrypoints.md) |
+| An accessibility ID without `useId` | `REACT-UTIL-01` | [React - Hooks Utilitários](../../../../knowledge-base/docs/react-hooks-utilitarios.md) |
+| A `subscribe` with unstable identity in `useSyncExternalStore` | `REACT-UTIL-04` | [React - Hooks Utilitários](../../../../knowledge-base/docs/react-hooks-utilitarios.md) |
+| `index` as the `key` in a reorderable list | no ID — [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 8 | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) |
 
-## Nível 4 — satélite do domínio
+## Level 4 — the domain's satellite
 
-Só agora, e só para o domínio que o código realmente toca, descoberto por [React.js](../../../../knowledge-base/docs/react-js.md) § 4.
-Abrir satélite antes disso é gasto de contexto sem retorno.
+Only now, and only for the domain the code actually touches, discovered through [React.js](../../../../knowledge-base/docs/react-js.md) § 4.
+Opening a satellite before that is context spent with no return.
 
-## Nível 5 — estilo e legibilidade
+## Level 5 — style and legibility
 
-Por último e subordinado aos anteriores. **Nunca** proponha refatoração cosmética em cima
-de código que viola o Nível 1: reporte a violação primeiro.
+Last and subordinate to the previous ones. **Never** propose a cosmetic refactor on top of
+code that violates Level 1: report the violation first.
 
 ---
 
-## Duas passagens de bastão
+## Two handoffs
 
-| Se a varredura revelar… | A revisão não continua aqui |
+| If the scan reveals… | The review does not continue here |
 | --- | --- |
-| o problema é **onde o arquivo mora** ou quem importa quem | `react-structure`, família `REACT-ARCH-*` |
-| o componente está **confirmadamente lento** e precisa de fix medido | *(rota vaga — ver `memory/STACK.md`)* |
+| the problem is **where the file lives** or who imports whom | `react-structure`, the `REACT-ARCH-*` family |
+| the component is **confirmed slow** and needs a measured fix | *(vague route — see `memory/STACK.md`)* |
 
 ---
 
-## Relacionados
+## Related
 
-- `sondas.md` — o que rodar antes desta grade
-- `severidade-e-relatorio.md` — como classificar e reportar
-- `mapa-de-ids.md` — onde cada ID está declarado
+- `sondas.md` — what to run before this grid
+- `severidade-e-relatorio.md` — how to classify and report
+- `mapa-de-ids.md` — where each ID is declared

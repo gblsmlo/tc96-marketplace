@@ -1,100 +1,100 @@
-# Exemplo trabalhado — a variante robusta: fronteira de servidor
+# Worked example — the robust variant: a server boundary
 
-Mesma feature do exemplo anterior, agora com **escrita**: aprovar uma fatura.
-O que muda não é o React — é que existe uma fronteira de confiança no meio.
+The same feature as the previous example, now with a **write**: approving an invoice.
+What changes is not React — it is that there is a trust boundary in the middle.
 
-> Aplica-se a Server Functions (`'use server'`). Numa SPA Vite sem RSC, a fronteira
-> é o endpoint HTTP e as mesmas três obrigações valem lá — ver [React.js](../../../../knowledge-base/docs/react-js.md) § 8.
+> It applies to Server Functions (`'use server'`). In a Vite SPA without RSC, the boundary
+> is the HTTP endpoint and the same three obligations hold there — see [React.js](../../../../knowledge-base/docs/react-js.md) § 8.
 
 ---
 
-## A regra que decide tudo
+## The rule that decides everything
 
-`REACT-RSC-06` — Server Function **MUST** autenticar, validar e autorizar **na própria
-função**. É um endpoint público: qualquer cliente pode chamá-la com qualquer argumento.
-Validação no formulário é ergonomia, não segurança.
+`REACT-RSC-06` — a Server Function **MUST** authenticate, validate and authorize **in the function
+itself**. It is a public endpoint: any client can call it with any argument.
+Validation in the form is ergonomics, not security.
 
-## O código
+## The code
 
 ```tsx
-// aprovar-fatura.ts
+// approve-invoice.ts
 'use server';
 
-const Entrada = z.object({ faturaId: z.string.uuid }); // validação de fronteira
+const Input = z.object({ invoiceId: z.string.uuid }); // boundary validation
 
-export async function aprovarFatura(_estado: EstadoAprovacao, dados: FormData) {
- const sessao = await lerSessao;
- if (!sessao) return { erro: 'Sessão expirada. Entre de novo.' }; // 1. autenticar
+export async function approveInvoice(_state: ApprovalState, data: FormData) {
+ const session = await readSession;
+ if (!session) return { error: 'Session expired. Sign in again.' }; // 1. authenticate
 
- const parsed = Entrada.safeParse({ faturaId: dados.get('faturaId') });// 2. validar
- if (!parsed.success) return { erro: 'Fatura inválida.' };
+ const parsed = Input.safeParse({ invoiceId: data.get('invoiceId') }); // 2. validate
+ if (!parsed.success) return { error: 'Invalid invoice.' };
 
- const fatura = await repo.buscar(parsed.data.faturaId);
- if (!fatura || fatura.orgId !== sessao.orgId) { // 3. autorizar
- return { erro: 'Fatura não encontrada.' }; // mesma mensagem dos dois casos:
- } // não revele existência a quem não pode ver
+ const invoice = await repo.find(parsed.data.invoiceId);
+ if (!invoice || invoice.orgId !== session.orgId) { // 3. authorize
+ return { error: 'Invoice not found.' }; // the same message for both cases:
+ } // do not reveal existence to someone who cannot see it
 
- if (fatura.status !== 'pendente') {
- return { erro: 'Esta fatura já foi processada.' }; // conflito é esperado → estado
+ if (invoice.status !== 'pending') {
+ return { error: 'This invoice has already been processed.' }; // a conflict is expected → state
  }
 
- await repo.aprovar(fatura.id, sessao.userId);
+ await repo.approve(invoice.id, session.userId);
  return { ok: true };
 }
 ```
 
 ```tsx
-// BotaoAprovar.tsx — Client Component, o mais baixo que dá
+// ApproveButton.tsx — a Client Component, as low as possible
 'use client';
 
-export function BotaoAprovar({ faturaId }: { faturaId: string }) {
- const [estado, acao] = useActionState(aprovarFatura, {});
+export function ApproveButton({ invoiceId }: { invoiceId: string }) {
+ const [state, action] = useActionState(approveInvoice, {});
 
  return (
- <form action={acao}> {/* sem e.preventDefault */}
- <input type="hidden" name="faturaId" value={faturaId} /> {/* name, não estado */}
- <Enviar />
- {estado.erro && <p role="alert">{estado.erro}</p>} {/* erro esperado é UI */}
+ <form action={action}> {/* no e.preventDefault */}
+ <input type="hidden" name="invoiceId" value={invoiceId} /> {/* name, not state */}
+ <Submit />
+ {state.error && <p role="alert">{state.error}</p>} {/* an expected error is UI */}
  </form>
  );
 }
 
-function Enviar {
- const { pending } = useFormStatus; // descendente do <form>, nunca o pai
- return <button disabled={pending}>{pending ? 'Aprovando…' : 'Aprovar'}</button>;
+function Submit {
+ const { pending } = useFormStatus; // a descendant of the <form>, never the parent
+ return <button disabled={pending}>{pending ? 'Approving…' : 'Approve'}</button>;
 }
 ```
 
-## Por que cada linha está assim
+## Why each line is like this
 
-| Decisão | Regra |
+| Decision | Rule |
 | --- | --- |
-| `'use server'` valida mesmo com validação no cliente | `REACT-RSC-06` |
-| argumentos e retorno serializáveis (`FormData`, objeto simples) | `REACT-RSC-07` |
-| erro de sessão, conflito e "não encontrada" **retornam**, não lançam | `REACT-FORM-03` / `REACT-ASYNC-09` |
-| `'use client'` no botão, não na página | `REACT-RSC-03` |
-| nada de `e.preventDefault` com `<form action>` | `REACT-FORM-01` |
-| `name` no campo que a Action lê | `REACT-FORM-02` |
-| `useFormStatus` em `<Enviar>`, descendente do `<form>` | `REACT-FORM-05` |
+| `'use server'` validates even with client-side validation | `REACT-RSC-06` |
+| serializable arguments and return (`FormData`, a plain object) | `REACT-RSC-07` |
+| session errors, conflicts and "not found" **return**, they do not throw | `REACT-FORM-03` / `REACT-ASYNC-09` |
+| `'use client'` on the button, not on the page | `REACT-RSC-03` |
+| no `e.preventDefault` with `<form action>` | `REACT-FORM-01` |
+| `name` on the field the Action reads | `REACT-FORM-02` |
+| `useFormStatus` in `<Submit>`, a descendant of the `<form>` | `REACT-FORM-05` |
 
-## A pergunta que decide o dono da submissão
+## The question that decides the submission's owner
 
-Se a aprovação **invalida cache** da [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md), o dono é a mutation da Query, e o
-formulário vira `<form>` comum com handler. `useActionState` sozinho basta quando a
-submissão é isolada. Empilhar os dois — e ainda `useOptimistic` sobre dado que vive no
-cache — produz duas fontes de verdade divergindo (`REACT-FORM-07`). Critério em
+If the approval **invalidates** [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md) cache, the owner is Query's mutation, and the
+form becomes an ordinary `<form>` with a handler. `useActionState` alone is enough when the
+submission is isolated. Stacking the two — and adding `useOptimistic` over data that lives in the
+cache — produces two sources of truth diverging (`REACT-FORM-07`). Criterion in
 [React.js](../../../../knowledge-base/docs/react-js.md) § 8.
 
-## O que um agente escreveria por hábito, e falharia
+## What an agent would write out of habit, and why it would fail
 
 ```tsx
-// ERRADO
-export async function aprovarFatura(id: string) {
+// WRONG
+export async function approveInvoice(id: string) {
  'use server';
- await repo.aprovar(id); // sem sessão, sem validação, sem checar dono
-} // REACT-RSC-06 — qualquer id aprova qualquer fatura
+ await repo.approve(id); // no session, no validation, no ownership check
+} // REACT-RSC-06 — any id approves any invoice
 
-// ERRADO
-if (fatura.status !== 'pendente') throw new Error('já processada');
-// REACT-ASYNC-09 — erro esperado subindo para o boundary: a tela inteira cai
+// WRONG
+if (invoice.status !== 'pending') throw new Error('already processed');
+// REACT-ASYNC-09 — an expected error rising to the boundary: the whole screen falls
 ```

@@ -1,89 +1,89 @@
-# Skills de React — família agrupada
+# React skills — a grouped family
 
-Quatro skills, um diretório cada, com `references/` e `scripts/` próprios. É o primeiro
-grupo do vault organizado como **pacote** e não como arquivo solto: a anatomia comum
-descrita em [Skill — Índice](../README.md) continua valendo, e o que muda é só que o
-material de apoio ganhou arquivo próprio em vez de inchar o `SKILL.md`.
+Four skills, one directory each, with their own `references/` and `scripts/`. It is the first
+group in the vault organized as a **package** rather than as loose files: the common anatomy
+described in [Skills index](../README.md) still holds, and the only change is that the
+supporting material got its own files instead of bloating the `SKILL.md`.
 
-| Skill | A pergunta que ela responde | Fonte | Apoio interno |
+| Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
-| `react-developer` | escrever componente, Hook ou feature **nova** | [React - Patterns](../../knowledge-base/docs/react-patterns.md) | 4 referências + 3 exemplos + 1 script |
-| `react-review` | este código que **já existe** está correto? | [React - Rules of React](../../knowledge-base/docs/react-rules-of-react.md) | 4 referências + 1 relatório + 2 scripts |
-| `react-structure` | **onde** o arquivo mora, quem importa quem | [Feature-Based Architecture](../../knowledge-base/pages/feature-based-architecture.md) | 3 referências + 1 relatório + 2 scripts |
-| `react-hook-form` | formulário: captura, validação, submissão | [React Hook Form](../../knowledge-base/docs/react-hook-form.md) | 4 referências + 1 exemplo + 2 scripts |
+| `react-developer` | writing a **new** component, Hook or feature | [React - Patterns](../../knowledge-base/docs/react-patterns.md) | 4 references + 3 examples + 1 script |
+| `react-review` | is this code that **already exists** correct? | [React - Rules of React](../../knowledge-base/docs/react-rules-of-react.md) | 4 references + 1 report + 2 scripts |
+| `react-structure` | **where** the file lives, who imports whom | [Feature-Based Architecture](../../knowledge-base/pages/feature-based-architecture.md) | 3 references + 1 report + 2 scripts |
+| `react-hook-form` | forms: capture, validation, submission | [React Hook Form](../../knowledge-base/docs/react-hook-form.md) | 4 references + 1 example + 2 scripts |
 
-Dois eixos separam as quatro. Entre `react-developer` e `react-review`, **novo × já
-existe** — e está nas primeiras palavras de cada `description`. Entre elas e as outras
-duas, **interior × fronteira**: `react-structure` cuida de onde o código mora e de quem
-pode importar quem; `react-hook-form` cuida de uma capacidade inteira (captura de
-formulário) que tem família de regras própria, `RHF-*`.
+Two axes separate the four. Between `react-developer` and `react-review`, **new × already
+exists** — and it is in the first words of each `description`. Between them and the other
+two, **interior × boundary**: `react-structure` handles where the code lives and who
+may import whom; `react-hook-form` handles a whole capability (form capture) that has a
+rule family of its own, `RHF-*`.
 
-**Num PR, a ordem é `react-structure` → `react-review`.** Mover um arquivo pode apagar o
-achado de interior, então revisar o interior primeiro é trabalho jogado fora.
+**In a PR, the order is `react-structure` → `react-review`.** Moving a file can erase the
+interior finding, so reviewing the interior first is wasted work.
 
-## O que cada pacote contém
+## What each package contains
 
 ```
 react-developer/
 ├── SKILL.md
 └── references/
- ├── arvores-de-decisao.md qual árvore percorrer, 4 erros de percurso, saídas curtas
- ├── habitos-de-ia.md 7 seções de reflexos que produzem violação, com ID
- ├── autoverificacao.md 3 passadas + 10 sondas rg antes de entregar
- ├── mapa-de-ids.md gerado: ID → satélite → seção
- ├── exemplo-painel-de-faturas.md caminho feliz
-│ ├── exemplo-fronteira-de-servidor.md variante robusta: Server Function, validação, boundaries
-│ └── exemplo-antipadrao-corrigido.md antes e depois, defeito por ID
+ ├── arvores-de-decisao.md which tree to walk, 4 path mistakes, short exits
+ ├── habitos-de-ia.md 7 sections of reflexes that produce violations, with IDs
+ ├── autoverificacao.md 3 passes + 10 rg probes before delivering
+ ├── mapa-de-ids.md generated: ID → satellite → section
+ ├── exemplo-painel-de-faturas.md the happy path
+│ ├── exemplo-fronteira-de-servidor.md the robust variant: Server Function, validation, boundaries
+│ └── exemplo-antipadrao-corrigido.md before and after, defect by ID
 └── scripts/
- └── autoverificar.sh roda as 10 sondas do Passo 5 sobre o código recém-escrito
+ └── autoverificar.sh runs the 10 Step 5 probes over the code just written
 
 react-review/
 ├── SKILL.md
 ├── references/
-│ ├── sondas.md 15 sondas, falsos positivos, e o que elas não pegam
-│ ├── grade-de-varredura.md 5 níveis na ordem que falha mais, com ID por antipadrão
-│ ├── severidade-e-relatorio.md classificação, formato de achado, o corte achado × opinião
-│ ├── mapa-de-ids.md gerado: ID → satélite → seção
-│ └── exemplo-relatorio-de-pr.md relatório inteiro, das sondas ao fechamento
+│ ├── sondas.md 15 probes, false positives, and what they do not catch
+│ ├── grade-de-varredura.md 5 levels in the order that fails most, with an ID per antipattern
+│ ├── severidade-e-relatorio.md classification, finding format, the finding × opinion cut
+│ ├── mapa-de-ids.md generated: ID → satellite → section
+│ └── exemplo-relatorio-de-pr.md a whole report, from the probes to the closing
 └── scripts/
- ├── sondas.sh roda as 15 sondas e imprime o ID a citar
- └── gerar-mapa-de-ids.sh regenera mapa-de-ids.md de developer e review
+ ├── sondas.sh runs the 15 probes and prints the ID to cite
+ └── gerar-mapa-de-ids.sh regenerates mapa-de-ids.md for developer and review
 
 react-structure/
 ├── SKILL.md
 ├── references/
-│ ├── arvore-de-colocacao.md 5 perguntas, a árvore, importar × duplicar × extrair
-│ ├── varredura-de-imports.md ordem da varredura, o que a sonda não pega, formato
-│ ├── mapa-de-ids.md gerado: ID → severidade → quem faz valer → seção
-│ └── exemplo-revisao-de-estrutura.md revisão de PR inteira
+│ ├── arvore-de-colocacao.md 5 questions, the tree, import × duplicate × extract
+│ ├── varredura-de-imports.md scan order, what the probe does not catch, format
+│ ├── mapa-de-ids.md generated: ID → severity → who enforces it → section
+│ └── exemplo-revisao-de-estrutura.md a whole PR review
 └── scripts/
- ├── sondas-imports.sh 8 sondas de fronteira, começando por enforcement
- └── gerar-mapa-de-ids.sh regenera a partir de Pages/Feature-Based Architecture.md
+ ├── sondas-imports.sh 8 boundary probes, starting with enforcement
+ └── gerar-mapa-de-ids.sh regenerates from Pages/Feature-Based Architecture.md
 
 react-hook-form/
 ├── SKILL.md
 ├── references/
-│ ├── tarefas.md as 5 tarefas, ordem das decisões, o que verificar
-│ ├── dono-da-submissao.md isSubmitting × isPending — escolher um e declarar
-│ ├── diagnostico.md sintoma → causa provável → satélite
-│ ├── mapa-de-ids.md gerado: 81 IDs RHF-* + regra de citação entre docs
-│ └── exemplo-lancamento-de-fatura.md do Passo 0 ao submit
+│ ├── tarefas.md the 5 tasks, the order of decisions, what to check
+│ ├── dono-da-submissao.md isSubmitting × isPending — pick one and declare it
+│ ├── diagnostico.md symptom → likely cause → satellite
+│ ├── mapa-de-ids.md generated: 81 RHF-* IDs + the cross-doc citation rule
+│ └── exemplo-lancamento-de-fatura.md from Step 0 to the submit
 └── scripts/
- ├── sondas.sh 12 sondas de formulário existente
- └── gerar-mapa-de-ids.sh regenera a partir de Docs/React Hook Form*
+ ├── sondas.sh 12 probes for an existing form
+ └── gerar-mapa-de-ids.sh regenerates from Docs/React Hook Form*
 ```
 
-**`mapa-de-ids.md` é gerado, não escrito** — nas quatro. Ele indexa os IDs por satélite e
-seção, e nunca carrega o **texto** da regra: cópia de regra dentro de skill vira réplica
-desatualizada. Três geradores, um por família, porque as fontes e as colunas diferem:
+**`mapa-de-ids.md` is generated, not written** — in all four. It indexes the IDs by satellite and
+section, and never carries the rule's **text**: a rule copied inside a skill becomes an outdated
+replica. Three generators, one per family, because the sources and the columns differ:
 
-| Gerador | Família | Fonte | Colunas |
+| Generator | Family | Source | Columns |
 | --- | --- | --- | --- |
-| `react-review/scripts/gerar-mapa-de-ids.sh` | 105 `REACT-*` | `Docs/React*` | satélite · seção · apelidos |
-| `react-structure/scripts/gerar-mapa-de-ids.sh` | 12 `REACT-ARCH-*` | `Pages/Feature-Based Architecture.md` | **severidade** · **quem faz valer** · seção |
-| `react-hook-form/scripts/gerar-mapa-de-ids.sh` | 81 `RHF-*` | `Docs/React Hook Form*` | satélite · seção · citação entre docs |
+| `react-review/scripts/gerar-mapa-de-ids.sh` | 105 `REACT-*` | `Docs/React*` | satellite · section · aliases |
+| `react-structure/scripts/gerar-mapa-de-ids.sh` | 12 `REACT-ARCH-*` | `Pages/Feature-Based Architecture.md` | **severity** · **who enforces it** · section |
+| `react-hook-form/scripts/gerar-mapa-de-ids.sh` | 81 `RHF-*` | `Docs/React Hook Form*` | satellite · section · cross-doc citation |
 
-Depois de editar qualquer nota-fonte, rode o gerador correspondente e reinstale:
+After editing any source note, run the corresponding generator and reinstall:
 
 ```bash
 bash plugins/hermes-frontend/skills/react-review/scripts/gerar-mapa-de-ids.sh
@@ -92,71 +92,71 @@ bash plugins/hermes-frontend/skills/react-hook-form/scripts/gerar-mapa-de-ids.sh
 bash scripts/instalar.sh
 ```
 
-A coluna **quem faz valer** só existe em `REACT-ARCH-*`, e é a mais acionável do grupo:
-ela separa o que o Biome pega do que depende de revisão humana — e é o que decide se um
-achado volta no PR seguinte.
+The **who enforces it** column only exists in `REACT-ARCH-*`, and it is the most actionable in the group:
+it separates what Biome catches from what depends on human review — and it is what decides whether a
+finding comes back in the next PR.
 
-## As vizinhas — o que **não** é destas duas
+## The neighbors — what is **not** these two's
 
-Um PR de frontend quase nunca é só React. Quando o assunto for de outra camada, o
-procedimento e os IDs pertencem à skill daquela camada:
+A frontend PR is almost never only React. When the subject belongs to another layer, the
+procedure and the IDs belong to that layer's skill:
 
-| Camada | Skill | Doc-fonte |
+| Layer | Skill | Source doc |
 | --- | --- | --- |
-| dado remoto, cache, invalidação, otimismo | `tanstack-query` | [TanStack Query](../../knowledge-base/docs/tanstack-query.md) |
-| rota, navegação, search params, loader | `tanstack-router` | [TanStack Router](../../knowledge-base/docs/tanstack-router.md) |
-| componente confirmado lento, fix medido | *(rota vaga — ver `memory/STACK.md`)* | — |
-| configurar Storybook, escrever story | `storybook-setup` · `storybook-story` | [Storybook](../../knowledge-base/docs/storybook.md) |
-| teste de interação na story, runner **Vitest** | `storybook-test` | [Storybook - Testes e Interações](../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4 |
-| **nível** do teste: unidade × integração × e2e | `test-design` | `Docs/Teste de Software - Níveis e Escopo.md` |
-| a suíte como sistema: protege? é confiável? | `test-review` · `test-diagnose` | `Docs/Teste de Software.md` |
-| **unidade e integração** em `bun test` | `bun-test-build` · `bun-test-review` | `Docs/Bun - Testes.md` |
+| remote data, cache, invalidation, optimism | `tanstack-query` | [TanStack Query](../../knowledge-base/docs/tanstack-query.md) |
+| routing, navigation, search params, loader | `tanstack-router` | [TanStack Router](../../knowledge-base/docs/tanstack-router.md) |
+| a component confirmed slow, a measured fix | *(rota vaga — ver `memory/STACK.md`)* | — |
+| configuring Storybook, writing a story | `storybook-setup` · `storybook-story` | [Storybook](../../knowledge-base/docs/storybook.md) |
+| an interaction test in the story, the **Vitest** runner | `storybook-test` | [Storybook - Testes e Interações](../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4 |
+| the test's **level**: unit × integration × e2e | `test-design` | `Docs/Teste de Software - Níveis e Escopo.md` |
+| the suite as a system: does it protect? is it trustworthy? | `test-review` · `test-diagnose` | `Docs/Teste de Software.md` |
+| **unit and integration** in `bun test` | `bun-test-build` · `bun-test-review` | `Docs/Bun - Testes.md` |
 | **e2e** | `playwright-build` · `playwright-review` · `playwright-diagnose` | `Docs/Playwright.md` |
-| rota, schema e lifecycle de API | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `Docs/Elysia.md` |
-| persistência: schema, migração, query | `drizzle-review` | `Docs/Drizzle ORM.md` |
-| contrato HTTP: método, status, cache, CORS | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | `Docs/HTTP.md` |
-| runtime, dependências, migração de Node | `bun-runtime` · `bun-workspace` · `bun-migrate` | `Docs/Bun.md` |
+| an API route, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `Docs/Elysia.md` |
+| persistence: schema, migration, query | `drizzle-review` | `Docs/Drizzle ORM.md` |
+| the HTTP contract: method, status, cache, CORS | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | `Docs/HTTP.md` |
+| runtime, dependencies, migrating from Node | `bun-runtime` · `bun-workspace` · `bun-migrate` | `Docs/Bun.md` |
 
-Duas fronteiras que costumam ser cruzadas na direção errada:
+Two boundaries that tend to be crossed in the wrong direction:
 
-- **Teste: conceito antes de ferramenta.** *Em que nível* é `test-design`; *como escrever*
- é a skill da ferramenta. Pular a primeira produz E2E por default.
-- **Vitest não é skill deste vault.** Aparece como runner do `@storybook/addon-vitest`,
- rodando story em browser real via Playwright ([Storybook - Testes e Interações](../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4;
- o corte entre Vitest 3 e 4 na § 4.2). Unidade fora do Storybook é `bun test`.
+- **Testing: concept before tool.** *At which level* is `test-design`; *how to write it*
+ is the tool's skill. Skipping the first produces E2E by default.
+- **Vitest is not a skill in this vault.** It appears as the runner of `@storybook/addon-vitest`,
+ running a story in a real browser through Playwright ([Storybook - Testes e Interações](../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4;
+ the cut between Vitest 3 and 4 in § 4.2). A unit test outside Storybook is `bun test`.
 
-## Validação
+## Validation
 
-As quatro passam em `skill-validator check` com **0 erros**. Restam dois avisos por skill,
-`unrecognized field: "tags"` e `unrecognized field: "fonte"` — são convenção deste vault
-(a anatomia comum exige `fonte:` no frontmatter para a atualização da doc propagar) e
-ficam por decisão, não por descuido.
+All four pass `skill-validator check` with **0 errors**. Two warnings remain per skill,
+`unrecognized field: "tags"` and `unrecognized field: "fonte"` — they are this vault's convention
+(the common anatomy requires `fonte:` in the frontmatter so that a docs update propagates) and
+they stay by decision, not by oversight.
 
 ```bash
 for s in plugins/hermes-frontend/skills/react-*/; do skill-validator check "$s"; done
 ```
 
 <!-- tokens:inicio -->
-## Orçamento de contexto
+## Context budget
 
-Medido por `skill-validator` (tiktoken), em 2026-09-05. **O número que importa é o da
-coluna `SKILL.md`**: é o que entra no contexto antes de a skill decidir o que abrir.
-As referências carregam sob demanda, uma por vez.
+Measured by `skill-validator` (tiktoken), on 2026-09-05. **The number that matters is the
+`SKILL.md` column**: it is what enters the context before the skill decides what to open.
+References load on demand, one at a time.
 
-| Skill | `SKILL.md` | maior `references/` | total | refs |
+| Skill | `SKILL.md` | largest `references/` | total | refs |
 | --- | ---: | --- | ---: | ---: |
 | `react-developer` | 2.804 | `mapa-de-ids.md` (3.539) | 14.791 | 7 |
 | `react-hook-form` | 2.223 | `mapa-de-ids.md` (3.424) | 10.308 | 5 |
 | `react-review` | 2.531 | `mapa-de-ids.md` (3.539) | 12.304 | 5 |
 | `react-structure` | 2.775 | `exemplo-revisao-de-estrutura.md` (1.210) | 6.534 | 4 |
 
-Carregar as 4 skills deste grupo de uma vez custaria **10.333 tokens** só de `SKILL.md`,
-e **43.937** com todas as referências. É por isso que cada skill declara o que **nunca** carregar.
+Loading all 4 skills in this group at once would cost **10.333 tokens** in `SKILL.md` alone,
+and **43.937** with every reference. That is why each skill declares what it must **never** load.
 
-Regenerar: `bash scripts/medir.sh`
+Regenerate: `bash scripts/medir.sh`
 <!-- tokens:fim -->
 
-## Relacionados
+## Related
 
-- [Skill — Índice](../README.md) — o índice geral e a anatomia comum
-- [React.js](../../knowledge-base/docs/react-js.md) § 7 — o contrato que as duas implementam
+- [Skills index](../README.md) — the general index and the common anatomy
+- [React.js](../../knowledge-base/docs/react-js.md) § 7 — the contract both implement

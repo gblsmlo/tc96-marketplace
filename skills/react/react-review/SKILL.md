@@ -1,8 +1,9 @@
 ---
 nome: react-review
-descricao: Revisar código React que já existe contra as regras normativas da doc do vault, citando IDs `REACT-*` — quinze sondas executáveis antes de ler código, varredura em cinco níveis na ordem que falha mais, classificação de severidade e formato fixo de achado — use quando a tarefa for revisar um PR, arquivo, componente ou Hook customizado já escrito, ou caçar violação de Rules of Hooks, fetch em Effect, estado derivado por Effect, dado remoto em useState, mutação de props, Suspense sem Error Boundary, Server Function sem validação e memoização sem medida. Não use para escrever código novo, que é react-developer, para decidir onde o arquivo mora, que é react-structure, para formulário com validação e campo condicional, que é react-hook-form, nem para diagnosticar componente já confirmado lento, que é react-component-performance.
+descricao: Review existing React code against the normative rules in the vault docs, citing `REACT-*` IDs — fifteen executable probes before reading code, a five-level scan in the order that fails most, severity classification and a fixed finding format — use when the task is reviewing a PR, file, component or custom Hook that is already written, or hunting for a Rules of Hooks violation, a fetch in an Effect, state derived through an Effect, remote data in useState, prop mutation, Suspense without an Error Boundary, a Server Function without validation and memoization without measurement. Do not use to write new code, which is react-developer, to decide where the file lives, which is react-structure, for a form with validation and conditional fields, which is react-hook-form, nor to diagnose a component already confirmed slow, which is react-component-performance.
 tipo: skill
 familia: react
+idioma: en
 fonte: "[React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.md)"
 docs:
   - /reactjs/react.dev
@@ -13,164 +14,164 @@ tags:
 
 # react-review
 
-> **Fonte desta skill:** [React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.md), com o hub [React.js](../../../knowledge-base/docs/react-js.md) como roteador.
-> Esta skill **não contém** o conteúdo das regras — ela diz o que rodar, o que carregar, em que ordem varrer e como reportar. Para o texto de uma regra, abra a nota-fonte: atualização da doc propaga sozinha para cá, e qualquer regra reescrita aqui viraria cópia desatualizada.
-> **Superfície de API:** resolva pelo Context7 — `/reactjs/react.dev`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
+> **Source of this skill:** [React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.md), with the [React.js](../../../knowledge-base/docs/react-js.md) hub as the router.
+> This skill **does not contain** the content of the rules — it says what to run, what to load, in what order to scan and how to report. For a rule's text, open the source note: a docs update propagates here on its own, and any rule rewritten here would become an outdated copy.
+> **API surface:** resolve it through Context7 — `/reactjs/react.dev`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contrato que esta skill implementa: [React.js](../../../knowledge-base/docs/react-js.md) § 7 ("Contrato de skill").
+Contract this skill implements: [React.js](../../../knowledge-base/docs/react-js.md) § 7 ("Contrato de skill").
 
 ---
 
-## Quando usar
+## When to use
 
-Revisar código React que **já existe**: PR, arquivo, componente, Hook customizado.
+Reviewing React code that **already exists**: a PR, a file, a component, a custom Hook.
 
-| Se a pergunta for… | Vá para |
+| If the question is… | Go to |
 | --- | --- |
-| escrever componente ou Hook **novo** | `react-developer` |
-| onde este arquivo mora, quem importa quem | `react-structure` |
-| formulário com validação, campo condicional, array de campos | `react-hook-form` |
-| componente **já confirmado lento**, precisa de fix medido | *(rota vaga — ver `memory/STACK.md`)* |
+| writing a **new** component or Hook | `react-developer` |
+| where this file lives, who imports whom | `react-structure` |
+| a form with validation, conditional fields, field arrays | `react-hook-form` |
+| a component **already confirmed slow**, needing a measured fix | *(vague route — see `memory/STACK.md`)* |
 
 ---
 
-## Carregamento mínimo
+## Minimum loading
 
-Nesta ordem, parando quando tiver o suficiente ([React.js](../../../knowledge-base/docs/react-js.md) § 1 e § 7):
+In this order, stopping when you have enough ([React.js](../../../knowledge-base/docs/react-js.md) § 1 and § 7):
 
-| Ordem | Carregar | Por quê |
+| Order | Load | Why |
 | --- | --- | --- |
-| 1 | [React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.md) (inteira, com foco na § 5) | base normativa e checklist de varredura |
-| 2 | [React.js](../../../knowledge-base/docs/react-js.md) § 6 e § 6.1 | regras invioláveis e as críticas dos satélites |
-| 3 | `references/mapa-de-ids.md` | canônicos e apelidos — obrigatório antes de citar |
-| 4 | [React.js](../../../knowledge-base/docs/react-js.md) § 4 | descobrir **qual** satélite corresponde à API tocada |
-| 5 | o satélite daquele domínio | só quando o achado exigir o texto completo da família |
-| 6 | [React - Patterns](../../../knowledge-base/docs/react-patterns.md) | quando o achado for estrutural (posse de estado, composição, fronteiras) |
+| 1 | [React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.md) (in full, focusing on § 5) | the normative base and the scan checklist |
+| 2 | [React.js](../../../knowledge-base/docs/react-js.md) § 6 and § 6.1 | the inviolable rules and the satellites' critical ones |
+| 3 | `references/mapa-de-ids.md` | canonicals and aliases — required before citing |
+| 4 | [React.js](../../../knowledge-base/docs/react-js.md) § 4 | find out **which** satellite corresponds to the API touched |
+| 5 | that domain's satellite | only when the finding requires the family's full text |
+| 6 | [React - Patterns](../../../knowledge-base/docs/react-patterns.md) | when the finding is structural (state ownership, composition, boundaries) |
 
-**Nunca carregue todos os satélites.** Regra de economia de contexto do hub.
+**Never load all the satellites.** The hub's context-economy rule.
 
-Referências desta skill — abra só a que o passo pedir:
+References in this skill — open only the one the step asks for:
 
-| Arquivo | Para quê |
+| File | What for |
 | --- | --- |
-| `references/sondas.md` | as quinze sondas, o que cada uma **não** pega, e os falsos positivos |
-| `references/grade-de-varredura.md` | os cinco níveis, na ordem que falha mais, com ID por antipadrão |
-| `references/severidade-e-relatorio.md` | classificação, formato de achado, o corte achado × opinião, estrutura do relatório |
-| `references/mapa-de-ids.md` | onde cada `REACT-*` está declarado, e a lista de apelidos |
-| `references/exemplo-relatorio-de-pr.md` | um relatório inteiro, das sondas ao fechamento |
-| `scripts/sondas.sh` | roda as quinze sondas e imprime o ID a citar em cada bloco |
-| `scripts/gerar-mapa-de-ids.sh` | regenera `mapa-de-ids.md` a partir de `Docs/React*` |
+| `references/sondas.md` | the fifteen probes, what each one does **not** catch, and the false positives |
+| `references/grade-de-varredura.md` | the five levels, in the order that fails most, with an ID per antipattern |
+| `references/severidade-e-relatorio.md` | classification, finding format, the finding × opinion cut, the report's structure |
+| `references/mapa-de-ids.md` | where each `REACT-*` is declared, and the list of aliases |
+| `references/exemplo-relatorio-de-pr.md` | a whole report, from the probes to the closing |
+| `scripts/sondas.sh` | runs the fifteen probes and prints the ID to cite in each block |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates `mapa-de-ids.md` from `Docs/React*` |
 
 ---
 
-## Passo 1 — Sondar antes de ler
+## Step 1 — Probe before reading
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/react-review/scripts/sondas.sh src
 ```
 
-(no vault, `bash ${CLAUDE_PLUGIN_ROOT}/skills/react-review/scripts/sondas.sh src`; o alvo padrão é `src`, ou `.` se não houver.)
+(in the vault, `bash ${CLAUDE_PLUGIN_ROOT}/skills/react-review/scripts/sondas.sh src`; the default target is `src`, or `.` if there is none.)
 
-A **sonda 0 roda primeiro e muda o veredito das outras**: versão do React, React Compiler ativo, **rede de lint** (ESLint com o plugin, ou Biome com o domínio `react` ligado), `<StrictMode>` presente. Reportar "falta memoizar" num projeto com React Compiler ativo é achado inválido, e desmoraliza o relatório inteiro.
+**Probe 0 runs first and changes the verdict of the others**: React version, React Compiler active, the **lint net** (ESLint with the plugin, or Biome with the `react` domain switched on), `<StrictMode>` present. Reporting "memoization is missing" in a project with React Compiler active is an invalid finding, and it discredits the whole report.
 
-Sonda **não é achado**: ela diz onde olhar. Achado exige leitura do trecho e `arquivo:linha`. As quatro sondas de contexto (9, 11, 12, 13) precisam de leitura do arquivo pai, da topologia ou da config de SSR antes de virar achado. Detalhe e falsos positivos em `references/sondas.md`.
-
----
-
-## Passo 2 — Varrer na ordem que falha mais
-
-`references/grade-de-varredura.md`, cinco níveis:
-
-1. **Contrato do React** — Hooks fora do topo, side effect no render, mutação, componente chamado como função. Bloqueante.
-2. **Regras críticas** de [React.js](../../../knowledge-base/docs/react-js.md) § 6.1 — fetch em Effect, estado derivado, dado remoto em `useState`, Suspense sem boundary, memoização sem medida, `'use client'` alto, Server Function sem validação.
-3. **Estrutura** — colocação de estado, composição, fronteiras, `key`, e as famílias dos satélites.
-4. **Satélite do domínio** — só agora, e só o que o código toca (via [React.js](../../../knowledge-base/docs/react-js.md) § 4).
-5. **Estilo** — por último, sempre subordinado aos anteriores.
-
-Se um nível produz achado que invalida o código do seguinte — o Effect inteiro não deveria existir — **pare de revisar o interior dele** e reporte a remoção, não a correção de detalhe.
-
-O que as sondas nunca pegam, e por isso exige leitura: `REACT-HOOK-01`, `REACT-CALL-01`, `REACT-CALL-02`, `REACT-PAT-02`, `REACT-PAT-03`, `REACT-PAT-10`, `REACT-ASYNC-09`.
+A probe **is not a finding**: it says where to look. A finding requires reading the passage and a `file:line`. The four context probes (9, 11, 12, 13) need a reading of the parent file, of the topology or of the SSR config before becoming a finding. Detail and false positives in `references/sondas.md`.
 
 ---
 
-## Passo 3 — Classificar e reportar
+## Step 2 — Scan in the order that fails most
 
-`references/severidade-e-relatorio.md`. Resumo:
+`references/grade-de-varredura.md`, five levels:
 
-| Severidade | O que entra |
+1. **React's contract** — Hooks outside the top level, side effects in the render, mutation, a component called as a function. Blocking.
+2. **Critical rules** in [React.js](../../../knowledge-base/docs/react-js.md) § 6.1 — a fetch in an Effect, derived state, remote data in `useState`, Suspense without a boundary, memoization without measurement, a high `'use client'`, a Server Function without validation.
+3. **Structure** — state placement, composition, boundaries, `key`, and the satellites' families.
+4. **The domain's satellite** — only now, and only what the code touches (via [React.js](../../../knowledge-base/docs/react-js.md) § 4).
+5. **Style** — last, always subordinate to the previous ones.
+
+If one level produces a finding that invalidates the next level's code — the whole Effect should not exist — **stop reviewing its interior** and report the removal, not a detail fix.
+
+What the probes never catch, and therefore requires reading: `REACT-HOOK-01`, `REACT-CALL-01`, `REACT-CALL-02`, `REACT-PAT-02`, `REACT-PAT-03`, `REACT-PAT-10`, `REACT-ASYNC-09`.
+
+---
+
+## Step 3 — Classify and report
+
+`references/severidade-e-relatorio.md`. Summary:
+
+| Severity | What goes in |
 | --- | --- |
-| **Bloqueante** | `REACT-PURE-*`, `REACT-CALL-*`, `REACT-HOOK-*` |
-| **Alta** | regras críticas de [React.js](../../../knowledge-base/docs/react-js.md) § 6.1 |
-| **Média** | demais `REACT-*` do satélite |
-| **Baixa** | preferência sem ID — **não é achado** |
+| **Blocking** | `REACT-PURE-*`, `REACT-CALL-*`, `REACT-HOOK-*` |
+| **High** | the critical rules in [React.js](../../../knowledge-base/docs/react-js.md) § 6.1 |
+| **Medium** | the other `REACT-*` from the satellite |
+| **Low** | preference without an ID — **not a finding** |
 
-Formato fixo, quatro partes:
+A fixed four-part format:
 
 ```
-`ID-DA-REGRA` — arquivo:linha
-<o que está errado, uma frase>
-Correção: <mudança concreta, não conselho genérico>
-Ver Satélite correspondente.
+`RULE-ID` — file:line
+<what is wrong, one sentence>
+Fix: <concrete change, not generic advice>
+See the corresponding satellite.
 ```
 
-**Achado sem ID de regra é opinião.** Existe ID → cite o canônico. Não existe ID mas é antipadrão documentado → cite a **seção** ([React - Patterns](../../../knowledge-base/docs/react-patterns.md) § 8). Não existe nem ID nem seção → vai para "Sugestões (sem regra)", separado, ou fica fora. **Nunca invente um ID.**
+**A finding without a rule ID is an opinion.** There is an ID → cite the canonical one. There is no ID but it is a documented antipattern → cite the **section** ([React - Patterns](../../../knowledge-base/docs/react-patterns.md) § 8). Neither ID nor section → it goes to "Suggestions (no rule)", separately, or stays out. **Never invent an ID.**
 
 ---
 
-## Passo 4 — Fechar a revisão
+## Step 4 — Closing the review
 
-1. **Automatize o que dá.** Sem rede de lint e sem `<StrictMode>`, metade do Nível 1 não tem proteção — e isso é o **primeiro achado do relatório**. Em projeto Biome, a rede só existe com `linter.domains.react` ligado: `preset: recommended` **não** ativa as regras de Hooks.
-2. **Verifique se o stack já resolve** antes de sugerir a primitiva crua ([React.js](../../../knowledge-base/docs/react-js.md) § 8).
-3. **Ordene por severidade**, não por ordem de arquivo.
-4. **Declare o que não foi verificado.** API fora de [React.js](../../../knowledge-base/docs/react-js.md) § 4 não foi verificada nesta doc; silêncio sobre arquivo não lido é lido como aprovação.
+1. **Automate what you can.** Without a lint net and without `<StrictMode>`, half of Level 1 has no protection — and that is the **report's first finding**. In a Biome project, the net only exists with `linter.domains.react` switched on: `preset: recommended` does **not** enable the Hooks rules.
+2. **Check whether the stack already solves it** before suggesting the raw primitive ([React.js](../../../knowledge-base/docs/react-js.md) § 8).
+3. **Order by severity**, not by file order.
+4. **Declare what was not verified.** An API outside [React.js](../../../knowledge-base/docs/react-js.md) § 4 has not been verified in this doc; silence about an unread file is read as approval.
 
-Se `Docs/React*` mudou desde a última revisão, regenere o mapa antes de citar:
+If `Docs/React*` changed since the last review, regenerate the map before citing:
 
 ```bash
-bash plugins/hermes-frontend/skills/react-review/scripts/gerar-mapa-de-ids.sh # reescreve o mapa das duas skills
-bash scripts/instalar.sh # e reinstala o plugin
+bash plugins/hermes-frontend/skills/react-review/scripts/gerar-mapa-de-ids.sh # rewrites both skills' map
+bash scripts/instalar.sh # and reinstalls the plugin
 ```
 
 ---
 
-## Vizinhas — quando a revisão sai do React
+## Neighbors — when the review leaves React
 
-Um PR de frontend quase nunca é só React. Quando o achado for de outra camada, ele pertence à skill daquela camada, com os IDs daquela família — não force um `REACT-*` em cima.
+A frontend PR is almost never only React. When the finding belongs to another layer, it belongs to that layer's skill, with that family's IDs — do not force a `REACT-*` on top of it.
 
-| A camada tocada é… | Skill | Doc-fonte |
+| The layer touched is… | Skill | Source doc |
 | --- | --- | --- |
-| dado remoto, cache, invalidação, update otimista | `tanstack-query` | [TanStack Query](../../../knowledge-base/docs/tanstack-query.md) |
-| rota, navegação, search params, loader | `tanstack-router` | [TanStack Router](../../../knowledge-base/docs/tanstack-router.md) |
-| formulário com validação, condicional, array de campos | `react-hook-form` | [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) |
-| story, controle, docs de componente | `storybook-story` · `storybook-setup` | [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md) |
-| teste de interação dentro da story, **runner Vitest** | `storybook-test` | [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4 |
-| **em que nível** este teste deve estar (unidade × integração × e2e) | `test-design` | `Docs/Teste de Software - Níveis e Escopo.md` |
-| a suíte protege alguma coisa? · ninguém confia nela | `test-review` · `test-diagnose` | `Docs/Teste de Software.md` |
-| **teste de unidade e integração** sob `bun test` | `bun-test-build` · `bun-test-review` | `Docs/Bun - Testes.md` |
-| **teste e2e** — escrever, auditar, diagnosticar | `playwright-build` · `playwright-review` · `playwright-diagnose` | `Docs/Playwright.md` |
-| rota, handler, schema e lifecycle de API | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `Docs/Elysia.md` |
-| schema, migração, query, N+1 | `drizzle-review` | `Docs/Drizzle ORM.md` |
-| método, status, cache, CORS, contrato da API | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | `Docs/HTTP.md` |
+| remote data, cache, invalidation, optimistic update | `tanstack-query` | [TanStack Query](../../../knowledge-base/docs/tanstack-query.md) |
+| routing, navigation, search params, loader | `tanstack-router` | [TanStack Router](../../../knowledge-base/docs/tanstack-router.md) |
+| a form with validation, conditionals, field arrays | `react-hook-form` | [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) |
+| a story, controls, component docs | `storybook-story` · `storybook-setup` | [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md) |
+| an interaction test inside the story, the **Vitest runner** | `storybook-test` | [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4 |
+| **at which level** this test should be (unit × integration × e2e) | `test-design` | `Docs/Teste de Software - Níveis e Escopo.md` |
+| does the suite protect anything? · nobody trusts it | `test-review` · `test-diagnose` | `Docs/Teste de Software.md` |
+| **unit and integration tests** under `bun test` | `bun-test-build` · `bun-test-review` | `Docs/Bun - Testes.md` |
+| **e2e tests** — writing, auditing, diagnosing | `playwright-build` · `playwright-review` · `playwright-diagnose` | `Docs/Playwright.md` |
+| an API route, handler, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `Docs/Elysia.md` |
+| schema, migration, query, N+1 | `drizzle-review` | `Docs/Drizzle ORM.md` |
+| method, status, cache, CORS, the API contract | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | `Docs/HTTP.md` |
 
-Duas observações que evitam achado errado:
+Two observations that prevent a wrong finding:
 
-- **Vitest não tem skill própria neste vault.** Ele aparece como *runner* do `@storybook/addon-vitest`, rodando story em browser real via Playwright — [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4, e o corte entre Vitest 3 e 4 está na § 4.2. Teste de unidade fora do Storybook é `bun test`, não Vitest.
-- **A camada de conceito vem antes da de ferramenta.** "Este teste deveria existir, e neste nível?" é `test-design`; "este teste está certo?" é a skill da ferramenta. Pular a primeira produz E2E por default, que é o antipadrão de maior custo do stack.
-
----
-
-## Exemplo
-
-PR de busca de clientes, três arquivos. As sondas apontam seis candidatos em cinco minutos; a **leitura** encontra o achado bloqueante que nenhuma sonda vê (`useState` depois de early return, `REACT-HOOK-01`), e ele reordena o relatório inteiro. Um `useMemo` apontado pela sonda 6 **não** vira achado, porque tinha medição documentada; o tamanho do arquivo vai para "Sugestões (sem regra)"; uma API de framework fora de [React.js](../../../knowledge-base/docs/react-js.md) § 4 vira declaração de limitação, não opinião.
-
-Relatório completo, das sondas ao fechamento: `references/exemplo-relatorio-de-pr.md`.
+- **Vitest has no skill of its own in this vault.** It appears as the *runner* of `@storybook/addon-vitest`, running a story in a real browser through Playwright — [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4, and the cut between Vitest 3 and 4 is in § 4.2. A unit test outside Storybook is `bun test`, not Vitest.
+- **The concept layer comes before the tool layer.** "Should this test exist, and at this level?" is `test-design`; "is this test right?" is the tool's skill. Skipping the first produces E2E by default, which is the highest-cost antipattern in this stack.
 
 ---
 
-## Relacionados
+## Example
 
-- `react-developer` — a skill irmã, para escrever código novo
-- `react-structure` — onde o arquivo mora e quem importa quem
-- [React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.md) — fonte desta skill
-- [React - Patterns](../../../knowledge-base/docs/react-patterns.md) — decisão estrutural e tabela de antipadrões
-- [React.js](../../../knowledge-base/docs/react-js.md) — hub, mapa da API, árvores de decisão, contrato de skill
+A customer search PR, three files. The probes point at six candidates in five minutes; the **reading** finds the blocking finding no probe sees (a `useState` after an early return, `REACT-HOOK-01`), and it reorders the whole report. A `useMemo` flagged by probe 6 does **not** become a finding, because it had documented measurement; the file's size goes to "Suggestions (no rule)"; a framework API outside [React.js](../../../knowledge-base/docs/react-js.md) § 4 becomes a declaration of limitation, not an opinion.
+
+Full report, from the probes to the closing: `references/exemplo-relatorio-de-pr.md`.
+
+---
+
+## Related
+
+- `react-developer` — the sibling skill, for writing new code
+- `react-structure` — where the file lives and who imports whom
+- [React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.md) — source of this skill
+- [React - Patterns](../../../knowledge-base/docs/react-patterns.md) — structural decisions and the antipattern table
+- [React.js](../../../knowledge-base/docs/react-js.md) — the hub, API map, decision trees, skill contract

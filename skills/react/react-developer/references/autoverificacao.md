@@ -1,110 +1,110 @@
-# Autoverificação antes de entregar
+# Self-check before delivering
 
-> Três passadas, nesta ordem. Nenhuma delas é opcional, e a entrega não sai com
-> ressalva: se um item falha, corrija antes.
-
----
-
-## Passada 1 — checklist normativa
-
-Ordenada por frequência de falha. É a mesma da § 5 de [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) —
-abra-a quando precisar do texto da regra.
-
-- [ ] Hook depois de early return, dentro de `if`, loop ou callback? → `REACT-HOOK-01`
-- [ ] `fetch`, `localStorage`, `Date.now`, `Math.random` ou log no corpo do render? → `REACT-PURE-01` / `REACT-PURE-02`
-- [ ] Mutação de props ou estado (`push`, `sort`, `splice`, atribuição direta)? → `REACT-PURE-03`
-- [ ] Valor mutado **depois** de já ter ido para o JSX? → `REACT-PURE-05`
-- [ ] `setState(x + 1)` onde deveria ser a forma updater? → `REACT-STATE-01`
-- [ ] Componente chamado como função (`Componente(props)`)? → `REACT-CALL-01`
-- [ ] Hook passado como valor, ou chamado de função comum? → `REACT-CALL-02` / `REACT-HOOK-02`
-- [ ] `ref.current` lido ou escrito no render? → `REACT-REF-01`
-- [ ] Algum `eslint-disable` em `exhaustive-deps`? → `REACT-EFFECT-03` — quase sempre é Effect que não deveria existir
-
-## Passada 2 — a tabela de hábitos
-
-Percorra `habitos-de-ia.md` linha a linha e pergunte: **o código evitou este hábito?**
-As seções 1 e 2 (estado e efeitos) pegam a maioria; as 6 e 7 só se aplicam quando o
-código toca servidor ou extrai Hook.
-
-## Passada 3 — as três perguntas de fechamento
-
-1. Todo `useState` que sobrou responde "sim" à árvore de estado de [React.js](../../../../knowledge-base/docs/react-js.md) § 5,
- ou algum é **derivável**, **remoto** ou **de URL**?
-2. Todo `useEffect` que sobrou sincroniza com um sistema externo **concreto e nomeável**?
- Escreva o nome. Se não sai nome, o Effect não deveria existir.
-3. Toda memoização que sobrou tem **medição** por trás — ou React Compiler ativo tornando-a
- redundante?
+> Three passes, in this order. None of them is optional, and the delivery does not go out with
+> a caveat: if an item fails, fix it first.
 
 ---
 
-## Sondas executáveis
+## Pass 1 — the normative checklist
 
-Rodam contra o que você acabou de escrever. Não substituem as passadas acima — apontam
-onde olhar. `$ALVO` é o arquivo ou diretório tocado.
+Ordered by failure frequency. It is the same one from § 5 of [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) —
+open it when you need a rule's text.
+
+- [ ] A Hook after an early return, inside an `if`, loop or callback? → `REACT-HOOK-01`
+- [ ] `fetch`, `localStorage`, `Date.now`, `Math.random` or a log in the render body? → `REACT-PURE-01` / `REACT-PURE-02`
+- [ ] Mutation of props or state (`push`, `sort`, `splice`, direct assignment)? → `REACT-PURE-03`
+- [ ] A value mutated **after** it already went into the JSX? → `REACT-PURE-05`
+- [ ] `setState(x + 1)` where the updater form was needed? → `REACT-STATE-01`
+- [ ] A component called as a function (`Component(props)`)? → `REACT-CALL-01`
+- [ ] A Hook passed as a value, or called from an ordinary function? → `REACT-CALL-02` / `REACT-HOOK-02`
+- [ ] `ref.current` read or written in the render? → `REACT-REF-01`
+- [ ] Any `eslint-disable` on `exhaustive-deps`? → `REACT-EFFECT-03` — it is almost always an Effect that should not exist
+
+## Pass 2 — the habits table
+
+Walk `habitos-de-ia.md` line by line and ask: **did the code avoid this habit?**
+Sections 1 and 2 (state and effects) catch most of them; 6 and 7 only apply when the
+code touches the server or extracts a Hook.
+
+## Pass 3 — the three closing questions
+
+1. Does every remaining `useState` answer "yes" to the state tree in [React.js](../../../../knowledge-base/docs/react-js.md) § 5,
+ or is one of them **derivable**, **remote** or **from the URL**?
+2. Does every remaining `useEffect` synchronize with a **concrete, nameable** external system?
+ Write the name. If no name comes out, the Effect should not exist.
+3. Does every remaining memoization have a **measurement** behind it — or an active React Compiler making it
+ redundant?
+
+---
+
+## Executable probes
+
+They run against what you just wrote. They do not replace the passes above — they point
+at where to look. `$ALVO` is the file or directory touched.
 
 ```bash
-# 1. Fetch dentro de Effect (REACT-EFFECT-06)
+# 1. A fetch inside an Effect (REACT-EFFECT-06)
 rg -nU --type-add 'rx:*.{ts,tsx}' -trx 'useEffect\((?s:.{0,400}?)\b(fetch|axios)\s*[\(\.]' "$ALVO"
 
-# 2. Estado derivado por Effect: set* como primeira coisa do Effect (REACT-PAT-01)
+# 2. State derived through an Effect: set* as the Effect's first thing (REACT-PAT-01)
 rg -nU --type-add 'rx:*.{ts,tsx}' -trx 'useEffect\(\s*\(\)\s*=>\s*\{\s*set[A-Z]' "$ALVO"
 
-# 3. Effect com callback async (REACT-EFFECT-12)
+# 3. An Effect with an async callback (REACT-EFFECT-12)
 rg -n --type-add 'rx:*.{ts,tsx}' -trx 'useEffect\(\s*async' "$ALVO"
 
-# 4. exhaustive-deps silenciado (REACT-EFFECT-03)
+# 4. exhaustive-deps silenced (REACT-EFFECT-03)
 rg -n 'eslint-disable.*exhaustive-deps' "$ALVO"
 
-# 5. setState sem updater onde o anterior importa (REACT-STATE-01)
+# 5. setState without the updater where the previous value matters (REACT-STATE-01)
 rg -n --type-add 'rx:*.{ts,tsx}' -trx 'set[A-Z]\w*\(\s*\w+\s*[-+]\s*1\s*\)' "$ALVO"
 
-# 6. index como key (antipadrão de Patterns § 8)
+# 6. index as a key (antipattern from Patterns § 8)
 rg -n --type-add 'rx:*.{ts,tsx}' -trx 'key=\{\s*(i|idx|index)\s*\}' "$ALVO"
 
-# 7. forwardRef em código novo (REACT-REF-03)
+# 7. forwardRef in new code (REACT-REF-03)
 rg -n --type-add 'rx:*.{ts,tsx}' -trx '\bforwardRef\b' "$ALVO"
 
-# 8. Memoização — conte antes de justificar (REACT-PERF-01)
+# 8. Memoization — count before justifying (REACT-PERF-01)
 rg -c --type-add 'rx:*.{ts,tsx}' -trx '\buseMemo\(|\buseCallback\(|\bmemo\(' "$ALVO"
 
-# 9. 'use client' e a que altura está (REACT-RSC-03)
+# 9. 'use client' and how high it sits (REACT-RSC-03)
 rg -l --sort path --type-add 'rx:*.{ts,tsx}' -trx "^['\"]use client['\"]" "$ALVO"
 
-# 10. Suspense sem Error Boundary no mesmo arquivo (REACT-ASYNC-08)
-rg -l --type-add 'rx:*.{ts,tsx}' -trx '<Suspense' "$ALVO" | xargs -I{} sh -c 'rg -q "ErrorBoundary|errorElement" "{}" || echo "sem boundary: {}"'
+# 10. Suspense with no Error Boundary in the same file (REACT-ASYNC-08)
+rg -l --type-add 'rx:*.{ts,tsx}' -trx '<Suspense' "$ALVO" | xargs -I{} sh -c 'rg -q "ErrorBoundary|errorElement" "{}" || echo "no boundary: {}"'
 ```
 
-Sonda 8 não tem limiar fixo: **qualquer** ocorrência precisa de resposta à pergunta 3
-da Passada 3. Sonda 9 é leitura, não veredito — o que importa é se existe algo acima
-da fronteira que poderia ter ficado no servidor.
+Probe 8 has no fixed threshold: **every** occurrence needs an answer to question 3
+of Pass 3. Probe 9 is a reading, not a verdict — what matters is whether there is anything above
+the boundary that could have stayed on the server.
 
 ---
 
-## Antes da primeira linha, não depois
+## Before the first line, not after
 
-Duas verificações de ambiente que mudam o código que você vai escrever:
+Two environment checks that change the code you are about to write:
 
 ```bash
-# React Compiler ativo? Muda toda a decisão de memoização (REACT-PERF-02)
+# React Compiler active? It changes the whole memoization decision (REACT-PERF-02)
 rg -n 'babel-plugin-react-compiler|reactCompiler|react-compiler' package.json vite.config.* babel.config.* 2>/dev/null
 
-# rede de lint? ESLint com o plugin, OU Biome com o domínio react ligado
+# a lint net? ESLint with the plugin, OR Biome with the react domain switched on
 rg -n 'react-hooks' package.json eslint.config.*.eslintrc* 2>/dev/null
 rg -n 'domains|useHookAtTopLevel|useExhaustiveDependencies' biome.json* 2>/dev/null
 ```
 
-Projeto sem rede de lint não é motivo para pular a Passada 1 — é motivo para **mencionar a
-ausência** na entrega.
+A project with no lint net is not a reason to skip Pass 1 — it is a reason to **mention the
+absence** in the delivery.
 
-**Em projeto Biome, confira o domínio.** As regras de Hooks (`useHookAtTopLevel`,
-`useExhaustiveDependencies`) são recommended **do domínio `react`**: com `preset`/`recommended`
-ligado e o domínio desligado, elas **não rodam** — sem erro e sem aviso. A correção é
+**In a Biome project, check the domain.** The Hooks rules (`useHookAtTopLevel`,
+`useExhaustiveDependencies`) are recommended **within the `react` domain**: with `preset`/`recommended`
+on and the domain off, they **do not run** — with no error and no warning. The fix is
 `"linter": { "domains": { "react": "recommended" } }`.
 
 ---
 
-## Relacionados
+## Related
 
-- [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) § 5 — a checklist normativa, com o texto das regras
-- `habitos-de-ia.md` — a segunda passada
-- `mapa-de-ids.md` — onde cada ID está declarado
+- [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) § 5 — the normative checklist, with the rules' text
+- `habitos-de-ia.md` — the second pass
+- `mapa-de-ids.md` — where each ID is declared

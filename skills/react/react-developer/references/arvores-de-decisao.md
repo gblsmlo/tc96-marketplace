@@ -1,80 +1,80 @@
-# Roteiro das árvores de decisão
+# Route through the decision trees
 
-> Este arquivo **não copia** as árvores. Elas moram em [React.js](../../../../knowledge-base/docs/react-js.md) § 5 e mudam lá.
-> Aqui está o que a árvore não diz: **qual** percorrer, qual é a pergunta que decide,
-> onde o percurso costuma sair errado, e quando parar antes de chegar ao fim.
+> This file **does not copy** the trees. They live in [React.js](../../../../knowledge-base/docs/react-js.md) § 5 and change there.
+> Here is what the tree does not say: **which** one to walk, what question decides it,
+> where the path usually goes wrong, and when to stop before reaching the end.
 
 ---
 
-## Qual árvore, a partir do sintoma da tarefa
+## Which tree, from the task's symptom
 
-| A frase da tarefa contém… | Árvore em [React.js](../../../../knowledge-base/docs/react-js.md) § 5 | A pergunta que decide |
+| The task's sentence contains… | Tree in [React.js](../../../../knowledge-base/docs/react-js.md) § 5 | The question that decides |
 | --- | --- | --- |
-| "guardar", "lembrar", "manter", "selecionado", "aberto/fechado" | *Preciso guardar um valor. Onde?* | **De onde vem o dado** — não "qual Hook" |
-| "quando X mudar", "ao montar", "sincronizar", "listener", "timer" | *Preciso rodar um efeito colateral. Onde?* | **Isso responde a uma interação?** Se sim, acabou: é handler |
-| "trava", "lento", "lag ao digitar", "lista grande" | *A UI trava durante uma atualização* | **Mediu?** Sem Profiler, o percurso nem começa |
-| "carregar", "buscar", "await", "promise", "submeter" | *Preciso lidar com algo assíncrono* | **Onde o dado vive** — cache, servidor, ou lugar nenhum |
+| "store", "remember", "keep", "selected", "open/closed" | *Preciso guardar um valor. Onde?* | **Where the data comes from** — not "which Hook" |
+| "when X changes", "on mount", "synchronize", "listener", "timer" | *Preciso rodar um efeito colateral. Onde?* | **Does this respond to an interaction?** If yes, you are done: it is a handler |
+| "freezes", "slow", "lag while typing", "big list" | *A UI trava durante uma atualização* | **Did you measure?** Without the Profiler, the path does not even begin |
+| "load", "fetch", "await", "promise", "submit" | *Preciso lidar com algo assíncrono* | **Where the data lives** — a cache, the server, or nowhere |
 
-Se a tarefa contém duas frases dessas, ela é **duas** decisões. Percorra as duas árvores
-separadamente, uma por dono de dado, antes de escrever qualquer linha.
-
----
-
-## Os quatro erros de percurso
-
-Cada um produz código que compila, roda, e está errado.
-
-**1. Começar pela segunda pergunta da árvore de estado.**
-A ordem é *qual mecanismo* → *em qual componente*. Escolher `useState` e só depois
-perguntar onde ele mora garante que dado remoto e estado de URL virem estado local
-(`REACT-PAT-03`, `REACT-PAT-10`). A primeira pergunta é sobre a **origem**.
-
-**2. Tratar a árvore de efeito como classificação, não como filtro.**
-Ela é desenhada para **eliminar** o Effect. Os dois primeiros ramos — interação, e
-"existe sistema externo nomeável?" — descartam a maioria dos `useEffect` que se
-escreve por hábito. Chegar em `useEffect` sem conseguir **nomear o sistema externo**
-significa que o percurso foi pulado.
-
-**3. Entrar na árvore de performance pelo passo 5.**
-Os passos 0–3 são estado desnecessário, estado alto demais e composição. `memo` é
-o passo 5, depois de medir (`REACT-PERF-01`). Com React Compiler ativo, memoização
-manual é redundante (`REACT-PERF-02`) — confirme antes.
-
-**4. Não conferir a ponte do stack.**
-[React.js](../../../../knowledge-base/docs/react-js.md) § 8 lista o que **já está resolvido** neste stack: dado remoto, cache,
-estado de URL, otimismo, validação de fronteira, formulário complexo, estado global
-de escrita frequente. A primitiva crua onde a ponte existe não é simplicidade — é
-regressão, e passa despercebida em revisão porque o código "funciona".
+If the task contains two of those phrases, it is **two** decisions. Walk both trees
+separately, one per data owner, before writing any line.
 
 ---
 
-## Parar antes do fim: as quatro saídas curtas
+## The four path mistakes
 
-| Se a resposta for… | Pare aqui | Não percorra o resto |
+Each one produces code that compiles, runs, and is wrong.
+
+**1. Starting at the state tree's second question.**
+The order is *which mechanism* → *in which component*. Choosing `useState` and only then
+asking where it lives guarantees that remote data and URL state become local state
+(`REACT-PAT-03`, `REACT-PAT-10`). The first question is about the **origin**.
+
+**2. Treating the effect tree as a classification, not as a filter.**
+It is designed to **eliminate** the Effect. The first two branches — interaction, and
+"is there a nameable external system?" — discard most of the `useEffect` calls one
+writes out of habit. Reaching `useEffect` without being able to **name the external system**
+means the path was skipped.
+
+**3. Entering the performance tree at step 5.**
+Steps 0–3 are unnecessary state, state lifted too high, and composition. `memo` is
+step 5, after measuring (`REACT-PERF-01`). With the React Compiler active, manual memoization
+is redundant (`REACT-PERF-02`) — confirm first.
+
+**4. Not checking the stack's bridge.**
+[React.js](../../../../knowledge-base/docs/react-js.md) § 8 lists what is **already solved** in this stack: remote data, caching,
+URL state, optimism, boundary validation, complex forms, frequently written global
+state. The raw primitive where the bridge exists is not simplicity — it is
+a regression, and it goes unnoticed in review because the code "works".
+
+---
+
+## Stopping before the end: the four short exits
+
+| If the answer is… | Stop here | Do not walk the rest |
 | --- | --- | --- |
-| o dado vem do servidor | [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md) ([React.js](../../../../knowledge-base/docs/react-js.md) § 8) | nenhum ramo de `useState` se aplica |
-| o valor é derivável do que já existe | calcule no render | não há Hook a escolher |
-| o estado deve sobreviver a refresh / ser compartilhável por link | search params do [TanStack Router](../../../../knowledge-base/docs/tanstack-router.md) | `useState` está fora de questão |
-| o código responde a um clique, submit, tecla | event handler | não é Effect, não tem dependências |
+| the data comes from the server | [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md) ([React.js](../../../../knowledge-base/docs/react-js.md) § 8) | no `useState` branch applies |
+| the value is derivable from what already exists | compute it in the render | there is no Hook to choose |
+| the state has to survive a refresh / be shareable by link | [TanStack Router](../../../../knowledge-base/docs/tanstack-router.md) search params | `useState` is out of the question |
+| the code responds to a click, a submit, a keystroke | an event handler | it is not an Effect, it has no dependencies |
 
-Três das quatro saídas terminam **sem Hook nenhum**. Esse é o resultado esperado:
-a árvore existe para reduzir a superfície, não para escolher entre APIs equivalentes.
-
----
-
-## Depois de escolher a API
-
-1. Confirme o **pacote de origem** em [React.js](../../../../knowledge-base/docs/react-js.md) § 3 — `react`, `react-dom`,
- `react-dom/client`. Metade dos erros de import morre aqui.
-2. Descubra o **satélite** em [React.js](../../../../knowledge-base/docs/react-js.md) § 4 e abra **só ele**.
-3. Se a API não está na § 4, ela **não foi verificada** nesta doc. Consulte react.dev,
- declare a limitação, e proponha atualizar a nota — não afirme comportamento
- ([React.js](../../../../knowledge-base/docs/react-js.md) § 7, invariante 1).
+Three of the four exits end **with no Hook at all**. That is the expected result:
+the tree exists to reduce the surface, not to choose between equivalent APIs.
 
 ---
 
-## Relacionados
+## After choosing the API
 
-- [React.js](../../../../knowledge-base/docs/react-js.md) § 5 — as árvores em si
-- [React.js](../../../../knowledge-base/docs/react-js.md) § 8 — as pontes com o stack
-- `habitos-de-ia.md` — o que o percurso evita, hábito por hábito
+1. Confirm the **source package** in [React.js](../../../../knowledge-base/docs/react-js.md) § 3 — `react`, `react-dom`,
+ `react-dom/client`. Half of all import errors die here.
+2. Find the **satellite** in [React.js](../../../../knowledge-base/docs/react-js.md) § 4 and open **only it**.
+3. If the API is not in § 4, it **has not been verified** in this doc. Consult react.dev,
+ declare the limitation, and propose updating the note — do not assert behavior
+ ([React.js](../../../../knowledge-base/docs/react-js.md) § 7, invariant 1).
+
+---
+
+## Related
+
+- [React.js](../../../../knowledge-base/docs/react-js.md) § 5 — the trees themselves
+- [React.js](../../../../knowledge-base/docs/react-js.md) § 8 — the bridges with the stack
+- `habitos-de-ia.md` — what the path avoids, habit by habit

@@ -1,63 +1,63 @@
-# Exemplo trabalhado — painel de faturas
+# Worked example — invoice panel
 
-Tarefa: *"um painel de faturas com filtro por status e o total do que está selecionado"*.
+Task: *"an invoice panel with a status filter and the total of what is selected"*.
 
-O ponto deste exemplo: a versão intuitiva desta tela tem **quatro** `useState` e **dois**
-`useEffect`. Nenhum deles sobrevive ao Passo 1 — e nenhum era necessário.
+The point of this example: the intuitive version of this screen has **four** `useState` and **two**
+`useEffect`. None of them survives Step 1 — and none was necessary.
 
 ---
 
-## Passo 1 — as três perguntas, por escrito
+## Step 1 — the three questions, in writing
 
-| Pergunta | Resposta | Consequência |
+| Question | Answer | Consequence |
 | --- | --- | --- |
-| De quem é este dado? | as **faturas** são do servidor; o **filtro** pertence à URL; a **seleção** é do painel | três donos, três mecanismos |
-| Quem fornece o conteúdo variável? | a linha da fatura varia por contexto → `children`, não prop booleana | a assinatura não cresce |
-| Onde uma falha ou espera deve parar? | na fronteira da feature, não na raiz | Error Boundary + `<Suspense>` em `features/faturas` |
+| Whose data is this? | the **invoices** are the server's; the **filter** belongs to the URL; the **selection** is the panel's | three owners, three mechanisms |
+| Who supplies the variable content? | the invoice row varies by context → `children`, not a boolean prop | the signature does not grow |
+| Where should a failure or a wait stop? | at the feature's boundary, not at the root | an Error Boundary + `<Suspense>` in `features/invoices` |
 
-A pergunta 1, sozinha, já eliminou dois `useState` que o hábito criaria.
+Question 1 alone already eliminated two `useState` calls that habit would have created.
 
-## Passo 2 — as árvores, um dono de cada vez
+## Step 2 — the trees, one owner at a time
 
-| Dono | Percurso em [React.js](../../../../knowledge-base/docs/react-js.md) § 5 | Saída | Regra |
+| Owner | Path in [React.js](../../../../knowledge-base/docs/react-js.md) § 5 | Exit | Rule |
 | --- | --- | --- | --- |
-| faturas | "o dado vem do servidor?" → sim | [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md), não `useState` + `useEffect` | `REACT-PAT-03`, `REACT-EFFECT-06` |
-| filtro | sobrevive a refresh, é compartilhável por link, respeita o voltar | search params do [TanStack Router](../../../../knowledge-base/docs/tanstack-router.md) | `REACT-PAT-10` |
-| seleção | efêmera, morre ao sair da tela | `useState` no ancestral comum **mais próximo** — o painel, não a raiz | `REACT-PAT-02` |
-| total | derivável de faturas + seleção | calculado no render, sem estado nem Effect | `REACT-PAT-01` |
+| invoices | "does the data come from the server?" → yes | [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md), not `useState` + `useEffect` | `REACT-PAT-03`, `REACT-EFFECT-06` |
+| filter | it survives a refresh, is shareable by link, respects the back button | [TanStack Router](../../../../knowledge-base/docs/tanstack-router.md) search params | `REACT-PAT-10` |
+| selection | ephemeral, dies when leaving the screen | `useState` in the **nearest** common ancestor — the panel, not the root | `REACT-PAT-02` |
+| total | derivable from invoices + selection | computed in the render, with no state and no Effect | `REACT-PAT-01` |
 
-Três das quatro saídas não têm Hook. É o resultado esperado.
+Three of the four exits have no Hook. That is the expected result.
 
-## Passo 3 — o código
+## Step 3 — the code
 
 ```tsx
-export function PainelFaturas({ children }: { children: ReactNode }) {
- const { status } = Route.useSearch; // filtro: URL
- const { data: faturas } = useSuspenseQuery(faturasQuery({ status })); // remoto: cache
- const [selecionadas, setSelecionadas] = useState<Set<string>>(new Set);
+export function InvoicePanel({ children }: { children: ReactNode }) {
+ const { status } = Route.useSearch; // filter: the URL
+ const { data: invoices } = useSuspenseQuery(invoicesQuery({ status })); // remote: the cache
+ const [selected, setSelected] = useState<Set<string>>(new Set);
 
- const total = faturas // derivado, no render
-.filter((f) => selecionadas.has(f.id))
-.reduce((soma, f) => soma + f.valor, 0);
+ const total = invoices // derived, in the render
+.filter((i) => selected.has(i.id))
+.reduce((sum, i) => sum + i.amount, 0);
 
- function alternar(id: string) {
- setSelecionadas((atual) => { // updater: o anterior importa
- const proximo = new Set(atual);
- proximo.has(id) ? proximo.delete(id) : proximo.add(id);
- return proximo; // novo Set, não mutação do estado
+ function toggle(id: string) {
+ setSelected((current) => { // updater: the previous value matters
+ const next = new Set(current);
+ next.has(id) ? next.delete(id) : next.add(id);
+ return next; // a new Set, not a mutation of the state
  });
  }
 
  return (
  <section>
- <Total valor={total} />
+ <Total value={total} />
  <ul>
- {faturas.map((f) => (
- <LinhaFatura
- key={f.id} // id do domínio, nunca o índice
- fatura={f}
- selecionada={selecionadas.has(f.id)}
- onAlternar={ => alternar(f.id)}
+ {invoices.map((i) => (
+ <InvoiceRow
+ key={i.id} // the domain's id, never the index
+ invoice={i}
+ selected={selected.has(i.id)}
+ onToggle={ => toggle(i.id)}
  />
  ))}
  </ul>
@@ -67,36 +67,36 @@ export function PainelFaturas({ children }: { children: ReactNode }) {
 }
 ```
 
-E a fronteira, um nível acima — boundary de espera **e** de erro, no nível da feature:
+And the boundary, one level above — a waiting **and** an error boundary, at the feature level:
 
 ```tsx
-<ErrorBoundary fallback={<FalhaFaturas onRetry={reset} />}> {/* REACT-ASYNC-08, ASYNC-11 */}
- <Suspense fallback={<EsqueletoPainel />}> {/* mesma área do conteúdo */}
- <PainelFaturas>
- <AcoesEmLote /> {/* composição, não prop booleana */}
- </PainelFaturas>
+<ErrorBoundary fallback={<InvoicesFailure onRetry={reset} />}> {/* REACT-ASYNC-08, ASYNC-11 */}
+ <Suspense fallback={<PanelSkeleton />}> {/* the same area as the content */}
+ <InvoicePanel>
+ <BulkActions /> {/* composition, not a boolean prop */}
+ </InvoicePanel>
  </Suspense>
 </ErrorBoundary>
 ```
 
-## Passo 4 — o que a tabela de hábitos evitou
+## Step 4 — what the habits table prevented
 
-| Hábito que não aconteceu | Regra |
+| The habit that did not happen | Rule |
 | --- | --- |
-| `useEffect` + `fetch` para carregar faturas | `REACT-EFFECT-06`, `REACT-ASYNC-03` |
-| `useState` + `useEffect` para o total | `REACT-PAT-01` |
-| `useState` para o filtro | `REACT-PAT-10` |
-| estado elevado à raiz "por precaução" | `REACT-PAT-02` |
-| `setSelecionadas(new Set(selecionadas))` sem updater | `REACT-STATE-01` |
-| `showTotal` / `hideActions` em vez de `children` | `REACT-PAT-04` |
-| `useMemo` no `total` sem medição | `REACT-PERF-01` |
-| `key={i}` na lista | antipadrão de [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 8 |
-| Error Boundary só na raiz | `REACT-PAT-06` |
+| `useEffect` + `fetch` to load the invoices | `REACT-EFFECT-06`, `REACT-ASYNC-03` |
+| `useState` + `useEffect` for the total | `REACT-PAT-01` |
+| `useState` for the filter | `REACT-PAT-10` |
+| state lifted to the root "just in case" | `REACT-PAT-02` |
+| `setSelected(new Set(selected))` without the updater | `REACT-STATE-01` |
+| `showTotal` / `hideActions` instead of `children` | `REACT-PAT-04` |
+| a `useMemo` on the `total` with no measurement | `REACT-PERF-01` |
+| `key={i}` in the list | antipattern from [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 8 |
+| an Error Boundary only at the root | `REACT-PAT-06` |
 
-## Passo 5 — autoverificação
+## Step 5 — self-check
 
-- Passada 1: nenhum Hook condicional, nenhum side effect no render, nenhuma mutação —
- o `Set` novo dentro do updater é construção, não mutação do estado anterior.
-- Passada 2: as seções 1–3 de `habitos-de-ia.md` estão limpas; 5–7 não se aplicam.
-- Passada 3: o único `useState` é efêmero e local; não há `useEffect`; não há memoização,
- logo não há memoização sem medida.
+- Pass 1: no conditional Hook, no side effect in the render, no mutation —
+ the new `Set` inside the updater is construction, not a mutation of the previous state.
+- Pass 2: sections 1–3 of `habitos-de-ia.md` are clean; 5–7 do not apply.
+- Pass 3: the only `useState` is ephemeral and local; there is no `useEffect`; there is no memoization,
+ so there is no memoization without measurement.
