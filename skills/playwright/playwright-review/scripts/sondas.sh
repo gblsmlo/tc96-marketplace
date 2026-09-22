@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Sondas de suíte Playwright — S1 a S8. Uso: bash sondas.sh [dir-de-testes]
+# Playwright suite probes — S1 to S8. Usage: bash sondas.sh [test-dir]
 #
-# Numa suíte E2E os piores defeitos são invisíveis à leitura: os arquivos parecem certos,
-# o CI está verde, e mesmo assim o trace nunca foi gravado ou um .only reduziu tudo a um caso.
+# In an E2E suite the worst defects are invisible to reading: the files look right, CI is
+# green, and yet the trace was never recorded or a .only cut everything down to one case.
 set -uo pipefail
 
 DIR="${1:-}"
@@ -10,50 +10,50 @@ if [ -z "$DIR" ]; then for d in e2e tests test; do [ -d "$d" ] && DIR="$d" && br
 DIR="${DIR:-.}"
 RG=(rg --type-add 'rx:*.{ts,tsx,js}' -trx)
 titulo() { printf '\n\033[1m== %s\033[0m  %s\n' "$1" "${2:-}"; }
-vazio() { echo "   (nada)"; }
-ou_vazio() {  # imprime a entrada; se vier vazia, a mensagem
+vazio() { echo "   (nothing)"; }
+ou_vazio() {  # prints the input; when it comes back empty, the message
   local saida; saida="$(cat)"
   if [ -n "$saida" ]; then printf '%s
-' "$saida"; else echo "   ${1:-(nada)}"; fi
+' "$saida"; else echo "   ${1:-(nothing)}"; fi
 }
 
-titulo "S1. Versão e piso de Node" "PW-CORE-01, PW-CORE-03"
+titulo "S1. Version and Node floor" "PW-CORE-01, PW-CORE-03"
 node -v 2>/dev/null | sed 's|^|   node |'
 rg -n --no-messages '"@playwright/test"|"playwright"' package.json || vazio
-echo "   os dois pacotes precisam estar em lockstep; 1.62 exige Node ≥ 22"
+echo "   the two packages must be in lockstep; 1.62 requires Node >= 22"
 
-titulo "S2. test.only sobrando, e o portão" "PW-CFG-01 — CI verde rodando UM teste"
+titulo "S2. Leftover test.only, and the gate" "PW-CFG-01 — green CI running ONE test"
 "${RG[@]}" -n --no-messages '\.only\(' "$DIR" || vazio
-echo "   -- forbidOnly no config:"
-rg -n --no-messages 'forbidOnly' playwright.config.* 2>/dev/null || echo "   AUSENTE"
+echo "   -- forbidOnly in the config:"
+rg -n --no-messages 'forbidOnly' playwright.config.* 2>/dev/null || echo "   MISSING"
 
-titulo "S3. Trace existe?" "PW-CFG-02, PW-DBG-05 — 'off' em CI torna toda falha adivinhação"
-rg -n --no-messages 'trace\s*:' playwright.config.* 2>/dev/null || echo "   AUSENTE"
+titulo "S3. Does the trace exist?" "PW-CFG-02, PW-DBG-05 — 'off' in CI turns every failure into guesswork"
+rg -n --no-messages 'trace\s*:' playwright.config.* 2>/dev/null || echo "   MISSING"
 
-titulo "S4. Espera por tempo" "PW-CORE-05, PW-ACT-04 — as duas causas nº 1 de flake"
+titulo "S4. Waiting on time" "PW-CORE-05, PW-ACT-04 — the two no. 1 causes of flake"
 "${RG[@]}" -n --no-messages 'waitForTimeout|networkidle' "$DIR" || vazio
 
-titulo "S5. Asserção que congela o instante" "PW-EXP-01 — nenhum linter pega"
+titulo "S5. An assertion that freezes the instant" "PW-EXP-01 — no linter catches it"
 "${RG[@]}" -n --no-messages 'expect\(await ' "$DIR" || vazio
 
-titulo "S6. Asserção sem await" "PW-CORE-04 — passa SEMPRE; só o lint pega"
+titulo "S6. Assertion without await" "PW-CORE-04 — it ALWAYS passes; only lint catches it"
 rg -n --no-messages 'no-floating-promises|noFloatingPromises' .eslintrc* eslint.config.* biome.json* 2>/dev/null \
-  || echo "   AUSENTE — bloqueante: pode haver qualquer quantidade de asserção que não afirma nada"
+  || echo "   MISSING — blocking: there may be any number of assertions that assert nothing"
 
 titulo "S7. Shard, fullyParallel e blob" "PW-RUN-01, PW-RUN-06"
 rg -n --no-messages 'fullyParallel|shard|blob|merge-reports' playwright.config.* .github/workflows/*.y*ml 2>/dev/null || vazio
 
-titulo "S8. storageState versionado" "PW-AUTH-02 — credencial de sessão no histórico do git"
+titulo "S8. storageState committed" "PW-AUTH-02 — a session credential in the git history"
 if rg -qn --no-messages 'storageState' playwright.config.* "$DIR" 2>/dev/null; then
   rg -n --no-messages 'storageState' playwright.config.* "$DIR" 2>/dev/null | head -5
-  echo "   -- .gitignore cobre o arquivo de sessão?"
+  echo "   -- does .gitignore cover the session file?"
   rg -n --no-messages 'auth|storageState|\.state\.json' .gitignore 2>/dev/null \
-    || echo "   NÃO — achado de SEGURANÇA, reporte separado e primeiro"
+    || echo "   NO — a SECURITY finding; report it separately, and first"
 else
-  echo "   (o projeto não usa storageState — login provavelmente está em beforeEach: PW-AUTH-01)"
+  echo "   (the project does not use storageState — the login is probably in a beforeEach: PW-AUTH-01)"
 fi
 
-titulo "Extra. Teste gerado por agente" "PW-AGT-04, PW-AGT-05 — specs versionadas?"
-rg --files --no-messages -g '*.md' "$DIR" 2>/dev/null | head -5 | ou_vazio "sem spec .md ao lado dos testes: healer que apaga asserção fica indetectável"
+titulo "Extra. Agent-generated test" "PW-AGT-04, PW-AGT-05 — are the specs committed?"
+rg --files --no-messages -g '*.md' "$DIR" 2>/dev/null | head -5 | ou_vazio "no .md spec beside the tests: a healer that deletes an assertion becomes undetectable"
 
-printf '\n\033[1m== Fim.\033[0m S2 com .only sem forbidOnly, ou S8 com sessão versionada: reporte ANTES de continuar.\n'
+printf '\n\033[1m== Done.\033[0m S2 with a .only and no forbidOnly, or S8 with a committed session: report BEFORE going on.\n'
