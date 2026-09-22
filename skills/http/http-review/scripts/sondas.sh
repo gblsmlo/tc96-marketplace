@@ -1,59 +1,59 @@
 #!/usr/bin/env bash
-# Sondas de contrato HTTP — S1 a S8. Rodam contra o serviço DE PÉ.
-# Uso: bash sondas.sh <base-url> [rota-de-leitura] [rota-de-escrita] [origem-permitida]
-#   ex: bash sondas.sh https://api.local /faturas/42 /faturas/42 http://localhost:5173
+# HTTP contract probes — S1 to S8. They run against a RUNNING service.
+# Usage: bash sondas.sh <base-url> [read-route] [write-route] [allowed-origin]
+#   e.g.: bash sondas.sh https://api.local /invoices/42 /invoices/42 http://localhost:5173
 #
-# curl NÃO faz CORS — e é por isso que ele serve: mostra o que o servidor responde,
-# sem o browser no meio.
+# curl does NOT do CORS — and that is exactly why it helps: it shows what the server
+# answers, without the browser in the way.
 set -uo pipefail
 
 BASE="${1:-}"
-[ -z "$BASE" ] && { echo "uso: bash sondas.sh <base-url> [rota] [rota-escrita] [origem]" >&2; exit 1; }
+[ -z "$BASE" ] && { echo "usage: bash sondas.sh <base-url> [route] [write-route] [origin]" >&2; exit 1; }
 LEI="${2:-/}"; ESC="${3:-$LEI}"; ORI="${4:-http://localhost:5173}"
 CURL=(curl -sS -i -m 10)
 titulo() { printf '\n\033[1m== %s\033[0m  %s\n' "$1" "${2:-}"; }
 cab() { grep -iE "^(HTTP/|$1)" | sed 's|^|   |'; }
 
-titulo "S1. Headers de uma leitura" "HTTP-CACHE-01, HTTP-CORE-03"
+titulo "S1. Headers of a read" "HTTP-CACHE-01, HTTP-CORE-03"
 "${CURL[@]}" "$BASE$LEI" | cab 'cache-control|etag|vary|content-type|last-modified'
 
-titulo "S2. HEAD responde?" "HTTP-METH-06 — HEAD ausente onde GET responde"
+titulo "S2. Does HEAD answer?" "HTTP-METH-06 — HEAD missing where GET answers"
 "${CURL[@]}" -X HEAD "$BASE$LEI" | cab 'content-length|content-type'
 
-titulo "S3. Método não suportado" "HTTP-METH-07 — 405 com Allow, não 404"
+titulo "S3. Unsupported method" "HTTP-METH-07 — 405 with Allow, not 404"
 "${CURL[@]}" -X PATCH "$BASE$ESC" -H 'Content-Type: application/json' -d '{}' | cab 'allow'
-echo "   em Hono, sem o middleware methodNotAllowed isto devolve 404"
+echo "   in Hono, without the methodNotAllowed middleware this returns 404"
 
-titulo "S4. Condicional" "HTTP-CACHE-07 — emite ETag e ignora If-None-Match?"
+titulo "S4. Conditional" "HTTP-CACHE-07 — does it emit an ETag and ignore If-None-Match?"
 ETAG=$("${CURL[@]}" "$BASE$LEI" | grep -i '^etag:' | tr -d '\r' | cut -d' ' -f2-)
 if [ -n "$ETAG" ]; then
-  echo "   ETag emitido: $ETAG"
+  echo "   ETag emitted: $ETAG"
   "${CURL[@]}" -H "If-None-Match: $ETAG" "$BASE$LEI" | cab 'content-length'
-  echo "   → esperado 304 sem corpo (HTTP-CACHE-06)"
+  echo "   -> expected 304 with no body (HTTP-CACHE-06)"
 else
-  echo "   sem ETag — a rota não é revalidável (HTTP-CACHE-05)"
+  echo "   no ETag — the route cannot be revalidated (HTTP-CACHE-05)"
 fi
 
-titulo "S5. Escrita concorrente" "HTTP-CACHE-08 — a mais grave e a menos rodada"
+titulo "S5. Concurrent write" "HTTP-CACHE-08 — the gravest, and the least run"
 "${CURL[@]}" -X PUT -H 'If-Match: "obsoleto-de-proposito"' -H 'Content-Type: application/json' \
   -d '{}' "$BASE$ESC" | cab 'etag'
-echo "   → esperado 412. Se aplicou a escrita, há PERDA SILENCIOSA de dado sob concorrência."
+echo "   -> expected 412. If the write was applied, there is SILENT data loss under concurrency."
 
 titulo "S6. Preflight" "HTTP-CORS-05, HTTP-CORS-06"
 "${CURL[@]}" -X OPTIONS "$BASE$ESC" -H "Origin: $ORI" \
   -H 'Access-Control-Request-Method: POST' \
   -H 'Access-Control-Request-Headers: content-type,authorization' | cab 'access-control'
 
-titulo "S7. Origem RECUSADA" "HTTP-CORS-01, HTTP-CORS-03 — a que quase ninguém roda"
-"${CURL[@]}" "$BASE$LEI" -H 'Origin: https://malicioso.example' | cab 'access-control|vary'
-echo "   → se a origem foi ecoada, é reflexo cego (HTTP-CORS-01)"
-echo "   → sem Vary: Origin, o cache serve a resposta de uma origem para outra (HTTP-CORS-03)"
+titulo "S7. REFUSED origin" "HTTP-CORS-01, HTTP-CORS-03 — the one almost nobody runs"
+"${CURL[@]}" "$BASE$LEI" -H 'Origin: https://malicious.example' | cab 'access-control|vary'
+echo "   -> if the origin was echoed, it is blind reflection (HTTP-CORS-01)"
+echo "   -> without Vary: Origin, the cache serves one origin's response to another (HTTP-CORS-03)"
 
-titulo "S8. Corpo de erro" "HTTP-SPEC-08 — um formato só na API inteira"
-for r in "$LEI/nao-existe-de-proposito"; do
+titulo "S8. Error body" "HTTP-SPEC-08 — one format across the whole API"
+for r in "$LEI/does-not-exist-on-purpose"; do
   echo "   -- $BASE$r"
   curl -sS -m 10 "$BASE$r" | head -c 300 | sed 's|^|   |'; echo
 done
 
-printf '\n\033[1m== Fim.\033[0m S5 aplicando a escrita, ou S8 com dois formatos: reporte ANTES de continuar.\n'
-printf 'Sonda que não rodou é "não verificado", nunca "sem achado".\n'
+printf '\n\033[1m== Done.\033[0m S5 applying the write, or S8 with two formats: report BEFORE going on.\n'
+printf 'A probe that did not run is "not verified", never "no finding".\n'

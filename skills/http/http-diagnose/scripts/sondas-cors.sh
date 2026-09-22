@@ -1,44 +1,45 @@
 #!/usr/bin/env bash
-# As cinco sondas de CORS e negociação. Uso: bash sondas-cors.sh <url> [origem]
+# The five CORS and negotiation probes. Usage: bash sondas-cors.sh <url> [origin]
 #
-# curl NÃO faz CORS. É por isso que ele serve: mostra o que o SERVIDOR responde,
-# sem o browser no meio — e separa "servidor não responde" de "browser bloqueou".
+# curl does NOT do CORS. That is exactly why it helps: it shows what the SERVER answers,
+# without the browser in the way — and separates "the server does not answer" from
+# "the browser blocked it".
 set -uo pipefail
 
 URL="${1:-}"; ORI="${2:-http://localhost:5173}"
-[ -z "$URL" ] && { echo "uso: bash sondas-cors.sh <url> [origem]" >&2; exit 1; }
+[ -z "$URL" ] && { echo "usage: bash sondas-cors.sh <url> [origin]" >&2; exit 1; }
 CURL=(curl -sS -i -m 10)
 titulo() { printf '\n\033[1m== %s\033[0m  %s\n' "$1" "${2:-}"; }
 
-titulo "1. O servidor responde?" "elimina o primeiro nó da árvore"
+titulo "1. Does the server answer?" "rules out the first node of the tree"
 "${CURL[@]}" "$URL" | head -1 | sed 's|^|   |'
 
-titulo "2. O preflight é tratado?" "a sonda que mais rende"
+titulo "2. Is the preflight handled?" "the probe that pays off most"
 "${CURL[@]}" -X OPTIONS "$URL" -H "Origin: $ORI" \
   -H 'Access-Control-Request-Method: POST' \
   -H 'Access-Control-Request-Headers: content-type,authorization' \
   | grep -iE '^(HTTP/|access-control)' | sed 's|^|   |'
-echo "   → 401, 404 ou 405 aqui: o problema é o PREFLIGHT, não a chamada real"
+echo "   -> a 401, 404 or 405 here: the problem is the PREFLIGHT, not the real call"
 
-titulo "3. A origem é ecoada, e há Vary?" "HTTP-CORS-03"
+titulo "3. Is the origin echoed, and is there a Vary?" "HTTP-CORS-03"
 "${CURL[@]}" "$URL" -H "Origin: $ORI" | grep -iE 'access-control|vary' | sed 's|^|   |'
 
-titulo "4. E quando a origem é RECUSADA?" "a que quase ninguém roda — pega HTTP-CORS-03"
-"${CURL[@]}" "$URL" -H 'Origin: https://malicioso.example' | grep -iE 'access-control|vary' | sed 's|^|   |'
-echo "   → origem ecoada aqui = reflexo cego (HTTP-CORS-01)"
+titulo "4. And when the origin is REFUSED?" "the one almost nobody runs — it catches HTTP-CORS-03"
+"${CURL[@]}" "$URL" -H 'Origin: https://malicious.example' | grep -iE 'access-control|vary' | sed 's|^|   |'
+echo "   -> an origin echoed here = blind reflection (HTTP-CORS-01)"
 
 titulo "5. Charset" "HTTP-CORE-03 / HTTP-NEG-*"
 "${CURL[@]}" "$URL" | grep -i 'content-type' | sed 's|^|   |'
-echo "   → text/* sem charset é acento quebrado esperando acontecer"
+echo "   -> text/* without charset is a broken accent waiting to happen"
 
 cat <<'FIM'
 
-Leitura:
-  1 falha ................. não é CORS: o servidor não responde
-  2 devolve 401/404/405 ... o preflight não é tratado (HTTP-CORS-05/-06)
-  3 sem access-control .... a origem não está permitida
-  4 com access-control .... reflexo cego: qualquer origem passa (HTTP-CORS-01)
-  3/4 sem Vary: Origin .... o cache mistura respostas entre origens (HTTP-CORS-03)
+Reading it:
+  1 fails ................. it is not CORS: the server does not answer
+  2 returns 401/404/405 ... the preflight is not handled (HTTP-CORS-05/-06)
+  3 no access-control ..... the origin is not allowed
+  4 with access-control ... blind reflection: any origin gets through (HTTP-CORS-01)
+  3/4 without Vary: Origin  the cache mixes responses across origins (HTTP-CORS-03)
 
-E o que NUNCA é a resposta: mexer no cliente. CORS é decisão do SERVIDOR.
+And what is NEVER the answer: touching the client. CORS is the SERVER's decision.
 FIM
