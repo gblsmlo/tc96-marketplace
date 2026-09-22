@@ -73,8 +73,8 @@ Isto já está registrado no vault, com o exemplo completo, em — e é o ponto 
 | segurança de sessão e autorização | `OWASP - Sessão e Autorização`, `RFC 8725 - JWT Best Current Practices`, `NIST RBAC - ANSI INCITS 359` |
 | segurança de fronteira HTTP | `HTTP - CORS`, `RFC 6265 - Cookies HTTP` |
 | acessibilidade (componente) | [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) |
-| acessibilidade (página) | `Playwright - Snapshots e Visual` § 5 |
-| compatibilidade de browser | projects — `Playwright - Configuração e Projects` § 3.1 |
+| acessibilidade (página) | [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) § 5 |
+| compatibilidade de browser | projects — [Playwright - Configuração e Projects](playwright-configuracao-e-projects.md) § 3.1 |
 | performance de query | `Drizzle - Queries e Relations`, `PostgreSQL` |
 | cache e condicional HTTP | `HTTP - Cache e Requisições Condicionais` |
 
@@ -217,7 +217,7 @@ Rodar a carga esperada e concluir que o sistema "aguenta estresse". Estresse é 
 - [Teste de Software - Processo e Artefatos](teste-de-software-processo-e-artefatos.md) — critério de aceite e de saída
 - — o critério numérico, com exemplo completo
 - `OWASP - Sessão e Autorização` · `HTTP - CORS` · `RFC 6265 - Cookies HTTP` — o atributo segurança
-- [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) · `Playwright - Snapshots e Visual` — o atributo acessibilidade
+- [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) · [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) — o atributo acessibilidade
 - `TypeScript` · `Zod - Validação de Ambiente` · — a camada estática e a fronteira
 - `PostgreSQL` · `Drizzle - Queries e Relations` — performance de dado
 - — os cinco estados de um fluxo

@@ -34,9 +34,9 @@ rápido lá, e o toast de 3 s ainda está na tela.
 
 ```
 $ bash scripts/isolar.sh e2e/checkout.spec.ts:52 20
-== 1. É intermitente?  20 execuções     → FALHOU
-== 2. Estado compartilhado?  --workers=1 → passou
-== 3. Dependência de outro teste?        → passou
+== 1. É intermitente? 20 execuções → FALHOU
+== 2. Estado compartilhado? --workers=1 → passou
+== 3. Dependência de outro teste? → passou
 ```
 
 O item 2 passar **não** significa que a causa é paralelismo: significa que em série o timing
@@ -48,12 +48,12 @@ muda. `--workers=1` diagnostica, não conserta.
 `PW-ACT-01` — e2e/checkout.spec.ts:52
 Sintoma: falha ~1 em 4 execuções em CI, sempre no clique em "Confirmar"; passa local.
 Evidência: trace, aba Log da ação click — "element intercepts pointer events";
-  Snapshot Before mostra o toast de "item adicionado" ainda na tela, sobre o botão.
+ Snapshot Before mostra o toast de "item adicionado" ainda na tela, sobre o botão.
 Causa: o toast tem 3 s de duração e cobre o botão; em CI o passo anterior termina mais rápido.
 Correção: NÃO usar force: true. Aguardar o toast sair antes de clicar —
-  await expect(page.getByRole('status')).toBeHidden() — ou corrigir o z-index/posição do toast,
-  que é o defeito real: o usuário também não consegue clicar.
-Ver [[Playwright - Ações e Auto-waiting]].
+ await expect(page.getByRole('status')).toBeHidden — ou corrigir o z-index/posição do toast,
+ que é o defeito real: o usuário também não consegue clicar.
+Ver Playwright - Ações e Auto-waiting.
 ```
 
 ## O que este exemplo demonstra

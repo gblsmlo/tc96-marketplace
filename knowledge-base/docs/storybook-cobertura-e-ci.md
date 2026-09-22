@@ -207,7 +207,7 @@ A opção 1 é a que a própria divisão de responsabilidade da § 3.3 já suger
 
 ### 3.5 O que fica fora do alcance do `--filter` do Bun
 
-Já registrado em [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) § 4.5 e vale relembrar no contexto de CI: o addon-vitest **exige Vitest** e não roda sob `bun test` (`SB-TEST-05`). O monorepo fica com runners separados por desenho, e o CI precisa invocar cada um — ver `Monorepo com Bun - estrutura e tooling` § 4. Com Playwright na conta, são três (`Playwright` § 8).
+Já registrado em [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) § 4.5 e vale relembrar no contexto de CI: o addon-vitest **exige Vitest** e não roda sob `bun test` (`SB-TEST-05`). O monorepo fica com runners separados por desenho, e o CI precisa invocar cada um — ver `Monorepo com Bun - estrutura e tooling` § 4. Com Playwright na conta, são três ([Playwright](playwright.md) § 8).
 
 ---
 
@@ -288,8 +288,8 @@ Os testes rodam e o status check aponta uma falha sem link para a story. Funcion
 - [Teste de Software](teste-de-software.md) — por que cobertura não é meta (`TS-CORE-05`)
 - [Teste de Software - Confiabilidade da Suíte](teste-de-software-confiabilidade-da-suite.md) — cobertura × mutação, e o teste de trinta segundos
 - [Teste de Software - Técnicas de Design de Caso](teste-de-software-tecnicas-de-design-de-caso.md) — o uso legítimo de cobertura
-- `Playwright` — o terceiro runner do monorepo, e a mesma exigência de binário em CI
-- `Playwright - Execução, Retries e CI` — o pipeline do lado do E2E
+- [Playwright](playwright.md) — o terceiro runner do monorepo, e a mesma exigência de binário em CI
+- [Playwright - Execução, Retries e CI](playwright-execucao-retries-e-ci.md) — o pipeline do lado do E2E
 - `Bun - Testes - Cobertura e CI` — o equivalente sob `bun test`, com os dois portões silenciosos
 - `Monorepo com Bun - estrutura e tooling` — por que os runners são separados
 - `Github Actions` ·

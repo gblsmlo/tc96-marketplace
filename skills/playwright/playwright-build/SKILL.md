@@ -1,20 +1,25 @@
 ---
-name: playwright-build
-description: Escrever teste E2E novo com Playwright — locator na ordem de prioridade, asserção web-first, estrutura, e autoverificação executável de 12 itens antes de entregar, citando IDs `PW-*` da doc do vault — use quando a tarefa for escrever ou editar um `*.spec.ts`, cobrir uma jornada de usuário, montar page object ou fixture, preparar estado por API, ou substituir rede, relógio e sessão num teste. Não use para revisar suíte existente, que é playwright-review, para diagnosticar teste que já falha, que é playwright-diagnose, nem para decidir se o teste deveria ser E2E — essa decisão vem antes, em teste-design.
+nome: playwright-build
+descricao: Escrever teste E2E novo com Playwright — locator na ordem de prioridade, asserção web-first, estrutura, e autoverificação executável de 12 itens antes de entregar, citando IDs `PW-*` da doc do vault — use quando a tarefa for escrever ou editar um `*.spec.ts`, cobrir uma jornada de usuário, montar page object ou fixture, preparar estado por API, ou substituir rede, relógio e sessão num teste. Não use para revisar suíte existente, que é playwright-review, para diagnosticar teste que já falha, que é playwright-diagnose, nem para decidir se o teste deveria ser E2E — essa decisão vem antes, em teste-design.
+tipo: skill
+familia: playwright
+fonte: "[Playwright - Locators](../../../knowledge-base/docs/playwright-locators.md)"
+docs:
+  - /microsoft/playwright
 tags:
   - skill
   - playwright
   - testing
   - e2e
-fonte: "[[Playwright - Locators]]"
 ---
 
 # playwright-build
 
-> **Fonte desta skill:** [[Playwright - Locators]] e [[Playwright - Assertions]], com o hub [[Playwright]] como roteador. As 85 regras da família `PW-*` moram na § 6 do hub, com o corpo completo no satélite dono de cada ID.
+> **Fonte desta skill:** [Playwright - Locators](../../../knowledge-base/docs/playwright-locators.md) e [Playwright - Assertions](../../../knowledge-base/docs/playwright-assertions.md), com o hub [Playwright](../../../knowledge-base/docs/playwright.md) como roteador. As 85 regras da família `PW-*` moram na § 6 do hub, com o corpo completo no satélite dono de cada ID.
 > Esta skill **não contém** o texto das regras — ela diz o que carregar, em que ordem decidir e o que conferir antes de entregar.
+> **Superfície de API:** resolva pelo Context7 — `/microsoft/playwright`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
-Contrato que esta skill implementa: [[Playwright]] § 7 ("Contrato de skill").
+Contrato que esta skill implementa: [Playwright](../../../knowledge-base/docs/playwright.md) § 7 ("Contrato de skill").
 Estrutura verificada contra playwright.dev em **2026-08-20**, sobre `@playwright/test` 1.62.1.
 
 ---
@@ -25,12 +30,12 @@ Escrever ou editar teste que **vai existir**: um `*.spec.ts` novo, um caso a mai
 
 | Situação | Vá para |
 | --- | --- |
-| revisar suíte que já existe | [[playwright-review]] |
-| teste que falha, ou falha às vezes | [[playwright-diagnose]] — **leia o trace antes de editar** |
-| decidir **se** isto deveria ser E2E | [[teste-design]] — e a resposta costuma ser "não" |
-| teste de unidade ou integração sob Bun | [[bun-test-build]] |
-| estado visual de um componente | [[storybook-story]] · [[storybook-test]] |
-| ligar agentes de teste no repositório | [[Playwright - Agents, CLI e MCP]] |
+| revisar suíte que já existe | `playwright-review` |
+| teste que falha, ou falha às vezes | `playwright-diagnose` — **leia o trace antes de editar** |
+| decidir **se** isto deveria ser E2E | `teste-design` — e a resposta costuma ser "não" |
+| teste de unidade ou integração sob Bun | `bun-test-build` |
+| estado visual de um componente | `storybook-story` · `storybook-test` |
+| ligar agentes de teste no repositório | [Playwright - Agents, CLI e MCP](../../../knowledge-base/docs/playwright-agents-cli-e-mcp.md) |
 
 **O corte que esta skill aplica antes de qualquer coisa:** se o que pode dar errado é uma **regra de negócio**, o teste não é E2E (`TS-CORE-02`). E2E cobre jornada crítica; regra vai para a camada mais barata.
 
@@ -40,11 +45,11 @@ Escrever ou editar teste que **vai existir**: um `*.spec.ts` novo, um caso a mai
 
 | Ordem | Carregar | Por quê |
 | --- | --- | --- |
-| 1 | [[Playwright]] § 0 | o piso de Node e a tabela de timeouts — `actionTimeout` é `0`, não 30 s |
-| 2 | [[Playwright]] § 2 | locator é consulta preguiçosa; a espera é da ferramenta |
-| 3 | [[Playwright]] § 6 e § 6.1 | as regras invioláveis e as críticas dos satélites |
-| 4 | [[Playwright - Locators]] | nenhum teste existe sem locator |
-| 5 | [[Playwright - Assertions]] | o par inseparável do passo 4 |
+| 1 | [Playwright](../../../knowledge-base/docs/playwright.md) § 0 | o piso de Node e a tabela de timeouts — `actionTimeout` é `0`, não 30 s |
+| 2 | [Playwright](../../../knowledge-base/docs/playwright.md) § 2 | locator é consulta preguiçosa; a espera é da ferramenta |
+| 3 | [Playwright](../../../knowledge-base/docs/playwright.md) § 6 e § 6.1 | as regras invioláveis e as críticas dos satélites |
+| 4 | [Playwright - Locators](../../../knowledge-base/docs/playwright-locators.md) | nenhum teste existe sem locator |
+| 5 | [Playwright - Assertions](../../../knowledge-base/docs/playwright-assertions.md) | o par inseparável do passo 4 |
 | 6 | o satélite da superfície tocada | via § 4 do hub — rede, auth, fixture, snapshot |
 
 **Nunca carregue os doze satélites.** Um teste de fluxo simples precisa de 1–5.
@@ -68,7 +73,7 @@ Referências desta skill:
 | Pergunta | Se a resposta for… |
 | --- | --- |
 | **O que pode dar errado aqui?** | não sei dizer → o teste não deveria ser escrito ainda |
-| **Isto é jornada, ou é regra?** | regra → não é E2E. Vá para [[bun-test-build]] |
+| **Isto é jornada, ou é regra?** | regra → não é E2E. Vá para `bun-test-build` |
 | **Este estado já existe, ou preciso criá-lo?** | criar → **por API**, não pela UI (`PW-NET-06`) |
 
 ---
@@ -77,7 +82,7 @@ Referências desta skill:
 
 `getByRole` → `getByLabel`/`getByPlaceholder`/`getByAltText`/`getByText` → `getByTestId` (com dívida registrada) → CSS (com justificativa).
 
-**Ambiguidade não se resolve com `.first()`** (`PW-LOC-02`): `filter({ hasText })`, container, `filter({ has })`. Se `getByRole` não alcança, o achado costuma ser sobre o **componente**.
+**Ambiguidade não se resolve com `.first`** (`PW-LOC-02`): `filter({ hasText })`, container, `filter({ has })`. Se `getByRole` não alcança, o achado costuma ser sobre o **componente**.
 
 Detalhe: `references/locator-e-assercao.md`.
 
@@ -108,7 +113,7 @@ Page object para sequência de ações; fixture para setup com ciclo de vida; se
 ## Passo 6 — Autoverificar antes de entregar
 
 ```bash
-bash ~/.claude/skills/playwright-build/scripts/autoverificar.sh e2e/pedidos.spec.ts
+bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-build/scripts/autoverificar.sh e2e/pedidos.spec.ts
 ```
 
 Doze itens, mais as três que valem mais: **quebrar o código de propósito** e ver o teste ficar vermelho (`TS-TEC-08`), `--repeat-each=5`, e rodar a suíte inteira.
@@ -120,7 +125,7 @@ Doze itens, mais as três que valem mais: **quebrar o código de propósito** e 
 1. **`--repeat-each=5`** no arquivo novo. Verde cinco vezes, não uma.
 2. **A suíte inteira ainda passa** — teste novo que suja estado quebra o vizinho.
 3. **Se precisou de `getByTestId` ou CSS**, registre a dívida (`PW-LOC-04`).
-4. **Se ficou lento ou frágil**, a pergunta é de nível — [[teste-design]].
+4. **Se ficou lento ou frágil**, a pergunta é de nível — `teste-design`.
 5. **Declare o que não cobriu** (`TS-TIPO-02`).
 
 ---
@@ -135,9 +140,9 @@ Caso completo: `references/exemplo-pedido-na-lista.md`.
 
 ## Relacionados
 
-- [[Playwright - Locators]] — fonte desta skill
-- [[Playwright - Assertions]] — a segunda fonte, inseparável da primeira
-- [[Playwright]] — o hub: § 0, § 2, § 5, § 6, § 7
-- [[playwright-review]] · [[playwright-diagnose]] — as skills irmãs
-- [[teste-design]] — decide **se** o teste é E2E, antes desta skill começar
-- [[bun-test-build]] · [[storybook-test]] — os outros níveis
+- [Playwright - Locators](../../../knowledge-base/docs/playwright-locators.md) — fonte desta skill
+- [Playwright - Assertions](../../../knowledge-base/docs/playwright-assertions.md) — a segunda fonte, inseparável da primeira
+- [Playwright](../../../knowledge-base/docs/playwright.md) — o hub: § 0, § 2, § 5, § 6, § 7
+- `playwright-review` · `playwright-diagnose` — as skills irmãs
+- `teste-design` — decide **se** o teste é E2E, antes desta skill começar
+- `bun-test-build` · `storybook-test` — os outros níveis

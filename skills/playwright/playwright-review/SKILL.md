@@ -1,20 +1,25 @@
 ---
-name: playwright-review
-description: Auditar uma suíte Playwright existente com oito sondas executáveis antes de ler código, varredura em onze níveis por frequência de defeito, checklist extra para teste gerado por agente, e achados com ID `PW-*` — use quando a tarefa for revisar a suíte E2E de um repositório ou de um PR, caçar asserção que não afirma nada, espera por tempo, locator frágil, sessão versionada, `test.only` sem portão, trace desligado ou shard mal configurado. Não use para escrever teste novo, que é playwright-build, para diagnosticar uma falha concreta, que é playwright-diagnose, nem para auditar a forma da suíte entre níveis, que é teste-review.
+nome: playwright-review
+descricao: Auditar uma suíte Playwright existente com oito sondas executáveis antes de ler código, varredura em onze níveis por frequência de defeito, checklist extra para teste gerado por agente, e achados com ID `PW-*` — use quando a tarefa for revisar a suíte E2E de um repositório ou de um PR, caçar asserção que não afirma nada, espera por tempo, locator frágil, sessão versionada, `test.only` sem portão, trace desligado ou shard mal configurado. Não use para escrever teste novo, que é playwright-build, para diagnosticar uma falha concreta, que é playwright-diagnose, nem para auditar a forma da suíte entre níveis, que é teste-review.
+tipo: skill
+familia: playwright
+fonte: "[Playwright](../../../knowledge-base/docs/playwright.md)"
+docs:
+  - /microsoft/playwright
 tags:
   - skill
   - playwright
   - testing
   - code-review
-fonte: "[[Playwright]]"
 ---
 
 # playwright-review
 
-> **Fonte desta skill:** [[Playwright]] — a § 6 normativa (85 regras), a § 6.1 com as críticas dos satélites, e a § 6.2 com os IDs canônicos. O corpo de cada família vive no satélite dono do ID.
+> **Fonte desta skill:** [Playwright](../../../knowledge-base/docs/playwright.md) — a § 6 normativa (85 regras), a § 6.1 com as críticas dos satélites, e a § 6.2 com os IDs canônicos. O corpo de cada família vive no satélite dono do ID.
 > Esta skill **não contém** o texto das regras — ela diz o que executar, em que ordem varrer, como classificar e como reportar.
+> **Superfície de API:** resolva pelo Context7 — `/microsoft/playwright`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
-Contrato que esta skill implementa: [[Playwright]] § 7 ("Contrato de skill").
+Contrato que esta skill implementa: [Playwright](../../../knowledge-base/docs/playwright.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -24,11 +29,11 @@ Auditar uma suíte E2E que **já existe**: o repositório inteiro, um diretório
 
 | Situação | Vá para |
 | --- | --- |
-| escrever ou reescrever teste | [[playwright-build]] |
-| uma falha concreta, ou flake com trace disponível | [[playwright-diagnose]] |
-| a **forma** da suíte entre níveis (E2E × unidade × componente) | [[teste-review]] |
-| suíte instável como sistema, taxa de flakiness | [[teste-diagnose]] |
-| revisar teste sob `bun test` | [[bun-test-review]] |
+| escrever ou reescrever teste | `playwright-build` |
+| uma falha concreta, ou flake com trace disponível | `playwright-diagnose` |
+| a **forma** da suíte entre níveis (E2E × unidade × componente) | `teste-review` |
+| suíte instável como sistema, taxa de flakiness | `teste-diagnose` |
+| revisar teste sob `bun test` | `bun-test-review` |
 
 ---
 
@@ -36,8 +41,8 @@ Auditar uma suíte E2E que **já existe**: o repositório inteiro, um diretório
 
 | Ordem | Carregar | Por quê |
 | --- | --- | --- |
-| 1 | [[Playwright]] § 0 | piso de Node e a tabela de timeouts |
-| 2 | [[Playwright]] § 6 e § 6.1 | as regras invioláveis e as críticas |
+| 1 | [Playwright](../../../knowledge-base/docs/playwright.md) § 0 | piso de Node e a tabela de timeouts |
+| 2 | [Playwright](../../../knowledge-base/docs/playwright.md) § 6 e § 6.1 | as regras invioláveis e as críticas |
 | 3 | `references/mapa-de-ids.md` | **obrigatório antes de citar** — dois IDs são apelidos |
 | 4 | o satélite do achado | via § 4 do hub |
 
@@ -61,7 +66,7 @@ Referências desta skill:
 ## Passo 1 — Sondar antes de ler
 
 ```bash
-bash ~/.claude/skills/playwright-review/scripts/sondas.sh e2e
+bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-review/scripts/sondas.sh e2e
 ```
 
 **Três paradas obrigatórias:**
@@ -90,7 +95,7 @@ Se a suíte tem testes de agente, aplique **também** a checklist extra — o it
 
 Para sonda, **a evidência é a saída do comando** — cole-a, incluindo o exit code quando ele for o achado.
 
-**Três coisas não são achado:** ausência de teste, `getByTestId` com dívida registrada, e escolha de proporção da suíte (essa é `TS-CORE-02`, em [[teste-review]]).
+**Três coisas não são achado:** ausência de teste, `getByTestId` com dívida registrada, e escolha de proporção da suíte (essa é `TS-CORE-02`, em `teste-review`).
 
 ---
 
@@ -101,7 +106,7 @@ Para sonda, **a evidência é a saída do comando** — cole-a, incluindo o exit
 3. **Ordene por severidade**, não por arquivo.
 4. **Credencial exposta vai separada e primeiro.**
 5. **Declare o que não foi verificado.**
-6. **Se a correção for escrever teste**, a fonte passa a ser [[playwright-build]].
+6. **Se a correção for escrever teste**, a fonte passa a ser `playwright-build`.
 
 ---
 
@@ -115,8 +120,8 @@ Auditoria completa: `references/exemplo-auditoria.md`.
 
 ## Relacionados
 
-- [[Playwright]] — fonte desta skill: § 6, § 6.1, § 6.2, § 7
-- [[playwright-build]] · [[playwright-diagnose]] — as skills irmãs
-- [[teste-review]] — audita a **forma** entre níveis; esta audita os **testes**
-- [[bun-test-review]] — a auditoria equivalente sob Bun
-- [[react-review]] · [[drizzle-review]] — de onde vem o formato de achado
+- [Playwright](../../../knowledge-base/docs/playwright.md) — fonte desta skill: § 6, § 6.1, § 6.2, § 7
+- `playwright-build` · `playwright-diagnose` — as skills irmãs
+- `teste-review` — audita a **forma** entre níveis; esta audita os **testes**
+- `bun-test-review` — a auditoria equivalente sob Bun
+- `react-review` · `drizzle-review` — de onde vem o formato de achado

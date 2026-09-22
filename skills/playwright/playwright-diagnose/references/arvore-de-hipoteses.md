@@ -1,6 +1,6 @@
 # A árvore, e a bissecção
 
-> Passos 3 e 4. A árvore completa é a § 5.2 do hub [[Playwright]] — a mais detalhada do vault.
+> Passos 3 e 4. A árvore completa é a § 5.2 do hub [Playwright](../../../../knowledge-base/docs/playwright.md) — a mais detalhada do vault.
 
 ---
 
@@ -28,7 +28,7 @@ defeito diagnosticável em custo permanente de CI.
 Script: `scripts/isolar.sh <arquivo[:linha]> [repeticoes]`.
 
 ```bash
-bash ~/.claude/skills/playwright-diagnose/scripts/isolar.sh e2e/checkout.spec.ts:52 20
+bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-diagnose/scripts/isolar.sh e2e/checkout.spec.ts:52 20
 ```
 
 | Comando | Se o comportamento mudar, a causa é |
@@ -49,6 +49,6 @@ bash ~/.claude/skills/playwright-diagnose/scripts/isolar.sh e2e/checkout.spec.ts
 
 ## Relacionados
 
-- [[Playwright]] § 5.2 — a árvore completa
+- [Playwright](../../../../knowledge-base/docs/playwright.md) § 5.2 — a árvore completa
 - `falha-so-em-ci.md` — a ramificação 6
 - `conserto-x-anestesico.md` — o que **não** propor

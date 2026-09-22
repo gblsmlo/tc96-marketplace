@@ -17,7 +17,7 @@ Fazem o vermelho desaparecer sem resolver nada. Se você está propondo um deles
 | remover a asserção que falha | exatamente o que o teste verificava | `PW-AGT-05` |
 
 O último é o mais grave, e é o que um healer automático faz quando não tem a intenção
-declarada — [[Playwright - Agents, CLI e MCP]] § 2.5.
+declarada — [Playwright - Agents, CLI e MCP](../../../../knowledge-base/docs/playwright-agents-cli-e-mcp.md) § 2.5.
 
 ---
 
@@ -31,19 +31,19 @@ Sintoma: <como a falha se apresenta, e em que condição>
 Evidência: <o que o trace mostra — a aba e a mensagem>
 Causa: <uma frase>
 Correção: <mudança concreta>
-Ver [[Satélite correspondente]].
+Ver Satélite correspondente.
 ```
 
 ```
 `PW-ACT-01` — e2e/checkout.spec.ts:52
 Sintoma: falha ~1 em 4 execuções em CI, sempre no clique em "Confirmar"; passa local.
 Evidência: trace, aba Log da ação click — "element intercepts pointer events";
-  Snapshot Before mostra o toast de "item adicionado" ainda na tela, sobre o botão.
+ Snapshot Before mostra o toast de "item adicionado" ainda na tela, sobre o botão.
 Causa: o toast tem 3 s de duração e cobre o botão; em CI o passo anterior termina mais rápido.
 Correção: NÃO usar force: true. Aguardar o toast sair antes de clicar —
-  await expect(page.getByRole('status')).toBeHidden() — ou corrigir o z-index/posição do toast,
-  que é o defeito real: o usuário também não consegue clicar.
-Ver [[Playwright - Ações e Auto-waiting]].
+ await expect(page.getByRole('status')).toBeHidden — ou corrigir o z-index/posição do toast,
+ que é o defeito real: o usuário também não consegue clicar.
+Ver Playwright - Ações e Auto-waiting.
 ```
 
 Regras do formato:
@@ -51,7 +51,7 @@ Regras do formato:
 - **ID conferido em `mapa-de-ids.md`**, nunca apelido.
 - **Evidência do trace, com a aba.** "Parece timing" não é evidência.
 - **Correção que ataca a causa.** Se a causa é defeito de produto, a correção é no produto —
-  dizer isso explicitamente é o valor principal desta skill.
+ dizer isso explicitamente é o valor principal desta skill.
 
 ---
 

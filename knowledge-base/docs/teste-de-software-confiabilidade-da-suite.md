@@ -57,7 +57,7 @@ As causas, em ordem de frequência:
 
 **A causa nº 1 é sempre a mesma, em qualquer ferramenta:** esperar tempo em vez de esperar condição. `sleep`, `waitForTimeout`, `setTimeout` no teste. Ela é simultaneamente lenta quando a máquina está rápida e insuficiente quando está lenta — o pior de dois mundos, por construção.
 
-As formas concretas por ferramenta: `Playwright` § 5.2 (a árvore mais detalhada do vault sobre isto) e `Bun - Testes - Ciclo de Vida e Isolamento`.
+As formas concretas por ferramenta: [Playwright](playwright.md) § 5.2 (a árvore mais detalhada do vault sobre isto) e `Bun - Testes - Ciclo de Vida e Isolamento`.
 
 ---
 
@@ -78,7 +78,7 @@ O que garante que a ordem não importa.
 
 **Reset no teardown, não no setup do seguinte.** Parece equivalente e não é: teardown roda mesmo quando o teste falha, e mantém a limpeza como responsabilidade de quem sujou. Limpeza no setup do próximo acopla os dois testes e vaza quando alguém roda um só.
 
-> **Ponte com o stack.** Em `Playwright` o isolamento é por `BrowserContext` e vem de graça; em `bun test` ele é responsabilidade de quem escreve (`Bun - Testes - Ciclo de Vida e Isolamento`). A diferença explica por que suíte de unidade costuma ter *mais* problema de isolamento que suíte E2E, o que é contraintuitivo.
+> **Ponte com o stack.** Em [Playwright](playwright.md) o isolamento é por `BrowserContext` e vem de graça; em `bun test` ele é responsabilidade de quem escreve (`Bun - Testes - Ciclo de Vida e Isolamento`). A diferença explica por que suíte de unidade costuma ter *mais* problema de isolamento que suíte E2E, o que é contraintuitivo.
 
 ---
 
@@ -166,7 +166,7 @@ Uma suíte é código, e envelhece.
 
 **Apagar teste é trabalho legítimo**, e raramente feito. Um teste que não pode falhar por nenhum defeito plausível é custo puro: ele roda, é mantido, e não informa. Os candidatos: duplicatas de nível (`TS-CORE-02`), testes de getter e construtor, testes escritos para meta de cobertura.
 
-**Retry merece parágrafo próprio.** Ele é anestésico: mascara o falso vermelho e, junto, o verdadeiro. Um teste que passa "às vezes na segunda tentativa" tem um defeito — no teste ou no produto — e o retry esconde qual (`TS-SUI-03`). O uso legítimo é absorver instabilidade **residual** de uma suíte já sã, e com trace da tentativa gravado (`Playwright - Execução, Retries e CI` § 4).
+**Retry merece parágrafo próprio.** Ele é anestésico: mascara o falso vermelho e, junto, o verdadeiro. Um teste que passa "às vezes na segunda tentativa" tem um defeito — no teste ou no produto — e o retry esconde qual (`TS-SUI-03`). O uso legítimo é absorver instabilidade **residual** de uma suíte já sã, e com trace da tentativa gravado ([Playwright - Execução, Retries e CI](playwright-execucao-retries-e-ci.md) § 4).
 
 ---
 
@@ -250,8 +250,8 @@ Teste pulado há oito meses, sem motivo escrito. Ninguém remove porque ninguém
 - [Teste de Software - Dublês de Teste](teste-de-software-dubles-de-teste.md) — relógio e aleatoriedade, onde o determinismo se compra
 - [Teste de Software - Técnicas de Design de Caso](teste-de-software-tecnicas-de-design-de-caso.md) — cobertura estrutural e mutação em detalhe
 - [Teste de Software - Processo e Artefatos](teste-de-software-processo-e-artefatos.md) — taxa de escape e taxa de flakiness
-- `Playwright` § 5.2 — a árvore de flake mais detalhada do vault
-- `Playwright - Execução, Retries e CI` — retry com trace, e por que retry não conserta
+- [Playwright](playwright.md) § 5.2 — a árvore de flake mais detalhada do vault
+- [Playwright - Execução, Retries e CI](playwright-execucao-retries-e-ci.md) — retry com trace, e por que retry não conserta
 - `Bun - Testes - Ciclo de Vida e Isolamento` — isolamento onde ele não vem de graça
 - — o que a suíte acoplada a implementação impede
 - — a origem de `TS-SUI-06`

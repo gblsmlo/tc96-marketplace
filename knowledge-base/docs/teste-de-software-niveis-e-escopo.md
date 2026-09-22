@@ -152,7 +152,7 @@ A leitura combinada: teste de nível alto verifica **integração e caminho**, n
 | caso de uso + repositório real | integração (medium) | `Bun - Testes` + Postgres local |
 | shape que atravessa a fronteira | contrato — em boa parte estático | `Hono - Validação e RPC`, `Elysia - Schema e Eden` |
 | estado visual de um componente | componente (estreito, medium) | [Storybook - Stories e Args](storybook-stories-e-args.md) |
-| jornada crítica com sessão e rota | E2E (amplo, large) | `Playwright` |
+| jornada crítica com sessão e rota | E2E (amplo, large) | [Playwright](playwright.md) |
 | tipo e uso incorreto de API | estático | `TypeScript` |
 
 ---
@@ -221,7 +221,7 @@ Sem esse nível na cabeça, todo teste de estado visual vira E2E (`TS-NIV-07`).
 - [Teste de Software - Dublês de Teste](teste-de-software-dubles-de-teste.md) — o que substituir, decidido na § 3
 - [Teste de Software - Confiabilidade da Suíte](teste-de-software-confiabilidade-da-suite.md) — por que tamanho decide determinismo
 - [Teste de Software - Tipos e Atributos de Qualidade](teste-de-software-tipos-e-atributos-de-qualidade.md) — o eixo ortogonal ao nível
-- `Bun - Testes` · [Storybook - Stories e Args](storybook-stories-e-args.md) · `Playwright` · `TypeScript`
+- `Bun - Testes` · [Storybook - Stories e Args](storybook-stories-e-args.md) · [Playwright](playwright.md) · `TypeScript`
 - `Hono - Validação e RPC` · `Elysia - Schema e Eden` — contrato como tipo
 - — a mesma decisão, com caso concreto
 - — por que a junta é onde o defeito mora

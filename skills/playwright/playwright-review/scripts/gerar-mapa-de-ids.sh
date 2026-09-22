@@ -3,12 +3,15 @@
 # Índice, não cópia: ID -> satélite -> seção. O texto da regra fica na nota.
 set -euo pipefail
 
-VAULT="${1:-$HOME/Sync/Vaults/Notes}"
-DOCS="$VAULT/Docs"
-HUB="$DOCS/Playwright.md"
+BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
+# O mapa é gerado na autoria e vai versionado no plugin: o destino é o repo,
+# a origem continua sendo o vault (passe outro caminho como $1 se preciso).
+PLUGIN="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+DOCS="$BASE/docs"
+HUB="$DOCS/playwright.md"
 
 scan() {
-  for f in "$DOCS"/Playwright*.md; do
+  for f in "$DOCS"/playwright*.md; do
     base="$(basename "$f" .md)"
     awk -v sat="$base" -v hub="Playwright" '
       /^## / { h2 = $0; sub(/^## /, "", h2) }
@@ -33,14 +36,14 @@ scan() {
 TMP="$(mktemp)"
 {
   echo "---"
-  echo "gerado-por: Skills/playwright/playwright-review/scripts/gerar-mapa-de-ids.sh"
+  echo "gerado-por: plugins/hermes-e2e/skills/playwright-review/scripts/gerar-mapa-de-ids.sh"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
   echo "# Mapa de IDs \`PW-*\`"
   echo
   echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
-  echo "> Regenerar com \`bash Skills/playwright/playwright-review/scripts/gerar-mapa-de-ids.sh\` —"
+  echo "> Regenerar com \`bash plugins/hermes-e2e/skills/playwright-review/scripts/gerar-mapa-de-ids.sh\` —"
   echo "> o mesmo arquivo é escrito nas três skills de Playwright."
   echo
   echo "## Apelidos e quase-apelidos"
@@ -55,7 +58,7 @@ TMP="$(mktemp)"
 } > "$TMP"
 
 for s in build review diagnose; do
-  cp "$TMP" "$VAULT/Skills/playwright/playwright-$s/references/mapa-de-ids.md"
+  cp "$TMP" "$PLUGIN/skills/playwright-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 3 skills ($(grep -c '^| `PW' "$VAULT/Skills/playwright/playwright-build/references/mapa-de-ids.md") IDs)"
+echo "gerado nas 3 skills ($(grep -c '^| `PW' "$PLUGIN/skills/playwright-build/references/mapa-de-ids.md") IDs)"

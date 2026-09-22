@@ -131,7 +131,7 @@ A fonte descreve os estados e **não** descreve o que um relatório deve conter.
 | **severidade** e **prioridade** | dois campos, § 5 |
 | **evidência** | trace, log, screenshot, vídeo |
 
-No stack, a evidência mais valiosa é o **trace** do Playwright: ele carrega DOM, rede, console e a linha de código de uma vez (`Playwright - Debug e Trace`). Anexar o trace ao ticket substitui meia página de descrição.
+No stack, a evidência mais valiosa é o **trace** do Playwright: ele carrega DOM, rede, console e a linha de código de uma vez ([Playwright - Debug e Trace](playwright-debug-e-trace.md)). Anexar o trace ao ticket substitui meia página de descrição.
 
 ---
 
@@ -243,7 +243,7 @@ O outro extremo do erro. Num time que entrega continuamente, produzir plano de t
 - [Teste de Software - Confiabilidade da Suíte](teste-de-software-confiabilidade-da-suite.md) — a taxa de flakiness da § 6
 - · — a mesma matéria pelo lado da gestão
 - — causa raiz do defeito reaberto
-- `Playwright - Debug e Trace` — o trace como evidência anexável
+- [Playwright - Debug e Trace](playwright-debug-e-trace.md) — o trace como evidência anexável
 - `Github Actions` · — os portões executáveis
 - `Pull Request` · `Pull Request Template` — onde o critério de saída vive num repositório
 -

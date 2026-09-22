@@ -15,7 +15,7 @@ verificado-em: 2026-08-20
 >
 > **O que não é.** Não é documentação de ferramenta. Nenhum exemplo aqui é específico de runner. Quando a pergunta for "como escrevo isso", a resposta está numa das notas de ferramenta da § 3 — e esta nota existe para você chegar lá tendo decidido **o quê** e **em que nível**.
 >
-> **Por que ela existe.** O vault tinha três estruturas de ferramenta de teste (`Bun - Testes`, [Storybook - Testes e Interações](storybook-testes-e-interacoes.md), `Playwright`) e nenhuma camada que decidisse entre elas. O resultado previsível é o que a economia da pirâmide descreve: asserção caindo na camada mais cara que a comporta, em vez da mais barata que ainda pega o defeito.
+> **Por que ela existe.** O vault tinha três estruturas de ferramenta de teste (`Bun - Testes`, [Storybook - Testes e Interações](storybook-testes-e-interacoes.md), [Playwright](playwright.md)) e nenhuma camada que decidisse entre elas. O resultado previsível é o que a economia da pirâmide descreve: asserção caindo na camada mais cara que a comporta, em vez da mais barata que ainda pega o defeito.
 
 Fontes verificadas em **2026-08-20**. Ver [Fontes consultadas](#fontes-consultadas) — incluindo o que **não** foi possível verificar na fonte primária.
 
@@ -59,7 +59,7 @@ Se a pergunta é *"quantos testes eu escrevo e de que tipo"*, vá para a § 4.1.
 
 Os termos aparecem com o nome em inglês entre parênteses na primeira ocorrência, porque a literatura e as ferramentas usam o inglês e a busca precisa achar. As famílias de regra são `TS-*`.
 
-**Marcação de origem:** regra sem marca vem de afirmação explícita de uma das fontes. Regra marcada **†** é decisão desta doc — coerente com as fontes, mas não ditada por elas. Mesma convenção de [Storybook](storybook.md) e `Playwright`.
+**Marcação de origem:** regra sem marca vem de afirmação explícita de uma das fontes. Regra marcada **†** é decisão desta doc — coerente com as fontes, mas não ditada por elas. Mesma convenção de [Storybook](storybook.md) e [Playwright](playwright.md).
 
 ---
 
@@ -91,13 +91,13 @@ Esta nota decide o nível. A partir daí, o "como" está aqui — e este mapa é
 | --- | --- | --- |
 | unidade e integração (Node/Bun, backend, funções puras) | `bun test` | `Bun - Testes` |
 | componente isolado, estados de UI, a11y de componente | Storybook + addon-vitest | [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) |
-| jornada de usuário atravessando rota, rede e sessão | Playwright | `Playwright` |
+| jornada de usuário atravessando rota, rede e sessão | Playwright | [Playwright](playwright.md) |
 | contrato entre cliente tipado e servidor | tipo exportado do servidor | `Hono - Validação e RPC`, `Elysia - Schema e Eden` |
 | validação de entrada em runtime | Zod / TypeBox | `Zod - Validação de Ambiente`, `Elysia - Schema e Eden` |
 | estático (tipo e lint) | TypeScript + Biome | `TypeScript` |
 | persistência e migração | Drizzle + Postgres local | `Drizzle - Schema e Migrations` |
 
-**A fronteira componente × jornada** é a que mais gera indecisão, e o critério é curto: se o teste precisa de **rota, login ou mais de uma tela**, é Playwright; se ele varia **props de um componente**, é story. A `Playwright` § 8 registra ainda que o component testing do Playwright (não-experimental desde a 1.62) cria uma sobreposição nova com Storybook, e a decisão deste vault é não migrar o que já funciona.
+**A fronteira componente × jornada** é a que mais gera indecisão, e o critério é curto: se o teste precisa de **rota, login ou mais de uma tela**, é Playwright; se ele varia **props de um componente**, é story. A [Playwright](playwright.md) § 8 registra ainda que o component testing do Playwright (não-experimental desde a 1.62) cria uma sobreposição nova com Storybook, e a decisão deste vault é não migrar o que já funciona.
 
 ---
 
@@ -202,7 +202,7 @@ O gatilho de maior retorno da lista é o quarto: **teste que nasce de defeito re
 
 2. Quando falha, dá para saber o motivo em menos de um minuto?
  → não: diagnóstico ruim. Nome de teste, granularidade, ou instrumentação
- (trace, step) — `Playwright - Debug e Trace`
+ (trace, step) — [Playwright - Debug e Trace](playwright-debug-e-trace.md)
 
 3. Quebrando o código de propósito, algo fica vermelho?
  → não: asserção fraca ou dublê no lugar errado (TS-CORE-03)
@@ -356,13 +356,13 @@ NUNCA: esta estrutura inteira para uma tarefa de escrever um teste
 | --- | --- | --- |
 | Verificar regra de negócio | escrever E2E | unidade em `Bun - Testes` (`TS-CORE-02`) |
 | Verificar estado visual de componente | E2E que navega até a tela | story em [Storybook - Stories e Args](storybook-stories-e-args.md) |
-| Verificar jornada crítica | teste de unidade que simula a jornada | `Playwright` |
+| Verificar jornada crítica | teste de unidade que simula a jornada | [Playwright](playwright.md) |
 | Verificar o contrato com o BFF | redigitar o shape no mock | reusar o tipo do servidor — `Hono - Validação e RPC`, `Elysia - Schema e Eden` |
 | Verificar entrada inválida | só o caminho feliz | valor limite + Zod na fronteira — [Teste de Software - Técnicas de Design de Caso](teste-de-software-tecnicas-de-design-de-caso.md) |
-| Preparar estado para um teste de UI | criar pela interface | criar por API — `Playwright - Rede e Mocking` § 5 |
+| Preparar estado para um teste de UI | criar pela interface | criar por API — [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 5 |
 | Isolar dado entre execuções paralelas | um banco compartilhado | schema/banco efêmero por worker — `Drizzle - Schema e Migrations` |
-| Testar expiração e "há 3 dias" | esperar o tempo passar | relógio controlado (`TS-DUB-05`) — `Playwright - Rede e Mocking` § 7, `Bun - Testes - Mocks e Tempo` |
-| Testar autorização por papel | um usuário com tudo liberado | um estado por papel — `Playwright - Autenticação e Isolamento`, e o critério de achado em `OWASP - Sessão e Autorização` |
+| Testar expiração e "há 3 dias" | esperar o tempo passar | relógio controlado (`TS-DUB-05`) — [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 7, `Bun - Testes - Mocks e Tempo` |
+| Testar autorização por papel | um usuário com tudo liberado | um estado por papel — [Playwright - Autenticação e Isolamento](playwright-autenticacao-e-isolamento.md), e o critério de achado em `OWASP - Sessão e Autorização` |
 | Garantir contrato de status e cache | afirmar `200` sempre | `HTTP - Status e Redirecionamento`, `HTTP - Cache e Requisições Condicionais` |
 | Portão de qualidade no PR | revisão manual como único portão | política + CI — `Github Actions` |
 | "melhorar a qualidade" | mais teste, sem dizer qual problema | decidir se é QA (processo) ou QC (entregável) — |
@@ -383,7 +383,7 @@ NUNCA: esta estrutura inteira para uma tarefa de escrever um teste
 - — TDD e integração contínua como prática
 - — o que a suíte existe para viabilizar
 - · ·
-- **Ferramentas:** `Bun - Testes` · [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) · `Playwright` · `TypeScript`
+- **Ferramentas:** `Bun - Testes` · [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) · [Playwright](playwright.md) · `TypeScript`
 - `Github Actions` · · `Trunk-based development`
 - — causa raiz de defeito recorrente
 -

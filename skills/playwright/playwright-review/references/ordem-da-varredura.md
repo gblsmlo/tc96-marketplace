@@ -48,4 +48,4 @@ acessível ao componente (`PW-LOC-01`).
 
 - `sondas.md` — o que rodar antes
 - `antipadroes.md` — a grade completa, com satélite por ID
-- [[Playwright - Agents, CLI e MCP]] § 2.5 — specs versionadas
+- [Playwright - Agents, CLI e MCP](../../../../knowledge-base/docs/playwright-agents-cli-e-mcp.md) § 2.5 — specs versionadas

@@ -30,6 +30,7 @@ skills/<familia>/
 | **tanstack** | `tanstack-query` · `tanstack-router` | [tanstack/](tanstack/README.md) |
 | **storybook** | `storybook-setup` · `storybook-story` · `storybook-test` | [storybook/](storybook/README.md) |
 | **test** | `teste-design` · `teste-review` · `teste-diagnose` | [test/](test/README.md) |
+| **playwright** | `playwright-build` · `playwright-review` · `playwright-diagnose` | [playwright/](playwright/README.md) |
 
 ## Ainda no formato antigo
 
@@ -39,7 +40,6 @@ Estas famílias seguem com o frontmatter do Claude Code (`name:`/`description:`)
 
 | Família | Skills | Agente que as carrega |
 | --- | --- | --- |
-| **playwright** | `playwright-build` · `playwright-review` · `playwright-diagnose` | `qa-engineer` |
 | **http** | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | `backend-developer` |
 | **bun** | `bun-runtime` · `bun-workspace` · `bun-migrate` · `bun-test-build` · `bun-test-review` | `backend-developer` |
 | **elysia** | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `backend-developer` |

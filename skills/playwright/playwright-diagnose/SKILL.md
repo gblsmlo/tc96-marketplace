@@ -1,22 +1,27 @@
 ---
-name: playwright-diagnose
-description: Diagnosticar teste Playwright que falha ou falha de forma intermitente, lendo o trace antes de tocar no código, com bissecção executável e IDs `PW-*` — use quando a tarefa for investigar teste flaky, falha que só acontece em CI, falha que só acontece em paralelo, screenshot que difere sem motivo, ou timeout de 30 s sem causa aparente. Não use para escrever teste novo, que é playwright-build, para auditar uma suíte inteira sem falha concreta, que é playwright-review, nem para a suíte como sistema e taxa de flakiness, que é teste-diagnose.
+nome: playwright-diagnose
+descricao: Diagnosticar teste Playwright que falha ou falha de forma intermitente, lendo o trace antes de tocar no código, com bissecção executável e IDs `PW-*` — use quando a tarefa for investigar teste flaky, falha que só acontece em CI, falha que só acontece em paralelo, screenshot que difere sem motivo, ou timeout de 30 s sem causa aparente. Não use para escrever teste novo, que é playwright-build, para auditar uma suíte inteira sem falha concreta, que é playwright-review, nem para a suíte como sistema e taxa de flakiness, que é teste-diagnose.
+tipo: skill
+familia: playwright
+fonte: "[Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md)"
+docs:
+  - /microsoft/playwright
 tags:
   - skill
   - playwright
   - testing
   - flaky-tests
-fonte: "[[Playwright - Debug e Trace]]"
 ---
 
 # playwright-diagnose
 
-> **Fonte desta skill:** [[Playwright - Debug e Trace]], com a § 5.2 do hub [[Playwright]] como árvore de diagnóstico. As 85 regras da família `PW-*` moram na § 6 do hub.
+> **Fonte desta skill:** [Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md), com a § 5.2 do hub [Playwright](../../../knowledge-base/docs/playwright.md) como árvore de diagnóstico. As 85 regras da família `PW-*` moram na § 6 do hub.
 > Esta skill **não contém** o texto das regras — ela diz o que obter, em que ordem ler e como eliminar hipóteses.
+> **Superfície de API:** resolva pelo Context7 — `/microsoft/playwright`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
-Contrato que esta skill implementa: [[Playwright]] § 7 ("Contrato de skill").
+Contrato que esta skill implementa: [Playwright](../../../knowledge-base/docs/playwright.md) § 7 ("Contrato de skill").
 
-> **Nota de desenho.** Esta skill diagnostica **um teste**. Para a **suíte como sistema** — taxa de flakiness, confiança, capacidade de detectar quebra — é [[teste-diagnose]]. A diferença prática: aqui se lê um trace; lá se lê o histórico do CI. Chegar lá com um teste vermelho, ou aqui com "a suíte é flaky", é usar a ferramenta errada.
+> **Nota de desenho.** Esta skill diagnostica **um teste**. Para a **suíte como sistema** — taxa de flakiness, confiança, capacidade de detectar quebra — é `teste-diagnose`. A diferença prática: aqui se lê um trace; lá se lê o histórico do CI. Chegar lá com um teste vermelho, ou aqui com "a suíte é flaky", é usar a ferramenta errada.
 
 ---
 
@@ -26,10 +31,10 @@ Um teste concreto falha, ou falha às vezes.
 
 | Situação | Vá para |
 | --- | --- |
-| escrever ou reescrever teste | [[playwright-build]] |
-| auditar suíte sem falha concreta | [[playwright-review]] |
-| a **suíte** perdeu credibilidade; medir flakiness | [[teste-diagnose]] |
-| teste sob `bun test` que falha | [[bun-test-review]] |
+| escrever ou reescrever teste | `playwright-build` |
+| auditar suíte sem falha concreta | `playwright-review` |
+| a **suíte** perdeu credibilidade; medir flakiness | `teste-diagnose` |
+| teste sob `bun test` que falha | `bun-test-review` |
 | a falha é defeito real do produto | então **o teste funcionou** — reporte o defeito e pare |
 
 ---
@@ -38,9 +43,9 @@ Um teste concreto falha, ou falha às vezes.
 
 | Ordem | Carregar | Por quê |
 | --- | --- | --- |
-| 1 | [[Playwright]] § 0 | a tabela de timeouts — quem estourou, e qual |
-| 2 | [[Playwright]] § 5.2 | a árvore de diagnóstico |
-| 3 | [[Playwright - Debug e Trace]] § 3 | a leitura do trace em quatro passos |
+| 1 | [Playwright](../../../knowledge-base/docs/playwright.md) § 0 | a tabela de timeouts — quem estourou, e qual |
+| 2 | [Playwright](../../../knowledge-base/docs/playwright.md) § 5.2 | a árvore de diagnóstico |
+| 3 | [Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md) § 3 | a leitura do trace em quatro passos |
 | 4 | `references/mapa-de-ids.md` | antes de citar — dois IDs são apelidos |
 | 5 | o satélite da causa | só **depois** de ter a causa |
 
@@ -93,7 +98,7 @@ O passo 2 é o que nenhum `console.log` dá, e é onde a causa aparece: `element
 ## Passo 4 — Isolar por bissecção
 
 ```bash
-bash ~/.claude/skills/playwright-diagnose/scripts/isolar.sh e2e/checkout.spec.ts:52 20
+bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-diagnose/scripts/isolar.sh e2e/checkout.spec.ts:52 20
 ```
 
 `--repeat-each` confirma intermitência; `--workers=1` aponta estado compartilhado; só-o-caso aponta dependência de ordem; container do CI aponta paridade de ambiente.
@@ -141,7 +146,7 @@ Diagnóstico completo: `references/exemplo-diagnostico.md`.
 
 ## Relacionados
 
-- [[Playwright - Debug e Trace]] — fonte desta skill
-- [[Playwright]] § 5.2 — a árvore de diagnóstico
-- [[playwright-build]] · [[playwright-review]] — as skills irmãs
-- [[teste-diagnose]] — diagnostica a **suíte**; esta diagnostica **um teste**
+- [Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md) — fonte desta skill
+- [Playwright](../../../knowledge-base/docs/playwright.md) § 5.2 — a árvore de diagnóstico
+- `playwright-build` · `playwright-review` — as skills irmãs
+- `teste-diagnose` — diagnostica a **suíte**; esta diagnostica **um teste**

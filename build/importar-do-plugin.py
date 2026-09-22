@@ -33,6 +33,9 @@ FAMILIAS = {
     "test": ("hermes-core/0.1.10", ["teste-design", "teste-review", "teste-diagnose"], "teste"),
     "http": ("hermes-core/0.1.10",
              ["http-contract", "http-cache", "http-diagnose", "http-review"], "http"),
+    "playwright": ("hermes-e2e/0.1.4",
+                   ["playwright-build", "playwright-review", "playwright-diagnose"],
+                   "playwright"),
 }
 AGENTES = {"frontend-developer": "hermes-core/0.1.10"}
 

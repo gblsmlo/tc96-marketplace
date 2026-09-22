@@ -11,6 +11,11 @@ DIR="${DIR:-.}"
 RG=(rg --type-add 'rx:*.{ts,tsx,js}' -trx)
 titulo() { printf '\n\033[1m== %s\033[0m  %s\n' "$1" "${2:-}"; }
 vazio() { echo "   (nada)"; }
+ou_vazio() {  # imprime a entrada; se vier vazia, a mensagem
+  local saida; saida="$(cat)"
+  if [ -n "$saida" ]; then printf '%s
+' "$saida"; else echo "   ${1:-(nada)}"; fi
+}
 
 titulo "S1. Versão e piso de Node" "PW-CORE-01, PW-CORE-03"
 node -v 2>/dev/null | sed 's|^|   node |'
@@ -49,6 +54,6 @@ else
 fi
 
 titulo "Extra. Teste gerado por agente" "PW-AGT-04, PW-AGT-05 — specs versionadas?"
-rg --files --no-messages -g '*.md' "$DIR" 2>/dev/null | head -5 || echo "   sem spec .md ao lado dos testes: healer que apaga asserção fica indetectável"
+rg --files --no-messages -g '*.md' "$DIR" 2>/dev/null | head -5 | ou_vazio "sem spec .md ao lado dos testes: healer que apaga asserção fica indetectável"
 
 printf '\n\033[1m== Fim.\033[0m S2 com .only sem forbidOnly, ou S8 com sessão versionada: reporte ANTES de continuar.\n'

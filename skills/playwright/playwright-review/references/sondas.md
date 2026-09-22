@@ -5,7 +5,7 @@
 > ou a suíte só passa porque um `test.only` está reduzindo tudo a um caso.
 
 ```bash
-bash ~/.claude/skills/playwright-review/scripts/sondas.sh e2e
+bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-review/scripts/sondas.sh e2e
 ```
 
 | Sonda | O que mede | O que revela |
@@ -52,4 +52,4 @@ haver qualquer quantidade de asserção que não afirma nada, e nenhuma aparece 
 
 - `ordem-da-varredura.md` — o que fazer com o que as sondas apontaram
 - `severidade-e-relatorio.md` — classificar e escrever
-- [[Playwright - Configuração e Projects]] · [[Playwright - Debug e Trace]]
+- [Playwright - Configuração e Projects](../../../../knowledge-base/docs/playwright-configuracao-e-projects.md) · [Playwright - Debug e Trace](../../../../knowledge-base/docs/playwright-debug-e-trace.md)

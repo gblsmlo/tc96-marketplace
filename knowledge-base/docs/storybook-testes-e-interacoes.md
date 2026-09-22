@@ -430,7 +430,7 @@ Três fatos verificados sobre isso:
 - **O addon-vitest não roda snapshot** — é a diferença dele em relação ao `test-runner` legado. Snapshot exige portable story.
 - **A própria fonte desencoraja o caso geral:** snapshot captura HTML, não aparência, e ela diz que teste visual *"normalmente é a escolha melhor"* para componente de UI.
 
-O critério que sobra: snapshot de markup vale para o que **não é visual** — a estrutura semântica de um componente de acessibilidade, a saída de um gerador de markup. Para aparência, é a ferramenta errada. Ver `Playwright - Snapshots e Visual` § 1, onde aria snapshot resolve o caso semântico com diff legível.
+O critério que sobra: snapshot de markup vale para o que **não é visual** — a estrutura semântica de um componente de acessibilidade, a saída de um gerador de markup. Para aparência, é a ferramenta errada. Ver [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) § 1, onde aria snapshot resolve o caso semântico com diff legível.
 
 ---
 

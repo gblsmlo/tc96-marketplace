@@ -12,3 +12,6 @@ Pages/Frontend roadmap.md
 
 # --- test ---
 Docs/Teste de Software*
+
+# --- e2e ---
+Docs/Playwright*

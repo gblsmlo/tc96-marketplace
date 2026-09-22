@@ -5,11 +5,11 @@ Playwright ela é deliberada: o diagnóstico começa **fora do código**, no tra
 
 | Skill | A pergunta que responde | Fonte | Apoio interno |
 | --- | --- | --- | --- |
-| [[playwright-build]] | como escrevo este teste E2E? | [[Playwright - Locators]] | 5 referências + 1 exemplo + 1 script |
-| [[playwright-review]] | esta suíte tem defeito? | [[Playwright]] | 5 referências + 1 auditoria + 2 scripts |
-| [[playwright-diagnose]] | por que **este** teste falha? | [[Playwright - Debug e Trace]] | 5 referências + 1 diagnóstico + 1 script |
+| `playwright-build` | como escrevo este teste E2E? | [Playwright - Locators](../../knowledge-base/docs/playwright-locators.md) | 5 referências + 1 exemplo + 1 script |
+| `playwright-review` | esta suíte tem defeito? | [Playwright](../../knowledge-base/docs/playwright.md) | 5 referências + 1 auditoria + 2 scripts |
+| `playwright-diagnose` | por que **este** teste falha? | [Playwright - Debug e Trace](../../knowledge-base/docs/playwright-debug-e-trace.md) | 5 referências + 1 diagnóstico + 1 script |
 
-**Antes das três vem [[teste-design]]:** se o que pode dar errado é regra de negócio, o
+**Antes das três vem `teste-design`:** se o que pode dar errado é regra de negócio, o
 teste **não é E2E** (`TS-CORE-02`).
 
 ## O que cada pacote acrescentou
@@ -31,8 +31,8 @@ seção — o número que a própria skill declara — mais a § 6.2 completa: o
 (`PW-ACT-07`, `PW-LOC-07`) **e** as quatro regras que *parecem* apelido e continuam citáveis.
 
 ```bash
-bash Skills/playwright/playwright-review/scripts/gerar-mapa-de-ids.sh
-bash Skills/instalar.sh
+bash plugins/hermes-e2e/skills/playwright-review/scripts/gerar-mapa-de-ids.sh
+bash scripts/instalar.sh
 ```
 
 <!-- tokens:inicio -->
@@ -44,18 +44,18 @@ As referências carregam sob demanda, uma por vez.
 
 | Skill | `SKILL.md` | maior `references/` | total | refs |
 | --- | ---: | --- | ---: | ---: |
-| [[playwright-build]] | 1.767 | `mapa-de-ids.md` (4.032) | 9.531 | 6 |
-| [[playwright-diagnose]] | 1.676 | `mapa-de-ids.md` (4.032) | 9.059 | 6 |
-| [[playwright-review]] | 1.412 | `mapa-de-ids.md` (4.032) | 12.033 | 6 |
+| `playwright-build` | 1.767 | `mapa-de-ids.md` (4.032) | 9.531 | 6 |
+| `playwright-diagnose` | 1.676 | `mapa-de-ids.md` (4.032) | 9.059 | 6 |
+| `playwright-review` | 1.412 | `mapa-de-ids.md` (4.032) | 12.033 | 6 |
 
 Carregar as 3 skills deste grupo de uma vez custaria **4.855 tokens** só de `SKILL.md`,
 e **30.623** com todas as referências. É por isso que cada skill declara o que **nunca** carregar.
 
-Regenerar: `bash Skills/tokens.sh`
+Regenerar: `bash scripts/medir.sh`
 <!-- tokens:fim -->
 
 ## Relacionados
 
-- [[Skills/README|Skill — Índice]] · [[Playwright]] § 7 — o contrato
-- [[Skills/teste/README|Skills/teste/]] — a camada de conceito, que vem antes
-- [[Skills/bun/README|Skills/bun/]] — unidade e integração
+- [Skill — Índice](../README.md) · [Playwright](../../knowledge-base/docs/playwright.md) § 7 — o contrato
+- `hermes-core: família teste` — a camada de conceito, que vem antes
+- `hermes-backend: família bun` — unidade e integração

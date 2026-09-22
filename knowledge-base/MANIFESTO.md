@@ -12,6 +12,19 @@ Origem: `/home/gabs/Sync/Vaults/Notes` · o que entra: `knowledge-base/dominio.t
 
 | Arquivo | Origem no vault | sha256 |
 | --- | --- | --- |
+| `docs/playwright-acoes-e-auto-waiting.md` | `Docs/Playwright - Ações e Auto-waiting.md` | `ae113f294517` |
+| `docs/playwright-agents-cli-e-mcp.md` | `Docs/Playwright - Agents, CLI e MCP.md` | `e770573ba504` |
+| `docs/playwright-assertions.md` | `Docs/Playwright - Assertions.md` | `25425fef67e4` |
+| `docs/playwright-autenticacao-e-isolamento.md` | `Docs/Playwright - Autenticação e Isolamento.md` | `8cd7c1b5c67e` |
+| `docs/playwright-configuracao-e-projects.md` | `Docs/Playwright - Configuração e Projects.md` | `bd6bbd46d85c` |
+| `docs/playwright-debug-e-trace.md` | `Docs/Playwright - Debug e Trace.md` | `463c10b94c9c` |
+| `docs/playwright-estrutura-de-testes.md` | `Docs/Playwright - Estrutura de Testes.md` | `533d89852f8b` |
+| `docs/playwright-execucao-retries-e-ci.md` | `Docs/Playwright - Execução, Retries e CI.md` | `a6977e734a01` |
+| `docs/playwright-fixtures.md` | `Docs/Playwright - Fixtures.md` | `d4136c9cc36c` |
+| `docs/playwright-locators.md` | `Docs/Playwright - Locators.md` | `eaa439747a93` |
+| `docs/playwright-rede-e-mocking.md` | `Docs/Playwright - Rede e Mocking.md` | `accf19ddca14` |
+| `docs/playwright-snapshots-e-visual.md` | `Docs/Playwright - Snapshots e Visual.md` | `8e99b4598098` |
+| `docs/playwright.md` | `Docs/Playwright.md` | `8aadc25ecd22` |
 | `docs/react-efeitos-e-sincronizacao.md` | `Docs/React - Efeitos e Sincronização.md` | `7641f6d8d1b9` |
 | `docs/react-estado-e-reatividade.md` | `Docs/React - Estado e Reatividade.md` | `d92bfe1f70ba` |
 | `docs/react-formularios-e-actions.md` | `Docs/React - Formulários e Actions.md` | `5ddd9f87383f` |

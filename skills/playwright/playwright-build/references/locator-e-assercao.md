@@ -1,7 +1,7 @@
 # Locator e asserção — o par inseparável
 
-> Passos 2 e 3. As árvores completas são a § 5.1 do hub [[Playwright]],
-> [[Playwright - Locators]] e [[Playwright - Assertions]].
+> Passos 2 e 3. As árvores completas são a § 5.1 do hub [Playwright](../../../../knowledge-base/docs/playwright.md),
+> [Playwright - Locators](../../../../knowledge-base/docs/playwright-locators.md) e [Playwright - Assertions](../../../../knowledge-base/docs/playwright-assertions.md).
 
 ---
 
@@ -12,7 +12,7 @@
 3. `getByTestId` — escape hatch, e **registre a dívida** (`PW-LOC-04`).
 4. `locator('css=…')` — último recurso, com justificativa na linha acima.
 
-**Resolveu para mais de um elemento?** A resposta **não** é `.first()` (`PW-LOC-02`). É, nesta
+**Resolveu para mais de um elemento?** A resposta **não** é `.first` (`PW-LOC-02`). É, nesta
 ordem: `filter({ hasText })`, encadear dentro de um container, `filter({ has: … })`.
 
 **`getByRole` não alcança o elemento?** Na maioria dos casos o achado é sobre o
@@ -31,9 +31,9 @@ Uma regra domina todas: **afirme sobre a condição, nunca sobre um valor lido**
 
 ```ts
 // ✗ congela um instante
-expect(await page.getByText('Salvo').isVisible()).toBe(true);
+expect(await page.getByText('Salvo').isVisible).toBe(true);
 // ✓ reespera
-await expect(page.getByText('Salvo')).toBeVisible();
+await expect(page.getByText('Salvo')).toBeVisible;
 ```
 
 E o defeito gêmeo, que passa **sempre**: asserção web-first sem `await` (`PW-CORE-04`). A
@@ -44,18 +44,18 @@ ligada. Os dois **não** são o mesmo defeito e exigem correções diferentes (�
 | --- | --- |
 | estado da UI | `expect(locator).…` |
 | lista inteira | `toHaveText([...])` — verifica ordem e conteúdo com retry |
-| resposta HTTP | `await expect(resposta).toBeOK()` |
+| resposta HTTP | `await expect(resposta).toBeOK` |
 | valor fora da UI que demora | `expect.poll(...)` |
 | bloco com várias asserções que demora | `expect(fn).toPass({ timeout })` — **timeout obrigatório** (`PW-EXP-03`) |
 | estrutura de UI | `toMatchAriaSnapshot` **antes** de `toHaveScreenshot` (`PW-SNAP-01`) |
 
-**Nunca** afirme ausência sozinha: `not.toBeVisible()` passa também com locator errado.
+**Nunca** afirme ausência sozinha: `not.toBeVisible` passa também com locator errado.
 Afirme o estado positivo esperado (`PW-EXP-06`).
 
 ---
 
 ## Relacionados
 
-- [[Playwright - Locators]] · [[Playwright - Assertions]] — as duas fontes desta skill
+- [Playwright - Locators](../../../../knowledge-base/docs/playwright-locators.md) · [Playwright - Assertions](../../../../knowledge-base/docs/playwright-assertions.md) — as duas fontes desta skill
 - `ambiente-e-estrutura.md` — o que substituir, e como organizar
 - `mapa-de-ids.md` — onde cada `PW-*` está declarado

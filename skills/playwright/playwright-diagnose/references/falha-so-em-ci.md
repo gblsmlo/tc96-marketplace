@@ -14,10 +14,10 @@
 ## Duas armadilhas específicas de CI que aparecem como flake
 
 - **Service Worker interceptando antes do `route`** — os eventos de rede simplesmente não
-  aparecem. `serviceWorkers: 'block'` é a **primeira** hipótese a verificar, não a última
-  (`PW-NET-03`).
+ aparecem. `serviceWorkers: 'block'` é a **primeira** hipótese a verificar, não a última
+ (`PW-NET-03`).
 - **Imagens bloqueadas por `route` numa suíte com screenshot** — a referência tem as
-  imagens, a execução não (`PW-SNAP-06`).
+ imagens, a execução não (`PW-SNAP-06`).
 
 ---
 
@@ -31,5 +31,5 @@ alonga toda execução.
 
 ## Relacionados
 
-- [[Playwright - Execução, Retries e CI]] · [[Playwright - Snapshots e Visual]] · [[Playwright - Autenticação e Isolamento]]
+- [Playwright - Execução, Retries e CI](../../../../knowledge-base/docs/playwright-execucao-retries-e-ci.md) · [Playwright - Snapshots e Visual](../../../../knowledge-base/docs/playwright-snapshots-e-visual.md) · [Playwright - Autenticação e Isolamento](../../../../knowledge-base/docs/playwright-autenticacao-e-isolamento.md)
 - `arvore-de-hipoteses.md` — de onde esta ramificação sai
