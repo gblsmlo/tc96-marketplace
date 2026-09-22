@@ -37,7 +37,7 @@ mv .agent /tmp/project-backup-$(date +%s)/ 2>/dev/null || true
 **Commands:**
 ```bash
 # Create project using TanStack Start CLI
-pnpm create @tanstack/start@latest . --tailwind --yes
+bunx @tanstack/create-start@latest . --tailwind --yes
 ```
 
 **Post-Init Configuration:**
@@ -107,7 +107,7 @@ EOF
 
 **Commands:**
 ```bash
-pnpm biome migrate --write
+bunx biome migrate --write
 ```
 
 **Configuration:**
@@ -160,7 +160,7 @@ EOF
 
 **Verification Checkpoint:**
 - [ ] `biome.json` exists with Tailwind support (`noUnknownAtRules: off`)
-- [ ] `pnpm biome check --version` executes without errors
+- [ ] `bunx biome check --version` executes without errors
 
 ---
 
@@ -170,7 +170,7 @@ EOF
 
 **Commands:**
 ```bash
-pnpm add -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom happy-dom
+bun add -d vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom happy-dom
 ```
 
 **Configuration:**
@@ -217,8 +217,8 @@ EOF
 **Commands:**
 ```bash
 git init
-pnpm add -D husky lint-staged @commitlint/cli @commitlint/config-conventional
-pnpm exec husky init
+bun add -d husky lint-staged @commitlint/cli @commitlint/config-conventional
+bunx husky init
 ```
 
 **Configuration:**
@@ -226,12 +226,12 @@ pnpm exec husky init
 **4.1: Pre-commit Hook**
 ```bash
 cat > .husky/pre-commit <<'EOF'
-pnpm lint-staged
+bunx lint-staged
 
 # Run lint-staged with error handling
-if ! pnpm lint-staged; then
+if ! bunx lint-staged; then
   echo "❌ Pre-commit checks failed. Please fix the issues above and try again."
-  echo "💡 You can run 'pnpm lint:staged' to fix issues automatically."
+  echo "💡 You can run 'bun run lint:staged' to fix issues automatically."
   exit 1
 fi
 
@@ -242,7 +242,7 @@ chmod +x .husky/pre-commit
 
 **4.2: Commit Message Hook**
 ```bash
-echo "npx --no -- commitlint --edit \$1" > .husky/commit-msg
+echo "bunx commitlint --edit \$1" > .husky/commit-msg
 chmod +x .husky/commit-msg
 ```
 
@@ -297,8 +297,8 @@ touch app/features/news-feed/index.ts
 
 **Commands:**
 ```bash
-pnpm dlx shadcn@latest init -d
-pnpm dlx shadcn@latest add card badge -y
+bunx shadcn@latest init -d
+bunx shadcn@latest add card badge -y
 ```
 
 **Configuration:**
@@ -345,13 +345,12 @@ sed -i "s|from '@/lib/utils'|from '@libs/utils'|g" app/components/ui/*.tsx 2>/de
 
 ## Phase 7: Package.json Scripts
 
-**Objective:** Ensure all required npm scripts and lint-staged configuration are present.
+**Objective:** Ensure all required package scripts and lint-staged configuration are present.
 
 **Commands:**
 ```bash
-node -e "
-const fs = require('fs');
-const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+bun -e "
+const pkg = await Bun.file('package.json').json();
 pkg.scripts = {
   ...pkg.scripts,
   'dev': 'vinxi dev',
@@ -361,13 +360,14 @@ pkg.scripts = {
   'lint:fix': 'biome check --apply app',
   'lint:format': 'biome format --write app',
   'lint:staged': 'biome check app --staged --write',
+  'typecheck': 'tsc --noEmit',
   'test': 'vitest',
   'test:run': 'vitest run',
   'prepare': 'husky'
 };
 pkg['lint-staged'] = {
   '*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}': [
-    'pnpm lint:staged --no-errors-on-unmatched'
+    'bun run lint:staged --no-errors-on-unmatched'
   ]
 };
 pkg.husky = {
@@ -375,7 +375,7 @@ pkg.husky = {
     'pre-commit': 'lint-staged'
   }
 };
-fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+await Bun.write('package.json', JSON.stringify(pkg, null, 2) + '\n');
 "
 ```
 
@@ -697,13 +697,13 @@ EOF
 **Commands:**
 ```bash
 # Lint check
-pnpm biome check --write app
+bunx biome check --write app
 
 # Test execution
-pnpm test:run
+bun run test:run
 
 # Build verification
-pnpm build
+bun run build
 ```
 
 **Final Checklist:**

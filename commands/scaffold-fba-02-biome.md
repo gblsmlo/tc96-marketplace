@@ -11,7 +11,7 @@ Senior Frontend Architect & DevOps Engineer
 Configure Biome as the exclusive linting, formatting, and import organization tool. This setup replaces ESLint and Prettier entirely, optimizing for Feature-Based Architecture (FBA) with kebab-case naming and barrel files.
 
 # Constraints
-- **Package Manager:** ALWAYS use `pnpm`. Never use npm or yarn.
+- **Package Manager:** ALWAYS use `bun`. Never use npm, pnpm or yarn.
 - **Versions:** NEVER specify version numbers. Always use `latest` or `@latest`.
 - **Exclusivity:** Biome MUST be the only linting/formatting tool. Remove ESLint and Prettier completely.
 - **FBA Compliance:** Configuration must enforce FBA patterns (kebab-case, barrel files, no circular imports).
@@ -20,9 +20,9 @@ Configure Biome as the exclusive linting, formatting, and import organization to
 # Chain of Thought
 1. Verify project was initialized in Phase 1
 2. Remove any existing ESLint/Prettier configurations
-3. Install Biome with pnpm
+3. Install Biome with bun
 4. Create biome.json with FBA-specific rules
-5. Add npm scripts for linting
+5. Add package scripts for linting
 6. Configure VS Code settings for Biome
 7. Verify no competing tools remain
 
@@ -33,15 +33,13 @@ Configure Biome as the exclusive linting, formatting, and import organization to
 Before installing Biome, remove ESLint and Prettier:
 
 ```bash
-# Remove ESLint and Prettier packages — only the ones actually present.
-# `pnpm remove` EXITS 1 if any named package is not a dependency
-# (ERR_PNPM_CANNOT_REMOVE_MISSING_DEPS), which under the "stop on first failure"
-# constraint would abort the whole scaffold on a project that was already clean.
-for pkg in eslint prettier eslint-config-next eslint-plugin-react \
-           @typescript-eslint/eslint-plugin @typescript-eslint/parser; do
-  node -e "process.exit(Object.keys({...(require('./package.json').dependencies||{}),...(require('./package.json').devDependencies||{})}).includes('$pkg')?0:1)" \
-    && pnpm remove "$pkg"
-done
+# Remove ESLint and Prettier packages, whichever of them are present.
+# `bun remove` takes several names at once, removes only what is a dependency
+# and still exits 0 when a name is absent — verified on bun 1.3.14. The guard
+# loop this step used to carry existed for pnpm, which exits 1 on a missing
+# name (ERR_PNPM_CANNOT_REMOVE_MISSING_DEPS) and would abort a clean project.
+bun remove eslint prettier eslint-config-next eslint-plugin-react \
+           @typescript-eslint/eslint-plugin @typescript-eslint/parser
 
 # Remove configuration files
 rm -f .eslintrc .eslintrc.js .eslintrc.json .eslintrc.cjs .eslintrc.mjs
@@ -55,10 +53,10 @@ rm -f .eslintignore .prettierignore
 ## Step 2: Install Biome
 
 ```bash
-pnpm add -D @biomejs/biome
+bun add -d @biomejs/biome
 ```
 
-**Anti-Pattern:** Do NOT use `npm install` or `yarn add`. Always use `pnpm`.
+**Anti-Pattern:** Do NOT use `npm install` or `yarn add`. Always use `bun install` / `bun add`.
 
 ## Step 3: Create Biome Configuration
 
@@ -259,7 +257,7 @@ Before proceeding to Phase 3, verify ALL of these:
 - [ ] NO `.eslintrc*`, `.prettierrc*`, or `.editorconfig` files exist
 - [ ] `biome.json` exists at project root
 - [ ] `@biomejs/biome` is in `devDependencies`
-- [ ] `pnpm lint:check` runs successfully — use this, NOT `pnpm lint`. `lint` is `biome check --write .`, which fixes files before reporting; a command that repairs the problem cannot prove its absence. `lint:check` is `biome check src`, non-mutating and scoped, and matches the acceptance command in [Feature-Based Architecture](../knowledge-base/pages/feature-based-architecture.md) § 7 and `Skill/react-structure.md`
+- [ ] `bun run lint:check` runs successfully — use this, NOT `bun run lint`. `lint` is `biome check --write .`, which fixes files before reporting; a command that repairs the problem cannot prove its absence. `lint:check` is `biome check src`, non-mutating and scoped, and matches the acceptance command in [Feature-Based Architecture](../knowledge-base/pages/feature-based-architecture.md) § 7 and `Skill/react-structure.md`
 - [ ] VS Code settings are configured for Biome
 - [ ] No eslint/prettier packages remain in dependencies
 
@@ -274,7 +272,7 @@ found=$(find . -maxdepth 1 \( -name '.eslintrc*' -o -name '.prettierrc*' -o -nam
 [ -z "$found" ] && echo "✅ No competing files" || { echo "❌ Found competing config files:"; echo "$found"; }
 
 # Test Biome works — non-mutating, this is the acceptance check
-pnpm lint:check
+bun run lint:check
 ```
 
 **Failure Recovery:** If any ESLint/Prettier files remain, remove them and re-run Phase 2.

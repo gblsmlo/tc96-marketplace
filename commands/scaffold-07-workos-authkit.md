@@ -17,7 +17,7 @@ idioma: en
 ## Commands
 
 ```bash
-pnpm add @workos/authkit-tanstack-react-start
+bun add @workos/authkit-tanstack-react-start
 ```
 
 ---

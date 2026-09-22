@@ -29,7 +29,7 @@ idioma: en
 
 ```bash
 # Create project using TanStack Start CLI
-pnpm create @tanstack/start@latest . --tailwind --yes
+bunx @tanstack/create-start@latest . --tailwind --yes
 ```
 
 ---

@@ -17,8 +17,8 @@ idioma: en
 
 ```bash
 git init
-pnpm add -D husky lint-staged @commitlint/cli @commitlint/config-conventional
-pnpm exec husky init
+bun add -d husky lint-staged @commitlint/cli @commitlint/config-conventional
+bunx husky init
 ```
 
 ---
@@ -28,12 +28,12 @@ pnpm exec husky init
 
 ```bash
 cat > .husky/pre-commit <<'EOF'
-pnpm lint-staged
+bunx lint-staged
 
 # Run lint-staged with error handling
-if ! pnpm lint-staged; then
+if ! bunx lint-staged; then
   echo "❌ Pre-commit checks failed. Please fix the issues above and try again."
-  echo "💡 You can run 'pnpm biome check --write src' to fix issues automatically."
+  echo "💡 You can run 'bunx biome check --write src' to fix issues automatically."
   exit 1
 fi
 
@@ -45,7 +45,7 @@ chmod +x .husky/pre-commit
 ### 4.2: Commit Message Hook
 
 ```bash
-echo "npx --no -- commitlint --edit \$1" > .husky/commit-msg
+echo "bunx commitlint --edit \$1" > .husky/commit-msg
 chmod +x .husky/commit-msg
 ```
 

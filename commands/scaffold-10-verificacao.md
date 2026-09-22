@@ -18,16 +18,20 @@ idioma: en
 
 ```bash
 # Install dependencies
-pnpm install
+bun install
 
 # Lint check
-pnpm biome check --write src
+bunx biome check --write src
+
+# Type check — the Bun runtime transpiles without checking types (`BUN-CORE-02`).
+# Without this step the build is green and the types mean nothing.
+bunx tsc --noEmit
 
 # Test execution
-pnpm test:run
+bun run test:run
 
 # Build verification
-pnpm build
+bun run build
 ```
 
 ---
@@ -37,6 +41,8 @@ pnpm build
 - [ ] `docs/` directory is present and intact
 - [ ] `.agent/` directory is present and intact
 - [ ] All biome checks pass (0 errors, 0 warnings)
+- [ ] `bunx tsc --noEmit` passes (`BUN-CORE-02`)
+- [ ] `bun.lock` is committed (`BUN-PKG-01`) — CI must run `bun ci`, not `bun install`
 - [ ] All tests pass (0 failures)
 - [ ] Build succeeds with no errors
 - [ ] No data loss occurred during scaffolding
@@ -53,7 +59,7 @@ pnpm build
 The scaffolding is complete when:
 1. All 10 phases are executed in order
 2. All verification checkpoints pass
-3. Final checklist shows 11/11 items checked
+3. Final checklist shows 13/13 items checked
 4. No errors in any validation command
 5. Existing documentation and agent configs are preserved
 6. FBA structure is properly implemented
@@ -97,4 +103,4 @@ echo "# Workflows" > docs/workflows/README.md
 - **Lint/Format**: Biome (no ESLint/Prettier)
 - **Testing**: Vitest + React Testing Library
 - **Git Hooks**: Husky + lint-staged + Commitlint
-- **Package Manager**: pnpm
+- **Package Manager**: bun

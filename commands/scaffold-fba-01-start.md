@@ -14,7 +14,7 @@ Initialize a new frontend project with framework-specific tooling, path aliases 
 
 # Constraints
 
-- **Package Manager:** ALWAYS use `pnpm`. Never use npm or yarn.
+- **Package Manager:** ALWAYS use `bun`. Never use npm, pnpm or yarn.
 - **Versions:** NEVER specify version numbers. Always use `latest` or `@latest`.
 - **Architecture:** Must support Feature-Based Architecture (FBA) with path aliases.
 - **Documentation:** Preserve existing `docs/` and `.agent/` directories if they exist.
@@ -23,7 +23,7 @@ Initialize a new frontend project with framework-specific tooling, path aliases 
 # Chain of Thought
 
 1. Check if framework selection is needed or if one is pre-determined
-2. Execute framework initialization with pnpm
+2. Execute framework initialization with bun
 3. Configure TypeScript path aliases for FBA
 4. Set up framework-specific path resolution
 5. Verify all files exist before proceeding
@@ -37,19 +37,19 @@ Choose ONE framework command based on project requirements:
 ### Option A: Next.js (Recommended for SSR/SSG)
 
 ```bash
-pnpm create next-app@latest . --typescript --tailwind --eslint --app --src-dir --no-import-alias --yes
+bun create next-app@latest . --typescript --tailwind --eslint --app --src-dir --no-import-alias --yes
 ```
 
 ### Option B: TanStack Start (Recommended for SPA with file-based routing)
 
 ```bash
-pnpm create @tanstack/start@latest . --tailwind --yes
+bunx @tanstack/create-start@latest . --tailwind --yes
 ```
 
 ### Option C: Vue (Recommended for Vue ecosystem)
 
 ```bash
-pnpm create vue@latest . --typescript --yes
+bun create vue@latest . --typescript --yes
 ```
 
 **Anti-Pattern:** Do NOT run multiple framework commands. Choose only ONE.

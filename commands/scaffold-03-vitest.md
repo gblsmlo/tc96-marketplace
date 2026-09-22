@@ -17,7 +17,7 @@ idioma: en
 ## Commands
 
 ```bash
-pnpm add -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom happy-dom
+bun add -d vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom happy-dom
 ```
 
 ---

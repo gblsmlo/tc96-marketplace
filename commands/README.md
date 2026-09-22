@@ -59,11 +59,41 @@ Quem emite: `build/claude-code.sh` escreve `commands/<nome>.md` com `description
 para os comandos declarados em `PLUGINS`; `build/agents-md.sh` escreve a tabela
 **Comandos** no `AGENTS.md` e copia o corpo sem frontmatter.
 
+## Bun, desde 2026-09-22
+
+O gerenciador e o runner são **Bun**, não pnpm. O que a migração fixou, por regra:
+
+| Regra | O que entrou |
+| --- | --- |
+| `BUN-CORE-06` | script do `package.json` é chamado na forma longa `bun run <script>` |
+| `BUN-CORE-02` | `typecheck: tsc --noEmit` nos scripts, e `bunx tsc --noEmit` no portão da fase 10 — o runtime transpila **sem** checar tipo |
+| `BUN-PKG-01/02` | o checklist final cobra `bun.lock` commitado, e `bun ci` no CI |
+
+Equivalências usadas: `pnpm add -D` → `bun add -d` · `pnpm dlx`/`pnpm exec`/`npx` → `bunx`
+· `node -e` → `bun -e` com `Bun.file`/`Bun.write` · `pnpm-lock.yaml` → `bun.lock`.
+
+`bunx @tanstack/create-start@latest` em vez de `bun create @tanstack/start@latest`: o
+`bun create <t>` roda `bunx create-<t>`, e essa regra não resolve pacote com escopo. O
+pacote real é [`@tanstack/create-start`](https://www.npmjs.com/package/@tanstack/create-start).
+
+**Um passo desapareceu.** A fase `scaffold-fba-02-biome` carregava um laço com `node -e`
+para conferir se cada pacote era dependência antes de removê-lo — contorno de `pnpm`, que
+sai com 1 em nome ausente. `bun remove` aceita vários nomes, remove o que existe e sai 0
+(verificado no bun 1.3.14), então o laço virou uma linha.
+
 ## O que está declarado, e não conferido
 
-Estes 17 arquivos vieram do build anterior **sem revisão de conteúdo**. Duas
-coisas visíveis, que valem uma decisão antes de rodar qualquer um deles em projeto novo:
+Estes 17 arquivos vieram do build anterior **sem revisão de conteúdo**. O que a migração
+para Bun encostou, e não resolveu:
 
-- eles usam **`pnpm`**, e o stack desta casa é **Bun** (`bun-workspace`, `bun-runtime`);
+- **Vitest × `bun test`.** As fases 3 instalam Vitest + Testing Library como runner de
+  unidade. A regra da casa é outra: *"teste de unidade fora do Storybook é `bun test`"*
+  (`react-developer`), e o Vitest existe aqui como runner do `@storybook/addon-vitest`.
+  Trocar renomeia duas fases e muda o que `test-design` roteia — é decisão, não conserto.
+- **`vinxi` nos scripts `dev`/`build`/`start`.** É o driver antigo do TanStack Start; as
+  versões atuais rodam sobre Vite direto.
+- **`biome.json` com `$schema` da 1.9.4**, e no formato da v1 (`organizeImports` na raiz).
+  O `bun add -d @biomejs/biome` instala hoje a **2.5.14**, onde essa chave mudou de lugar.
+  E o valor do `$schema` está escrito como link markdown, não como URL.
 - `scaffold-01…10` e `scaffold-fba-01…05` cobrem o mesmo terreno com detalhe diferente,
   e nada declara qual dos dois é o caminho corrente.

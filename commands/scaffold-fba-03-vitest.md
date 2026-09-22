@@ -11,7 +11,7 @@ Senior Frontend Architect & DevOps Engineer
 Configure Vitest testing framework with FBA path aliases, testing-library integration, and proper setup files. This establishes the testing foundation for the project.
 
 # Constraints
-- **Package Manager:** ALWAYS use `pnpm`. Never use npm or yarn.
+- **Package Manager:** ALWAYS use `bun`. Never use npm, pnpm or yarn.
 - **Versions:** NEVER specify version numbers. Always use `latest` or `@latest`.
 - **Path Aliases:** Must match Phase 1 FBA aliases exactly.
 - **Environment:** Use `happy-dom` for lightweight browser simulation.
@@ -22,7 +22,7 @@ Configure Vitest testing framework with FBA path aliases, testing-library integr
 2. Install Vitest and testing dependencies
 3. Create vitest.config.ts with path aliases
 4. Create test setup file
-5. Add npm scripts
+5. Add package scripts
 6. Create example test to verify setup
 7. Run tests to confirm everything works
 
@@ -31,7 +31,7 @@ Configure Vitest testing framework with FBA path aliases, testing-library integr
 ## Step 1: Install Dependencies
 
 ```bash
-pnpm add -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom happy-dom
+bun add -d vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom happy-dom
 ```
 
 **Anti-Pattern:** Do NOT install `@testing-library/jest-dom` as a regular dependency. It's a dev dependency.
@@ -114,7 +114,7 @@ describe('Vitest Setup', () => {
 ## Step 6: Run Tests
 
 ```bash
-pnpm test:run
+bun run test:run
 ```
 
 **Anti-Pattern:** Do NOT skip running tests to verify setup. Always confirm tests pass.
@@ -126,13 +126,13 @@ Before proceeding to Phase 4, verify ALL of these:
 - [ ] `vitest.config.ts` exists with all FBA path aliases
 - [ ] `src/setupTests.ts` exists with jest-dom import
 - [ ] `package.json` has `test`, `test:run`, and `test:ui` scripts
-- [ ] `pnpm test:run` executes successfully (at least 1 test passes)
+- [ ] `bun run test:run` executes successfully (at least 1 test passes)
 - [ ] Path aliases resolve correctly (no "Cannot find module" errors)
 
 **Verification Command:**
 ```bash
 # Test the setup
-pnpm test:run
+bun run test:run
 ```
 
 **Failure Recovery:** If tests fail, check that path aliases in vitest.config.ts match tsconfig.json exactly.
@@ -162,7 +162,7 @@ If any command fails:
 **Solution:** Ensure `src/setupTests.ts` is imported in vitest.config.ts test.setupFiles.
 
 **Issue:** Tests run but UI doesn't open with `test:ui`
-**Solution:** Install `@vitest/ui` package: `pnpm add -D @vitest/ui`
+**Solution:** Install `@vitest/ui` package: `bun add -d @vitest/ui`
 
 **Issue:** React hooks not working in tests
 **Solution:** Verify `@vitejs/plugin-react` is installed and included in vitest.config.ts plugins.

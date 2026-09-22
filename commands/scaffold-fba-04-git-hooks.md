@@ -11,7 +11,7 @@ Senior Frontend Architect & DevOps Engineer
 Initialize Git repository with Husky, lint-staged, commitlint, and cz-git for conventional commits. This ensures code quality and standardized commit messages through automated hooks.
 
 # Constraints
-- **Package Manager:** ALWAYS use `pnpm`. Never use npm or yarn.
+- **Package Manager:** ALWAYS use `bun`. Never use npm, pnpm or yarn.
 - **Versions:** NEVER specify version numbers. Always use `latest` or `@latest`.
 - **Hook Safety:** Pre-commit hooks must handle errors gracefully and provide helpful messages.
 - **Commit Standards:** Must enforce Conventional Commits specification.
@@ -40,15 +40,15 @@ git init
 ## Step 2: Install Dependencies
 
 ```bash
-pnpm add -D husky lint-staged @commitlint/cli @commitlint/config-conventional @commitlint/types cz-git czg
+bun add -d husky lint-staged @commitlint/cli @commitlint/config-conventional @commitlint/types cz-git czg
 ```
 
-**Anti-Pattern:** Do NOT use `npx` to run these tools in CI. Always use pnpm scripts.
+**Anti-Pattern:** In CI, do not reach for a tool that is not a declared dependency. `bunx` looks for the local package first and only then downloads, so `bunx lint-staged` inside a hook resolves the installed binary — but `bunx <something-not-installed>` runs whatever is published at that moment. Declare the tool, and call it through a script with `bun run <script>` (`BUN-CORE-06`).
 
 ## Step 3: Initialize Husky
 
 ```bash
-pnpm exec husky init
+bunx husky init
 ```
 
 ## Step 4: Create Pre-commit Hook
@@ -59,10 +59,10 @@ Create `.husky/pre-commit`:
 #!/bin/sh
 # Pre-commit hook with error handling
 
-if ! pnpm lint-staged; then
+if ! bunx lint-staged; then
   echo ""
   echo "❌ Pre-commit checks failed. Please fix the issues above and try again."
-  echo "💡 You can run 'pnpm biome check --write .' to fix issues automatically."
+  echo "💡 You can run 'bunx biome check --write .' to fix issues automatically."
   echo ""
   exit 1
 fi
@@ -78,7 +78,7 @@ Make it executable:
 chmod +x .husky/pre-commit
 ```
 
-**Critical Fix:** The original had `pnpm lint-staged` twice. This version calls it once with proper error handling.
+**Critical Fix:** The original had `bunx lint-staged` twice. This version calls it once with proper error handling.
 
 **Anti-Pattern:** Do NOT run lint-staged multiple times in the same hook.
 
@@ -88,7 +88,7 @@ Create `.husky/commit-msg`:
 
 ```bash
 #!/bin/sh
-npx --no -- commitlint --edit $1
+bunx commitlint --edit $1
 ```
 
 Make it executable:
@@ -248,7 +248,7 @@ Add to `package.json`:
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,stories,stories.tsx,json}": [
-      "pnpm lint:staged --no-errors-on-unmatched"
+      "bun run lint:staged --no-errors-on-unmatched"
     ]
   },
   "scripts": {
@@ -269,13 +269,13 @@ echo "// Test file" > test-hooks.txt
 git add test-hooks.txt
 
 # Try to commit (this should trigger the interactive commit flow)
-pnpm commit
+bun run commit
 
 # Clean up after test
 rm test-hooks.txt
 ```
 
-**Anti-Pattern:** Do NOT use `git commit -m "test"` to bypass commitlint. Use `pnpm commit` for interactive flow.
+**Anti-Pattern:** Do NOT use `git commit -m "test"` to bypass commitlint. Use `bun run commit` for interactive flow.
 
 # Verification Checklist
 
@@ -295,7 +295,7 @@ Before proceeding to Phase 5, verify ALL of these:
 ls -la .husky/
 
 # Verify commitizen works (dry run)
-echo "test" | npx --no -- commitlint --config commitlint.config.ts
+echo "test" | bunx commitlint --config commitlint.config.ts
 ```
 
 **Failure Recovery:** If hooks fail, check file permissions with `chmod +x .husky/*`.
@@ -319,13 +319,13 @@ If any command fails:
 # Troubleshooting
 
 **Issue:** "husky - command not found"
-**Solution:** Run `pnpm exec husky install` to reinitialize Husky.
+**Solution:** Run `bunx husky install` to reinitialize Husky.
 
 **Issue:** Pre-commit hook runs but doesn't fail on errors
 **Solution:** Ensure the hook script checks exit codes with `if ! command; then ... fi`.
 
 **Issue:** "commitlint: command not found"
-**Solution:** Use `npx --no -- commitlint` instead of direct command.
+**Solution:** Use `bunx commitlint` instead of direct command.
 
 **Issue:** cz-git doesn't show interactive prompt
 **Solution:** Make sure `config.commitizen.path` points to `node_modules/cz-git` in package.json.

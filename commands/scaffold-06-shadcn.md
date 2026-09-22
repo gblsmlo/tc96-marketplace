@@ -17,8 +17,8 @@ idioma: en
 ## Commands
 
 ```bash
-pnpm dlx shadcn@latest init -d
-pnpm dlx shadcn@latest add button card badge input -y
+bunx shadcn@latest init -d
+bunx shadcn@latest add button card badge input -y
 ```
 
 ---

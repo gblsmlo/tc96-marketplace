@@ -238,8 +238,8 @@ Right now every barrel is `export {}` and no feature has a single subfolder. The
 React must be a dependency before this compiles:
 
 ```bash
-pnpm add react react-dom
-pnpm add -D @types/react @types/react-dom typescript
+bun add react react-dom
+bun add -d @types/react @types/react-dom typescript
 ```
 
 ```bash
@@ -300,11 +300,11 @@ EOF
 Now normalize formatting and import order **before** verifying:
 
 ```bash
-pnpm lint        # biome check --write . — applies formatting and sorts imports
-pnpm lint:check  # biome check src — must now pass with zero errors
+bun run lint        # biome check --write . — applies formatting and sorts imports
+bun run lint:check  # biome check src — must now pass with zero errors
 ```
 
-This two-step is not ceremony. Heredocs in a Markdown prompt cannot stay byte-identical to a formatter the project owns: this scaffold sets `indentStyle: "tab"` and `organizeImports`, while the blocks above are written with spaces and in reading order. Running `--write` once reconciles the files with the project's own configuration; `lint:check` then proves the result is clean. Never skip the second command — `pnpm lint` fixes and would exit 0 even on a genuinely broken import boundary it happened to autofix.
+This two-step is not ceremony. Heredocs in a Markdown prompt cannot stay byte-identical to a formatter the project owns: this scaffold sets `indentStyle: "tab"` and `organizeImports`, while the blocks above are written with spaces and in reading order. Running `--write` once reconciles the files with the project's own configuration; `lint:check` then proves the result is clean. Never skip the second command — `bun run lint` fixes and would exit 0 even on a genuinely broken import boundary it happened to autofix.
 
 Three things this block demonstrates, and one it deliberately avoids:
 
@@ -369,10 +369,10 @@ for f in vite.config.ts vitest.config.ts; do
 done
 
 # --- Compilation: catches barrels re-exporting files that were never written ---
-pnpm tsc --noEmit || fail=1
+bunx tsc --noEmit || fail=1
 
-# --- Import boundaries: non-mutating. NOT `pnpm lint`, which rewrites files ---
-pnpm lint:check || fail=1
+# --- Import boundaries: non-mutating. NOT `bun run lint`, which rewrites files ---
+bun run lint:check || fail=1
 
 [ "$fail" -eq 0 ] && echo "PHASE 5 OK" || echo "PHASE 5 FAILED"
 ```

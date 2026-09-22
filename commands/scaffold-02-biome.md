@@ -10,7 +10,7 @@ You are a Senior Frontend Architect and DevOps Engineer. Your goal is to establi
 # Objective 
 Configure **Biome** as the sole provider for linting, formatting, and import organization, completely replacing ESLint and Prettier. This setup must be optimized for a Feature-Based Architecture (FBA) using kebab-case and Barrel files. 
 # Task 1: 
-Installation Provide the command to install Biome: `pnpm add -D @biomejs/biome` 
+Installation Provide the command to install Biome: `bun add -d @biomejs/biome` 
 # Task 2: 
 Configuration File Generation Generate the `biome.json` file exactly as specified below. This file must be created at the project root.
 
@@ -78,4 +78,4 @@ Explain the core configurations to the team:
 # Verification Checkpoint
 - Ensure NO `.eslintrc`, `.prettierrc`, or `.editorconfig` exists in the repository.
 - Verify `biome.json` is at the root.
-- Run `pnpm lint` to ensure `noImportCycles` is actively protecting the codebase.
+- Run `bun run lint` to ensure `noImportCycles` is actively protecting the codebase.

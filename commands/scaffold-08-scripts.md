@@ -7,7 +7,7 @@ idioma: en
 # Phase 8: Package.json Scripts
 
 **Role:** Senior Frontend Architect & DevOps Engineer
-**Objective:** Ensure all required npm scripts and lint-staged configuration are present.
+**Objective:** Ensure all required package scripts and lint-staged configuration are present.
 
 **Priority:** High - Build and development scripts
 **Constraint:** Preserve existing scripts, add missing ones
@@ -17,9 +17,8 @@ idioma: en
 ## Commands
 
 ```bash
-node -e "
-const fs = require('fs');
-const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+bun -e "
+const pkg = await Bun.file('package.json').json();
 pkg.scripts = {
   ...pkg.scripts,
   'dev': 'vinxi dev',
@@ -30,13 +29,14 @@ pkg.scripts = {
   'lint:fix': 'biome check --write src',
   'lint:format': 'biome format --write src',
   'lint:staged': 'biome check src --staged --write',
+  'typecheck': 'tsc --noEmit',
   'test': 'vitest',
   'test:run': 'vitest run',
   'prepare': 'husky'
 };
 pkg['lint-staged'] = {
   '*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}': [
-    'pnpm lint:staged --no-errors-on-unmatched'
+    'bun run lint:staged --no-errors-on-unmatched'
   ]
 };
 pkg.husky = {
@@ -44,7 +44,7 @@ pkg.husky = {
     'pre-commit': 'lint-staged'
   }
 };
-fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+await Bun.write('package.json', JSON.stringify(pkg, null, 2) + '\n');
 "
 ```
 
@@ -64,6 +64,10 @@ fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
 - `lint:format` - Format code
 - `lint:staged` - Check staged files
 
+### Type Check
+- `typecheck` - `tsc --noEmit`. The Bun runtime transpiles **without checking a single
+  type** (`BUN-CORE-02`), so without this step in CI the project's types are decorative.
+
 ### Testing Scripts
 - `test` - Run tests in watch mode
 - `test:run` - Run tests once
@@ -78,7 +82,7 @@ fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
 ```json
 {
   "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
-    "pnpm lint:staged --no-errors-on-unmatched"
+    "bun run lint:staged --no-errors-on-unmatched"
   ]
 }
 ```
