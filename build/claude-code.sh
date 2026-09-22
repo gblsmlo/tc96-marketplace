@@ -11,7 +11,7 @@ set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="${1:-$RAIZ/dist/claude-code}"
-VERSAO="${VERSAO:-0.4.0}"   # 0.3: hermes -> twincam · 0.4: camada commands/
+VERSAO="${VERSAO:-0.5.0}"   # 0.3: twincam · 0.4: commands/ · 0.5: comandos em bun
 
 rm -rf "$DEST"
 
