@@ -21,20 +21,21 @@ São três elos, não quatro: a camada de raciocínio foi cortada em 2026-09-22 
 
 **Superfície de API não mora aqui.** Assinatura, opção e comportamento por versão de uma biblioteca resolvem pelo Context7, com o library ID que a skill declara em `docs:`. A knowledge-base responde o que é certo e com que ID citar num review — não o que a função aceita nesta minor.
 
-## Os dez agentes
+## Os onze agentes
 
 | Agente | Papel | Skills que carrega | Fontes principais |
 | --- | --- | --- | --- |
 | `code-reviewer` | Revisa PR ou arquivo já escrito em contexto fresco: roteia por família, classifica severidade, cita ID e arquivo:linha, separa achado de opinião | `react-review` · `http-review` · `drizzle-review` · `playwright-review` · `bun-test-review` · `test-review` | `Code Review` · [Claude Code - Sessão e Verificação](../knowledge-base/docs/claude-code-sessao-e-verificacao.md) |
-| `frontend-developer` | Escreve React no stack da casa: onde mora → quem é dono do estado → qual API | `react-structure` · `react-build` · `tanstack-router` · `tanstack-query` · `react-hook-form` · `storybook-story` | [Frontend roadmap](../knowledge-base/pages/frontend-roadmap.md) · [Architecture in React](../knowledge-base/pages/architecture-in-react.md) · [Feature-Based Architecture](../knowledge-base/pages/feature-based-architecture.md) |
+| `frontend-developer` | Escreve React no stack da casa: onde mora → quem é dono do estado → qual API | `react-structure` · `react-developer` · `tanstack-router` · `tanstack-query` · `react-hook-form` · `storybook-story` | [Frontend roadmap](../knowledge-base/pages/frontend-roadmap.md) · [Architecture in React](../knowledge-base/pages/architecture-in-react.md) · [Feature-Based Architecture](../knowledge-base/pages/feature-based-architecture.md) |
 | `backend-developer` | Escreve serviços em Bun + Elysia/Hono + Drizzle: contrato HTTP antes do handler | `elysia-build` · `elysia-schema` · `elysia-diagnose` · `http-contract` · `http-cache` · `http-diagnose` · `bun-runtime` · `bun-workspace` · `bun-migrate` · `bun-test-build` | [Backend no runtime Bun](../knowledge-base/docs/backend-no-runtime-bun.md) · [Elysia](../knowledge-base/docs/elysia.md) · [HTTP](../knowledge-base/docs/http.md) · [Drizzle ORM](../knowledge-base/docs/drizzle-orm.md) |
 | `qa-engineer` | Decide o nível do teste, escreve na ferramenta, audita e diagnostica a suíte | `test-design` · `test-review` · `test-diagnose` · `playwright-build` · `playwright-review` · `playwright-diagnose` · `bun-test-build` · `bun-test-review` · `storybook-test` | [Teste de Software](../knowledge-base/docs/teste-de-software.md) · [Playwright](../knowledge-base/docs/playwright.md) · [Bun - Testes](../knowledge-base/docs/bun-testes.md) |
 | `software-architect` | Decide fronteiras e responsabilidades; registra a decisão com eixo, invariantes e migração | `react-structure` | [Architecture in React](../knowledge-base/pages/architecture-in-react.md) · [Fronteira do BFF - forma, jornada e regra](../knowledge-base/pages/fronteira-do-bff-forma-jornada-e-regra.md) · mapas de Arquitetura, Design Patterns e Microsserviços |
 | `devops-security` | Pipeline, deploy, segredos, sessão, tokens, autorização | `bun-workspace` · `bun-migrate` | `Secret Management em DevOps - Mapa de Fundamentos` · [Trunk-based development](../knowledge-base/pages/trunk-based-development.md) · [OWASP - Sessão e Autorização](../knowledge-base/docs/owasp-sessao-e-autorizacao.md) |
 | `ai-engineer` | Agentes, ferramentas, MCP, multiagentes, RAG e busca semântica; configura o Claude Code; cria skills e agentes deste projeto | — | mapas de Agentes de IA, MCP, Multiagentes, RAG e Busca semântica · [Claude Code](../knowledge-base/docs/claude-code.md) |
-| `product-manager` | Problema, hipótese, discovery, priorização, métricas, spec, decisão registrada | — | `Produto e Inovação - Mapa de Fundamentos` · `Curso de Product Management (PM3) — Mapa` · |
+| `product-manager` | Problema, hipótese, discovery, priorização, métricas, spec, decisão registrada | — | `Produto e Inovação - Mapa de Fundamentos` · `Curso de Product Management (PM3) — Mapa` |
 | `product-designer` | Persona, jornada, fluxo, os quatro estados de toda tela, componentes e nível do catálogo | — | `Product Design` · `Product Team` · [Storybook estruturado por Atomic Design](../knowledge-base/pages/storybook-estruturado-por-atomic-design.md) |
-| `project-manager` | Escopo, cronograma, custo, risco, comunicação e mudança como um sistema | — | `Gestão de Projetos - Mapa de Fundamentos` · |
+| `project-manager` | Escopo, cronograma, custo, risco, comunicação e mudança como um sistema | — | `Gestão de Projetos - Mapa de Fundamentos` |
+| `monorepo-auditor` | Audita as camadas de um monorepo já escrito: direção de dependência, superfície pública, quem abre transação, qual fronteira é verificável | `bun-workspace` · `drizzle-review` · `react-structure` | [Monorepo com Bun - estrutura e tooling](../knowledge-base/pages/monorepo-com-bun-estrutura-e-tooling.md) `MONO-*` · [Architecture in React](../knowledge-base/pages/architecture-in-react.md) · [Fronteira do BFF - forma, jornada e regra](../knowledge-base/pages/fronteira-do-bff-forma-jornada-e-regra.md) |
 
 ## Anatomia comum
 
@@ -114,7 +115,7 @@ Criadas em 2026-09-01 a partir do material já existente, e extraídas para este
 
 **Lacunas herdadas, declaradas.** Não há skill de construção para Drizzle nem para Hono — `backend-developer` lê o hub direto e revisa com `drizzle-review`. O cluster de OAuth, sessão e RBAC não tem skill — `devops-security` usa o checklist de [OWASP - Sessão e Autorização](../knowledge-base/docs/owasp-sessao-e-autorizacao.md) item a item. Os agentes de produto e gestão derivam de mapas de curso que **não** foram extraídos para cá: aparecem em code span, por nome. Eles não têm regra com ID para citar, e isso é declarado, não disfarçado.
 
-**Critério para um agente novo.** Um papel que alguém de fato exerce, com pergunta que nenhum dos dez responde, e material na knowledge-base para responder. Agente sem nota-fonte é opinião empacotada — não entra.
+**Critério para um agente novo.** Um papel que alguém de fato exerce, com pergunta que nenhum dos onze responde, e material na knowledge-base para responder. Agente sem nota-fonte é opinião empacotada — não entra.
 
 ## Relacionados
 

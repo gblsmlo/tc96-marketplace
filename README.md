@@ -111,15 +111,12 @@ claude plugin install hermes-core@hermes
 | --- | --- | --- |
 | **skills** | 28, em 9 famílias | inglês |
 | **scripts de skill** | 40 | inglês |
-| **agents** | 11 | `frontend-developer` em inglês; os outros dez em português |
+| **agents** | 12 | `frontend-developer` em inglês; os outros onze em português |
 | **knowledge-base** | 129 notas (`docs/` 118 · `pages/` 11) | português — é a regra, e o ID vem dela |
 
 Os `mapa-de-ids.md` são **gerados** por `skills/<familia>/<skill>/scripts/gerar-mapa-de-ids.sh`
 a partir da knowledge-base; não edite à mão. Rodar o gerador reproduz byte a byte o que
 está versionado, tirando a data.
-
-`monorepo-auditor` está declarado em `build/claude-code.sh` mas não tem arquivo em
-`agents/` — é a única lacuna conhecida entre o que o build declara e o que a fonte tem.
 
 `_legado/` guarda o que saiu do caminho vivo: `snapshot-2026-09-08/` é a versão do
 frontend anterior ao Hermes, e `vault/` é a proveniência da extração. Nada em `_legado/`
