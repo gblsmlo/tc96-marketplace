@@ -33,17 +33,12 @@ skills/<familia>/
 | **playwright** | `playwright-build` · `playwright-review` · `playwright-diagnose` | [playwright/](playwright/README.md) |
 | **bun** | `bun-runtime` · `bun-workspace` · `bun-migrate` · `bun-test-build` · `bun-test-review` | [bun/](bun/README.md) |
 | **elysia** | `elysia-build` · `elysia-schema` · `elysia-diagnose` | [elysia/](elysia/README.md) |
+| **http** | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [http/](http/README.md) |
+| **drizzle** | `drizzle-review` | [drizzle/](drizzle/README.md) |
 
-## Ainda no formato antigo
+## Todas migradas
 
-Estas famílias seguem com o frontmatter do Claude Code (`name:`/`description:`) e wikilinks
-`[[...]]` que dependem do vault. Os adaptadores de `build/` **ignoram** o que não tem
-`tipo:` neutro, então elas não quebram o build — só não saem nele.
+As 9 famílias estão na fonte neutra. Não há mais família no formato antigo do Claude Code.
 
-| Família | Skills | Agente que as carrega |
-| --- | --- | --- |
-| **http** | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | `backend-developer` |
-| **drizzle** | `drizzle-review` | `backend-developer` |
-
-Para migrar uma família, acrescente o domínio dela em `knowledge-base/dominio.txt` e rode
-a importação descrita em [`../README.md`](../README.md).
+O importador (`build/importar-do-plugin.py`) fica como registro de proveniência: ele pula
+skill com `idioma: en`, porque o build hermes de origem só tem português.

@@ -23,13 +23,13 @@ Custo medido vence custo suposto. "Isso pode ficar lento" sem número nem plano 
 
 ## Passo 5 — Formato de saída de um achado
 
-Quatro partes, o mesmo contrato de [[react-review]]:
+Quatro partes, o mesmo contrato de `react-review`:
 
 ```
 `ID-DA-REGRA` — arquivo:linha
 <o que está errado, uma frase>
 Correção: <mudança concreta>
-Ver [[Satélite correspondente]].
+Ver Satélite correspondente.
 ```
 
 ### Exemplo

@@ -1,11 +1,11 @@
 # Skills de Drizzle
 
 Uma skill, por enquanto: **revisão**. Não há skill de construção — para escrever schema ou
-query nova, as árvores de [[Drizzle ORM]] § 5 são consultadas direto.
+query nova, as árvores de [Drizzle ORM](../../knowledge-base/docs/drizzle-orm.md) § 5 são consultadas direto.
 
 | Skill | A pergunta que responde | Fonte | Apoio interno |
 | --- | --- | --- | --- |
-| [[drizzle-review]] | esta camada de persistência tem defeito? | [[Drizzle ORM]] | 6 referências + 2 scripts |
+| `drizzle-review` | esta camada de persistência tem defeito? | [Drizzle ORM](../../knowledge-base/docs/drizzle-orm.md) | 6 referências + 2 scripts |
 
 ## O que o pacote acrescentou
 
@@ -19,7 +19,7 @@ sete que a varredura pedia e não tinha comando.
 | `sql\`\`` com interpolação | `DRZ-QUERY-03` — vira **segurança** quando o valor vem do usuário |
 | `db` externo dentro de `transaction` | `DRZ-TX-03` — a escrita sai da transação sem erro |
 | `push` fora do local | `DRZ-MIG-02`, `DRZ-MIG-04` |
-| `.default()` com valor computado | `DRZ-SCHEMA-04` — o valor congela no SQL da migração |
+| `.default` com valor computado | `DRZ-SCHEMA-04` — o valor congela no SQL da migração |
 | Zod à mão | `DRZ-ZOD-01` |
 
 **A sonda S1 continua sendo a parada obrigatória:** o script imprime **as duas listas** — o
@@ -38,8 +38,8 @@ expressão sobre coluna e listagem sem teto **não têm `DRZ-*`** — a grade ci
 normativa, e inventar ID ali seria pior que não citar.
 
 ```bash
-bash Skills/drizzle/drizzle-review/scripts/gerar-mapa-de-ids.sh
-bash Skills/instalar.sh
+bash plugins/hermes-backend/skills/drizzle-review/scripts/gerar-mapa-de-ids.sh
+bash scripts/instalar.sh
 ```
 
 <!-- tokens:inicio -->
@@ -51,16 +51,16 @@ As referências carregam sob demanda, uma por vez.
 
 | Skill | `SKILL.md` | maior `references/` | total | refs |
 | --- | ---: | --- | ---: | ---: |
-| [[drizzle-review]] | 1.471 | `mapa-de-ids.md` (1.401) | 5.688 | 6 |
+| `drizzle-review` | 1.471 | `mapa-de-ids.md` (1.401) | 5.688 | 6 |
 
 Carregar as 1 skills deste grupo de uma vez custaria **1.471 tokens** só de `SKILL.md`,
 e **5.688** com todas as referências. É por isso que cada skill declara o que **nunca** carregar.
 
-Regenerar: `bash Skills/tokens.sh`
+Regenerar: `bash scripts/medir.sh`
 <!-- tokens:fim -->
 
 ## Relacionados
 
-- [[Skills/README|Skill — Índice]] · [[Drizzle ORM]] § 7 — o contrato
-- [[PostgreSQL]] — o que o ORM não dispensa
-- [[Skills/elysia/README|Skills/elysia/]] — a rota que chama o repositório
+- [Skill — Índice](../README.md) · [Drizzle ORM](../../knowledge-base/docs/drizzle-orm.md) § 7 — o contrato
+- `PostgreSQL` — o que o ORM não dispensa
+- [família elysia](../elysia/README.md) — a rota que chama o repositório

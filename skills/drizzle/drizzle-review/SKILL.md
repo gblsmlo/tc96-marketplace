@@ -1,19 +1,24 @@
 ---
-name: drizzle-review
-description: Revisar uma camada de persistência Drizzle e PostgreSQL que já existe, citando IDs `DRZ-*`, com onze sondas executáveis para os defeitos que a leitura de código não encontra — use quando a tarefa for revisar schema, migrações, repositórios ou queries, conferir se a migração aplicada corresponde ao schema, achar N+1, escrita sem `where` ou interpolação em SQL cru, ou confirmar a linha de versão do pacote antes de codar. Não use para escrever schema ou query nova — siga as árvores de decisão de Drizzle ORM § 5 direto, porque ainda não existe skill de construção.
+nome: drizzle-review
+descricao: Revisar uma camada de persistência Drizzle e PostgreSQL que já existe, citando IDs `DRZ-*`, com onze sondas executáveis para os defeitos que a leitura de código não encontra — use quando a tarefa for revisar schema, migrações, repositórios ou queries, conferir se a migração aplicada corresponde ao schema, achar N+1, escrita sem `where` ou interpolação em SQL cru, ou confirmar a linha de versão do pacote antes de codar. Não use para escrever schema ou query nova — siga as árvores de decisão de Drizzle ORM § 5 direto, porque ainda não existe skill de construção.
+tipo: skill
+familia: drizzle
+fonte: "[Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md)"
+docs:
+  - /drizzle-team/drizzle-orm-docs
 tags:
   - skill
   - drizzle
   - database
-fonte: "[[Drizzle ORM]]"
 ---
 
 # drizzle-review
 
-> **Fonte desta skill:** [[Drizzle ORM]], que é o hub e também a nota normativa — `DRZ-CORE-*` mora na § 6 dela, e os corpos das demais famílias nos dois satélites.
+> **Fonte desta skill:** [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md), que é o hub e também a nota normativa — `DRZ-CORE-*` mora na § 6 dela, e os corpos das demais famílias nos dois satélites.
 > Esta skill **não contém** o texto das regras — ela diz o que executar, em que ordem varrer e como reportar.
+> **Superfície de API:** resolva pelo Context7 — `/drizzle-team/drizzle-orm-docs`. Assinatura, opção e comportamento por versão vêm de lá; a regra e o ID vêm da knowledge-base.
 
-Contrato que esta skill implementa: [[Drizzle ORM]] § 7 ("Contrato de skill").
+Contrato que esta skill implementa: [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -23,11 +28,11 @@ Revisar persistência que **já existe**: schema, migrações, repositórios, qu
 
 | Situação | Vá para |
 | --- | --- |
-| escrever schema ou query nova | [[Drizzle ORM]] § 5, direto — **não há skill de construção ainda** |
-| modelagem, índice, constraint, RLS no banco | [[PostgreSQL]] |
-| a rota que chama o repositório | [[elysia-build]] |
-| a suíte que deveria cobrir isso | [[bun-test-review]] · [[test-review]] |
-| o contrato HTTP que a rota expõe | [[http-review]] |
+| escrever schema ou query nova | [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) § 5, direto — **não há skill de construção ainda** |
+| modelagem, índice, constraint, RLS no banco | `PostgreSQL` |
+| a rota que chama o repositório | `elysia-build` |
+| a suíte que deveria cobrir isso | `bun-test-review` · `test-review` |
+| o contrato HTTP que a rota expõe | `http-review` |
 
 ---
 
@@ -35,11 +40,11 @@ Revisar persistência que **já existe**: schema, migrações, repositórios, qu
 
 | Ordem | Carregar | Por quê |
 | --- | --- | --- |
-| 1 | [[Drizzle ORM]] § 0 | **não é opcional** — o `package.json` do projeto decide qual API de relations vale, não a doc ao vivo |
-| 2 | [[Drizzle ORM]] § 6 | as regras citáveis e a tabela de famílias |
-| 3 | [[Drizzle ORM]] § 2 e § 5 | modelo mental e árvores, para separar "errado" de "diferente" |
-| 4 | [[Drizzle - Schema e Migrations]] | só quando o achado toca tabela, índice ou `drizzle-kit` |
-| 5 | [[Drizzle - Queries e Relations]] | só quando o achado toca query, `relations()`, RQB ou transaction |
+| 1 | [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) § 0 | **não é opcional** — o `package.json` do projeto decide qual API de relations vale, não a doc ao vivo |
+| 2 | [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) § 6 | as regras citáveis e a tabela de famílias |
+| 3 | [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) § 2 e § 5 | modelo mental e árvores, para separar "errado" de "diferente" |
+| 4 | [Drizzle - Schema e Migrations](../../../knowledge-base/docs/drizzle-schema-e-migrations.md) | só quando o achado toca tabela, índice ou `drizzle-kit` |
+| 5 | [Drizzle - Queries e Relations](../../../knowledge-base/docs/drizzle-queries-e-relations.md) | só quando o achado toca query, `relations`, RQB ou transaction |
 
 **Nunca carregue os dois satélites por padrão.**
 
@@ -61,10 +66,10 @@ Referências desta skill:
 ## Passo 1 — Sondar antes de ler
 
 ```bash
-bash ~/.claude/skills/drizzle-review/scripts/sondas.sh src
+bash ${CLAUDE_PLUGIN_ROOT}/skills/drizzle-review/scripts/sondas.sh src
 ```
 
-**S1 é a parada obrigatória:** se o objeto passado a `drizzle({ schema })` não contém os `relations()`, `with` lança em runtime e `db.query.x` é `undefined` (`DRZ-REL-05`). Com a API relacional desligada, **toda leitura montada à mão é consequência** — criticar cada uma é ruído.
+**S1 é a parada obrigatória:** se o objeto passado a `drizzle({ schema })` não contém os `relations`, `with` lança em runtime e `db.query.x` é `undefined` (`DRZ-REL-05`). Com a API relacional desligada, **toda leitura montada à mão é consequência** — criticar cada uma é ruído.
 
 O script imprime as duas listas — o que é exportado e o que é registrado — e a comparação é sua.
 
@@ -102,7 +107,7 @@ Formato de quatro partes, com `arquivo:linha`. Para sonda, **cole a saída do sc
 
 ## Exemplo
 
-Repositório de tarefas: a sonda S1 mostra `usersRelations` exportado e **ausente** do `drizzle({ schema })` — achado que invalida os demais. Depois dele, S4 aponta uma listagem que chama a leitura de agregado **uma vez por linha** dentro de `Promise.all` (`DRZ-RQB-01`), e S9 um `.default(crypto.randomUUID())` que congela o valor no SQL da migração (`DRZ-SCHEMA-04`).
+Repositório de tarefas: a sonda S1 mostra `usersRelations` exportado e **ausente** do `drizzle({ schema })` — achado que invalida os demais. Depois dele, S4 aponta uma listagem que chama a leitura de agregado **uma vez por linha** dentro de `Promise.all` (`DRZ-RQB-01`), e S9 um `.default(crypto.randomUUID)` que congela o valor no SQL da migração (`DRZ-SCHEMA-04`).
 
 O formato e o corte estão em `references/relatorio-e-corte.md`.
 
@@ -110,8 +115,8 @@ O formato e o corte estão em `references/relatorio-e-corte.md`.
 
 ## Relacionados
 
-- [[Drizzle ORM]] — fonte desta skill: § 0, § 5, § 6, § 7
-- [[Drizzle - Schema e Migrations]] · [[Drizzle - Queries e Relations]] — os satélites
-- [[PostgreSQL]] — o que o ORM não dispensa
-- [[Paginação por offset e cursor]] · [[Migrações de banco de dados]] — quando o achado é de estratégia
-- [[react-review]] — de onde vem o formato de achado
+- [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) — fonte desta skill: § 0, § 5, § 6, § 7
+- [Drizzle - Schema e Migrations](../../../knowledge-base/docs/drizzle-schema-e-migrations.md) · [Drizzle - Queries e Relations](../../../knowledge-base/docs/drizzle-queries-e-relations.md) — os satélites
+- `PostgreSQL` — o que o ORM não dispensa
+- · — quando o achado é de estratégia
+- `react-review` — de onde vem o formato de achado

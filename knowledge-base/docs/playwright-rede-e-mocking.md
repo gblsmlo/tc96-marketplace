@@ -397,7 +397,7 @@ Ver § 1.3 e [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md)
 - [Playwright - Assertions](playwright-assertions.md) — `toBeOK` e matchers assimétricos sobre payload
 - [Playwright - Autenticação e Isolamento](playwright-autenticacao-e-isolamento.md) — `storageState` entre API e browser
 - [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) — por que bloquear imagem quebra screenshot
-- `HTTP - Cache e Requisições Condicionais` · `HTTP - Status e Redirecionamento` · `HTTP - CORS` — a semântica que o mock precisa preservar
+- [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) · [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) · [HTTP - CORS](http-cors.md) — a semântica que o mock precisa preservar
 - `Hono - Validação e RPC` · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — de onde vem o tipo da resposta
 - [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) — por que a query não refaz o fetch que o teste esperava
 - — o critério de quando mock não basta

@@ -567,11 +567,11 @@ O corpo desta doc é Playwright fiel à fonte. Mas no meu stack várias decisõe
 | Estado de erro do BFF não dispara | `try/catch` no teste | nem `hc` (Hono) nem Eden Treaty lançam em status de erro — `Hono - Validação e RPC`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 | Mock de resposta com shape redigitado à mão | duplicar o tipo no teste | reusar o tipo exportado do servidor — `Hono - Validação e RPC`, [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 | Preparar dado de teste pela UI | clicar 12 vezes para criar um registro | criar via `request` (API), navegar depois — [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 5 |
-| Semear e limpar banco entre execuções | `beforeEach` que apaga tabela | setup/teardown project + dado por worker — `Drizzle - Schema e Migrations`, e |
+| Semear e limpar banco entre execuções | `beforeEach` que apaga tabela | setup/teardown project + dado por worker — [Drizzle - Schema e Migrations](drizzle-schema-e-migrations.md), e |
 | Cookie de sessão não persiste | recriar login em cada teste | `storageState`; e a semântica de `SameSite`/`__Host-` é de `RFC 6265 - Cookies HTTP` |
 | Teste de autorização por papel | um só usuário com tudo liberado | um `storageState` por papel — `OWASP - Sessão e Autorização`, `WorkOS - RBAC` |
-| Asserção sobre status HTTP inesperado | afirmar `200` sempre | a semântica do status é contrato — `HTTP - Status e Redirecionamento` |
-| Requisição do teste barrada por origem | desligar CORS na aplicação | `HTTP - CORS` |
+| Asserção sobre status HTTP inesperado | afirmar `200` sempre | a semântica do status é contrato — [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) |
+| Requisição do teste barrada por origem | desligar CORS na aplicação | [HTTP - CORS](http-cors.md) |
 | Suíte E2E cobrindo toda regra de negócio | um E2E por rota | E2E cobre jornada crítica; regra vai para camada mais barata — [Teste de Software](teste-de-software.md) |
 | Teste acoplado a estado interno do componente | espiar hook ou render count | |
 | CI lento com a suíte inteira em série | aumentar a máquina | `fullyParallel` + `--shard` + `merge-reports` — `Github Actions` |
@@ -596,7 +596,7 @@ O que mudou: a 1.62 tornou component testing não-experimental, com um modelo de
 - [Storybook](storybook.md) — o outro lado da fronteira componente × jornada
 - ·
 - [React.js](react-js.md) · [TanStack Query](tanstack-query.md) · [TanStack Router](tanstack-router.md) · [React Hook Form](react-hook-form.md)
-- `HTTP` · `OWASP - Sessão e Autorização` · `Github Actions`
+- [HTTP](http.md) · `OWASP - Sessão e Autorização` · `Github Actions`
 - `Monorepo com Bun - estrutura e tooling` — onde a suíte E2E vive
 -
 

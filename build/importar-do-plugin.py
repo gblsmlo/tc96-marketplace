@@ -39,6 +39,7 @@ FAMILIAS = {
              "bun-test-build", "bun-test-review"], "bun"),
     "elysia": ("hermes-backend/0.1.6",
                ["elysia-build", "elysia-schema", "elysia-diagnose"], "elysia"),
+    "drizzle": ("hermes-backend/0.1.6", ["drizzle-review"], "drizzle"),
     "playwright": ("hermes-e2e/0.1.4",
                    ["playwright-build", "playwright-review", "playwright-diagnose"],
                    "playwright"),

@@ -107,7 +107,7 @@ A pergunta é sempre: **este fake honra o contrato real?**
 
 **Fake fiel existe, e é ótimo:** um Postgres em container é essencialmente o real controlado. O critério não é "fake × real", é **fidelidade** — e um container do banco de verdade tem fidelidade quase total por um custo de tamanho medium.
 
-> **Ponte com o stack.** O padrão preferível para persistência não é fake de repositório: é Postgres local com dado isolado por worker (`Drizzle - Schema e Migrations`). Fake de repositório substitui exatamente a coisa cujo comportamento — transação, constraint, cascade, tipo de coluna — é a mais fácil de errar.
+> **Ponte com o stack.** O padrão preferível para persistência não é fake de repositório: é Postgres local com dado isolado por worker ([Drizzle - Schema e Migrations](drizzle-schema-e-migrations.md)). Fake de repositório substitui exatamente a coisa cujo comportamento — transação, constraint, cascade, tipo de coluna — é a mais fácil de errar.
 
 ---
 
@@ -231,7 +231,7 @@ Produz o pior dos dois: o custo de infraestrutura do E2E, com a fidelidade de um
 - [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) · [Storybook - Mocking](storybook-mocking.md) · [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) — as ferramentas por nível
 - `Hono - Validação e RPC` · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — de onde o shape deve vir
 - — o critério de quando mock não basta
-- `Drizzle - Schema e Migrations` — por que fake de repositório perde o que importa
+- [Drizzle - Schema e Migrations](drizzle-schema-e-migrations.md) — por que fake de repositório perde o que importa
 - — a fronteira que torna a substituição possível
 
 ## Fontes consultadas

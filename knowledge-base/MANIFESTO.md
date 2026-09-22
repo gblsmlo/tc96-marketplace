@@ -26,10 +26,20 @@ Origem: `/home/gabs/Sync/Vaults/Notes` · o que entra: `knowledge-base/dominio.t
 | `docs/bun-testes-mocks-e-tempo.md` | `Docs/Bun - Testes - Mocks e Tempo.md` | `deaac722c6a2` |
 | `docs/bun-testes.md` | `Docs/Bun - Testes.md` | `6e3d86500eeb` |
 | `docs/bun.md` | `Docs/Bun.md` | `dd93a6e634eb` |
+| `docs/drizzle-orm.md` | `Docs/Drizzle ORM.md` | `fd98bae3cbc6` |
+| `docs/drizzle-queries-e-relations.md` | `Docs/Drizzle - Queries e Relations.md` | `555ea0e6aec1` |
+| `docs/drizzle-schema-e-migrations.md` | `Docs/Drizzle - Schema e Migrations.md` | `e801d79e6f7d` |
 | `docs/elysia-lifecycle-e-plugins.md` | `Docs/Elysia - Lifecycle e Plugins.md` | `b42b6dfd93d0` |
 | `docs/elysia-roteamento-e-handler.md` | `Docs/Elysia - Roteamento e Handler.md` | `c6f7a491c2ce` |
 | `docs/elysia-schema-e-eden.md` | `Docs/Elysia - Schema e Eden.md` | `d67a2e1ba479` |
 | `docs/elysia.md` | `Docs/Elysia.md` | `62afa6ebfb27` |
+| `docs/http-cache-e-requisicoes-condicionais.md` | `Docs/HTTP - Cache e Requisições Condicionais.md` | `d9f12ad77862` |
+| `docs/http-cors.md` | `Docs/HTTP - CORS.md` | `0893db6501c3` |
+| `docs/http-metodos-e-semantica.md` | `Docs/HTTP - Métodos e Semântica.md` | `4267e51621c6` |
+| `docs/http-negociacao-de-conteudo-e-range.md` | `Docs/HTTP - Negociação de Conteúdo e Range.md` | `39e9666e47fc` |
+| `docs/http-specs-e-rfcs.md` | `Docs/HTTP - Specs e RFCs.md` | `b075f16489de` |
+| `docs/http-status-e-redirecionamento.md` | `Docs/HTTP - Status e Redirecionamento.md` | `9a9b2d6ed639` |
+| `docs/http.md` | `Docs/HTTP.md` | `c8dc88f8492a` |
 | `docs/playwright-acoes-e-auto-waiting.md` | `Docs/Playwright - Ações e Auto-waiting.md` | `ae113f294517` |
 | `docs/playwright-agents-cli-e-mcp.md` | `Docs/Playwright - Agents, CLI e MCP.md` | `e770573ba504` |
 | `docs/playwright-assertions.md` | `Docs/Playwright - Assertions.md` | `25425fef67e4` |

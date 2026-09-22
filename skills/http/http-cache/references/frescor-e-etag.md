@@ -31,9 +31,9 @@ A árvore completa é a § 5.3 do hub. O resumo operacional:
 ## Passo 2 — `ETag` e o `304`
 
 ```
-GET  /faturas/42            → 200 + ETag: "v7" + Cache-Control
-GET  /faturas/42            → If-None-Match: "v7"
-                             → 304, sem corpo, repetindo ETag/Cache-Control/Date/Vary
+GET /faturas/42 → 200 + ETag: "v7" + Cache-Control
+GET /faturas/42 → If-None-Match: "v7"
+ → 304, sem corpo, repetindo ETag/Cache-Control/Date/Vary
 ```
 
 | Confira | Regra |
@@ -44,7 +44,7 @@ GET  /faturas/42            → If-None-Match: "v7"
 
 **Emitir `ETag` sem tratar `If-None-Match` é o antipadrão mais comum aqui**: custa o header e não entrega economia nenhuma — o cliente pergunta e recebe o corpo inteiro de volta.
 
-**O que o stack faz sozinho:** `Bun.serve` responde `304` a `If-None-Match` ao servir `Bun.file` — mas **só para arquivo**. Para resposta dinâmica, o `ETag` é seu ([[Bun - HTTP e Servidor]]). Em Hono há `hono/etag`, com `weak: false` por default ([[Hono - Middleware e Ciclo de Vida]] § 5).
+**O que o stack faz sozinho:** `Bun.serve` responde `304` a `If-None-Match` ao servir `Bun.file` — mas **só para arquivo**. Para resposta dinâmica, o `ETag` é seu (`Docs/Bun - HTTP e Servidor.md`). Em Hono há `hono/etag`, com `weak: false` por default (`Docs/Hono - Middleware e Ciclo de Vida.md` § 5).
 
 ---
 

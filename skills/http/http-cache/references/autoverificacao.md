@@ -1,7 +1,7 @@
 # Autoverificação antes de entregar
 
 ```bash
-bash ~/.claude/skills/http-cache/scripts/sondas-cache.sh https://api.local/faturas/42
+bash ${CLAUDE_PLUGIN_ROOT}/skills/http-cache/scripts/sondas-cache.sh https://api.local/faturas/42
 ```
 
 | # | Confira | Regra |
@@ -22,9 +22,9 @@ bash ~/.claude/skills/http-cache/scripts/sondas-cache.sh https://api.local/fatur
 **As sondas que provam:**
 
 ```bash
-curl -i https://api.local/faturas/42                                   # tem Cache-Control? ETag? Vary?
-curl -i -H 'If-None-Match: "v7"' https://api.local/faturas/42          # devolve 304 sem corpo?
-curl -i -X PUT -H 'If-Match: "obsoleto"' https://api.local/faturas/42  # devolve 412?
+curl -i https://api.local/faturas/42 # tem Cache-Control? ETag? Vary?
+curl -i -H 'If-None-Match: "v7"' https://api.local/faturas/42 # devolve 304 sem corpo?
+curl -i -X PUT -H 'If-Match: "obsoleto"' https://api.local/faturas/42 # devolve 412?
 ```
 
 A segunda e a terceira são as que mais falham, e nenhuma das duas dá erro quando não implementada — a segunda devolve `200` com o corpo inteiro, a terceira aplica a escrita e apaga o trabalho de outra pessoa.

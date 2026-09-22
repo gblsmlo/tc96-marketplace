@@ -7,13 +7,13 @@ O cliente pode reenviar esta requisição sem intenção?
 (retry automático, botão clicado duas vezes, timeout de rede)
 ├── é GET/HEAD/PUT/DELETE → já é idempotente por semântica (HTTP-METH-04)
 └── é POST ou PATCH
-    ├── criar duplicata é aceitável?  → nada a fazer
-    └── criar duplicata é defeito
-        → aceitar chave de idempotência no request (HTTP-METH-09)
-          e o cliente NÃO configura retry sem ela (HTTP-METH-08)
+ ├── criar duplicata é aceitável? → nada a fazer
+ └── criar duplicata é defeito
+ → aceitar chave de idempotência no request (HTTP-METH-09)
+ e o cliente NÃO configura retry sem ela (HTTP-METH-08)
 ```
 
-**`HTTP-METH-08` é sobre o cliente e é frequentemente violada por configuração**, não por código: um retry global no cliente HTTP transforma todo `POST` em risco de duplicata. Ver [[Idempotência torna retries seguros]].
+**`HTTP-METH-08` é sobre o cliente e é frequentemente violada por configuração**, não por código: um retry global no cliente HTTP transforma todo `POST` em risco de duplicata. Ver.
 
 ---
 
@@ -35,7 +35,7 @@ A § 8 do hub existe para este passo, e ela muda o trabalho:
 | Hono | há built-in para CORS, `etag`, `compress`, `bodyLimit`, e **`methodNotAllowed`** |
 | Elysia | `@elysia/cors`, e o schema produz validação + tipo + OpenAPI + cliente |
 
-**A armadilha do Hono que é violação silenciosa de `HTTP-METH-07`:** sem o middleware `methodNotAllowed`, método não suportado numa rota existente devolve **`404`**, não `405` com `Allow`. Ver [[Hono - Middleware e Ciclo de Vida]] § 5.
+**A armadilha do Hono que é violação silenciosa de `HTTP-METH-07`:** sem o middleware `methodNotAllowed`, método não suportado numa rota existente devolve **`404`**, não `405` com `Allow`. Ver `Docs/Hono - Middleware e Ciclo de Vida.md` § 5.
 
 ---
 

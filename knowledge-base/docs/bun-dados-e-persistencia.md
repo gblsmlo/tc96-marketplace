@@ -398,7 +398,7 @@ Com drivers embutidos, a pergunta "ainda preciso de ORM?" tem resposta por eixo,
 | Latência mínima, controle total do SQL | **melhor** | camada a mais |
 | Superfície de dependência mínima (edge, binário compilado) | **melhor** | pesa |
 
-Leitura curta: **migração e geração de tipos são o que se compra com um ORM.** Se o projeto já resolve migração com outra ferramenta e o schema é estável, o driver embutido cobre bem. Se o schema evolui toda semana e várias pessoas mexem, a ausência de migração em Bun vira o gargalo — e Drizzle, mais leve, costuma ser o meio-termo: gera migração e tipos, e continua deixando você escrever SQL. Referência conduzida em `Drizzle ORM`.
+Leitura curta: **migração e geração de tipos são o que se compra com um ORM.** Se o projeto já resolve migração com outra ferramenta e o schema é estável, o driver embutido cobre bem. Se o schema evolui toda semana e várias pessoas mexem, a ausência de migração em Bun vira o gargalo — e Drizzle, mais leve, costuma ser o meio-termo: gera migração e tipos, e continua deixando você escrever SQL. Referência conduzida em [Drizzle ORM](drizzle-orm.md).
 
 ---
 
@@ -449,7 +449,7 @@ Leitura curta: **migração e geração de tipos são o que se compra com um ORM
 
 - [Bun](bun.md) — hub
 - [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Bun - Runtime e APIs](bun-runtime-e-apis.md) · [Bun - Bundler e Build](bun-bundler-e-build.md) · [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) · [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) · [Bun - Testes](bun-testes.md)
-- `PostgreSQL` · `Drizzle ORM` · `Prisma` · ·
+- `PostgreSQL` · [Drizzle ORM](drizzle-orm.md) · `Prisma` · ·
 - · ·
 - · `Arquivos.env não substituem secret management`
 - ·

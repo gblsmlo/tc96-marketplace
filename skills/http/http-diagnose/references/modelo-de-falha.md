@@ -13,18 +13,18 @@ A árvore completa é a § 5.4 do hub. Percorra **sem pular**:
 ```
 O erro no console menciona "CORS policy"?
 ├── NÃO → não é CORS. É rede, TLS, DNS, ou o servidor caiu.
-│         Confirme se a requisição saiu (aba Network / log do servidor).
+│ Confirme se a requisição saiu (aba Network / log do servidor).
 └── SIM
-    └── A requisição chegou ao servidor (aparece no log)?
-        ├── NÃO → o preflight falhou ou não foi respondido
-        │   ├── há OPTIONS no log? → o handler não devolve os Access-Control-Allow-*
-        │   └── não há OPTIONS   → a rota não trata OPTIONS
-        │                          (framework devolvendo 404/405 no preflight)
-        └── SIM, 2xx, e ainda falhou
-            ├── usa cookie/credencial? → Allow-Origin: * é INVÁLIDO com credenciais
-            ├── o header vem undefined  → falta Access-Control-Expose-Headers
-            └── falha só para alguns, ou só antes de hard refresh
-                → cache compartilhado sem Vary: Origin
+ └── A requisição chegou ao servidor (aparece no log)?
+ ├── NÃO → o preflight falhou ou não foi respondido
+ │ ├── há OPTIONS no log? → o handler não devolve os Access-Control-Allow-*
+ │ └── não há OPTIONS → a rota não trata OPTIONS
+ │ (framework devolvendo 404/405 no preflight)
+ └── SIM, 2xx, e ainda falhou
+ ├── usa cookie/credencial? → Allow-Origin: * é INVÁLIDO com credenciais
+ ├── o header vem undefined → falta Access-Control-Expose-Headers
+ └── falha só para alguns, ou só antes de hard refresh
+ → cache compartilhado sem Vary: Origin
 ```
 
 **O primeiro nó é o que mais engana:** "CORS" no console frequentemente é o browser relatando que **não houve resposta** — servidor caído, TLS inválido, porta errada. A checagem é o log do servidor, não o console.
@@ -51,15 +51,15 @@ Um `OPTIONS` automático que o browser envia **antes** da chamada real, quando e
 ```
 A chamada usa cookie, Authorization, ou credentials: 'include'?
 └── SIM → Access-Control-Allow-Origin: * é INVÁLIDO
-          → ecoe a origem concreta + Access-Control-Allow-Credentials: true
-                                     (HTTP-CORS-02)
-          → e a origem concreta veio de uma ALLOWLIST, nunca do header Origin
-            refletido cegamente                          (HTTP-CORS-01)
-          → e a resposta declara Vary: Origin, inclusive quando RECUSA
-                                                          (HTTP-CORS-03)
+ → ecoe a origem concreta + Access-Control-Allow-Credentials: true
+ (HTTP-CORS-02)
+ → e a origem concreta veio de uma ALLOWLIST, nunca do header Origin
+ refletido cegamente (HTTP-CORS-01)
+ → e a resposta declara Vary: Origin, inclusive quando RECUSA
+ (HTTP-CORS-03)
 ```
 
-**O default do Hono é `origin: '*'`**, que é inválido com `credentials: true` — `HONO-MW-08` em [[Hono - Middleware e Ciclo de Vida]]. É o caso concreto mais comum deste ramo no stack.
+**O default do Hono é `origin: '*'`**, que é inválido com `credentials: true` — `HONO-MW-08` em `Docs/Hono - Middleware e Ciclo de Vida.md`. É o caso concreto mais comum deste ramo no stack.
 
 ### 2.3 Header que chega `undefined`
 
@@ -67,7 +67,7 @@ Só **sete** headers de resposta são legíveis cross-origin por default. `ETag`
 
 Se o JavaScript precisa ler um header, ele vai em `Access-Control-Expose-Headers` (`HTTP-CORS-04`). E `*` ali **nunca** em rota que aceita credenciais (`HTTP-CORS-10`).
 
-Isto interage com [[http-cache]]: uma API que emite `ETag` para o cliente usar em `If-None-Match` precisa expor `ETag`, senão o cliente nunca o vê.
+Isto interage com `http-cache`: uma API que emite `ETag` para o cliente usar em `If-None-Match` precisa expor `ETag`, senão o cliente nunca o vê.
 
 ### 2.4 Funciona para uns e não para outros
 

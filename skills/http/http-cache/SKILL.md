@@ -1,19 +1,21 @@
 ---
-name: http-cache
-description: Decidir a política de cache HTTP de um recurso e implementar requisição condicional — `Cache-Control` diretiva a diretiva, `ETag`, `304`, `If-Match` para escrita concorrente, `Vary` — citando IDs `HTTP-CACHE-*`, com sondas `curl` que provam se a condicional é tratada — use quando a tarefa for definir frescor de uma rota, ligar `ETag` e responder `304`, proteger escrita concorrente contra sobrescrita, decidir entre `no-store` e `no-cache`, versionar asset, ou entender por que um cache serviu resposta errada. Não use para desenhar método e status, que é http-contract, para requisição bloqueada pelo browser, que é http-diagnose, nem para o cache do TanStack Query, que é outra camada.
+nome: http-cache
+descricao: Decidir a política de cache HTTP de um recurso e implementar requisição condicional — `Cache-Control` diretiva a diretiva, `ETag`, `304`, `If-Match` para escrita concorrente, `Vary` — citando IDs `HTTP-CACHE-*`, com sondas `curl` que provam se a condicional é tratada — use quando a tarefa for definir frescor de uma rota, ligar `ETag` e responder `304`, proteger escrita concorrente contra sobrescrita, decidir entre `no-store` e `no-cache`, versionar asset, ou entender por que um cache serviu resposta errada. Não use para desenhar método e status, que é http-contract, para requisição bloqueada pelo browser, que é http-diagnose, nem para o cache do TanStack Query, que é outra camada.
+tipo: skill
+familia: http
+fonte: "[HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md)"
 tags:
   - skill
   - http
   - backend
-fonte: "[[HTTP - Cache e Requisições Condicionais]]"
 ---
 
 # http-cache
 
-> **Fonte desta skill:** [[HTTP - Cache e Requisições Condicionais]], com o hub [[HTTP]] como roteador.
+> **Fonte desta skill:** [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md), com o hub [HTTP](../../../knowledge-base/docs/http.md) como roteador.
 > Esta skill **não contém** o texto das regras — ela diz o que decidir e o que provar com `curl`.
 
-Contrato que esta skill implementa: [[HTTP]] § 7 ("Contrato de skill").
+Contrato que esta skill implementa: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -23,10 +25,10 @@ A pergunta é **por quanto tempo**, **quem pode guardar**, ou **como revalidar**
 
 | Situação | Vá para |
 | --- | --- |
-| qual método, qual status, `Location` | [[http-contract]] |
-| requisição bloqueada, CORS, formato errado | [[http-diagnose]] |
-| auditar a API inteira | [[http-review]] |
-| `staleTime`/`gcTime` do cliente | [[tanstack-query]] — **outra camada**, ver Passo 5 |
+| qual método, qual status, `Location` | `http-contract` |
+| requisição bloqueada, CORS, formato errado | `http-diagnose` |
+| auditar a API inteira | `http-review` |
+| `staleTime`/`gcTime` do cliente | `tanstack-query` — **outra camada**, ver Passo 5 |
 
 ---
 
@@ -34,10 +36,10 @@ A pergunta é **por quanto tempo**, **quem pode guardar**, ou **como revalidar**
 
 | Ordem | Carregar | Por quê |
 | --- | --- | --- |
-| 1 | [[HTTP]] § 5.3 | a árvore de frescor — o núcleo desta skill |
-| 2 | [[HTTP]] § 6 + § 6.2 | regras e, **obrigatório**, a nota sobre `Vary` e `ETag` forte |
-| 3 | [[HTTP - Cache e Requisições Condicionais]] | a fonte |
-| 4 | [[HTTP]] § 8.3 | a fronteira com o cache do TanStack Query |
+| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 5.3 | a árvore de frescor — o núcleo desta skill |
+| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.2 | regras e, **obrigatório**, a nota sobre `Vary` e `ETag` forte |
+| 3 | [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md) | a fonte |
+| 4 | [HTTP](../../../knowledge-base/docs/http.md) § 8.3 | a fronteira com o cache do TanStack Query |
 
 Referências desta skill:
 
@@ -91,7 +93,7 @@ São **camadas empilhadas com donos diferentes**: o cache HTTP é decidido pelo 
 ## Passo 6 — Autoverificar antes de entregar
 
 ```bash
-bash ~/.claude/skills/http-cache/scripts/sondas-cache.sh https://api.local/faturas/42
+bash ${CLAUDE_PLUGIN_ROOT}/skills/http-cache/scripts/sondas-cache.sh https://api.local/faturas/42
 ```
 
 As duas sondas que mais falham são as que **não dão erro** quando não implementadas: a condicional devolve `200` com o corpo inteiro, e a escrita concorrente aplica a mudança.
@@ -101,8 +103,8 @@ As duas sondas que mais falham são as que **não dão erro** quando não implem
 ## Passo 7 — Fechar
 
 1. **Rode as sondas.** Política declarada e política implementada são coisas diferentes.
-2. **Se a decisão virou "qual status devolver"**, é [[http-contract]].
-3. **Se o cache serviu resposta de outra origem**, o achado é `Vary` — e pode ser CORS ([[http-diagnose]]).
+2. **Se a decisão virou "qual status devolver"**, é `http-contract`.
+3. **Se o cache serviu resposta de outra origem**, o achado é `Vary` — e pode ser CORS (`http-diagnose`).
 4. **Declare o que não verificou.**
 
 ---
@@ -117,7 +119,7 @@ Caso completo: `references/exemplo.md`.
 
 ## Relacionados
 
-- [[HTTP - Cache e Requisições Condicionais]] — fonte desta skill
-- [[HTTP]] § 5.3, § 6, § 7, § 8.3
-- [[http-contract]] · [[http-diagnose]] · [[http-review]] — as skills irmãs
-- [[tanstack-query]] — a outra camada de cache
+- [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md) — fonte desta skill
+- [HTTP](../../../knowledge-base/docs/http.md) § 5.3, § 6, § 7, § 8.3
+- `http-contract` · `http-diagnose` · `http-review` — as skills irmãs
+- `tanstack-query` — a outra camada de cache

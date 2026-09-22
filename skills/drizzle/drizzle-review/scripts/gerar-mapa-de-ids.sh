@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 # Regenera references/mapa-de-ids.md a partir de Docs/Drizzle*.
 set -euo pipefail
-VAULT="${1:-$HOME/Sync/Vaults/Notes}"
-DOCS="$VAULT/Docs"
-OUT="$VAULT/Skills/drizzle/drizzle-review/references/mapa-de-ids.md"
+BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
+# O mapa é gerado na autoria e vai versionado no plugin: o destino é o repo,
+# a origem continua sendo o vault (passe outro caminho como $1 se preciso).
+PLUGIN="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+DOCS="$BASE/docs"
+OUT="$PLUGIN/skills/drizzle-review/references/mapa-de-ids.md"
 
 scan() {
-  for f in "$DOCS"/Drizzle*.md; do
+  for f in "$DOCS"/drizzle*.md; do
     base="$(basename "$f" .md)"
     awk -v sat="$base" -v hub="Drizzle ORM" '
       /^## / { h2 = $0; sub(/^## /, "", h2) }
@@ -30,14 +33,14 @@ scan() {
 
 {
   echo "---"
-  echo "gerado-por: Skills/drizzle/drizzle-review/scripts/gerar-mapa-de-ids.sh"
+  echo "gerado-por: plugins/hermes-backend/skills/drizzle-review/scripts/gerar-mapa-de-ids.sh"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
   echo "# Mapa de IDs \`DRZ-*\`"
   echo
   echo "> Índice, não cópia. \`DRZ-SCHEMA-01\` é **apelido** de \`DRZ-CORE-02\` e não aparece em revisão."
-  echo "> Regenerar com \`bash Skills/drizzle/drizzle-review/scripts/gerar-mapa-de-ids.sh\`."
+  echo "> Regenerar com \`bash plugins/hermes-backend/skills/drizzle-review/scripts/gerar-mapa-de-ids.sh\`."
   echo
   echo "| ID | Declarada em | Corpo no satélite | Seção do corpo |"
   echo "| --- | --- | --- | --- |"

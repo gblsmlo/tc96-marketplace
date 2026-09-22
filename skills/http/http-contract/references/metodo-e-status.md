@@ -1,6 +1,6 @@
 # Método e status
 
-> Passos 1 e 2. As árvores completas são a § 5.1 e § 5.2 de [[HTTP]].
+> Passos 1 e 2. As árvores completas são a § 5.1 e § 5.2 de [HTTP](../../../../knowledge-base/docs/http.md).
 
 A árvore completa é a § 5.1 do hub. As invariantes que ela protege:
 
@@ -38,7 +38,7 @@ A árvore completa é a § 5.2 do hub. As obrigações que acompanham cada escol
 
 **A regra que domina o passo:** falha nunca é `2xx` com erro no corpo. O status carrega o resultado (`HTTP-CORE-06` — canônico; `HTTP-STATUS-01` é apelido e não deve ser citado).
 
-> **A ponte que evita o bug mais comum do stack:** nem o `hc` do Hono nem o Eden Treaty do Elysia **lançam** em status de erro. Uma `queryFn` ingênua fica em `success` com o erro dentro de `data` — ver [[Hono - Validação e RPC]] e [[Elysia - Schema e Eden]]. Ou seja: cumprir `HTTP-CORE-06` no servidor **não basta** se o cliente tipado não checa `res.ok`.
+> **A ponte que evita o bug mais comum do stack:** nem o `hc` do Hono nem o Eden Treaty do Elysia **lançam** em status de erro. Uma `queryFn` ingênua fica em `success` com o erro dentro de `data` — ver `Docs/Hono - Validação e RPC.md` e `Docs/Elysia - Schema e Eden.md`. Ou seja: cumprir `HTTP-CORE-06` no servidor **não basta** se o cliente tipado não checa `res.ok`.
 
 ### 2.1 Redirecionamento
 

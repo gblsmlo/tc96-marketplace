@@ -1,19 +1,21 @@
 ---
-name: http-diagnose
-description: Diagnosticar requisição bloqueada pelo browser ou discordância de formato entre cliente e servidor — o modelo de falha de CORS, preflight, headers legíveis, `415` × `406`, charset — citando IDs `HTTP-CORS-*` e `HTTP-NEG-*`, com cinco sondas `curl` executáveis — use quando a tarefa for investigar erro de CORS no console, preflight que falha, header que chega `undefined` no JavaScript, requisição que funciona no curl e falha no browser, acento quebrado, ou corpo no formato errado. Não use para desenhar método e status, que é http-contract, para política de frescor, que é http-cache, nem para auditar a API inteira, que é http-review.
+nome: http-diagnose
+descricao: Diagnosticar requisição bloqueada pelo browser ou discordância de formato entre cliente e servidor — o modelo de falha de CORS, preflight, headers legíveis, `415` × `406`, charset — citando IDs `HTTP-CORS-*` e `HTTP-NEG-*`, com cinco sondas `curl` executáveis — use quando a tarefa for investigar erro de CORS no console, preflight que falha, header que chega `undefined` no JavaScript, requisição que funciona no curl e falha no browser, acento quebrado, ou corpo no formato errado. Não use para desenhar método e status, que é http-contract, para política de frescor, que é http-cache, nem para auditar a API inteira, que é http-review.
+tipo: skill
+familia: http
+fonte: "[HTTP - CORS](../../../knowledge-base/docs/http-cors.md)"
 tags:
   - skill
   - http
   - backend
-fonte: "[[HTTP - CORS]]"
 ---
 
 # http-diagnose
 
-> **Fonte desta skill:** [[HTTP - CORS]] e [[HTTP - Negociação de Conteúdo e Range]], com o hub [[HTTP]] como roteador.
+> **Fonte desta skill:** [HTTP - CORS](../../../knowledge-base/docs/http-cors.md) e [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/docs/http-negociacao-de-conteudo-e-range.md), com o hub [HTTP](../../../knowledge-base/docs/http.md) como roteador.
 > Esta skill **não contém** o texto das regras — ela diz o que sondar, em que ordem eliminar hipóteses, e o que **não** é CORS.
 
-Contrato que esta skill implementa: [[HTTP]] § 7 ("Contrato de skill").
+Contrato que esta skill implementa: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -23,10 +25,10 @@ Uma requisição não chega, ou chega e o formato está errado.
 
 | Situação | Vá para |
 | --- | --- |
-| desenhar método e status | [[http-contract]] |
-| política de frescor, `ETag`, condicional | [[http-cache]] |
-| auditar a API inteira | [[http-review]] |
-| o plugin `cors()` do Elysia com default permissivo | [[elysia-diagnose]] (`ELYSIA-LIFE-12`) — é o mesmo achado por outro caminho |
+| desenhar método e status | `http-contract` |
+| política de frescor, `ETag`, condicional | `http-cache` |
+| auditar a API inteira | `http-review` |
+| o plugin `cors` do Elysia com default permissivo | `elysia-diagnose` (`ELYSIA-LIFE-12`) — é o mesmo achado por outro caminho |
 
 ---
 
@@ -34,10 +36,10 @@ Uma requisição não chega, ou chega e o formato está errado.
 
 | Ordem | Carregar | Por quê |
 | --- | --- | --- |
-| 1 | [[HTTP]] § 5.4 e § 5.5 | as duas árvores desta skill |
-| 2 | [[HTTP]] § 6 + § 6.2 | regras e IDs canônicos |
-| 3 | [[HTTP - CORS]] | a fonte |
-| 4 | [[HTTP - Negociação de Conteúdo e Range]] | quando o sintoma é formato, não bloqueio |
+| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 5.4 e § 5.5 | as duas árvores desta skill |
+| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.2 | regras e IDs canônicos |
+| 3 | [HTTP - CORS](../../../knowledge-base/docs/http-cors.md) | a fonte |
+| 4 | [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/docs/http-negociacao-de-conteudo-e-range.md) | quando o sintoma é formato, não bloqueio |
 
 Referências desta skill:
 
@@ -65,7 +67,7 @@ Referências desta skill:
 `references/modelo-de-falha.md`. Metade dos "erros de CORS" é o servidor não respondendo: a mensagem do browser é a mesma.
 
 ```bash
-bash ~/.claude/skills/http-diagnose/scripts/sondas-cors.sh https://api.local/faturas http://localhost:5173
+bash ${CLAUDE_PLUGIN_ROOT}/skills/http-diagnose/scripts/sondas-cors.sh https://api.local/faturas http://localhost:5173
 ```
 
 **A sonda 2 é a que mais rende:** se o preflight devolve `401`, `404` ou `405`, o problema é o **preflight**, não a chamada real — e o handler está correto.
@@ -96,7 +98,7 @@ Sintoma: <a mensagem do browser, e o que o usuário vê>
 Evidência: <a saída da sonda, com o header>
 Causa: <uma frase>
 Correção: <no servidor>
-Ver [[Satélite correspondente]].
+Ver Satélite correspondente.
 ```
 
 **Evidência é a saída do `curl`**, com o header colado. "Parece CORS" não é evidência.
@@ -120,7 +122,7 @@ Erro que o `curl` também reproduz, `401` legítimo, header que o servidor nunca
 
 ## Relacionados
 
-- [[HTTP - CORS]] — fonte desta skill
-- [[HTTP - Negociação de Conteúdo e Range]] — a segunda fonte
-- [[http-contract]] · [[http-cache]] · [[http-review]] — as skills irmãs
-- [[elysia-diagnose]] — o mesmo achado pelo lado do plugin
+- [HTTP - CORS](../../../knowledge-base/docs/http-cors.md) — fonte desta skill
+- [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/docs/http-negociacao-de-conteudo-e-range.md) — a segunda fonte
+- `http-contract` · `http-cache` · `http-review` — as skills irmãs
+- `elysia-diagnose` — o mesmo achado pelo lado do plugin

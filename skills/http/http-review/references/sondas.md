@@ -1,7 +1,7 @@
 # As oito sondas
 
 ```bash
-bash ~/.claude/skills/http-review/scripts/sondas.sh https://api.local /faturas/42 /faturas/42
+bash ${CLAUDE_PLUGIN_ROOT}/skills/http-review/scripts/sondas.sh https://api.local /faturas/42 /faturas/42
 ```
 
 Contrato HTTP é **invisível no código**: o handler parece certo, o teste passa, e o header que falta só quebra atrás de uma CDN ou noutro browser. Rode estas oito sondas contra o serviço de pé, **antes** de abrir o código.
@@ -19,7 +19,7 @@ Contrato HTTP é **invisível no código**: o handler parece certo, o teste pass
 
 **S5 é a mais grave e a menos rodada.** Se a escrita é aplicada, o serviço tem perda silenciosa de dado sob concorrência — não é achado de estilo.
 
-**S3 é a mais provável de acender no stack:** em Hono, sem o middleware `methodNotAllowed`, método não suportado devolve `404` ([[Hono - Middleware e Ciclo de Vida]] § 5).
+**S3 é a mais provável de acender no stack:** em Hono, sem o middleware `methodNotAllowed`, método não suportado devolve `404` (`Docs/Hono - Middleware e Ciclo de Vida.md` § 5).
 
 **Se S8 mostrar dois formatos de erro, reporte antes de continuar** — é contrato público inconsistente, e cada rota nova amplia o problema.
 

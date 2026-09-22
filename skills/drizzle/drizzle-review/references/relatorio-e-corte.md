@@ -1,12 +1,12 @@
 # Formato do achado, e o corte
 
-Quatro partes, o mesmo contrato de [[react-review]]:
+Quatro partes, o mesmo contrato de `react-review`:
 
 ```
 `ID-DA-REGRA` — arquivo:linha
 <o que está errado, uma frase>
 Correção: <mudança concreta>
-Ver [[Satélite correspondente]].
+Ver Satélite correspondente.
 ```
 
 ### Exemplo
@@ -15,7 +15,7 @@ Ver [[Satélite correspondente]].
 `DRZ-RQB-01` — apps/api/src/features/tasks/repository.ts:265
 A listagem chama a leitura de agregado uma vez por linha da página, dentro de Promise.all.
 Correção: buscar os IDs da página e carregar referências e tags em uma query com inArray, agrupando por Map.
-Ver [[Drizzle - Queries e Relations]].
+Ver Drizzle - Queries e Relations.
 ```
 
 Regras do formato:
@@ -32,9 +32,9 @@ Regras do formato:
 **Achado sem ID de regra é opinião**, com duas saídas legítimas:
 
 1. **Existe ID** → achado, cite o canônico.
-2. **Não existe ID, mas há nota normativa** (offset × cursor, retenção de log, ordem de deploy destrutivo) → cite a nota e a seção: "[[Paginação por offset e cursor]]". Não invente `DRZ-*`.
+2. **Não existe ID, mas há nota normativa** (offset × cursor, retenção de log, ordem de deploy destrutivo) → cite a nota e a seção: "". Não invente `DRZ-*`.
 3. **Nem ID nem nota** → seção separada "Sugestões (sem regra)", nunca misturada.
 
-**Nunca invente um ID.** Se a varredura encontrar um defeito recorrente e real sem regra correspondente, o produto certo é uma **proposta de regra** para [[Drizzle ORM]] § 6 — com ID sugerido, texto e o caso que a motivou — não uma citação falsa no relatório.
+**Nunca invente um ID.** Se a varredura encontrar um defeito recorrente e real sem regra correspondente, o produto certo é uma **proposta de regra** para [Drizzle ORM](../../../../knowledge-base/docs/drizzle-orm.md) § 6 — com ID sugerido, texto e o caso que a motivou — não uma citação falsa no relatório.
 
 ---

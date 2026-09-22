@@ -23,7 +23,7 @@ E a rota passa a tratar `If-None-Match`, devolvendo `304` quando `"lista-v41"` b
 PUT /faturas/42
 If-Match: "v7"
 
-→ 412 Precondition Failed     (o ETag atual é "v9")
+→ 412 Precondition Failed (o ETag atual é "v9")
 ```
 
 **O que as decisões evitaram:**

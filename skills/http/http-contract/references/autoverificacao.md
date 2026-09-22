@@ -1,7 +1,7 @@
 # Autoverificação antes de entregar
 
 ```bash
-bash ~/.claude/skills/http-contract/scripts/conferir.sh https://api.local /pedidos/42 /pedidos
+bash ${CLAUDE_PLUGIN_ROOT}/skills/http-contract/scripts/conferir.sh https://api.local /pedidos/42 /pedidos
 ```
 
 | # | Confira | Regra |
@@ -27,7 +27,7 @@ bash ~/.claude/skills/http-contract/scripts/conferir.sh https://api.local /pedid
 ```bash
 curl -i -X POST https://api.local/pedidos -H 'Content-Type: application/json' -d '{}'
 curl -i -X HEAD https://api.local/pedidos/42
-curl -i -X PATCH https://api.local/pedidos/42   # a rota só aceita PUT?
+curl -i -X PATCH https://api.local/pedidos/42 # a rota só aceita PUT?
 ```
 
 O terceiro é o que pega `HTTP-METH-07`: se voltar `404` em vez de `405` com `Allow`, é o middleware faltando.

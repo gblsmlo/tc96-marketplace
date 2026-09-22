@@ -1,20 +1,22 @@
 ---
-name: http-review
-description: Auditar o contrato HTTP de uma API existente contra as regras normativas da doc do vault, citando IDs `HTTP-*`, com oito sondas `curl` executáveis para o que a leitura de código não mostra — use quando a tarefa for revisar as rotas de um serviço ou de um PR, conferir se os status e headers estão certos, achar escrita sem proteção de concorrência, verificar se o CORS está desenhado ou improvisado, ou checar citação de RFC em ADR e documentação. Não use para desenhar rota nova, que é http-contract, para política de frescor, que é http-cache, nem para uma falha concreta em investigação, que é http-diagnose.
+nome: http-review
+descricao: Auditar o contrato HTTP de uma API existente contra as regras normativas da doc do vault, citando IDs `HTTP-*`, com oito sondas `curl` executáveis para o que a leitura de código não mostra — use quando a tarefa for revisar as rotas de um serviço ou de um PR, conferir se os status e headers estão certos, achar escrita sem proteção de concorrência, verificar se o CORS está desenhado ou improvisado, ou checar citação de RFC em ADR e documentação. Não use para desenhar rota nova, que é http-contract, para política de frescor, que é http-cache, nem para uma falha concreta em investigação, que é http-diagnose.
+tipo: skill
+familia: http
+fonte: "[HTTP](../../../knowledge-base/docs/http.md)"
 tags:
   - skill
   - http
   - backend
   - code-review
-fonte: "[[HTTP]]"
 ---
 
 # http-review
 
-> **Fonte desta skill:** [[HTTP]] — a § 6 normativa (74 regras, numeração contínua), a § 6.1 com as 25 que viajam com o caminho mínimo, e a § 6.2 com os IDs canônicos.
+> **Fonte desta skill:** [HTTP](../../../knowledge-base/docs/http.md) — a § 6 normativa (74 regras, numeração contínua), a § 6.1 com as 25 que viajam com o caminho mínimo, e a § 6.2 com os IDs canônicos.
 > Esta skill **não contém** o texto das regras — ela diz o que executar, em que ordem varrer, como classificar e como reportar.
 
-Contrato que esta skill implementa: [[HTTP]] § 7 ("Contrato de skill").
+Contrato que esta skill implementa: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -24,11 +26,11 @@ Auditar o contrato de uma API que **já existe** — o serviço inteiro, ou as r
 
 | Situação | Vá para |
 | --- | --- |
-| desenhar rota nova | [[http-contract]] |
-| política de frescor e condicional | [[http-cache]] |
-| uma falha concreta em investigação | [[http-diagnose]] |
-| o handler no framework | [[elysia-build]] |
-| a suíte que deveria cobrir isso | [[test-review]] |
+| desenhar rota nova | `http-contract` |
+| política de frescor e condicional | `http-cache` |
+| uma falha concreta em investigação | `http-diagnose` |
+| o handler no framework | `elysia-build` |
+| a suíte que deveria cobrir isso | `test-review` |
 
 ---
 
@@ -36,8 +38,8 @@ Auditar o contrato de uma API que **já existe** — o serviço inteiro, ou as r
 
 | Ordem | Carregar | Por quê |
 | --- | --- | --- |
-| 1 | [[HTTP]] § 2 | o modelo mental |
-| 2 | [[HTTP]] § 6 + § 6.1 | regras e as críticas |
+| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 2 | o modelo mental |
+| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.1 | regras e as críticas |
 | 3 | `references/mapa-de-ids.md` | **obrigatório antes de citar** |
 | 4 | o satélite do achado | via § 4 do hub |
 
@@ -61,7 +63,7 @@ Referências desta skill:
 Contrato HTTP é **invisível no código**: o handler parece certo, o teste passa, e o header que falta só quebra atrás de uma CDN ou noutro browser.
 
 ```bash
-bash ~/.claude/skills/http-review/scripts/sondas.sh https://api.local /faturas/42 /faturas/42
+bash ${CLAUDE_PLUGIN_ROOT}/skills/http-review/scripts/sondas.sh https://api.local /faturas/42 /faturas/42
 ```
 
 **Duas paradas obrigatórias:**
@@ -109,7 +111,7 @@ O formato e o corte estão em `references/relatorio-e-corte.md`.
 
 ## Relacionados
 
-- [[HTTP]] — fonte desta skill: § 6, § 6.1, § 6.2, § 7
-- [[http-contract]] · [[http-cache]] · [[http-diagnose]] — as skills irmãs
-- [[elysia-build]] — onde a correção costuma ser feita
-- [[test-review]] — a suíte que deveria proteger o contrato
+- [HTTP](../../../knowledge-base/docs/http.md) — fonte desta skill: § 6, § 6.1, § 6.2, § 7
+- `http-contract` · `http-cache` · `http-diagnose` — as skills irmãs
+- `elysia-build` — onde a correção costuma ser feita
+- `test-review` — a suíte que deveria proteger o contrato

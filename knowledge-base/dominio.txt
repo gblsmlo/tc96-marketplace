@@ -19,3 +19,6 @@ Docs/Playwright*
 # --- backend ---
 Docs/Bun*
 Docs/Elysia*
+
+Docs/HTTP*
+Docs/Drizzle*

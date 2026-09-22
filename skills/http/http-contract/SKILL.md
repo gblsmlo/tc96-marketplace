@@ -1,19 +1,21 @@
 ---
-name: http-contract
-description: Desenhar ou alterar o contrato HTTP de um endpoint — método, status, `Location`, idempotência, corpo de erro — citando IDs `HTTP-*`, com conferência executável por `curl` antes de entregar — use quando a tarefa for criar rota nova, escolher entre `PUT` e `PATCH`, decidir qual status devolver, projetar redirecionamento, tornar uma escrita segura para retry, ou padronizar o corpo de erro de uma API. Não use para política de cache e requisição condicional, que é http-cache, para requisição bloqueada pelo browser, que é http-diagnose, nem para auditar uma API inteira, que é http-review.
+nome: http-contract
+descricao: Desenhar ou alterar o contrato HTTP de um endpoint — método, status, `Location`, idempotência, corpo de erro — citando IDs `HTTP-*`, com conferência executável por `curl` antes de entregar — use quando a tarefa for criar rota nova, escolher entre `PUT` e `PATCH`, decidir qual status devolver, projetar redirecionamento, tornar uma escrita segura para retry, ou padronizar o corpo de erro de uma API. Não use para política de cache e requisição condicional, que é http-cache, para requisição bloqueada pelo browser, que é http-diagnose, nem para auditar uma API inteira, que é http-review.
+tipo: skill
+familia: http
+fonte: "[HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md)"
 tags:
   - skill
   - http
   - backend
-fonte: "[[HTTP - Métodos e Semântica]]"
 ---
 
 # http-contract
 
-> **Fonte desta skill:** [[HTTP - Métodos e Semântica]] e [[HTTP - Status e Redirecionamento]], com o hub [[HTTP]] como roteador. As 74 regras `HTTP-*` são declaradas na § 6 do hub.
+> **Fonte desta skill:** [HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md) e [HTTP - Status e Redirecionamento](../../../knowledge-base/docs/http-status-e-redirecionamento.md), com o hub [HTTP](../../../knowledge-base/docs/http.md) como roteador. As 74 regras `HTTP-*` são declaradas na § 6 do hub.
 > Esta skill **não contém** o texto das regras — ela diz o que decidir, em que ordem, e o que conferir com `curl` antes de entregar.
 
-Contrato que esta skill implementa: [[HTTP]] § 7 ("Contrato de skill").
+Contrato que esta skill implementa: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -23,12 +25,12 @@ Há um endpoint a desenhar ou alterar, e as perguntas são **qual método**, **q
 
 | Situação | Vá para |
 | --- | --- |
-| `Cache-Control`, `ETag`, `304`, `If-Match`, `Vary` | [[http-cache]] |
-| requisição bloqueada, CORS, formato errado | [[http-diagnose]] |
-| auditar o contrato de uma API existente | [[http-review]] |
-| escrever o handler no framework | [[elysia-build]] · [[Hono - Roteamento e Contexto]] |
-| validar o corpo em runtime | [[elysia-schema]] · [[Hono - Validação e RPC]] |
-| autenticação, sessão, token | [[OWASP - Sessão e Autorização]] · [[RFC 9700 - OAuth 2.0 Security BCP]] |
+| `Cache-Control`, `ETag`, `304`, `If-Match`, `Vary` | `http-cache` |
+| requisição bloqueada, CORS, formato errado | `http-diagnose` |
+| auditar o contrato de uma API existente | `http-review` |
+| escrever o handler no framework | `elysia-build` · `Docs/Hono - Roteamento e Contexto.md` |
+| validar o corpo em runtime | `elysia-schema` · `Docs/Hono - Validação e RPC.md` |
+| autenticação, sessão, token | `OWASP - Sessão e Autorização` · `RFC 9700 - OAuth 2.0 Security BCP` |
 
 ---
 
@@ -36,11 +38,11 @@ Há um endpoint a desenhar ou alterar, e as perguntas são **qual método**, **q
 
 | Ordem | Carregar | Por quê |
 | --- | --- | --- |
-| 1 | [[HTTP]] § 2 | o modelo mental do protocolo |
-| 2 | [[HTTP]] § 5.1 e § 5.2 | as duas árvores desta skill |
-| 3 | [[HTTP]] § 6 + § 6.1 + § 6.2 | regras, críticas, e os IDs canônicos |
-| 4 | [[HTTP - Métodos e Semântica]] · [[HTTP - Status e Redirecionamento]] | as duas fontes, inseparáveis |
-| 5 | [[HTTP]] § 8 | **antes de escrever header à mão** — o stack pode já fazer |
+| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 2 | o modelo mental do protocolo |
+| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 5.1 e § 5.2 | as duas árvores desta skill |
+| 3 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.1 + § 6.2 | regras, críticas, e os IDs canônicos |
+| 4 | [HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](../../../knowledge-base/docs/http-status-e-redirecionamento.md) | as duas fontes, inseparáveis |
+| 5 | [HTTP](../../../knowledge-base/docs/http.md) § 8 | **antes de escrever header à mão** — o stack pode já fazer |
 
 Referências desta skill:
 
@@ -84,14 +86,14 @@ Falha **nunca** é `2xx` (`HTTP-CORE-06`). `201` leva `Location`; `204` não tem
 
 ## Passo 5 — Antes de escrever header à mão
 
-Confira [[HTTP]] § 8: o stack pode já fazer. Header escrito à mão onde o framework já emite é fonte de divergência silenciosa.
+Confira [HTTP](../../../knowledge-base/docs/http.md) § 8: o stack pode já fazer. Header escrito à mão onde o framework já emite é fonte de divergência silenciosa.
 
 ---
 
 ## Passo 6 — Autoverificar antes de entregar
 
 ```bash
-bash ~/.claude/skills/http-contract/scripts/conferir.sh https://api.local /pedidos/42 /pedidos
+bash ${CLAUDE_PLUGIN_ROOT}/skills/http-contract/scripts/conferir.sh https://api.local /pedidos/42 /pedidos
 ```
 
 Quinze itens em `references/autoverificacao.md`. **O que vale mais:** `curl -i` na rota e ler os headers de verdade — em especial o `PATCH` numa rota que só aceita `PUT`, que pega `HTTP-METH-07` (`404` em vez de `405` com `Allow`).
@@ -101,8 +103,8 @@ Quinze itens em `references/autoverificacao.md`. **O que vale mais:** `curl -i` 
 ## Passo 7 — Fechar
 
 1. **Rode o `curl`.** Contrato é o que o servidor responde, não o que o handler parece fazer.
-2. **Se a pergunta virou "por quanto tempo isso pode ser guardado"**, é [[http-cache]].
-3. **Se o browser bloqueou**, é [[http-diagnose]] — e a causa é do servidor, não do cliente.
+2. **Se a pergunta virou "por quanto tempo isso pode ser guardado"**, é `http-cache`.
+3. **Se o browser bloqueou**, é `http-diagnose` — e a causa é do servidor, não do cliente.
 4. **Declare o que não verificou.**
 
 ---
@@ -117,7 +119,7 @@ Caso completo: `references/exemplo.md`.
 
 ## Relacionados
 
-- [[HTTP - Métodos e Semântica]] · [[HTTP - Status e Redirecionamento]] — as fontes
-- [[HTTP]] § 2, § 5, § 6, § 7, § 8
-- [[http-cache]] · [[http-diagnose]] · [[http-review]] — as skills irmãs
-- [[elysia-build]] — o mecanismo que implementa este contrato
+- [HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](../../../knowledge-base/docs/http-status-e-redirecionamento.md) — as fontes
+- [HTTP](../../../knowledge-base/docs/http.md) § 2, § 5, § 6, § 7, § 8
+- `http-cache` · `http-diagnose` · `http-review` — as skills irmãs
+- `elysia-build` — o mecanismo que implementa este contrato

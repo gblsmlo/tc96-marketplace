@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 # Regenera references/mapa-de-ids.md das quatro skills de HTTP, a partir de Docs/HTTP*.
 set -euo pipefail
-VAULT="${1:-$HOME/Sync/Vaults/Notes}"
-DOCS="$VAULT/Docs"
-HUB="$DOCS/HTTP.md"
+BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
+# O mapa é gerado na autoria e vai versionado no plugin: o destino é o repo,
+# a origem continua sendo o vault (passe outro caminho como $1 se preciso).
+PLUGIN="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+DOCS="$BASE/docs"
+HUB="$DOCS/http.md"
 
 scan() {
-  for f in "$DOCS"/HTTP*.md; do
+  for f in "$DOCS"/http*.md; do
     base="$(basename "$f" .md)"
     awk -v sat="$base" -v hub="HTTP" '
       /^## / { h2 = $0; sub(/^## /, "", h2) }
@@ -31,14 +34,14 @@ scan() {
 TMP="$(mktemp)"
 {
   echo "---"
-  echo "gerado-por: Skills/http/http-review/scripts/gerar-mapa-de-ids.sh"
+  echo "gerado-por: plugins/hermes-core/skills/http-review/scripts/gerar-mapa-de-ids.sh"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
   echo "# Mapa de IDs \`HTTP-*\`"
   echo
   echo "> Índice, não cópia: diz **onde** a regra está declarada, nunca o que ela diz."
-  echo "> Regenerar com \`bash Skills/http/http-review/scripts/gerar-mapa-de-ids.sh\` —"
+  echo "> Regenerar com \`bash plugins/hermes-core/skills/http-review/scripts/gerar-mapa-de-ids.sh\` —"
   echo "> o mesmo arquivo é escrito nas quatro skills de HTTP."
   echo
   echo "## Canônicos e apelidos"
@@ -53,7 +56,7 @@ TMP="$(mktemp)"
 } > "$TMP"
 
 for s in contract cache diagnose review; do
-  cp "$TMP" "$VAULT/Skills/http/http-$s/references/mapa-de-ids.md"
+  cp "$TMP" "$PLUGIN/skills/http-$s/references/mapa-de-ids.md"
 done
 rm -f "$TMP"
-echo "gerado nas 4 skills ($(grep -c '^| `HTTP' "$VAULT/Skills/http/http-review/references/mapa-de-ids.md") IDs)"
+echo "gerado nas 4 skills ($(grep -c '^| `HTTP' "$PLUGIN/skills/http-review/references/mapa-de-ids.md") IDs)"

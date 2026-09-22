@@ -13,7 +13,7 @@ Consequências práticas:
 
 - **`staleTime` do Query não substitui `Cache-Control`.** Sem header, o browser e a CDN aplicam heurística por conta própria (`HTTP-CACHE-01`).
 - **`Cache-Control` não substitui `staleTime`.** O Query pode reusar da memória sem nem chegar ao browser.
-- **`invalidateQueries` não derruba cache de CDN.** Para isso é `no-cache` + `ETag` (`HTTP-CACHE-12`) ou purge — [[CDN e invalidação de cache]].
+- **`invalidateQueries` não derruba cache de CDN.** Para isso é `no-cache` + `ETag` (`HTTP-CACHE-12`) ou purge —.
 - **Um `304` é sucesso**, e o Query o vê como resposta normal — não como "não mudou nada".
 
 ---
@@ -38,5 +38,5 @@ São camadas empilhadas, e cada uma precisa da sua decisão.
 
 ## Relacionados
 
-- [[tanstack-query]] — o dono da outra camada
-- [[TanStack Query - Cache e Frescor]] — `staleTime` e invalidação
+- `tanstack-query` — o dono da outra camada
+- `Docs/TanStack Query - Cache e Frescor.md` — `staleTime` e invalidação
