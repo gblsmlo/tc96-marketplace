@@ -1,103 +1,103 @@
-# Exemplo trabalhado — revisão de estrutura num PR
+# Worked example — a structural review in a PR
 
-PR: *"extrai formatação de fatura para reuso e adiciona a tela de cobranças"*.
+PR: *"extracts invoice formatting for reuse and adds the billing screen"*.
 
 ---
 
-## Passo 1 — sondas antes de abrir arquivo
+## Step 1 — probes before opening a file
 
 ```
 $ bash scripts/sondas-imports.sh src
 
 == 0. Enforcement
- -- biome.json: AUSENTE ← já é achado, e é o primeiro
- -- aliases: tsconfig.json 4 | vite.config.ts 4 | vitest.config.ts sem alias
-== 1. Direção invertida
- src/libs/formatar-fatura.ts:3 from '@features/faturas'
+ -- biome.json: ABSENT ← already a finding, and the first one
+ -- aliases: tsconfig.json 4 | vite.config.ts 4 | vitest.config.ts no alias
+== 1. Inverted direction
+ src/libs/format-invoice.ts:3 from '@features/invoices'
 == 2. Deep import
- src/routes/cobrancas.tsx:2 from '@features/faturas/components/linha-fatura'
-== 3. Alias próprio dentro da feature
- src/features/cobrancas/components/lista.tsx:1 from '@features/cobrancas'
-== 4. Barrel com lógica
- src/features/cobrancas/index.ts
-== 6. Convenção de nome
- src/features/cobrancas/components/ListaCobrancas.tsx
+ src/routes/billing.tsx:2 from '@features/invoices/components/invoice-row'
+== 3. Own alias inside the feature
+ src/features/billing/components/list.tsx:1 from '@features/billing'
+== 4. Barrel with logic
+ src/features/billing/index.ts
+== 6. Naming convention
+ src/features/billing/components/BillingList.tsx
 ```
 
-Seis minutos. Nenhum é achado ainda — são candidatos com localização.
+Six minutes. None of them is a finding yet — they are candidates with a location.
 
-## Passo 2 — leitura, e o que ela muda
+## Step 2 — the reading, and what it changes
 
-`libs/formatar-fatura.ts` importa `@features/faturas` para ler o tipo `Fatura` e a tabela
-de impostos. Confirma `REACT-ARCH-06`: a camada genérica deixou de ser genérica.
+`libs/format-invoice.ts` imports `@features/invoices` to read the `Invoice` type and the tax
+table. It confirms `REACT-ARCH-06`: the generic layer has stopped being generic.
 
-`features/cobrancas/` tem **uma** tela e nenhum vocabulário próprio — "cobranças" aqui é
-o nome do botão, não de uma capacidade. Isso a sonda não vê: é `REACT-ARCH-01`, e **muda
-o resto do relatório**, porque se a feature não deveria existir, os achados 3, 4 e 6
-dentro dela deixam de ser corrigíveis onde estão.
+`features/billing/` has **one** screen and no vocabulary of its own — "billing" here is
+the button's name, not a capability's. The probe cannot see that: it is `REACT-ARCH-01`, and it **changes
+the rest of the report**, because if the feature should not exist, findings 3, 4 and 6
+inside it stop being fixable where they are.
 
-## Passo 3 — o relatório
+## Step 3 — the report
 
 ```markdown
-## Revisão de estrutura — PR #91 (cobranças)
+## Structural review — PR #91 (billing)
 
-**Enforcement** (sonda 0): biome.json **AUSENTE** · alias ausente em vitest.config.ts
+**Enforcement** (probe 0): biome.json **ABSENT** · alias missing in vitest.config.ts
 
-### Crítica (3)
+### Critical (3)
 
-`REACT-ARCH-01` — src/features/cobrancas/
-"Cobranças" é uma tela de faturas, não uma capacidade com vocabulário próprio: não há
-entidade, api/ nem store que não sejam de faturas.
-Correção: mover o conteúdo para src/features/faturas/components/ e apagar a feature;
-a rota compõe o que já existe.
-Ver Feature-Based Architecture § 3.
+`REACT-ARCH-01` — src/features/billing/
+"Billing" is an invoices screen, not a capability with vocabulary of its own: there is no
+entity, api/ or store that is not invoices'.
+Fix: move the content into src/features/invoices/components/ and delete the feature;
+the route composes what already exists.
+See Feature-Based Architecture § 3.
 
-`REACT-ARCH-06` — src/libs/formatar-fatura.ts:3
-Regra de domínio dentro da camada genérica; libs/ deixa de ser reutilizável.
-Correção: mover para src/features/faturas/utils/formatar-fatura.ts e exportar no barrel
-se algum consumidor externo precisar.
-Ver Feature-Based Architecture § 6.
+`REACT-ARCH-06` — src/libs/format-invoice.ts:3
+A domain rule inside the generic layer; libs/ stops being reusable.
+Fix: move it to src/features/invoices/utils/format-invoice.ts and export it in the barrel
+if some external consumer needs it.
+See Feature-Based Architecture § 6.
 
-`REACT-ARCH-05` — src/routes/cobrancas.tsx:2
-Deep import em @features/faturas/components/linha-fatura.
-Correção: importar pelo barrel — from '@features/faturas'.
-Ver Feature-Based Architecture § 4.
+`REACT-ARCH-05` — src/routes/billing.tsx:2
+Deep import into @features/invoices/components/invoice-row.
+Fix: import through the barrel — from '@features/invoices'.
+See Feature-Based Architecture § 4.
 
-### Alta (1)
+### High (1)
 
-`REACT-ARCH-08` — src/libs/formatar-fatura.ts:1
-A extração foi feita com **um** consumidor. A regra do terceiro consumidor não disparou.
-Correção: a mesma do REACT-ARCH-06 — devolver à feature dona. Extrair de novo só quando
-houver três importadores reais.
-Ver Feature-Based Architecture § 4.
+`REACT-ARCH-08` — src/libs/format-invoice.ts:1
+The extraction was done with **one** consumer. The third-consumer rule never fired.
+Fix: the same as REACT-ARCH-06 — return it to the owning feature. Extract again only when
+there are three real importers.
+See Feature-Based Architecture § 4.
 
-### Média (1)
+### Medium (1)
 
-`REACT-ARCH-12` — src/features/cobrancas/components/ListaCobrancas.tsx
-Nome em PascalCase; a convenção é kebab-case em arquivo e diretório.
-Correção: renomear para lista-cobrancas.tsx no mesmo commit em que o arquivo se mudar.
-Ver Feature-Based Architecture § 4.
+`REACT-ARCH-12` — src/features/billing/components/BillingList.tsx
+A PascalCase name; the convention is kebab-case for files and directories.
+Fix: rename it to billing-list.tsx in the same commit where the file moves.
+See Feature-Based Architecture § 4.
 
-### Não reportado, e por quê
+### Not reported, and why
 
-- `REACT-ARCH-04` (alias próprio) e `REACT-ARCH-03` (lógica no barrel) estavam dentro de
- `features/cobrancas/`, que sai inteira pelo REACT-ARCH-01. Corrigi-los onde estão seria
- trabalho jogado fora.
-- Tamanho de `linha-fatura.tsx` (190 linhas) não tem ID — vai para Sugestões, se for o caso.
+- `REACT-ARCH-04` (own alias) and `REACT-ARCH-03` (logic in the barrel) were inside
+ `features/billing/`, which goes away entirely through REACT-ARCH-01. Fixing them where they
+ are would be wasted work.
+- The size of `invoice-row.tsx` (190 lines) has no ID — it goes to Suggestions, if at all.
 
-### Fechamento
+### Closing
 
-Sem `biome.json`, `REACT-ARCH-04`, `-05`, `-06`, `-07` e `-10` dependem de revisão humana e
-voltam no próximo PR. Ligar as regras de § 7 é o item de maior retorno — mais do que
-qualquer achado individual acima.
+Without `biome.json`, `REACT-ARCH-04`, `-05`, `-06`, `-07` and `-10` depend on human review and
+come back in the next PR. Turning on the § 7 rules is the highest-return item — more than
+any individual finding above.
 ```
 
-## O que este exemplo demonstra
+## What this example demonstrates
 
-| Decisão | Onde está a regra |
+| Decision | Where the rule is |
 | --- | --- |
-| a leitura reclassificou o relatório inteiro (`REACT-ARCH-01`) | `varredura-de-imports.md` § *O que a sonda não pega* |
-| dois achados dentro da feature condenada **não** foram reportados | § 6 — pare quando um achado invalida o seguinte |
-| o mesmo arquivo saiu com `-06` **e** `-08`, que são defeitos diferentes | § 4 — importar × duplicar × extrair |
-| a ausência de lint virou o fechamento, não nota de rodapé | § 7 |
-| o achado de estrutura vem antes do de interior | esta skill, `## Quando usar` |
+| the reading reclassified the whole report (`REACT-ARCH-01`) | `varredura-de-imports.md` § *What the probe does not catch* |
+| two findings inside the condemned feature were **not** reported | § 6 — stop when a finding invalidates the next |
+| the same file came out with `-06` **and** `-08`, which are different defects | § 4 — import × duplicate × extract |
+| the absence of lint became the closing, not a footnote | § 7 |
+| the structural finding comes before the interior one | this skill, `## When to use` |

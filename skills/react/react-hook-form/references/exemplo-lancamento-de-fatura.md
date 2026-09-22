@@ -1,86 +1,86 @@
-# Exemplo trabalhado — lançamento de fatura
+# Worked example — entering an invoice
 
-Tarefa: *"formulário de lançamento de fatura — valor em moeda, vencimento, e um campo de
-justificativa que só aparece quando o valor passa de R$ 10.000"*.
+Task: *"an invoice entry form — a currency amount, a due date, and a justification field
+that only appears when the amount goes above R$ 10,000"*.
 
 ---
 
-## Passo 0 — triagem
+## Step 0 — triage
 
-Três campos, **validação entre eles**, **campo condicional** e submit que **invalida
-cache**. Passa da fronteira de "um campo sem validação": é RHF. Dois dos cinco gatilhos
-nomeados — registrar isso em uma frase é o que a invariante 1 do contrato pede.
+Three fields, **validation between them**, a **conditional field** and a submit that
+**invalidates the cache**. It crosses the "one field with no validation" boundary: it is RHF. Two of the five triggers
+named — recording that in one sentence is what invariant 1 of the contract asks for.
 
-## A ordem das decisões, que não é a ordem do JSX
+## The order of decisions, which is not the order of the JSX
 
-**1. Schema primeiro** — o tipo do form deriva do Zod, nunca o contrário (`RHF-VAL-04`).
-A regra **entre** campos vive em `.superRefine`, não em `validate` por campo:
+**1. Schema first** — the form's type derives from Zod, never the other way round (`RHF-VAL-04`).
+The rule **between** fields lives in `.superRefine`, not in a per-field `validate`:
 
 ```ts
 const schema = z.object({
- valor: z.coerce.number.positive, // o DOM devolve string — RHF-REG-03
- vencimento: z.coerce.date,
- justificativa: z.string.optional,
+ amount: z.coerce.number.positive, // the DOM returns a string — RHF-REG-03
+ dueDate: z.coerce.date,
+ justification: z.string.optional,
 }).superRefine((v, ctx) => {
- if (v.valor > 10_000 && !v.justificativa?.trim)
- ctx.addIssue({ code: 'custom', path: ['justificativa'],
- message: 'Obrigatória acima de R$ 10.000' });
+ if (v.amount > 10_000 && !v.justification?.trim)
+ ctx.addIssue({ code: 'custom', path: ['justification'],
+ message: 'Required above R$ 10,000' });
 });
 ```
 
-**2. `defaultValues` cobrindo todo campo**, incluindo o condicional (`RHF-CORE-01`) —
-`justificativa: ''`, não ausente.
+**2. `defaultValues` covering every field**, including the conditional one (`RHF-CORE-01`) —
+`justification: ''`, not absent.
 
-**3. `mode`** — aqui `onBlur`, porque validar a cada tecla num campo de moeda briga com a
-máscara. É decisão declarada, não default por omissão.
+**3. `mode`** — here `onBlur`, because validating on every keystroke in a currency field fights the
+mask. It is a declared decision, not a default by omission.
 
-**4. Campo a campo pela árvore § 5.1.** `valor` e `vencimento` vão por `register`; o
-seletor de moeda é componente controlado de terceiro → `Controller` (a exceção, não a regra).
+**4. Field by field through the § 5.1 tree.** `amount` and `dueDate` go through `register`; the
+currency selector is a third-party controlled component → `Controller` (the exception, not the rule).
 
-**5. Só então o dono do submit.** Há cache a invalidar → mutation do TanStack Query
+**5. Only then the submit's owner.** There is a cache to invalidate → a TanStack Query mutation
 (`RHF-BRIDGE-01`):
 
 ```ts
-const onSubmit = handleSubmit(async (dados) => {
+const onSubmit = handleSubmit(async (data) => {
  try {
- await criarFatura.mutateAsync(dados); // mutateAsync lança — TSQ-MUT-04
+ await createInvoice.mutateAsync(data); // mutateAsync throws — TSQ-MUT-04
  } catch (e) {
  if (isValidationError(e))
- setError('valor', { message: e.campo.valor }); // erro de campo — RHF-ERR-02
+ setError('amount', { message: e.field.amount }); // a field error — RHF-ERR-02
  else
- setError('root.serverError', { message: 'Falha ao lançar' });
+ setError('root.serverError', { message: 'Failed to create' });
  }
 });
 ```
 
-E o campo condicional lê o valor no **menor componente que precisa dele**:
+And the conditional field reads the value in the **smallest component that needs it**:
 
 ```tsx
-function Justificativa {
- const valor = useWatch({ name: 'valor' }); // não watch na raiz — RHF-PERF-01
- if (valor <= 10_000) return null;
- return <CampoTexto name="justificativa" />; // defaultValues já cobre — RHF-CORE-01
+function Justification {
+ const amount = useWatch({ name: 'amount' }); // not watch at the root — RHF-PERF-01
+ if (amount <= 10_000) return null;
+ return <TextField name="justification" />; // defaultValues already covers it — RHF-CORE-01
 }
 ```
 
-## O que as decisões evitaram
+## What these decisions prevented
 
-| Decisão | Alternativa que dói depois | Regra |
+| Decision | Alternative that hurts later | Rule |
 | --- | --- | --- |
-| tipo derivado do schema | tipo escrito à mão, divergindo do Zod | `RHF-VAL-04` |
-| `z.coerce.number` | `valor` chega string e `> 10_000` compara texto | `RHF-REG-03` |
-| `superRefine` para a regra entre campos | `validate` na justificativa, que não vê o valor | Validação § 3 |
-| `defaultValues` no condicional | campo passa de uncontrolled a controlled no meio | `RHF-CORE-01` |
-| um dono do submit | `<form action>` **e** `onSubmit` juntos — a ordem deixa de ser sua | `RHF-BRIDGE-01` |
-| `try/catch` no `mutateAsync` | rejeição não tratada, e o form trava em `isSubmitting` | `TSQ-MUT-04` |
-| erro esperado por `setError` | lançar do `onSubmit` para o Error Boundary | `REACT-ASYNC-09` |
-| `useWatch` no filho | `watch` na raiz: re-render do form inteiro a cada tecla | `RHF-PERF-01` |
-| um único estado de espera | `disabled={isSubmitting \|\| isPending}` | `dono-da-submissao.md` |
+| a type derived from the schema | a hand-written type, diverging from the Zod one | `RHF-VAL-04` |
+| `z.coerce.number` | `amount` arrives as a string and `> 10_000` compares text | `RHF-REG-03` |
+| `superRefine` for the cross-field rule | a `validate` on the justification, which cannot see the amount | Validação § 3 |
+| `defaultValues` on the conditional field | the field goes from uncontrolled to controlled mid-flight | `RHF-CORE-01` |
+| one owner of the submit | `<form action>` **and** `onSubmit` together — the order stops being yours | `RHF-BRIDGE-01` |
+| `try/catch` around `mutateAsync` | an unhandled rejection, and the form stuck in `isSubmitting` | `TSQ-MUT-04` |
+| an expected error through `setError` | throwing from the `onSubmit` to the Error Boundary | `REACT-ASYNC-09` |
+| `useWatch` in the child | `watch` at the root: a re-render of the whole form on every keystroke | `RHF-PERF-01` |
+| a single waiting state | `disabled={isSubmitting \|\| isPending}` | `dono-da-submissao.md` |
 
-## O que fica fora desta skill
+## What stays outside this skill
 
-- O que a criação da fatura tornou velho no cache é decisão da **mutation** —
+- What creating the invoice made stale in the cache is the **mutation's** decision —
  `tanstack-query`.
-- O **otimismo**, se houver, é da mutation com snapshot e rollback — `RHF-BRIDGE-04`,
- nunca do formulário.
-- A validação de cliente aqui é UX; o servidor revalida e autoriza — `REACT-RSC-06`.
+- **Optimism**, if any, belongs to the mutation with a snapshot and a rollback — `RHF-BRIDGE-04`,
+ never to the form.
+- Client validation here is UX; the server revalidates and authorizes — `REACT-RSC-06`.

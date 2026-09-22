@@ -1,10 +1,10 @@
-# Varredura de imports — na ordem que falha mais
+# Import scan — in the order that fails most
 
-> Ordem de [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 6 e § 4. Pare de detalhar um arquivo quando um
-> achado invalidar o seguinte: se a **camada** está errada, não revise o import dela —
-> reporte a mudança de camada.
+> Order from [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 6 and § 4. Stop detailing a file when a
+> finding invalidates the next one: if the **layer** is wrong, do not review its imports —
+> report the layer change.
 
-Script: `scripts/sondas-imports.sh [alvo]`, que roda as oito sondas na mesma ordem.
+Script: `scripts/sondas-imports.sh [target]`, which runs the eight probes in the same order.
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/skills/react-structure/scripts/sondas-imports.sh src
@@ -12,71 +12,71 @@ bash ${CLAUDE_PLUGIN_ROOT}/skills/react-structure/scripts/sondas-imports.sh src
 
 ---
 
-## Sonda 0 — enforcement (roda primeiro)
+## Probe 0 — enforcement (runs first)
 
-`biome.json`, `noRestrictedImports`, `noImportCycles`, e os aliases nos **três** arquivos.
+`biome.json`, `noRestrictedImports`, `noImportCycles`, and the aliases in **all three** files.
 
-| Achado da sonda 0 | Consequência |
+| Probe 0 finding | Consequence |
 | --- | --- |
-| sem `biome.json`, ou sem as regras de § 7 | as fronteiras são convenção: **primeiro achado do relatório**, porque sem isso ele se repete no próximo PR |
-| alias divergindo entre `tsconfig`, `vite.config`, `vitest.config` | "funciona no build, quebra no teste" — § 2 e § 7 |
-| camada endereçada pelo barrel sem entrada **sem curinga** no `paths` | o import nu não resolve |
+| no `biome.json`, or none of the § 7 rules | the boundaries are convention: **the report's first finding**, because without it the report repeats in the next PR |
+| an alias diverging between `tsconfig`, `vite.config`, `vitest.config` | "works in the build, breaks in the test" — § 2 and § 7 |
+| a layer addressed through the barrel with no **wildcard-free** entry in `paths` | the bare import does not resolve |
 
 ---
 
-## A ordem, e o que cada passo pega
+## The order, and what each step catches
 
-| # | O que | ID | Sonda |
+| # | What | ID | Probe |
 | --- | --- | --- | --- |
-| 1 | **Direção invertida** — genérico importando `@features/`/`@routes/`; feature importando `@routes/` | `REACT-ARCH-06`, `REACT-ARCH-07` | 1 |
-| 2 | **Deep import** — `@features/x/...` com três segmentos ou mais | `REACT-ARCH-05` | 2 |
-| 3 | **Alias próprio dentro da feature** | `REACT-ARCH-04` | 3 |
-| 4 | **Barrel** — superfície pública grande demais, ou lógica no `index.ts` | `REACT-ARCH-02`, `REACT-ARCH-03` | 4 |
-| 5 | **Rota inchada** — teste de bancada de § 4, não impressão | `REACT-ARCH-09` | 5 |
-| 6 | **Colocação** — papel técnico onde deveria haver domínio; extração prematura | `REACT-ARCH-01`, `REACT-ARCH-08` | — |
-| 7 | **Convenção** — `export type` no barrel, kebab-case | `REACT-ARCH-11`, `REACT-ARCH-12` | 6, 7 |
+| 1 | **Inverted direction** — generic importing `@features/`/`@routes/`; a feature importing `@routes/` | `REACT-ARCH-06`, `REACT-ARCH-07` | 1 |
+| 2 | **Deep import** — `@features/x/...` with three segments or more | `REACT-ARCH-05` | 2 |
+| 3 | **An own alias inside the feature** | `REACT-ARCH-04` | 3 |
+| 4 | **Barrel** — a public surface that is too large, or logic in the `index.ts` | `REACT-ARCH-02`, `REACT-ARCH-03` | 4 |
+| 5 | **Bloated route** — the bench test in § 4, not an impression | `REACT-ARCH-09` | 5 |
+| 6 | **Placement** — a technical role where there should be a domain; premature extraction | `REACT-ARCH-01`, `REACT-ARCH-08` | — |
+| 7 | **Convention** — `export type` in the barrel, kebab-case | `REACT-ARCH-11`, `REACT-ARCH-12` | 6, 7 |
 
-**Não reporte o mesmo arquivo duas vezes com IDs diferentes.** Domínio dentro de `libs/`
-já saiu no passo 1 como `REACT-ARCH-06`; ele não volta no passo 6 como `REACT-ARCH-01`.
+**Do not report the same file twice with different IDs.** A domain inside `libs/`
+already came out in step 1 as `REACT-ARCH-06`; it does not come back in step 6 as `REACT-ARCH-01`.
 
-`REACT-ARCH-04` tem **cobertura parcial de lint** (§ 4): `noImportCycles` só pega quando o
-import fecha ciclo. O resto depende desta varredura.
+`REACT-ARCH-04` has **partial lint coverage** (§ 4): `noImportCycles` only catches it when the
+import closes a cycle. The rest depends on this scan.
 
 ---
 
-## O que a sonda não pega
+## What the probe does not catch
 
-| Não detectável por regex | ID | Como achar |
+| Not detectable by regex | ID | How to find it |
 | --- | --- | --- |
-| feature que nasceu de uma **tela**, não de uma capacidade | `REACT-ARCH-01` | ler o nome da pasta e perguntar: é vocabulário de produto? |
-| extração para o compartilhado com menos de três consumidores | `REACT-ARCH-08` | contar os importadores do módulo em `features/core/` |
-| barrel exportando mais do que alguém consome | `REACT-ARCH-02` | cruzar o `index.ts` com quem importa dele |
-| rota que carrega jornada em vez de compor | `REACT-ARCH-09` | teste de bancada de § 4 |
+| a feature born from a **screen**, not from a capability | `REACT-ARCH-01` | read the folder's name and ask: is this product vocabulary? |
+| extraction into the shared layer with fewer than three consumers | `REACT-ARCH-08` | count the module's importers in `features/core/` |
+| a barrel exporting more than anyone consumes | `REACT-ARCH-02` | cross-reference the `index.ts` with whoever imports from it |
+| a route that carries a journey instead of composing | `REACT-ARCH-09` | the bench test in § 4 |
 
 ---
 
-## Formato do achado
+## Finding format
 
-Mesmo formato das skills irmãs, com o ID desta família:
+The same format as the sibling skills, with this family's ID:
 
 ```
-`ID-DA-REGRA` — arquivo:linha
-<o que está errado, uma frase>
-Correção: <mudança concreta>
-Ver Feature-Based Architecture § <seção>.
+`RULE-ID` — file:line
+<what is wrong, one sentence>
+Fix: <concrete change>
+See Feature-Based Architecture § <section>.
 ```
 
-Severidade sai de `mapa-de-ids.md` (coluna **Severidade**, normativa em § 4) — **não
-reclassifique**. Direção de dependência ganha de estética, sempre (§ 10, invariante 2).
+Severity comes from `mapa-de-ids.md` (the **Severity** column, normative in § 4) — **do not
+reclassify**. Dependency direction beats aesthetics, always (§ 10, invariant 2).
 
-**O corte:** preferência de organização sem ID não é achado. Existe ID em § 4 → achado.
-É antipadrão de § 6 sem ID → cite a **seção**. Nem uma coisa nem outra → "Sugestões (sem
-regra)", separado. Nunca invente um `REACT-ARCH-*`.
+**The cut:** an organizational preference with no ID is not a finding. There is an ID in § 4 → a finding.
+It is an antipattern in § 6 with no ID → cite the **section**. Neither → "Suggestions (no
+rule)", separately. Never invent a `REACT-ARCH-*`.
 
 ---
 
-## Relacionados
+## Related
 
-- [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 4, § 6, § 7 — a fonte
-- `arvore-de-colocacao.md` — decidir onde colocar, antes de auditar o que está colocado
-- `mapa-de-ids.md` — severidade e enforcement por ID
+- [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 4, § 6, § 7 — the source
+- `arvore-de-colocacao.md` — deciding where to place, before auditing what is placed
+- `mapa-de-ids.md` — severity and enforcement per ID

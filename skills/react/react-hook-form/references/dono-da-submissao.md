@@ -1,30 +1,30 @@
-# Quem é dono do estado de submissão
+# Who owns the submission state
 
-Com TanStack Query no fluxo há **dois** estados dizendo "está salvando":
-`formState.isSubmitting` (RHF) e `isPending` (mutation). Escolha um e use o **mesmo** em
-toda a tela — botão, texto, `disabled`, spinner.
+With TanStack Query in the flow there are **two** states saying "it is saving":
+`formState.isSubmitting` (RHF) and `isPending` (the mutation). Pick one and use the **same** one
+across the whole screen — button, text, `disabled`, spinner.
 
-| Situação | Dono | Por quê |
+| Situation | Owner | Why |
 | --- | --- | --- |
-| `handleSubmit` faz `await mutateAsync(...)` e é o único caminho de escrita | `isSubmitting` | cobre o `await` inteiro, inclusive o refetch se o callback retornar a Promise (`TSQ-MUT-02`) |
-| A mesma mutation dispara de outros lugares (retry, outra tela, otimismo) | `isPending` | o estado é da mutation; o form é só um dos gatilhos |
-| Server Function com `useActionState` | o `isPending` do `useActionState` | `isSubmitting` não é lido |
+| `handleSubmit` does `await mutateAsync(...)` and is the only write path | `isSubmitting` | it covers the entire `await`, including the refetch if the callback returns the Promise (`TSQ-MUT-02`) |
+| The same mutation fires from elsewhere (retry, another screen, optimism) | `isPending` | the state belongs to the mutation; the form is just one of the triggers |
+| A Server Function with `useActionState` | `useActionState`'s `isPending` | `isSubmitting` is not read |
 
-**Não faça `disabled={isSubmitting || isPending}`.** Parece defensivo e é o sintoma de que
-ninguém decidiu: os dois divergem entre o fim do `await` e o fim da invalidação, e o botão
-pisca ou destrava cedo.
+**Do not write `disabled={isSubmitting || isPending}`.** It looks defensive and it is the symptom that
+nobody decided: the two diverge between the end of the `await` and the end of the invalidation, and the button
+flickers or unlocks early.
 
-O precedente é `REACT-FORM-07` — quando duas camadas descrevem o mesmo estado, uma é a
-verdade e a outra é ruído. É o mesmo erro que `RHF-BRIDGE-04` proíbe no **otimismo**,
-aplicado ao estado de **espera**; são regras distintas e citáveis separadamente (hub § 6.2).
+The precedent is `REACT-FORM-07` — when two layers describe the same state, one is the
+truth and the other is noise. It is the same mistake `RHF-BRIDGE-04` forbids for **optimism**,
+applied to the **waiting** state; they are distinct rules and citable separately (hub § 6.2).
 
-**Deixe a escolha registrada junto do handler**, em uma linha. A sonda 11 de `sondas.sh`
-procura exatamente o `||` que aparece quando ela não foi feita.
+**Leave the choice recorded next to the handler**, in one line. Probe 11 in `sondas.sh`
+looks for exactly the `||` that appears when it was not made.
 
 ---
 
-## Relacionados
+## Related
 
-- [React Hook Form](../../../../knowledge-base/docs/react-hook-form.md) § 5.4 e § 8 — as árvores de submissão e as pontes
-- `tanstack-query` — o que a escrita tornou velho no cache
-- `tarefas.md` § 5 — submeter
+- [React Hook Form](../../../../knowledge-base/docs/react-hook-form.md) § 5.4 and § 8 — the submission trees and the bridges
+- `tanstack-query` — what the write made stale in the cache
+- `tarefas.md` § 5 — submitting

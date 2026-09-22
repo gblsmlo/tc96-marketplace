@@ -1,84 +1,84 @@
-# Onde este arquivo mora
+# Where this file lives
 
-> A árvore e as cinco perguntas vêm de [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 3, § 4 e § 10.
-> Aqui está o percurso e o que costuma sair errado nele — o texto normativo mora na nota.
+> The tree and the five questions come from [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 3, § 4 and § 10.
+> Here is the path and what usually goes wrong along it — the normative text lives in the note.
 
 ---
 
-## As cinco perguntas antes de criar uma feature
+## The five questions before creating a feature
 
-Ordem normativa. Responda **por escrito**, uma frase cada, antes do primeiro `mkdir`.
+A normative order. Answer them **in writing**, one sentence each, before the first `mkdir`.
 
-| # | Pergunta | Se a resposta travar |
+| # | Question | If the answer stalls |
 | --- | --- | --- |
-| 1 | Isto é um **domínio**? | sem vocabulário próprio de produto, não é feature — pare, o problema é de definição |
-| 2 | O domínio **já existe**? | feature nova exige capacidade nova, não tela nova |
-| 3 | O dado é **remoto**? | se sim, `api/` com `queryOptions` — nunca `stores/` |
-| 4 | Isto é **público**? | só entra no barrel o que outra camada consome de fato |
-| 5 | **Quem** vai importar isto? | outra feature → confirme `REACT-ARCH-05` e registre o contador de `REACT-ARCH-08` |
+| 1 | Is this a **domain**? | with no product vocabulary of its own, it is not a feature — stop, the problem is one of definition |
+| 2 | Does the domain **already exist**? | a new feature requires a new capability, not a new screen |
+| 3 | Is the data **remote**? | if so, `api/` with `queryOptions` — never `stores/` |
+| 4 | Is this **public**? | only what another layer actually consumes goes into the barrel |
+| 5 | **Who** is going to import this? | another feature → confirm `REACT-ARCH-05` and record the `REACT-ARCH-08` counter |
 
-**A exceção da pergunta 5:** quando a própria especificação já nomeia **três** consumidores,
-o terceiro não é previsão — crie direto em `features/core/` (§ 4, "Capacidade que nasce
-compartilhada").
+**The exception to question 5:** when the specification itself already names **three**
+consumers, the third is not a prediction — create it straight in `features/core/` (§ 4, "Capacidade
+que nasce compartilhada").
 
-Não abra as sete subpastas de uma vez. Critério em § 3.
+Do not open all seven subfolders at once. Criterion in § 3.
 
 ---
 
-## A árvore
+## The tree
 
-Percorra na ordem; a primeira resposta "sim" decide.
+Walk it in order; the first "yes" decides.
 
 ```
-Ele conhece vocabulário de alguma capacidade do produto?
-├─ NÃO → é genérico. Qual tipo?
-│ ├─ componente visual.......... components/ui/ ou components/layout/
-│ ├─ hook........................ hooks/
-│ ├─ infraestrutura, formatador.. libs/
-│ └─ tipo/contrato............... types/
-│ ⚠ REACT-ARCH-06: se ele precisar importar de @features/ para
-│ funcionar, ele NÃO é genérico. Volte e trate como domínio.
-│ Se ele só precisa EXIBIR domínio (um cabeçalho com um seletor
-│ de moeda), continua genérico: receba por slot e componha no
-│ shell. Ver § 4, "Camada genérica que precisa exibir domínio".
+Does it know the vocabulary of some product capability?
+├─ NO → it is generic. Which kind?
+│ ├─ a visual component......... components/ui/ or components/layout/
+│ ├─ a hook..................... hooks/
+│ ├─ infrastructure, formatter.. libs/
+│ └─ a type/contract............ types/
+│ ⚠ REACT-ARCH-06: if it has to import from @features/ to
+│ work, it is NOT generic. Go back and treat it as a domain.
+│ If it only has to DISPLAY a domain (a header with a currency
+│ selector), it stays generic: receive it through a slot and compose in
+│ the shell. See § 4, "Camada genérica que precisa exibir domínio".
 │
-└─ SIM → é domínio. Quantas capacidades o consomem?
- ├─ 1......... features/<capacidade>/, privado
- ├─ 2......... continua onde está; a segunda importa o barrel
- │ (REACT-ARCH-05). Não duplique, não extraia.
- └─ 3 ou +.... features/core/<capacidade>/ e corte as arestas
- diretas (REACT-ARCH-08)
+└─ YES → it is a domain. How many capabilities consume it?
+ ├─ 1......... features/<capability>/, private
+ ├─ 2......... it stays where it is; the second imports the barrel
+ │ (REACT-ARCH-05). Do not duplicate, do not extract.
+ └─ 3 or +.... features/core/<capability>/ and cut the direct
+ edges (REACT-ARCH-08)
 ```
 
-Dentro da feature, o subdiretório sai do **tipo** do arquivo — `api/`, `components/`,
-`hooks/`, `stores/`, `types/`, `utils/`, conforme § 3. Teste fica colocalizado ao lado do
-arquivo testado, nunca no barrel.
+Inside the feature, the subdirectory follows the file's **type** — `api/`, `components/`,
+`hooks/`, `stores/`, `types/`, `utils/`, per § 3. A test is co-located next to the file it
+tests, never in the barrel.
 
 ---
 
-## O erro mais comum: confundir três movimentos
+## The most common mistake: confusing three moves
 
-`REACT-ARCH-08` responde *quando criar módulo compartilhado* — **não** *se posso importar*.
-A tabela de § 4 ("Importar, duplicar e extrair são três movimentos diferentes") desempata:
+`REACT-ARCH-08` answers *when to create a shared module* — **not** *whether I may import*.
+The table in § 4 ("Importar, duplicar e extrair são três movimentos diferentes") breaks the tie:
 
-| Movimento | Quando | Custo de errar |
+| Move | When | Cost of getting it wrong |
 | --- | --- | --- |
-| **importar** o barrel da outra feature | 2 consumidores | nenhum; é o caminho normal (`REACT-ARCH-05`) |
-| **duplicar** | quase nunca — só quando as duas cópias vão divergir de propósito | duas verdades que ninguém sincroniza |
-| **extrair** para `features/core/` | 3 consumidores reais, contados | extração prematura vira `libs/` que conhece domínio (`REACT-ARCH-06`) |
+| **import** the other feature's barrel | 2 consumers | none; it is the normal path (`REACT-ARCH-05`) |
+| **duplicate** | almost never — only when the two copies are meant to diverge | two truths nobody keeps in sync |
+| **extract** into `features/core/` | 3 real, counted consumers | premature extraction becomes a `libs/` that knows a domain (`REACT-ARCH-06`) |
 
 ---
 
-## Quando **não** usar esta estrutura
+## When **not** to use this structure
 
-§ 9 da nota-fonte. App de domínio único não precisa de fatia vertical, e impor a estrutura
-nele é o antipadrão desta skill. Confira § 9 **antes** de decidir que algo é overkill — e
-antes de propor a migração de um repositório inteiro.
+§ 9 of the source note. A single-domain app does not need a vertical slice, and imposing the structure
+on it is this skill's antipattern. Check § 9 **before** deciding something is overkill — and
+before proposing a whole repository's migration.
 
 ---
 
-## Relacionados
+## Related
 
-- [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 3, § 4, § 9, § 10 — a fonte
-- `varredura-de-imports.md` — auditar o que já está colocado
-- `mapa-de-ids.md` — ID → severidade → quem faz valer
+- [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 3, § 4, § 9, § 10 — the source
+- `varredura-de-imports.md` — auditing what is already placed
+- `mapa-de-ids.md` — ID → severity → who enforces it

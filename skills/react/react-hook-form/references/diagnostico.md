@@ -1,56 +1,56 @@
-# Diagnóstico — sintoma → causa provável → satélite
+# Diagnosis — symptom → likely cause → satellite
 
-> Causa **provável**: a tabela encurta a busca, não fecha o diagnóstico. Confirme no código
-> antes de reportar, e cite `arquivo:linha`.
+> A **likely** cause: the table shortens the search, it does not close the diagnosis. Confirm in the code
+> before reporting, and cite `file:line`.
 
 ---
 
-## "O formulário re-renderiza demais"
+## "The form re-renders too much"
 
-**Passo zero, normativo: mediu?** Profiler antes de trocar qualquer coisa — § 5.6, passo 0,
-e `REACT-PERF-01`. A ordem da § 5.6 é obrigatória e **não começa por memoização**.
+**Step zero, normative: did you measure?** The Profiler before changing anything — § 5.6, step 0,
+and `REACT-PERF-01`. The order in § 5.6 is mandatory and **does not start with memoization**.
 
-| Sintoma | Causa provável | Onde | Sonda |
+| Symptom | Likely cause | Where | Probe |
 | --- | --- | --- | --- |
-| Tela inteira renderiza a cada tecla | `watch` sem argumento na raiz (`RHF-PERF-01`) | Estado | 1 |
-| Render por caractere num campo simples | `useState` espelhando o campo (`REACT-PAT-01`), ou `Controller` onde `register` bastava (`RHF-CORE-03`) | hub § 2 · Registro | 9 |
-| Componente que só exibe erro renderiza com o form todo | `formState` lido no topo e passado por prop (`RHF-STATE-01`) | Estado | 4 |
-| Autosave, analytics ou log provocando render | `watch(callback)`, deprecado — use `subscribe` (`RHF-PERF-02`) | Estado | 2 |
-| Lista lenta mesmo com `memo` na linha | volume de nós, não cálculo (§ 5.6, passo 5) | Estado | — |
+| The whole screen renders on every keystroke | `watch` with no argument at the root (`RHF-PERF-01`) | Estado | 1 |
+| A render per character in a simple field | `useState` mirroring the field (`REACT-PAT-01`), or `Controller` where `register` would do (`RHF-CORE-03`) | hub § 2 · Registro | 9 |
+| A component that only displays an error renders with the whole form | `formState` read at the top and passed as a prop (`RHF-STATE-01`) | Estado | 4 |
+| Autosave, analytics or logging causing renders | `watch(callback)`, deprecated — use `subscribe` (`RHF-PERF-02`) | Estado | 2 |
+| A slow list even with `memo` on the row | node volume, not computation (§ 5.6, step 5) | Estado | — |
 
 ---
 
-## "Meu campo não valida / não envia"
+## "My field does not validate / does not submit"
 
-| Sintoma | Causa provável | Onde | Sonda |
+| Symptom | Likely cause | Where | Probe |
 | --- | --- | --- | --- |
-| `errors` não atualiza, mas o valor inicial está certo | `formState` acessado condicionalmente — o Proxy não assinou (`RHF-CORE-02`) | hub § 2 | — |
-| Em componente filho, o estado congela após o primeiro render | `formState` de `useFormContext` em vez de `useFormState` (`RHF-STATE-01`) | hub § 5.2 | 4 |
-| O campo não chega no submit | não registrado, ou nome com colchetes (`RHF-REG-01`) | Registro | — |
-| Campo de UI controlada envia vazio, ou perde `onBlur`/foco | `field` não espalhado (`RHF-CTRL-01`), ou registro duplo (`RHF-CORE-04`) | Registro | 8 |
-| Input muda de não controlado para controlado | campo fora do `defaultValues` (`RHF-CORE-01`), ou `onChange` com `undefined` (`RHF-CORE-06`) | hub § 2 | 3 |
-| Número chega como string no servidor | falta coerção (`RHF-REG-03`) | Registro | — |
-| `validate` do `useForm` nunca roda | há `resolver` — são exclusivos (`RHF-VAL-01`) | Validação | — |
-| Submete duas vezes, ou em ordem imprevisível | dois donos: `<form action>` com `onSubmit` (`RHF-BRIDGE-01`) | hub § 5.4 | 5 |
-| Erro do servidor aparece e some na tecla seguinte | `setError` sob revalidação — caveats de `RHF-ERR-02` | Validação § 4.2 | — |
-| `isSubmitSuccessful` errado, ou o form não reseta | erro esperado lançado no `onSubmit` (`REACT-ASYNC-09`), ou `reset` fora do Effect (`RHF-STATE-02`) | Validação · Estado | 6 |
-| `setValue` no mount não faz nada | assinatura ainda não pronta — ver `isReady` (v7.56.0) | nota de verificação do hub | — |
+| `errors` does not update, but the initial value is right | `formState` accessed conditionally — the Proxy did not subscribe (`RHF-CORE-02`) | hub § 2 | — |
+| In a child component, the state freezes after the first render | `formState` from `useFormContext` instead of `useFormState` (`RHF-STATE-01`) | hub § 5.2 | 4 |
+| The field does not reach the submit | not registered, or a name with brackets (`RHF-REG-01`) | Registro | — |
+| A controlled UI field submits empty, or loses `onBlur`/focus | `field` not spread (`RHF-CTRL-01`), or double registration (`RHF-CORE-04`) | Registro | 8 |
+| An input switches from uncontrolled to controlled | a field outside `defaultValues` (`RHF-CORE-01`), or an `onChange` with `undefined` (`RHF-CORE-06`) | hub § 2 | 3 |
+| A number arrives as a string on the server | missing coercion (`RHF-REG-03`) | Registro | — |
+| `useForm`'s `validate` never runs | there is a `resolver` — they are exclusive (`RHF-VAL-01`) | Validação | — |
+| It submits twice, or in an unpredictable order | two owners: `<form action>` with `onSubmit` (`RHF-BRIDGE-01`) | hub § 5.4 | 5 |
+| A server error appears and disappears on the next keystroke | `setError` under revalidation — the caveats of `RHF-ERR-02` | Validação § 4.2 | — |
+| `isSubmitSuccessful` is wrong, or the form does not reset | an expected error thrown in the `onSubmit` (`REACT-ASYNC-09`), or a `reset` outside the Effect (`RHF-STATE-02`) | Validação · Estado | 6 |
+| `setValue` on mount does nothing | the subscription is not ready yet — see `isReady` (v7.56.0) | the hub's verification note | — |
 
 ---
 
-## O que **não** é diagnóstico desta skill
+## What is **not** this skill's diagnosis
 
-| Sintoma | Vá para |
+| Symptom | Go to |
 | --- | --- |
-| a tela volta ao valor antigo depois de salvar | cache: `tanstack-query` |
-| o wizard perde a etapa no refresh | a etapa é da URL: `tanstack-router` (`REACT-PAT-10`) |
-| o componente em volta viola pureza ou Rules of Hooks | `react-review` — `REACT-PURE-*` e `REACT-HOOK-*` têm precedência (hub § 7, invariante 4) |
-| o formulário nem deveria usar RHF | Passo 0 da skill; se a resposta for Actions nativas, `react-developer` |
+| the screen goes back to the old value after saving | the cache: `tanstack-query` |
+| the wizard loses the step on refresh | the step belongs to the URL: `tanstack-router` (`REACT-PAT-10`) |
+| the surrounding component violates purity or the Rules of Hooks | `react-review` — `REACT-PURE-*` and `REACT-HOOK-*` take precedence (hub § 7, invariant 4) |
+| the form should not be using RHF at all | Step 0 of the skill; if the answer is native Actions, `react-developer` |
 
 ---
 
-## Relacionados
+## Related
 
-- `tarefas.md` — a tarefa correspondente a cada causa
-- `mapa-de-ids.md` — onde cada `RHF-*` está declarado, e o que é apelido
-- [React Hook Form - Estado e Performance](../../../../knowledge-base/docs/react-hook-form-estado-e-performance.md) — o satélite que fecha a maioria destes casos
+- `tarefas.md` — the task corresponding to each cause
+- `mapa-de-ids.md` — where each `RHF-*` is declared, and what is an alias
+- [React Hook Form - Estado e Performance](../../../../knowledge-base/docs/react-hook-form-estado-e-performance.md) — the satellite that closes most of these cases
