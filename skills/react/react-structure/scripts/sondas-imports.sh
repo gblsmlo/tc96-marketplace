@@ -1,66 +1,66 @@
 #!/usr/bin/env bash
-# Sondas de fronteira — rodam ANTES de ler código, na ordem que falha mais.
-# Uso: bash sondas-imports.sh [alvo]     (alvo padrão: src)
+# Boundary probes — they run BEFORE reading any code, in the order that fails most.
+# Usage: bash sondas-imports.sh [target]   (default target: src)
 #
-# Sonda não é achado: ela aponta o arquivo. Confirme lendo, e reporte com
-# ID de Feature-Based Architecture § 4 + arquivo:linha.
+# A probe is not a finding: it points at the file. Confirm by reading, and report with
+# an ID from Feature-Based Architecture § 4 + file:line.
 set -uo pipefail
 
 ALVO="${1:-src}"
 RG=(rg --type-add 'rx:*.{ts,tsx,js,jsx}' -trx)
 titulo() { printf '\n\033[1m== %s\033[0m  %s\n' "$1" "${2:-}"; }
-vazio() { echo "   (nada)"; }
-ou_vazio() {  # imprime a entrada; se vier vazia, a mensagem
+vazio() { echo "   (nothing)"; }
+ou_vazio() {  # prints the input; when it comes back empty, the message
   local saida; saida="$(cat)"
   if [ -n "$saida" ]; then printf '%s
-' "$saida"; else echo "   ${1:-(nada)}"; fi
+' "$saida"; else echo "   ${1:-(nothing)}"; fi
 }
 
-titulo "0. Enforcement" "sem isto, todo achado abaixo se repete no próximo PR"
+titulo "0. Enforcement" "without this, every finding below comes back next PR"
 echo "   -- biome.json:"
-ls biome.json biome.jsonc 2>/dev/null || echo "   AUSENTE — primeiro achado do relatório"
-echo "   -- regras de fronteira ligadas:"
+ls biome.json biome.jsonc 2>/dev/null || echo "   MISSING — first finding of the report"
+echo "   -- boundary rules turned on:"
 rg -n 'noRestrictedImports|noImportCycles' biome.json biome.jsonc 2>/dev/null || vazio
-echo "   -- aliases nos três arquivos (divergência = quebra só no teste):"
+echo "   -- aliases across the three files (divergence = breaks only in the test):"
 for f in tsconfig.json vite.config.ts vitest.config.ts; do
   printf '   %-18s ' "$f"
-  rg -c '@features|@components|@libs|@hooks|@routes' "$f" 2>/dev/null || echo "sem alias"
+  rg -c '@features|@components|@libs|@hooks|@routes' "$f" 2>/dev/null || echo "no alias"
 done
 
-titulo "1. Direção invertida" "REACT-ARCH-06 / REACT-ARCH-07 — o achado mais caro"
-echo "   -- camada genérica importando domínio:"
+titulo "1. Inverted direction" "REACT-ARCH-06 / REACT-ARCH-07 — the most expensive finding"
+echo "   -- generic layer importing the domain:"
 GENERICAS=()
 for d in components hooks libs types; do [ -d "$ALVO/$d" ] && GENERICAS+=("$ALVO/$d"); done
 if [ ${#GENERICAS[@]} -gt 0 ]; then
   "${RG[@]}" -n "from '@(features|routes)/" "${GENERICAS[@]}" || vazio
 else vazio; fi
-echo "   -- feature importando rota:"
+echo "   -- feature importing a route:"
 "${RG[@]}" -n "from '@routes/" "$ALVO/features" 2>/dev/null || vazio
 
-titulo "2. Deep import" "REACT-ARCH-05 — três segmentos ou mais depois do alias"
+titulo "2. Deep import" "REACT-ARCH-05 — three segments or more after the alias"
 "${RG[@]}" -n "from '@(features|components)/[^/']+/[^/']+/" "$ALVO" || vazio
 
-titulo "3. Alias próprio dentro da feature" "REACT-ARCH-04 — o lint só pega quando fecha ciclo"
+titulo "3. A feature aliasing itself" "REACT-ARCH-04 — lint only catches it once a cycle closes"
 "${RG[@]}" -l "from '@features/" "$ALVO/features" 2>/dev/null \
   | while read -r f; do
       dono="$(echo "$f" | sed -E "s|.*features/([^/]+)/.*|\1|")"
       rg -nH "from '@features/$dono" "$f" | sed "s|^|   |"
     done | grep . || vazio
 
-titulo "4. Barrel com lógica" "REACT-ARCH-03 — index.ts só reexporta"
+titulo "4. Barrel with logic" "REACT-ARCH-03 — index.ts only re-exports"
 find "$ALVO" -name 'index.ts' -not -path '*/node_modules/*' 2>/dev/null \
   | while read -r f; do
       rg -qv '^\s*(export|import|//|/\*|\*|$)' "$f" && echo "   $f"
     done | grep . || vazio
 
-titulo "5. Rota inchada" "REACT-ARCH-09 — aplique o teste de bancada, não impressão"
+titulo "5. Bloated route" "REACT-ARCH-09 — apply the bench test, not an impression"
 find "$ALVO/routes" -name '*.tsx' 2>/dev/null -exec wc -l {} + 2>/dev/null | sort -rn | head -6 | ou_vazio
 
-titulo "6. Convenção de nome" "REACT-ARCH-12 — kebab-case em arquivo e diretório"
+titulo "6. Naming convention" "REACT-ARCH-12 — kebab-case for file and directory"
 find "$ALVO" -name '*[A-Z]*' -not -path '*/node_modules/*' 2>/dev/null | head -10 | sed 's|^|   |' | grep . | ou_vazio
 
-titulo "7. Tipo saindo do barrel sem export type" "REACT-ARCH-11"
+titulo "7. Type leaving the barrel without export type" "REACT-ARCH-11"
 find "$ALVO" -name 'index.ts' -not -path '*/node_modules/*' 2>/dev/null \
   | xargs rg -n "^export \{[^}]*\b(Props|Type|Dto|Schema)\b" 2>/dev/null || vazio
 
-printf '\n\033[1m== Fim.\033[0m Achado de estrutura vem antes de achado de interior: mover arquivo apaga o segundo.\n'
+printf '\n\033[1m== Done.\033[0m A structural finding comes before an internal one: moving a file erases the second.\n'
