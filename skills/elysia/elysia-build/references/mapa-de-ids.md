@@ -1,6 +1,6 @@
 ---
 gerado-por: skills/elysia/elysia-diagnose/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-22
+gerado-em: 2026-09-23
 ---
 
 # ID map `ELYSIA-*`
@@ -31,47 +31,47 @@ Os dois "só nesta cláusula" são deliberados, porque as duas regras não são 
 
 | ID | Declared in | Body in the satellite | Section of the body |
 | --- | --- | --- | --- |
-| `ELYSIA-APP-01` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
-| `ELYSIA-APP-02` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
-| `ELYSIA-APP-03` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
-| `ELYSIA-APP-04` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
-| `ELYSIA-APP-05` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
-| `ELYSIA-APP-06` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
-| `ELYSIA-APP-07` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
-| `ELYSIA-APP-08` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
-| `ELYSIA-APP-09` | [Elysia](../../../../knowledge-base/docs/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
-| `ELYSIA-CORE-01` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 2. Instância, rotas e precedência de caminho |
-| `ELYSIA-CORE-02` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 1. Conceito: o contexto é um acúmulo de decisões anteriores, não um objeto fixo |
-| `ELYSIA-CORE-03` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 5. Erros: taxonomia, retorno × exceção, e customização |
-| `ELYSIA-CORE-04` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 4. Formas de resposta |
-| `ELYSIA-CORE-05` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 4. Formas de resposta |
-| `ELYSIA-CORE-06` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 4. Formas de resposta |
-| `ELYSIA-CORE-07` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 5. Erros: taxonomia, retorno × exceção, e customização |
-| `ELYSIA-CORE-08` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 5. Erros: taxonomia, retorno × exceção, e customização |
-| `ELYSIA-CORE-09` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 6. Testar sem subir servidor |
-| `ELYSIA-CORE-10` | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 6. Testar sem subir servidor |
-| `ELYSIA-LIFE-01` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 5. Escopo: `local`, `scoped`, `global` e o método `as()` |
-| `ELYSIA-LIFE-02` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 3. `state` × `decorate` × `derive` × `resolve` |
-| `ELYSIA-LIFE-03` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 4. Plugin é uma instância, e `use()` é a única forma de compor |
-| `ELYSIA-LIFE-04` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 2. A ordem do lifecycle |
-| `ELYSIA-LIFE-05` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 3. `state` × `decorate` × `derive` × `resolve` |
-| `ELYSIA-LIFE-06` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 3. `state` × `decorate` × `derive` × `resolve` |
-| `ELYSIA-LIFE-07` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 4. Plugin é uma instância, e `use()` é a única forma de compor |
-| `ELYSIA-LIFE-08` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 5. Escopo: `local`, `scoped`, `global` e o método `as()` |
-| `ELYSIA-LIFE-09` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 5. Escopo: `local`, `scoped`, `global` e o método `as()` |
-| `ELYSIA-LIFE-10` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 6. `macro`: hook reutilizável, ativado declarativamente |
-| `ELYSIA-LIFE-11` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 8. Plugins oficiais em produção |
-| `ELYSIA-LIFE-12` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 8. Plugins oficiais em produção |
-| `ELYSIA-TYPE-01` | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | 1. Conceito: uma declaração produz quatro artefatos — duplicar qualquer um é regressão |
-| `ELYSIA-TYPE-02` | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | 2. `t` × Standard Schema: onde Zod ainda faz sentido |
-| `ELYSIA-TYPE-03` | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | 3. Schema por rota e coerção automática |
-| `ELYSIA-TYPE-04` | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | 3. Schema por rota e coerção automática |
-| `ELYSIA-TYPE-05` | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | 4. `guard`, precedência e `standalone`; reference models |
-| `ELYSIA-TYPE-06` | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | 5. `response` por status, e o erro de validação |
-| `ELYSIA-TYPE-07` | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | 6. OpenAPI |
-| `ELYSIA-TYPE-08` | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | 7. Eden: o contrato atravessa para o frontend |
-| `ELYSIA-TYPE-09` | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | 7. Eden: o contrato atravessa para o frontend |
-| `ELYSIA-TYPE-10` | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | 7. Eden: o contrato atravessa para o frontend |
-| `ELYSIA-TYPE-11` | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | 7. Eden: o contrato atravessa para o frontend |
-| `ELYSIA-TYPE-12` | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | 5. `response` por status, e o erro de validação |
-| `ELYSIA-TYPE-13` | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) | 7. Eden: o contrato atravessa para o frontend |
+| `ELYSIA-APP-01` | [Elysia](../../../../knowledge-base/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-02` | [Elysia](../../../../knowledge-base/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-03` | [Elysia](../../../../knowledge-base/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-04` | [Elysia](../../../../knowledge-base/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-05` | [Elysia](../../../../knowledge-base/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-06` | [Elysia](../../../../knowledge-base/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-07` | [Elysia](../../../../knowledge-base/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-08` | [Elysia](../../../../knowledge-base/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-APP-09` | [Elysia](../../../../knowledge-base/elysia.md) | — (ELYSIA-APP-* family, hub only) | — |
+| `ELYSIA-CORE-01` | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | 2. Instância, rotas e precedência de caminho |
+| `ELYSIA-CORE-02` | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | 1. Conceito: o contexto é um acúmulo de decisões anteriores, não um objeto fixo |
+| `ELYSIA-CORE-03` | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | 5. Erros: taxonomia, retorno × exceção, e customização |
+| `ELYSIA-CORE-04` | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | 4. Formas de resposta |
+| `ELYSIA-CORE-05` | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | 4. Formas de resposta |
+| `ELYSIA-CORE-06` | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | 4. Formas de resposta |
+| `ELYSIA-CORE-07` | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | 5. Erros: taxonomia, retorno × exceção, e customização |
+| `ELYSIA-CORE-08` | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | 5. Erros: taxonomia, retorno × exceção, e customização |
+| `ELYSIA-CORE-09` | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | 6. Testar sem subir servidor |
+| `ELYSIA-CORE-10` | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) | 6. Testar sem subir servidor |
+| `ELYSIA-LIFE-01` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | 5. Escopo: `local`, `scoped`, `global` e o método `as()` |
+| `ELYSIA-LIFE-02` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | 3. `state` × `decorate` × `derive` × `resolve` |
+| `ELYSIA-LIFE-03` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | 4. Plugin é uma instância, e `use()` é a única forma de compor |
+| `ELYSIA-LIFE-04` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | 2. A ordem do lifecycle |
+| `ELYSIA-LIFE-05` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | 3. `state` × `decorate` × `derive` × `resolve` |
+| `ELYSIA-LIFE-06` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | 3. `state` × `decorate` × `derive` × `resolve` |
+| `ELYSIA-LIFE-07` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | 4. Plugin é uma instância, e `use()` é a única forma de compor |
+| `ELYSIA-LIFE-08` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | 5. Escopo: `local`, `scoped`, `global` e o método `as()` |
+| `ELYSIA-LIFE-09` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | 5. Escopo: `local`, `scoped`, `global` e o método `as()` |
+| `ELYSIA-LIFE-10` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | 6. `macro`: hook reutilizável, ativado declarativamente |
+| `ELYSIA-LIFE-11` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | 8. Plugins oficiais em produção |
+| `ELYSIA-LIFE-12` | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) | 8. Plugins oficiais em produção |
+| `ELYSIA-TYPE-01` | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | 1. Conceito: uma declaração produz quatro artefatos — duplicar qualquer um é regressão |
+| `ELYSIA-TYPE-02` | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | 2. `t` × Standard Schema: onde Zod ainda faz sentido |
+| `ELYSIA-TYPE-03` | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | 3. Schema por rota e coerção automática |
+| `ELYSIA-TYPE-04` | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | 3. Schema por rota e coerção automática |
+| `ELYSIA-TYPE-05` | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | 4. `guard`, precedência e `standalone`; reference models |
+| `ELYSIA-TYPE-06` | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | 5. `response` por status, e o erro de validação |
+| `ELYSIA-TYPE-07` | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | 6. OpenAPI |
+| `ELYSIA-TYPE-08` | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | 7. Eden: o contrato atravessa para o frontend |
+| `ELYSIA-TYPE-09` | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | 7. Eden: o contrato atravessa para o frontend |
+| `ELYSIA-TYPE-10` | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | 7. Eden: o contrato atravessa para o frontend |
+| `ELYSIA-TYPE-11` | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | 7. Eden: o contrato atravessa para o frontend |
+| `ELYSIA-TYPE-12` | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | 5. `response` por status, e o erro de validação |
+| `ELYSIA-TYPE-13` | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) | 7. Eden: o contrato atravessa para o frontend |

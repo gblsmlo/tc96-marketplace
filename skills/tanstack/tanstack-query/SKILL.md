@@ -4,7 +4,7 @@ descricao: Work with server state in TanStack Query — reading remote data, fre
 tipo: skill
 familia: tanstack
 idioma: en
-fonte: "[TanStack Query](../../../knowledge-base/docs/tanstack-query.md)"
+fonte: "[TanStack Query](../../../knowledge-base/tanstack-query.md)"
 docs:
   - /websites/tanstack_query
 tags:
@@ -15,11 +15,11 @@ tags:
 
 # tanstack-query
 
-> **Source of this skill:** [TanStack Query](../../../knowledge-base/docs/tanstack-query.md), with the five satellites loaded **one at a time**.
+> **Source of this skill:** [TanStack Query](../../../knowledge-base/tanstack-query.md), with the five satellites loaded **one at a time**.
 > This skill **contains** neither the text of the rules nor the API surface — it routes by task and diagnoses by symptom.
 > **API surface:** resolve it through Context7 — `/websites/tanstack_query`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [TanStack Query](../../../knowledge-base/docs/tanstack-query.md) § 7.
+Contract this skill implements: [TanStack Query](../../../knowledge-base/tanstack-query.md) § 7.
 
 ---
 
@@ -27,7 +27,7 @@ Contract this skill implements: [TanStack Query](../../../knowledge-base/docs/ta
 
 The data **comes from a server and someone else can change it**: reading, writing, invalidating, paginating, deciding freshness, or understanding the cache.
 
-Before anything, go through the first tree in [TanStack Query](../../../knowledge-base/docs/tanstack-query.md) § 5 ("Este dado é da Query?"):
+Before anything, go through the first tree in [TanStack Query](../../../knowledge-base/tanstack-query.md) § 5 ("Este dado é da Query?"):
 
 | The data is… | Go to |
 | --- | --- |
@@ -61,7 +61,7 @@ References in this skill:
 | `references/mapa-de-ids.md` | the 55 `TSQ-*` by satellite and section |
 | `references/exemplo.md` | worked case |
 | `scripts/sondas.sh` | twelve probes over the code |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `knowledge-base/docs/tanstack-query*` |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `knowledge-base/tanstack-query*` |
 
 ---
 
@@ -124,7 +124,7 @@ Full case: `references/exemplo.md`.
 
 ## Related
 
-- [TanStack Query](../../../knowledge-base/docs/tanstack-query.md) — source of this skill: § 2, § 4, § 5, § 7
+- [TanStack Query](../../../knowledge-base/tanstack-query.md) — source of this skill: § 2, § 4, § 5, § 7
 - `tanstack-router` — route data, and preloading
 - `react-developer` · `react-review` — the component around it
 - `elysia-schema` — the bridge with Eden

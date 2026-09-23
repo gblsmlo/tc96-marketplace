@@ -47,7 +47,7 @@ new Elysia({ cookie: { secrets: env.COOKIE_SECRET, sign: ['session'] } })
 ```
 
 The semantics of `SameSite`, `Domain` and the prefixes come from
-[RFC 6265 - Cookies HTTP](../../../../knowledge-base/docs/rfc-6265-cookies-http.md) —
+[RFC 6265 - Cookies HTTP](../../../../knowledge-base/rfc-6265-cookies-http.md) —
 Elysia is the mechanism, not the criterion.
 
 **Streaming:** `ELYSIA-CORE-06` — `set.headers` is **never** changed after the first `yield`
@@ -55,7 +55,7 @@ of a generator handler. The change is **silently ignored**.
 
 > **The trap that comes from the runtime, not the framework:** `Bun.serve`'s 10 s `idleTimeout`
 > **counts during the response**, not only before it — it is the cause of SSE that drops on its own.
-> See [Bun - HTTP e Servidor](../../../../knowledge-base/docs/bun-http-e-servidor.md).
+> See [Bun - HTTP e Servidor](../../../../knowledge-base/bun-http-e-servidor.md).
 
 ---
 
@@ -85,5 +85,5 @@ the plugin registers the route, and the result depends on timing. See `bun-test-
 
 ## Related
 
-- [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) · [Elysia](../../../../knowledge-base/docs/elysia.md) § 5 — the error tree
+- [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) · [Elysia](../../../../knowledge-base/elysia.md) § 5 — the error tree
 - `http-contract` — which status to return is a protocol decision, not a framework one

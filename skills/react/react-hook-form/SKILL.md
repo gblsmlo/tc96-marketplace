@@ -4,7 +4,7 @@ descricao: Work with forms in React Hook Form — triaging whether RHF is the to
 tipo: skill
 familia: react
 idioma: en
-fonte: "[React Hook Form](../../../knowledge-base/docs/react-hook-form.md)"
+fonte: "[React Hook Form](../../../knowledge-base/react-hook-form.md)"
 docs:
   - /react-hook-form/documentation
   - /reactjs/react.dev
@@ -16,11 +16,11 @@ tags:
 
 # react-hook-form
 
-> **Source of this skill:** [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) and its three satellites in the knowledge base.
+> **Source of this skill:** [React Hook Form](../../../knowledge-base/react-hook-form.md) and its three satellites in the knowledge base.
 > A **task → note** router, not an API summary. It contains neither the text of the `RHF-*` rules, nor signatures, options, nor the behavior of the `formState` Proxy: that lives in the satellites, and that is where it is read and updated. Technical procedure written here becomes a copy that goes stale on its own.
 > **API surface:** resolve it through Context7 — `/react-hook-form/documentation` · `/reactjs/react.dev`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) § 7. The invariants there hold in every task, without repetition per section.
+Contract this skill implements: [React Hook Form](../../../knowledge-base/react-hook-form.md) § 7. The invariants there hold in every task, without repetition per section.
 
 ---
 
@@ -41,13 +41,13 @@ Does the form need at least ONE of these?
 └── YES → RHF owns the CAPTURE. Continue.
 ```
 
-Three notes converge on that cut — [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) § 5.4, [React - Formulários e Actions](../../../knowledge-base/docs/react-formularios-e-actions.md) § 6 and [React - Patterns](../../../knowledge-base/docs/react-patterns.md) § 4 —, so it is not a style preference. **Record the decision in one sentence:** if you cannot name which of the five triggers applies, RHF is a dependency with no counterpart.
+Three notes converge on that cut — [React Hook Form](../../../knowledge-base/react-hook-form.md) § 5.4, [React - Formulários e Actions](../../../knowledge-base/react-formularios-e-actions.md) § 6 and [React - Patterns](../../../knowledge-base/react-patterns.md) § 4 —, so it is not a style preference. **Record the decision in one sentence:** if you cannot name which of the five triggers applies, RHF is a dependency with no counterpart.
 
 ---
 
 ## Minimum loading
 
-Per [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) § 7:
+Per [React Hook Form](../../../knowledge-base/react-hook-form.md) § 7:
 
 ```
 ALWAYS: React Hook Form § 2 (mental model), § 5 (trees), § 6 + § 6.1 (rules)
@@ -72,9 +72,9 @@ References in this skill — open only the one the task asks for:
 | `references/mapa-de-ids.md` | where each `RHF-*` is declared, and the cross-doc citation rule |
 | `references/exemplo-lancamento-de-fatura.md` | worked case, from Step 0 to the submit |
 | `scripts/sondas.sh` | twelve executable probes for reviewing an existing form |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates `mapa-de-ids.md` from `knowledge-base/docs/react-hook-form*` |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates `mapa-de-ids.md` from `knowledge-base/react-hook-form*` |
 
-Below, the satellites appear by their short names: **Registro**, **Validação**, **Estado**; the **hub** is [React Hook Form](../../../knowledge-base/docs/react-hook-form.md).
+Below, the satellites appear by their short names: **Registro**, **Validação**, **Estado**; the **hub** is [React Hook Form](../../../knowledge-base/react-hook-form.md).
 
 ---
 
@@ -143,7 +143,7 @@ Full case, with code and the table of what each decision prevented: `references/
 
 ## Related
 
-- [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) — hub, mental model, decision trees, skill contract (source)
-- [React Hook Form - Registro e Controle](../../../knowledge-base/docs/react-hook-form-registro-e-controle.md) · [React Hook Form - Validação e Resolvers](../../../knowledge-base/docs/react-hook-form-validacao-e-resolvers.md) · [React Hook Form - Estado e Performance](../../../knowledge-base/docs/react-hook-form-estado-e-performance.md) — satellites, one at a time
-- [React - Formulários e Actions](../../../knowledge-base/docs/react-formularios-e-actions.md) — the native alternative, which Step 0 may point to
+- [React Hook Form](../../../knowledge-base/react-hook-form.md) — hub, mental model, decision trees, skill contract (source)
+- [React Hook Form - Registro e Controle](../../../knowledge-base/react-hook-form-registro-e-controle.md) · [React Hook Form - Validação e Resolvers](../../../knowledge-base/react-hook-form-validacao-e-resolvers.md) · [React Hook Form - Estado e Performance](../../../knowledge-base/react-hook-form-estado-e-performance.md) — satellites, one at a time
+- [React - Formulários e Actions](../../../knowledge-base/react-formularios-e-actions.md) — the native alternative, which Step 0 may point to
 - `react-developer` · `react-review` · `react-structure` · `tanstack-query` · `tanstack-router` — neighboring skills

@@ -14,7 +14,7 @@ BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-b
 # The map is generated at authoring time and committed: source and destination are
 # both this repository (pass another knowledge-base path as $1 if you need to).
 FAMILIA="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-DOCS="$BASE/docs"
+DOCS="$BASE"
 
 # Title of each note, from the `titulo:` field in the file itself — the link label.
 titulos() {
@@ -25,8 +25,8 @@ titulos() {
 # Rewrites a note's own relative links to how they are seen from
 # <family>/<skill>/references/ — nothing here points outside the project.
 links() {
-  sed -E -e 's#\]\(\.\./pages/#](../../../../knowledge-base/pages/#g' \
-         -e 's#\]\(([^)/]+\.md)#](../../../../knowledge-base/docs/\1#g'
+  sed -E -e 's#\]\(\.\./pages/#](../../../../knowledge-base/#g' \
+         -e 's#\]\(([^)/]+\.md)#](../../../../knowledge-base/\1#g'
 }
 OUT_DEV="$FAMILIA/react-developer/references/mapa-de-ids.md"
 OUT_REV="$FAMILIA/react-review/references/mapa-de-ids.md"
@@ -69,7 +69,7 @@ scan() {
   echo
   echo "## Aliases — never cite one in a review"
   echo
-  echo "From [React.js](../../../../knowledge-base/docs/react-js.md) § 6.2. Always cite the canonical ID; an alias in a finding is an invalid finding."
+  echo "From [React.js](../../../../knowledge-base/react-js.md) § 6.2. Always cite the canonical ID; an alias in a finding is an invalid finding."
   echo
   awk '/^### 6\.2/,/^### Fam/' "$DOCS/react-js.md" | grep -E '^\|' | links || true
   echo
@@ -79,7 +79,7 @@ scan() {
   echo "| --- | --- | --- |"
   scan | sort -t$'\t' -k1,1 -k2,2n \
     | awk -F'\t' 'NR == FNR { titulo[$1] = $2; next }
-                  !seen[$1]++ { printf "| `%s` | [%s](../../../../knowledge-base/docs/%s.md) | %s |\n", \
+                  !seen[$1]++ { printf "| `%s` | [%s](../../../../knowledge-base/%s.md) | %s |\n", \
                                 $1, ($3 in titulo ? titulo[$3] : $3), $3, $4 }' <(titulos) -
 } > "$TMP"
 

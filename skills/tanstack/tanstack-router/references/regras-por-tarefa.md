@@ -7,16 +7,16 @@
 
 | Task | Family | Where |
 | --- | --- | --- |
-| defining a route, hierarchy, layout | `TSR-ROUTE-*` | [TanStack Router - Routing Concepts](../../../../knowledge-base/docs/tanstack-router-routing-concepts.md) |
-| file convention and tree generation | `TSR-FILE-*` | [TanStack Router - File-Based Routing](../../../../knowledge-base/docs/tanstack-router-file-based-routing.md) |
-| assembling and organizing the tree | `TSR-TREE-*` | [TanStack Router - Route Trees](../../../../knowledge-base/docs/tanstack-router-route-trees.md) |
-| why a URL matches (or does not) | `TSR-MATCH-*` | [TanStack Router - Route Matching](../../../../knowledge-base/docs/tanstack-router-route-matching.md) |
-| a tree outside the file convention | `TSR-VIRTUAL-*` | [TanStack Router - Virtual File Routes](../../../../knowledge-base/docs/tanstack-router-virtual-file-routes.md) |
-| navigating, `<Link>`, `useNavigate`, preloading | `TSR-NAV-*` | [TanStack Router - Navegação](../../../../knowledge-base/docs/tanstack-router-navegacao.md) |
-| typed and validated search params | `TSR-SEARCH-*` | [TanStack Router - Search Params](../../../../knowledge-base/docs/tanstack-router-search-params.md) |
-| loader, `beforeLoad`, cache integration | `TSR-LOAD-*` | [TanStack Router - Carregamento de Dados](../../../../knowledge-base/docs/tanstack-router-carregamento-de-dados.md) |
-| route context (typed dependency injection) | `TSR-CTX-*` | [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) |
-| per-route code splitting | `TSR-SPLIT-*` | [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/docs/tanstack-router-route-context-e-code-splitting.md) |
+| defining a route, hierarchy, layout | `TSR-ROUTE-*` | [TanStack Router - Routing Concepts](../../../../knowledge-base/tanstack-router-routing-concepts.md) |
+| file convention and tree generation | `TSR-FILE-*` | [TanStack Router - File-Based Routing](../../../../knowledge-base/tanstack-router-file-based-routing.md) |
+| assembling and organizing the tree | `TSR-TREE-*` | [TanStack Router - Route Trees](../../../../knowledge-base/tanstack-router-route-trees.md) |
+| why a URL matches (or does not) | `TSR-MATCH-*` | [TanStack Router - Route Matching](../../../../knowledge-base/tanstack-router-route-matching.md) |
+| a tree outside the file convention | `TSR-VIRTUAL-*` | [TanStack Router - Virtual File Routes](../../../../knowledge-base/tanstack-router-virtual-file-routes.md) |
+| navigating, `<Link>`, `useNavigate`, preloading | `TSR-NAV-*` | [TanStack Router - Navegação](../../../../knowledge-base/tanstack-router-navegacao.md) |
+| typed and validated search params | `TSR-SEARCH-*` | [TanStack Router - Search Params](../../../../knowledge-base/tanstack-router-search-params.md) |
+| loader, `beforeLoad`, cache integration | `TSR-LOAD-*` | [TanStack Router - Carregamento de Dados](../../../../knowledge-base/tanstack-router-carregamento-de-dados.md) |
+| route context (typed dependency injection) | `TSR-CTX-*` | [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/tanstack-router-route-context-e-code-splitting.md) |
+| per-route code splitting | `TSR-SPLIT-*` | [TanStack Router - Route Context e Code Splitting](../../../../knowledge-base/tanstack-router-route-context-e-code-splitting.md) |
 
 Full index, by section: `mapa-de-ids.md`.
 

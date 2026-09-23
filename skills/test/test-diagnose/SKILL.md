@@ -4,7 +4,7 @@ descricao: Diagnose a suite nobody trusts — measure the flakiness rate before 
 tipo: skill
 familia: test
 idioma: en
-fonte: "[Teste de Software - Confiabilidade da Suíte](../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md)"
+fonte: "[Teste de Software - Confiabilidade da Suíte](../../../knowledge-base/teste-de-software-confiabilidade-da-suite.md)"
 tags:
   - skill
   - testing
@@ -13,10 +13,10 @@ tags:
 ---
 # test-diagnose
 
-> **Source of this skill:** [Teste de Software - Confiabilidade da Suíte](../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md), with § 4.5 of the [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) hub as the diagnostic tree. The 64 rules of the `TS-*` family live in § 6 of the hub.
+> **Source of this skill:** [Teste de Software - Confiabilidade da Suíte](../../../knowledge-base/teste-de-software-confiabilidade-da-suite.md), with § 4.5 of the [Teste de Software](../../../knowledge-base/teste-de-software.md) hub as the diagnostic tree. The 64 rules of the `TS-*` family live in § 6 of the hub.
 > This skill **does not contain** the text of the rules — it says what to measure, in what order to eliminate hypotheses and how to report.
 
-Contract this skill implements: [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Teste de Software](../../../knowledge-base/teste-de-software.md) § 7 ("Contrato de skill").
 
 > **Design note.** This skill diagnoses the **suite as a system**: flakiness rate, trust, ability to detect a break. `playwright-diagnose` and `bun-test-review` diagnose **one test** that fails. The practical difference: they read a trace; this one reads the CI history. Arriving here with a single red test is using the wrong tool — and arriving there with "the suite is flaky" produces one diagnosis at a time, forever.
 
@@ -32,7 +32,7 @@ The suite, as a whole, has lost credibility: intermittent failures, people re-ru
 | auditing the shape and risk coverage | `test-review` |
 | deciding a new test | `test-design` |
 | the failure is a real product defect | then **the suite worked** — stop and fix the product |
-| a recurring defect with an organizational cause | [Teste de Software - Processo e Artefatos](../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) |
+| a recurring defect with an organizational cause | [Teste de Software - Processo e Artefatos](../../../knowledge-base/teste-de-software-processo-e-artefatos.md) |
 
 ---
 
@@ -40,9 +40,9 @@ The suite, as a whole, has lost credibility: intermittent failures, people re-ru
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 2 (claim 5) | **the arithmetic**: an untrustworthy suite is worse than no suite |
-| 2 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 4.5 | the six questions of "I do not trust the suite" |
-| 3 | [Teste de Software - Confiabilidade da Suíte](../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) § 1 and § 2 | the numbers, and the ten causes in order of frequency |
+| 1 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 2 (claim 5) | **the arithmetic**: an untrustworthy suite is worse than no suite |
+| 2 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 4.5 | the six questions of "I do not trust the suite" |
+| 3 | [Teste de Software - Confiabilidade da Suíte](../../../knowledge-base/teste-de-software-confiabilidade-da-suite.md) § 1 and § 2 | the numbers, and the ten causes in order of frequency |
 | 4 | `references/mapa-de-ids.md` | before citing — three IDs are aliases |
 
 References in this skill:
@@ -151,8 +151,8 @@ Full diagnosis, with both reports: `references/exemplo-diagnostico.md`.
 
 ## Related
 
-- [Teste de Software - Confiabilidade da Suíte](../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) — source of this skill: the arithmetic, the ten causes, test smells
-- [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — § 2 (claim 5), § 4.5 (the tree), § 6, § 7
+- [Teste de Software - Confiabilidade da Suíte](../../../knowledge-base/teste-de-software-confiabilidade-da-suite.md) — source of this skill: the arithmetic, the ten causes, test smells
+- [Teste de Software](../../../knowledge-base/teste-de-software.md) — § 2 (claim 5), § 4.5 (the tree), § 6, § 7
 - `test-design` · `test-review` — the sibling skills
 - `playwright-diagnose` · `bun-test-review` — they diagnose **one test**; this one diagnoses the **suite**
-- [Playwright](../../../knowledge-base/docs/playwright.md) § 5.2 · [Bun - Testes - Ciclo de Vida e Isolamento](../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md) — the concrete forms per tool
+- [Playwright](../../../knowledge-base/playwright.md) § 5.2 · [Bun - Testes - Ciclo de Vida e Isolamento](../../../knowledge-base/bun-testes-ciclo-de-vida-e-isolamento.md) — the concrete forms per tool

@@ -31,5 +31,5 @@ failure and lengthens every run.
 
 ## Related
 
-- [Playwright - Execução, Retries e CI](../../../../knowledge-base/docs/playwright-execucao-retries-e-ci.md) · [Playwright - Snapshots e Visual](../../../../knowledge-base/docs/playwright-snapshots-e-visual.md) · [Playwright - Autenticação e Isolamento](../../../../knowledge-base/docs/playwright-autenticacao-e-isolamento.md)
+- [Playwright - Execução, Retries e CI](../../../../knowledge-base/playwright-execucao-retries-e-ci.md) · [Playwright - Snapshots e Visual](../../../../knowledge-base/playwright-snapshots-e-visual.md) · [Playwright - Autenticação e Isolamento](../../../../knowledge-base/playwright-autenticacao-e-isolamento.md)
 - `arvore-de-hipoteses.md` — where this branch comes from

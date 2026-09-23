@@ -4,9 +4,9 @@ Three skills, one per satellite: **route**, **schema**, **lifecycle**.
 
 | Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
-| `elysia-build` | how do I write this route and this handler? | [Elysia - Roteamento e Handler](../../knowledge-base/docs/elysia-roteamento-e-handler.md) | 5 references + 1 script |
-| `elysia-schema` | how do I validate, type the return and consume it through Eden? | [Elysia - Schema e Eden](../../knowledge-base/docs/elysia-schema-e-eden.md) | 5 references + 1 script |
-| `elysia-diagnose` | why does this hook not affect the route? | [Elysia - Lifecycle e Plugins](../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | 6 references + 2 scripts |
+| `elysia-build` | how do I write this route and this handler? | [Elysia - Roteamento e Handler](../../knowledge-base/elysia-roteamento-e-handler.md) | 5 references + 1 script |
+| `elysia-schema` | how do I validate, type the return and consume it through Eden? | [Elysia - Schema e Eden](../../knowledge-base/elysia-schema-e-eden.md) | 5 references + 1 script |
+| `elysia-diagnose` | why does this hook not affect the route? | [Elysia - Lifecycle e Plugins](../../knowledge-base/elysia-lifecycle-e-plugins.md) | 6 references + 2 scripts |
 
 ## What the packages added
 
@@ -62,6 +62,6 @@ Regenerate: `bash scripts/medir.sh`
 
 ## Related
 
-- [Skills index](../README.md) · [Elysia](../../knowledge-base/docs/elysia.md) § 7 — the contract
+- [Skills index](../README.md) · [Elysia](../../knowledge-base/elysia.md) § 7 — the contract
 - `twincam-core: http family` — the protocol Elysia implements
 - `drizzle family` — the persistence the handler calls

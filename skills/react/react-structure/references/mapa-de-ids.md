@@ -1,11 +1,11 @@
 ---
 gerado-por: skills/react/react-structure/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-22
+gerado-em: 2026-09-23
 ---
 
 # ID map `REACT-ARCH-*`
 
-> An index, not a copy: each rule's text lives in [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 4.
+> An index, not a copy: each rule's text lives in [Feature-Based Architecture](../../../../knowledge-base/feature-based-architecture.md) § 4.
 > The **Enforced by** column says whether lint catches it or it depends on human review — that is what decides
 > whether a finding comes back in the next PR. Regenerate with:
 > `bash skills/react/react-structure/scripts/gerar-mapa-de-ids.sh`

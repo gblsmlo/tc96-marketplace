@@ -1,6 +1,6 @@
 # The sentence, the level and the proportion
 
-> Steps 1 to 3 of the skill. The full tree is § 4.1 of [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md); here is the
+> Steps 1 to 3 of the skill. The full tree is § 4.1 of [Teste de Software](../../../../knowledge-base/teste-de-software.md); here is the
 > path and what it eliminates.
 
 ---
@@ -31,7 +31,7 @@ the level, not intuition:
 | --- | --- | --- |
 | calculation, parsing, validation, domain invariant | **unit** | `bun-test-build` |
 | two of my pieces talking (use case + repository) | **integration**, with a controlled real dependency | `bun-test-build` |
-| the format crossing the boundary with a system that is not mine | **contract** — and much of it is the compiler | [Hono - Validação e RPC](../../../../knowledge-base/docs/hono-validacao-e-rpc.md) · [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md) |
+| the format crossing the boundary with a system that is not mine | **contract** — and much of it is the compiler | [Hono - Validação e RPC](../../../../knowledge-base/hono-validacao-e-rpc.md) · [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md) |
 | visual/interactive state of a component | **component** | `storybook-story` · `storybook-test` |
 | the critical journey works with routing, session and network | **E2E** | `playwright-build` |
 | incompatible type, incorrect API use | **static** | TypeScript via Context7, `/microsoft/typescript` |
@@ -74,6 +74,6 @@ runs, and they are the cheapest layer there is (`TS-TIPO-08`).
 
 ## Related
 
-- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 4.1 — the full tree
-- [Teste de Software - Níveis e Escopo](../../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) — the source
+- [Teste de Software](../../../../knowledge-base/teste-de-software.md) § 4.1 — the full tree
+- [Teste de Software - Níveis e Escopo](../../../../knowledge-base/teste-de-software-niveis-e-escopo.md) — the source
 - `tecnicas-de-caso.md` — the next step, when there is input to exercise

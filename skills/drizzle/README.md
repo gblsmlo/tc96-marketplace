@@ -1,11 +1,11 @@
 # Drizzle skills
 
 One skill for now: **review**. There is no build skill — to write a new schema or query, the
-trees in [Drizzle ORM](../../knowledge-base/docs/drizzle-orm.md) § 5 are consulted directly.
+trees in [Drizzle ORM](../../knowledge-base/drizzle-orm.md) § 5 are consulted directly.
 
 | Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
-| `drizzle-review` | does this persistence layer have defects? | [Drizzle ORM](../../knowledge-base/docs/drizzle-orm.md) | 6 references + 2 scripts |
+| `drizzle-review` | does this persistence layer have defects? | [Drizzle ORM](../../knowledge-base/drizzle-orm.md) | 6 references + 2 scripts |
 
 ## What the package added
 
@@ -61,6 +61,6 @@ Regenerate: `bash scripts/medir.sh`
 
 ## Related
 
-- [Skills index](../README.md) · [Drizzle ORM](../../knowledge-base/docs/drizzle-orm.md) § 7 — the contract
+- [Skills index](../README.md) · [Drizzle ORM](../../knowledge-base/drizzle-orm.md) § 7 — the contract
 - `PostgreSQL` — what the ORM does not dispense with
 - [elysia family](../elysia/README.md) — the route that calls the repository

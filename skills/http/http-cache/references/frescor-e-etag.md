@@ -44,4 +44,4 @@ GET /invoices/42 → If-None-Match: "v7"
 
 **Emitting an `ETag` without handling `If-None-Match` is the most common antipattern here**: it costs the header and delivers no saving at all — the client asks and receives the whole body back.
 
-**What the stack does on its own:** `Bun.serve` answers `304` to `If-None-Match` when serving `Bun.file` — but **only for files**. For a dynamic response, the `ETag` is yours ([Bun - HTTP e Servidor](../../../../knowledge-base/docs/bun-http-e-servidor.md)). In Hono there is `hono/etag`, with `weak: false` by default ([Hono - Middleware e Ciclo de Vida](../../../../knowledge-base/docs/hono-middleware-e-ciclo-de-vida.md) § 5).
+**What the stack does on its own:** `Bun.serve` answers `304` to `If-None-Match` when serving `Bun.file` — but **only for files**. For a dynamic response, the `ETag` is yours ([Bun - HTTP e Servidor](../../../../knowledge-base/bun-http-e-servidor.md)). In Hono there is `hono/etag`, with `weak: false` by default ([Hono - Middleware e Ciclo de Vida](../../../../knowledge-base/hono-middleware-e-ciclo-de-vida.md) § 5).

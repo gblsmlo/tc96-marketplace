@@ -46,7 +46,7 @@ function Search({ term }: { term: string }) {
 | 4 | `count` derived through an Effect | it is `results.length` | `REACT-PAT-01` |
 | 5 | `.sort` over the state's array | `sort` **mutates** — the array came from the state and already went into the JSX | `REACT-PURE-03`, `REACT-PURE-05` |
 | 5 | a `useMemo` with no measurement | cost with no proven benefit | `REACT-PERF-01` |
-| 6 | `key={i}` | on reorder, the row's internal state goes to the wrong item | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 8 |
+| 6 | `key={i}` | on reorder, the row's internal state goes to the wrong item | [React - Patterns](../../../../knowledge-base/react-patterns.md) § 8 |
 
 Defect 3 costs most and shows least: the race condition only manifests
 with variable latency, exactly where nobody is watching.

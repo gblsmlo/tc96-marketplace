@@ -4,7 +4,7 @@ descricao: Manage dependencies and the workspace with Bun's package manager — 
 tipo: skill
 familia: bun
 idioma: en
-fonte: "[Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md)"
+fonte: "[Bun - Gerenciador de Pacotes](../../../knowledge-base/bun-gerenciador-de-pacotes.md)"
 docs:
   - /oven-sh/bun
 tags:
@@ -15,7 +15,7 @@ tags:
 
 # bun-workspace
 
-> **Source of this skill:** [Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md), with the [Bun](../../../knowledge-base/docs/bun.md) hub as the router.
+> **Source of this skill:** [Bun - Gerenciador de Pacotes](../../../knowledge-base/bun-gerenciador-de-pacotes.md), with the [Bun](../../../knowledge-base/bun.md) hub as the router.
 > **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
 ---
@@ -29,7 +29,7 @@ Dependency, lockfile, workspace, install.
 | writing application code | `bun-runtime` |
 | Node code that does not run | `bun-migrate` |
 | test suite and CI gates | `bun-test-review` |
-| bundling and builds | [Bun - Bundler e Build](../../../knowledge-base/docs/bun-bundler-e-build.md) |
+| bundling and builds | [Bun - Bundler e Build](../../../knowledge-base/bun-bundler-e-build.md) |
 
 ---
 
@@ -37,8 +37,8 @@ Dependency, lockfile, workspace, install.
 
 | Order | Load |
 | --- | --- |
-| 1 | [Bun](../../../knowledge-base/docs/bun.md) § 6 — `BUN-PKG-*` |
-| 2 | [Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md) |
+| 1 | [Bun](../../../knowledge-base/bun.md) § 6 — `BUN-PKG-*` |
+| 2 | [Bun - Gerenciador de Pacotes](../../../knowledge-base/bun-gerenciador-de-pacotes.md) |
 
 References in this skill:
 
@@ -107,6 +107,6 @@ Full case: `references/exemplo.md`.
 
 ## Related
 
-- [Bun - Gerenciador de Pacotes](../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md) — source of this skill
+- [Bun - Gerenciador de Pacotes](../../../knowledge-base/bun-gerenciador-de-pacotes.md) — source of this skill
 - `bun-runtime` · `bun-migrate` · `bun-test-build` · `bun-test-review` — the family
-- [Bun - Bundler e Build](../../../knowledge-base/docs/bun-bundler-e-build.md) — bundling, which stays outside this skill
+- [Bun - Bundler e Build](../../../knowledge-base/bun-bundler-e-build.md) — bundling, which stays outside this skill

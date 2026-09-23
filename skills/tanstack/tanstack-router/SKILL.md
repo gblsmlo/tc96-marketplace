@@ -4,7 +4,7 @@ descricao: Work with routing in TanStack Router — defining and nesting routes,
 tipo: skill
 familia: tanstack
 idioma: en
-fonte: "[TanStack Router](../../../knowledge-base/docs/tanstack-router.md)"
+fonte: "[TanStack Router](../../../knowledge-base/tanstack-router.md)"
 docs:
   - /websites/tanstack_router
 tags:
@@ -15,7 +15,7 @@ tags:
 
 # tanstack-router
 
-> **Source of this skill:** [TanStack Router](../../../knowledge-base/docs/tanstack-router.md) and the ten satellites, loaded **one per task**.
+> **Source of this skill:** [TanStack Router](../../../knowledge-base/tanstack-router.md) and the ten satellites, loaded **one per task**.
 > This skill **does not contain** technical API procedure — it routes by task, cites the rule and says what to check.
 > **API surface:** resolve it through Context7 — `/websites/tanstack_router`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
@@ -54,7 +54,7 @@ References in this skill:
 | `references/mapa-de-ids.md` | the 102 `TSR-*` by satellite and section |
 | `references/exemplo.md` | worked case |
 | `scripts/sondas.sh` | sixteen probes over routing, navigation, search and loaders |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `knowledge-base/docs/tanstack-router*` |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `knowledge-base/tanstack-router*` |
 
 ---
 
@@ -110,7 +110,7 @@ Full case: `references/exemplo.md`.
 
 ## Related
 
-- [TanStack Router](../../../knowledge-base/docs/tanstack-router.md) — the hub, and the ten satellites
+- [TanStack Router](../../../knowledge-base/tanstack-router.md) — the hub, and the ten satellites
 - `tanstack-query` — the other cache; `TSR-LOAD-14` is what reconciles them
 - `react-developer` · `react-review` · `react-structure` — what stays inside the route
 - `react-hook-form` — the wizard whose step lives in the URL

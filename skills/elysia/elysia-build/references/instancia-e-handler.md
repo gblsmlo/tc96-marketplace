@@ -1,6 +1,6 @@
 # The instance and the handler
 
-> Steps 0 to 2. The text of the rules lives in [Elysia](../../../../knowledge-base/docs/elysia.md) § 6 and [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md).
+> Steps 0 to 2. The text of the rules lives in [Elysia](../../../../knowledge-base/elysia.md) § 6 and [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md).
 
 ---
 
@@ -61,6 +61,6 @@ as the target runtime — none of the three is portable.
 
 ## Related
 
-- [Elysia - Roteamento e Handler](../../../../knowledge-base/docs/elysia-roteamento-e-handler.md) — the source
+- [Elysia - Roteamento e Handler](../../../../knowledge-base/elysia-roteamento-e-handler.md) — the source
 - `erro-cookie-e-teste.md` — the next step
 - `mapa-de-ids.md` — where each `ELYSIA-*` has its body

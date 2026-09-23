@@ -7,7 +7,7 @@ BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-b
 # The map is generated at authoring time and committed: source and destination are
 # both this repository (pass another knowledge-base path as $1 if you need to).
 FAMILIA="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-DOCS="$BASE/docs"
+DOCS="$BASE"
 
 # Title of each note, from the `titulo:` field in the file itself — the link label.
 titulos() {
@@ -18,8 +18,8 @@ titulos() {
 # Rewrites a note's own relative links to how they are seen from
 # <family>/<skill>/references/ — nothing here points outside the project.
 links() {
-  sed -E -e 's#\]\(\.\./pages/#](../../../../knowledge-base/pages/#g' \
-         -e 's#\]\(([^)/]+\.md)#](../../../../knowledge-base/docs/\1#g'
+  sed -E -e 's#\]\(\.\./pages/#](../../../../knowledge-base/#g' \
+         -e 's#\]\(([^)/]+\.md)#](../../../../knowledge-base/\1#g'
 }
 
 scan() {
@@ -63,7 +63,7 @@ TMP="$(mktemp)"
   echo "| --- | --- | --- | --- |"
   scan | sort -t$'\t' -k1,1V -k2,2n \
     | awk -F'\t' -v hub="bun-testes" '
-    function nota(s) { return "[" (s in titulo ? titulo[s] : s) "](../../../../knowledge-base/docs/" s ".md)" }
+    function nota(s) { return "[" (s in titulo ? titulo[s] : s) "](../../../../knowledge-base/" s ".md)" }
     NR == FNR { titulo[$1] = $2; next }
     {
       if (!( $1 in decl )) { decl[$1] = $3; ordem[++k] = $1 }

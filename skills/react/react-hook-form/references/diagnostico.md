@@ -53,4 +53,4 @@ and `REACT-PERF-01`. The order in § 5.6 is mandatory and **does not start with 
 
 - `tarefas.md` — the task corresponding to each cause
 - `mapa-de-ids.md` — where each `RHF-*` is declared, and what is an alias
-- [React Hook Form - Estado e Performance](../../../../knowledge-base/docs/react-hook-form-estado-e-performance.md) — the satellite that closes most of these cases
+- [React Hook Form - Estado e Performance](../../../../knowledge-base/react-hook-form-estado-e-performance.md) — the satellite that closes most of these cases

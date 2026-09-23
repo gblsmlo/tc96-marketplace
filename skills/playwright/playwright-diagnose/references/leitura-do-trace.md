@@ -49,5 +49,5 @@ failing (`PW-AUTH-06`).
 
 ## Related
 
-- [Playwright - Debug e Trace](../../../../knowledge-base/docs/playwright-debug-e-trace.md) § 3 — the source of this reading
+- [Playwright - Debug e Trace](../../../../knowledge-base/playwright-debug-e-trace.md) § 3 — the source of this reading
 - `arvore-de-hipoteses.md` — what to do when the trace does not close the case

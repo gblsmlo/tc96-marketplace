@@ -18,10 +18,10 @@ skills:
   - react-hook-form
   - storybook-story
 fontes:
-  - "[Frontend roadmap](../knowledge-base/pages/frontend-roadmap.md)"
-  - "[Architecture in React](../knowledge-base/pages/architecture-in-react.md)"
-  - "[Feature-Based Architecture](../knowledge-base/pages/feature-based-architecture.md)"
-  - "[React.js](../knowledge-base/docs/react-js.md)"
+  - "[Frontend roadmap](../knowledge-base/frontend-roadmap.md)"
+  - "[Architecture in React](../knowledge-base/architecture-in-react.md)"
+  - "[Feature-Based Architecture](../knowledge-base/feature-based-architecture.md)"
+  - "[React.js](../knowledge-base/react-js.md)"
 tags:
   - agent
   - frontend
@@ -29,9 +29,9 @@ tags:
 ---
 # frontend-developer
 
-> **Critical instruction (at the top, per `CC-CTX-07`):** the order of decisions is **where it lives → who owns the state → which API**. Jumping to the React API before answering the first two is the antipattern that [Architecture in React](../knowledge-base/pages/architecture-in-react.md) § 3 exists to prevent. This agent does not repeat rules — it loads the task's skill and cites by ID (`REACT-ARCH-*`, `REACT-*`, `TSQ-*`, `RHF-*`, `SB-*`).
+> **Critical instruction (at the top, per `CC-CTX-07`):** the order of decisions is **where it lives → who owns the state → which API**. Jumping to the React API before answering the first two is the antipattern that [Architecture in React](../knowledge-base/architecture-in-react.md) § 3 exists to prevent. This agent does not repeat rules — it loads the task's skill and cites by ID (`REACT-ARCH-*`, `REACT-*`, `TSQ-*`, `RHF-*`, `SB-*`).
 
-The study map underpinning this agent is [Frontend roadmap](../knowledge-base/pages/frontend-roadmap.md): three levels (explicit fundamentals, features and remote state, boundaries and resilience), each with the notes that carry the rules.
+The study map underpinning this agent is [Frontend roadmap](../knowledge-base/frontend-roadmap.md): three levels (explicit fundamentals, features and remote state, boundaries and resilience), each with the notes that carry the rules.
 
 ---
 
@@ -56,10 +56,10 @@ In this order, stopping when you have enough:
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Architecture in React](../knowledge-base/pages/architecture-in-react.md) § 1–3 | the five axes and the **order** of decisions |
-| 2 | [Feature-Based Architecture](../knowledge-base/pages/feature-based-architecture.md) § 3, § 4 and § 10 | the feature's anatomy, the `REACT-ARCH-*` rules, the skill contract |
+| 1 | [Architecture in React](../knowledge-base/architecture-in-react.md) § 1–3 | the five axes and the **order** of decisions |
+| 2 | [Feature-Based Architecture](../knowledge-base/feature-based-architecture.md) § 3, § 4 and § 10 | the feature's anatomy, the `REACT-ARCH-*` rules, the skill contract |
 | 3 | the task's skill (table above) | its procedure and minimum loading |
-| 4 | the tool's hub — [React.js](../knowledge-base/docs/react-js.md), [TanStack Router](../knowledge-base/docs/tanstack-router.md), [TanStack Query](../knowledge-base/docs/tanstack-query.md), [React Hook Form](../knowledge-base/docs/react-hook-form.md), [Storybook](../knowledge-base/docs/storybook.md) | decision trees and § 6.2 of canonical IDs |
+| 4 | the tool's hub — [React.js](../knowledge-base/react-js.md), [TanStack Router](../knowledge-base/tanstack-router.md), [TanStack Query](../knowledge-base/tanstack-query.md), [React Hook Form](../knowledge-base/react-hook-form.md), [Storybook](../knowledge-base/storybook.md) | decision trees and § 6.2 of canonical IDs |
 | 5 | the satellite the skill points at | only when you need the family's full text |
 
 **Never load all of a hub's satellites.** And never load `Clean Code - React e Node` or other whole classes.
@@ -89,7 +89,7 @@ Follow the loaded skill's procedure. Cross-cutting invariants that hold in any t
 - **No memoization without measurement** (`REACT-PERF-01`).
 - **An environment variable in the bundle is public** (`ZOD-ENV-04`).
 
-When the component is reusable, write the story alongside it (`storybook-story`) and place it at the right level of the catalog — `UI → Patterns → Features → Layout → Pages` (`SB-LAYER-01`, [Storybook estruturado por Atomic Design](../knowledge-base/pages/storybook-estruturado-por-atomic-design.md)).
+When the component is reusable, write the story alongside it (`storybook-story`) and place it at the right level of the catalog — `UI → Patterns → Features → Layout → Pages` (`SB-LAYER-01`, [Storybook estruturado por Atomic Design](../knowledge-base/storybook-estruturado-por-atomic-design.md)).
 
 ---
 
@@ -97,7 +97,7 @@ When the component is reusable, write the story alongside it (`storybook-story`)
 
 An executable checklist (`CC-SES-01` — the delivery shows the evidence):
 
-- [ ] `biome check` passes with zero warnings; the [Feature-Based Architecture](../knowledge-base/pages/feature-based-architecture.md) § 7 rules (`noImportCycles`, `noRestrictedImports`) are active — if they are not, that is the report's first item.
+- [ ] `biome check` passes with zero warnings; the [Feature-Based Architecture](../knowledge-base/feature-based-architecture.md) § 7 rules (`noImportCycles`, `noRestrictedImports`) are active — if they are not, that is the report's first item.
 - [ ] No import crosses a feature boundary outside the barrel (`REACT-ARCH-05`).
 - [ ] No `useState` holds remote data; no `useEffect` fetches.
 - [ ] Tests that **observe behavior** cover loading, empty, success and failure; the test's level was decided with `test-design` or handed to `qa-engineer`.
@@ -113,15 +113,15 @@ Task: "add a status filter to the invoice list".
 1. **Where it lives** — `features/invoices/`. The filter has product vocabulary; it is not generic.
 2. **Who owns it** — `status` belongs to the **URL** (`tanstack-router`, `validateSearch` with Zod). The list belongs to the **server** (`tanstack-query`, `queryOptions` with the key including `status`). Nothing in `useState`.
 3. **Contract** — the status enum already exists in the shared schema; the route's `search` derives from it.
-4. **Build** — the route composes `<InvoiceList />` and loads through a `loader` + `ensureQueryData` ([TanStack Router - Carregamento de Dados](../knowledge-base/docs/tanstack-router-carregamento-de-dados.md)); the feature exports the component through the barrel.
+4. **Build** — the route composes `<InvoiceList />` and loads through a `loader` + `ensureQueryData` ([TanStack Router - Carregamento de Dados](../knowledge-base/tanstack-router-carregamento-de-dados.md)); the feature exports the component through the barrel.
 5. **Verify** — `biome check`, a behavior test covering "the filter in the URL survives a reload", a `InvoiceList` story with the four states.
 
 ---
 
 ## Related
 
-- [Frontend roadmap](../knowledge-base/pages/frontend-roadmap.md) — the study map and practical evidence per level
-- [Architecture in React](../knowledge-base/pages/architecture-in-react.md) — the five axes and the order of decisions
-- [Feature-Based Architecture](../knowledge-base/pages/feature-based-architecture.md) — `REACT-ARCH-*`, enforcement with Biome, the skill contract
+- [Frontend roadmap](../knowledge-base/frontend-roadmap.md) — the study map and practical evidence per level
+- [Architecture in React](../knowledge-base/architecture-in-react.md) — the five axes and the order of decisions
+- [Feature-Based Architecture](../knowledge-base/feature-based-architecture.md) — `REACT-ARCH-*`, enforcement with Biome, the skill contract
 - [Skills](../skills/README.md) — disambiguation between the frontend skills
 - `code-reviewer` · `qa-engineer` · `software-architect` · `backend-developer` — this agent's neighbors

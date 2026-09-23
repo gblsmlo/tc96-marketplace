@@ -112,7 +112,7 @@ Autoverificação: toda estimativa tem origem em quem executa; toda mudança tem
 
 Pedido do stakeholder: "só adiciona login social, é pequeno, dá pra entrar nesta sprint?"
 
-1. **Registrar** a mudança. **Impacto**: segurança (fluxo OAuth novo — `devops-security` estima 3 dias e aponta o checklist de [OWASP - Sessão e Autorização](../knowledge-base/docs/owasp-sessao-e-autorizacao.md)), UX (tela de escolha de provedor — `product-designer`), backend (vinculação de conta — `backend-developer`, 2 dias), QA (E2E de login por provedor — `qa-engineer`), prazo (a sprint já está no caminho crítico da entrega de faturas), custo (provedor de identidade tem custo por MAU).
+1. **Registrar** a mudança. **Impacto**: segurança (fluxo OAuth novo — `devops-security` estima 3 dias e aponta o checklist de [OWASP - Sessão e Autorização](../knowledge-base/owasp-sessao-e-autorizacao.md)), UX (tela de escolha de provedor — `product-designer`), backend (vinculação de conta — `backend-developer`, 2 dias), QA (E2E de login por provedor — `qa-engineer`), prazo (a sprint já está no caminho crítico da entrega de faturas), custo (provedor de identidade tem custo por MAU).
 2. **Alternativas**: entra na sprint e sai "exportação para Excel" (decisão de valor: `product-manager`); ou entra na próxima, sem mexer no marco.
 3. **Decisão** de quem tem poder na; registrada com premissa e aceite.
 4. **Comunicar** pelo canal previsto no plano; atualizar o Gantt e o risco "dependência de provedor externo".

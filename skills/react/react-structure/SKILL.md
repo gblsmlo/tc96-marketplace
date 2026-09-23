@@ -4,7 +4,7 @@ descricao: Decide where React code lives and who may import whom in a feature-ba
 tipo: skill
 familia: react
 idioma: en
-fonte: "[Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md)"
+fonte: "[Feature-Based Architecture](../../../knowledge-base/feature-based-architecture.md)"
 docs:
   - /reactjs/react.dev
 tags:
@@ -15,13 +15,13 @@ tags:
 
 # react-structure
 
-> **Source of this skill:** [Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md) (structure, rules and enforcement), with [Architecture in React](../../../knowledge-base/pages/architecture-in-react.md) as the router for the other decision axes.
+> **Source of this skill:** [Feature-Based Architecture](../../../knowledge-base/feature-based-architecture.md) (structure, rules and enforcement), with [Architecture in React](../../../knowledge-base/architecture-in-react.md) as the router for the other decision axes.
 > This skill **contains** neither the text of the rules nor the Biome configuration — it says what to load, in what order to decide and how to report. A rule rewritten here would become an outdated copy.
 >
-> **Resolving the links:** the source note is [Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md). It condenses an external article of the same name, which is **not** normative here: what the note says wins.
+> **Resolving the links:** the source note is [Feature-Based Architecture](../../../knowledge-base/feature-based-architecture.md). It condenses an external article of the same name, which is **not** normative here: what the note says wins.
 > **API surface:** resolve it through Context7 — `/reactjs/react.dev`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md) § 10, which in turn implements [React.js](../../../knowledge-base/docs/react-js.md) § 7.
+Contract this skill implements: [Feature-Based Architecture](../../../knowledge-base/feature-based-architecture.md) § 10, which in turn implements [React.js](../../../knowledge-base/react-js.md) § 7.
 
 ---
 
@@ -47,7 +47,7 @@ The skills compose, almost always in pairs:
 
 ## Minimum loading
 
-Adapted from [Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md) § 10 — the `ON DEMAND` line is this skill's addition:
+Adapted from [Feature-Based Architecture](../../../knowledge-base/feature-based-architecture.md) § 10 — the `ON DEMAND` line is this skill's addition:
 
 ```
 ALWAYS: § 2 (layers and dependency direction)
@@ -95,7 +95,7 @@ A **placement** finding ("this should not be here") comes out of the Step 3 scan
 
 ## Step 1 — The five questions before creating a feature
 
-A normative order ([Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md) § 10). Answer them **in writing**, one sentence each, before the first `mkdir`: is it a domain? does the domain already exist? is the data remote? is this public? who is going to import this?
+A normative order ([Feature-Based Architecture](../../../knowledge-base/feature-based-architecture.md) § 10). Answer them **in writing**, one sentence each, before the first `mkdir`: is it a domain? does the domain already exist? is the data remote? is this public? who is going to import this?
 
 The full table, with what to do when each answer stalls, and the "capability born shared" exception: `references/arvore-de-colocacao.md`.
 
@@ -144,7 +144,7 @@ When closing, **declare what the lint would already cover**. The *Enforced by* c
 
 ## Step 5 — Self-check before delivering
 
-Run the checklist in [Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md) § 10 in full: barrel, dependency direction, `queryKey` invalidation, co-located test, naming convention. **It does not verify aliases** — that is Step 6; if you touched `paths`, check the three files by hand.
+Run the checklist in [Feature-Based Architecture](../../../knowledge-base/feature-based-architecture.md) § 10 in full: barrel, dependency direction, `queryKey` invalidation, co-located test, naming convention. **It does not verify aliases** — that is Step 6; if you touched `paths`, check the three files by hand.
 
 Three closing questions:
 
@@ -200,8 +200,8 @@ Full report: `references/exemplo-revisao-de-estrutura.md`.
 
 ## Related
 
-- [Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md) — source of this skill: structure, `REACT-ARCH-*` rules, enforcement
-- [Architecture in React](../../../knowledge-base/pages/architecture-in-react.md) — router for the other architectural decision axes
+- [Feature-Based Architecture](../../../knowledge-base/feature-based-architecture.md) — source of this skill: structure, `REACT-ARCH-*` rules, enforcement
+- [Architecture in React](../../../knowledge-base/architecture-in-react.md) — router for the other architectural decision axes
 - `react-developer` — write the component that lives in the structure decided here
 - `react-review` — review the interior; this skill reviews the boundary
-- [React.js](../../../knowledge-base/docs/react-js.md) § 7 — the original skill contract
+- [React.js](../../../knowledge-base/react-js.md) § 7 — the original skill contract

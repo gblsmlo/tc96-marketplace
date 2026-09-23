@@ -2,10 +2,10 @@
 
 | Skill | Domain | Source | Internal support |
 | --- | --- | --- | --- |
-| `http-contract` | method, status, idempotency, error body | [HTTP - Métodos e Semântica](../../knowledge-base/docs/http-metodos-e-semantica.md) | 5 references + 1 script |
-| `http-cache` | freshness, `ETag`, conditionals, concurrent writes, `Vary` | [HTTP - Cache e Requisições Condicionais](../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md) | 6 references + 1 script |
-| `http-diagnose` | blocked request, wrong format | [HTTP - CORS](../../knowledge-base/docs/http-cors.md) | 5 references + 1 script |
-| `http-review` | auditing an existing API's contract | [HTTP](../../knowledge-base/docs/http.md) | 6 references + 2 scripts |
+| `http-contract` | method, status, idempotency, error body | [HTTP - Métodos e Semântica](../../knowledge-base/http-metodos-e-semantica.md) | 5 references + 1 script |
+| `http-cache` | freshness, `ETag`, conditionals, concurrent writes, `Vary` | [HTTP - Cache e Requisições Condicionais](../../knowledge-base/http-cache-e-requisicoes-condicionais.md) | 6 references + 1 script |
+| `http-diagnose` | blocked request, wrong format | [HTTP - CORS](../../knowledge-base/http-cors.md) | 5 references + 1 script |
+| `http-review` | auditing an existing API's contract | [HTTP](../../knowledge-base/http.md) | 6 references + 2 scripts |
 
 ## What the packages added
 
@@ -66,6 +66,6 @@ Regenerate: `bash scripts/medir.sh`
 
 ## Related
 
-- [Skills index](../README.md) · [HTTP](../../knowledge-base/docs/http.md) § 7 — the contract
+- [Skills index](../README.md) · [HTTP](../../knowledge-base/http.md) § 7 — the contract
 - `twincam-backend: elysia family` — the mechanism that implements the contract
 - `tanstack-query` — the client's cache layer, which is not this one

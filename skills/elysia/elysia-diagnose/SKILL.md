@@ -4,7 +4,7 @@ descricao: Diagnose why a plugin or hook does not affect a route in Elysia, and 
 tipo: skill
 familia: elysia
 idioma: en
-fonte: "[Elysia - Lifecycle e Plugins](../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md)"
+fonte: "[Elysia - Lifecycle e Plugins](../../../knowledge-base/elysia-lifecycle-e-plugins.md)"
 docs:
   - /websites/elysiajs
 tags:
@@ -15,11 +15,11 @@ tags:
 
 # elysia-diagnose
 
-> **Source of this skill:** [Elysia - Lifecycle e Plugins](../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md), with the [Elysia](../../../knowledge-base/docs/elysia.md) hub as the router.
+> **Source of this skill:** [Elysia - Lifecycle e Plugins](../../../knowledge-base/elysia-lifecycle-e-plugins.md), with the [Elysia](../../../knowledge-base/elysia.md) hub as the router.
 > This skill **does not contain** the text of the rules — it says what to probe, in what order to eliminate hypotheses, and what **proves** each one.
 > **API surface:** resolve it through Context7 — `/websites/elysiajs`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [Elysia](../../../knowledge-base/docs/elysia.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Elysia](../../../knowledge-base/elysia.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -40,9 +40,9 @@ A hook, plugin, `derive`, `resolve` or `onError` **is not affecting** the route 
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Elysia](../../../knowledge-base/docs/elysia.md) § 2 | the mental model of instance and plugin |
-| 2 | [Elysia](../../../knowledge-base/docs/elysia.md) § 6 + § 6.1 + § 6.2 | rules, critical ones and canonical IDs |
-| 3 | [Elysia - Lifecycle e Plugins](../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) | the source |
+| 1 | [Elysia](../../../knowledge-base/elysia.md) § 2 | the mental model of instance and plugin |
+| 2 | [Elysia](../../../knowledge-base/elysia.md) § 6 + § 6.1 + § 6.2 | rules, critical ones and canonical IDs |
+| 3 | [Elysia - Lifecycle e Plugins](../../../knowledge-base/elysia-lifecycle-e-plugins.md) | the source |
 
 References in this skill:
 
@@ -147,7 +147,7 @@ Full diagnosis: `references/exemplo-plugin-sem-escopo.md`.
 
 ## Related
 
-- [Elysia - Lifecycle e Plugins](../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) — source of this skill
-- [Elysia](../../../knowledge-base/docs/elysia.md) § 6, § 7
+- [Elysia - Lifecycle e Plugins](../../../knowledge-base/elysia-lifecycle-e-plugins.md) — source of this skill
+- [Elysia](../../../knowledge-base/elysia.md) § 6, § 7
 - `elysia-build` · `elysia-schema` — the sibling skills
 - `http-diagnose` — when the symptom is CORS in the browser

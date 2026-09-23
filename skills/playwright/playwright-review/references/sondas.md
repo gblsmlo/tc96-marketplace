@@ -52,4 +52,4 @@ may be any number of assertions that assert nothing, and none shows up as a fail
 
 - `ordem-da-varredura.md` — what to do with what the probes pointed at
 - `severidade-e-relatorio.md` — classify and write
-- [Playwright - Configuração e Projects](../../../../knowledge-base/docs/playwright-configuracao-e-projects.md) · [Playwright - Debug e Trace](../../../../knowledge-base/docs/playwright-debug-e-trace.md)
+- [Playwright - Configuração e Projects](../../../../knowledge-base/playwright-configuracao-e-projects.md) · [Playwright - Debug e Trace](../../../../knowledge-base/playwright-debug-e-trace.md)

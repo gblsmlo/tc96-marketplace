@@ -26,6 +26,6 @@ parameters: { a11y: { test: 'error' } }
 
 **`'todo'` produces nothing in CI** — no error, no warning, no output. Only `'error'` fails (`SB-TEST-04`). A whole project on `'todo'` has a check that only exists for whoever opens the UI.
 
-The ramp is the real problem: turning on `'error'` in an existing design system leaves CI red on day 1, and the only release valve produces zero output. Both ends are documented and the middle is not — it is an open item in [Storybook - Pendências de revisão](../../../../knowledge-base/docs/storybook-pendencias-de-revisao.md). The workable way out is `'error'` per story or per component, advancing in waves, instead of globally in one go.
+The ramp is the real problem: turning on `'error'` in an existing design system leaves CI red on day 1, and the only release valve produces zero output. Both ends are documented and the middle is not — it is an open item in [Storybook - Pendências de revisão](../../../../knowledge-base/storybook-pendencias-de-revisao.md). The workable way out is `'error'` per story or per component, advancing in waves, instead of globally in one go.
 
 The addon disables the `region` rule by default, to avoid a **false positive** on an isolated component — a button outside a landmark is Storybook's normal, not a defect.

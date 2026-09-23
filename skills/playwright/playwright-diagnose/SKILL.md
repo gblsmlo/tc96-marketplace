@@ -4,7 +4,7 @@ descricao: Diagnose a Playwright test that fails or fails intermittently, readin
 tipo: skill
 familia: playwright
 idioma: en
-fonte: "[Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md)"
+fonte: "[Playwright - Debug e Trace](../../../knowledge-base/playwright-debug-e-trace.md)"
 docs:
   - /microsoft/playwright
 tags:
@@ -16,11 +16,11 @@ tags:
 
 # playwright-diagnose
 
-> **Source of this skill:** [Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md), with § 5.2 of the [Playwright](../../../knowledge-base/docs/playwright.md) hub as the diagnostic tree. The 85 rules of the `PW-*` family live in § 6 of the hub.
+> **Source of this skill:** [Playwright - Debug e Trace](../../../knowledge-base/playwright-debug-e-trace.md), with § 5.2 of the [Playwright](../../../knowledge-base/playwright.md) hub as the diagnostic tree. The 85 rules of the `PW-*` family live in § 6 of the hub.
 > This skill **does not contain** the text of the rules — it says what to obtain, in what order to read and how to eliminate hypotheses.
 > **API surface:** resolve it through Context7 — `/microsoft/playwright`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [Playwright](../../../knowledge-base/docs/playwright.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Playwright](../../../knowledge-base/playwright.md) § 7 ("Contrato de skill").
 
 > **Design note.** This skill diagnoses **one test**. For the **suite as a system** — flakiness rate, trust, ability to detect a break — that is `test-diagnose`. The practical difference: here you read a trace; there you read the CI history. Arriving there with one red test, or here with "the suite is flaky", is using the wrong tool.
 
@@ -44,9 +44,9 @@ One concrete test fails, or fails sometimes.
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Playwright](../../../knowledge-base/docs/playwright.md) § 0 | the timeout table — which one blew, and which |
-| 2 | [Playwright](../../../knowledge-base/docs/playwright.md) § 5.2 | the diagnostic tree |
-| 3 | [Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md) § 3 | reading the trace in four steps |
+| 1 | [Playwright](../../../knowledge-base/playwright.md) § 0 | the timeout table — which one blew, and which |
+| 2 | [Playwright](../../../knowledge-base/playwright.md) § 5.2 | the diagnostic tree |
+| 3 | [Playwright - Debug e Trace](../../../knowledge-base/playwright-debug-e-trace.md) § 3 | reading the trace in four steps |
 | 4 | `references/mapa-de-ids.md` | before citing — two IDs are aliases |
 | 5 | the satellite for the cause | only **after** you have the cause |
 
@@ -147,7 +147,7 @@ Full diagnosis: `references/exemplo-diagnostico.md`.
 
 ## Related
 
-- [Playwright - Debug e Trace](../../../knowledge-base/docs/playwright-debug-e-trace.md) — source of this skill
-- [Playwright](../../../knowledge-base/docs/playwright.md) § 5.2 — the diagnostic tree
+- [Playwright - Debug e Trace](../../../knowledge-base/playwright-debug-e-trace.md) — source of this skill
+- [Playwright](../../../knowledge-base/playwright.md) § 5.2 — the diagnostic tree
 - `playwright-build` · `playwright-review` — the sibling skills
 - `test-diagnose` — diagnoses the **suite**; this one diagnoses **one test**

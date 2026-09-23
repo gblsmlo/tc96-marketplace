@@ -66,7 +66,7 @@ Rules of the format:
 | **the choice of suite proportion** | "there is too much E2E" is only a finding with the level argument — and then the ID is `TS-CORE-02`, not `PW-*` |
 
 If the scan finds a recurring, real defect **with no matching rule**, the right product
-is a **rule proposal** for [Playwright](../../../../knowledge-base/docs/playwright.md) § 6 — not a fake citation.
+is a **rule proposal** for [Playwright](../../../../knowledge-base/playwright.md) § 6 — not a fake citation.
 
 ---
 

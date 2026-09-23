@@ -119,5 +119,5 @@ Fix: `key={customer.id}`.
 | the `REACT-HOOK-01` finding came from **reading**, not from the probe | `sondas.md` § *What the probes do not catch* |
 | the memoization from probe 6 did **not** become a finding — the `useMemo` had a comment with a measurement | `REACT-PERF-01` |
 | the file's size went to "Suggestions", not to findings | `severidade-e-relatorio.md` § *The cut* |
-| the unknown `after` became a declaration of limitation, not an opinion | [React.js](../../../../knowledge-base/docs/react-js.md) § 7, invariant 1 |
+| the unknown `after` became a declaration of limitation, not an opinion | [React.js](../../../../knowledge-base/react-js.md) § 7, invariant 1 |
 | the absence of lint came in as the closing, not as a footnote | `severidade-e-relatorio.md` § *The report's structure* |

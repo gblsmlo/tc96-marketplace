@@ -19,10 +19,10 @@ Question 1 alone already eliminated two `useState` calls that habit would have c
 
 ## Step 2 — the trees, one owner at a time
 
-| Owner | Path in [React.js](../../../../knowledge-base/docs/react-js.md) § 5 | Exit | Rule |
+| Owner | Path in [React.js](../../../../knowledge-base/react-js.md) § 5 | Exit | Rule |
 | --- | --- | --- | --- |
-| invoices | "does the data come from the server?" → yes | [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md), not `useState` + `useEffect` | `REACT-PAT-03`, `REACT-EFFECT-06` |
-| filter | it survives a refresh, is shareable by link, respects the back button | [TanStack Router](../../../../knowledge-base/docs/tanstack-router.md) search params | `REACT-PAT-10` |
+| invoices | "does the data come from the server?" → yes | [TanStack Query](../../../../knowledge-base/tanstack-query.md), not `useState` + `useEffect` | `REACT-PAT-03`, `REACT-EFFECT-06` |
+| filter | it survives a refresh, is shareable by link, respects the back button | [TanStack Router](../../../../knowledge-base/tanstack-router.md) search params | `REACT-PAT-10` |
 | selection | ephemeral, dies when leaving the screen | `useState` in the **nearest** common ancestor — the panel, not the root | `REACT-PAT-02` |
 | total | derivable from invoices + selection | computed in the render, with no state and no Effect | `REACT-PAT-01` |
 
@@ -90,7 +90,7 @@ And the boundary, one level above — a waiting **and** an error boundary, at th
 | `setSelected(new Set(selected))` without the updater | `REACT-STATE-01` |
 | `showTotal` / `hideActions` instead of `children` | `REACT-PAT-04` |
 | a `useMemo` on the `total` with no measurement | `REACT-PERF-01` |
-| `key={i}` in the list | antipattern from [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 8 |
+| `key={i}` in the list | antipattern from [React - Patterns](../../../../knowledge-base/react-patterns.md) § 8 |
 | an Error Boundary only at the root | `REACT-PAT-06` |
 
 ## Step 5 — self-check

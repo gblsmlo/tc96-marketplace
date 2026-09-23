@@ -4,7 +4,7 @@ descricao: Declare schemas in Elysia and consume the API through Eden — `t`/Ty
 tipo: skill
 familia: elysia
 idioma: en
-fonte: "[Elysia - Schema e Eden](../../../knowledge-base/docs/elysia-schema-e-eden.md)"
+fonte: "[Elysia - Schema e Eden](../../../knowledge-base/elysia-schema-e-eden.md)"
 docs:
   - /websites/elysiajs
 tags:
@@ -15,11 +15,11 @@ tags:
 
 # elysia-schema
 
-> **Source of this skill:** [Elysia - Schema e Eden](../../../knowledge-base/docs/elysia-schema-e-eden.md), with the [Elysia](../../../knowledge-base/docs/elysia.md) hub as the router.
+> **Source of this skill:** [Elysia - Schema e Eden](../../../knowledge-base/elysia-schema-e-eden.md), with the [Elysia](../../../knowledge-base/elysia.md) hub as the router.
 > This skill **does not contain** the text of the rules — it says what to decide, in what order, and what to check before delivering.
 > **API surface:** resolve it through Context7 — `/websites/elysiajs`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [Elysia](../../../knowledge-base/docs/elysia.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Elysia](../../../knowledge-base/elysia.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -41,10 +41,10 @@ Declaring a schema, typing a return, or consuming the API through Eden.
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Elysia](../../../knowledge-base/docs/elysia.md) § 2 | **one schema declaration produces four effects** |
-| 2 | [Elysia](../../../knowledge-base/docs/elysia.md) § 6 + § 6.1 + § 6.2 | rules, critical ones and canonical IDs |
-| 3 | [Elysia - Schema e Eden](../../../knowledge-base/docs/elysia-schema-e-eden.md) | the source |
-| 4 | [Elysia](../../../knowledge-base/docs/elysia.md) § 5 | the trees, when in doubt |
+| 1 | [Elysia](../../../knowledge-base/elysia.md) § 2 | **one schema declaration produces four effects** |
+| 2 | [Elysia](../../../knowledge-base/elysia.md) § 6 + § 6.1 + § 6.2 | rules, critical ones and canonical IDs |
+| 3 | [Elysia - Schema e Eden](../../../knowledge-base/elysia-schema-e-eden.md) | the source |
+| 4 | [Elysia](../../../knowledge-base/elysia.md) § 5 | the trees, when in doubt |
 
 References in this skill:
 
@@ -137,8 +137,8 @@ Full case: `references/exemplo-listagem-paginada.md`.
 
 ## Related
 
-- [Elysia - Schema e Eden](../../../knowledge-base/docs/elysia-schema-e-eden.md) — source of this skill
-- [Elysia](../../../knowledge-base/docs/elysia.md) § 2, § 6, § 7
+- [Elysia - Schema e Eden](../../../knowledge-base/elysia-schema-e-eden.md) — source of this skill
+- [Elysia](../../../knowledge-base/elysia.md) § 2, § 6, § 7
 - `elysia-build` · `elysia-diagnose` — the sibling skills
 - `tanstack-query` — the cache on the other side of the bridge
 - `Zod - Validação de Ambiente` — when the schema is Zod

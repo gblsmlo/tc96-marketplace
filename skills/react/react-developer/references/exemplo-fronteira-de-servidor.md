@@ -4,7 +4,7 @@ The same feature as the previous example, now with a **write**: approving an inv
 What changes is not React — it is that there is a trust boundary in the middle.
 
 > It applies to Server Functions (`'use server'`). In a Vite SPA without RSC, the boundary
-> is the HTTP endpoint and the same three obligations hold there — see [React.js](../../../../knowledge-base/docs/react-js.md) § 8.
+> is the HTTP endpoint and the same three obligations hold there — see [React.js](../../../../knowledge-base/react-js.md) § 8.
 
 ---
 
@@ -79,11 +79,11 @@ function Submit {
 
 ## The question that decides the submission's owner
 
-If the approval **invalidates** [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md) cache, the owner is Query's mutation, and the
+If the approval **invalidates** [TanStack Query](../../../../knowledge-base/tanstack-query.md) cache, the owner is Query's mutation, and the
 form becomes an ordinary `<form>` with a handler. `useActionState` alone is enough when the
 submission is isolated. Stacking the two — and adding `useOptimistic` over data that lives in the
 cache — produces two sources of truth diverging (`REACT-FORM-07`). Criterion in
-[React.js](../../../../knowledge-base/docs/react-js.md) § 8.
+[React.js](../../../../knowledge-base/react-js.md) § 8.
 
 ## What an agent would write out of habit, and why it would fail
 

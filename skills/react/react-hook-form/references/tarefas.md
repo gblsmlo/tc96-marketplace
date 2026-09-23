@@ -2,7 +2,7 @@
 
 > A task → note router. It contains no signatures, no options and no `formState` Proxy
 > behavior: that lives in the satellites, and that is where it is read and updated.
-> Short names: **Registro**, **Validação**, **Estado**; the **hub** is [React Hook Form](../../../../knowledge-base/docs/react-hook-form.md).
+> Short names: **Registro**, **Validação**, **Estado**; the **hub** is [React Hook Form](../../../../knowledge-base/react-hook-form.md).
 
 ---
 
@@ -71,7 +71,7 @@ The last two are the **canonical** ones (hub § 6.2). `RHF-ERR-03` and `RHF-CORE
 
 **Conditional.** The value governing the condition is read with `useWatch` in the smallest component that needs it, never with `watch` at the root → `RHF-PERF-01`. For a field that unmounts, `shouldUnregister` is a conscious decision (does the value disappear or stay?), and `defaultValues` still has to cover it → `RHF-CORE-01`.
 
-**List.** `useFieldArray` with `key={field.id}` → `RHF-ARRAY-01`. An index as the `key` is the antipattern in [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 8 **with a local aggravating factor**: the names are already indexed (`items.0.name`, `RHF-REG-01`), so the index in the `key` and the index in the name blur together in the bug. If the list is long, the cost is node volume (§ 5.6, step 5): virtualize or paginate.
+**List.** `useFieldArray` with `key={field.id}` → `RHF-ARRAY-01`. An index as the `key` is the antipattern in [React - Patterns](../../../../knowledge-base/react-patterns.md) § 8 **with a local aggravating factor**: the names are already indexed (`items.0.name`, `RHF-REG-01`), so the index in the `key` and the index in the name blur together in the bug. If the list is long, the cost is node volume (§ 5.6, step 5): virtualize or paginate.
 
 **Wizard.** The step belongs to the URL → `REACT-PAT-10` and `tanstack-router`. The form holds values; the route holds **where the user is**.
 
@@ -101,7 +101,7 @@ A single owner → `RHF-BRIDGE-01`. `<form action={...} onSubmit={handleSubmit(.
 
 ## Related
 
-- [React Hook Form](../../../../knowledge-base/docs/react-hook-form.md) — the hub: mental model, § 5 trees, § 6 rules
-- [React Hook Form - Registro e Controle](../../../../knowledge-base/docs/react-hook-form-registro-e-controle.md) · [React Hook Form - Validação e Resolvers](../../../../knowledge-base/docs/react-hook-form-validacao-e-resolvers.md) · [React Hook Form - Estado e Performance](../../../../knowledge-base/docs/react-hook-form-estado-e-performance.md) — one at a time
+- [React Hook Form](../../../../knowledge-base/react-hook-form.md) — the hub: mental model, § 5 trees, § 6 rules
+- [React Hook Form - Registro e Controle](../../../../knowledge-base/react-hook-form-registro-e-controle.md) · [React Hook Form - Validação e Resolvers](../../../../knowledge-base/react-hook-form-validacao-e-resolvers.md) · [React Hook Form - Estado e Performance](../../../../knowledge-base/react-hook-form-estado-e-performance.md) — one at a time
 - `dono-da-submissao.md` — who disables the button
 - `diagnostico.md` — symptom → cause → satellite

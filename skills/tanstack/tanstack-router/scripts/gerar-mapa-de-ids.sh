@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Regenerates references/mapa-de-ids.md from knowledge-base/docs/tanstack-router*.
+# Regenerates references/mapa-de-ids.md from knowledge-base/tanstack-router*.
 set -euo pipefail
 BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
 # The map is generated at authoring time and committed: source and destination are
 # both this repository (pass another knowledge-base path as $1 if you need to).
 FAMILIA="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-DOCS="$BASE/docs"
+DOCS="$BASE"
 
 # Title of each note, from the `titulo:` field in the file itself — the link label.
 titulos() {
@@ -16,8 +16,8 @@ titulos() {
 # Rewrites a note's own relative links to how they are seen from
 # <family>/<skill>/references/ — nothing here points outside the project.
 links() {
-  sed -E -e 's#\]\(\.\./pages/#](../../../../knowledge-base/pages/#g' \
-         -e 's#\]\(([^)/]+\.md)#](../../../../knowledge-base/docs/\1#g'
+  sed -E -e 's#\]\(\.\./pages/#](../../../../knowledge-base/#g' \
+         -e 's#\]\(([^)/]+\.md)#](../../../../knowledge-base/\1#g'
 }
 OUT="$FAMILIA/tanstack-router/references/mapa-de-ids.md"
 
@@ -60,7 +60,7 @@ scan() {
   echo "| --- | --- | --- |"
   scan | sort -t$'\t' -k1,1 -k2,2n \
     | awk -F'\t' 'NR == FNR { titulo[$1] = $2; next }
-                  !seen[$1]++ { printf "| `%s` | [%s](../../../../knowledge-base/docs/%s.md) | %s |\n", \
+                  !seen[$1]++ { printf "| `%s` | [%s](../../../../knowledge-base/%s.md) | %s |\n", \
                                 $1, ($3 in titulo ? titulo[$3] : $3), $3, $4 }' <(titulos) -
 } > "$OUT"
 echo "written: $OUT ($(grep -c '^| `TSR' "$OUT") IDs)"

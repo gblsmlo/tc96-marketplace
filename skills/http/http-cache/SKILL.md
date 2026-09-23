@@ -4,7 +4,7 @@ descricao: Decide a resource's HTTP cache policy and implement conditional reque
 tipo: skill
 familia: http
 idioma: en
-fonte: "[HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md)"
+fonte: "[HTTP - Cache e Requisições Condicionais](../../../knowledge-base/http-cache-e-requisicoes-condicionais.md)"
 tags:
   - skill
   - http
@@ -13,10 +13,10 @@ tags:
 
 # http-cache
 
-> **Source of this skill:** [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md), with the [HTTP](../../../knowledge-base/docs/http.md) hub as the router.
+> **Source of this skill:** [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/http-cache-e-requisicoes-condicionais.md), with the [HTTP](../../../knowledge-base/http.md) hub as the router.
 > This skill **does not contain** the text of the rules — it says what to decide and what to prove with `curl`.
 
-Contract this skill implements: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
+Contract this skill implements: [HTTP](../../../knowledge-base/http.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -37,10 +37,10 @@ The question is **for how long**, **who may store it**, or **how to revalidate**
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 5.3 | the freshness tree — the core of this skill |
-| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.2 | rules and, **required**, the note about `Vary` and strong `ETag` |
-| 3 | [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md) | the source |
-| 4 | [HTTP](../../../knowledge-base/docs/http.md) § 8.3 | the boundary with the TanStack Query cache |
+| 1 | [HTTP](../../../knowledge-base/http.md) § 5.3 | the freshness tree — the core of this skill |
+| 2 | [HTTP](../../../knowledge-base/http.md) § 6 + § 6.2 | rules and, **required**, the note about `Vary` and strong `ETag` |
+| 3 | [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/http-cache-e-requisicoes-condicionais.md) | the source |
+| 4 | [HTTP](../../../knowledge-base/http.md) § 8.3 | the boundary with the TanStack Query cache |
 
 References in this skill:
 
@@ -120,7 +120,7 @@ Full case: `references/exemplo.md`.
 
 ## Related
 
-- [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/docs/http-cache-e-requisicoes-condicionais.md) — source of this skill
-- [HTTP](../../../knowledge-base/docs/http.md) § 5.3, § 6, § 7, § 8.3
+- [HTTP - Cache e Requisições Condicionais](../../../knowledge-base/http-cache-e-requisicoes-condicionais.md) — source of this skill
+- [HTTP](../../../knowledge-base/http.md) § 5.3, § 6, § 7, § 8.3
 - `http-contract` · `http-diagnose` · `http-review` — the sibling skills
 - `tanstack-query` — the other cache layer

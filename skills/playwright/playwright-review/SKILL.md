@@ -4,7 +4,7 @@ descricao: Audit an existing Playwright suite with eight executable probes befor
 tipo: skill
 familia: playwright
 idioma: en
-fonte: "[Playwright](../../../knowledge-base/docs/playwright.md)"
+fonte: "[Playwright](../../../knowledge-base/playwright.md)"
 docs:
   - /microsoft/playwright
 tags:
@@ -16,11 +16,11 @@ tags:
 
 # playwright-review
 
-> **Source of this skill:** [Playwright](../../../knowledge-base/docs/playwright.md) — the normative § 6 (85 rules), § 6.1 with the satellites' critical ones, and § 6.2 with the canonical IDs. The body of each family lives in the satellite that owns the ID.
+> **Source of this skill:** [Playwright](../../../knowledge-base/playwright.md) — the normative § 6 (85 rules), § 6.1 with the satellites' critical ones, and § 6.2 with the canonical IDs. The body of each family lives in the satellite that owns the ID.
 > This skill **does not contain** the text of the rules — it says what to run, in what order to scan, how to classify and how to report.
 > **API surface:** resolve it through Context7 — `/microsoft/playwright`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [Playwright](../../../knowledge-base/docs/playwright.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Playwright](../../../knowledge-base/playwright.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -42,8 +42,8 @@ Auditing an E2E suite that **already exists**: the whole repository, a directory
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Playwright](../../../knowledge-base/docs/playwright.md) § 0 | the Node floor and the timeout table |
-| 2 | [Playwright](../../../knowledge-base/docs/playwright.md) § 6 and § 6.1 | the inviolable rules and the critical ones |
+| 1 | [Playwright](../../../knowledge-base/playwright.md) § 0 | the Node floor and the timeout table |
+| 2 | [Playwright](../../../knowledge-base/playwright.md) § 6 and § 6.1 | the inviolable rules and the critical ones |
 | 3 | `references/mapa-de-ids.md` | **required before citing** — two IDs are aliases |
 | 4 | the satellite for the finding | via § 4 of the hub |
 
@@ -121,7 +121,7 @@ Full audit: `references/exemplo-auditoria.md`.
 
 ## Related
 
-- [Playwright](../../../knowledge-base/docs/playwright.md) — source of this skill: § 6, § 6.1, § 6.2, § 7
+- [Playwright](../../../knowledge-base/playwright.md) — source of this skill: § 6, § 6.1, § 6.2, § 7
 - `playwright-build` · `playwright-diagnose` — the sibling skills
 - `test-review` — audits the **shape** across levels; this one audits the **tests**
 - `bun-test-review` — the equivalent audit under Bun

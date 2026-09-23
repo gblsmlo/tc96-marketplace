@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Regenerates references/mapa-de-ids.md from knowledge-base/pages/feature-based-architecture.md.
+# Regenerates references/mapa-de-ids.md from knowledge-base/feature-based-architecture.md.
 # An index, not a copy: ID -> severity -> what enforces it -> section where the rule lives.
 set -euo pipefail
 
@@ -7,7 +7,7 @@ BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-b
 # The map is generated at authoring time and committed: source and destination are
 # both this repository (pass another knowledge-base path as $1 if you need to).
 FAMILIA="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-FONTE="$BASE/pages/feature-based-architecture.md"
+FONTE="$BASE/feature-based-architecture.md"
 OUT="$FAMILIA/react-structure/references/mapa-de-ids.md"
 
 [ -f "$FONTE" ] || { echo "source note not found: $FONTE" >&2; exit 1; }
@@ -20,7 +20,7 @@ OUT="$FAMILIA/react-structure/references/mapa-de-ids.md"
   echo
   echo "# ID map \`REACT-ARCH-*\`"
   echo
-  echo "> An index, not a copy: each rule's text lives in [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 4."
+  echo "> An index, not a copy: each rule's text lives in [Feature-Based Architecture](../../../../knowledge-base/feature-based-architecture.md) § 4."
   echo "> The **Enforced by** column says whether lint catches it or it depends on human review — that is what decides"
   echo "> whether a finding comes back in the next PR. Regenerate with:"
   echo "> \`bash skills/react/react-structure/scripts/gerar-mapa-de-ids.sh\`"

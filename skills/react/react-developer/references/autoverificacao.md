@@ -7,7 +7,7 @@
 
 ## Pass 1 — the normative checklist
 
-Ordered by failure frequency. It is the same one from § 5 of [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) —
+Ordered by failure frequency. It is the same one from § 5 of [React - Rules of React](../../../../knowledge-base/react-rules-of-react.md) —
 open it when you need a rule's text.
 
 - [ ] A Hook after an early return, inside an `if`, loop or callback? → `REACT-HOOK-01`
@@ -28,7 +28,7 @@ code touches the server or extracts a Hook.
 
 ## Pass 3 — the three closing questions
 
-1. Does every remaining `useState` answer "yes" to the state tree in [React.js](../../../../knowledge-base/docs/react-js.md) § 5,
+1. Does every remaining `useState` answer "yes" to the state tree in [React.js](../../../../knowledge-base/react-js.md) § 5,
  or is one of them **derivable**, **remote** or **from the URL**?
 2. Does every remaining `useEffect` synchronize with a **concrete, nameable** external system?
  Write the name. If no name comes out, the Effect should not exist.
@@ -105,6 +105,6 @@ on and the domain off, they **do not run** — with no error and no warning. The
 
 ## Related
 
-- [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) § 5 — the normative checklist, with the rules' text
+- [React - Rules of React](../../../../knowledge-base/react-rules-of-react.md) § 5 — the normative checklist, with the rules' text
 - `habitos-de-ia.md` — the second pass
 - `mapa-de-ids.md` — where each ID is declared

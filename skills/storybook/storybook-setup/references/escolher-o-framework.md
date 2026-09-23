@@ -18,7 +18,7 @@ directly or transitively (a <Link> inside a component counts)?
 | React | ≥ **18** | ≥ 16.8 |
 | Vite | ≥ **7** | ≥ 5 |
 | rule family | `SB-TS-*` | `SB-RV-*` |
-| note | [Storybook - TanStack React](../../../../knowledge-base/docs/storybook-tanstack-react.md) | [Storybook - React Vite](../../../../knowledge-base/docs/storybook-react-vite.md) |
+| note | [Storybook - TanStack React](../../../../knowledge-base/storybook-tanstack-react.md) | [Storybook - React Vite](../../../../knowledge-base/storybook-react-vite.md) |
 
 Three facts that change the decision and are not obvious:
 
@@ -30,7 +30,7 @@ Three facts that change the decision and are not obvious:
 
 > **The choice is practically irreversible.** The `react-vite-to-tanstack-react` automigration is one-way, and `routeOverrides` has no direct replacement on the Vite side. Deciding by inertia here costs a migration later.
 
-Record the choice: it determines which path note to load for the rest of the project's life, and citing the wrong path's family is an invalid finding ([Storybook](../../../../knowledge-base/docs/storybook.md) § 6.2).
+Record the choice: it determines which path note to load for the rest of the project's life, and citing the wrong path's family is an invalid finding ([Storybook](../../../../knowledge-base/storybook.md) § 6.2).
 
 ---
 
@@ -43,4 +43,4 @@ Two line-10 constraints that break a project coming from 8 or 9:
 | **ESM-only** — `main.ts` and presets have to be valid ESM; `require`/`module.exports` do not start | `SB-CORE-03` |
 | **Node ≥ 20.19 or ≥ 22.12** | `SB-CORE-04` |
 
-> **Watch the Node floor when Playwright is in the project:** [Playwright](../../../../knowledge-base/docs/playwright.md) requires Node **≥ 22** (22.x, 24.x or 26.x). A project on Node 20.19 runs Storybook and does **not** run Playwright 1.62 — and addon-vitest uses Playwright. In practice, the monorepo's effective floor is 22.12.
+> **Watch the Node floor when Playwright is in the project:** [Playwright](../../../../knowledge-base/playwright.md) requires Node **≥ 22** (22.x, 24.x or 26.x). A project on Node 20.19 runs Storybook and does **not** run Playwright 1.62 — and addon-vitest uses Playwright. In practice, the monorepo's effective floor is 22.12.

@@ -1,6 +1,6 @@
 # Deriving the cases
 
-> Step 4. The tree is § 4.3 of [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md). When there is input to exercise,
+> Step 4. The tree is § 4.3 of [Teste de Software](../../../../knowledge-base/teste-de-software.md). When there is input to exercise,
 > this is the highest-return stage of the skill.
 
 ---
@@ -49,6 +49,6 @@ Deciding "not to cover" is a valid answer; **not deciding** is the gap.
 
 ## Related
 
-- [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) — the source
-- [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/docs/teste-de-software-tipos-e-atributos-de-qualidade.md) — the five states and the attributes
+- [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/teste-de-software-tecnicas-de-design-de-caso.md) — the source
+- [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/teste-de-software-tipos-e-atributos-de-qualidade.md) — the five states and the attributes
 - `substituicao.md` — the next step, when there is a dependency

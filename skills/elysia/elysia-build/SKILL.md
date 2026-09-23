@@ -4,7 +4,7 @@ descricao: Write routes and handlers in Elysia — method chaining, destructured
 tipo: skill
 familia: elysia
 idioma: en
-fonte: "[Elysia - Roteamento e Handler](../../../knowledge-base/docs/elysia-roteamento-e-handler.md)"
+fonte: "[Elysia - Roteamento e Handler](../../../knowledge-base/elysia-roteamento-e-handler.md)"
 docs:
   - /websites/elysiajs
 tags:
@@ -15,11 +15,11 @@ tags:
 
 # elysia-build
 
-> **Source of this skill:** [Elysia - Roteamento e Handler](../../../knowledge-base/docs/elysia-roteamento-e-handler.md), with the [Elysia](../../../knowledge-base/docs/elysia.md) hub as the router. The 44 rules of the `ELYSIA-*` family are declared in § 6 of the hub; the body of `CORE`, `LIFE` and `TYPE` lives in the owning satellite.
+> **Source of this skill:** [Elysia - Roteamento e Handler](../../../knowledge-base/elysia-roteamento-e-handler.md), with the [Elysia](../../../knowledge-base/elysia.md) hub as the router. The 44 rules of the `ELYSIA-*` family are declared in § 6 of the hub; the body of `CORE`, `LIFE` and `TYPE` lives in the owning satellite.
 > This skill **does not contain** the text of the rules — it says what to load, in what order to decide, and what to check before delivering.
 > **API surface:** resolve it through Context7 — `/websites/elysiajs`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [Elysia](../../../knowledge-base/docs/elysia.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Elysia](../../../knowledge-base/elysia.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -42,11 +42,11 @@ Writing or editing a **route and handler**.
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Elysia](../../../knowledge-base/docs/elysia.md) § 2 | **one schema declaration produces four effects** — that is the mental model |
-| 2 | [Elysia](../../../knowledge-base/docs/elysia.md) § 3 | import boundaries, and the **two npm scopes** that coexist |
-| 3 | [Elysia](../../../knowledge-base/docs/elysia.md) § 6 + § 6.1 + § 6.2 | rules, critical ones and canonical IDs |
-| 4 | [Elysia - Roteamento e Handler](../../../knowledge-base/docs/elysia-roteamento-e-handler.md) | the source |
-| 5 | [Elysia](../../../knowledge-base/docs/elysia.md) § 5 ("Como devolvo um erro?") | the error tree |
+| 1 | [Elysia](../../../knowledge-base/elysia.md) § 2 | **one schema declaration produces four effects** — that is the mental model |
+| 2 | [Elysia](../../../knowledge-base/elysia.md) § 3 | import boundaries, and the **two npm scopes** that coexist |
+| 3 | [Elysia](../../../knowledge-base/elysia.md) § 6 + § 6.1 + § 6.2 | rules, critical ones and canonical IDs |
+| 4 | [Elysia - Roteamento e Handler](../../../knowledge-base/elysia-roteamento-e-handler.md) | the source |
+| 5 | [Elysia](../../../knowledge-base/elysia.md) § 5 ("Como devolvo um erro?") | the error tree |
 
 **Never load all the satellites.**
 
@@ -95,7 +95,7 @@ Destructure the context **inline** (`ELYSIA-CORE-02`). An external function anno
 
 ## Step 4 — Cookies and streaming
 
-A session cookie is **signed and `httpOnly`** (`ELYSIA-CORE-05`); the semantics of `SameSite` and prefixes come from [RFC 6265 - Cookies HTTP](../../../knowledge-base/docs/rfc-6265-cookies-http.md). In a stream, `set.headers` after the first `yield` is **silently ignored** (`ELYSIA-CORE-06`) — and `Bun.serve`'s `idleTimeout` drops SSE on its own.
+A session cookie is **signed and `httpOnly`** (`ELYSIA-CORE-05`); the semantics of `SameSite` and prefixes come from [RFC 6265 - Cookies HTTP](../../../knowledge-base/rfc-6265-cookies-http.md). In a stream, `set.headers` after the first `yield` is **silently ignored** (`ELYSIA-CORE-06`) — and `Bun.serve`'s `idleTimeout` drops SSE on its own.
 
 ---
 
@@ -137,8 +137,8 @@ Full case: `references/exemplo-rota-de-faturas.md`.
 
 ## Related
 
-- [Elysia - Roteamento e Handler](../../../knowledge-base/docs/elysia-roteamento-e-handler.md) — source of this skill
-- [Elysia](../../../knowledge-base/docs/elysia.md) § 2, § 5, § 6, § 7 — mental model, trees, rules, contract
+- [Elysia - Roteamento e Handler](../../../knowledge-base/elysia-roteamento-e-handler.md) — source of this skill
+- [Elysia](../../../knowledge-base/elysia.md) § 2, § 5, § 6, § 7 — mental model, trees, rules, contract
 - `elysia-schema` · `elysia-diagnose` — the sibling skills
 - `http-contract` · `http-cache` — the protocol, which Elysia only implements
 - `bun-test-build` — the test itself

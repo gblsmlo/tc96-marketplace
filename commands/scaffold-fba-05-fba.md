@@ -11,7 +11,7 @@ Senior Frontend Architect & DevOps Engineer
 Create the Feature-Based Architecture (FBA) directory structure with barrel files, enforce kebab-case naming, and establish anti-cycle rules. This phase implements the architectural foundation for scalable frontend development.
 
 # Reference
-The architecture this phase scaffolds is specified in the knowledge-base note [Feature-Based Architecture](../knowledge-base/pages/feature-based-architecture.md) — § 2 (layers and dependency direction), § 4 (the `REACT-ARCH-*` rule table), § 7 (Biome enforcement). That note is the source of truth: if this prompt and the note disagree, the note wins and this prompt is the bug. The procedure for applying the rules to real code is `Skill/react-structure.md`.
+The architecture this phase scaffolds is specified in the knowledge-base note [Feature-Based Architecture](../knowledge-base/feature-based-architecture.md) — § 2 (layers and dependency direction), § 4 (the `REACT-ARCH-*` rule table), § 7 (Biome enforcement). That note is the source of truth: if this prompt and the note disagree, the note wins and this prompt is the bug. The procedure for applying the rules to real code is `Skill/react-structure.md`.
 
 # Constraints
 - **Naming Convention:** Strict kebab-case for ALL files and directories (e.g., `user-profile.tsx`, NOT `UserProfile.tsx`)

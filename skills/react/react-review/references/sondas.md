@@ -75,7 +75,7 @@ rm src/__probe.tsx
 | 4 | `useEffect(async …)` | `REACT-EFFECT-12` | — |
 | 5 | `setX(x + 1)` without the updater form | `REACT-STATE-01` | a value that does not depend on the previous one (`setPage(1)` does not match) |
 | 6 | an inventory of `useMemo`/`useCallback`/`memo` | `REACT-PERF-01` | none: **every** occurrence needs a measurement or the compiler |
-| 7 | `key={i}` | [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 8 | a static list, never reordered, with no state in the rows |
+| 7 | `key={i}` | [React - Patterns](../../../../knowledge-base/react-patterns.md) § 8 | a static list, never reordered, with no state in the rows |
 | 8 | `forwardRef` | `REACT-REF-03` | a third-party library re-exported |
 | 9 | a `<Suspense>` with no Error Boundary in the same file | `REACT-ASYNC-08` | the boundary declared in the parent file — confirm by going up a level |
 | 10 | `.push/.sort/.splice/.reverse` | `REACT-PURE-03`, `REACT-PURE-05` | a local array created in its own scope (`[...x].sort` is correct) |

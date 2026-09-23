@@ -4,12 +4,12 @@
 
 ## Classification
 
-Normative precedence, from [React.js](../../../../knowledge-base/docs/react-js.md) § 7 (invariant 3) and [React - Rules of React](../../../../knowledge-base/docs/react-rules-of-react.md) § 6.
+Normative precedence, from [React.js](../../../../knowledge-base/react-js.md) § 7 (invariant 3) and [React - Rules of React](../../../../knowledge-base/react-rules-of-react.md) § 6.
 
 | Severity | What goes in | Why |
 | --- | --- | --- |
 | **Blocking** | `REACT-PURE-*`, `REACT-CALL-*`, `REACT-HOOK-*` | it breaks React's contract; it is not negotiated for concision or style |
-| **High** | the critical rules in [React.js](../../../../knowledge-base/docs/react-js.md) § 6.1 — `REACT-EFFECT-06`, `REACT-PAT-03`, `REACT-ASYNC-08`, `REACT-RSC-06`, `REACT-DOM-01`… | a latent bug: a race condition, a white screen, an endpoint with no authorization |
+| **High** | the critical rules in [React.js](../../../../knowledge-base/react-js.md) § 6.1 — `REACT-EFFECT-06`, `REACT-PAT-03`, `REACT-ASYNC-08`, `REACT-RSC-06`, `REACT-DOM-01`… | a latent bug: a race condition, a white screen, an endpoint with no authorization |
 | **Medium** | the other `REACT-*` from the satellite (structure, performance, forms, refs) | fixable in the same PR |
 | **Low** | preference without an ID | **not a finding** — see the cut, below |
 
@@ -21,7 +21,7 @@ the violation first.
 
 ## A finding's format
 
-Four parts, always. The format comes from [React.js](../../../../knowledge-base/docs/react-js.md) § 7 ("Como citar").
+Four parts, always. The format comes from [React.js](../../../../knowledge-base/react-js.md) § 7 ("Como citar").
 
 ```
 `RULE-ID` — file:line
@@ -56,19 +56,19 @@ Rules of the format:
 
 **A finding without a rule ID is an opinion, not a finding.**
 
-Before reporting, check whether an ID exists in [React.js](../../../../knowledge-base/docs/react-js.md) § 6, § 6.1, § 6.2, in `mapa-de-ids.md`
+Before reporting, check whether an ID exists in [React.js](../../../../knowledge-base/react-js.md) § 6, § 6.1, § 6.2, in `mapa-de-ids.md`
 or in the satellite's family. Three ways out:
 
 1. **There is an ID** → it is a finding. Cite the canonical one.
 2. **There is no ID, but it is a documented antipattern** (`index` as a `key`, Context with frequent
- writes — both in [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 8) → report it citing the **section**, never an
- invented ID: "antipattern from [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 8".
+ writes — both in [React - Patterns](../../../../knowledge-base/react-patterns.md) § 8) → report it citing the **section**, never an
+ invented ID: "antipattern from [React - Patterns](../../../../knowledge-base/react-patterns.md) § 8".
 3. **There is neither ID nor section** → it is your preference. Either it stays out of the report, or it goes in a
  separate section labeled **"Suggestions (no rule)"**, never mixed with the findings.
 
-**Never invent an ID.** If an API does not appear in [React.js](../../../../knowledge-base/docs/react-js.md) § 4, it has not been verified in this
+**Never invent an ID.** If an API does not appear in [React.js](../../../../knowledge-base/react-js.md) § 4, it has not been verified in this
 doc: consult react.dev, **declare the limitation** and propose updating the note — do not assert
-behavior ([React.js](../../../../knowledge-base/docs/react-js.md) § 7, invariant 1).
+behavior ([React.js](../../../../knowledge-base/react-js.md) § 7, invariant 1).
 
 ---
 
@@ -103,7 +103,7 @@ Four closing obligations:
  If the project has neither, that is the **report's first finding** — and with
  Biome it is worth actually checking: `preset: recommended` does not enable the Hooks rules.
 2. **Check whether the stack already solves it.** Before suggesting the raw primitive, check the bridges in
- [React.js](../../../../knowledge-base/docs/react-js.md) § 8 — remote data is `tanstack-query`, URL state is `tanstack-router`.
+ [React.js](../../../../knowledge-base/react-js.md) § 8 — remote data is `tanstack-query`, URL state is `tanstack-router`.
 3. **Order by severity**, not by file order.
 4. **Declare what was not verified.** Silence about an unread file is read as approval.
 

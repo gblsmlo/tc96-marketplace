@@ -34,7 +34,7 @@ the CI**; **S8 requires git history**.
 | --- | --- |
 | **S1 with an inverted shape** | criticizing an individual test becomes noise: the fix is moving assertions down, and it rewrites much of the suite |
 | **S4 with a gate that does not fail** | a CI that exits `0` regardless makes every discussion of coverage decorative — it is the finding that best explains "we have tests and it still breaks" |
-| **S3 with `no-floating-promises` off** in a project with Playwright | **blocking**: there may be any number of `expect(...)` calls without `await`, and none shows up as a failure ([Playwright](../../../../knowledge-base/docs/playwright.md) `PW-CORE-04`) |
+| **S3 with `no-floating-promises` off** in a project with Playwright | **blocking**: there may be any number of `expect(...)` calls without `await`, and none shows up as a failure ([Playwright](../../../../knowledge-base/playwright.md) `PW-CORE-04`) |
 
 ---
 
@@ -57,4 +57,4 @@ gives full coverage (`TS-CORE-05`).
 
 - `ordem-da-varredura.md` — what to do with what the probes pointed at
 - `severidade-e-relatorio.md` — how to classify and write
-- [Teste de Software - Processo e Artefatos](../../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) — the gates
+- [Teste de Software - Processo e Artefatos](../../../../knowledge-base/teste-de-software-processo-e-artefatos.md) — the gates

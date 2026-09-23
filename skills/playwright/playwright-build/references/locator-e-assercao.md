@@ -1,7 +1,7 @@
 # Locator and assertion — the inseparable pair
 
-> Steps 2 and 3. The full trees are § 5.1 of the [Playwright](../../../../knowledge-base/docs/playwright.md) hub,
-> [Playwright - Locators](../../../../knowledge-base/docs/playwright-locators.md) and [Playwright - Assertions](../../../../knowledge-base/docs/playwright-assertions.md).
+> Steps 2 and 3. The full trees are § 5.1 of the [Playwright](../../../../knowledge-base/playwright.md) hub,
+> [Playwright - Locators](../../../../knowledge-base/playwright-locators.md) and [Playwright - Assertions](../../../../knowledge-base/playwright-assertions.md).
 
 ---
 
@@ -56,6 +56,6 @@ Assert the expected positive state (`PW-EXP-06`).
 
 ## Related
 
-- [Playwright - Locators](../../../../knowledge-base/docs/playwright-locators.md) · [Playwright - Assertions](../../../../knowledge-base/docs/playwright-assertions.md) — this skill's two sources
+- [Playwright - Locators](../../../../knowledge-base/playwright-locators.md) · [Playwright - Assertions](../../../../knowledge-base/playwright-assertions.md) — this skill's two sources
 - `ambiente-e-estrutura.md` — what to replace, and how to organize
 - `mapa-de-ids.md` — where each `PW-*` is declared

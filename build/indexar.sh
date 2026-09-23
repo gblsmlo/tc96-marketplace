@@ -27,7 +27,7 @@ def titulo_de(p):
             return t.group(1).strip()
     return p.stem
 
-notas = sorted(p for p in base.glob("*/*.md"))
+notas = sorted(p for p in base.glob("*.md") if p.name != "MANIFESTO.md")
 linhas = []
 for p in notas:
     rel = p.relative_to(base).as_posix()
@@ -39,11 +39,11 @@ texto = f"""# Manifesto da knowledge-base
 Indice gerado por `build/indexar.sh` a partir das notas deste repositorio.
 `bash build/indexar.sh --verificar` falha quando o indice esta velho.
 
-Camadas: `docs/` e a regra (IDs canonicos), `pages/` sao os mapas desta casa.
-O titulo de cada nota vem do campo `titulo:` no proprio arquivo — e o rotulo
+Uma camada so: cada nota mora direto em `knowledge-base/`, sem subpasta. O
+titulo de cada nota vem do campo `titulo:` no proprio arquivo — e o rotulo
 que as skills usam ao linkar para ela.
 
-Notas: {len(notas)} · `docs/`: {sum(1 for p in notas if p.parent.name == 'docs')} · `pages/`: {sum(1 for p in notas if p.parent.name == 'pages')}
+Notas: {len(notas)}
 
 | Arquivo | Titulo | sha256 |
 | --- | --- | --- |

@@ -4,7 +4,7 @@ descricao: Write a new test under `bun test` and configure a project's suite, fo
 tipo: skill
 familia: bun
 idioma: en
-fonte: "[Bun - Testes](../../../knowledge-base/docs/bun-testes.md)"
+fonte: "[Bun - Testes](../../../knowledge-base/bun-testes.md)"
 docs:
   - /oven-sh/bun
 tags:
@@ -15,11 +15,11 @@ tags:
 
 # bun-test-build
 
-> **Source of this skill:** [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — the normative § 6 (`BUN-TEST-01` to `BUN-TEST-29`), with the body of each rule in the owning satellite.
+> **Source of this skill:** [Bun - Testes](../../../knowledge-base/bun-testes.md) — the normative § 6 (`BUN-TEST-01` to `BUN-TEST-29`), with the body of each rule in the owning satellite.
 > This skill **does not contain** the text of the rules nor the API surface — it says what to load, in what order to decide, and what to run before delivering.
 > **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Bun - Testes](../../../knowledge-base/bun-testes.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -39,17 +39,17 @@ Writing a test that **will exist**, or configuring a project's suite under `bun 
 
 ## Minimum loading
 
-The order comes from the contract ([Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 7). The first two are **not optional**:
+The order comes from the contract ([Bun - Testes](../../../knowledge-base/bun-testes.md) § 7). The first two are **not optional**:
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 2 | the default is **one global shared by every file** — whoever writes a test without knowing that produces a suite that passes by accident |
-| 2 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 6.1 | the seven silent-violation rules, which travel with any task |
-| 3 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 3 | import boundaries: what comes from `bun:test`, and what Bun **does not** read (`vite.config.ts`, `jest.config.js`) |
+| 1 | [Bun - Testes](../../../knowledge-base/bun-testes.md) § 2 | the default is **one global shared by every file** — whoever writes a test without knowing that produces a suite that passes by accident |
+| 2 | [Bun - Testes](../../../knowledge-base/bun-testes.md) § 6.1 | the seven silent-violation rules, which travel with any task |
+| 3 | [Bun - Testes](../../../knowledge-base/bun-testes.md) § 3 | import boundaries: what comes from `bun:test`, and what Bun **does not** read (`vite.config.ts`, `jest.config.js`) |
 | 4 | **one** satellite, via the map in `references/por-tarefa.md` | the surface the task touches |
-| 5 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 5 | the decision tree, when in doubt between two APIs |
+| 5 | [Bun - Testes](../../../knowledge-base/bun-testes.md) § 5 | the decision tree, when in doubt between two APIs |
 
-**Never load all six satellites.** Writing a unit test needs 1 + 2 + [Bun - Testes - Escrita e Asserções](../../../knowledge-base/docs/bun-testes-escrita-e-assercoes.md) and nothing else.
+**Never load all six satellites.** Writing a unit test needs 1 + 2 + [Bun - Testes - Escrita e Asserções](../../../knowledge-base/bun-testes-escrita-e-assercoes.md) and nothing else.
 
 References in this skill:
 
@@ -138,7 +138,7 @@ When the boundary is crossed, **declare the handoff** instead of opining outside
 
 ## Related
 
-- [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — source of this skill: § 2, § 5, § 6, § 7
-- [Bun - Testes - Escrita e Asserções](../../../knowledge-base/docs/bun-testes-escrita-e-assercoes.md) · [Bun - Testes - Mocks e Tempo](../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) · [Bun - Testes - DOM e Componentes](../../../knowledge-base/docs/bun-testes-dom-e-componentes.md) · [Bun - Testes - Ciclo de Vida e Isolamento](../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md) · [Bun - Testes - Execução e Configuração](../../../knowledge-base/docs/bun-testes-execucao-e-configuracao.md) · [Bun - Testes - Cobertura e CI](../../../knowledge-base/docs/bun-testes-cobertura-e-ci.md)
+- [Bun - Testes](../../../knowledge-base/bun-testes.md) — source of this skill: § 2, § 5, § 6, § 7
+- [Bun - Testes - Escrita e Asserções](../../../knowledge-base/bun-testes-escrita-e-assercoes.md) · [Bun - Testes - Mocks e Tempo](../../../knowledge-base/bun-testes-mocks-e-tempo.md) · [Bun - Testes - DOM e Componentes](../../../knowledge-base/bun-testes-dom-e-componentes.md) · [Bun - Testes - Ciclo de Vida e Isolamento](../../../knowledge-base/bun-testes-ciclo-de-vida-e-isolamento.md) · [Bun - Testes - Execução e Configuração](../../../knowledge-base/bun-testes-execucao-e-configuracao.md) · [Bun - Testes - Cobertura e CI](../../../knowledge-base/bun-testes-cobertura-e-ci.md)
 - `bun-test-review` — the sibling skill
 - `test-design` — decides the level, before this skill starts

@@ -48,6 +48,6 @@ The bottom row is the only one that tells the two apart — and it is the one `E
 | a required header "never arrives" | a capitalized name in the schema — `ELYSIA-TYPE-03` |
 | a numeric body fails validation | `body` does not coerce — `ELYSIA-TYPE-04` |
 | a flaky test with an async plugin | missing `await app.modules` — `ELYSIA-CORE-10` |
-| SSE drops on its own | `Bun.serve`'s `idleTimeout` — [Bun - HTTP e Servidor](../../../../knowledge-base/docs/bun-http-e-servidor.md) |
+| SSE drops on its own | `Bun.serve`'s `idleTimeout` — [Bun - HTTP e Servidor](../../../../knowledge-base/bun-http-e-servidor.md) |
 
 **And the most common of all:** the hook does not run because it was registered **after** the route (`ELYSIA-CORE-01`). Before investigating scope, check the order.

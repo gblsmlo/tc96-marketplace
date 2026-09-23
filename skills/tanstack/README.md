@@ -4,8 +4,8 @@ Two skills, and the boundary between them is **who owns the data**.
 
 | Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
-| `tanstack-query` | the data comes from a server and someone else can change it | [TanStack Query](../../knowledge-base/docs/tanstack-query.md) | 6 references + 2 scripts |
-| `tanstack-router` | the state belongs to the URL, or the route loads the data | [TanStack Router](../../knowledge-base/docs/tanstack-router.md) | 5 references + 2 scripts |
+| `tanstack-query` | the data comes from a server and someone else can change it | [TanStack Query](../../knowledge-base/tanstack-query.md) | 6 references + 2 scripts |
+| `tanstack-router` | the state belongs to the URL, or the route loads the data | [TanStack Router](../../knowledge-base/tanstack-router.md) | 5 references + 2 scripts |
 
 ## What the packages added
 

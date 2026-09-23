@@ -34,7 +34,7 @@ O papel está em: orientar o produto para resolver problemas reais de clientes e
 | como será a experiência, o fluxo, a tela | `product-designer` | product-manager |
 | prazo, custo, risco, escopo do projeto | `project-manager` | product-manager |
 | é viável tecnicamente, quanto custa construir | `software-architect` · desenvolvedores | product-manager pergunta, não decide |
-| uma solução feita para um cliente deve virar feature? | · [Forward Deployed Engineering](../knowledge-base/pages/forward-deployed-engineering.md) | — |
+| uma solução feita para um cliente deve virar feature? | · [Forward Deployed Engineering](../knowledge-base/forward-deployed-engineering.md) | — |
 
 ---
 

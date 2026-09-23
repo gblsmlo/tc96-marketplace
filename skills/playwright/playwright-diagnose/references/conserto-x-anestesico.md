@@ -17,7 +17,7 @@ They make the red disappear without solving anything. If you are proposing one o
 | removing the failing assertion | exactly what the test was verifying | `PW-AGT-05` |
 
 The last one is the worst, and it is what an automatic healer does when it has no declared
-intent — [Playwright - Agents, CLI e MCP](../../../../knowledge-base/docs/playwright-agents-cli-e-mcp.md) § 2.5.
+intent — [Playwright - Agents, CLI e MCP](../../../../knowledge-base/playwright-agents-cli-e-mcp.md) § 2.5.
 
 ---
 

@@ -57,6 +57,6 @@ more local round.
 
 ## Related
 
-- [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) § 1 — the arithmetic
-- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 2, claim 5 — an untrustworthy suite is worse than none
+- [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/teste-de-software-confiabilidade-da-suite.md) § 1 — the arithmetic
+- [Teste de Software](../../../../knowledge-base/teste-de-software.md) § 2, claim 5 — an untrustworthy suite is worse than none
 - `causas-de-flake.md` — the next step, once you have the number

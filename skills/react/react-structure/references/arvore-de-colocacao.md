@@ -1,6 +1,6 @@
 # Where this file lives
 
-> The tree and the five questions come from [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 3, § 4 and § 10.
+> The tree and the five questions come from [Feature-Based Architecture](../../../../knowledge-base/feature-based-architecture.md) § 3, § 4 and § 10.
 > Here is the path and what usually goes wrong along it — the normative text lives in the note.
 
 ---
@@ -79,6 +79,6 @@ before proposing a whole repository's migration.
 
 ## Related
 
-- [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 3, § 4, § 9, § 10 — the source
+- [Feature-Based Architecture](../../../../knowledge-base/feature-based-architecture.md) § 3, § 4, § 9, § 10 — the source
 - `varredura-de-imports.md` — auditing what is already placed
 - `mapa-de-ids.md` — ID → severity → who enforces it

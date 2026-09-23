@@ -39,4 +39,4 @@ memory. They are stacked layers, and each needs its own decision.
 ## Related
 
 - `tanstack-query` — the owner of the other layer
-- [TanStack Query - Cache e Frescor](../../../../knowledge-base/docs/tanstack-query-cache-e-frescor.md) — `staleTime` and invalidation
+- [TanStack Query - Cache e Frescor](../../../../knowledge-base/tanstack-query-cache-e-frescor.md) — `staleTime` and invalidation

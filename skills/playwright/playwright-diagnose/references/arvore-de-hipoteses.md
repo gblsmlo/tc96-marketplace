@@ -1,6 +1,6 @@
 # The tree, and the bisection
 
-> Steps 3 and 4. The full tree is § 5.2 of the [Playwright](../../../../knowledge-base/docs/playwright.md) hub — the most detailed one in the knowledge base.
+> Steps 3 and 4. The full tree is § 5.2 of the [Playwright](../../../../knowledge-base/playwright.md) hub — the most detailed one in the knowledge base.
 
 ---
 
@@ -49,6 +49,6 @@ bash ${CLAUDE_PLUGIN_ROOT}/skills/playwright-diagnose/scripts/isolar.sh e2e/chec
 
 ## Related
 
-- [Playwright](../../../../knowledge-base/docs/playwright.md) § 5.2 — the full tree
+- [Playwright](../../../../knowledge-base/playwright.md) § 5.2 — the full tree
 - `falha-so-em-ci.md` — branch 6
 - `conserto-x-anestesico.md` — what **not** to propose

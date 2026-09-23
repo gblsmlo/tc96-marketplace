@@ -4,7 +4,7 @@ descricao: Decide which level a test belongs at and derive the cases before writ
 tipo: skill
 familia: test
 idioma: en
-fonte: "[Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md)"
+fonte: "[Teste de Software - Níveis e Escopo](../../../knowledge-base/teste-de-software-niveis-e-escopo.md)"
 tags:
   - skill
   - testing
@@ -14,10 +14,10 @@ tags:
 
 # test-design
 
-> **Source of this skill:** [Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) and [Teste de Software - Técnicas de Design de Caso](../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md), with the [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) hub as the router. The 64 rules of the `TS-*` family live in § 6 of the hub.
+> **Source of this skill:** [Teste de Software - Níveis e Escopo](../../../knowledge-base/teste-de-software-niveis-e-escopo.md) and [Teste de Software - Técnicas de Design de Caso](../../../knowledge-base/teste-de-software-tecnicas-de-design-de-caso.md), with the [Teste de Software](../../../knowledge-base/teste-de-software.md) hub as the router. The 64 rules of the `TS-*` family live in § 6 of the hub.
 > This skill **does not contain** the text of the rules — it says what to decide, in what order, and whom to hand it to afterwards.
 
-Contract this skill implements: [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Teste de Software](../../../knowledge-base/teste-de-software.md) § 7 ("Contrato de skill").
 
 > **Design note.** This is the **concept layer**: it decides *what* and *at which level*. It **does not write tests** — that is `playwright-build` or `bun-test-build`, and the handoff is in Step 7. Running both layers as if they were one wastes context; skipping this one and going straight to the tool produces **E2E by default**, the most expensive antipattern in this stack.
 
@@ -33,7 +33,7 @@ There is a feature, a bug, a rule, a journey — and the question is *what test 
 | auditing the strategy of an existing suite | `test-review` |
 | a suite nobody trusts | `test-diagnose` |
 | one concrete test failing | `playwright-diagnose` · `bun-test-review` |
-| acceptance criteria for a non-functional requirement | [Teste de Software - Processo e Artefatos](../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) |
+| acceptance criteria for a non-functional requirement | [Teste de Software - Processo e Artefatos](../../../knowledge-base/teste-de-software-processo-e-artefatos.md) |
 
 ---
 
@@ -41,11 +41,11 @@ There is a feature, a bug, a rule, a journey — and the question is *what test 
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 2 | a test buys information at a price; the cheapest layer that still catches the defect |
-| 2 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 4.1 | the level tree — the core of this skill |
-| 3 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 6 | the 8 `TS-CORE-*` and the critical ones in § 6.1 |
-| 4 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 4.3 | the technique tree, when there is input to exercise |
-| 5 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 4.2 | the replacement tree, when there is a dependency |
+| 1 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 2 | a test buys information at a price; the cheapest layer that still catches the defect |
+| 2 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 4.1 | the level tree — the core of this skill |
+| 3 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 6 | the 8 `TS-CORE-*` and the critical ones in § 6.1 |
+| 4 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 4.3 | the technique tree, when there is input to exercise |
+| 5 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 4.2 | the replacement tree, when there is a dependency |
 
 **Never load all six satellites.** And do not load the tool note yet — it comes in at Step 7.
 
@@ -127,8 +127,8 @@ Then go through `references/antipadroes.md` line by line.
 | E2E | `playwright-build` |
 | unit, integration | `bun-test-build` |
 | component | `storybook-story` · `storybook-test` |
-| contract | `elysia-schema` · [Hono - Validação e RPC](../../../knowledge-base/docs/hono-validacao-e-rpc.md) |
-| static | TypeScript via Context7, `/microsoft/typescript` · [Zod - Validação de Ambiente](../../../knowledge-base/docs/zod-validacao-de-ambiente.md) |
+| contract | `elysia-schema` · [Hono - Validação e RPC](../../../knowledge-base/hono-validacao-e-rpc.md) |
+| static | TypeScript via Context7, `/microsoft/typescript` · [Zod - Validação de Ambiente](../../../knowledge-base/zod-validacao-de-ambiente.md) |
 
 **Hand the decision over with it:** level, derived cases, and what will be replaced. The tool skill implements — it does not reopen those questions.
 
@@ -153,8 +153,8 @@ Full case: `references/exemplo-desconto-por-volume.md`.
 
 ## Related
 
-- [Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) — source of this skill
-- [Teste de Software - Técnicas de Design de Caso](../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) — the second source, from Step 4
-- [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — the hub: § 2, § 4.1, § 4.2, § 4.3, § 6, § 7
+- [Teste de Software - Níveis e Escopo](../../../knowledge-base/teste-de-software-niveis-e-escopo.md) — source of this skill
+- [Teste de Software - Técnicas de Design de Caso](../../../knowledge-base/teste-de-software-tecnicas-de-design-de-caso.md) — the second source, from Step 4
+- [Teste de Software](../../../knowledge-base/teste-de-software.md) — the hub: § 2, § 4.1, § 4.2, § 4.3, § 6, § 7
 - `test-review` · `test-diagnose` — the sibling skills
 - `playwright-build` · `bun-test-build` · `storybook-test` — where the handoff goes

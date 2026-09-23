@@ -4,7 +4,7 @@ descricao: Turn a story into a component test in Storybook — `play`, `storyboo
 tipo: skill
 familia: storybook
 idioma: en
-fonte: "[Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md)"
+fonte: "[Storybook - Testes e Interações](../../../knowledge-base/storybook-testes-e-interacoes.md)"
 docs:
   - /storybookjs/storybook
 tags:
@@ -15,11 +15,11 @@ tags:
 
 # storybook-test
 
-> **Source of this skill:** [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md), with the [Storybook](../../../knowledge-base/docs/storybook.md) hub as the router.
+> **Source of this skill:** [Storybook - Testes e Interações](../../../knowledge-base/storybook-testes-e-interacoes.md), with the [Storybook](../../../knowledge-base/storybook.md) hub as the router.
 > This skill **does not contain** the text of the rules — it says what to discover, what to write and what to check.
 > **API surface:** resolve it through Context7 — `/storybookjs/storybook`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [Storybook](../../../knowledge-base/docs/storybook.md) § 7.
+Contract this skill implements: [Storybook](../../../knowledge-base/storybook.md) § 7.
 
 ---
 
@@ -33,8 +33,8 @@ bash ${CLAUDE_PLUGIN_ROOT}/skills/storybook-setup/scripts/descobrir-caminho.sh
 
 | `framework` | Path | Family | Note |
 | --- | --- | --- | --- |
-| `@storybook/tanstack-react` | **A** | `SB-TS-*` | [Storybook - TanStack React](../../../knowledge-base/docs/storybook-tanstack-react.md) |
-| `@storybook/react-vite` | **B** | `SB-RV-*` | [Storybook - React Vite](../../../knowledge-base/docs/storybook-react-vite.md) |
+| `@storybook/tanstack-react` | **A** | `SB-TS-*` | [Storybook - TanStack React](../../../knowledge-base/storybook-tanstack-react.md) |
+| `@storybook/react-vite` | **B** | `SB-RV-*` | [Storybook - React Vite](../../../knowledge-base/storybook-react-vite.md) |
 
 This is **not a formality**. It is the only structure in this vault where prescribing the wrong path **fails silently**: under `react-vite`, `parameters.tanstack.*` has no effect at all (`SB-RV-04`); under `tanstack-react`, a decorator with `RouterProvider` creates a **second** router (`SB-TS-03`).
 
@@ -50,7 +50,7 @@ Writing or reviewing an interaction test inside a story.
 | --- | --- |
 | configuring Storybook, an empty sidebar, versions | `storybook-setup` |
 | the story itself: `args`, controls, docs | `storybook-story` |
-| coverage and the CI job | [Storybook - Cobertura e CI](../../../knowledge-base/docs/storybook-cobertura-e-ci.md) |
+| coverage and the CI job | [Storybook - Cobertura e CI](../../../knowledge-base/storybook-cobertura-e-ci.md) |
 | a journey with routing, session and network | `playwright-build` |
 | unit and integration outside the browser | `bun-test-build` |
 | **at which level** this test should be | `test-design` |
@@ -62,10 +62,10 @@ Writing or reviewing an interaction test inside a story.
 | Order | Load |
 | --- | --- |
 | 1 | the `framework` field (Step 0) |
-| 2 | [Storybook](../../../knowledge-base/docs/storybook.md) § 6 and § 6.2 |
-| 3 | [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) |
+| 2 | [Storybook](../../../knowledge-base/storybook.md) § 6 and § 6.2 |
+| 3 | [Storybook - Testes e Interações](../../../knowledge-base/storybook-testes-e-interacoes.md) |
 | 4 | the note for the **discovered path** |
-| 5 | [Storybook - Mocking](../../../knowledge-base/docs/storybook-mocking.md) when there is a module or network to replace |
+| 5 | [Storybook - Mocking](../../../knowledge-base/storybook-mocking.md) when there is a module or network to replace |
 
 References in this skill:
 
@@ -136,8 +136,8 @@ Full case: `references/exemplo.md`.
 
 ## Related
 
-- [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) — source of this skill
-- [Storybook - Mocking](../../../knowledge-base/docs/storybook-mocking.md) — module and network
+- [Storybook - Testes e Interações](../../../knowledge-base/storybook-testes-e-interacoes.md) — source of this skill
+- [Storybook - Mocking](../../../knowledge-base/storybook-mocking.md) — module and network
 - `storybook-setup` · `storybook-story` — the sibling skills
 - `test-design` — decides the level, before this one
 - `playwright-build` · `bun-test-build` — the other levels

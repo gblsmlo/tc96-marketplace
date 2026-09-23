@@ -161,7 +161,7 @@ if comandos:
     linhas += [f"| [`{n}`](commands/{n}.md) | {d} |" for n, d in comandos]
 
 linhas += ["", "## Regra", "",
-           "`knowledge-base/docs/` é a regra (IDs canônicos) e `knowledge-base/pages/` são os mapas.",
+           "`knowledge-base/` é a regra, citada por ID canônico.",
            "Todo achado cita o ID e o arquivo:linha. Cópia de regra dentro de skill vira",
            "réplica desatualizada — por isso as skills **apontam** em vez de repetir.",
            "", "Origem e integridade de cada nota: [`knowledge-base/MANIFESTO.md`](knowledge-base/MANIFESTO.md).",

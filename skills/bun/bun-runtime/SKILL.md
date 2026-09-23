@@ -4,7 +4,7 @@ descricao: Write code that uses the Bun runtime APIs — file, `.env`, process, 
 tipo: skill
 familia: bun
 idioma: en
-fonte: "[Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md)"
+fonte: "[Bun - Runtime e APIs](../../../knowledge-base/bun-runtime-e-apis.md)"
 docs:
   - /oven-sh/bun
 tags:
@@ -15,7 +15,7 @@ tags:
 
 # bun-runtime
 
-> **Source of this skill:** [Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md), with the [Bun](../../../knowledge-base/docs/bun.md) hub as the router.
+> **Source of this skill:** [Bun - Runtime e APIs](../../../knowledge-base/bun-runtime-e-apis.md), with the [Bun](../../../knowledge-base/bun.md) hub as the router.
 > This skill **does not contain** the text of the rules nor the API surface — it says what to decide and what to check.
 > **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
@@ -38,9 +38,9 @@ Writing application code that uses the runtime.
 
 | Order | Load |
 | --- | --- |
-| 1 | [Bun](../../../knowledge-base/docs/bun.md) § 2 (the binary is runtime, package manager, bundler and runner) |
-| 2 | [Bun](../../../knowledge-base/docs/bun.md) § 6 — `BUN-CORE-*` |
-| 3 | [Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md) |
+| 1 | [Bun](../../../knowledge-base/bun.md) § 2 (the binary is runtime, package manager, bundler and runner) |
+| 2 | [Bun](../../../knowledge-base/bun.md) § 6 — `BUN-CORE-*` |
+| 3 | [Bun - Runtime e APIs](../../../knowledge-base/bun-runtime-e-apis.md) |
 
 References in this skill:
 
@@ -112,6 +112,6 @@ Full case: `references/exemplo.md`.
 
 ## Related
 
-- [Bun - Runtime e APIs](../../../knowledge-base/docs/bun-runtime-e-apis.md) — source of this skill
-- [Bun](../../../knowledge-base/docs/bun.md) § 2, § 6
+- [Bun - Runtime e APIs](../../../knowledge-base/bun-runtime-e-apis.md) — source of this skill
+- [Bun](../../../knowledge-base/bun.md) § 2, § 6
 - `bun-workspace` · `bun-migrate` · `bun-test-build` · `bun-test-review` — the family

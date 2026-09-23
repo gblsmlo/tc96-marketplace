@@ -4,11 +4,11 @@ Five skills: two about testing, three about runtime, packages and migration.
 
 | Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
-| `bun-test-build` | how do I write this test, and how do I configure the suite? | [Bun - Testes](../../knowledge-base/docs/bun-testes.md) | 4 references + 1 script |
-| `bun-test-review` | does this suite have defects? why is this test flaky? | [Bun - Testes](../../knowledge-base/docs/bun-testes.md) | 5 references + 2 scripts |
-| `bun-runtime` | how do I write this with the runtime APIs? | [Bun - Runtime e APIs](../../knowledge-base/docs/bun-runtime-e-apis.md) | 6 references + 2 scripts |
-| `bun-workspace` | dependency, lockfile, workspace, install | [Bun - Gerenciador de Pacotes](../../knowledge-base/docs/bun-gerenciador-de-pacotes.md) | 5 references + 1 script |
-| `bun-migrate` | it came from Node and does not run — is it an incompatibility? | [Bun - Shell, FFI e Compat Node](../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md) | 4 references + 1 script |
+| `bun-test-build` | how do I write this test, and how do I configure the suite? | [Bun - Testes](../../knowledge-base/bun-testes.md) | 4 references + 1 script |
+| `bun-test-review` | does this suite have defects? why is this test flaky? | [Bun - Testes](../../knowledge-base/bun-testes.md) | 5 references + 2 scripts |
+| `bun-runtime` | how do I write this with the runtime APIs? | [Bun - Runtime e APIs](../../knowledge-base/bun-runtime-e-apis.md) | 6 references + 2 scripts |
+| `bun-workspace` | dependency, lockfile, workspace, install | [Bun - Gerenciador de Pacotes](../../knowledge-base/bun-gerenciador-de-pacotes.md) | 5 references + 1 script |
+| `bun-migrate` | it came from Node and does not run — is it an incompatibility? | [Bun - Shell, FFI e Compat Node](../../knowledge-base/bun-shell-ffi-e-compat-node.md) | 4 references + 1 script |
 
 ## The three newer ones, and what each script does
 
@@ -88,6 +88,6 @@ Regenerate: `bash scripts/medir.sh`
 
 ## Related
 
-- [Skills index](../README.md) · [Bun - Testes](../../knowledge-base/docs/bun-testes.md) § 7 — the contract
+- [Skills index](../README.md) · [Bun - Testes](../../knowledge-base/bun-testes.md) § 7 — the contract
 - `twincam-core: test family` — decides the level, before these
 - `twincam-e2e: playwright family` — the E2E level

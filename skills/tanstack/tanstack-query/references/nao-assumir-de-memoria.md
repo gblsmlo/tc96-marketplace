@@ -2,7 +2,7 @@
 
 ### The mutation callback signatures changed within v5
 
-**Check [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) § 2 ("As assinaturas dos callbacks") every time you touch a mutation with `onMutate`, and always on an optimistic update.** Do not write it from memory and do not copy from an example found outside the vault.
+**Check [TanStack Query - Mutations e Invalidação](../../../../knowledge-base/tanstack-query-mutations-e-invalidacao.md) § 2 ("As assinaturas dos callbacks") every time you touch a mutation with `onMutate`, and always on an optimistic update.** Do not write it from memory and do not copy from an example found outside the vault.
 
 What changes the outcome: **the return of `onMutate` arrives as the third argument**, and `context` became the last one and became something else. Code written against the old form reads the wrong object — the rollback receives `undefined` and **fails silently**: the mutation "handles" the error, the screen does not revert to the previous state, and nothing blows up.
 
@@ -16,8 +16,8 @@ React's `useOptimistic` and the optimistic update over Query's cache solve the s
 
 | Criterion | Layer |
 | --- | --- |
-| The optimistic data appears in **one** place, inside a form/Action | `useOptimistic` — [React - Formulários e Actions](../../../../knowledge-base/docs/react-formularios-e-actions.md) § 5 |
+| The optimistic data appears in **one** place, inside a form/Action | `useOptimistic` — [React - Formulários e Actions](../../../../knowledge-base/react-formularios-e-actions.md) § 5 |
 | It appears in more than one place, or has to survive navigation | Query's cache, complete cycle — `TSQ-MUT-10` |
-| It is a single item in a list and the cache does not need touching | render the mutation's `variables` while `pending` — the version that cannot roll back wrongly ([TanStack Query - Mutations e Invalidação](../../../../knowledge-base/docs/tanstack-query-mutations-e-invalidacao.md) § 5) |
+| It is a single item in a list and the cache does not need touching | render the mutation's `variables` while `pending` — the version that cannot roll back wrongly ([TanStack Query - Mutations e Invalidação](../../../../knowledge-base/tanstack-query-mutations-e-invalidacao.md) § 5) |
 
 In any of the three, **the optimistic value is never the source of truth** — `REACT-FORM-07`. Truth converges from the server: in React, at the end of the Action; in Query, at the invalidation in `onSettled`. One rollback is automatic (`useOptimistic`), the other is explicit with a snapshot (Query) — confusing the two is how a rollback that never runs gets written.

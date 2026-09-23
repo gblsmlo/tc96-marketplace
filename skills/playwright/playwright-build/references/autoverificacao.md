@@ -30,7 +30,7 @@ Item 2 is the only one **no grep catches well** — the defense is
 
 1. **Break the code on purpose** and confirm the test goes red. Flip a sign,
  invert a condition, remove the call. If nothing breaks, the assertion does not exist
- (`TS-TEC-08` in [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md)). Thirty seconds, and it
+ (`TS-TEC-08` in [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/teste-de-software-tecnicas-de-design-de-caso.md)). Thirty seconds, and it
  separates a real test from a decorative one.
 2. **`npx playwright test <file> --repeat-each=5`** — five green runs are worth more
  than one.

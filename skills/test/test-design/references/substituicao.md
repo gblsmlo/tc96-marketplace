@@ -1,7 +1,7 @@
 # What to replace with a double
 
-> Step 5. The tree is § 4.2 of [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md); the body is
-> [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md).
+> Step 5. The tree is § 4.2 of [Teste de Software](../../../../knowledge-base/teste-de-software.md); the body is
+> [Teste de Software - Dublês de Teste](../../../../knowledge-base/teste-de-software-dubles-de-teste.md).
 
 ---
 
@@ -25,7 +25,7 @@ NO → replace it, and pick the right kind:
 - **Clock and randomness: always replace them** (`TS-DUB-05`). That is where determinism is
  bought cheaply, and it is the antidote to every wait on real time.
 - **Server state: do not mock it — create it for real** through the API when there is an endpoint
- (`TS-CORE-03`, and `PW-NET-06` in [Playwright - Rede e Mocking](../../../../knowledge-base/docs/playwright-rede-e-mocking.md)).
+ (`TS-CORE-03`, and `PW-NET-06` in [Playwright - Rede e Mocking](../../../../knowledge-base/playwright-rede-e-mocking.md)).
 
 ---
 
@@ -41,6 +41,6 @@ SQL breaks in production.
 
 ## Related
 
-- [Teste de Software - Dublês de Teste](../../../../knowledge-base/docs/teste-de-software-dubles-de-teste.md) — the source
-- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 4.2 — the tree
+- [Teste de Software - Dublês de Teste](../../../../knowledge-base/teste-de-software-dubles-de-teste.md) — the source
+- [Teste de Software](../../../../knowledge-base/teste-de-software.md) § 4.2 — the tree
 - `arvore-de-nivel.md` — the level that came before

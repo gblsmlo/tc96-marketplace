@@ -30,7 +30,7 @@ As 10 fases, executáveis uma a uma:
 ## Variante FBA
 
 Cinco fases com o mesmo recorte, mais detalhadas e com o teste de fronteira de
-[Feature-Based Architecture](../knowledge-base/pages/feature-based-architecture.md)
+[Feature-Based Architecture](../knowledge-base/feature-based-architecture.md)
 escrito por extenso:
 
 | Fase | O que faz |

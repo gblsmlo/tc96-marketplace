@@ -64,7 +64,7 @@ Confusing them burns the credibility of the whole report.
 And one **invalid** case: citing an alias (`TS-NIV-01`, `TS-DUB-02`, `TS-SUI-02`).
 
 If the scan finds a recurring, real defect **with no matching rule**, the right product is a
-**rule proposal** for [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 6 — suggested ID, text and the
+**rule proposal** for [Teste de Software](../../../../knowledge-base/teste-de-software.md) § 6 — suggested ID, text and the
 case that motivated it — not a fake citation.
 
 ---

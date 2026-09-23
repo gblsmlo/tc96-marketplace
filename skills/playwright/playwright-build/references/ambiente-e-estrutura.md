@@ -1,6 +1,6 @@
 # Environment and structure
 
-> Steps 4 and 5. The trees are § 5.4 of the [Playwright](../../../../knowledge-base/docs/playwright.md) hub.
+> Steps 4 and 5. The trees are § 5.4 of the [Playwright](../../../../knowledge-base/playwright.md) hub.
 
 ---
 
@@ -21,7 +21,7 @@ One question decides it:
 | **none of the above: server state** | create it for real through `request` | `PW-NET-06` |
 
 A mock that reproduces the shape of a response **derives from the type exported by the server**, never
-retyped by hand (`PW-NET-04`) — `elysia-schema`, [Hono - Validação e RPC](../../../../knowledge-base/docs/hono-validacao-e-rpc.md).
+retyped by hand (`PW-NET-04`) — `elysia-schema`, [Hono - Validação e RPC](../../../../knowledge-base/hono-validacao-e-rpc.md).
 
 ---
 
@@ -52,5 +52,5 @@ A test with more than one business step gets `test.step` (`PW-DBG-03`) — that 
 
 ## Related
 
-- [Playwright - Rede e Mocking](../../../../knowledge-base/docs/playwright-rede-e-mocking.md) · [Playwright - Autenticação e Isolamento](../../../../knowledge-base/docs/playwright-autenticacao-e-isolamento.md) · [Playwright - Fixtures](../../../../knowledge-base/docs/playwright-fixtures.md) · [Playwright - Estrutura de Testes](../../../../knowledge-base/docs/playwright-estrutura-de-testes.md)
+- [Playwright - Rede e Mocking](../../../../knowledge-base/playwright-rede-e-mocking.md) · [Playwright - Autenticação e Isolamento](../../../../knowledge-base/playwright-autenticacao-e-isolamento.md) · [Playwright - Fixtures](../../../../knowledge-base/playwright-fixtures.md) · [Playwright - Estrutura de Testes](../../../../knowledge-base/playwright-estrutura-de-testes.md)
 - `autoverificacao.md` — what to check after writing

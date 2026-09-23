@@ -35,4 +35,4 @@ Rules of the format:
 2. **There is no ID, but there is a normative note** (offset × cursor, log retention, destructive deploy order) → cite the note and the section: "". Do not invent `DRZ-*`.
 3. **Neither ID nor note** → a separate "Suggestions (no rule)" section, never mixed in.
 
-**Never invent an ID.** If the scan finds a recurring, real defect with no matching rule, the right product is a **rule proposal** for [Drizzle ORM](../../../../knowledge-base/docs/drizzle-orm.md) § 6 — with a suggested ID, text and the case that motivated it — not a fake citation in the report.
+**Never invent an ID.** If the scan finds a recurring, real defect with no matching rule, the right product is a **rule proposal** for [Drizzle ORM](../../../../knowledge-base/drizzle-orm.md) § 6 — with a suggested ID, text and the case that motivated it — not a fake citation in the report.

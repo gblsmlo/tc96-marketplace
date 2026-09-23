@@ -48,4 +48,4 @@ accessible name (`PW-LOC-01`).
 
 - `sondas.md` — what to run first
 - `antipadroes.md` — the full grid, with a satellite per ID
-- [Playwright - Agents, CLI e MCP](../../../../knowledge-base/docs/playwright-agents-cli-e-mcp.md) § 2.5 — committed specs
+- [Playwright - Agents, CLI e MCP](../../../../knowledge-base/playwright-agents-cli-e-mcp.md) § 2.5 — committed specs

@@ -4,7 +4,7 @@ descricao: Review an existing `bun test` suite and diagnose flaky tests, citing 
 tipo: skill
 familia: bun
 idioma: en
-fonte: "[Bun - Testes](../../../knowledge-base/docs/bun-testes.md)"
+fonte: "[Bun - Testes](../../../knowledge-base/bun-testes.md)"
 docs:
   - /oven-sh/bun
 tags:
@@ -16,11 +16,11 @@ tags:
 
 # bun-test-review
 
-> **Source of this skill:** [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — the normative § 6 (`BUN-TEST-01` to `BUN-TEST-29`), § 6.1 with the seven silent-violation rules, and § 5.1 with the flakiness tree.
+> **Source of this skill:** [Bun - Testes](../../../knowledge-base/bun-testes.md) — the normative § 6 (`BUN-TEST-01` to `BUN-TEST-29`), § 6.1 with the seven silent-violation rules, and § 5.1 with the flakiness tree.
 > This skill **does not contain** the text of the rules — it says what to run, in what order to scan, how to classify and how to report.
 > **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Bun - Testes](../../../knowledge-base/bun-testes.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -42,10 +42,10 @@ Reviewing a suite that **already exists** under `bun test`, or diagnosing a test
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 2 | one `globalThis` shared by every file is the default |
-| 2 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 6 and § 6.1 | the rules, and the seven silent-violation ones |
+| 1 | [Bun - Testes](../../../knowledge-base/bun-testes.md) § 2 | one `globalThis` shared by every file is the default |
+| 2 | [Bun - Testes](../../../knowledge-base/bun-testes.md) § 6 and § 6.1 | the rules, and the seven silent-violation ones |
 | 3 | `references/mapa-de-ids.md` | before citing — and to find **which satellite** holds the body |
-| 4 | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) § 5.1 | the flakiness tree |
+| 4 | [Bun - Testes](../../../knowledge-base/bun-testes.md) § 5.1 | the flakiness tree |
 | 5 | the satellite for the finding | only after you have the cause |
 
 **Never load all six satellites.** And **never invent an ID** — the family runs from `BUN-TEST-01` to `BUN-TEST-29`.
@@ -128,7 +128,7 @@ Full review: `references/exemplo-revisao.md`.
 
 ## Related
 
-- [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) — source of this skill: § 2, § 5.1, § 6, § 6.1, § 7
+- [Bun - Testes](../../../knowledge-base/bun-testes.md) — source of this skill: § 2, § 5.1, § 6, § 6.1, § 7
 - `bun-test-build` — the sibling skill
 - `test-review` · `test-diagnose` — the concept layer
 - `playwright-review` — the equivalent audit in E2E

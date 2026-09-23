@@ -4,7 +4,7 @@ descricao: Design or change the HTTP contract of an endpoint — method, status,
 tipo: skill
 familia: http
 idioma: en
-fonte: "[HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md)"
+fonte: "[HTTP - Métodos e Semântica](../../../knowledge-base/http-metodos-e-semantica.md)"
 tags:
   - skill
   - http
@@ -13,10 +13,10 @@ tags:
 
 # http-contract
 
-> **Source of this skill:** [HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md) and [HTTP - Status e Redirecionamento](../../../knowledge-base/docs/http-status-e-redirecionamento.md), with the [HTTP](../../../knowledge-base/docs/http.md) hub as the router. The 74 `HTTP-*` rules are declared in § 6 of the hub.
+> **Source of this skill:** [HTTP - Métodos e Semântica](../../../knowledge-base/http-metodos-e-semantica.md) and [HTTP - Status e Redirecionamento](../../../knowledge-base/http-status-e-redirecionamento.md), with the [HTTP](../../../knowledge-base/http.md) hub as the router. The 74 `HTTP-*` rules are declared in § 6 of the hub.
 > This skill **does not contain** the text of the rules — it says what to decide, in what order, and what to check with `curl` before delivering.
 
-Contract this skill implements: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
+Contract this skill implements: [HTTP](../../../knowledge-base/http.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -29,8 +29,8 @@ There is an endpoint to design or change, and the questions are **which method**
 | `Cache-Control`, `ETag`, `304`, `If-Match`, `Vary` | `http-cache` |
 | a blocked request, CORS, wrong format | `http-diagnose` |
 | auditing the contract of an existing API | `http-review` |
-| writing the handler in the framework | `elysia-build` · [Hono - Roteamento e Contexto](../../../knowledge-base/docs/hono-roteamento-e-contexto.md) |
-| validating the body at runtime | `elysia-schema` · [Hono - Validação e RPC](../../../knowledge-base/docs/hono-validacao-e-rpc.md) |
+| writing the handler in the framework | `elysia-build` · [Hono - Roteamento e Contexto](../../../knowledge-base/hono-roteamento-e-contexto.md) |
+| validating the body at runtime | `elysia-schema` · [Hono - Validação e RPC](../../../knowledge-base/hono-validacao-e-rpc.md) |
 | authentication, session, tokens | `OWASP - Sessão e Autorização` · `RFC 9700 - OAuth 2.0 Security BCP` |
 
 ---
@@ -39,11 +39,11 @@ There is an endpoint to design or change, and the questions are **which method**
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 2 | the protocol's mental model |
-| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 5.1 and § 5.2 | this skill's two trees |
-| 3 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.1 + § 6.2 | rules, critical ones, and the canonical IDs |
-| 4 | [HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](../../../knowledge-base/docs/http-status-e-redirecionamento.md) | the two sources, inseparable |
-| 5 | [HTTP](../../../knowledge-base/docs/http.md) § 8 | **before writing a header by hand** — the stack may already do it |
+| 1 | [HTTP](../../../knowledge-base/http.md) § 2 | the protocol's mental model |
+| 2 | [HTTP](../../../knowledge-base/http.md) § 5.1 and § 5.2 | this skill's two trees |
+| 3 | [HTTP](../../../knowledge-base/http.md) § 6 + § 6.1 + § 6.2 | rules, critical ones, and the canonical IDs |
+| 4 | [HTTP - Métodos e Semântica](../../../knowledge-base/http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](../../../knowledge-base/http-status-e-redirecionamento.md) | the two sources, inseparable |
+| 5 | [HTTP](../../../knowledge-base/http.md) § 8 | **before writing a header by hand** — the stack may already do it |
 
 References in this skill:
 
@@ -87,7 +87,7 @@ A `POST`/`PATCH` that can be retried accepts an **idempotency key** (`HTTP-METH-
 
 ## Step 5 — Before writing a header by hand
 
-Check [HTTP](../../../knowledge-base/docs/http.md) § 8: the stack may already do it. A hand-written header where the framework already emits one is a source of silent divergence.
+Check [HTTP](../../../knowledge-base/http.md) § 8: the stack may already do it. A hand-written header where the framework already emits one is a source of silent divergence.
 
 ---
 
@@ -120,7 +120,7 @@ Full case: `references/exemplo.md`.
 
 ## Related
 
-- [HTTP - Métodos e Semântica](../../../knowledge-base/docs/http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](../../../knowledge-base/docs/http-status-e-redirecionamento.md) — the sources
-- [HTTP](../../../knowledge-base/docs/http.md) § 2, § 5, § 6, § 7, § 8
+- [HTTP - Métodos e Semântica](../../../knowledge-base/http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](../../../knowledge-base/http-status-e-redirecionamento.md) — the sources
+- [HTTP](../../../knowledge-base/http.md) § 2, § 5, § 6, § 7, § 8
 - `http-cache` · `http-diagnose` · `http-review` — the sibling skills
 - `elysia-build` — the mechanism that implements this contract

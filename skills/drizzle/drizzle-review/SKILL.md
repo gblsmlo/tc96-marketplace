@@ -4,7 +4,7 @@ descricao: Review an existing Drizzle and PostgreSQL persistence layer, citing `
 tipo: skill
 familia: drizzle
 idioma: en
-fonte: "[Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md)"
+fonte: "[Drizzle ORM](../../../knowledge-base/drizzle-orm.md)"
 docs:
   - /drizzle-team/drizzle-orm-docs
 tags:
@@ -15,11 +15,11 @@ tags:
 
 # drizzle-review
 
-> **Source of this skill:** [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md), which is both the hub and the normative note — `DRZ-CORE-*` lives in its § 6, and the bodies of the other families in the two satellites.
+> **Source of this skill:** [Drizzle ORM](../../../knowledge-base/drizzle-orm.md), which is both the hub and the normative note — `DRZ-CORE-*` lives in its § 6, and the bodies of the other families in the two satellites.
 > This skill **does not contain** the text of the rules — it says what to run, in what order to scan and how to report.
 > **API surface:** resolve it through Context7 — `/drizzle-team/drizzle-orm-docs`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Drizzle ORM](../../../knowledge-base/drizzle-orm.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -29,7 +29,7 @@ Reviewing persistence that **already exists**: schema, migrations, repositories,
 
 | Situation | Go to |
 | --- | --- |
-| writing a new schema or query | [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) § 5, directly — **there is no build skill yet** |
+| writing a new schema or query | [Drizzle ORM](../../../knowledge-base/drizzle-orm.md) § 5, directly — **there is no build skill yet** |
 | modeling, indexes, constraints, RLS in the database | `PostgreSQL` |
 | the route that calls the repository | `elysia-build` |
 | the suite that should cover this | `bun-test-review` · `test-review` |
@@ -41,11 +41,11 @@ Reviewing persistence that **already exists**: schema, migrations, repositories,
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) § 0 | **not optional** — the project's `package.json` decides which relations API applies, not the live docs |
-| 2 | [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) § 6 | the citable rules and the family table |
-| 3 | [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) § 2 and § 5 | mental model and trees, to tell "wrong" from "different" |
-| 4 | [Drizzle - Schema e Migrations](../../../knowledge-base/docs/drizzle-schema-e-migrations.md) | only when the finding touches a table, an index or `drizzle-kit` |
-| 5 | [Drizzle - Queries e Relations](../../../knowledge-base/docs/drizzle-queries-e-relations.md) | only when the finding touches a query, `relations`, RQB or a transaction |
+| 1 | [Drizzle ORM](../../../knowledge-base/drizzle-orm.md) § 0 | **not optional** — the project's `package.json` decides which relations API applies, not the live docs |
+| 2 | [Drizzle ORM](../../../knowledge-base/drizzle-orm.md) § 6 | the citable rules and the family table |
+| 3 | [Drizzle ORM](../../../knowledge-base/drizzle-orm.md) § 2 and § 5 | mental model and trees, to tell "wrong" from "different" |
+| 4 | [Drizzle - Schema e Migrations](../../../knowledge-base/drizzle-schema-e-migrations.md) | only when the finding touches a table, an index or `drizzle-kit` |
+| 5 | [Drizzle - Queries e Relations](../../../knowledge-base/drizzle-queries-e-relations.md) | only when the finding touches a query, `relations`, RQB or a transaction |
 
 **Never load both satellites by default.**
 
@@ -60,7 +60,7 @@ References in this skill:
 | `references/fechamento.md` | turning a probe into a test, and what requires a product decision |
 | `references/mapa-de-ids.md` | the 32 `DRZ-*`: declaration, satellite of the body and section |
 | `scripts/sondas.sh` | runs all eleven |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `knowledge-base/docs/drizzle*` |
+| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `knowledge-base/drizzle*` |
 
 ---
 
@@ -116,8 +116,8 @@ The format and the cut are in `references/relatorio-e-corte.md`.
 
 ## Related
 
-- [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) — source of this skill: § 0, § 5, § 6, § 7
-- [Drizzle - Schema e Migrations](../../../knowledge-base/docs/drizzle-schema-e-migrations.md) · [Drizzle - Queries e Relations](../../../knowledge-base/docs/drizzle-queries-e-relations.md) — the satellites
+- [Drizzle ORM](../../../knowledge-base/drizzle-orm.md) — source of this skill: § 0, § 5, § 6, § 7
+- [Drizzle - Schema e Migrations](../../../knowledge-base/drizzle-schema-e-migrations.md) · [Drizzle - Queries e Relations](../../../knowledge-base/drizzle-queries-e-relations.md) — the satellites
 - `PostgreSQL` — what the ORM does not dispense with
 - · — when the finding is about strategy
 - `react-review` — where the finding format comes from

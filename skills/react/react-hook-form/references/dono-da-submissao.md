@@ -25,6 +25,6 @@ looks for exactly the `||` that appears when it was not made.
 
 ## Related
 
-- [React Hook Form](../../../../knowledge-base/docs/react-hook-form.md) § 5.4 and § 8 — the submission trees and the bridges
+- [React Hook Form](../../../../knowledge-base/react-hook-form.md) § 5.4 and § 8 — the submission trees and the bridges
 - `tanstack-query` — what the write made stale in the cache
 - `tarefas.md` § 5 — submitting

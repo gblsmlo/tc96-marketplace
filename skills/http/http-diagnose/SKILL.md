@@ -4,7 +4,7 @@ descricao: Diagnose a request blocked by the browser or a format disagreement be
 tipo: skill
 familia: http
 idioma: en
-fonte: "[HTTP - CORS](../../../knowledge-base/docs/http-cors.md)"
+fonte: "[HTTP - CORS](../../../knowledge-base/http-cors.md)"
 tags:
   - skill
   - http
@@ -13,10 +13,10 @@ tags:
 
 # http-diagnose
 
-> **Source of this skill:** [HTTP - CORS](../../../knowledge-base/docs/http-cors.md) and [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/docs/http-negociacao-de-conteudo-e-range.md), with the [HTTP](../../../knowledge-base/docs/http.md) hub as the router.
+> **Source of this skill:** [HTTP - CORS](../../../knowledge-base/http-cors.md) and [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/http-negociacao-de-conteudo-e-range.md), with the [HTTP](../../../knowledge-base/http.md) hub as the router.
 > This skill **does not contain** the text of the rules — it says what to probe, in what order to eliminate hypotheses, and what is **not** CORS.
 
-Contract this skill implements: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
+Contract this skill implements: [HTTP](../../../knowledge-base/http.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -37,10 +37,10 @@ A request does not arrive, or arrives and the format is wrong.
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 5.4 and § 5.5 | this skill's two trees |
-| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.2 | rules and canonical IDs |
-| 3 | [HTTP - CORS](../../../knowledge-base/docs/http-cors.md) | the source |
-| 4 | [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/docs/http-negociacao-de-conteudo-e-range.md) | when the symptom is format, not blocking |
+| 1 | [HTTP](../../../knowledge-base/http.md) § 5.4 and § 5.5 | this skill's two trees |
+| 2 | [HTTP](../../../knowledge-base/http.md) § 6 + § 6.2 | rules and canonical IDs |
+| 3 | [HTTP - CORS](../../../knowledge-base/http-cors.md) | the source |
+| 4 | [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/http-negociacao-de-conteudo-e-range.md) | when the symptom is format, not blocking |
 
 References in this skill:
 
@@ -123,7 +123,7 @@ An error that `curl` also reproduces, a legitimate `401`, a header the server ne
 
 ## Related
 
-- [HTTP - CORS](../../../knowledge-base/docs/http-cors.md) — source of this skill
-- [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/docs/http-negociacao-de-conteudo-e-range.md) — the second source
+- [HTTP - CORS](../../../knowledge-base/http-cors.md) — source of this skill
+- [HTTP - Negociação de Conteúdo e Range](../../../knowledge-base/http-negociacao-de-conteudo-e-range.md) — the second source
 - `http-contract` · `http-cache` · `http-review` — the sibling skills
 - `elysia-diagnose` — the same finding from the plugin side

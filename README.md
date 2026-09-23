@@ -117,7 +117,7 @@ claude plugin install twincam-core@twincam
 | **scripts de skill** | 40 | inglês |
 | **agents** | 12 | `frontend-developer` em inglês; os outros onze em português |
 | **commands** | 17 | inglês no corpo, `descricao` em português |
-| **knowledge-base** | 129 notas (`docs/` 118 · `pages/` 11) | português — é a regra, e o ID vem dela |
+| **knowledge-base** | 129 notas, sem subpasta | português — é a regra, e o ID vem dela |
 
 Os `mapa-de-ids.md` são **gerados** por `skills/<familia>/<skill>/scripts/gerar-mapa-de-ids.sh`
 a partir da knowledge-base; não edite à mão. Rodar o gerador reproduz byte a byte o que

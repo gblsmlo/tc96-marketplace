@@ -1,6 +1,6 @@
 # Import scan — in the order that fails most
 
-> Order from [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 6 and § 4. Stop detailing a file when a
+> Order from [Feature-Based Architecture](../../../../knowledge-base/feature-based-architecture.md) § 6 and § 4. Stop detailing a file when a
 > finding invalidates the next one: if the **layer** is wrong, do not review its imports —
 > report the layer change.
 
@@ -77,6 +77,6 @@ rule)", separately. Never invent a `REACT-ARCH-*`.
 
 ## Related
 
-- [Feature-Based Architecture](../../../../knowledge-base/pages/feature-based-architecture.md) § 4, § 6, § 7 — the source
+- [Feature-Based Architecture](../../../../knowledge-base/feature-based-architecture.md) § 4, § 6, § 7 — the source
 - `arvore-de-colocacao.md` — deciding where to place, before auditing what is placed
 - `mapa-de-ids.md` — severity and enforcement per ID

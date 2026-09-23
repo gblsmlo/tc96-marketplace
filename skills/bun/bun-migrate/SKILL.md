@@ -4,7 +4,7 @@ descricao: Migrate Node code to Bun and diagnose what does not run — `node:*` 
 tipo: skill
 familia: bun
 idioma: en
-fonte: "[Bun - Shell, FFI e Compat Node](../../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md)"
+fonte: "[Bun - Shell, FFI e Compat Node](../../../knowledge-base/bun-shell-ffi-e-compat-node.md)"
 docs:
   - /oven-sh/bun
 tags:
@@ -14,7 +14,7 @@ tags:
 ---
 # bun-migrate
 
-> **Source of this skill:** [Bun - Shell, FFI e Compat Node](../../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md), with the [Bun](../../../knowledge-base/docs/bun.md) hub as the router.
+> **Source of this skill:** [Bun - Shell, FFI e Compat Node](../../../knowledge-base/bun-shell-ffi-e-compat-node.md), with the [Bun](../../../knowledge-base/bun.md) hub as the router.
 > **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
 ---
@@ -43,8 +43,8 @@ Compatibility is **partial and uneven**: some modules are complete, some have a 
 
 | Order | Load |
 | --- | --- |
-| 1 | [Bun](../../../knowledge-base/docs/bun.md) § 6 — `BUN-CORE-*` and `BUN-SYS-*` |
-| 2 | [Bun - Shell, FFI e Compat Node](../../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md) |
+| 1 | [Bun](../../../knowledge-base/bun.md) § 6 — `BUN-CORE-*` and `BUN-SYS-*` |
+| 2 | [Bun - Shell, FFI e Compat Node](../../../knowledge-base/bun-shell-ffi-e-compat-node.md) |
 | 3 | the official compatibility page, for **every** enumerated module |
 
 References in this skill:
@@ -108,7 +108,7 @@ Detail: `references/enumerar-e-lacunas.md`.
 
 ## Related
 
-- [Bun - Shell, FFI e Compat Node](../../../knowledge-base/docs/bun-shell-ffi-e-compat-node.md) — source of this skill
-- [Bun](../../../knowledge-base/docs/bun.md) § 6
+- [Bun - Shell, FFI e Compat Node](../../../knowledge-base/bun-shell-ffi-e-compat-node.md) — source of this skill
+- [Bun](../../../knowledge-base/bun.md) § 6
 - `bun-runtime` · `bun-workspace` · `bun-test-build` · `bun-test-review` — the family
 - Node.js — what is being left behind; its API surface resolves through Context7, `/nodejs/node`

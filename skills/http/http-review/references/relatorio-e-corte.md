@@ -54,4 +54,4 @@ Four cases that are **not** findings:
 
 And one **invalid** case: citing `HTTP-STATUS-01`. It is an alias of `HTTP-CORE-06` (§ 6.2).
 
-If the scan finds a real, recurring defect with no rule, the product is a **rule proposal** for [HTTP](../../../../knowledge-base/docs/http.md) § 6 — suggested ID, text, and the case that motivated it.
+If the scan finds a real, recurring defect with no rule, the product is a **rule proposal** for [HTTP](../../../../knowledge-base/http.md) § 6 — suggested ID, text, and the case that motivated it.

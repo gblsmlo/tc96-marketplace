@@ -1,6 +1,6 @@
 # Boundary with React
 
-The router solves what plain React does not. When deciding between a React primitive and the router, use [React.js](../../../../knowledge-base/docs/react-js.md) § 8 (bridges with the stack):
+The router solves what plain React does not. When deciding between a React primitive and the router, use [React.js](../../../../knowledge-base/react-js.md) § 8 (bridges with the stack):
 
 | Problem | Do not use | Use |
 | --- | --- | --- |

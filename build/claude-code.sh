@@ -108,19 +108,13 @@ def neutro(caminho, tipo):
 
 def citadas(texto):
     """Quais notas da knowledge-base este arquivo referencia."""
-    return set(re.findall(r"knowledge-base/((?:docs|pages)/[^)\s]+\.md)", texto))
+    return {n for n in re.findall(r"knowledge-base/([^)\s]+\.md)", texto) if n != "MANIFESTO.md"}
 
 
 def citadas_entre_notas(caminho):
-    """Links de uma nota para outra dentro da knowledge-base, normalizados."""
-    sub = caminho.parent.name
-    saida = set()
-    for alvo in re.findall(r"\]\(([^)#:]+\.md)\)", caminho.read_text(encoding="utf-8")):
-        if alvo.startswith("../"):
-            saida.add(alvo[3:])          # ../pages/x.md -> pages/x.md
-        elif "/" not in alvo:
-            saida.add(f"{sub}/{alvo}")   # irma no mesmo diretorio
-    return saida
+    """Links de uma nota para outra dentro da knowledge-base: sempre irma no mesmo diretorio."""
+    return {alvo for alvo in re.findall(r"\]\(([^)#:]+\.md)\)", caminho.read_text(encoding="utf-8"))
+            if "/" not in alvo}
 
 
 resumo, publicados = [], []

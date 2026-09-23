@@ -53,8 +53,8 @@ of both worlds, by construction.
 | the same test 20× | confirms it is intermittent |
 | in a container with the CI image | environment parity |
 
-Concrete forms per tool: [Playwright](../../../../knowledge-base/docs/playwright.md) § 5.2 (the most detailed tree in the knowledge base) and
-[Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md).
+Concrete forms per tool: [Playwright](../../../../knowledge-base/playwright.md) § 5.2 (the most detailed tree in the knowledge base) and
+[Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/bun-testes-ciclo-de-vida-e-isolamento.md).
 
 > **Diagnosing is not fixing.** One worker makes the failure disappear and **keeps** the
 > coupling, with the suite N times slower. Prefixing files with `001-`, `002-`
@@ -64,6 +64,6 @@ Concrete forms per tool: [Playwright](../../../../knowledge-base/docs/playwright
 
 ## Related
 
-- [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) § 2 — the ten causes, with the body
-- [Teste de Software](../../../../knowledge-base/docs/teste-de-software.md) § 4.5 — the tree of the six questions
+- [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/teste-de-software-confiabilidade-da-suite.md) § 2 — the ten causes, with the body
+- [Teste de Software](../../../../knowledge-base/teste-de-software.md) § 4.5 — the tree of the six questions
 - `conserto-x-anestesico.md` — what **not** to do with what you found

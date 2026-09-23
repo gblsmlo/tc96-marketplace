@@ -1,6 +1,6 @@
 # Method and status
 
-> Steps 1 and 2. The full trees are § 5.1 and § 5.2 of [HTTP](../../../../knowledge-base/docs/http.md).
+> Steps 1 and 2. The full trees are § 5.1 and § 5.2 of [HTTP](../../../../knowledge-base/http.md).
 
 The full tree is § 5.1 of the hub. The invariants it protects:
 
@@ -38,7 +38,7 @@ The full tree is § 5.2 of the hub. The obligations that come with each choice:
 
 **The rule that dominates the step:** a failure is never `2xx` with an error in the body. The status carries the result (`HTTP-CORE-06` — canonical; `HTTP-STATUS-01` is an alias and must not be cited).
 
-> **The bridge that avoids the stack's most common bug:** neither Hono's `hc` nor Elysia's Eden Treaty **throws** on an error status. A naive `queryFn` stays in `success` with the error inside `data` — see [Hono - Validação e RPC](../../../../knowledge-base/docs/hono-validacao-e-rpc.md) and [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md). In other words: honoring `HTTP-CORE-06` on the server **is not enough** if the typed client does not check `res.ok`.
+> **The bridge that avoids the stack's most common bug:** neither Hono's `hc` nor Elysia's Eden Treaty **throws** on an error status. A naive `queryFn` stays in `success` with the error inside `data` — see [Hono - Validação e RPC](../../../../knowledge-base/hono-validacao-e-rpc.md) and [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md). In other words: honoring `HTTP-CORE-06` on the server **is not enough** if the typed client does not check `res.ok`.
 
 ### 2.1 Redirects
 

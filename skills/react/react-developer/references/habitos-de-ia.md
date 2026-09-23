@@ -11,11 +11,11 @@
 
 | Habit | Why it fails | Instead of it | Rule |
 | --- | --- | --- | --- |
-| a `fetch` inside a `useEffect` to load data | it solves neither race conditions, caching, dedupe nor retry; and `<Suspense>` does not work with it | a data-fetching library — [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md), via [React.js](../../../../knowledge-base/docs/react-js.md) § 8 | `REACT-EFFECT-06`, `REACT-ASYNC-03` |
+| a `fetch` inside a `useEffect` to load data | it solves neither race conditions, caching, dedupe nor retry; and `<Suspense>` does not work with it | a data-fetching library — [TanStack Query](../../../../knowledge-base/tanstack-query.md), via [React.js](../../../../knowledge-base/react-js.md) § 8 | `REACT-EFFECT-06`, `REACT-ASYNC-03` |
 | `useState` + `useEffect` for a computable value (a total, a percentage, an item by id, a filtered list) | it desynchronizes and produces an extra render | compute it in the render, **in the state's owner**, and pass it down ready | `REACT-PAT-01` |
 | Syncing a prop into state to "reset" when the entity changes | the same problem, with one more render | change the `key`: `<ProfileForm key={userId} />` | `REACT-PAT-01` |
 | Keeping the API response in `useState` as the source of truth | two sources of truth; invalidation becomes your responsibility | Query's cache is the source; `useState` only for what is the client's | `REACT-PAT-03` |
-| `useState` for a filter, a tab, pagination, sorting | it does not survive a refresh, is not shareable by link, ignores the back button | typed search params from [TanStack Router](../../../../knowledge-base/docs/tanstack-router.md) | `REACT-PAT-10` |
+| `useState` for a filter, a tab, pagination, sorting | it does not survive a refresh, is not shareable by link, ignores the back button | typed search params from [TanStack Router](../../../../knowledge-base/tanstack-router.md) | `REACT-PAT-10` |
 | Lifting state to the root "just in case" | a global re-render and a warehouse component | the **nearest** common ancestor, and stop there | `REACT-PAT-02` |
 | `setCount(count + 1)` when the previous value matters | two `set` calls in the same handler increment once — state is a snapshot | the updater form: `setCount(c => c + 1)` | `REACT-STATE-01` |
 | Parallel booleans (`isLoading` + `isError` + `data`) | they admit impossible combinations | a discriminated union | `REACT-STATE-06` |
@@ -41,7 +41,7 @@
 | A `<Suspense>` with no Error Boundary at a data boundary | the promise's failure has nowhere to stop | an error boundary next to every waiting boundary | `REACT-ASYNC-08` |
 | A boundary with no retry/reset button | the user is stuck in the fallback | an explicit recovery path | `REACT-ASYNC-11` |
 | Throwing an expected error (validation, a business 404, a 403) to the boundary | a boundary is for the unexpected | an expected error is UI state / the action's return | `REACT-ASYNC-09` |
-| `index` as the `key` in a `.map` | internal state sticks to the wrong index when reordering or removing | a stable domain id; `index` only in a static list, with no state in the rows | no ID — [React - Patterns](../../../../knowledge-base/docs/react-patterns.md) § 8 |
+| `index` as the `key` in a `.map` | internal state sticks to the wrong index when reordering or removing | a stable domain id; `index` only in a static list, with no state in the rows | no ID — [React - Patterns](../../../../knowledge-base/react-patterns.md) § 8 |
 | A `fallback` of arbitrary size | a layout shift at the moment of the swap | a fallback with roughly the real content's area | `REACT-ASYNC-02` |
 
 ## 4. Performance
@@ -97,4 +97,4 @@
 
 - `mapa-de-ids.md` — where each ID is declared
 - `autoverificacao.md` — the second pass, over this table
-- [React.js](../../../../knowledge-base/docs/react-js.md) § 6.1 — the critical rules that travel with the minimum path
+- [React.js](../../../../knowledge-base/react-js.md) § 6.1 — the critical rules that travel with the minimum path

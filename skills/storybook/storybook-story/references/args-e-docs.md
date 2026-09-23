@@ -23,7 +23,7 @@ export const Large: Story = { args: {...Default.args, size: 'lg' } };
 
 ### 3.3 What is **not** `args`
 
-If what distinguishes them is **the world around** — theme, provider, routing, network response, clock —, that is the **environment**, and the environment enters through a decorator, `loaders` or `beforeEach` ([Storybook - Decorators e Contexto](../../../../knowledge-base/docs/storybook-decorators-e-contexto.md)).
+If what distinguishes them is **the world around** — theme, provider, routing, network response, clock —, that is the **environment**, and the environment enters through a decorator, `loaders` or `beforeEach` ([Storybook - Decorators e Contexto](../../../../knowledge-base/storybook-decorators-e-contexto.md)).
 
 And the pair most often confused: **`globals` is for a variation the reader switches through the toolbar** (theme, locale). What distinguishes two stories is **never** a global — it is `args` (`SB-CTX-05`).
 
@@ -68,4 +68,4 @@ And the cut between a story's two roles (`SB-DOC-04`):
 | documentation only | `'!test'` — out of the runner |
 | testing only | `'!autodocs'` — out of the page |
 
-**In a design system, the story feeds the docs page by design** — that is why [Storybook - Docs e Autodocs](../../../../knowledge-base/docs/storybook-docs-e-autodocs.md) is in the minimum loading. And the story the page displays has to express its state through `args`, otherwise the controls show up empty (`SB-DOC-05`, which is an alias of `SB-CSF-04` — cite the canonical one).
+**In a design system, the story feeds the docs page by design** — that is why [Storybook - Docs e Autodocs](../../../../knowledge-base/storybook-docs-e-autodocs.md) is in the minimum loading. And the story the page displays has to express its state through `args`, otherwise the controls show up empty (`SB-DOC-05`, which is an alias of `SB-CSF-04` — cite the canonical one).

@@ -28,5 +28,5 @@ default is the most common concrete cause in this stack. See `http-diagnose`.
 
 ## Related
 
-- [Elysia - Lifecycle e Plugins](../../../../knowledge-base/docs/elysia-lifecycle-e-plugins.md) — the source
+- [Elysia - Lifecycle e Plugins](../../../../knowledge-base/elysia-lifecycle-e-plugins.md) — the source
 - `http-diagnose` — when the symptom is the browser blocking

@@ -7,14 +7,14 @@
 
 | The task is… | Satellite | Tree |
 | --- | --- | --- |
-| writing a test, choosing a matcher, modifier, snapshot | [Bun - Testes - Escrita e Asserções](../../../../knowledge-base/docs/bun-testes-escrita-e-assercoes.md) | — |
-| replacing a dependency: mock, spy, double | [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) | § 5.2 |
-| freezing a date, advancing a timer, timezone | [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) | § 5.3 |
-| testing a React component, DOM, interaction | [Bun - Testes - DOM e Componentes](../../../../knowledge-base/docs/bun-testes-dom-e-componentes.md) | § 5.6 |
-| hooks, preload, setup scope | [Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md) | — |
-| `bunfig.toml [test]`, discovery, filters | [Bun - Testes - Execução e Configuração](../../../../knowledge-base/docs/bun-testes-execucao-e-configuracao.md) | — |
-| coverage, reporter, CI workflow | [Bun - Testes - Cobertura e CI](../../../../knowledge-base/docs/bun-testes-cobertura-e-ci.md) | § 5.5 |
-| a habit from Jest or Vitest | [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 5.4 (equivalence map) | § 5.4 |
+| writing a test, choosing a matcher, modifier, snapshot | [Bun - Testes - Escrita e Asserções](../../../../knowledge-base/bun-testes-escrita-e-assercoes.md) | — |
+| replacing a dependency: mock, spy, double | [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/bun-testes-mocks-e-tempo.md) | § 5.2 |
+| freezing a date, advancing a timer, timezone | [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/bun-testes-mocks-e-tempo.md) | § 5.3 |
+| testing a React component, DOM, interaction | [Bun - Testes - DOM e Componentes](../../../../knowledge-base/bun-testes-dom-e-componentes.md) | § 5.6 |
+| hooks, preload, setup scope | [Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/bun-testes-ciclo-de-vida-e-isolamento.md) | — |
+| `bunfig.toml [test]`, discovery, filters | [Bun - Testes - Execução e Configuração](../../../../knowledge-base/bun-testes-execucao-e-configuracao.md) | — |
+| coverage, reporter, CI workflow | [Bun - Testes - Cobertura e CI](../../../../knowledge-base/bun-testes-cobertura-e-ci.md) | § 5.5 |
+| a habit from Jest or Vitest | [Bun - Testes](../../../../knowledge-base/bun-testes.md) § 5.4 (equivalence map) | § 5.4 |
 
 ---
 
@@ -57,7 +57,7 @@ Stop signal: if three files mock the same module, the dependency wanted to be a 
 
 ### 4. Test a React component
 
-Check the full recipe in [Bun - Testes - DOM e Componentes](../../../../knowledge-base/docs/bun-testes-dom-e-componentes.md) § 2 before writing the first line — it has four pieces, and three fail silently if missing:
+Check the full recipe in [Bun - Testes - DOM e Componentes](../../../../knowledge-base/bun-testes-dom-e-componentes.md) § 2 before writing the first line — it has four pieces, and three fail silently if missing:
 
 1. `GlobalRegistrator.register` in a preload, never in the test file — `BUN-TEST-07`;
 2. **two** preloads, in this order: happy-dom, then `@testing-library/*` — `BUN-TEST-25`;
@@ -68,7 +68,7 @@ When writing: `await` on every `userEvent`, `findBy*` to wait for an element, `w
 
 ### 5. Configure a project's suite
 
-1. `bunfig.toml`, `[test]` section — the full surface is in [Bun - Testes - Execução e Configuração](../../../../knowledge-base/docs/bun-testes-execucao-e-configuracao.md) § 5.
+1. `bunfig.toml`, `[test]` section — the full surface is in [Bun - Testes - Execução e Configuração](../../../../knowledge-base/bun-testes-execucao-e-configuracao.md) § 5.
 2. A preload with `afterEach( => mock.restore)`. It is the line that stops a file written by someone who did not read the docs from leaking a spy into the whole suite.
 3. Scripts: `test` **with no mandatory flag** (the rest goes in `bunfig.toml`), `test:watch`, `test:changed`, `test:ci`, `typecheck`.
 4. If there are components, the two DOM preloads (task 4).
@@ -78,7 +78,7 @@ When writing: `await` on every `userEvent`, `findBy*` to wait for an element, `w
 
 ### 6. Assemble the CI command
 
-Recipe in [Bun - Testes - Cobertura e CI](../../../../knowledge-base/docs/bun-testes-cobertura-e-ci.md) § 5. The non-negotiable decisions:
+Recipe in [Bun - Testes - Cobertura e CI](../../../../knowledge-base/bun-testes-cobertura-e-ci.md) § 5. The non-negotiable decisions:
 
 - the Bun version **pinned** — `BUN-TEST-15`;
 - `bun ci`, not `bun install` — `BUN-PKG-02`;
@@ -93,6 +93,6 @@ Recipe in [Bun - Testes - Cobertura e CI](../../../../knowledge-base/docs/bun-te
 
 ## Related
 
-- [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 5 — the decision trees
+- [Bun - Testes](../../../../knowledge-base/bun-testes.md) § 5 — the decision trees
 - `armadilhas-do-runner.md` — what you do not assume from memory
 - `autoverificacao.md` — what to check before delivering

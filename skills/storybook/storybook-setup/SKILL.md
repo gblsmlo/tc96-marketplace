@@ -4,7 +4,7 @@ descricao: Configure Storybook in a project or monorepo — choosing between the
 tipo: skill
 familia: storybook
 idioma: en
-fonte: "[Storybook - Configuração e Builder](../../../knowledge-base/docs/storybook-configuracao-e-builder.md)"
+fonte: "[Storybook - Configuração e Builder](../../../knowledge-base/storybook-configuracao-e-builder.md)"
 docs:
   - /storybookjs/storybook
 tags:
@@ -15,11 +15,11 @@ tags:
 
 # storybook-setup
 
-> **Source of this skill:** [Storybook - Configuração e Builder](../../../knowledge-base/docs/storybook-configuracao-e-builder.md), with the [Storybook](../../../knowledge-base/docs/storybook.md) hub as the router.
+> **Source of this skill:** [Storybook - Configuração e Builder](../../../knowledge-base/storybook-configuracao-e-builder.md), with the [Storybook](../../../knowledge-base/storybook.md) hub as the router.
 > This skill **does not contain** the text of the rules — it says what to decide, in what order, and what to check.
 > **API surface:** resolve it through Context7 — `/storybookjs/storybook`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [Storybook](../../../knowledge-base/docs/storybook.md) § 7.
+Contract this skill implements: [Storybook](../../../knowledge-base/storybook.md) § 7.
 
 ---
 
@@ -31,7 +31,7 @@ Installing, migrating or reconfiguring Storybook.
 | --- | --- |
 | writing a story | `storybook-story` |
 | an interaction test inside the story | `storybook-test` |
-| coverage and the CI job | [Storybook - Cobertura e CI](../../../knowledge-base/docs/storybook-cobertura-e-ci.md) |
+| coverage and the CI job | [Storybook - Cobertura e CI](../../../knowledge-base/storybook-cobertura-e-ci.md) |
 | a journey test | `playwright-build` · a unit test | `bun-test-build` |
 
 ---
@@ -68,9 +68,9 @@ Detail: `references/escolher-o-framework.md`.
 
 | Order | Load |
 | --- | --- |
-| 1 | [Storybook](../../../knowledge-base/docs/storybook.md) § 5.1 (the framework tree) and § 6.2 (the mutually exclusive families) |
-| 2 | [Storybook - Configuração e Builder](../../../knowledge-base/docs/storybook-configuracao-e-builder.md) |
-| 3 | the note for the **chosen path**: [Storybook - TanStack React](../../../knowledge-base/docs/storybook-tanstack-react.md) or [Storybook - React Vite](../../../knowledge-base/docs/storybook-react-vite.md) |
+| 1 | [Storybook](../../../knowledge-base/storybook.md) § 5.1 (the framework tree) and § 6.2 (the mutually exclusive families) |
+| 2 | [Storybook - Configuração e Builder](../../../knowledge-base/storybook-configuracao-e-builder.md) |
+| 3 | the note for the **chosen path**: [Storybook - TanStack React](../../../knowledge-base/storybook-tanstack-react.md) or [Storybook - React Vite](../../../knowledge-base/storybook-react-vite.md) |
 
 References in this skill:
 
@@ -105,7 +105,7 @@ References in this skill:
 
 1. **Record the framework choice.** It determines which note to load for the rest of the project's life.
 2. **Citing the wrong path's family is an invalid finding** (`SB-TS-*` × `SB-RV-*`).
-3. A story → `storybook-story`; the test inside it → `storybook-test`; coverage and CI → [Storybook - Cobertura e CI](../../../knowledge-base/docs/storybook-cobertura-e-ci.md).
+3. A story → `storybook-story`; the test inside it → `storybook-test`; coverage and CI → [Storybook - Cobertura e CI](../../../knowledge-base/storybook-cobertura-e-ci.md).
 
 ---
 
@@ -119,7 +119,7 @@ Full case: `references/exemplo.md`.
 
 ## Related
 
-- [Storybook - Configuração e Builder](../../../knowledge-base/docs/storybook-configuracao-e-builder.md) — source of this skill
-- [Storybook](../../../knowledge-base/docs/storybook.md) § 5.1, § 6.2, § 7
+- [Storybook - Configuração e Builder](../../../knowledge-base/storybook-configuracao-e-builder.md) — source of this skill
+- [Storybook](../../../knowledge-base/storybook.md) § 5.1, § 6.2, § 7
 - `storybook-story` · `storybook-test` — the sibling skills
-- [Storybook - TanStack React](../../../knowledge-base/docs/storybook-tanstack-react.md) · [Storybook - React Vite](../../../knowledge-base/docs/storybook-react-vite.md) — the two path notes
+- [Storybook - TanStack React](../../../knowledge-base/storybook-tanstack-react.md) · [Storybook - React Vite](../../../knowledge-base/storybook-react-vite.md) — the two path notes

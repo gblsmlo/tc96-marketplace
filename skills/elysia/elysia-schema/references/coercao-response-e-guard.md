@@ -1,6 +1,6 @@
 # Coercion, response and guard
 
-> Steps 0 to 5. The text of the rules lives in [Elysia - Schema e Eden](../../../../knowledge-base/docs/elysia-schema-e-eden.md).
+> Steps 0 to 5. The text of the rules lives in [Elysia - Schema e Eden](../../../../knowledge-base/elysia-schema-e-eden.md).
 
 > **One schema declaration produces four effects:** runtime validation, a TypeScript type, an OpenAPI document, and the Eden client's type.
 

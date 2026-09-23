@@ -5,9 +5,9 @@ Playwright it is deliberate: diagnosis starts **outside the code**, in the trace
 
 | Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
-| `playwright-build` | how do I write this E2E test? | [Playwright - Locators](../../knowledge-base/docs/playwright-locators.md) | 5 references + 1 example + 1 script |
-| `playwright-review` | does this suite have defects? | [Playwright](../../knowledge-base/docs/playwright.md) | 5 references + 1 audit + 2 scripts |
-| `playwright-diagnose` | why does **this** test fail? | [Playwright - Debug e Trace](../../knowledge-base/docs/playwright-debug-e-trace.md) | 5 references + 1 diagnosis + 1 script |
+| `playwright-build` | how do I write this E2E test? | [Playwright - Locators](../../knowledge-base/playwright-locators.md) | 5 references + 1 example + 1 script |
+| `playwright-review` | does this suite have defects? | [Playwright](../../knowledge-base/playwright.md) | 5 references + 1 audit + 2 scripts |
+| `playwright-diagnose` | why does **this** test fail? | [Playwright - Debug e Trace](../../knowledge-base/playwright-debug-e-trace.md) | 5 references + 1 diagnosis + 1 script |
 
 **Before all three comes `test-design`:** if what can go wrong is a business rule, the
 test **is not E2E** (`TS-CORE-02`).
@@ -56,6 +56,6 @@ Regenerate: `bash scripts/medir.sh`
 
 ## Related
 
-- [Skills index](../README.md) · [Playwright](../../knowledge-base/docs/playwright.md) § 7 — the contract
+- [Skills index](../README.md) · [Playwright](../../knowledge-base/playwright.md) § 7 — the contract
 - `twincam-core: test family` — the concept layer, which comes first
 - `twincam-backend: bun family` — unit and integration

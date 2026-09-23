@@ -43,6 +43,6 @@ Declaring the suite sufficient **without having broken anything** is `TS-TEC-08`
 
 ## Related
 
-- [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/docs/teste-de-software-tecnicas-de-design-de-caso.md) — coverage × mutation
-- [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) — `TS-SUI-04`
+- [Teste de Software - Técnicas de Design de Caso](../../../../knowledge-base/teste-de-software-tecnicas-de-design-de-caso.md) — coverage × mutation
+- [Teste de Software - Confiabilidade da Suíte](../../../../knowledge-base/teste-de-software-confiabilidade-da-suite.md) — `TS-SUI-04`
 - `medicao.md` — the other mandatory measurement in this skill

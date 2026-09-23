@@ -7,7 +7,7 @@ These contradict habits brought from Jest and Vitest, and are the source of most
 
 **1. Without a flag, every file shares one `globalThis`.** There is no per-file isolation. "Leaked" does not mean "affected the next test": it means "affected the rest of the suite". Write as if the next file were going to read everything you left behind — because it will.
 
-**2. `mock.restore` does not undo `mock.module`.** The three cleanups do different things, and the table is in [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) § 3. `clearAllMocks` preserves the implementation; `resetAllMocks` removes it but does not restore the spy's original; only `restore` restores — and none of the three touches a module mock.
+**2. `mock.restore` does not undo `mock.module`.** The three cleanups do different things, and the table is in [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/bun-testes-mocks-e-tempo.md) § 3. `clearAllMocks` preserves the implementation; `resetAllMocks` removes it but does not restore the spy's original; only `restore` restores — and none of the three touches a module mock.
 
 **3. Concurrency inside a file shares state.** `test.concurrent` (and the suite under `--concurrent`) isolates nothing: anything depending on order or mutable state has to be `test.serial` — `BUN-TEST-23`. And `onTestFinished` does not work in a concurrent test — `BUN-TEST-22`.
 
@@ -31,6 +31,6 @@ which is why there is no way to find them by reading the code without knowing th
 
 ## Related
 
-- [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 2 — the execution model
-- [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/docs/bun-testes-mocks-e-tempo.md) § 3 — the table of the three cleanups
-- [Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md) — scope, preload, `--isolate`
+- [Bun - Testes](../../../../knowledge-base/bun-testes.md) § 2 — the execution model
+- [Bun - Testes - Mocks e Tempo](../../../../knowledge-base/bun-testes-mocks-e-tempo.md) § 3 — the table of the three cleanups
+- [Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/bun-testes-ciclo-de-vida-e-isolamento.md) — scope, preload, `--isolate`

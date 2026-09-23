@@ -197,7 +197,7 @@ Create `biome.json` at the project root:
 
 `noPrivateImports` looks like it would enforce feature boundaries. It does not — `@package` visibility is relative to the declaring folder, so a feature's `index.ts` cannot re-export a `@package` symbol from its own `components/` subfolder. Do not add it for this purpose.
 
-**Reference:** the rules above are defined in the knowledge-base note [Feature-Based Architecture](../knowledge-base/pages/feature-based-architecture.md) § 4 (rule table) and § 7 (enforcement). That note is the source of truth; if this prompt and the note disagree, the note wins.
+**Reference:** the rules above are defined in the knowledge-base note [Feature-Based Architecture](../knowledge-base/feature-based-architecture.md) § 4 (rule table) and § 7 (enforcement). That note is the source of truth; if this prompt and the note disagree, the note wins.
 
 **Anti-Pattern:** Do NOT use `"@tc96/biome-config"` or other extends. Use explicit configuration.
 
@@ -257,7 +257,7 @@ Before proceeding to Phase 3, verify ALL of these:
 - [ ] NO `.eslintrc*`, `.prettierrc*`, or `.editorconfig` files exist
 - [ ] `biome.json` exists at project root
 - [ ] `@biomejs/biome` is in `devDependencies`
-- [ ] `bun run lint:check` runs successfully — use this, NOT `bun run lint`. `lint` is `biome check --write .`, which fixes files before reporting; a command that repairs the problem cannot prove its absence. `lint:check` is `biome check src`, non-mutating and scoped, and matches the acceptance command in [Feature-Based Architecture](../knowledge-base/pages/feature-based-architecture.md) § 7 and `Skill/react-structure.md`
+- [ ] `bun run lint:check` runs successfully — use this, NOT `bun run lint`. `lint` is `biome check --write .`, which fixes files before reporting; a command that repairs the problem cannot prove its absence. `lint:check` is `biome check src`, non-mutating and scoped, and matches the acceptance command in [Feature-Based Architecture](../knowledge-base/feature-based-architecture.md) § 7 and `Skill/react-structure.md`
 - [ ] VS Code settings are configured for Biome
 - [ ] No eslint/prettier packages remain in dependencies
 

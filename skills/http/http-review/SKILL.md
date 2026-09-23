@@ -4,7 +4,7 @@ descricao: Audit an existing API's HTTP contract against the normative rules in 
 tipo: skill
 familia: http
 idioma: en
-fonte: "[HTTP](../../../knowledge-base/docs/http.md)"
+fonte: "[HTTP](../../../knowledge-base/http.md)"
 tags:
   - skill
   - http
@@ -14,10 +14,10 @@ tags:
 
 # http-review
 
-> **Source of this skill:** [HTTP](../../../knowledge-base/docs/http.md) — the normative § 6 (74 rules, continuous numbering), § 6.1 with the 25 that travel with the minimum path, and § 6.2 with the canonical IDs.
+> **Source of this skill:** [HTTP](../../../knowledge-base/http.md) — the normative § 6 (74 rules, continuous numbering), § 6.1 with the 25 that travel with the minimum path, and § 6.2 with the canonical IDs.
 > This skill **does not contain** the text of the rules — it says what to run, in what order to scan, how to classify and how to report.
 
-Contract this skill implements: [HTTP](../../../knowledge-base/docs/http.md) § 7 ("Contrato de skill").
+Contract this skill implements: [HTTP](../../../knowledge-base/http.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -39,8 +39,8 @@ Auditing the contract of an API that **already exists** — the whole service, o
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [HTTP](../../../knowledge-base/docs/http.md) § 2 | the mental model |
-| 2 | [HTTP](../../../knowledge-base/docs/http.md) § 6 + § 6.1 | the rules and the critical ones |
+| 1 | [HTTP](../../../knowledge-base/http.md) § 2 | the mental model |
+| 2 | [HTTP](../../../knowledge-base/http.md) § 6 + § 6.1 | the rules and the critical ones |
 | 3 | `references/mapa-de-ids.md` | **required before citing** |
 | 4 | the satellite for the finding | via § 4 of the hub |
 
@@ -112,7 +112,7 @@ The format and the cut are in `references/relatorio-e-corte.md`.
 
 ## Related
 
-- [HTTP](../../../knowledge-base/docs/http.md) — source of this skill: § 6, § 6.1, § 6.2, § 7
+- [HTTP](../../../knowledge-base/http.md) — source of this skill: § 6, § 6.1, § 6.2, § 7
 - `http-contract` · `http-cache` · `http-diagnose` — the sibling skills
 - `elysia-build` — where the fix is usually made
 - `test-review` — the suite that should protect the contract

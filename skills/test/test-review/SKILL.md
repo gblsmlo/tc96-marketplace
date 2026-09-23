@@ -4,7 +4,7 @@ descricao: Audit a repository's test strategy — the shape of the suite, not th
 tipo: skill
 familia: test
 idioma: en
-fonte: "[Teste de Software](../../../knowledge-base/docs/teste-de-software.md)"
+fonte: "[Teste de Software](../../../knowledge-base/teste-de-software.md)"
 tags:
   - skill
   - testing
@@ -14,10 +14,10 @@ tags:
 
 # test-review
 
-> **Source of this skill:** [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — the normative § 6 (64 rules in 7 families), § 6.1 with the satellites' critical ones, and § 6.2 with the canonical IDs. The body of each family lives in the satellite that owns the ID.
+> **Source of this skill:** [Teste de Software](../../../knowledge-base/teste-de-software.md) — the normative § 6 (64 rules in 7 families), § 6.1 with the satellites' critical ones, and § 6.2 with the canonical IDs. The body of each family lives in the satellite that owns the ID.
 > This skill **does not contain** the text of the rules — it says what to run, in what order to scan, how to classify and how to report.
 
-Contract this skill implements: [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Teste de Software](../../../knowledge-base/teste-de-software.md) § 7 ("Contrato de skill").
 
 > **Design note.** This skill audits the **shape** of the suite; `playwright-review` and `bun-test-review` audit the **tests**. The difference is operational: they find `waitForTimeout` on line 41; this one finds that 200 of the 214 tests are E2E and that none covers the error state. A repository can pass both tool skills and fail here — and that is the most common case.
 
@@ -34,7 +34,7 @@ Assessing a suite **as a system**. The question is *"does this suite protect any
 | deciding a new test | `test-design` |
 | one concrete failure | `playwright-diagnose` |
 | reviewing the application code | `react-review` · `drizzle-review` |
-| process, defects, severity, team metrics | [Teste de Software - Processo e Artefatos](../../../knowledge-base/docs/teste-de-software-processo-e-artefatos.md) |
+| process, defects, severity, team metrics | [Teste de Software - Processo e Artefatos](../../../knowledge-base/teste-de-software-processo-e-artefatos.md) |
 
 ---
 
@@ -42,10 +42,10 @@ Assessing a suite **as a system**. The question is *"does this suite protect any
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 2 | a test buys information at a price — the criterion for every judgment here |
-| 2 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 6 + § 6.1 | the inviolable rules and the critical ones |
+| 1 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 2 | a test buys information at a price — the criterion for every judgment here |
+| 2 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 6 + § 6.1 | the inviolable rules and the critical ones |
 | 3 | `references/mapa-de-ids.md` | **required before citing** — three IDs are aliases |
-| 4 | [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) § 4.1 and § 4.4 | the level tree, and "when to stop writing tests" |
+| 4 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 4.1 and § 4.4 | the level tree, and "when to stop writing tests" |
 | 5 | the satellite for the finding | via § 5 of the hub |
 
 **Never load all six satellites.**
@@ -123,8 +123,8 @@ Full audit, with the report and the "not verified" section: `references/exemplo-
 
 ## Related
 
-- [Teste de Software](../../../knowledge-base/docs/teste-de-software.md) — source of this skill: normative § 6, § 6.1, § 6.2, § 7 contract
+- [Teste de Software](../../../knowledge-base/teste-de-software.md) — source of this skill: normative § 6, § 6.1, § 6.2, § 7 contract
 - `test-design` · `test-diagnose` — the sibling skills
 - `playwright-review` · `bun-test-review` — they audit the **tests**; this one audits the **shape**
 - `Github Actions` — where the gates live
-- [Bun - Testes - Cobertura e CI](../../../knowledge-base/docs/bun-testes-cobertura-e-ci.md) · [Playwright - Execução, Retries e CI](../../../knowledge-base/docs/playwright-execucao-retries-e-ci.md) — the mechanism of the gates
+- [Bun - Testes - Cobertura e CI](../../../knowledge-base/bun-testes-cobertura-e-ci.md) · [Playwright - Execução, Retries e CI](../../../knowledge-base/playwright-execucao-retries-e-ci.md) — the mechanism of the gates

@@ -25,11 +25,11 @@ The full tree is § 5.1 of the hub. The reading of the probes:
 | Fails only with `--parallel`, and it is setup that starts something | preload hooks wrap **each file** | `BUN-TEST-24` |
 | Fails within the same file, depending on order | concurrency with mutable state | `BUN-TEST-23` |
 | A component finds an element from another test | shared `document` without cleanup | `BUN-TEST-26` |
-| Intermittent failure with no order pattern | a missing `await`, or a real timer | [Bun - Testes - DOM e Componentes](../../../../knowledge-base/docs/bun-testes-dom-e-componentes.md) § 3 |
+| Intermittent failure with no order pattern | a missing `await`, or a real timer | [Bun - Testes - DOM e Componentes](../../../../knowledge-base/bun-testes-dom-e-componentes.md) § 3 |
 | Snapshot fails on every run | a non-deterministic field | `BUN-TEST-19` |
 | A test "disappeared" from the report | `.skip`, or a file outside the pattern | `BUN-TEST-11`, `BUN-TEST-01` |
-| All tests green and exit ≠ 0 | an unhandled error outside a test | [Bun - Testes - Execução e Configuração](../../../../knowledge-base/docs/bun-testes-execucao-e-configuracao.md) § 6 |
-| `beforeAll` failed and the report shows "skip" | a hook error skips the whole scope | [Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/docs/bun-testes-ciclo-de-vida-e-isolamento.md) § 2 |
+| All tests green and exit ≠ 0 | an unhandled error outside a test | [Bun - Testes - Execução e Configuração](../../../../knowledge-base/bun-testes-execucao-e-configuracao.md) § 6 |
+| `beforeAll` failed and the report shows "skip" | a hook error skips the whole scope | [Bun - Testes - Ciclo de Vida e Isolamento](../../../../knowledge-base/bun-testes-ciclo-de-vida-e-isolamento.md) § 2 |
 
 **`test.serial` never resolves a dependency between files** — it sequences within the file. If the fix proposed by someone (or by you) is `test.serial` for a test that depends on another file, it is wrong: `BUN-TEST-09`.
 
@@ -39,6 +39,6 @@ The full tree is § 5.1 of the hub. The reading of the probes:
 
 ## Related
 
-- [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 5.1 — the full flakiness tree
+- [Bun - Testes](../../../../knowledge-base/bun-testes.md) § 5.1 — the full flakiness tree
 - `sondas.md` — what to run first
 - `severidade-e-relatorio.md` — classify and report

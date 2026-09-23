@@ -5,9 +5,9 @@ organized that way.
 
 | Skill | Takes care of | Source | Internal support |
 | --- | --- | --- | --- |
-| `storybook-setup` | `.storybook/`, `vite.config.ts`, versions | [Storybook - Configuração e Builder](../../knowledge-base/docs/storybook-configuracao-e-builder.md) | 5 references + 2 scripts |
-| `storybook-story` | `*.stories.tsx` — the `meta`, the `args`, the tags | [Storybook - Stories e Args](../../knowledge-base/docs/storybook-stories-e-args.md) | 5 references + 1 script |
-| `storybook-test` | the `play` inside the story, mocking, a11y | [Storybook - Testes e Interações](../../knowledge-base/docs/storybook-testes-e-interacoes.md) | 6 references + 1 script |
+| `storybook-setup` | `.storybook/`, `vite.config.ts`, versions | [Storybook - Configuração e Builder](../../knowledge-base/storybook-configuracao-e-builder.md) | 5 references + 2 scripts |
+| `storybook-story` | `*.stories.tsx` — the `meta`, the `args`, the tags | [Storybook - Stories e Args](../../knowledge-base/storybook-stories-e-args.md) | 5 references + 1 script |
+| `storybook-test` | the `play` inside the story, mocking, a11y | [Storybook - Testes e Interações](../../knowledge-base/storybook-testes-e-interacoes.md) | 6 references + 1 script |
 
 **Writing and reviewing sit together in each one**, because in Storybook the story **is** the test and
 the decision is the same in both directions.
@@ -64,6 +64,6 @@ Regenerate: `bash scripts/medir.sh`
 
 ## Related
 
-- [Skills index](../README.md) · [Storybook](../../knowledge-base/docs/storybook.md) § 7 — the contract
+- [Skills index](../README.md) · [Storybook](../../knowledge-base/storybook.md) § 7 — the contract
 - `twincam-core: test family` — decides the level, before these
-- [Storybook - Cobertura e CI](../../knowledge-base/docs/storybook-cobertura-e-ci.md) — the operational side, consulted directly
+- [Storybook - Cobertura e CI](../../knowledge-base/storybook-cobertura-e-ci.md) — the operational side, consulted directly

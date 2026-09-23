@@ -7,10 +7,10 @@ supporting material got its own files instead of bloating the `SKILL.md`.
 
 | Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
-| `react-developer` | writing a **new** component, Hook or feature | [React - Patterns](../../knowledge-base/docs/react-patterns.md) | 4 references + 3 examples + 1 script |
-| `react-review` | is this code that **already exists** correct? | [React - Rules of React](../../knowledge-base/docs/react-rules-of-react.md) | 4 references + 1 report + 2 scripts |
-| `react-structure` | **where** the file lives, who imports whom | [Feature-Based Architecture](../../knowledge-base/pages/feature-based-architecture.md) | 3 references + 1 report + 2 scripts |
-| `react-hook-form` | forms: capture, validation, submission | [React Hook Form](../../knowledge-base/docs/react-hook-form.md) | 4 references + 1 example + 2 scripts |
+| `react-developer` | writing a **new** component, Hook or feature | [React - Patterns](../../knowledge-base/react-patterns.md) | 4 references + 3 examples + 1 script |
+| `react-review` | is this code that **already exists** correct? | [React - Rules of React](../../knowledge-base/react-rules-of-react.md) | 4 references + 1 report + 2 scripts |
+| `react-structure` | **where** the file lives, who imports whom | [Feature-Based Architecture](../../knowledge-base/feature-based-architecture.md) | 3 references + 1 report + 2 scripts |
+| `react-hook-form` | forms: capture, validation, submission | [React Hook Form](../../knowledge-base/react-hook-form.md) | 4 references + 1 example + 2 scripts |
 
 Two axes separate the four. Between `react-developer` and `react-review`, **new × already
 exists** — and it is in the first words of each `description`. Between them and the other
@@ -58,7 +58,7 @@ react-structure/
 │ └── exemplo-revisao-de-estrutura.md a whole PR review
 └── scripts/
  ├── sondas-imports.sh 8 boundary probes, starting with enforcement
- └── gerar-mapa-de-ids.sh regenerates from knowledge-base/pages/feature-based-architecture.md
+ └── gerar-mapa-de-ids.sh regenerates from knowledge-base/feature-based-architecture.md
 
 react-hook-form/
 ├── SKILL.md
@@ -70,7 +70,7 @@ react-hook-form/
 │ └── exemplo-lancamento-de-fatura.md from Step 0 to the submit
 └── scripts/
  ├── sondas.sh 12 probes for an existing form
- └── gerar-mapa-de-ids.sh regenerates from knowledge-base/docs/react-hook-form*
+ └── gerar-mapa-de-ids.sh regenerates from knowledge-base/react-hook-form*
 ```
 
 **`mapa-de-ids.md` is generated, not written** — in all four. It indexes the IDs by satellite and
@@ -79,9 +79,9 @@ replica. Three generators, one per family, because the sources and the columns d
 
 | Generator | Family | Source | Columns |
 | --- | --- | --- | --- |
-| `react-review/scripts/gerar-mapa-de-ids.sh` | 105 `REACT-*` | `knowledge-base/docs/react*` | satellite · section · aliases |
-| `react-structure/scripts/gerar-mapa-de-ids.sh` | 12 `REACT-ARCH-*` | [Feature-Based Architecture](../../knowledge-base/pages/feature-based-architecture.md) | **severity** · **who enforces it** · section |
-| `react-hook-form/scripts/gerar-mapa-de-ids.sh` | 81 `RHF-*` | `knowledge-base/docs/react-hook-form*` | satellite · section · cross-doc citation |
+| `react-review/scripts/gerar-mapa-de-ids.sh` | 105 `REACT-*` | `knowledge-base/react*` | satellite · section · aliases |
+| `react-structure/scripts/gerar-mapa-de-ids.sh` | 12 `REACT-ARCH-*` | [Feature-Based Architecture](../../knowledge-base/feature-based-architecture.md) | **severity** · **who enforces it** · section |
+| `react-hook-form/scripts/gerar-mapa-de-ids.sh` | 81 `RHF-*` | `knowledge-base/react-hook-form*` | satellite · section · cross-doc citation |
 
 After editing any source note, run the corresponding generator and reinstall:
 
@@ -103,26 +103,26 @@ procedure and the IDs belong to that layer's skill:
 
 | Layer | Skill | Source doc |
 | --- | --- | --- |
-| remote data, cache, invalidation, optimism | `tanstack-query` | [TanStack Query](../../knowledge-base/docs/tanstack-query.md) |
-| routing, navigation, search params, loader | `tanstack-router` | [TanStack Router](../../knowledge-base/docs/tanstack-router.md) |
+| remote data, cache, invalidation, optimism | `tanstack-query` | [TanStack Query](../../knowledge-base/tanstack-query.md) |
+| routing, navigation, search params, loader | `tanstack-router` | [TanStack Router](../../knowledge-base/tanstack-router.md) |
 | a component confirmed slow, a measured fix | *(rota vaga — ver `memory/STACK.md`)* | — |
-| configuring Storybook, writing a story | `storybook-setup` · `storybook-story` | [Storybook](../../knowledge-base/docs/storybook.md) |
-| an interaction test in the story, the **Vitest** runner | `storybook-test` | [Storybook - Testes e Interações](../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4 |
-| the test's **level**: unit × integration × e2e | `test-design` | [Teste de Software - Níveis e Escopo](../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
-| the suite as a system: does it protect? is it trustworthy? | `test-review` · `test-diagnose` | [Teste de Software](../../knowledge-base/docs/teste-de-software.md) |
-| **unit and integration** in `bun test` | `bun-test-build` · `bun-test-review` | [Bun - Testes](../../knowledge-base/docs/bun-testes.md) |
-| **e2e** | `playwright-build` · `playwright-review` · `playwright-diagnose` | [Playwright](../../knowledge-base/docs/playwright.md) |
-| an API route, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | [Elysia](../../knowledge-base/docs/elysia.md) |
-| persistence: schema, migration, query | `drizzle-review` | [Drizzle ORM](../../knowledge-base/docs/drizzle-orm.md) |
-| the HTTP contract: method, status, cache, CORS | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [HTTP](../../knowledge-base/docs/http.md) |
-| runtime, dependencies, migrating from Node | `bun-runtime` · `bun-workspace` · `bun-migrate` | [Bun](../../knowledge-base/docs/bun.md) |
+| configuring Storybook, writing a story | `storybook-setup` · `storybook-story` | [Storybook](../../knowledge-base/storybook.md) |
+| an interaction test in the story, the **Vitest** runner | `storybook-test` | [Storybook - Testes e Interações](../../knowledge-base/storybook-testes-e-interacoes.md) § 4 |
+| the test's **level**: unit × integration × e2e | `test-design` | [Teste de Software - Níveis e Escopo](../../knowledge-base/teste-de-software-niveis-e-escopo.md) |
+| the suite as a system: does it protect? is it trustworthy? | `test-review` · `test-diagnose` | [Teste de Software](../../knowledge-base/teste-de-software.md) |
+| **unit and integration** in `bun test` | `bun-test-build` · `bun-test-review` | [Bun - Testes](../../knowledge-base/bun-testes.md) |
+| **e2e** | `playwright-build` · `playwright-review` · `playwright-diagnose` | [Playwright](../../knowledge-base/playwright.md) |
+| an API route, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | [Elysia](../../knowledge-base/elysia.md) |
+| persistence: schema, migration, query | `drizzle-review` | [Drizzle ORM](../../knowledge-base/drizzle-orm.md) |
+| the HTTP contract: method, status, cache, CORS | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [HTTP](../../knowledge-base/http.md) |
+| runtime, dependencies, migrating from Node | `bun-runtime` · `bun-workspace` · `bun-migrate` | [Bun](../../knowledge-base/bun.md) |
 
 Two boundaries that tend to be crossed in the wrong direction:
 
 - **Testing: concept before tool.** *At which level* is `test-design`; *how to write it*
  is the tool's skill. Skipping the first produces E2E by default.
 - **Vitest is not a skill here.** It appears as the runner of `@storybook/addon-vitest`,
- running a story in a real browser through Playwright ([Storybook - Testes e Interações](../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4;
+ running a story in a real browser through Playwright ([Storybook - Testes e Interações](../../knowledge-base/storybook-testes-e-interacoes.md) § 4;
  the cut between Vitest 3 and 4 in § 4.2). A unit test outside Storybook is `bun test`.
 
 ## Validation
@@ -159,4 +159,4 @@ Regenerate: `bash scripts/medir.sh`
 ## Related
 
 - [Skills index](../README.md) — the general index and the common anatomy
-- [React.js](../../knowledge-base/docs/react-js.md) § 7 — the contract both implement
+- [React.js](../../knowledge-base/react-js.md) § 7 — the contract both implement

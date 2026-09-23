@@ -53,4 +53,4 @@ Two cases that are **not** findings, and confusing them burns the report's credi
 - **Absence of a test.** "This module has no test" is a strategy decision, not a rule violation —. Report it as a question, not as a defect.
 - **Assertion style.** `toEqual` where you would use `toStrictEqual` is only a finding if the exact shape is the contract. Without that argument, it is preference.
 
-If the scan finds a recurring, real defect with no matching rule, the right product is a **rule proposal** for [Bun - Testes](../../../../knowledge-base/docs/bun-testes.md) § 6 — suggested ID, text and the case that motivated it — not a fake citation.
+If the scan finds a recurring, real defect with no matching rule, the right product is a **rule proposal** for [Bun - Testes](../../../../knowledge-base/bun-testes.md) § 6 — suggested ID, text and the case that motivated it — not a fake citation.

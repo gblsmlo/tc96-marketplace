@@ -16,4 +16,4 @@ Overlaps resolved:
 
 When reporting a finding in a review, use `react-review`'s format — canonical ID + `file:line` + concrete fix + satellite link. The `TSQ-*` IDs fit that format just as the `REACT-*` ones do.
 
-**Honesty rule:** if the API you touched appears neither in [TanStack Query](../../../../knowledge-base/docs/tanstack-query.md) § 4 nor in the satellites, it has not been verified in this doc. Declare the limitation, consult [tanstack.com/query](https://tanstack.com/query/latest/docs/framework/react/overview) and propose updating the note — do not assert behavior and do not invent an ID ([TanStack Query](../../../../knowledge-base/docs/tanstack-query.md) § 7).
+**Honesty rule:** if the API you touched appears neither in [TanStack Query](../../../../knowledge-base/tanstack-query.md) § 4 nor in the satellites, it has not been verified in this doc. Declare the limitation, consult [tanstack.com/query](https://tanstack.com/query/latest/docs/framework/react/overview) and propose updating the note — do not assert behavior and do not invent an ID ([TanStack Query](../../../../knowledge-base/tanstack-query.md) § 7).

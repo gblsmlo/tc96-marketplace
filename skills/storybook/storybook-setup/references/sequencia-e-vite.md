@@ -4,13 +4,13 @@ The official docs document each piece in isolation and **never the order**. For 
 
 | # | Step | Reference |
 | --- | --- | --- |
-| 1 | create `apps/storybook` with its own `package.json`, declared in the workspace | [Bun - Gerenciador de Pacotes](../../../../knowledge-base/docs/bun-gerenciador-de-pacotes.md) |
+| 1 | create `apps/storybook` with its own `package.json`, declared in the workspace | [Bun - Gerenciador de Pacotes](../../../../knowledge-base/bun-gerenciador-de-pacotes.md) |
 | 2 | install the framework and addons, **all on the same version** | `SB-CFG-04` |
 | 3 | create `apps/storybook/vite.config.ts` inheriting the shared base | Step 4 |
 | 4 | write `main.ts` with `framework`, `stories`, `addons` | `SB-CFG-01`, `SB-CFG-02` |
 | 5 | write `preview.tsx` with global CSS, providers, project parameters | `SB-CFG-03` |
 | 6 | **start it and check the sidebar** | `SB-CFG-02` |
-| 7 | only then turn on the runner | [Storybook - Testes e Interações](../../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4 |
+| 7 | only then turn on the runner | [Storybook - Testes e Interações](../../../../knowledge-base/storybook-testes-e-interacoes.md) § 4 |
 
 **Step 6 before step 7 is deliberate:** debugging a glob and a runner at the same time costs double. And a glob that does not match **raises no error** — it gives an empty sidebar, which is this skill's most confusing symptom.
 
@@ -46,7 +46,7 @@ export default defineConfig(baseConfig);
 
 Alias, plugin and `define` declared **once**, inherited by `apps/web`, `apps/storybook` and by the `vitest.config.ts` (`SB-CFG-06`).
 
-> **This arrangement is the vault's decision, not the source's.** The 2026-08-19 review found that `SB-CFG-06` was **impossible to follow** in the layout the docs themselves prescribe. See [Storybook - Pendências de revisão](../../../../knowledge-base/docs/storybook-pendencias-de-revisao.md).
+> **This arrangement is the vault's decision, not the source's.** The 2026-08-19 review found that `SB-CFG-06` was **impossible to follow** in the layout the docs themselves prescribe. See [Storybook - Pendências de revisão](../../../../knowledge-base/storybook-pendencias-de-revisao.md).
 
 **`viteFinal` is almost never needed.** If you are reaching through it for something the base should already give, the problem is the inheritance in Step 4 — not the hook.
 

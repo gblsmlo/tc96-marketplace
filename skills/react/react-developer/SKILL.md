@@ -4,7 +4,7 @@ descricao: Write a new React component, custom Hook or feature — three structu
 tipo: skill
 familia: react
 idioma: en
-fonte: "[React - Patterns](../../../knowledge-base/docs/react-patterns.md)"
+fonte: "[React - Patterns](../../../knowledge-base/react-patterns.md)"
 docs:
   - /reactjs/react.dev
 tags:
@@ -14,13 +14,13 @@ tags:
 
 # react-developer
 
-> **Source of this skill:** [React - Patterns](../../../knowledge-base/docs/react-patterns.md) (structural decisions), with [React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.md) as the normative base and [React.js](../../../knowledge-base/docs/react-js.md) as the API router.
+> **Source of this skill:** [React - Patterns](../../../knowledge-base/react-patterns.md) (structural decisions), with [React - Rules of React](../../../knowledge-base/react-rules-of-react.md) as the normative base and [React.js](../../../knowledge-base/react-js.md) as the API router.
 > This skill **does not repeat** the rules or the API surface — it defines the order of decisions and points at what to open at each point. The text of the rules lives in the source notes; an update there propagates here.
 >
 > Successor to `react-developer`, with the same procedure and the internal references that were missing.
 > **API surface:** resolve it through Context7 — `/reactjs/react.dev`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [React.js](../../../knowledge-base/docs/react-js.md) § 7 ("Contrato de skill").
+Contract this skill implements: [React.js](../../../knowledge-base/react-js.md) § 7 ("Contrato de skill").
 
 ---
 
@@ -41,7 +41,7 @@ Writing a **new** React component, custom Hook or feature — or rewriting a pas
 
 ## Minimum loading
 
-Per [React.js](../../../knowledge-base/docs/react-js.md) § 7:
+Per [React.js](../../../knowledge-base/react-js.md) § 7:
 
 ```
 ALWAYS: React.js § 2 (mental model)
@@ -73,11 +73,11 @@ References in this skill — open only the one the step asks for:
 
 ## Step 1 — The three structural questions, before any code
 
-From [React - Patterns](../../../knowledge-base/docs/react-patterns.md) § 1. The order matters: composition chosen before data ownership almost always produces prop drilling.
+From [React - Patterns](../../../knowledge-base/react-patterns.md) § 1. The order matters: composition chosen before data ownership almost always produces prop drilling.
 
-1. **Whose data is this?** → state placement. Detail in [React - Patterns](../../../knowledge-base/docs/react-patterns.md) § 2.
-2. **Who supplies the variable content?** → composition. Detail in [React - Patterns](../../../knowledge-base/docs/react-patterns.md) § 3.
-3. **Where should a failure or a wait stop?** → boundaries (Error Boundary, `<Suspense>`, `'use client'`, the server). Detail in [React - Patterns](../../../knowledge-base/docs/react-patterns.md) § 6.
+1. **Whose data is this?** → state placement. Detail in [React - Patterns](../../../knowledge-base/react-patterns.md) § 2.
+2. **Who supplies the variable content?** → composition. Detail in [React - Patterns](../../../knowledge-base/react-patterns.md) § 3.
+3. **Where should a failure or a wait stop?** → boundaries (Error Boundary, `<Suspense>`, `'use client'`, the server). Detail in [React - Patterns](../../../knowledge-base/react-patterns.md) § 6.
 
 Answer all three **in writing**, one sentence each, before the first line of JSX. If you cannot answer 1, the problem is not the code: the data's origin has not been defined.
 
@@ -85,7 +85,7 @@ Answer all three **in writing**, one sentence each, before the first line of JSX
 
 ## Step 2 — Choose the API through the decision trees
 
-Do not choose the Hook out of habit. Walk the corresponding tree in [React.js](../../../knowledge-base/docs/react-js.md) § 5 — the route, the path mistakes and the four short exits are in `references/arvores-de-decisao.md`.
+Do not choose the Hook out of habit. Walk the corresponding tree in [React.js](../../../knowledge-base/react-js.md) § 5 — the route, the path mistakes and the four short exits are in `references/arvores-de-decisao.md`.
 
 | The task's symptom | Tree to walk |
 | --- | --- |
@@ -94,15 +94,15 @@ Do not choose the Hook out of habit. Walk the corresponding tree in [React.js](.
 | "the UI freezes" | *A UI trava durante uma atualização* — the order is normative and **does not start with memoization** |
 | "I need to deal with something async" | *Preciso lidar com algo assíncrono* |
 
-After choosing the API, confirm its source package in [React.js](../../../knowledge-base/docs/react-js.md) § 3 and the satellite in [React.js](../../../knowledge-base/docs/react-js.md) § 4. Open **only that** satellite.
+After choosing the API, confirm its source package in [React.js](../../../knowledge-base/react-js.md) § 3 and the satellite in [React.js](../../../knowledge-base/react-js.md) § 4. Open **only that** satellite.
 
-**Before using the raw primitive, check [React.js](../../../knowledge-base/docs/react-js.md) § 8.** Remote data, caching, URL state, boundary validation and frequently written global state already have an answer in this stack — using `useEffect` + `useState` where the stack solves it is a regression, not simplicity.
+**Before using the raw primitive, check [React.js](../../../knowledge-base/react-js.md) § 8.** Remote data, caching, URL state, boundary validation and frequently written global state already have an answer in this stack — using `useEffect` + `useState` where the stack solves it is a regression, not simplicity.
 
 ---
 
 ## Step 3 — Writing
 
-Keep [React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.md) loaded. Three anchors of the mental model ([React.js](../../../knowledge-base/docs/react-js.md) § 2) decide nearly everything:
+Keep [React - Rules of React](../../../knowledge-base/react-rules-of-react.md) loaded. Three anchors of the mental model ([React.js](../../../knowledge-base/react-js.md) § 2) decide nearly everything:
 
 - a component is a pure function of its inputs;
 - state is a snapshot, not a variable;
@@ -120,9 +120,9 @@ The five that appear in almost all generated code:
 
 | Habit | Instead of it | Rule |
 | --- | --- | --- |
-| a `fetch` inside a `useEffect` | a data-fetching library ([React.js](../../../knowledge-base/docs/react-js.md) § 8) | `REACT-EFFECT-06` |
+| a `fetch` inside a `useEffect` | a data-fetching library ([React.js](../../../knowledge-base/react-js.md) § 8) | `REACT-EFFECT-06` |
 | `useState` + `useEffect` for a computable value | compute it in the render, in the state's owner | `REACT-PAT-01` |
-| `useState` for a filter, a tab, pagination | [TanStack Router](../../../knowledge-base/docs/tanstack-router.md) search params | `REACT-PAT-10` |
+| `useState` for a filter, a tab, pagination | [TanStack Router](../../../knowledge-base/tanstack-router.md) search params | `REACT-PAT-10` |
 | memoization "just in case" | measure first; and check whether the React Compiler is active | `REACT-PERF-01`, `REACT-PERF-02` |
 | an Error Boundary only at the root | a boundary at the feature level, next to every data `<Suspense>` | `REACT-PAT-06`, `REACT-ASYNC-08` |
 
@@ -139,7 +139,7 @@ bash ${CLAUDE_PLUGIN_ROOT}/skills/react-developer/scripts/autoverificar.sh src/f
 ```
 
 
-1. **Normative checklist** — § 5 of [React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.md), ordered by failure frequency.
+1. **Normative checklist** — § 5 of [React - Rules of React](../../../knowledge-base/react-rules-of-react.md), ordered by failure frequency.
 2. **Habits table** — for each line, did the code avoid the habit?
 3. **Three closing questions** — does every `useState` survive the state tree? does every `useEffect` synchronize with a **nameable** external system? does every memoization have a measurement?
 
@@ -151,27 +151,27 @@ Two checks that change the code and therefore run **before** the first line: Rea
 
 ## Neighbors — when the feature leaves React
 
-Before writing the raw primitive, confirm whose layer it is. [React.js](../../../knowledge-base/docs/react-js.md) § 8 lists what the stack already solves; the table below says **which skill** carries the procedure.
+Before writing the raw primitive, confirm whose layer it is. [React.js](../../../knowledge-base/react-js.md) § 8 lists what the stack already solves; the table below says **which skill** carries the procedure.
 
 | The layer is… | Skill | Source doc |
 | --- | --- | --- |
-| remote data, cache, invalidation, optimistic update | `tanstack-query` | [TanStack Query](../../../knowledge-base/docs/tanstack-query.md) |
-| routing, navigation, search params, loader, code splitting | `tanstack-router` | [TanStack Router](../../../knowledge-base/docs/tanstack-router.md) |
-| a form with validation, conditional fields, field arrays | `react-hook-form` | [React Hook Form](../../../knowledge-base/docs/react-hook-form.md) |
-| where the file lives and who imports whom | `react-structure` | [Feature-Based Architecture](../../../knowledge-base/pages/feature-based-architecture.md) |
-| a story, args, controls, the docs page | `storybook-story` · `storybook-setup` | [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md) |
-| an interaction test in the story, the **Vitest runner** | `storybook-test` | [Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4 |
-| **at which level** this test goes (unit × integration × e2e) | `test-design` | [Teste de Software - Níveis e Escopo](../../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) |
-| **unit and integration** under `bun test` | `bun-test-build` · `bun-test-review` | [Bun - Testes](../../../knowledge-base/docs/bun-testes.md) |
-| **e2e** — writing, auditing, diagnosing | `playwright-build` · `playwright-review` · `playwright-diagnose` | [Playwright](../../../knowledge-base/docs/playwright.md) |
-| an API route, handler, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | [Elysia](../../../knowledge-base/docs/elysia.md) |
-| schema, migration, query, N+1 | `drizzle-review` | [Drizzle ORM](../../../knowledge-base/docs/drizzle-orm.md) |
-| method, status, cache, CORS, the API contract | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [HTTP](../../../knowledge-base/docs/http.md) |
+| remote data, cache, invalidation, optimistic update | `tanstack-query` | [TanStack Query](../../../knowledge-base/tanstack-query.md) |
+| routing, navigation, search params, loader, code splitting | `tanstack-router` | [TanStack Router](../../../knowledge-base/tanstack-router.md) |
+| a form with validation, conditional fields, field arrays | `react-hook-form` | [React Hook Form](../../../knowledge-base/react-hook-form.md) |
+| where the file lives and who imports whom | `react-structure` | [Feature-Based Architecture](../../../knowledge-base/feature-based-architecture.md) |
+| a story, args, controls, the docs page | `storybook-story` · `storybook-setup` | [Storybook - Stories e Args](../../../knowledge-base/storybook-stories-e-args.md) |
+| an interaction test in the story, the **Vitest runner** | `storybook-test` | [Storybook - Testes e Interações](../../../knowledge-base/storybook-testes-e-interacoes.md) § 4 |
+| **at which level** this test goes (unit × integration × e2e) | `test-design` | [Teste de Software - Níveis e Escopo](../../../knowledge-base/teste-de-software-niveis-e-escopo.md) |
+| **unit and integration** under `bun test` | `bun-test-build` · `bun-test-review` | [Bun - Testes](../../../knowledge-base/bun-testes.md) |
+| **e2e** — writing, auditing, diagnosing | `playwright-build` · `playwright-review` · `playwright-diagnose` | [Playwright](../../../knowledge-base/playwright.md) |
+| an API route, handler, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | [Elysia](../../../knowledge-base/elysia.md) |
+| schema, migration, query, N+1 | `drizzle-review` | [Drizzle ORM](../../../knowledge-base/drizzle-orm.md) |
+| method, status, cache, CORS, the API contract | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [HTTP](../../../knowledge-base/http.md) |
 
 Three boundaries that tend to be crossed in the wrong direction:
 
 - **Testing: concept before tool.** Deciding *the level* is `test-design`; writing is the tool's skill. Skipping the first produces E2E by default — the highest-cost antipattern in this stack.
-- **Vitest has no skill of its own here.** It is the *runner* of `@storybook/addon-vitest`, executing a story in a real browser through Playwright ([Storybook - Testes e Interações](../../../knowledge-base/docs/storybook-testes-e-interacoes.md) § 4; the cut between Vitest 3 and 4 is in § 4.2). A unit test outside Storybook is `bun test`.
+- **Vitest has no skill of its own here.** It is the *runner* of `@storybook/addon-vitest`, executing a story in a real browser through Playwright ([Storybook - Testes e Interações](../../../knowledge-base/storybook-testes-e-interacoes.md) § 4; the cut between Vitest 3 and 4 is in § 4.2). A unit test outside Storybook is `bun test`.
 - **Optimism has two owners.** If the data lives in Query's cache, the optimism belongs to the mutation, with a snapshot and a rollback; `useOptimistic` is for what does not live in a cache. Stacking the two violates `REACT-FORM-07`.
 
 ---
@@ -192,6 +192,6 @@ The same component done wrong and then fixed, defect by ID: `references/exemplo-
 
 - `react-review` — the sibling skill, for reviewing existing code
 - `react-structure` — where the file lives and who imports whom
-- [React - Patterns](../../../knowledge-base/docs/react-patterns.md) — source of this skill
-- [React - Rules of React](../../../knowledge-base/docs/react-rules-of-react.md) — the normative base, required when writing
-- [React.js](../../../knowledge-base/docs/react-js.md) — the hub, API map, decision trees, bridges with the stack
+- [React - Patterns](../../../knowledge-base/react-patterns.md) — source of this skill
+- [React - Rules of React](../../../knowledge-base/react-rules-of-react.md) — the normative base, required when writing
+- [React.js](../../../knowledge-base/react-js.md) — the hub, API map, decision trees, bridges with the stack

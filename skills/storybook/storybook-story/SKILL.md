@@ -4,7 +4,7 @@ descricao: Write or review a component story — file anatomy, typing with `sati
 tipo: skill
 familia: storybook
 idioma: en
-fonte: "[Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md)"
+fonte: "[Storybook - Stories e Args](../../../knowledge-base/storybook-stories-e-args.md)"
 docs:
   - /storybookjs/storybook
 tags:
@@ -15,11 +15,11 @@ tags:
 
 # storybook-story
 
-> **Source of this skill:** [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md), with the [Storybook](../../../knowledge-base/docs/storybook.md) hub as the router.
+> **Source of this skill:** [Storybook - Stories e Args](../../../knowledge-base/storybook-stories-e-args.md), with the [Storybook](../../../knowledge-base/storybook.md) hub as the router.
 > This skill **does not contain** the text of the rules — it says what to decide and what to check.
 > **API surface:** resolve it through Context7 — `/storybookjs/storybook`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
 
-Contract this skill implements: [Storybook](../../../knowledge-base/docs/storybook.md) § 7.
+Contract this skill implements: [Storybook](../../../knowledge-base/storybook.md) § 7.
 
 ---
 
@@ -50,9 +50,9 @@ Creating or reviewing `*.stories.tsx`.
 
 | Order | Load |
 | --- | --- |
-| 1 | [Storybook](../../../knowledge-base/docs/storybook.md) § 2 (mental model) and § 6 |
-| 2 | [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md) |
-| 3 | [Storybook - Decorators e Contexto](../../../knowledge-base/docs/storybook-decorators-e-contexto.md) when the story needs an environment |
+| 1 | [Storybook](../../../knowledge-base/storybook.md) § 2 (mental model) and § 6 |
+| 2 | [Storybook - Stories e Args](../../../knowledge-base/storybook-stories-e-args.md) |
+| 3 | [Storybook - Decorators e Contexto](../../../knowledge-base/storybook-decorators-e-contexto.md) when the story needs an environment |
 | 4 | the path note, **if** the story touches routing |
 
 References in this skill:
@@ -123,7 +123,7 @@ Full case: `references/exemplo.md`.
 
 ## Related
 
-- [Storybook - Stories e Args](../../../knowledge-base/docs/storybook-stories-e-args.md) — source of this skill
-- [Storybook - Decorators e Contexto](../../../knowledge-base/docs/storybook-decorators-e-contexto.md) — the environment that is not `args`
-- [Storybook - Docs e Autodocs](../../../knowledge-base/docs/storybook-docs-e-autodocs.md) — the docs page
+- [Storybook - Stories e Args](../../../knowledge-base/storybook-stories-e-args.md) — source of this skill
+- [Storybook - Decorators e Contexto](../../../knowledge-base/storybook-decorators-e-contexto.md) — the environment that is not `args`
+- [Storybook - Docs e Autodocs](../../../knowledge-base/storybook-docs-e-autodocs.md) — the docs page
 - `storybook-setup` · `storybook-test` — the sibling skills

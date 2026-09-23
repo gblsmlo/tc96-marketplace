@@ -6,9 +6,9 @@ suite protects** — and they never write tests: that belongs to the tool layer
 
 | Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
-| `test-design` | what test do I write, and at which level? | [Teste de Software - Níveis e Escopo](../../knowledge-base/docs/teste-de-software-niveis-e-escopo.md) | 4 references + 1 example + 1 script |
-| `test-review` | does this suite protect anything? | [Teste de Software](../../knowledge-base/docs/teste-de-software.md) | 4 references + 1 audit + 1 script |
-| `test-diagnose` | why does nobody trust this suite? | [Teste de Software - Confiabilidade da Suíte](../../knowledge-base/docs/teste-de-software-confiabilidade-da-suite.md) | 4 references + 1 diagnosis + 1 script |
+| `test-design` | what test do I write, and at which level? | [Teste de Software - Níveis e Escopo](../../knowledge-base/teste-de-software-niveis-e-escopo.md) | 4 references + 1 example + 1 script |
+| `test-review` | does this suite protect anything? | [Teste de Software](../../knowledge-base/teste-de-software.md) | 4 references + 1 audit + 1 script |
+| `test-diagnose` | why does nobody trust this suite? | [Teste de Software - Confiabilidade da Suíte](../../knowledge-base/teste-de-software-confiabilidade-da-suite.md) | 4 references + 1 diagnosis + 1 script |
 
 **The order is concept → tool.** Skipping this layer produces **E2E by default**, the
 highest-cost antipattern in this stack (`TS-CORE-02`).
@@ -59,5 +59,5 @@ Regenerate: `bash scripts/medir.sh`
 
 ## Related
 
-- [Skills index](../README.md) · [Teste de Software](../../knowledge-base/docs/teste-de-software.md) § 7 — the contract all three implement
+- [Skills index](../README.md) · [Teste de Software](../../knowledge-base/teste-de-software.md) § 7 — the contract all three implement
 - `twincam-e2e: playwright family` · `twincam-backend: bun family` — the tool layer
