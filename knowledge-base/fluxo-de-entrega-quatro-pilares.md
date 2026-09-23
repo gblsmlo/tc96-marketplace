@@ -32,7 +32,7 @@ Fontes consultadas em **2026-09-23**. Ver [Fontes consultadas](#fontes-consultad
 
 ---
 
-## 0. Antes de tudo: três distinções que decidem a conversa
+## 0. Antes de tudo: quatro distinções que decidem a conversa
 
 **1. Pilar × papel.** *Pilar* é o momento do trabalho — pesquisa, planejamento, implementação
 ou validação. *Papel* é quem o exerce — um dos onze agentes de `agents/README.md`.
@@ -53,6 +53,16 @@ Uma pesquisa que devolve mais perguntas do que a decisão pedida não terminou.
 coisa certa?" (aceite de negócio). O pilar de Validação desta nota cobre a **primeira**
 pergunta — é verificação técnica. A segunda pergunta é responsabilidade do `product-manager`
 e acontece **depois** do fechamento técnico, nunca o bloqueando (`WF-VAL-03`).
+
+**4. Pilar × nível de board.** *Nível de board* é a granularidade em que uma decisão vira
+trabalho rastreável — Epic (capacidade permanente), Story (unidade de aceite) ou Task (corte
+executável), definidos em `workflow-planning/references/template-{epic,story,task}.md`. A
+Pesquisa (a descoberta contínua do item 2) **nunca** produz um item de board diretamente: ela
+produz a decisão mínima que autoriza o Planejamento a abrir um. É no Planejamento, pelos
+portões de decomposição e de fronteira (§4.2, `WF-PLAN-03`, `WF-PLAN-05`), que a árvore
+Epic → Story → Task nasce. Abrir o Epic no rastreador assim que alguém tem uma ideia é o erro
+espelhado de `WF-CORE-03`: em vez de pular a Pesquisa, finge que ela já terminou. Tabela
+completa em §3. †
 
 ---
 
@@ -96,16 +106,25 @@ mas nunca decide "vou resolver isso na implementação mesmo" quando a lacuna é
 
 ## 3. Onde cada pilar roteia
 
-| Pilar | Skill | Agente(s) que o exercem, hoje |
-| --- | --- | --- |
-| Pesquisa | `workflow-research` | `product-manager` · `product-designer` · `software-architect` |
-| Planejamento | `workflow-planning` | `project-manager` · `software-architect` |
-| Implementação | `workflow-implementation` | `frontend-developer` · `backend-developer` |
-| Validação | `workflow-validation` | `qa-engineer` · `code-reviewer` · `devops-security` (quando o achado é de segurança) |
+| Pilar | Skill | Agente(s) que o exercem, hoje | Nível de board |
+| --- | --- | --- | --- |
+| Pesquisa | `workflow-research` | `product-manager` · `product-designer` · `software-architect` | — nenhum item ainda; sai com a decisão que autoriza um (§0.4) |
+| Planejamento | `workflow-planning` | `project-manager` · `software-architect` | abre e decompõe Epic → Story → Task (`template-epic.md` · `template-story.md` · `template-task.md`) |
+| Implementação | `workflow-implementation` | `frontend-developer` · `backend-developer` | executa um Task por vez — o único nível que quem implementa lê (`WF-IMPL-03`) |
+| Validação | `workflow-validation` | `qa-engineer` · `code-reviewer` · `devops-security` (quando o achado é de segurança) | revisa o PR (`template-pr.md`), com link de mão única de volta ao Task/Story |
 
 Este mapeamento é o mesmo fluxograma de `agents/README.md`, seção "Como os agentes passam o
 bastão" — aqui só como tabela, sem repetir o mermaid. Quando um agente novo for adicionado lá, esta tabela é
 quem precisa de atualização, não o inverso.
+
+A coluna de nível de board é o percurso "descobrir → tarefa" por inteiro, de ponta a ponta:
+Pesquisa resolve a decisão (o `product-manager` chama isso de Discovery); Planejamento é onde
+essa decisão primeiro vira item de board, se decompõe em Story e corta em Task, sempre pelos
+cinco portões (§4.2); Implementação executa exatamente um Task por vez; Validação revisa o PR
+que referencia esse Task. Nenhum pilar escreve em dois níveis de board ao mesmo tempo, e
+nenhum nível nasce fora do pilar que o produz — abrir uma Task direto, sem Story e sem Epic,
+é decomposição sem critério (`WF-PLAN-03`), do mesmo jeito que abrir um Epic sem decisão de
+Pesquisa por trás é avanço sem decisão resolvida (`WF-CORE-03`).
 
 ---
 
@@ -317,6 +336,7 @@ NUNCA:    esta estrutura inteira para uma tarefa cujo pilar já é óbvio
 | Decisão | O que **não** fazer | A ponte |
 | --- | --- | --- |
 | Decidir se uma mudança é de produto, arquitetura ou detalhe | assumir e seguir para o código | `product-manager` / `software-architect` — §4.1 |
+| Abrir Epic/Story/Task no rastreador | criar o item assim que a ideia aparece, antes da decisão | `workflow-research` decide o escopo primeiro (§4.1) — o Board só abre no Planejamento, com a decisão já resolvida (§0.4, §3) |
 | Decidir em que nível um teste da unidade entra | deixar para a hora de escrever | `test-design`, existente — não é reimplementado aqui |
 | Revisar uma mudança já implementada | o próprio autor aprovar | `code-reviewer`, em contexto fresco (`WF-VAL-01`, `CC-SES-07`) |
 | Decidir o contrato HTTP de uma rota nova | inventar status/shape no handler | `http-contract`, existente |

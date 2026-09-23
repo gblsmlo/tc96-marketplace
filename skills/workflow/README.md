@@ -52,6 +52,11 @@ template. Adapted from a real reference project, lemind (`studio-risine`), speci
 `docs/product/templates/{epic,story,task}.md` and `.github/pull_request_template.md`, current
 as of ADR 117 (`docs/decisions/117-o-multica-e-autoridade-unica-do-backlog.md`).
 
+The full "discover → task" path — where product Discovery ends and the board begins, and
+which pillar owns each board level — is the fourth distinction in the hub, §0.4 and the
+board column in §3: research never opens a board item, planning is where Epic → Story → Task
+is born, implementation executes one Task, validation reviews the PR that closes it.
+
 Two decisions were made adapting that model into the neutral source, both confirmed with the
 project owner while dogfooding `workflow-research` on this exact task:
 
