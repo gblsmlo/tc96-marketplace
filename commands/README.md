@@ -18,7 +18,7 @@ As 10 fases, executáveis uma a uma:
 | --- | --- |
 | [`scaffold-01-tanstack-start`](scaffold-01-tanstack-start.md) | Fase 1 — base TanStack Start com TypeScript, Tailwind e Vite |
 | [`scaffold-02-biome`](scaffold-02-biome.md) | Fase 2 — Biome como lint e formatter |
-| [`scaffold-03-vitest`](scaffold-03-vitest.md) | Fase 3 — Vitest e Testing Library |
+| [`scaffold-03-bun-test`](scaffold-03-bun-test.md) | Fase 3 — `bun test`, happy-dom e Testing Library |
 | [`scaffold-04-git-hooks`](scaffold-04-git-hooks.md) | Fase 4 — git hooks e portões de commit |
 | [`scaffold-05-fba`](scaffold-05-fba.md) | Fase 5 — estrutura de diretórios Feature-Based Architecture |
 | [`scaffold-06-shadcn`](scaffold-06-shadcn.md) | Fase 6 — shadcn/ui e tokens de design |
@@ -37,7 +37,7 @@ escrito por extenso:
 | --- | --- |
 | [`scaffold-fba-01-start`](scaffold-fba-01-start.md) | Variante FBA — fase 1, base do projeto |
 | [`scaffold-fba-02-biome`](scaffold-fba-02-biome.md) | Variante FBA — fase 2, Biome |
-| [`scaffold-fba-03-vitest`](scaffold-fba-03-vitest.md) | Variante FBA — fase 3, Vitest |
+| [`scaffold-fba-03-bun-test`](scaffold-fba-03-bun-test.md) | Variante FBA — fase 3, `bun test` e Testing Library |
 | [`scaffold-fba-04-git-hooks`](scaffold-fba-04-git-hooks.md) | Variante FBA — fase 4, git hooks |
 | [`scaffold-fba-05-fba`](scaffold-fba-05-fba.md) | Variante FBA — fase 5, estrutura de diretórios |
 
@@ -72,6 +72,12 @@ O gerenciador e o runner são **Bun**, não pnpm. O que a migração fixou, por 
 Equivalências usadas: `pnpm add -D` → `bun add -d` · `pnpm dlx`/`pnpm exec`/`npx` → `bunx`
 · `node -e` → `bun -e` com `Bun.file`/`Bun.write` · `pnpm-lock.yaml` → `bun.lock`.
 
+**As fases 3 rodam em `bun test`**, não em Vitest — `scaffold-03-bun-test` e
+`scaffold-fba-03-bun-test`. O `vitest.config.ts` sumiu junto: `bun test` lê
+`compilerOptions.paths` do `tsconfig.json` (verificado no bun 1.3.14), e o mapa de alias
+duplicado — cuja divergência com o `tsconfig` era o modo de falha documentado da fase —
+deixou de existir. O que se perde é o `test:ui`, que o `bun test` não tem.
+
 `bunx @tanstack/create-start@latest` em vez de `bun create @tanstack/start@latest`: o
 `bun create <t>` roda `bunx create-<t>`, e essa regra não resolve pacote com escopo. O
 pacote real é [`@tanstack/create-start`](https://www.npmjs.com/package/@tanstack/create-start).
@@ -86,10 +92,6 @@ sai com 1 em nome ausente. `bun remove` aceita vários nomes, remove o que exist
 Estes 17 arquivos vieram do build anterior **sem revisão de conteúdo**. O que a migração
 para Bun encostou, e não resolveu:
 
-- **Vitest × `bun test`.** As fases 3 instalam Vitest + Testing Library como runner de
-  unidade. A regra da casa é outra: *"teste de unidade fora do Storybook é `bun test`"*
-  (`react-developer`), e o Vitest existe aqui como runner do `@storybook/addon-vitest`.
-  Trocar renomeia duas fases e muda o que `test-design` roteia — é decisão, não conserto.
 - **`vinxi` nos scripts `dev`/`build`/`start`.** É o driver antigo do TanStack Start; as
   versões atuais rodam sobre Vite direto.
 - **`biome.json` com `$schema` da 1.9.4**, e no formato da v1 (`organizeImports` na raiz).

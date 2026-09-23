@@ -164,49 +164,68 @@ EOF
 
 ---
 
-## Phase 3: Testing Infrastructure (Vitest)
+## Phase 3: Testing Infrastructure (`bun test`)
 
-**Objective:** Install and configure Vitest with all path aliases.
+**Objective:** Configure `bun test` with happy-dom and Testing Library. There is **no**
+`vitest.config.ts`: `bun test` reads `compilerOptions.paths` from `tsconfig.json`, so the
+alias map exists once, not twice.
 
 **Commands:**
 ```bash
-bun add -d vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom happy-dom
+bun add -d @happy-dom/global-registrator @testing-library/react \
+            @testing-library/dom @testing-library/jest-dom @testing-library/user-event
 ```
 
 **Configuration:**
 ```bash
-cat > vitest.config.ts <<'EOF'
-import { defineConfig } from "vitest/config";
-import react from "@vitejs/plugin-react";
-import path from "path";
+mkdir -p test
 
-export default defineConfig({
-  plugins: [react()],
-  test: {
-    environment: "happy-dom",
-    setupFiles: ["./app/setupTests.ts"],
-    globals: true,
-  },
-  resolve: {
-    alias: {
-      "@features": path.resolve(__dirname, "./app/features"),
-      "@components": path.resolve(__dirname, "./app/components"),
-      "@types": path.resolve(__dirname, "./app/types"),
-      "@libs": path.resolve(__dirname, "./app/libs"),
-      "@utils": path.resolve(__dirname, "./app/utils")
-    },
-  },
+# preload 1 — browser globals first; the order is load-bearing
+cat > test/happydom.ts <<'EOF'
+import { GlobalRegistrator } from "@happy-dom/global-registrator";
+
+GlobalRegistrator.register();
+EOF
+
+# preload 2 — matchers and cleanup. `expect.extend` is mandatory: importing
+# "@testing-library/jest-dom" alone does NOT register matchers in bun:test.
+cat > test/testing-library.ts <<'EOF'
+import { afterEach, expect } from "bun:test";
+import { cleanup } from "@testing-library/react";
+import * as matchers from "@testing-library/jest-dom/matchers";
+
+expect.extend(matchers);
+
+afterEach(() => {
+  cleanup();
+  document.body.innerHTML = "";
 });
 EOF
 
-cat > app/setupTests.ts <<'EOF'
-import '@testing-library/jest-dom';
+cat > bunfig.toml <<'EOF'
+[test]
+preload = ["./test/happydom.ts", "./test/testing-library.ts"]
+EOF
+
+# without this, the tests pass and `tsc --noEmit` fails on the matchers
+cat > test/matchers.d.ts <<'EOF'
+import { TestingLibraryMatchers } from "@testing-library/jest-dom/matchers";
+import { Matchers, AsymmetricMatchers } from "bun:test";
+
+declare module "bun:test" {
+  interface Matchers<T> extends TestingLibraryMatchers<typeof expect.stringContaining, void> {}
+  interface AsymmetricMatchers extends TestingLibraryMatchers<any, any> {}
+}
 EOF
 ```
 
 **Verification Checkpoint:**
-- [ ] `vitest.config.ts` exists with all 5 path aliases
-- [ ] `src/setupTests.ts` exists with jest-dom import
+- [ ] `test/happydom.ts` and `test/testing-library.ts` exist, in that order in `bunfig.toml`
+- [ ] `test/matchers.d.ts` exists
+- [ ] **No** `vitest.config.ts` — the aliases live only in `tsconfig.json`
+- [ ] A test file matches a discovery pattern (`*.test.*`) — outside it, it never runs
+      and nothing warns (`BUN-TEST-01`)
+- [ ] Break the component on purpose and confirm the suite goes RED (`TS-TEC-08`)
 
 ---
 
@@ -361,8 +380,8 @@ pkg.scripts = {
   'lint:format': 'biome format --write app',
   'lint:staged': 'biome check app --staged --write',
   'typecheck': 'tsc --noEmit',
-  'test': 'vitest',
-  'test:run': 'vitest run',
+  'test': 'bun test --watch',
+  'test:run': 'bun test',
   'prepare': 'husky'
 };
 pkg['lint-staged'] = {
@@ -584,7 +603,7 @@ EOF
 
 # 7. Test
 cat > app/features/news-feed/tests/news-feed.test.tsx <<'EOF'
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'bun:test';
 import { render, screen, waitFor } from '@testing-library/react';
 import { NewsCard } from '../components/news-card.component';
 import { NewsFeedService } from '../services/news-feed.service';
@@ -715,7 +734,7 @@ bun run build
 - [ ] No data loss occurred during scaffolding
 - [ ] Git hooks are configured and executable with lint-staged
 - [ ] lint-staged is configured with error handling in pre-commit hook
-- [ ] Path aliases work in all contexts (TypeScript, Vitest, TanStack Start)
+- [ ] Path aliases work in all contexts — one map, in `tsconfig.json`
 - [ ] Services layer is properly structured and tested
 
 ---

@@ -38,12 +38,12 @@ PLUGINS = {
         # skill e agente. Como os agentes, entra por nome, nao por familia.
         "comandos": ["scaffold-projeto",
                      "scaffold-01-tanstack-start", "scaffold-02-biome",
-                     "scaffold-03-vitest", "scaffold-04-git-hooks",
+                     "scaffold-03-bun-test", "scaffold-04-git-hooks",
                      "scaffold-05-fba", "scaffold-06-shadcn",
                      "scaffold-07-workos-authkit", "scaffold-08-scripts",
                      "scaffold-09-feature-exemplo", "scaffold-10-verificacao",
                      "scaffold-fba-01-start", "scaffold-fba-02-biome",
-                     "scaffold-fba-03-vitest", "scaffold-fba-04-git-hooks",
+                     "scaffold-fba-03-bun-test", "scaffold-fba-04-git-hooks",
                      "scaffold-fba-05-fba",
                      "configurar-antigravity"],
         "descricao": "Teste e contrato HTTP, e os papéis que atravessam qualquer stack. "

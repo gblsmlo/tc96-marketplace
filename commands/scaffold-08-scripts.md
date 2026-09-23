@@ -30,8 +30,8 @@ pkg.scripts = {
   'lint:format': 'biome format --write src',
   'lint:staged': 'biome check src --staged --write',
   'typecheck': 'tsc --noEmit',
-  'test': 'vitest',
-  'test:run': 'vitest run',
+  'test': 'bun test --watch',
+  'test:run': 'bun test',
   'prepare': 'husky'
 };
 pkg['lint-staged'] = {
@@ -69,8 +69,10 @@ await Bun.write('package.json', JSON.stringify(pkg, null, 2) + '\n');
   type** (`BUN-CORE-02`), so without this step in CI the project's types are decorative.
 
 ### Testing Scripts
-- `test` - Run tests in watch mode
-- `test:run` - Run tests once
+- `test` - `bun test --watch`
+- `test:run` - `bun test`, one pass
+
+There is no `test:ui`: `bun test` has no UI runner.
 
 ### Git Hooks
 - `prepare` - Initialize Husky

@@ -128,7 +128,7 @@ Ensure `tsconfig.json` contains these paths (from Phase 1):
 
 **2. Wildcard vs. bare entries are not interchangeable.** A `"@libs/*"` mapping only matches specifiers with something after the slash — `import { httpClient } from '@libs'` does **not** resolve against it. Layers consumed only through their barrel (`@hooks`, `@libs`, `@app-types`) get the bare entry. Layers where the subpath is the real address (`@features/auth`, `@components/ui`) get the `/*` entry. Declaring both forms for the same layer re-opens the deep-import door that Step 5 Rule 2 closes.
 
-These same aliases must also exist in `vite.config.ts` and `vitest.config.ts`. Three files that have to agree is the classic source of "builds fine, tests can't resolve the module".
+These same aliases must also exist in `vite.config.ts`. `bun test` reads them from `tsconfig.json`, so only two files have to agree — the test side is derived, not duplicated.
 
 ## Step 4: Biome Import Governance
 
@@ -328,7 +328,7 @@ Verify the FBA structure:
 - [ ] No `@types/*` alias exists — it is `@app-types`
 - [ ] Barrel-only layers (`@hooks`, `@libs`, `@app-types`) use the **bare** paths entry, not `/*`
 - [ ] `tsconfig.json` has NO `baseUrl` — TypeScript 7 removed it and `tsc` errors out (TS5102)
-- [ ] The same aliases exist in `tsconfig.json`, `vite.config.ts` AND `vitest.config.ts`. If those two files do not exist yet, this item is **unverified**, not passed — do not tick it
+- [ ] The same aliases exist in `tsconfig.json` and `vite.config.ts`. If `vite.config.ts` does not exist yet, this item is **unverified**, not passed — do not tick it. `bun test` needs no entry: it reads `tsconfig.json`
 - [ ] `noImportCycles` is under `suspicious`, not `nursery`
 - [ ] `noRestrictedImports` overrides exist for `src/features/**` and for the generic layers
 - [ ] Example files demonstrate correct import patterns
@@ -357,8 +357,9 @@ chk "@libs is bare, not @libs/*"    "$(grep -n '\"@libs/\*\"\|\"@hooks/\*\"\|\"@
 for a in @features @components @hooks @libs @app-types; do
   grep -q "\"$a" tsconfig.json || { echo "❌ alias missing from tsconfig: $a"; fail=1; }
 done
-# vite/vitest must agree with tsconfig — only checkable if they exist
-for f in vite.config.ts vitest.config.ts; do
+# vite must agree with tsconfig — only checkable if it exists.
+# bun test is not in this list: it reads tsconfig.json itself.
+for f in vite.config.ts; do
   if [ -f "$f" ]; then
     for a in @features @components @libs; do
       grep -q "$a" "$f" || { echo "❌ $a declared in tsconfig but not in $f"; fail=1; }
@@ -412,7 +413,7 @@ If any command fails:
 **Solution:** A `paths` alias named `@types/*` is shadowing the npm scope, because `paths` resolves before `node_modules`. Rename it to `@app-types`.
 
 **Issue:** Tests can't find modules with path aliases
-**Solution:** Ensure vitest.config.ts resolve.alias matches tsconfig.json paths.
+**Solution:** fix `compilerOptions.paths` in `tsconfig.json` — `bun test` reads it directly, and there is no second map to reconcile.
 
 **Issue:** Biome accepts the config but never flags a deep import
 **Solution:** Check that `noImportCycles` is under `suspicious` (not `nursery`) and that `noRestrictedImports` is present. Neither is enabled by default. If the file lives under an `overrides` entry, remember overrides are first-match-wins and replace the top-level rule — the pattern has to be repeated inside that override.

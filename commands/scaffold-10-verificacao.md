@@ -48,7 +48,7 @@ bun run build
 - [ ] No data loss occurred during scaffolding
 - [ ] Git hooks are configured and executable with lint-staged
 - [ ] lint-staged is configured with error handling in pre-commit hook
-- [ ] Path aliases work in all contexts (TypeScript, Vitest, TanStack Start)
+- [ ] Path aliases work in all contexts — one map, in `tsconfig.json`: `bun test` and TanStack Start both read it
 - [ ] Shadcn UI components are properly configured
 - [ ] WorkOS AuthKit is properly integrated
 
@@ -101,6 +101,6 @@ echo "# Workflows" > docs/workflows/README.md
 - **UI**: Shadcn UI + Tailwind CSS
 - **Auth**: WorkOS AuthKit
 - **Lint/Format**: Biome (no ESLint/Prettier)
-- **Testing**: Vitest + React Testing Library
+- **Testing**: `bun test` + happy-dom + React Testing Library
 - **Git Hooks**: Husky + lint-staged + Commitlint
 - **Package Manager**: bun

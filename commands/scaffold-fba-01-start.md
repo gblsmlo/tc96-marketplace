@@ -98,7 +98,7 @@ Create or update `tsconfig.json` with FBA path aliases:
 3. **`@libs`, plural, pointing at `src/libs`.** Phase 5 creates `src/libs`. An `@lib/* → ./src/lib/*` entry aliases a directory that never gets created.
 4. **Bare entries for barrel-only layers.** A `"@libs/*"` mapping only matches specifiers with a subpath — `import { httpClient } from '@libs'` does not resolve against it. Layers reached only through their barrel (`@hooks`, `@libs`, `@app-types`) take the bare form; layers where the subpath is the real address (`@features/auth`, `@components/ui`) take `/*`. Declaring both forms for one layer re-opens the deep-import hole that Phase 5 closes.
 
-These aliases must be reproduced verbatim in `vite.config.ts` and `vitest.config.ts` below. Three files that have to agree is the classic source of "builds fine, tests cannot resolve the module".
+These aliases must be reproduced verbatim in `vite.config.ts` below. **Not** in a test config: `bun test` reads `compilerOptions.paths` from `tsconfig.json` directly, so there are two files to keep in agreement, not three — and the test side cannot drift at all.
 
 ## Step 3: Framework-Specific Configuration
 
@@ -172,7 +172,7 @@ Before proceeding to Phase 2, verify ALL of these:
 - [ ] `package.json` exists with framework dependencies
 - [ ] `tsconfig.json` contains the FBA path aliases: `@features/*`, `@components/*`, `@routes/*` (wildcard) and `@hooks`, `@libs`, `@app-types` (bare)
 - [ ] `tsconfig.json` contains NO `baseUrl` and NO `@types/*` alias
-- [ ] The alias names in `vite.config.ts` and `vitest.config.ts` match `tsconfig.json` exactly — `@libs` not `@lib`, `@app-types` not `@types`
+- [ ] The alias names in `vite.config.ts` match `tsconfig.json` exactly — `@libs` not `@lib`, `@app-types` not `@types`. The test runner needs no entry of its own.
 - [ ] Framework config file exists (next.config.mjs, vite.config.ts, or vue.config.ts)
 - [ ] `docs/` directory is preserved (if it existed before)
 - [ ] `.agent/` directory is preserved (if it existed before)
