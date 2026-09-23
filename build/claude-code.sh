@@ -29,7 +29,7 @@ MODELO = {"alto": "opus", "medio": "sonnet", "rapido": "haiku"}
 # nao sai no build.
 PLUGINS = {
     "twincam-core": {
-        "familias": ["test", "http"],
+        "familias": ["test", "http", "workflow"],
         "agentes": ["code-reviewer", "software-architect", "qa-engineer",
                     "product-manager", "product-designer", "project-manager",
                     "devops-security", "ai-engineer", "monorepo-auditor"],

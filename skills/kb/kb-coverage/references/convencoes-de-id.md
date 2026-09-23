@@ -22,6 +22,7 @@ prose that merely uses capital letters and hyphens.
 | test (estratégia) | `TS-*` | `docs/teste-de-software*.md` |
 | playwright | `PW-*` | `docs/playwright*.md` |
 | storybook | `SB-CFG-*`, `SB-CORE-*`, `SB-CSF-*`, `SB-CTX-*`, `SB-TEST-*`, `SB-MOCK-*` | `docs/storybook*.md` |
+| workflow (quatro pilares) | `WF-CORE-*`, `WF-RES-*`, `WF-PLAN-*`, `WF-IMPL-*`, `WF-VAL-*` | `docs/fluxo-de-entrega-quatro-pilares.md` |
 | páginas normativas (não-`docs/`) | `REACT-ARCH-*`, `BFF-*`, `MONO-*` | `pages/feature-based-architecture.md`, `pages/fronteira-do-bff-forma-jornada-e-regra.md`, `pages/monorepo-com-bun-estrutura-e-tooling.md` — `architecture-in-react.md` § 5 explains why these three pages carry IDs when the rest of `pages/` does not |
 
 ## What is not an ID

@@ -7,7 +7,7 @@ Uma camada so: cada nota mora direto em `knowledge-base/`, sem subpasta. O
 titulo de cada nota vem do campo `titulo:` no proprio arquivo — e o rotulo
 que as skills usam ao linkar para ela.
 
-Notas: 129
+Notas: 130
 
 | Arquivo | Titulo | sha256 |
 | --- | --- | --- |
@@ -46,6 +46,7 @@ Notas: 129
 | `elysia.md` | Elysia | `a4c1be7eead7` |
 | `feature-based-architecture.md` | Feature-Based Architecture | `d361ef1301a1` |
 | `feature-flags-modelo-visual-do-fluxo.md` | Feature Flags — modelo visual do fluxo | `fc1e90735a7c` |
+| `fluxo-de-entrega-quatro-pilares.md` | Fluxo de Entrega — Quatro Pilares | `133af4d51dcd` |
 | `forward-deployed-engineering.md` | Forward Deployed Engineering | `5522c590ec21` |
 | `fronteira-do-bff-forma-jornada-e-regra.md` | Fronteira do BFF - forma, jornada e regra | `d85add0942d9` |
 | `frontend-roadmap.md` | Frontend roadmap | `44e50bc18ad9` |

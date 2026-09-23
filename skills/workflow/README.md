@@ -1,0 +1,63 @@
+# workflow skills — the procedure layer over the eleven agents
+
+Four skills, one per pillar. They decide **when** — which moment a task is in — never **who**:
+that stays with the eleven agents in [Agents](../../agents/README.md). Each skill routes to an
+existing agent or skill; none of them re-decides architecture, product scope, or test level —
+those already have an owner.
+
+| Skill | The question it answers | Routes to (existing) |
+| --- | --- | --- |
+| `workflow-research` | is this task's intent actually decided yet? | `product-manager` · `product-designer` · `software-architect` · `workflow-planning` |
+| `workflow-planning` | is this task executable yet — bounded, owned, with acceptance? | `project-manager` · `software-architect` · `workflow-implementation` · `workflow-research` |
+| `workflow-implementation` | is this ready unit's behavior already decided, so it is safe to write? | `frontend-developer` · `backend-developer` · `test-design` · `workflow-validation` |
+| `workflow-validation` | does this change have proof proportional to its risk? | `code-reviewer` · `qa-engineer` · `devops-security` · back to the pillar of origin |
+
+**The order is research → planning → implementation → validation**, and a task may return one
+pillar back when it discovers a gap — it never skips forward past an open decision
+(`WF-CORE-03`). Source: [Fluxo de Entrega — Quatro Pilares](../../knowledge-base/fluxo-de-entrega-quatro-pilares.md).
+
+```
+workflow/
+├── README.md                    this file
+├── workflow-research/
+│   ├── SKILL.md
+│   └── references/
+│       ├── separar-fato-hipotese-decisao.md
+│       └── classificar-escopo.md
+├── workflow-planning/
+│   ├── SKILL.md
+│   └── references/
+│       ├── portoes.md
+│       └── apetite-e-corte.md
+├── workflow-implementation/
+│   ├── SKILL.md
+│   └── references/
+│       └── condicoes-de-parada.md
+└── workflow-validation/
+    ├── SKILL.md
+    └── references/
+        ├── proporcionalidade-da-evidencia.md
+        └── revisao-em-contexto-independente.md
+```
+
+## What this family deliberately does not have, yet
+
+Unlike the mature families (`react`, `test`, `http`), this one ships lean on purpose:
+
+- **No `scripts/gerar-mapa-de-ids.sh`.** The 25 `WF-*` rules live in one hub section, cited
+  inline by each skill — a generator earns its keep once a second consumer needs the same map.
+- **No satellite notes.** If the hub grows past what one file should hold, the natural cut is
+  one satellite per pillar (four), not a replica of `teste-de-software.md`'s seven.
+- **No measured context-budget table.** That section on other family READMEs comes from a
+  tiktoken measurement tool; adding fabricated numbers here would be worse than omitting it.
+
+## Registered under
+
+`twincam-core` in `build/claude-code.sh`, next to `test` and `http` — the families this
+house's plugin map already calls "the roles that cut across any stack".
+
+## Related
+
+- [Skills index](../README.md)
+- [Fluxo de Entrega — Quatro Pilares](../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — the hub all four skills implement, §7 "Contrato de skill"
+- [Agents](../../agents/README.md) — "Como os agentes passam o bastão", the flow this family formalizes

@@ -99,6 +99,11 @@ flowchart LR
 
 Cada agente declara no passo final para quem passa o bastão, e a seta é sempre acompanhada de um artefato: spec, decisão registrada, fluxo com estados, código com evidência, relatório de achados.
 
+Esse fluxograma tem procedimento formal em `skills/workflow/` — quatro skills, uma por
+momento (pesquisa, planejamento, implementação, validação), que decidem **quando** rotear para
+qual dos onze agentes, citando regra por ID em [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md). O mermaid acima continua sendo a fonte de **quem**;
+a nota nova é a fonte de **quando**.
+
 ## Uso no Claude Code
 
 **Instalação.** Nada aqui é instalado à mão. `bash build/claude-code.sh` monta os plugins em `dist/claude-code/`, traduzindo o frontmatter neutro para o formato do alvo (`nome`→`name`, `capacidades`→`tools`, `modelo`→`model`) e reescrevendo os links para dentro do pacote. É o mesmo modelo de [Skills](../skills/README.md): **`agents/` é a fonte; `dist/` é o pacote.** Mudar um agente é editar aqui e rodar o build.
@@ -120,6 +125,7 @@ Criadas em 2026-09-01 a partir do material já existente, e extraídas para este
 ## Relacionados
 
 - [Skills](../skills/README.md) — índice das skills, anatomia comum e desambiguação
+- [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — o procedimento formal de "como os agentes passam o bastão", com regra `WF-*`
 - `Docs` — índice das estruturas de documentação e "Quais estruturas têm skill"
 - [Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) — § 7, subagentes customizados
 - [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) — subagentes, fan-out, cache compartilhado
