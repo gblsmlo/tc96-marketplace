@@ -52,24 +52,24 @@ This agent is also the one who **creates and maintains this project's agents and
 | --- | --- | --- |
 | 1 | the domain's foundations map (table above) | the Zettels, without the transcript |
 | 2 | [Claude Code](../knowledge-base/claude-code.md) § 6 | the `CC-*` rules — they hold for any agent this agent builds |
-| 3 | · | how this knowledge enters an agent's context |
+| 3 | `Como usar a base de conhecimento para dar contexto a agentes` · `Um vault Obsidian serve de memória persistente para agentes de IA` | how this knowledge enters an agent's context |
 | 4 | the transcripts — `Agentes de IA - Transcrição das Aulas`, `MCP - Transcrição das Aulas`, `Sistemas Multiagentes - Transcrição das Aulas`, `Alimentando IA com base de dados - Estratégia e Inovação`, `Busca semântica e Classificação de Dados` | **only** when a Zettel cites the lecture and the detail matters; the last one is 277 KB |
 
 ---
 
 ## Step 2 — The domains, and the Zettel that answers each one
 
-**Agent and tool** —; the cycle is; a tool is a function with name, description, and parameters; that is why data, e-mail, and event come through tools. Structured output by schema, not by text parsing; before any. A data-reading tool uses — the LLM picks the query, it does not write SQL.
+**Agent and tool** — `Agente de IA age de forma autônoma analisando o ambiente`; the cycle is `Paradigma ReAct separa raciocínio e ação na IA`; a tool is a function with name, description, and parameters (`Ferramentas são funções que ampliam as ações de um agente de IA`); `O conhecimento paramétrico de um LLM é estático`, which is why data, e-mail, and events come through tools. Structured output by schema, not by text parsing (`Saída estruturada em LLMs`); `Zero-shot e few-shot prompting` before any `Fine-tuning`. A data-reading tool uses `Consultas predefinidas limitam a autonomia arriscada do LLM` — the LLM picks the query, it does not write SQL.
 
-**MCP** —;;;. In Claude Code, **CLI comes before MCP** (`CC-CFG-08`) and tool search keeps MCP cheap ([Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) § 8).
+**MCP** — `MCP é um protocolo de comunicação para conectar IAs a ferramentas remotas`; `Arquitetura client-server do MCP separa IA das ferramentas`; `Declaração de ferramentas no MCP usa server.tool com Zod schema`; `StdioClientTransport conecta a IA ao MCP Server local`. In Claude Code, **CLI comes before MCP** (`CC-CFG-08`) and tool search keeps MCP cheap ([Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) § 8).
 
-**Multiagent** — routes via a routing tool with forced `tool_choice`; are ReAct specialists with their own prompt and tools; and with reducers. A specialist returns `HumanMessage`, otherwise the supervisor loops; conditional edges avoid unwanted parallelism; well-defined responsibilities avoid conflict. In Claude Code, the equivalent is a subagent with its own context (`CC-PAR-01`) and **homogeneous** agents in fan-out to share cache ([Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)).
+**Multiagent** — `Supervisor` routes via a routing tool with forced `tool_choice`; `Agent Nodes` are ReAct specialists with their own prompt and tools; `Grafos de Execução` and `Estado Compartilhado` with reducers (`LangGraph`). A specialist returns `HumanMessage`, otherwise the supervisor loops; conditional edges avoid unwanted parallelism; well-defined responsibilities avoid conflict. In Claude Code, the equivalent is a subagent with its own context (`CC-PAR-01`) and **homogeneous** agents in fan-out to share cache ([Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)).
 
-**RAG** —;;; — structured data calls for a query, not an embedding;;;; — decide whether the opacity is worth it.
+**RAG** — `RAG combina recuperação, aumento de contexto e geração`; `Grounding conecta respostas de IA a evidências externas`; `Recuperação vs geração`; `Acesso direto e RAG atendem estruturas de dados diferentes` — structured data calls for a query, not an embedding; `Dados externos precisam ser convertidos em contexto textual`; `Metadados dão significado aos dados recuperados`; `Resultados ausentes devem ser tratados antes de chamar o LLM`; `Frameworks de RAG aceleram a orquestração e ocultam complexidade` — decide whether the opacity is worth it.
 
-**Semantic search** — vs; in; distance by or; with;; ingestion:; and — swapping the model requires reindexing everything;;; as an alternative.
+**Semantic search** — `Busca semântica` vs `Correspondência literal vs busca semântica`; `Embeddings` in `Espaço vetorial de embeddings` (`Vetores densos e esparsos`, `Representação distribuída`, `Tokenização em modelos de linguagem`, `Pooling de embeddings`, `Normalização de embeddings`); distance by `Similaridade de cosseno`, `Produto escalar em embeddings` or `Distância euclidiana em embeddings`; `Busca exata vs busca aproximada` with `K-Nearest Neighbors (KNN)`, `Approximate Nearest Neighbors (ANN)`, `HNSW`, `LSH`; `Bancos de dados vetoriais` (`ChromaDB`); ingestion: `Chunking equilibra granularidade, contexto e custo`, `Chunk overlap preserva contexto entre fragmentos`, `Ingestão em lotes para embeddings`, `Pipeline de embeddings com Hugging Face`; `Consistência de modelo em busca semântica` and `Modelo de embedding compatível com idioma` — swapping the model requires reindexing everything; `Viés em embeddings`; `Busca multimodal`; `Grafos de conhecimento` as an alternative.
 
-**Classification and evaluation** —; measure with; search with. **Without evaluation, there is no production-ready RAG** — LLM behavior is stochastic and demands extensive testing.
+**Classification and evaluation** — `Classificação de dados`, `Classificação de texto`, `Classificação com embeddings`, `Classificação clássica vs classificação com IA`; measure with `Matriz de confusão`, `Accuracy Precision Recall e F1`, `ROC-AUC`; search with `Precision at K e Recall at K`, `Mean Reciprocal Rank (MRR)` (`Avaliação de busca semântica`). **Without evaluation, there is no production-ready RAG** — LLM behavior is stochastic and demands extensive testing.
 
 **Claude Code environment** — the mechanism choice criterion ([Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) § 1): the same convention wrong twice → CLAUDE.md; the same prompt repeated → skill; the same tab copied → MCP; a side task flooding the conversation → subagent; "always, no exceptions" → hook. CLAUDE.md under 200 lines (`CC-CFG-02`); critical instruction at the top of `SKILL.md` (`CC-CTX-07`); verification that Claude runs (`CC-SES-01`); review in fresh context with a delimited criterion (`CC-SES-07`, `CC-SES-10`); long execution pinned to `/goal` or a Stop hook (`CC-SES-12`).
 
@@ -105,10 +105,10 @@ This agent is also the one who **creates and maintains this project's agents and
 Task: "an agent that answers questions about internal policies from the HR PDFs".
 
 1. **Unstructured data** → RAG, not a query.
-2. **Ingestion**: chunk by section with short overlap; metadata `document`, `section`, `validity`; a multilingual embedding model **pinned**; batches; with.
-3. **Query**: top-k by; no result above the threshold → a "not found" answer, **before** the LLM; answer with the section citation.
-4. **Evaluation**: 30 questions with the expected section; `Precision@3` and `MRR` in the report.
-5. **Exposure**: one `server.tool("searchPolicy", { question: z.string })` via MCP, so the same index serves Claude Code and the internal chat.
+2. **Ingestion**: chunk by section with short overlap (`Chunking equilibra granularidade, contexto e custo`, `Chunk overlap preserva contexto entre fragmentos`); metadata `document`, `section`, `validity` (`Metadados dão significado aos dados recuperados`); a multilingual embedding model **pinned** (`Modelo de embedding compatível com idioma`, `Consistência de modelo em busca semântica`); batches (`Ingestão em lotes para embeddings`); `ChromaDB` with `HNSW`.
+3. **Query**: top-k by `Similaridade de cosseno`; no result above the threshold → a "not found" answer, **before** the LLM (`Resultados ausentes devem ser tratados antes de chamar o LLM`); answer with the section citation (`Grounding conecta respostas de IA a evidências externas`).
+4. **Evaluation**: 30 questions with the expected section; `Precision@3` and `MRR` in the report (`Avaliação de busca semântica`).
+5. **Exposure**: one `server.tool("searchPolicy", { question: z.string })` via MCP, so the same index serves Claude Code and the internal chat (`Declaração de ferramentas no MCP usa server.tool com Zod schema`).
 
 ---
 
