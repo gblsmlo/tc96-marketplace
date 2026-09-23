@@ -1,0 +1,65 @@
+{
+  "skill_name": "kb-coverage",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "A gente já tem skill cobrindo TanStack Query? Se sim, qual doc e qual skill exatamente cobre isso, no repositório tc96-agents?",
+      "expected_output": "Reports 'Coberto', citing knowledge-base/docs/tanstack-query.md as the hub doc and the `tanstack-query` skill as owner. Clean, unambiguous hit already in the seed index — the easy sanity case.",
+      "files": [],
+      "expectations": [
+        "The report states the topic's status as Coberto (covered)",
+        "The report cites knowledge-base/docs/tanstack-query.md as the entry note / hub doc",
+        "The report names the tanstack-query skill as the owner",
+        "The report does not classify this as a gap or as partial"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Verifica se 'Clean Code' tem cobertura no knowledge-base ou nas skills do tc96-agents. Onde é que isso vive?",
+      "expected_output": "Reports a confirmed gap, and specifically names it as a dangling reference: agents/code-reviewer.md and agents/frontend-developer.md cite a 'Clean Code - React e Node - Mapa de Fundamentos' hub that does not exist anywhere in knowledge-base/. Should not report this as covered just because the term appears in those agent files.",
+      "files": [],
+      "expectations": [
+        "The report classifies the topic as a confirmed gap (Gap confirmado), not covered and not partial",
+        "The report explicitly names it as a dangling reference, citing agents/code-reviewer.md and/or agents/frontend-developer.md as the files that reference a non-existent hub",
+        "The report does not claim any file in knowledge-base/ develops Clean Code as a topic",
+        "The report does not treat the mere appearance of the term in agent files as coverage"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Preciso saber se já documentamos, no tc96-agents, como versionar e migrar dado persistido no navegador (tipo localStorage). Tem alguma nota ou skill sobre isso, ou é um buraco?",
+      "expected_output": "Reports a partial gap: knowledge-base/docs/react-patterns.md § 2 has a bare, unlinked table row ('Persistido no browser | precisa versão e validação') with no REACT-PAT-* rule ID, no worked example, and no probe in react-developer/react-review. Should not report this as fully 'Coberto' just because the topic is mentioned.",
+      "files": [],
+      "expectations": [
+        "The report classifies the topic as Parcial (partial), not fully Coberto",
+        "The report cites knowledge-base/docs/react-patterns.md (§ 2, the 'Persistido no browser' row) as the relevant material",
+        "The report explains what is missing for it to count as developed — no REACT-PAT-* ID, no worked example, no probe/self-check",
+        "The report does not claim a specific skill (react-developer or react-review) already has a check or probe for this topic"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Será que já temos alguma regra ou skill sobre evitar N+1 query no Drizzle, no tc96-agents? Não lembro de ter visto isso na tabela de temas que a gente já mapeou.",
+      "expected_output": "Not in the pre-seeded 17-theme index — this tests live search generalization. Should find knowledge-base/docs/drizzle-queries-e-relations.md § 5.6-5.8, cite rule DRZ-RQB-01 by name, and name drizzle-review as the skill (noting it is review-only, since drizzle has no build skill yet).",
+      "files": [],
+      "expectations": [
+        "The report classifies N+1 in Drizzle as Coberto (covered)",
+        "The report cites the DRZ-RQB-01 rule ID by name",
+        "The report points to knowledge-base/docs/drizzle-queries-e-relations.md as the doc that develops it",
+        "The report names drizzle-review as the owning skill"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Onde é que a gente documenta CORS e o preflight OPTIONS no tc96-agents? Tem skill pra isso?",
+      "expected_output": "Not in the pre-seeded 17-theme index — another live-search generalization test, this time in the http family. Should find knowledge-base/docs/http-cors.md as the hub with HTTP-CORS-* rule IDs, and name http-diagnose (and/or http-review) as the owning skill(s).",
+      "files": [],
+      "expectations": [
+        "The report classifies CORS/preflight as Coberto (covered)",
+        "The report cites knowledge-base/docs/http-cors.md as the hub doc",
+        "The report cites at least one HTTP-CORS-* rule ID by name",
+        "The report names http-diagnose and/or http-review as owning skill(s)"
+      ]
+    }
+  ]
+}
