@@ -1,9 +1,9 @@
 # workflow skills — the procedure layer over the eleven agents
 
 Four skills, one per pillar. They decide **when** — which moment a task is in — never **who**:
-that stays with the eleven agents in [Agents](../../agents/README.md). Each skill routes to an
-existing agent or skill; none of them re-decides architecture, product scope, or test level —
-those already have an owner.
+that stays with the eleven agents in `agents/README.md`. Each skill routes to an existing
+agent or skill; none of them re-decides architecture, product scope, or test level — those
+already have an owner.
 
 | Skill | The question it answers | Routes to (existing) |
 | --- | --- | --- |
@@ -28,7 +28,10 @@ workflow/
 │   ├── SKILL.md
 │   └── references/
 │       ├── portoes.md
-│       └── apetite-e-corte.md
+│       ├── apetite-e-corte.md
+│       ├── template-epic.md
+│       ├── template-story.md
+│       └── template-task.md
 ├── workflow-implementation/
 │   ├── SKILL.md
 │   └── references/
@@ -37,8 +40,29 @@ workflow/
     ├── SKILL.md
     └── references/
         ├── proporcionalidade-da-evidencia.md
-        └── revisao-em-contexto-independente.md
+        ├── revisao-em-contexto-independente.md
+        └── template-pr.md
 ```
+
+## Board and PR templates
+
+`workflow-planning/references/` carries the tool-neutral work-item templates — Epic, Story,
+Task — and `workflow-validation/references/template-pr.md` carries the PR (change-artifact)
+template. Adapted from a real reference project, lemind (`studio-risine`), specifically its
+`docs/product/templates/{epic,story,task}.md` and `.github/pull_request_template.md`, current
+as of ADR 117 (`docs/decisions/117-o-multica-e-autoridade-unica-do-backlog.md`).
+
+Two decisions were made adapting that model into the neutral source, both confirmed with the
+project owner while dogfooding `workflow-research` on this exact task:
+
+1. **Tool-neutral, not Multica-flavored.** The reference project's templates name their
+   tracker (Multica, `Work level`, `LEMI-*`) directly — coherent for them, but this source
+   never embeds a runtime or tool name (see the root `README.md`). The templates here use
+   generic fields (`capability`, `milestone`, `parent`) that any adapter fills.
+2. **No standalone Milestone template.** The reference project's own most current decision
+   (ADR 117 clause 4) already treats Milestone as a roadmap-block **property** on Epic/Story/
+   Task, not a fourth narrative artifact — this family keeps that same cut rather than
+   inventing a heavier one.
 
 ## What this family deliberately does not have, yet
 
@@ -60,4 +84,4 @@ house's plugin map already calls "the roles that cut across any stack".
 
 - [Skills index](../README.md)
 - [Fluxo de Entrega — Quatro Pilares](../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — the hub all four skills implement, §7 "Contrato de skill"
-- [Agents](../../agents/README.md) — "Como os agentes passam o bastão", the flow this family formalizes
+- `agents/README.md` — "Como os agentes passam o bastão", the flow this family formalizes

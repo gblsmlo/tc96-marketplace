@@ -47,6 +47,9 @@ References in this skill:
 | --- | --- |
 | `references/portoes.md` | the five gates, one worked check each |
 | `references/apetite-e-corte.md` | appetite and circuit breaker, with a worked example |
+| `references/template-epic.md` | tool-neutral work-item template — the permanent-capability level |
+| `references/template-story.md` | tool-neutral work-item template — the acceptance-unit level |
+| `references/template-task.md` | tool-neutral work-item template — the executable-cut level |
 
 ---
 

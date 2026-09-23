@@ -52,6 +52,7 @@ References in this skill:
 | --- | --- |
 | `references/proporcionalidade-da-evidencia.md` | the risk → evidence tree, expanded with examples |
 | `references/revisao-em-contexto-independente.md` | why the author never approves their own change, and how to hand off cleanly |
+| `references/template-pr.md` | tool-neutral change-artifact template, one-way reference back to the work item |
 
 ---
 

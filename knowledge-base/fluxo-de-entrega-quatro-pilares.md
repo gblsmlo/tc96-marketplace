@@ -17,7 +17,7 @@ verificado-em: 2026-09-23
 >
 > **O que não é.** Não substitui nenhum dos onze agentes nem redefine o que cada um faz.
 > Não é um quinto agente. É a formalização, com regra citável, do fluxograma que já existia
-> implicitamente em [Agents](../agents/README.md) ("Como os agentes passam o bastão") — que
+> implicitamente em `agents/README.md` ("Como os agentes passam o bastão") — que
 > continua sendo a fonte do *quem*; esta nota é a fonte do *quando*.
 >
 > **Por que ela existe.** O projeto tinha onze papéis e um diagrama mermaid informal de como
@@ -35,7 +35,7 @@ Fontes consultadas em **2026-09-23**. Ver [Fontes consultadas](#fontes-consultad
 ## 0. Antes de tudo: três distinções que decidem a conversa
 
 **1. Pilar × papel.** *Pilar* é o momento do trabalho — pesquisa, planejamento, implementação
-ou validação. *Papel* é quem o exerce — um dos onze agentes de [Agents](../agents/README.md).
+ou validação. *Papel* é quem o exerce — um dos onze agentes de `agents/README.md`.
 Os dois eixos são **ortogonais**: o mesmo `software-architect` aparece no pilar de Pesquisa
 (decidindo se uma mudança é arquitetural) e no de Planejamento (nomeando a fronteira de uma
 unidade); o mesmo `qa-engineer` aparece na Implementação (nível do teste) e na Validação
@@ -103,9 +103,8 @@ mas nunca decide "vou resolver isso na implementação mesmo" quando a lacuna é
 | Implementação | `workflow-implementation` | `frontend-developer` · `backend-developer` |
 | Validação | `workflow-validation` | `qa-engineer` · `code-reviewer` · `devops-security` (quando o achado é de segurança) |
 
-Este mapeamento é o mesmo fluxograma de
-[Agents](../agents/README.md#como-os-agentes-passam-o-bastão) — aqui só como tabela, sem
-repetir o mermaid. Quando um agente novo for adicionado a `agents/README.md`, esta tabela é
+Este mapeamento é o mesmo fluxograma de `agents/README.md`, seção "Como os agentes passam o
+bastão" — aqui só como tabela, sem repetir o mermaid. Quando um agente novo for adicionado lá, esta tabela é
 quem precisa de atualização, não o inverso.
 
 ---
@@ -361,7 +360,7 @@ contribuição principal deste projeto, sem paralelo direto numa única fonte.
 
 ## Relacionados
 
-- [Agents](../agents/README.md) — os onze papéis; "Como os agentes passam o bastão" é o
+- `agents/README.md` — os onze papéis; "Como os agentes passam o bastão" é o
   fluxograma que esta nota formaliza
 - [Teste de Software](teste-de-software.md) — §0, a distinção verificação × validação que o
   pilar de Validação reaproveita
