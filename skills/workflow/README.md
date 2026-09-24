@@ -89,4 +89,4 @@ house's plugin map already calls "the roles that cut across any stack".
 
 - [Skills index](../README.md)
 - [Fluxo de Entrega — Quatro Pilares](../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — the hub all four skills implement, §7 "Contrato de skill"
-- `agents/README.md` — "Como os agentes passam o bastão", the flow this family formalizes
+- `agents/README.md` — "How agents hand off", the flow this family formalizes

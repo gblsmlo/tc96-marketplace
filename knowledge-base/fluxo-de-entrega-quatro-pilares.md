@@ -17,7 +17,7 @@ verificado-em: 2026-09-23
 >
 > **O que não é.** Não substitui nenhum dos onze agentes nem redefine o que cada um faz.
 > Não é um quinto agente. É a formalização, com regra citável, do fluxograma que já existia
-> implicitamente em `agents/README.md` ("Como os agentes passam o bastão") — que
+> implicitamente em `agents/README.md` ("How agents hand off") — que
 > continua sendo a fonte do *quem*; esta nota é a fonte do *quando*.
 >
 > **Por que ela existe.** O projeto tinha onze papéis e um diagrama mermaid informal de como
@@ -380,7 +380,7 @@ contribuição principal deste projeto, sem paralelo direto numa única fonte.
 
 ## Relacionados
 
-- `agents/README.md` — os onze papéis; "Como os agentes passam o bastão" é o
+- `agents/README.md` — os onze papéis; "How agents hand off" é o
   fluxograma que esta nota formaliza
 - [Teste de Software](teste-de-software.md) — §0, a distinção verificação × validação que o
   pilar de Validação reaproveita
