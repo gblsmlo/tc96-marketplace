@@ -1,4 +1,4 @@
-# Skills — index
+# Skills
 
 Skills are **procedures**: they say what to load, in what order, which step to follow and how to
 report. They do **not** repeat the rule's text — they route to `knowledge-base/` and cite
