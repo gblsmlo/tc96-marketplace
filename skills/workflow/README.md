@@ -82,7 +82,7 @@ Unlike the mature families (`react`, `test`, `http`), this one ships lean on pur
 
 ## Registered under
 
-`twincam-core` in `build/claude-code.sh`, next to `test` and `http` — the families this
+`tc96-core` in `build/claude-code.sh`, next to `test` and `http` — the families this
 house's plugin map already calls "the roles that cut across any stack".
 
 ## Related

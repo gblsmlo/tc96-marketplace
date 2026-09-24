@@ -36,8 +36,8 @@ table ends on a row citing `TSR-LOAD-14`.
 One generator per skill, because the sources are distinct: **55 `TSQ-*`** and **102 `TSR-*`**.
 
 ```bash
-bash plugins/twincam-frontend/skills/tanstack-query/scripts/gerar-mapa-de-ids.sh
-bash plugins/twincam-frontend/skills/tanstack-router/scripts/gerar-mapa-de-ids.sh
+bash plugins/tc96-frontend/skills/tanstack-query/scripts/gerar-mapa-de-ids.sh
+bash plugins/tc96-frontend/skills/tanstack-router/scripts/gerar-mapa-de-ids.sh
 bash scripts/instalar.sh
 ```
 
@@ -63,5 +63,5 @@ Regenerate: `bash scripts/medir.sh`
 
 - [Skills index](../README.md)
 - [react family](../react/README.md) — the component around it
-- `twincam-backend: elysia family` — the bridge with Eden (`ELYSIA-TYPE-09`)
+- `tc96-backend: elysia family` — the bridge with Eden (`ELYSIA-TYPE-09`)
 - `http-cache` — a camada de cache do servidor

@@ -37,7 +37,7 @@ the hub, the map has a **"body in satellite"** column, and the 9 `APP` rows appe
 theirs alone — and that is why the map's header carries the whole of § 6.2.
 
 ```bash
-bash plugins/twincam-backend/skills/elysia-diagnose/scripts/gerar-mapa-de-ids.sh
+bash plugins/tc96-backend/skills/elysia-diagnose/scripts/gerar-mapa-de-ids.sh
 bash scripts/instalar.sh
 ```
 
@@ -63,5 +63,5 @@ Regenerate: `bash scripts/medir.sh`
 ## Related
 
 - [Skills index](../README.md) · [Elysia](../../knowledge-base/elysia.md) § 7 — the contract
-- `twincam-core: http family` — the protocol Elysia implements
+- `tc96-core: http family` — the protocol Elysia implements
 - `drizzle family` — the persistence the handler calls

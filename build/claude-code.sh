@@ -28,7 +28,7 @@ MODELO = {"alto": "opus", "medio": "sonnet", "rapido": "haiku"}
 # Um plugin por recorte habilitavel em projeto. Familia sem plugin declarado
 # nao sai no build.
 PLUGINS = {
-    "twincam-core": {
+    "tc96-core": {
         "familias": ["test", "http", "workflow"],
         "agentes": ["code-reviewer", "software-architect", "qa-engineer",
                     "product-manager", "product-designer", "project-manager",
@@ -50,7 +50,7 @@ PLUGINS = {
                      "Habilite sempre.",
         "keywords": ["teste", "http", "review", "arquitetura"],
     },
-    "twincam-frontend": {
+    "tc96-frontend": {
         "familias": ["react", "tanstack", "storybook"],
         "agentes": ["frontend-developer"],
         "descricao": "React, TanStack Router e Query, React Hook Form e Storybook no stack "
@@ -58,14 +58,14 @@ PLUGINS = {
                      "Habilite em projeto com frontend.",
         "keywords": ["react", "tanstack", "storybook", "frontend"],
     },
-    "twincam-backend": {
+    "tc96-backend": {
         "familias": ["bun", "elysia", "drizzle"],
         "agentes": ["backend-developer"],
         "descricao": "Runtime Bun, Elysia e Drizzle — serviço HTTP, persistência e "
                      "dependências. Habilite em projeto com backend.",
         "keywords": ["bun", "elysia", "drizzle", "backend"],
     },
-    "twincam-e2e": {
+    "tc96-e2e": {
         "familias": ["playwright"],
         "agentes": [],
         "descricao": "Playwright — escrita, auditoria e diagnóstico de teste E2E. "
@@ -243,7 +243,7 @@ for plugin, cfg in PLUGINS.items():
 
 (dest / ".claude-plugin").mkdir(parents=True, exist_ok=True)
 (dest / ".claude-plugin/marketplace.json").write_text(json.dumps({
-    "name": "twincam",
+    "name": "tc96",
     "owner": {"name": "Gabriel Melo", "email": "gblsmlo@gmail.com"},
     "metadata": {"description": "Agentes, skills e regra do stack desta casa.",
                  "version": versao},

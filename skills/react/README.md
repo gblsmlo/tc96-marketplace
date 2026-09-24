@@ -86,9 +86,9 @@ replica. Three generators, one per family, because the sources and the columns d
 After editing any source note, run the corresponding generator and reinstall:
 
 ```bash
-bash plugins/twincam-frontend/skills/react-review/scripts/gerar-mapa-de-ids.sh
-bash plugins/twincam-frontend/skills/react-structure/scripts/gerar-mapa-de-ids.sh
-bash plugins/twincam-frontend/skills/react-hook-form/scripts/gerar-mapa-de-ids.sh
+bash plugins/tc96-frontend/skills/react-review/scripts/gerar-mapa-de-ids.sh
+bash plugins/tc96-frontend/skills/react-structure/scripts/gerar-mapa-de-ids.sh
+bash plugins/tc96-frontend/skills/react-hook-form/scripts/gerar-mapa-de-ids.sh
 bash scripts/instalar.sh
 ```
 
@@ -133,7 +133,7 @@ All four pass `skill-validator check` with **0 errors**. Two warnings remain per
 they stay by decision, not by oversight.
 
 ```bash
-for s in plugins/twincam-frontend/skills/react-*/; do skill-validator check "$s"; done
+for s in plugins/tc96-frontend/skills/react-*/; do skill-validator check "$s"; done
 ```
 
 <!-- tokens:inicio -->

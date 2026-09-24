@@ -28,5 +28,5 @@ kb-coverage/
 **It only reports.** `kb-coverage` never edits `knowledge-base/`, a `SKILL.md`, or a routing
 table — when it finds a gap, closing it is a separate, explicit task.
 
-Registered under `twincam-core` in `build/claude-code.sh`, next to `test` and `http`: those are
+Registered under `tc96-core` in `build/claude-code.sh`, next to `test` and `http`: those are
 the families this house's plugin map already calls "the roles that cut across any stack".

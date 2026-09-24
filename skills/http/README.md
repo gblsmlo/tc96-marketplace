@@ -40,7 +40,7 @@ statement `HTTP-CORE-04`. Each adds a concrete obligation, and citing the generi
 specific one fits loses information. The map's header carries the whole of § 6.2.
 
 ```bash
-bash plugins/twincam-core/skills/http-review/scripts/gerar-mapa-de-ids.sh
+bash plugins/tc96-core/skills/http-review/scripts/gerar-mapa-de-ids.sh
 bash scripts/instalar.sh
 ```
 
@@ -67,5 +67,5 @@ Regenerate: `bash scripts/medir.sh`
 ## Related
 
 - [Skills index](../README.md) · [HTTP](../../knowledge-base/http.md) § 7 — the contract
-- `twincam-backend: elysia family` — the mechanism that implements the contract
+- `tc96-backend: elysia family` — the mechanism that implements the contract
 - `tanstack-query` — the client's cache layer, which is not this one

@@ -76,7 +76,7 @@ Each probe is a command, a meaning and an authority. Adjust the paths to the rep
 ### S1 — Dependency used and not declared · `MONO-06`
 
 ```sh
-SCOPE='@twincam'   # the real scope: see the `name` in packages/*/package.json
+SCOPE='@tc96'   # the real scope: see the `name` in packages/*/package.json
 
 for dir in apps/* packages/* packages/*/*; do
   [ -f "$dir/package.json" ] || continue

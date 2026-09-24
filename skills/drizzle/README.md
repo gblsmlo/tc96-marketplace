@@ -38,7 +38,7 @@ expression over a column and an unbounded listing have **no `DRZ-*`** — the gr
 normative note, and inventing an ID there would be worse than not citing.
 
 ```bash
-bash plugins/twincam-backend/skills/drizzle-review/scripts/gerar-mapa-de-ids.sh
+bash plugins/tc96-backend/skills/drizzle-review/scripts/gerar-mapa-de-ids.sh
 bash scripts/instalar.sh
 ```
 

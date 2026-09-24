@@ -95,14 +95,14 @@ build.
 
 `dist/claude-code/` é um marketplace: `.claude-plugin/marketplace.json` na raiz e um
 plugin por recorte habilitável em `plugins/` (core, frontend, backend, e2e). Aponte o
-marketplace `twincam` para esse diretório, ou copie `skills/` e `agents/` de um plugin
+marketplace `tc96` para esse diretório, ou copie `skills/` e `agents/` de um plugin
 para `~/.claude/`.
 
-O marketplace `twincam` já aponta para cá desde 2026-09-22:
+O marketplace mudou de nome para `tc96` em 2026-09-23 (era `twincam`) — reaponte assim:
 
 ```bash
-claude plugin marketplace list          # twincam -> Directory (…/Workspaces/dist/claude-code)
-claude plugin install twincam-core@twincam
+claude plugin marketplace list          # tc96 -> Directory (…/Workspaces/dist/claude-code)
+claude plugin install tc96-core@tc96
 ```
 
 > `dist/` é ignorado pelo git e todo build o apaga antes de reescrever. O marketplace
