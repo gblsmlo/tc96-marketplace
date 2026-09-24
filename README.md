@@ -115,7 +115,7 @@ claude plugin install tc96-core@tc96
 | | Count | Language |
 | --- | --- | --- |
 | **skills** | 33, across 11 families | English |
-| **agents** | 12 | English |
+| **agents** | 11 | English |
 | **commands** | 17 | English body, `descricao` in Portuguese |
 | **knowledge-base** | 130 notes, no subfolders | Portuguese — it's the rule, and the ID comes from it |
 
