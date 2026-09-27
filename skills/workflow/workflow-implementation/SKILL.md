@@ -56,6 +56,11 @@ References in this skill:
 The unit needs, from `workflow-planning`: acceptance criterion, owning perfil, evidence plan.
 Missing any of these means this is not actually a ready unit — return it (`WF-CORE-03`).
 
+Start from a small context: a fresh agent, or a session right after `/compact`, holding the unit
+and not the conversation that produced it. Implementing inside a long session re-reads all of
+that history on every request
+([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
+
 ---
 
 ## Step 2 — Read the owning code and its existing tests
@@ -110,6 +115,12 @@ later" (`WF-IMPL-04`).
 
 Return the envelope from hub §5 (`pilar: implementacao`). This pillar always routes forward
 to `workflow-validation` — it never marks work complete itself (`WF-CORE-04`).
+
+**Advance without asking.** Start `workflow-validation` right away. Do not ask whether to
+continue. Validation already runs in a context independent from this one (`WF-VAL-01`), so the
+context reset is built in. If the owner gave an instruction during the work that departs from
+the unit, record it under `decisoes` in the envelope, not only in chat. A product-level
+departure returns to `workflow-research` instead (`WF-IMPL-01`).
 
 ---
 

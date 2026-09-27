@@ -82,6 +82,14 @@ a pillar. Return it to `workflow-research` before doing anything else (`WF-CORE-
 Decide now, not at validation time, what focused checks and what evidence this unit's
 completion will require — the next pillar inherits this plan, it does not invent one.
 
+**Shared contracts get a shape test in the first consumer.** When two units share a contract
+(a schema and the component that emits data for it, an API and its client) and they can be
+built in parallel, the consumer's acceptance criterion requires a test that feeds its **real
+output** into the producer's **real validator**. Matching field or node names is not enough:
+shapes drift while names still match. Put the test in the earliest unit that consumes the
+contract, not in a later integration unit. Otherwise the mismatch surfaces only after both
+sides are built on it.
+
 ---
 
 ## Step 4 — Self-check before the handoff
@@ -94,6 +102,7 @@ completion will require — the next pillar inherits this plan, it does not inve
 | 4 | appetite is decided before any time estimate | `WF-PLAN-01` |
 | 5 | acceptance criteria are written, not implicit | `WF-PLAN-04` |
 | 6 | the evidence plan for validation is named | — |
+| 7 | every contract shared between units has a real-output-against-real-validator test in its first consumer | `WF-PLAN-04` |
 
 ---
 
@@ -107,6 +116,16 @@ Return the envelope from hub §5 (`pilar: planejamento`):
 | a decision is missing after all | `workflow-research` |
 | cronograma/risk spans multiple units | `project-manager` |
 | boundary itself is disputed, not just which perfil owns it | `software-architect` |
+
+**Advance without asking.** When the first unit is ready and `lacunas` holds nothing that only
+the owner can decide, start `workflow-implementation` on it now. Do not ask whether to continue.
+Stop only for an owner decision or for an action that is irreversible or visible to others
+(push, PR, deleting data).
+
+**Reset the context at the boundary.** Each unit is implemented in a fresh agent, or after
+`/compact`, that receives only the unit (acceptance, owner, evidence plan) and the decisions it
+depends on. The planning conversation does not travel with it
+([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
 
 ---
 

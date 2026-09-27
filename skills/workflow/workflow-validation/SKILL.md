@@ -125,6 +125,13 @@ Return the envelope from hub §5 (`pilar: validacao`):
 | clean | closed technically — `product-manager` picks up business acceptance separately, if applicable |
 | failure found | the pillar of origin from Step 4 |
 
+**Advance without asking.** Routing a failure back to its pillar of origin is automatic: do not
+ask whether to continue. The fix starts in a fresh agent, or after `/compact`, carrying only the
+findings and the unit
+([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
+A clean result ends the flow here. A push or PR that follows is visible to others and needs the
+owner's go-ahead.
+
 ---
 
 ## Example
