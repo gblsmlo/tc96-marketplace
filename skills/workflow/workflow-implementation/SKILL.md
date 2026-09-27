@@ -61,6 +61,12 @@ and not the conversation that produced it. Implementing inside a long session re
 that history on every request
 ([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
 
+**Returning with validation findings.** For the first and second fix rounds, resume the
+implementer that already holds the unit and send it only the findings. That is cheaper than
+re-reading the plan. From the third round on, start a fresh agent carrying the unit, its
+acceptance criteria and the findings still open. Each resumed round adds to the implementer's
+context, so after a few rounds every request costs more than a fresh start would.
+
 ---
 
 ## Step 2 — Read the owning code and its existing tests

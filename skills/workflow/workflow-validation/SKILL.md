@@ -126,9 +126,10 @@ Return the envelope from hub §5 (`pilar: validacao`):
 | failure found | the pillar of origin from Step 4 |
 
 **Advance without asking.** Routing a failure back to its pillar of origin is automatic: do not
-ask whether to continue. The fix starts in a fresh agent, or after `/compact`, carrying only the
-findings and the unit
+ask whether to continue. Send only the findings, never this review's conversation. Whether the
+fix resumes the implementer or starts a fresh one follows `workflow-implementation` Step 1
 ([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
+A unit that failed validation is reviewed again after the fix.
 A clean result ends the flow here. A push or PR that follows is visible to others and needs the
 owner's go-ahead.
 
