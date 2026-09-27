@@ -133,6 +133,17 @@ Return the envelope from hub §5 (`pilar: pesquisa`), and route by scope:
 what stays an open gap. The next pillar does not reopen this classification without new
 evidence.
 
+**Advance without asking.** If `proximo` is set and `lacunas` holds nothing that only the owner
+can decide, start the next pillar now. Do not ask whether to continue. Stop only for an owner
+decision (a product question, an appetite breach under `WF-PLAN-02`) or for an action that is
+irreversible or visible to others (push, PR, deleting data).
+
+**Reset the context at the boundary.** The next pillar starts in a fresh agent, or after
+`/compact`, carrying only this envelope and the facts it cites. Stale context is re-read and
+billed on every turn ([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
+Before routing on a fact that came from a summary, re-read its cited line, because a summary
+can widen a rule beyond its scope (`WF-RES-02`).
+
 ---
 
 ## Example
