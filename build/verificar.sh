@@ -127,6 +127,38 @@ for agente in sorted((raiz / "agents").glob("*.md")):
             orfas.append(f"{agente.relative_to(raiz)}: declara `{nome}`, que não existe")
 sondar("skills declaradas por agente que existem", orfas)
 
+# --- 5. custo por papel ------------------------------------------------------
+import json
+mapa = json.loads((raiz / "build/modelos.json").read_text(encoding="utf-8"))
+tiers = set.intersection(*(set(a["modelo"]) for a in mapa.values()))
+niveis = set.intersection(*(set(a["esforco"]) for a in mapa.values()))
+sem_tier, preload_pesado = [], []
+for agente in sorted((raiz / "agents").glob("*.md")):
+    m = re.match(r"^---\n(.*?)\n---\n", agente.read_text(encoding="utf-8"), re.S)
+    if not m or "tipo: agente" not in m.group(1):
+        continue
+    campos = dict(re.findall(r"^(\w+):\s*(.*)$", m.group(1), re.M))
+    if campos.get("modelo") not in tiers:
+        sem_tier.append(f"{agente.relative_to(raiz)}: modelo `{campos.get('modelo')}`")
+    if campos.get("esforco") not in niveis:
+        sem_tier.append(f"{agente.relative_to(raiz)}: esforco `{campos.get('esforco')}`")
+    bloco = re.search(r"^skills:\n((?:  - .*\n)+)", m.group(1) + "\n", re.M)
+    if bloco and len(bloco.group(1).splitlines()) > 2:
+        preload_pesado.append(f"{agente.relative_to(raiz)}: "
+                              f"{len(bloco.group(1).splitlines())} skills pré-carregadas")
+sondar("agentes com modelo e esforco mapeados em todo alvo", sem_tier)
+sondar("agentes com no máximo 2 skills pré-carregadas", preload_pesado)
+
+delegacao = []
+for skill in sorted((raiz / "skills/workflow").glob("*/SKILL.md")):
+    linhas = skill.read_text(encoding="utf-8").splitlines()
+    if not any("WF-CORE-06" in l for l in linhas[:30]):
+        delegacao.append(f"{skill.relative_to(raiz)}: sem bloco de delegação no topo")
+    for n, l in enumerate(linhas, 1):
+        if re.search(r"\ba fresh agent\b", l, re.I):
+            delegacao.append(f"{skill.relative_to(raiz)}:{n}: agente sem nome")
+sondar("pilares delegados a agente nomeado (WF-CORE-06)", delegacao)
+
 print()
 if falhas:
     print(f"{len(falhas)} grupo(s) com falha: " + ", ".join(falhas))

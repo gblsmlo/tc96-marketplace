@@ -9,7 +9,9 @@ capacidades:
   - editar
   - buscar
   - executar
+  - usar-skill
 modelo: alto
+esforco: alto
 skills:
   - bun-workspace
   - bun-migrate

@@ -7,7 +7,8 @@ capacidades:
   - ler
   - escrever
   - buscar
-modelo: alto
+modelo: medio
+esforco: medio
 tags:
   - agent
   - project-management

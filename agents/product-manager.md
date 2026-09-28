@@ -8,6 +8,7 @@ capacidades:
   - escrever
   - buscar
 modelo: alto
+esforco: alto
 tags:
   - agent
   - product-management

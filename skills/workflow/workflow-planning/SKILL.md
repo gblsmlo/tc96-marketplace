@@ -18,6 +18,11 @@ tags:
 
 Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §7.
 
+> **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`).** The gates and the decomposition go
+> to `project-manager`; a disputed boundary goes to `software-architect`. Never delegate to a
+> generic agent. The work items live on the board or in files, and the orchestrating
+> conversation keeps only their references in the envelope's `artefato`.
+
 > **Design note.** This is the **second pillar**: it turns an already-accepted decision into a unit someone can implement without reopening product questions. It never writes a plan file into the repository or invents the decision itself — if the decision is not there yet, that is a return to `workflow-research`, not something to improvise here.
 
 ---
@@ -39,7 +44,7 @@ Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../k
 | --- | --- | --- |
 | 1 | [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §2 | the four-pillar table, to confirm entry condition |
 | 2 | Same hub, §4.2 | the five gates — the core of this skill |
-| 3 | Same hub, §6 `WF-CORE-*` and `WF-PLAN-*` | the 10 rules this skill enforces |
+| 3 | Same hub, §6 `WF-CORE-*` and `WF-PLAN-*` | the 12 rules this skill enforces |
 
 References in this skill:
 
@@ -103,6 +108,7 @@ sides are built on it.
 | 5 | acceptance criteria are written, not implicit | `WF-PLAN-04` |
 | 6 | the evidence plan for validation is named | — |
 | 7 | every contract shared between units has a real-output-against-real-validator test in its first consumer | `WF-PLAN-04` |
+| 8 | each unit names the agent that implements it, and that agent is in hub §3 | `WF-CORE-06` |
 
 ---
 
@@ -122,9 +128,10 @@ the owner can decide, start `workflow-implementation` on it now. Do not ask whet
 Stop only for an owner decision or for an action that is irreversible or visible to others
 (push, PR, deleting data).
 
-**Reset the context at the boundary.** Each unit is implemented in a fresh agent, or after
-`/compact`, that receives only the unit (acceptance, owner, evidence plan) and the decisions it
-depends on. The planning conversation does not travel with it
+**Reset the context at the boundary.** Each unit is implemented by the agent the boundary gate
+named (`frontend-developer`, `backend-developer`, `devops-security`), started with only the unit
+(acceptance, owner, evidence plan) and the decisions it depends on (`WF-CORE-06`). The planning
+conversation does not travel with it
 ([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
 
 ---

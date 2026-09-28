@@ -2,7 +2,8 @@
 # Projeta a fonte neutra para um plugin do Claude Code, em dist/claude-code/.
 #
 # O que este adaptador acrescenta, e que a fonte neutra nao tem:
-#   - frontmatter: nome->name, descricao->description, capacidades->tools, modelo->model
+#   - frontmatter: nome->name, descricao->description, capacidades->tools, modelo->model,
+#     esforco->effort (mapa em build/modelos.json)
 #   - .claude-plugin/plugin.json
 #   - layout achatado: skills/<familia>/<skill>/ -> skills/<skill>/
 #   - knowledge-base/ -> referencias/
@@ -11,7 +12,7 @@ set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="${1:-$RAIZ/dist/claude-code}"
-VERSAO="${VERSAO:-0.6.0}"   # 0.4: commands/ · 0.5: comandos em bun · 0.6: fases 3 em bun test
+VERSAO="${VERSAO:-0.7.0}"   # 0.4: commands/ · 0.5: comandos em bun · 0.6: fases 3 em bun test · 0.7: modelo e esforco por papel
 
 rm -rf "$DEST"
 
@@ -22,8 +23,9 @@ raiz, dest = pathlib.Path(os.environ["RAIZ"]), pathlib.Path(os.environ["DEST"])
 versao = os.environ["VERSAO"]
 
 FERR = {"ler": ["Read"], "escrever": ["Write"], "editar": ["Edit"],
-        "buscar": ["Grep", "Glob"], "executar": ["Bash"]}
-MODELO = {"alto": "opus", "medio": "sonnet", "rapido": "haiku"}
+        "buscar": ["Grep", "Glob"], "executar": ["Bash"], "usar-skill": ["Skill"]}
+# a lista explicita em `tools:` so libera a Skill tool se ela estiver nomeada
+ALVO = json.loads((raiz / "build/modelos.json").read_text(encoding="utf-8"))["claude-code"]
 
 # Um plugin por recorte habilitavel em projeto. Familia sem plugin declarado
 # nao sai no build.
@@ -32,7 +34,8 @@ PLUGINS = {
         "familias": ["test", "http", "workflow"],
         "agentes": ["code-reviewer", "software-architect", "qa-engineer",
                     "product-manager", "product-designer", "project-manager",
-                    "devops-security", "ai-engineer", "monorepo-auditor"],
+                    "devops-security", "ai-engineer", "monorepo-auditor",
+                    "repo-explorer"],
         # comando e ponto de entrada nomeado, invocado pela pessoa — nao e uma
         # quarta camada da cadeia, e um quarto tipo de artefato ao lado de
         # skill e agente. Como os agentes, entra por nome, nao por familia.
@@ -187,9 +190,12 @@ for plugin, cfg in PLUGINS.items():
             for f in FERR.get(c, []):
                 if f not in ferramentas:
                     ferramentas.append(f)
+        modelo = ALVO["modelo"][campos.get("modelo", "alto")]
         fm = ["---", f"name: {campos['nome']}", f"description: {campos['descricao']}",
               f"tools: {', '.join(ferramentas)}",
-              f"model: {MODELO.get(campos.get('modelo', 'alto'), 'opus')}"]
+              f"model: {modelo}"]
+        if modelo not in ALVO["sem_esforco"] and campos.get("esforco"):
+            fm.append(f"effort: {ALVO['esforco'][campos['esforco']]}")
         fm += listas(campos, ["skills", "tags", "fontes"])
         fm.append("---\n")
         texto = ("\n".join(fm) + corpo)

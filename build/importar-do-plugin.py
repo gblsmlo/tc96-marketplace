@@ -54,8 +54,11 @@ RENOMEAR = {"teste-design": "test-design", "teste-review": "test-review",
 CONTEXT7 = json.loads((RAIZ / "build/context7.json").read_text(encoding="utf-8"))
 
 FERRAMENTA_PARA_CAPACIDADE = {"Read": "ler", "Write": "escrever", "Edit": "editar",
-                              "Grep": "buscar", "Glob": "buscar", "Bash": "executar"}
-MODELO_NEUTRO = {"opus": "alto", "sonnet": "medio", "haiku": "rapido"}
+                              "Grep": "buscar", "Glob": "buscar", "Bash": "executar",
+                              "Skill": "usar-skill"}
+_CC = json.loads((RAIZ / "build/modelos.json").read_text(encoding="utf-8"))["claude-code"]
+MODELO_NEUTRO = {v: k for k, v in _CC["modelo"].items()}
+ESFORCO_NEUTRO = {v: k for k, v in _CC["esforco"].items()}
 ACENTOS = str.maketrans("áãâéêíóõôúüç", "aaaeeiooouuc")
 
 
@@ -233,6 +236,8 @@ def frontmatter_agente(campos, corpo):
             "tipo: agente", "capacidades:"]
     novo += [f"  - {c}" for c in caps]
     novo.append(f"modelo: {MODELO_NEUTRO.get(campos.get('model', ''), 'alto')}")
+    if campos.get("effort") in ESFORCO_NEUTRO:
+        novo.append(f"esforco: {ESFORCO_NEUTRO[campos['effort']]}")
     for lista in ("skills", "fontes", "tags"):
         if campos.get(lista + "__lista"):
             novo.append(f"{lista}:")

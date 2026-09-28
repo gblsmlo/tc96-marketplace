@@ -10,6 +10,7 @@ capacidades:
   - buscar
   - executar
 modelo: alto
+esforco: medio
 tags:
   - agent
   - ai

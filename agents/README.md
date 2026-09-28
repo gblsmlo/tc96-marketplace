@@ -21,7 +21,7 @@ These are three links, not four: the reasoning layer was cut on 2026-09-22 and i
 
 **The API surface doesn't live here.** A library's signature, options, and version-specific behavior resolve through Context7, using the library ID the skill declares in `docs:`. The knowledge base answers what's correct and which ID to cite in a review — not what a function accepts in this minor version.
 
-## The eleven agents
+## The twelve agents
 
 | Agent | Role | Skills it loads | Main sources |
 | --- | --- | --- | --- |
@@ -36,18 +36,19 @@ These are three links, not four: the reasoning layer was cut on 2026-09-22 and i
 | `product-designer` | Persona, journey, flow, the four states of every screen, components, and catalog level | — | `Product Design` · `Product Team` · [Storybook estruturado por Atomic Design](../knowledge-base/storybook-estruturado-por-atomic-design.md) |
 | `project-manager` | Scope, schedule, cost, risk, communication, and change as a system | — | `Gestão de Projetos - Mapa de Fundamentos` |
 | `monorepo-auditor` | Audits the layers of an already-written monorepo: dependency direction, public surface, who opens a transaction, which boundary is verifiable | `bun-workspace` · `drizzle-review` · `react-structure` | [Monorepo com Bun - estrutura e tooling](../knowledge-base/monorepo-com-bun-estrutura-e-tooling.md) `MONO-*` · [Architecture in React](../knowledge-base/architecture-in-react.md) · [Fronteira do BFF - forma, jornada e regra](../knowledge-base/fronteira-do-bff-forma-jornada-e-regra.md) |
+| `repo-explorer` | Gathers facts from existing code for the research pillar: a bounded question in, facts with file:line out, no file contents | — | [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) · [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) `WF-CORE-06` |
 
 ## Common anatomy
 
-All eleven share the same shape, checkable by script, and it extends the anatomy from [Skills](../skills/README.md) with the fields a Claude Code subagent reads ([Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) § 7):
+All twelve share the same shape, checkable by script, and it extends the anatomy from [Skills](../skills/README.md) with the fields a Claude Code subagent reads ([Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) § 7):
 
 | Element | Rule |
 | --- | --- |
 | `name` | kebab-case, **identical** to the file name |
 | `description` | **what** + **when to use** + **when not to use**, naming the neighboring agent — this is what the lead agent uses to decide whether to delegate |
 | `tools` | the minimum the role uses: agents that decide and review **do not** have `Write`/`Edit` |
-| `model` | `opus` by default; switching to `haiku` for a simple task is the most direct saving on a subagent |
-| `skills` | skills **preloaded in full** at launch — only the ones the role uses on every task; occasional ones stay in the body's minimal loading |
+| `modelo` + `esforco` | the role's tier and effort, neutral (`alto`/`medio`/`rapido`, `baixo`/`medio`/`alto`); each build maps them per provider — see "Model and effort per role" |
+| `skills` | skills **preloaded in full** at launch — at most two, the ones the role uses on every task; the rest load on demand, which needs the `usar-skill` capability (`Skill` in Claude Code) |
 | `fontes:` | the normative notes or maps the agent loads first |
 | **critical instruction up top** | the body's first block, because post-compaction truncation preserves the beginning (`CC-CTX-07`) |
 | `## Quando usar` | a routing table to the right agent or skill |
@@ -71,6 +72,7 @@ All eleven share the same shape, checkable by script, and it extends the anatomy
 | is it worth building; what to prioritize; how to measure it; spec; hypothesis | `product-manager` | `product-designer` · `project-manager` |
 | how should this work for the user; flow; screen states; usable, accessible | `product-designer` | `product-manager` · `frontend-developer` |
 | how long; who does what; risk; does it fit the scope; status | `project-manager` | `product-manager` · `software-architect` |
+| where is X, what calls Y, what does Z do **today** | `repo-explorer` | whoever decides with those facts |
 
 Two axes separate most of the pairs. **New × already exists** separates those who write from `code-reviewer` — the same axis as in [Skills](../skills/README.md). **Decide × execute** separates `software-architect`, `product-manager`, `product-designer`, and `project-manager` from the three that write code: the four that decide have no `Write`/`Edit` on the repository and deliver a recorded decision; those that execute receive the decision and return code with evidence.
 
@@ -99,11 +101,38 @@ flowchart LR
 
 Each agent declares in its final step who it hands off to, and the arrow is always accompanied by an artifact: spec, recorded decision, flow with states, code with evidence, findings report.
 
-This flowchart has a formal procedure in `skills/workflow/` — four skills, one per moment (research, planning, implementation, validation), that decide **when** to route to which of the eleven agents, citing rules by ID in [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md). The diagram above remains the source of **who**; the newer note is the source of **when**.
+This flowchart has a formal procedure in `skills/workflow/` — four skills, one per moment (research, planning, implementation, validation), that decide **when** to route to which of the twelve agents, citing rules by ID in [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md). The diagram above remains the source of **who**; the newer note is the source of **when**.
+
+## Model and effort per role
+
+The tier follows the task, not the role's prestige. Four properties decide it: how ambiguous the work is, how many tokens it spends, whether a later pillar checks its output, and how costly a miss is. Work that spends many tokens and gets checked downstream goes down a tier; work that is ambiguous, spends few tokens and is checked by no one stays up.
+
+| Role | `modelo` | `esforco` | Why |
+| --- | --- | --- | --- |
+| `product-manager` · `software-architect` | alto | alto | ambiguous, few tokens, nothing checks it later |
+| `devops-security` | alto | alto | a missed finding costs more than the tokens |
+| `monorepo-auditor` · `ai-engineer` | alto | medio | rare, wide judgment |
+| `code-reviewer` | medio | alto | it is the check; nothing reviews it |
+| `product-designer` | medio | alto | structured, but open-ended |
+| `project-manager` | medio | medio | template-driven gates |
+| `frontend-developer` · `backend-developer` · `qa-engineer` | medio | medio | most tokens, and validation catches their errors |
+| `repo-explorer` | rapido | baixo | every fact carries the line that proves it |
+
+A fix round that fails twice on the declared tier runs once more one tier up, then returns to planning (`workflow-implementation`, Step 1).
+
+The tiers are neutral; [`build/modelos.json`](../build/modelos.json) maps them per provider, and the lever differs:
+
+| | Claude Code | Codex |
+| --- | --- | --- |
+| main cost lever | the model: three tiers, `opus` · `sonnet` · `haiku` | the reasoning effort: `alto` and `medio` both land on `gpt-6-sol`, `rapido` on `gpt-6-luna` |
+| where it lands | agent frontmatter `model` + `effort` (no `effort` on `haiku`) | `.codex/agents/<name>.toml`: `model` + `model_reasoning_effort`, and `sandbox_mode` from the capabilities |
+| agent spawned with no role | set `CLAUDE_CODE_SUBAGENT_MODEL` in your environment; a role's own `model` still wins over it | `[agents] default_subagent_model` in `.codex/config.toml`, emitted by the build |
+
+Delegating a pillar to a generic agent skips all of this, since it runs on the session's model (`WF-CORE-06`).
 
 ## Usage in Claude Code
 
-**Installation.** Nothing here is installed by hand. `bash build/claude-code.sh` assembles the plugins in `dist/claude-code/`, translating the neutral frontmatter into the target format (`nome`→`name`, `capacidades`→`tools`, `modelo`→`model`) and rewriting links to stay inside the package. It's the same model as [Skills](../skills/README.md): **`agents/` is the source; `dist/` is the package.** Changing an agent means editing it here and running the build.
+**Installation.** Nothing here is installed by hand. `bash build/claude-code.sh` assembles the plugins in `dist/claude-code/`, translating the neutral frontmatter into the target format (`nome`→`name`, `capacidades`→`tools`, `modelo`→`model`, `esforco`→`effort`) and rewriting links to stay inside the package. It's the same model as [Skills](../skills/README.md): **`agents/` is the source; `dist/` is the package.** Changing an agent means editing it here and running the build.
 
 **What a subagent loads at startup** ([Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) § 7): **its own** system prompt (the note's body), the full content of the skills in the `skills:` field, the repository's CLAUDE.md, and whatever the lead agent passes in the prompt. Its reads **do not enter** the main context (`CC-PAR-01`) — which is why reviewing, investigating, and auditing are naturally subagent tasks.
 
@@ -117,7 +146,7 @@ Created on 2026-09-01 from already-existing material, and extracted into this re
 
 **Inherited gaps, stated openly.** There is no build skill for Drizzle or for Hono — `backend-developer` reads the hub directly and reviews with `drizzle-review`. The OAuth, session, and RBAC cluster has no skill — `devops-security` works through the [OWASP - Sessão e Autorização](../knowledge-base/owasp-sessao-e-autorizacao.md) checklist item by item. The product and management agents derive from course maps that **have not** been extracted into this repository: they appear in a code span, by name. They have no rule ID to cite, and that is stated plainly, not hidden.
 
-**Criterion for a new agent.** A role someone actually performs, with a question none of the eleven already answers, and material in the knowledge base to answer it. An agent with no source note is packaged opinion — it doesn't get in.
+**Criterion for a new agent.** A role someone actually performs, with a question none of the twelve already answers, and material in the knowledge base to answer it. An agent with no source note is packaged opinion — it doesn't get in.
 
 ## Related
 

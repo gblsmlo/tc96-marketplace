@@ -9,14 +9,12 @@ capacidades:
   - editar
   - buscar
   - executar
-modelo: alto
+  - usar-skill
+modelo: medio
+esforco: medio
 skills:
   - react-structure
   - react-developer
-  - tanstack-router
-  - tanstack-query
-  - react-hook-form
-  - storybook-story
 fontes:
   - "[Frontend roadmap](../knowledge-base/frontend-roadmap.md)"
   - "[Architecture in React](../knowledge-base/architecture-in-react.md)"

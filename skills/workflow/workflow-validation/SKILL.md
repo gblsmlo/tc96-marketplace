@@ -18,6 +18,12 @@ tags:
 
 Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §7.
 
+> **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`).** The diff goes to `code-reviewer`,
+> the checks and the test level to `qa-engineer`, a security finding to `devops-security`.
+> Never delegate to a generic agent. Check output (test logs, lint) stays inside the agent that
+> ran it; the orchestrating conversation receives the envelope with pass, fail, skipped and
+> unavailable counts, and the findings.
+
 > **Design note.** This is the **fourth pillar**, and it is a decision about evidence, not a
 > synonym for running the broadest suite (`WF-VAL-02`). It also never lets the change's own
 > author be the one who approves it (`WF-VAL-01`) — that is why `code-reviewer` runs this
@@ -43,7 +49,7 @@ Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../k
 | Order | Load | Why |
 | --- | --- | --- |
 | 1 | [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §4.4 | the evidence-proportionality tree — the core of this skill |
-| 2 | Same hub, §6 `WF-CORE-*` and `WF-VAL-*` | the 10 rules this skill enforces |
+| 2 | Same hub, §6 `WF-CORE-*` and `WF-VAL-*` | the 12 rules this skill enforces |
 | 3 | Same hub, §0.3 | the verification × validation distinction this pillar depends on |
 
 References in this skill:
@@ -113,6 +119,7 @@ missing decision just produces a different wrong answer, faster.
 | 4 | any failure was routed to its actual pillar of origin | `WF-VAL-04` |
 | 5 | any delivery metric cited comes from measured data, not impression | `WF-VAL-05` |
 | 6 | this pillar's output is a clear result, not a vague "looks fine" | `WF-CORE-01` |
+| 7 | review and checks ran in named agents, and only their envelopes came back | `WF-CORE-06`, `WF-CORE-07` |
 
 ---
 
@@ -126,8 +133,9 @@ Return the envelope from hub §5 (`pilar: validacao`):
 | failure found | the pillar of origin from Step 4 |
 
 **Advance without asking.** Routing a failure back to its pillar of origin is automatic: do not
-ask whether to continue. Send only the findings, never this review's conversation. Whether the
-fix resumes the implementer or starts a fresh one follows `workflow-implementation` Step 1
+ask whether to continue. Send only the findings, never this review's conversation. The fix
+round number decides who runs it (resume, one tier up, or back to planning), per the table in
+`workflow-implementation` Step 1
 ([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
 A unit that failed validation is reviewed again after the fix.
 A clean result ends the flow here. A push or PR that follows is visible to others and needs the

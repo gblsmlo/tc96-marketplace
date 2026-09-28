@@ -15,7 +15,7 @@ mkdir -p "$DEST"
 cp -r "$RAIZ/knowledge-base" "$DEST/knowledge-base"
 
 RAIZ="$RAIZ" DEST="$DEST" python3 <<'PYEOF'
-import os, re, shutil, pathlib
+import json, os, re, shutil, pathlib
 
 raiz, dest = pathlib.Path(os.environ["RAIZ"]), pathlib.Path(os.environ["DEST"])
 
@@ -50,7 +50,8 @@ def sem_frontmatter(campos, corpo):
     return "\n".join(saida) + "\n"
 
 
-skills, agentes, comandos = [], [], []
+skills, agentes, comandos, papeis = [], [], [], []
+CODEX = json.loads((raiz / "build/modelos.json").read_text(encoding="utf-8"))["codex"]
 
 for skill_dir in sorted((raiz / "skills").glob("*/*/")):
     fonte = skill_dir / "SKILL.md"
@@ -86,6 +87,8 @@ for agente in sorted((raiz / "agents").glob("*.md")):
     (dest / "agents").mkdir(exist_ok=True)
     (dest / "agents" / agente.name).write_text(sem_frontmatter(campos, corpo), encoding="utf-8")
     agentes.append((campos["nome"], campos["descricao"], campos.get("skills__lista", [])))
+    papeis.append((campos["nome"], campos.get("modelo", "alto"), campos.get("esforco", "alto"),
+                   campos.get("capacidades__lista", [])))
 
 for comando in sorted((raiz / "commands").glob("*.md")):
     campos, corpo = partir(comando.read_text(encoding="utf-8"))
@@ -100,6 +103,26 @@ indice_cmd = raiz / "commands/README.md"
 if indice_cmd.exists():
     (dest / "commands").mkdir(exist_ok=True)
     shutil.copy2(indice_cmd, dest / "commands/README.md")
+
+
+# --- .codex/: um agente customizado por papel -------------------------------
+(dest / ".codex/agents").mkdir(parents=True, exist_ok=True)
+for nome, modelo, esforco, capacidades in papeis:
+    escreve = {"escrever", "editar"} & set(capacidades)
+    (dest / ".codex/agents" / f"{nome}.toml").write_text("\n".join([
+        f'name = "{nome}"',
+        f'description = {json.dumps(next(d for n, d, _s in agentes if n == nome), ensure_ascii=False)}',
+        f'developer_instructions = "Read agents/{nome}.md before anything else and follow it as your procedure."',
+        f'model = "{CODEX["modelo"][modelo]}"',
+        f'model_reasoning_effort = "{CODEX["esforco"][esforco]}"',
+        f'sandbox_mode = "{"workspace-write" if escreve else "read-only"}"',
+        ""]), encoding="utf-8")
+padrao = CODEX["subagente_padrao"]
+(dest / ".codex/config.toml").write_text("\n".join([
+    "[agents]",
+    f'default_subagent_model = "{CODEX["modelo"][padrao["modelo"]]}"',
+    f'default_subagent_reasoning_effort = "{CODEX["esforco"][padrao["esforco"]]}"',
+    ""]), encoding="utf-8")
 
 
 # --- AGENTS.md: o roteador -------------------------------------------------
@@ -128,6 +151,14 @@ for nome, desc, skills_do_agente in agentes:
         linhas.append("")
     linhas.append(f"Procedimento completo em [`agents/{nome}.md`](agents/{nome}.md).")
     linhas.append("")
+
+linhas += ["## Modelo e esforço por papel", "",
+           "Ao delegar, use o papel pelo nome: um agente genérico herda o modelo da sessão",
+           "(`WF-CORE-06`). Runtime sem configuração de modelo por agente aplica esta tabela à mão.",
+           "", "| Papel | Tier | Esforço |", "| --- | --- | --- |"]
+linhas += [f"| `{n}` | {m} | {e} |" for n, m, e, _c in papeis]
+linhas += ["", "`alto` é o modelo mais capaz do provedor, `medio` o intermediário, `rapido` o mais",
+           "barato. No Codex os agentes já vêm em `.codex/agents/`, com o mapa aplicado.", ""]
 
 linhas += ["## Procedimentos", "",
            "Carregue **uma** skill por tarefa, e só as referências que ela mandar abrir.", ""]

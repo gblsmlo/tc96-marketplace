@@ -7,7 +7,9 @@ capacidades:
   - ler
   - buscar
   - executar
+  - usar-skill
 modelo: alto
+esforco: alto
 skills:
   - react-structure
 tags:

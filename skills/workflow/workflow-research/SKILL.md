@@ -19,6 +19,12 @@ tags:
 
 Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §7.
 
+> **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`).** Reading code to gather facts goes to
+> `repo-explorer`, which returns facts with `file:line`, not file contents. The scope decision
+> goes to `product-manager`, `product-designer` or `software-architect`. Never delegate to a
+> generic agent. The orchestrating conversation keeps the fact list and the envelope, never
+> the code that was read or a full report.
+
 > **Design note.** This is the **first pillar**: it decides *whether the intent is resolved*, never the intent itself. It does not write product spec, does not design the flow, does not decide architecture — those stay with `product-manager`, `product-designer`, `software-architect`. Skipping this pillar and going straight to implementation with an open decision is the most expensive antipattern this family exists to catch (`WF-CORE-03`).
 
 ---
@@ -42,7 +48,7 @@ Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../k
 | --- | --- | --- |
 | 1 | [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §0, §2 | the pillar × role distinction, the four-pillar table |
 | 2 | Same hub, §4.1 | the scope decision tree — the core of this skill |
-| 3 | Same hub, §6 `WF-CORE-*` and `WF-RES-*` | the 10 rules this skill enforces |
+| 3 | Same hub, §6 `WF-CORE-*` and `WF-RES-*` | the 12 rules this skill enforces |
 
 **Never load §4.2–§4.4** (planning gates, implementation stop conditions, validation
 proportionality) — those belong to the sibling skills, loaded only when the handoff reaches
@@ -67,8 +73,9 @@ want first.
 
 ## Step 2 — Separate fact, hypothesis, decision, and gap
 
-`references/separar-fato-hipotese-decisao.md`. Read the existing code, tests, tickets, and
-prior decisions. Sort everything you find into exactly one of these four buckets — never leave
+`references/separar-fato-hipotese-decisao.md`. Send `repo-explorer` a bounded question (which
+files, which behavior) to read the existing code and tests; read tickets and prior decisions
+yourself. Sort everything you find into exactly one of these four buckets — never leave
 an item unsorted (`WF-RES-01`).
 
 Existing code is evidence of the **present**, never authority over the **intent** — the
@@ -115,6 +122,8 @@ Team opinion about the user, without that source, never substitutes for research
 | 5 | every user-behavior claim has a source | `WF-RES-04` |
 | 6 | the output is a decision, not just a report | `WF-RES-03` |
 | 7 | remaining gaps are declared explicitly, not implied | `WF-CORE-05` |
+| 8 | code was read by `repo-explorer`, and the decision went to a named agent | `WF-CORE-06` |
+| 9 | this conversation holds the envelope and the fact list, not code or a full report | `WF-CORE-07` |
 
 ---
 
@@ -138,9 +147,10 @@ can decide, start the next pillar now. Do not ask whether to continue. Stop only
 decision (a product question, an appetite breach under `WF-PLAN-02`) or for an action that is
 irreversible or visible to others (push, PR, deleting data).
 
-**Reset the context at the boundary.** The next pillar starts in a fresh agent, or after
-`/compact`, carrying only this envelope and the facts it cites. Stale context is re-read and
-billed on every turn ([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
+**Reset the context at the boundary.** The next pillar runs in the named agent that owns it
+(hub §3), started with only this envelope and the facts it cites (`WF-CORE-06`). That agent
+returns an envelope, not a report (`WF-CORE-07`). Stale context is re-read and billed on every
+turn ([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
 Before routing on a fact that came from a summary, re-read its cited line, because a summary
 can widen a rule beyond its scope (`WF-RES-02`).
 

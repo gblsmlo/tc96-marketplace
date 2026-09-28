@@ -7,11 +7,11 @@ capacidades:
   - ler
   - buscar
   - executar
+  - usar-skill
 modelo: alto
+esforco: medio
 skills:
   - bun-workspace
-  - drizzle-review
-  - react-structure
 tags:
   - agent
   - architecture
