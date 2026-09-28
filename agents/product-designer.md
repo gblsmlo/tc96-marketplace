@@ -7,7 +7,8 @@ capacidades:
   - ler
   - escrever
   - buscar
-modelo: alto
+modelo: medio
+esforco: alto
 tags:
   - agent
   - product-design

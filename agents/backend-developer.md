@@ -9,18 +9,12 @@ capacidades:
   - editar
   - buscar
   - executar
-modelo: alto
+  - usar-skill
+modelo: medio
+esforco: medio
 skills:
   - elysia-build
-  - elysia-schema
-  - elysia-diagnose
   - http-contract
-  - http-cache
-  - http-diagnose
-  - bun-runtime
-  - bun-workspace
-  - bun-migrate
-  - bun-test-build
 tags:
   - agent
   - backend

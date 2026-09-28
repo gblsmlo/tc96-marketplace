@@ -1,7 +1,7 @@
-# workflow skills — the procedure layer over the eleven agents
+# workflow skills — the procedure layer over the twelve agents
 
 Four skills, one per pillar. They decide **when** — which moment a task is in — never **who**:
-that stays with the eleven agents in `agents/README.md`. Each skill routes to an existing
+that stays with the twelve agents in `agents/README.md`. Each skill routes to an existing
 agent or skill; none of them re-decides architecture, product scope, or test level — those
 already have an owner.
 

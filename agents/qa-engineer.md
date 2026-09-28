@@ -9,17 +9,11 @@ capacidades:
   - editar
   - buscar
   - executar
-modelo: alto
+  - usar-skill
+modelo: medio
+esforco: medio
 skills:
   - test-design
-  - test-review
-  - test-diagnose
-  - playwright-build
-  - playwright-review
-  - playwright-diagnose
-  - bun-test-build
-  - bun-test-review
-  - storybook-test
 tags:
   - agent
   - qa

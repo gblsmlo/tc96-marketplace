@@ -108,10 +108,14 @@ mas nunca decide "vou resolver isso na implementação mesmo" quando a lacuna é
 
 | Pilar | Skill | Agente(s) que o exercem, hoje | Nível de board |
 | --- | --- | --- | --- |
-| Pesquisa | `workflow-research` | `product-manager` · `product-designer` · `software-architect` | — nenhum item ainda; sai com a decisão que autoriza um (§0.4) |
+| Pesquisa | `workflow-research` | `product-manager` · `product-designer` · `software-architect`; levantamento de fatos no código: `repo-explorer` | — nenhum item ainda; sai com a decisão que autoriza um (§0.4) |
 | Planejamento | `workflow-planning` | `project-manager` · `software-architect` | abre e decompõe Epic → Story → Task (`template-epic.md` · `template-story.md` · `template-task.md`) |
 | Implementação | `workflow-implementation` | `frontend-developer` · `backend-developer` | executa um Task por vez — o único nível que quem implementa lê (`WF-IMPL-03`) |
 | Validação | `workflow-validation` | `qa-engineer` · `code-reviewer` · `devops-security` (quando o achado é de segurança) | revisa o PR (`template-pr.md`), com link de mão única de volta ao Task/Story |
+
+A coluna de agentes é também a lista fechada de quem pode receber um pilar delegado
+(`WF-CORE-06`): cada um declara `modelo` e `esforco` no próprio frontmatter, e é isso que
+impede o pilar de rodar no modelo da sessão.
 
 Este mapeamento é o mesmo fluxograma de `agents/README.md`, seção "Como os agentes passam o
 bastão" — aqui só como tabela, sem repetir o mermaid. Quando um agente novo for adicionado lá, esta tabela é
@@ -194,6 +198,7 @@ reconstruir o que já foi decidido:
 ```yaml
 pilar: "pesquisa | planejamento | implementacao | validacao"
 resultado: uma frase com o resultado
+artefato: "<item de board, arquivo, commit ou PR onde a saída completa está>"
 evidencia: [E1, E2]
 decisoes: [D1]
 lacunas: [G1]
@@ -202,6 +207,11 @@ proximo: "workflow-research | workflow-planning | workflow-implementation | work
 
 `proximo` é o campo de transição — é ele que aponta para onde o bastão vai, e é sempre
 acompanhado de um artefato (`WF-CORE-01`), nunca só de uma frase de intenção.
+
+`artefato` é a referência, não o conteúdo. A saída completa do pilar mora fora da conversa;
+quem orquestra guarda só o envelope, que cabe em 30 linhas (`WF-CORE-07`). Um relatório
+inteiro devolvido à conversa principal é relido e cobrado em todo turno seguinte, de todos
+os pilares que vierem depois.
 
 ---
 
@@ -218,6 +228,8 @@ Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
 | `WF-CORE-03` | Nenhum pilar **MUST** avançar com uma decisão em aberto: um retorno explícito ao pilar anterior é mais barato do que a decisão errada seguir adiante (Boehm, curva de custo de mudança). |
 | `WF-CORE-04` | Todo pilar de Implementação **MUST** terminar em Validação; **NEVER** termina em "pronto" sem prova. |
 | `WF-CORE-05` | Decisão sem evidência **MUST** ser tratada como hipótese, não fato; fingir certeza **NEVER** — é opinião empacotada. |
+| `WF-CORE-06` | Todo pilar delegado **MUST** ir a um agente nomeado da tabela da §3, que carrega modelo e esforço próprios; delegar a um agente genérico (o `general-purpose` do Claude Code, o spawn sem agente do Codex) **NEVER** — ele herda o modelo mais caro da sessão e todas as ferramentas. † |
+| `WF-CORE-07` | Quem orquestra os pilares **MUST** guardar só o envelope da §5, com a saída completa referenciada em `artefato`; ler código, o hub inteiro ou o relatório completo de um pilar na conversa principal **NEVER** — esse contexto é relido em todo turno até o fim do fluxo. † |
 
 ### `WF-RES-*` — pesquisa
 
@@ -261,11 +273,11 @@ Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
 
 ### Contagem
 
-**25 regras** em cinco famílias, um único arquivo — sem satélite nesta versão.
+**27 regras** em cinco famílias, um único arquivo — sem satélite nesta versão.
 
 | Família | Regras |
 | --- | --- |
-| `WF-CORE-*` | 5 |
+| `WF-CORE-*` | 7 |
 | `WF-RES-*` | 5 |
 | `WF-PLAN-*` | 5 |
 | `WF-IMPL-*` | 5 |

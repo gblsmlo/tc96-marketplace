@@ -7,14 +7,9 @@ capacidades:
   - ler
   - buscar
   - executar
-modelo: alto
-skills:
-  - react-review
-  - http-review
-  - drizzle-review
-  - playwright-review
-  - bun-test-review
-  - test-review
+  - usar-skill
+modelo: medio
+esforco: alto
 tags:
   - agent
   - code-review
