@@ -249,12 +249,27 @@ for plugin, cfg in PLUGINS.items():
 
 (dest / ".claude-plugin").mkdir(parents=True, exist_ok=True)
 (dest / ".claude-plugin/marketplace.json").write_text(json.dumps({
-    "name": "tc96",
+    "name": "tc96-marketplace",
     "owner": {"name": "Gabriel Melo", "email": "gblsmlo@gmail.com"},
     "metadata": {"description": "Agentes, skills e regra do stack desta casa.",
                  "version": versao},
     "plugins": publicados,
 }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+# Manifesto na raiz do repositorio: e o que `/plugin marketplace add gblsmlo/tc96-marketplace`
+# le. Os plugins continuam em dist/, entao cada source aponta para la.
+if dest.is_relative_to(raiz):
+    rel = dest.relative_to(raiz).as_posix()
+    (raiz / ".claude-plugin").mkdir(exist_ok=True)
+    raiz_plugins = [{**p, "source": f"./{rel}/" + p["source"].removeprefix("./")}
+                    for p in publicados]
+    (raiz / ".claude-plugin/marketplace.json").write_text(json.dumps({
+        "name": "tc96-marketplace",
+        "owner": {"name": "Gabriel Melo", "email": "gblsmlo@gmail.com"},
+        "metadata": {"description": "Agentes, skills e regra do stack desta casa.",
+                     "version": versao},
+        "plugins": raiz_plugins,
+    }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 print(f"claude-code -> {dest}")
 print("\n".join(resumo))

@@ -1,0 +1,33 @@
+{
+  "name": "tc96-marketplace",
+  "owner": {
+    "name": "Gabriel Melo",
+    "email": "gblsmlo@gmail.com"
+  },
+  "metadata": {
+    "description": "Agentes, skills e regra do stack desta casa.",
+    "version": "0.7.0"
+  },
+  "plugins": [
+    {
+      "name": "tc96-core",
+      "source": "./dist/claude-code/plugins/tc96-core",
+      "description": "Teste e contrato HTTP, e os papéis que atravessam qualquer stack. Habilite sempre."
+    },
+    {
+      "name": "tc96-frontend",
+      "source": "./dist/claude-code/plugins/tc96-frontend",
+      "description": "React, TanStack Router e Query, React Hook Form e Storybook no stack desta casa — escrita, estrutura e revisão de interface. Habilite em projeto com frontend."
+    },
+    {
+      "name": "tc96-backend",
+      "source": "./dist/claude-code/plugins/tc96-backend",
+      "description": "Runtime Bun, Elysia e Drizzle — serviço HTTP, persistência e dependências. Habilite em projeto com backend."
+    },
+    {
+      "name": "tc96-e2e",
+      "source": "./dist/claude-code/plugins/tc96-e2e",
+      "description": "Playwright — escrita, auditoria e diagnóstico de teste E2E. Habilite em projeto com suíte E2E."
+    }
+  ]
+}
