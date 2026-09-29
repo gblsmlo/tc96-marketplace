@@ -96,19 +96,31 @@ family at a time without breaking the build.
 
 ### Installing the Claude Code target
 
-`dist/claude-code/` is a marketplace: a `.claude-plugin/marketplace.json` at the root
-and one enableable plugin per slice under `plugins/` (`tc96-core`, `tc96-frontend`,
-`tc96-backend`, `tc96-e2e`). Point the `tc96` marketplace at that directory, or copy a
-plugin's `skills/` and `agents/` into `~/.claude/` directly.
+This repository is also the `tc96-marketplace` marketplace. `.claude-plugin/marketplace.json` at the
+root lists one enableable plugin per slice, built into `dist/claude-code/plugins/`
+(`tc96-core`, `tc96-frontend`, `tc96-backend`, `tc96-e2e`). `dist/claude-code/` is
+committed so the marketplace resolves straight from GitHub; `dist/agents-md/` stays ignored.
 
-```bash
-claude plugin marketplace list          # tc96 -> Directory (…/tc96-workspaces/dist/claude-code)
-claude plugin install tc96-core@tc96
+```
+/plugin marketplace add gblsmlo/tc96-marketplace
+/plugin install tc96-core@tc96-marketplace
 ```
 
-> `dist/` is git-ignored and every build wipes it before rewriting. The marketplace
-> references that directory, so **run an adapter before installing or updating a
-> plugin** — a marketplace pointing at an empty `dist/` fails with `cache-miss`.
+To enable it for a whole project (including Claude Code on the web), commit this to the
+project's `.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "tc96-marketplace": { "source": { "source": "github", "repo": "gblsmlo/tc96-marketplace" } }
+  },
+  "enabledPlugins": { "tc96-core@tc96-marketplace": true, "tc96-frontend@tc96-marketplace": true }
+}
+```
+
+> **After changing skills, agents, commands or the knowledge base, run
+> `bash build/claude-code.sh` and commit `dist/claude-code/` and `.claude-plugin/`.**
+> Every build wipes `dist/claude-code/` before rewriting it.
 
 ## Status
 
