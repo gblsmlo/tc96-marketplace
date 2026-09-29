@@ -1,4 +1,4 @@
-# tc96-workspaces
+# tc96-marketplace
 
 **A neutral source for agents, skills, and rules.**
 
