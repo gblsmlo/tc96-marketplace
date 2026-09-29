@@ -1,5 +1,6 @@
 # saída dos adaptadores — reconstruível com bash build/<alvo>.sh
-dist/
+dist/*
+!dist/claude-code/
 
 # saída de eval do skill kb-coverage — não é conteúdo fonte
 skills/kb/kb-coverage-workspace/
