@@ -32,7 +32,7 @@ cat > components.json <<'EOF'
   "rsc": false,
   "tsx": true,
   "tailwind": {
-    "config": "tailwind.config.ts",
+    "config": "",
     "css": "src/app.css",
     "baseColor": "zinc",
     "cssVariables": true,
@@ -67,6 +67,7 @@ mkdir -p src/libs
 - [ ] `src/components/ui/` contains shadcn components
 - [ ] All UI component imports reference `@libs/utils`
 - [ ] `components.json` has correct aliases for FBA
+- [ ] `components.json` leaves `tailwind.config` empty — Tailwind v4 has no JS config (`TW-THEME-14`)
 
 ---
 
