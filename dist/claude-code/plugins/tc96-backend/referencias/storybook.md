@@ -516,7 +516,7 @@ O corpo desta doc é Storybook fiel à fonte. Mas no meu stack várias decisões
 | Componente lê search param tipado — **caminho react-vite** | passar prop fake | query string em `initialEntries`; `validateSearch` **não é sobrescrevível** — [Storybook - React Vite](storybook-react-vite.md) § 4.2 |
 | Story de formulário complexo | disparar `change` em cada input | `play` com `userEvent` + `fn()` no `onSubmit` — [React Hook Form - Estado e Performance](react-hook-form-estado-e-performance.md) |
 | Componente com `useEffect` de fetch | escrever a story em volta do defeito | o defeito é o `useEffect` — `REACT-EFFECT-06` em [React - Efeitos e Sincronização](react-efeitos-e-sincronizacao.md) |
-| Tema e tokens | `style` inline na story | decorator global de tema — `Tailwindcss` |
+| Tema e tokens | `style` inline na story | decorator global de tema — `Tailwind CSS` |
 | Erro esperado (400 de validação) | lançar para o Error Boundary | é estado, e merece story própria — `REACT-ASYNC-09` |
 | Resposta do BFF tipada | duplicar o tipo no mock | reusar o tipo exportado do servidor — [Hono - Validação e RPC](hono-validacao-e-rpc.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 
@@ -533,7 +533,7 @@ O corpo desta doc é Storybook fiel à fonte. Mas no meu stack várias decisões
 - [Storybook - React Vite](storybook-react-vite.md) — caminho B: o framework genérico, e o router à mão
 - [React.js](react-js.md) — o hub de React; esta doc pressupõe o modelo mental de lá
 - [React - Patterns](react-patterns.md) — decide o que é componente de design system e o que não é
-- [TanStack Query](tanstack-query.md) · [TanStack Router](tanstack-router.md) · [React Hook Form](react-hook-form.md) · `Tailwindcss`
+- [TanStack Query](tanstack-query.md) · [TanStack Router](tanstack-router.md) · [React Hook Form](react-hook-form.md) · `Tailwind CSS`
 - [Bun - Testes](bun-testes.md) — o outro runner do monorepo
 - [Monorepo com Bun - estrutura e tooling](monorepo-com-bun-estrutura-e-tooling.md) — onde `apps/storybook` vive e por que é folha
 

@@ -286,7 +286,7 @@ Silencia o aviso e mantém a ambiguidade. Quando um botão for inserido antes, o
 page.locator('button.px-4.py-2.bg-blue-500.rounded-md');
 ```
 
-Com Tailwind isso é especialmente frágil: as classes *são* o estilo, e mudam a cada ajuste de design. Ver `Tailwindcss`.
+Com Tailwind isso é especialmente frágil: as classes *são* o estilo, e mudam a cada ajuste de design. Ver `Tailwind CSS`.
 
 ### 8.3 `getByText` para clicar em botão
 
@@ -341,7 +341,7 @@ Ver § 4. É um dos poucos antipadrões que produzem teste **verde** e inútil, 
 - — o princípio de que isto é a aplicação prática
 - [React - Patterns](react-patterns.md) — quando o achado é o componente, não o teste
 - [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) — o mesmo critério de query, um nível abaixo
-- `Tailwindcss` — por que classe utilitária não serve de seletor
+- `Tailwind CSS` — por que classe utilitária não serve de seletor
 
 ## Fontes consultadas
 

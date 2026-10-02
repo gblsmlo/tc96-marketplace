@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Agentes, skills e regra do stack desta casa.",
-    "version": "0.7.0"
+    "version": "0.8.0"
   },
   "plugins": [
     {
@@ -23,6 +23,11 @@
       "name": "tc96-backend",
       "source": "./plugins/tc96-backend",
       "description": "Runtime Bun, Elysia e Drizzle — serviço HTTP, persistência e dependências. Habilite em projeto com backend."
+    },
+    {
+      "name": "tc96-tailwind",
+      "source": "./plugins/tc96-tailwind",
+      "description": "Tailwind CSS v4 — setup, escrita e revisão de estilo, com a própria doc normativa (TW-*). Autocontido: habilite sozinho ou junto do tc96-frontend."
     },
     {
       "name": "tc96-e2e",
