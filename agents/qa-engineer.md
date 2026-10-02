@@ -121,7 +121,7 @@ A finding without an ID is opinion. Never invent an ID; declare what wasn't veri
 Task: "cover the overdue invoice's interest calculation and the screen that shows it".
 
 1. **Sentence**: "interest calculated wrong at month rollover; screen shows the old value after payment".
-2. **Level** (`test-design`): calculation → **unit** (`bun test`, boundary value: 0 days, 1 day, 30, 31 — `TS-TEC-01`); "screen shows the value" → **component integration** with a story + `play` (`storybook-test`), with the query mocked at the HTTP boundary; the "pay and see it settled" journey is already covered in E2E — don't duplicate it (`TS-CORE-02`).
+2. **Level** (`test-design`): calculation → **unit** (`bun test`, boundary value: 0 days, 1 day, 30, 31 — `TS-TEC-01`); "screen shows the value" → **component integration** (here as a story + `play` with `storybook-test`, because the task instructed Storybook; otherwise `bun test` + Testing Library), with the query mocked at the HTTP boundary; the "pay and see it settled" journey is already covered in E2E — don't duplicate it (`TS-CORE-02`).
 3. **Tool**: `juros.test.ts` with a controlled clock ([Bun - Testes - Mocks e Tempo](../knowledge-base/bun-testes-mocks-e-tempo.md)); `FaturaResumo.stories.tsx` with `play` asserting the text by accessible role.
 4. **Evidence**: `bun test` output and the Storybook test-runner's output in the report; what wasn't covered, declared.
 
