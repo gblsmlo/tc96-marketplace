@@ -50,13 +50,13 @@ References in this skill:
 
 | File | What for |
 | --- | --- |
-| `references/arvore-de-nivel.md` | the sentence, the level, the per-module proportion (Steps 1–3) |
-| `references/tecnicas-de-caso.md` | technique by input shape, non-numeric boundaries, the five states (Step 4) |
-| `references/substituicao.md` | the single question about doubles and the vocabulary (Step 5) |
-| `references/antipadroes.md` | the check grid, 24 antipatterns with IDs |
-| `references/mapa-de-ids.md` | the 64 `TS-*` by satellite and section, and the three **aliases** |
-| `references/exemplo-desconto-por-volume.md` | worked case, from the sentence to the handoff |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates the map across the three test skills |
+| `references/level-tree.md` | the sentence, the level, the per-module proportion (Steps 1–3) |
+| `references/case-techniques.md` | technique by input shape, non-numeric boundaries, the five states (Step 4) |
+| `references/substitution.md` | the single question about doubles and the vocabulary (Step 5) |
+| `references/antipatterns.md` | the check grid, 24 antipatterns with IDs |
+| `references/id-map.md` | the 64 `TS-*` by satellite and section, and the three **aliases** |
+| `references/example-volume-discount.md` | worked case, from the sentence to the handoff |
+| `scripts/generate-id-map.sh` | regenerates the map across the three test skills |
 
 ---
 
@@ -64,13 +64,13 @@ References in this skill:
 
 > **What exactly can go wrong here?**
 
-If you cannot write it, **the test should not be written yet** (`TS-CORE-01`). A good sentence names **a subject and a wrong behavior** — and it is the sentence that decides the level, not intuition. Examples of vague × actionable sentences: `references/arvore-de-nivel.md`.
+If you cannot write it, **the test should not be written yet** (`TS-CORE-01`). A good sentence names **a subject and a wrong behavior** — and it is the sentence that decides the level, not intuition. Examples of vague × actionable sentences: `references/level-tree.md`.
 
 ---
 
 ## Step 2 — Choose the level
 
-`references/arvore-de-nivel.md`, or § 4.1 of the hub. Three cuts settle most cases:
+`references/level-tree.md`, or § 4.1 of the hub. Three cuts settle most cases:
 
 - **a business rule is never E2E** (`TS-NIV-02`);
 - it needs routing, login or more than one screen → **E2E**; it varies props → **component**;
@@ -88,13 +88,13 @@ Per **module**, not per repository (`TS-NIV-08`). Complexity inside functions �
 
 ## Step 4 — Derive the cases
 
-`references/tecnicas-de-caso.md`. If you are going to apply **one** technique, make it **boundary value** (`TS-TEC-01`). Do not forget the non-numeric boundaries — an **empty** collection is the one that breaks UI most — nor the five states of the flow (`TS-TIPO-02`).
+`references/case-techniques.md`. If you are going to apply **one** technique, make it **boundary value** (`TS-TEC-01`). Do not forget the non-numeric boundaries — an **empty** collection is the one that breaks UI most — nor the five states of the flow (`TS-TIPO-02`).
 
 ---
 
 ## Step 5 — Decide what to replace
 
-`references/substituicao.md`. The single question: **if the real dependency diverged from the double, should this test break?** If yes, do not replace it (`TS-CORE-03`). Clock and randomness: always replace them (`TS-DUB-05`).
+`references/substitution.md`. The single question: **if the real dependency diverged from the double, should this test break?** If yes, do not replace it (`TS-CORE-03`). Clock and randomness: always replace them (`TS-DUB-05`).
 
 ---
 
@@ -113,7 +113,7 @@ Per **module**, not per repository (`TS-NIV-08`). Complexity inside functions �
 | 9 | the double is called by the right name | `TS-DUB-01` |
 | 10 | a non-functional requirement has a number and a percentile | `TS-TIPO-05`, `TS-TIPO-06` |
 
-Then go through `references/antipadroes.md` line by line.
+Then go through `references/antipatterns.md` line by line.
 
 ---
 
@@ -144,7 +144,7 @@ Then go through `references/antipadroes.md` line by line.
 
 *"Cover the volume discount at checkout."* The sentence — "a discount above 50% can be applied without approval" — sends it to **unit**, not to the whole checkout. Boundary value generates 5 cases, state transition 2 more, and E2E gets **one**: the screen displays the calculated value. The intuitive alternative (8 E2E runs) buys less information for far more execution time.
 
-Full case: `references/exemplo-desconto-por-volume.md`.
+Full case: `references/example-volume-discount.md`.
 
 ---
 

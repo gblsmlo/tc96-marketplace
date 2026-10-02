@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Regenerates references/mapa-de-ids.md for the three test skills, from teste-de-software*.
+# Regenerates references/id-map.md for the three test skills, from teste-de-software*.
 # An index, not a copy: ID -> satellite -> section. The rule's text stays in the note.
 #
 # Priority when the same ID shows up in several places:
@@ -7,7 +7,7 @@
 #   2  the same in the hub  3  mention in a checklist or antipattern table
 set -euo pipefail
 
-BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)/knowledge-base}"
+BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)/referencias}"
 # The map is generated at authoring time and committed: source and destination are
 # both this repository (pass another knowledge-base path as $1 if you need to).
 FAMILIA="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -22,8 +22,8 @@ titulos() {
 # Rewrites a note's own relative links to how they are seen from
 # <family>/<skill>/references/ — nothing here points outside the project.
 links() {
-  sed -E -e 's#\]\(\.\./pages/#](../../../../knowledge-base/#g' \
-         -e 's#\]\(([^)/]+\.md)#](../../../../knowledge-base/\1#g'
+  sed -E -e 's#\]\(\.\./pages/#](../../../referencias/#g' \
+         -e 's#\]\(([^)/]+\.md)#](../../../referencias/\1#g'
 }
 HUB="$DOCS/teste-de-software.md"
 
@@ -53,14 +53,14 @@ scan() {
 TMP="$(mktemp)"
 {
   echo "---"
-  echo "gerado-por: skills/test/test-design/scripts/gerar-mapa-de-ids.sh"
+  echo "gerado-por: skills/test/test-design/scripts/generate-id-map.sh"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
   echo "# ID map \`TS-*\`"
   echo
   echo "> An index, not a copy: it says **where** the rule is declared, never what it says."
-  echo "> Regenerate with \`bash skills/test/test-design/scripts/gerar-mapa-de-ids.sh\` —"
+  echo "> Regenerate with \`bash skills/test/test-design/scripts/generate-id-map.sh\` —"
   echo "> the same file is written into all three test skills."
   echo
   echo "## Aliases — citing one is an invalid finding"
@@ -73,12 +73,12 @@ TMP="$(mktemp)"
   echo "| --- | --- | --- |"
   scan | sort -t$'\t' -k1,1 -k2,2n \
     | awk -F'\t' 'NR == FNR { titulo[$1] = $2; next }
-                  !seen[$1]++ { printf "| `%s` | [%s](../../../../knowledge-base/%s.md) | %s |\n", \
+                  !seen[$1]++ { printf "| `%s` | [%s](../../../referencias/%s.md) | %s |\n", \
                                 $1, ($3 in titulo ? titulo[$3] : $3), $3, $4 }' <(titulos) -
 } > "$TMP"
 
 for s in design review diagnose; do
-  cp "$TMP" "$FAMILIA/test-$s/references/mapa-de-ids.md"
+  cp "$TMP" "$FAMILIA/test-$s/references/id-map.md"
 done
 rm -f "$TMP"
-echo "written into 3 skills ($(grep -c '^| `TS' "$FAMILIA/test-design/references/mapa-de-ids.md") IDs)"
+echo "written into 3 skills ($(grep -c '^| `TS' "$FAMILIA/test-design/references/id-map.md") IDs)"

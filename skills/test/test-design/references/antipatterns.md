@@ -30,5 +30,5 @@
 | Mean instead of percentile | `TS-TIPO-06` | [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/teste-de-software-tipos-e-atributos-de-qualidade.md) |
 | Not counting the static layer in the strategy | `TS-TIPO-08` | [Teste de Software - Tipos e Atributos de Qualidade](../../../../knowledge-base/teste-de-software-tipos-e-atributos-de-qualidade.md) |
 
-**Before citing any ID, check `mapa-de-ids.md`:** `TS-NIV-01`, `TS-DUB-02` and
+**Before citing any ID, check `id-map.md`:** `TS-NIV-01`, `TS-DUB-02` and
 `TS-SUI-02` are **aliases** and citing them makes the finding invalid.

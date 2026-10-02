@@ -87,7 +87,7 @@ Follow the loaded skill's procedure. Cross-cutting invariants that hold in any t
 - **No memoization without measurement** (`REACT-PERF-01`).
 - **An environment variable in the bundle is public** (`ZOD-ENV-04`).
 
-When the component is reusable, write the story alongside it (`storybook-story`) and place it at the right level of the catalog — `UI → Patterns → Features → Layout → Pages` (`SB-LAYER-01`, [Storybook estruturado por Atomic Design](../knowledge-base/storybook-estruturado-por-atomic-design.md)).
+Write a story only when the task explicitly instructs it — Storybook is never implied by the component being reusable. When instructed, write it with `storybook-story` and place it at the right level of the catalog — `UI → Patterns → Features → Layout → Pages` (`SB-LAYER-01`, [Storybook estruturado por Atomic Design](../knowledge-base/storybook-estruturado-por-atomic-design.md)).
 
 ---
 
@@ -99,7 +99,7 @@ An executable checklist (`CC-SES-01` — the delivery shows the evidence):
 - [ ] No import crosses a feature boundary outside the barrel (`REACT-ARCH-05`).
 - [ ] No `useState` holds remote data; no `useEffect` fetches.
 - [ ] Tests that **observe behavior** cover loading, empty, success and failure; the test's level was decided with `test-design` or handed to `qa-engineer`.
-- [ ] The loaded skill's self-check ran in full (`react-developer` has its own; `playwright-build` has 12 items; `storybook-test` has 14).
+- [ ] The loaded skill's self-check ran in full (`react-developer` has its own; `storybook-test` has 14).
 - [ ] What was not verified against the docs is **declared**, not asserted.
 
 ---
@@ -112,7 +112,7 @@ Task: "add a status filter to the invoice list".
 2. **Who owns it** — `status` belongs to the **URL** (`tanstack-router`, `validateSearch` with Zod). The list belongs to the **server** (`tanstack-query`, `queryOptions` with the key including `status`). Nothing in `useState`.
 3. **Contract** — the status enum already exists in the shared schema; the route's `search` derives from it.
 4. **Build** — the route composes `<InvoiceList />` and loads through a `loader` + `ensureQueryData` ([TanStack Router - Carregamento de Dados](../knowledge-base/tanstack-router-carregamento-de-dados.md)); the feature exports the component through the barrel.
-5. **Verify** — `biome check`, a behavior test covering "the filter in the URL survives a reload", a `InvoiceList` story with the four states.
+5. **Verify** — `biome check`, a behavior test covering "the filter in the URL survives a reload"; an `InvoiceList` story with the four states only if the task asked for one.
 
 ---
 

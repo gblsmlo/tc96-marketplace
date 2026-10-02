@@ -28,13 +28,13 @@ times, comparing against the ~1% threshold.
 
 ## The ID map
 
-`mapa-de-ids.md` is **generated** and identical across the three, by
-`test-design/scripts/gerar-mapa-de-ids.sh`. It indexes the **64** `TS-*` by satellite and
+`id-map.md` is **generated** and identical across the three, by
+`test-design/scripts/generate-id-map.sh`. It indexes the **64** `TS-*` by satellite and
 section — the same number § 6.2 of the hub declares, which serves as the check — and carries
 the alias table: `TS-NIV-01`, `TS-DUB-02` and `TS-SUI-02` are **not** cited.
 
 ```bash
-bash plugins/tc96-core/skills/test-design/scripts/gerar-mapa-de-ids.sh
+bash plugins/tc96-core/skills/test-design/scripts/generate-id-map.sh
 bash scripts/instalar.sh
 ```
 
@@ -47,9 +47,9 @@ References load on demand, one at a time.
 
 | Skill | `SKILL.md` | largest `references/` | total | refs |
 | --- | ---: | --- | ---: | ---: |
-| `test-design` | 2.032 | `mapa-de-ids.md` (3.085) | 8.482 | 6 |
-| `test-diagnose` | 1.994 | `mapa-de-ids.md` (3.085) | 9.365 | 6 |
-| `test-review` | 1.631 | `mapa-de-ids.md` (3.085) | 9.941 | 6 |
+| `test-design` | 2.032 | `id-map.md` (3.085) | 8.482 | 6 |
+| `test-diagnose` | 1.994 | `id-map.md` (3.085) | 9.365 | 6 |
+| `test-review` | 1.631 | `id-map.md` (3.085) | 9.941 | 6 |
 
 Loading all 3 skills in this group at once would cost **5.657 tokens** in `SKILL.md` alone,
 and **27.788** with every reference. That is why each skill declares what it must **never** load.

@@ -43,7 +43,7 @@ See Teste de Software - Níveis e Escopo.
 
 Rules of the format:
 
-- **ID checked in `mapa-de-ids.md`**, and **never an alias**.
+- **ID checked in `id-map.md`**, and **never an alias**.
 - **Location always** — file, directory or workflow line.
 - **Numbers for a finding about shape.** "There is too much E2E" without a count is an opinion.
 - **A fix with a starting point.** In an unbalanced suite, "move the assertions" is useless without saying which file to start with.

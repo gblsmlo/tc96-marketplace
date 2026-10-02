@@ -1,12 +1,12 @@
 ---
-gerado-por: skills/test/test-design/scripts/gerar-mapa-de-ids.sh
-gerado-em: 2026-09-23
+gerado-por: skills/test/test-design/scripts/generate-id-map.sh
+gerado-em: 2026-10-01
 ---
 
 # ID map `TS-*`
 
 > An index, not a copy: it says **where** the rule is declared, never what it says.
-> Regenerate with `bash skills/test/test-design/scripts/gerar-mapa-de-ids.sh` —
+> Regenerate with `bash skills/test/test-design/scripts/generate-id-map.sh` —
 > the same file is written into all three test skills.
 
 ## Aliases — citing one is an invalid finding

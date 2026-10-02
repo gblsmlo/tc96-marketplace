@@ -51,4 +51,4 @@ Deciding "not to cover" is a valid answer; **not deciding** is the gap.
 
 - [Teste de Software - Técnicas de Design de Caso](../../../referencias/teste-de-software-tecnicas-de-design-de-caso.md) — the source
 - [Teste de Software - Tipos e Atributos de Qualidade](../../../referencias/teste-de-software-tipos-e-atributos-de-qualidade.md) — the five states and the attributes
-- `substituicao.md` — the next step, when there is a dependency
+- `substitution.md` — the next step, when there is a dependency

@@ -48,5 +48,5 @@ safety net and becomes a blindfold.
 | Production defect with no test that catches it | `TS-CORE-06` | [Teste de Software](../../../referencias/teste-de-software.md) |
 | Green suite treated as fitness for the user | `TS-CORE-08` | [Teste de Software](../../../referencias/teste-de-software.md) |
 
-Check the ID in `mapa-de-ids.md` before citing: `TS-SUI-02`, `TS-NIV-01` and `TS-DUB-02` are
+Check the ID in `id-map.md` before citing: `TS-SUI-02`, `TS-NIV-01` and `TS-DUB-02` are
 aliases.

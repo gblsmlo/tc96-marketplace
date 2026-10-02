@@ -43,7 +43,7 @@ The suite, as a whole, has lost credibility: intermittent failures, people re-ru
 | 1 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 2 (claim 5) | **the arithmetic**: an untrustworthy suite is worse than no suite |
 | 2 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 4.5 | the six questions of "I do not trust the suite" |
 | 3 | [Teste de Software - Confiabilidade da Suíte](../../../knowledge-base/teste-de-software-confiabilidade-da-suite.md) § 1 and § 2 | the numbers, and the ten causes in order of frequency |
-| 4 | `references/mapa-de-ids.md` | before citing — three IDs are aliases |
+| 4 | `references/id-map.md` | before citing — three IDs are aliases |
 
 References in this skill:
 
@@ -53,7 +53,7 @@ References in this skill:
 | `references/causas-de-flake.md` | the six questions, the ten causes, and the commands that separate hypotheses |
 | `references/deteccao.md` | the thirty-second test and the corollary about coverage |
 | `references/conserto-x-anestesico.md` | the seven anesthetics and the grid of 21 antipatterns |
-| `references/mapa-de-ids.md` | the 64 `TS-*` by satellite and section |
+| `references/id-map.md` | the 64 `TS-*` by satellite and section |
 | `references/exemplo-diagnostico.md` | a whole diagnosis, from the measurement to the report |
 | `scripts/medir-flakiness.sh` | inventories anesthetics and measures the rate over N runs |
 
