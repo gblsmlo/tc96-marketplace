@@ -1,6 +1,6 @@
 {
   "name": "tc96-backend",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Runtime Bun, Elysia e Drizzle — serviço HTTP, persistência e dependências. Habilite em projeto com backend.",
   "author": {
     "name": "Gabriel Melo"

@@ -518,7 +518,7 @@ Derive-a de **um** satélite, não desta nota inteira. Para teste, a fonte é a 
 
 ## 8. Pontes com o stack
 
-Bun toca o meu stack de frontend ([React.js](react-js.md), [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md), [TanStack Router](tanstack-router.md), `Tailwindcss`, `TypeScript`) nos pontos abaixo, e substitui `Node.js` como runtime.
+Bun toca o meu stack de frontend ([React.js](react-js.md), [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md), [TanStack Router](tanstack-router.md), `Tailwind CSS`, `TypeScript`) nos pontos abaixo, e substitui `Node.js` como runtime.
 
 | Problema | Primitiva crua | O que usar no stack |
 | --- | --- | --- |
@@ -556,7 +556,7 @@ Bun toca o meu stack de frontend ([React.js](react-js.md), [TanStack Query](tans
 - [Backend no runtime Bun](backend-no-runtime-bun.md) — escolher entre `Bun.serve` cru, [Hono](hono.md) e [Elysia](elysia.md)
 - `Node.js` — o runtime que Bun busca substituir; a fronteira está na § 8
 - `TypeScript` ·
-- [React.js](react-js.md) · [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md) · [TanStack Router](tanstack-router.md) · `Tailwindcss` · `Next.js`
+- [React.js](react-js.md) · [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md) · [TanStack Router](tanstack-router.md) · `Tailwind CSS` · `Next.js`
 
 ## Fontes consultadas
 

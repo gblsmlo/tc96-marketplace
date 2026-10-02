@@ -574,7 +574,7 @@ Derive-a de um satélite, não desta nota inteira: uma skill de acessibilidade d
 
 ## 8. Pontes com o stack
 
-O corpo desta doc é RHF puro, fiel à fonte. No meu stack ([TanStack Router](tanstack-router.md), [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md), TanStack Start, `Tailwindcss`, `TypeScript`) várias práticas cruas mudam de dono.
+O corpo desta doc é RHF puro, fiel à fonte. No meu stack ([TanStack Router](tanstack-router.md), [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md), TanStack Start, `Tailwind CSS`, `TypeScript`) várias práticas cruas mudam de dono.
 
 | Problema | Prática crua | O que usar no stack |
 | --- | --- | --- |

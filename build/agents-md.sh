@@ -63,6 +63,10 @@ for skill_dir in sorted((raiz / "skills").glob("*/*/")):
     familia = campos["familia"]
     alvo = dest / "skills" / familia / skill_dir.name
     shutil.copytree(skill_dir, alvo)
+    # doc propria da familia: o layout aninhado preserva os links relativos
+    doc_familia = skill_dir.parent / "docs"
+    if doc_familia.is_dir() and not (dest / "skills" / familia / "docs").exists():
+        shutil.copytree(doc_familia, dest / "skills" / familia / "docs")
     (alvo / "SKILL.md").write_text(sem_frontmatter(campos, corpo), encoding="utf-8")
     skills.append((familia, skill_dir.name, campos["descricao"],
                    campos.get("docs__lista", [])))
