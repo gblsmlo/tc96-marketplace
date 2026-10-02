@@ -5,7 +5,7 @@ tags:
   - agent
   - index
 ---
-# Agents — Index
+# Agents
 
 Agents are **roles**: each one receives a task in its own context, loads the skills and notes that role uses, and returns a result in the format that role produces. They **do not** repeat rules or procedures — they route to [Skills](../skills/README.md) (procedure) and to the [knowledge-base](../knowledge-base/MANIFESTO.md) (rule), citing by ID wherever one exists.
 
