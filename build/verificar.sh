@@ -159,6 +159,61 @@ for skill in sorted((raiz / "skills/workflow").glob("*/SKILL.md")):
             delegacao.append(f"{skill.relative_to(raiz)}:{n}: agente sem nome")
 sondar("pilares delegados a agente nomeado (WF-CORE-06)", delegacao)
 
+# --- 6. every .skill package stands alone -----------------------------------
+# Runs only when dist/skills/ exists (bash build/skill-packages.sh). Each package is
+# unzipped into an empty directory with nothing else around it, and must still
+# resolve every link, find every script it calls and keep no path into the repo.
+import zipfile, tempfile, subprocess, shutil
+pacotes = sorted((raiz / "dist/skills").glob("*.skill"))
+if pacotes:
+    isolado = []
+    LINK_MD = re.compile(r"\]\(([^)#:\s]+\.md)(?:#[^)]*)?\)")
+    ESCAPE = re.compile(r"knowledge-base/|CLAUDE_PLUGIN_ROOT|\]\(\.\./\.\./\.\./|authoring:|generate-id-map|gerar-mapa|scripts/instalar|plugins/tc96-")
+    SCRIPT = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/scripts/([A-Za-z0-9._-]+)")
+    for pacote in pacotes:
+        tmp = pathlib.Path(tempfile.mkdtemp(prefix="skill-"))
+        with zipfile.ZipFile(pacote) as z:
+            z.extractall(tmp)
+        topo = [p for p in tmp.iterdir() if p.is_dir()]
+        if len(topo) != 1 or not (topo[0] / "SKILL.md").exists():
+            isolado.append(f"{pacote.name}: expected one top-level directory with SKILL.md")
+            shutil.rmtree(tmp)
+            continue
+        skill = topo[0]
+        fm = re.match(r"^---\n(.*?)\n---\n", (skill / "SKILL.md").read_text(encoding="utf-8"), re.S)
+        campos = dict(re.findall(r"^(\w+):\s*(.*)$", fm.group(1), re.M)) if fm else {}
+        if campos.get("name") != skill.name or not campos.get("description"):
+            isolado.append(f"{pacote.name}: frontmatter needs `name: {skill.name}` and `description`")
+        for md in skill.rglob("*.md"):
+            texto = md.read_text(encoding="utf-8")
+            for m in LINK_MD.finditer(texto):
+                alvo = (md.parent / m.group(1)).resolve()
+                if not alvo.exists() or not alvo.is_relative_to(skill.resolve()):
+                    isolado.append(f"{pacote.name}: {md.relative_to(skill)} -> {m.group(1)} leaves the package")
+            for n, linha in enumerate(texto.splitlines(), 1):
+                m = ESCAPE.search(linha)
+                if m:
+                    isolado.append(f"{pacote.name}: {md.relative_to(skill)}:{n}: `{m.group(0)}`")
+            for m in SCRIPT.finditer(texto):
+                if not (skill / "scripts" / m.group(1)).exists():
+                    isolado.append(f"{pacote.name}: {md.relative_to(skill)} calls scripts/{m.group(1)}, which is not in the package")
+        vazio = tmp / "empty-project"
+        vazio.mkdir()
+        for sh in sorted(skill.rglob("scripts/*.sh")):
+            if subprocess.run(["bash", "-n", str(sh)], capture_output=True).returncode:
+                isolado.append(f"{pacote.name}: scripts/{sh.name} does not parse")
+                continue
+            try:
+                r = subprocess.run(["bash", str(sh), str(vazio)], capture_output=True, text=True,
+                                   timeout=60, cwd=vazio)
+                err = r.stderr
+            except subprocess.TimeoutExpired:
+                err = "timed out after 60s"
+            if re.search(r"No such file|command not found|timed out", err):
+                isolado.append(f"{pacote.name}: scripts/{sh.name} on an empty project: {err.strip().splitlines()[-1][:120]}")
+        shutil.rmtree(tmp)
+    sondar(f"pacotes .skill que funcionam sozinhos (de {len(pacotes)})", isolado)
+
 print()
 if falhas:
     print(f"{len(falhas)} grupo(s) com falha: " + ", ".join(falhas))

@@ -1,162 +1,160 @@
-# React skills — a grouped family
+# React skills — developer, review, structure, hook-form
 
-Four skills, one directory each, with their own `references/` and `scripts/`. It is the first
-family here organized as a **package** rather than as loose files: the common anatomy
-described in [Skills index](../README.md) still holds, and the only change is that the
-supporting material got its own files instead of bloating the `SKILL.md`.
+Four skills, one directory each, with their own `references/` and `scripts/`. The common
+anatomy described in [Skills index](../README.md) holds; the supporting material lives in its
+own files instead of bloating the `SKILL.md`.
 
 | Skill | The question it answers | Source | Internal support |
 | --- | --- | --- | --- |
-| `react-developer` | writing a **new** component, Hook or feature | [React - Patterns](../../knowledge-base/react-patterns.md) | 4 references + 3 examples + 1 script |
-| `react-review` | is this code that **already exists** correct? | [React - Rules of React](../../knowledge-base/react-rules-of-react.md) | 4 references + 1 report + 2 scripts |
-| `react-structure` | **where** the file lives, who imports whom | [Feature-Based Architecture](../../knowledge-base/feature-based-architecture.md) | 3 references + 1 report + 2 scripts |
-| `react-hook-form` | forms: capture, validation, submission | [React Hook Form](../../knowledge-base/react-hook-form.md) | 4 references + 1 example + 2 scripts |
+| `react-developer` | writing a **new** component, Hook or feature | [React - Patterns](docs/react-patterns.md) | 4 references + 3 examples + 1 script |
+| `react-review` | is this code that **already exists** correct? | [React - Rules of React](docs/react-rules-of-react.md) | 4 references + 1 report + 2 scripts |
+| `react-structure` | **where** the file lives, who imports whom | [Feature-Based Architecture](docs/feature-based-architecture.md) | 3 references + 1 report + 2 scripts |
+| `react-hook-form` | forms: capture, validation, submission | [React Hook Form](docs/react-hook-form.md) | 4 references + 1 example + 2 scripts |
 
 Two axes separate the four. Between `react-developer` and `react-review`, **new × already
 exists** — and it is in the first words of each `description`. Between them and the other
-two, **interior × boundary**: `react-structure` handles where the code lives and who
-may import whom; `react-hook-form` handles a whole capability (form capture) that has a
-rule family of its own, `RHF-*`.
+two, **interior × boundary**: `react-structure` handles where the code lives and who may
+import whom; `react-hook-form` handles a whole capability (form capture) that has a rule
+family of its own, `RHF-*`.
 
 **In a PR, the order is `react-structure` → `react-review`.** Moving a file can erase the
 interior finding, so reviewing the interior first is wasted work.
+
+## The docs travel with the family
+
+The normative notes — the `React.js` hub with its twelve satellites, `React Hook Form` with its
+three, `Feature-Based Architecture` and `Architecture in React`, 198 IDs in all — live in
+[`docs/`](docs/react-js.md), not in the tc96 `knowledge-base/`. That is what lets each skill
+work in a project that has nothing else from tc96:
+
+| Layout | Where the docs are |
+| --- | --- |
+| this repository | `skills/react/docs/` — the skills link to `../docs/`, the references to `../../docs/` |
+| the built plugin (`tc96-frontend`) | `docs/react/` at the plugin root — the build rewrites the links |
+| a single `.skill` package | `docs/` inside the skill — only the notes it cites, and the notes those cite |
+| `AGENTS.md` target | `skills/react/docs/`, nested as here |
+
+The docs and the skills cite tc96 notes outside the family (`TanStack Query`,
+`Storybook - Testes e Interações`, `Playwright`…) **by name in a code span**, never by link:
+context when tc96 is installed, never a dependency.
+
+`bash build/skill-packages.sh` produces one `dist/skills/<skill>.skill` per skill, each with its
+docs closure and the sibling scripts it calls. `bash build/verificar.sh` then opens every package
+in isolation and fails on any link, script or path that reaches outside it.
 
 ## What each package contains
 
 ```
 react-developer/
 ├── SKILL.md
-└── references/
- ├── arvores-de-decisao.md which tree to walk, 4 path mistakes, short exits
- ├── habitos-de-ia.md 7 sections of reflexes that produce violations, with IDs
- ├── autoverificacao.md 3 passes + 10 rg probes before delivering
- ├── mapa-de-ids.md generated: ID → satellite → section
- ├── exemplo-painel-de-faturas.md the happy path
-│ ├── exemplo-fronteira-de-servidor.md the robust variant: Server Function, validation, boundaries
-│ └── exemplo-antipadrao-corrigido.md before and after, defect by ID
+├── references/
+│   ├── decision-trees.md             which tree to walk, 4 path mistakes, short exits
+│   ├── ai-habits.md                  7 sections of reflexes that produce violations, with IDs
+│   ├── self-check.md                 3 passes + 10 rg probes before delivering
+│   ├── id-map.md                     generated: ID → satellite → section
+│   ├── example-invoice-dashboard.md  the happy path
+│   ├── example-server-boundary.md    the robust variant: Server Function, validation, boundaries
+│   └── example-antipattern-fixed.md  before and after, defect by ID
 └── scripts/
- └── autoverificar.sh runs the 10 Step 5 probes over the code just written
+    └── self-check.sh                 runs the 10 Step 5 probes over the code just written
 
 react-review/
 ├── SKILL.md
 ├── references/
-│ ├── sondas.md 15 probes, false positives, and what they do not catch
-│ ├── grade-de-varredura.md 5 levels in the order that fails most, with an ID per antipattern
-│ ├── severidade-e-relatorio.md classification, finding format, the finding × opinion cut
-│ ├── mapa-de-ids.md generated: ID → satellite → section
-│ └── exemplo-relatorio-de-pr.md a whole report, from the probes to the closing
+│   ├── probes.md                     15 probes, false positives, and what they do not catch
+│   ├── scan-grid.md                  5 levels in the order that fails most, with an ID per antipattern
+│   ├── severity-and-report.md        classification, finding format, the finding × opinion cut
+│   ├── id-map.md                     generated: ID → satellite → section
+│   └── example-pr-report.md          a whole report, from the probes to the closing
 └── scripts/
- ├── sondas.sh runs the 15 probes and prints the ID to cite
- └── gerar-mapa-de-ids.sh regenerates mapa-de-ids.md for developer and review
+    ├── probes.sh                     runs the 15 probes and prints the ID to cite
+    └── generate-id-map.sh            regenerates id-map.md for developer and review
 
 react-structure/
 ├── SKILL.md
 ├── references/
-│ ├── arvore-de-colocacao.md 5 questions, the tree, import × duplicate × extract
-│ ├── varredura-de-imports.md scan order, what the probe does not catch, format
-│ ├── mapa-de-ids.md generated: ID → severity → who enforces it → section
-│ └── exemplo-revisao-de-estrutura.md a whole PR review
+│   ├── placement-tree.md             5 questions, the tree, import × duplicate × extract
+│   ├── import-scan.md                scan order, what the probe does not catch, format
+│   ├── id-map.md                     generated: ID → severity → who enforces it → section
+│   └── example-structure-review.md   a whole PR review
 └── scripts/
- ├── sondas-imports.sh 8 boundary probes, starting with enforcement
- └── gerar-mapa-de-ids.sh regenerates from knowledge-base/feature-based-architecture.md
+    ├── import-probes.sh              8 boundary probes, starting with enforcement
+    └── generate-id-map.sh            regenerates from docs/feature-based-architecture.md
 
 react-hook-form/
 ├── SKILL.md
 ├── references/
-│ ├── tarefas.md the 5 tasks, the order of decisions, what to check
-│ ├── dono-da-submissao.md isSubmitting × isPending — pick one and declare it
-│ ├── diagnostico.md symptom → likely cause → satellite
-│ ├── mapa-de-ids.md generated: 81 RHF-* IDs + the cross-doc citation rule
-│ └── exemplo-lancamento-de-fatura.md from Step 0 to the submit
+│   ├── tasks.md                      the 5 tasks, the order of decisions, what to check
+│   ├── submission-owner.md           isSubmitting × isPending — pick one and declare it
+│   ├── diagnosis.md                  symptom → likely cause → satellite
+│   ├── id-map.md                     generated: 81 RHF-* IDs + the cross-doc citation rule
+│   └── example-invoice-entry.md      from Step 0 to the submit
 └── scripts/
- ├── sondas.sh 12 probes for an existing form
- └── gerar-mapa-de-ids.sh regenerates from knowledge-base/react-hook-form*
+    ├── probes.sh                     12 probes for an existing form
+    └── generate-id-map.sh            regenerates from docs/react-hook-form*
 ```
 
-**`mapa-de-ids.md` is generated, not written** — in all four. It indexes the IDs by satellite and
+## The ID map
+
+**`id-map.md` is generated, not written** — in all four. It indexes the IDs by satellite and
 section, and never carries the rule's **text**: a rule copied inside a skill becomes an outdated
-replica. Three generators, one per family, because the sources and the columns differ:
+replica. Three generators, one per rule family, because the sources and the columns differ:
 
 | Generator | Family | Source | Columns |
 | --- | --- | --- | --- |
-| `react-review/scripts/gerar-mapa-de-ids.sh` | 105 `REACT-*` | `knowledge-base/react*` | satellite · section · aliases |
-| `react-structure/scripts/gerar-mapa-de-ids.sh` | 12 `REACT-ARCH-*` | [Feature-Based Architecture](../../knowledge-base/feature-based-architecture.md) | **severity** · **who enforces it** · section |
-| `react-hook-form/scripts/gerar-mapa-de-ids.sh` | 81 `RHF-*` | `knowledge-base/react-hook-form*` | satellite · section · cross-doc citation |
+| `react-review/scripts/generate-id-map.sh` | 105 `REACT-*` | `docs/react*` | satellite · section · aliases |
+| `react-structure/scripts/generate-id-map.sh` | 12 `REACT-ARCH-*` | [Feature-Based Architecture](docs/feature-based-architecture.md) | **severity** · **who enforces it** · section |
+| `react-hook-form/scripts/generate-id-map.sh` | 81 `RHF-*` | `docs/react-hook-form*` | satellite · section · cross-doc citation |
 
-After editing any source note, run the corresponding generator and reinstall:
+After editing any note in `docs/`, run the corresponding generator and rebuild:
 
 ```bash
-bash plugins/tc96-frontend/skills/react-review/scripts/gerar-mapa-de-ids.sh
-bash plugins/tc96-frontend/skills/react-structure/scripts/gerar-mapa-de-ids.sh
-bash plugins/tc96-frontend/skills/react-hook-form/scripts/gerar-mapa-de-ids.sh
-bash scripts/instalar.sh
+bash skills/react/react-review/scripts/generate-id-map.sh
+bash skills/react/react-structure/scripts/generate-id-map.sh
+bash skills/react/react-hook-form/scripts/generate-id-map.sh
+bash build/claude-code.sh
 ```
 
-The **who enforces it** column only exists in `REACT-ARCH-*`, and it is the most actionable in the group:
-it separates what Biome catches from what depends on human review — and it is what decides whether a
-finding comes back in the next PR.
+The generators are authoring tools: they are not shipped in the `.skill` packages, and the
+regeneration block in `react-review` is wrapped in `<!-- authoring -->` markers that the
+packager strips.
 
-## The neighbors — what is **not** these two's
+The **who enforces it** column only exists in `REACT-ARCH-*`, and it is the most actionable in
+the group: it separates what Biome catches from what depends on human review — and it is what
+decides whether a finding comes back in the next PR.
+
+## The neighbors — what is **not** this family's
 
 A frontend PR is almost never only React. When the subject belongs to another layer, the
-procedure and the IDs belong to that layer's skill:
+procedure and the IDs belong to that layer's skill. The names below are tc96 notes outside this
+family, cited by name on purpose:
 
 | Layer | Skill | Source doc |
 | --- | --- | --- |
-| remote data, cache, invalidation, optimism | `tanstack-query` | [TanStack Query](../../knowledge-base/tanstack-query.md) |
-| routing, navigation, search params, loader | `tanstack-router` | [TanStack Router](../../knowledge-base/tanstack-router.md) |
-| a component confirmed slow, a measured fix | *(rota vaga — ver `memory/STACK.md`)* | — |
-| configuring Storybook, writing a story | `storybook-setup` · `storybook-story` | [Storybook](../../knowledge-base/storybook.md) |
-| an interaction test in the story, the **Vitest** runner | `storybook-test` | [Storybook - Testes e Interações](../../knowledge-base/storybook-testes-e-interacoes.md) § 4 |
-| the test's **level**: unit × integration × e2e | `test-design` | [Teste de Software - Níveis e Escopo](../../knowledge-base/teste-de-software-niveis-e-escopo.md) |
-| the suite as a system: does it protect? is it trustworthy? | `test-review` · `test-diagnose` | [Teste de Software](../../knowledge-base/teste-de-software.md) |
-| **unit and integration** in `bun test` | `bun-test-build` · `bun-test-review` | [Bun - Testes](../../knowledge-base/bun-testes.md) |
-| **e2e** | `playwright-build` · `playwright-review` · `playwright-diagnose` | [Playwright](../../knowledge-base/playwright.md) |
-| an API route, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | [Elysia](../../knowledge-base/elysia.md) |
-| persistence: schema, migration, query | `drizzle-review` | [Drizzle ORM](../../knowledge-base/drizzle-orm.md) |
-| the HTTP contract: method, status, cache, CORS | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [HTTP](../../knowledge-base/http.md) |
-| runtime, dependencies, migrating from Node | `bun-runtime` · `bun-workspace` · `bun-migrate` | [Bun](../../knowledge-base/bun.md) |
+| remote data, cache, invalidation, optimism | `tanstack-query` | `TanStack Query` |
+| routing, navigation, search params, loader | `tanstack-router` | `TanStack Router` |
+| a component confirmed slow, a measured fix | *(no skill yet)* | — |
+| configuring Storybook, writing a story | `storybook-setup` · `storybook-story` | `Storybook` |
+| an interaction test in the story, the **Vitest** runner | `storybook-test` | `Storybook - Testes e Interações` § 4 |
+| the test's **level**: unit × integration × e2e | `test-design` | `Teste de Software - Níveis e Escopo` |
+| the suite as a system: does it protect? is it trustworthy? | `test-review` · `test-diagnose` | `Teste de Software` |
+| **unit and integration** in `bun test` | `bun-test-build` · `bun-test-review` | `Bun - Testes` |
+| **e2e** | `playwright-build` · `playwright-review` · `playwright-diagnose` | `Playwright` |
+| an API route, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `Elysia` |
+| persistence: schema, migration, query | `drizzle-review` | `Drizzle ORM` |
+| the HTTP contract: method, status, cache, CORS | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | `HTTP` |
+| runtime, dependencies, migrating from Node | `bun-runtime` · `bun-workspace` · `bun-migrate` | `Bun` |
 
 Two boundaries that tend to be crossed in the wrong direction:
 
 - **Testing: concept before tool.** *At which level* is `test-design`; *how to write it*
- is the tool's skill. Skipping the first produces E2E by default.
+  is the tool's skill. Skipping the first produces E2E by default.
 - **Vitest is not a skill here.** It appears as the runner of `@storybook/addon-vitest`,
- running a story in a real browser through Playwright ([Storybook - Testes e Interações](../../knowledge-base/storybook-testes-e-interacoes.md) § 4;
- the cut between Vitest 3 and 4 in § 4.2). A unit test outside Storybook is `bun test`.
-
-## Validation
-
-All four pass `skill-validator check` with **0 errors**. Two warnings remain per skill,
-`unrecognized field: "tags"` and `unrecognized field: "fonte"` — they are this project's convention
-(the common anatomy requires `fonte:` in the frontmatter so that a docs update propagates) and
-they stay by decision, not by oversight.
-
-```bash
-for s in plugins/tc96-frontend/skills/react-*/; do skill-validator check "$s"; done
-```
-
-<!-- tokens:inicio -->
-## Context budget
-
-Measured by `skill-validator` (tiktoken), on 2026-09-05. **The number that matters is the
-`SKILL.md` column**: it is what enters the context before the skill decides what to open.
-References load on demand, one at a time.
-
-| Skill | `SKILL.md` | largest `references/` | total | refs |
-| --- | ---: | --- | ---: | ---: |
-| `react-developer` | 2.804 | `mapa-de-ids.md` (3.539) | 14.791 | 7 |
-| `react-hook-form` | 2.223 | `mapa-de-ids.md` (3.424) | 10.308 | 5 |
-| `react-review` | 2.531 | `mapa-de-ids.md` (3.539) | 12.304 | 5 |
-| `react-structure` | 2.775 | `exemplo-revisao-de-estrutura.md` (1.210) | 6.534 | 4 |
-
-Loading all 4 skills in this group at once would cost **10.333 tokens** in `SKILL.md` alone,
-and **43.937** with every reference. That is why each skill declares what it must **never** load.
-
-Regenerate: `bash scripts/medir.sh`
-<!-- tokens:fim -->
+  running a story in a real browser through Playwright (`Storybook - Testes e Interações` § 4;
+  the cut between Vitest 3 and 4 in § 4.2). A unit test outside Storybook is `bun test`.
 
 ## Related
 
 - [Skills index](../README.md) — the general index and the common anatomy
-- [React.js](../../knowledge-base/react-js.md) § 7 — the contract both implement
+- [React.js](docs/react-js.md) § 7 — the contract the four implement
+- `tailwind` — the other self-contained family, same layout

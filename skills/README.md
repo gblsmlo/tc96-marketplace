@@ -26,7 +26,7 @@ skills/<family>/
 
 | Family | Skills | Index |
 | --- | --- | --- |
-| **react** | `react-developer` · `react-review` · `react-structure` · `react-hook-form` | [react/](react/README.md) |
+| **react** | `react-developer` · `react-review` · `react-structure` · `react-hook-form` — self-contained, with its own `docs/` | [react/](react/README.md) |
 | **tanstack** | `tanstack-query` · `tanstack-router` | [tanstack/](tanstack/README.md) |
 | **storybook** | `storybook-setup` · `storybook-story` · `storybook-test` | [storybook/](storybook/README.md) |
 | **tailwind** | `tailwind-setup` · `tailwind-build` · `tailwind-review` — self-contained, with its own `docs/` | [tailwind/](tailwind/README.md) |
