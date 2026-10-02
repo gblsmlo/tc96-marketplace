@@ -44,7 +44,7 @@ Assessing a suite **as a system**. The question is *"does this suite protect any
 | --- | --- | --- |
 | 1 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 2 | a test buys information at a price — the criterion for every judgment here |
 | 2 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 6 + § 6.1 | the inviolable rules and the critical ones |
-| 3 | `references/mapa-de-ids.md` | **required before citing** — three IDs are aliases |
+| 3 | `references/id-map.md` | **required before citing** — three IDs are aliases |
 | 4 | [Teste de Software](../../../knowledge-base/teste-de-software.md) § 4.1 and § 4.4 | the level tree, and "when to stop writing tests" |
 | 5 | the satellite for the finding | via § 5 of the hub |
 
@@ -58,7 +58,7 @@ References in this skill:
 | `references/ordem-da-varredura.md` | the 11 steps by impact, and the three conclusions that do not mix |
 | `references/severidade-e-relatorio.md` | classification, format with measurement, the cut, and the closing |
 | `references/antipadroes.md` | 29 antipatterns with ID and satellite |
-| `references/mapa-de-ids.md` | the 64 `TS-*` by satellite and section, and the three aliases |
+| `references/id-map.md` | the 64 `TS-*` by satellite and section, and the three aliases |
 | `references/exemplo-auditoria.md` | a whole audit, from the probes to the "not verified" |
 | `scripts/sondas-suite.sh` | runs S1, S3–S9 and prepares S2 |
 

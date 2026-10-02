@@ -76,4 +76,4 @@ runs, and they are the cheapest layer there is (`TS-TIPO-08`).
 
 - [Teste de Software](../../../../knowledge-base/teste-de-software.md) § 4.1 — the full tree
 - [Teste de Software - Níveis e Escopo](../../../../knowledge-base/teste-de-software-niveis-e-escopo.md) — the source
-- `tecnicas-de-caso.md` — the next step, when there is input to exercise
+- `case-techniques.md` — the next step, when there is input to exercise

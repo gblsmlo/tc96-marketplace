@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Regenerates references/mapa-de-ids.md for the three test skills, from teste-de-software*.
+# Regenerates references/id-map.md for the three test skills, from teste-de-software*.
 # An index, not a copy: ID -> satellite -> section. The rule's text stays in the note.
 #
 # Priority when the same ID shows up in several places:
@@ -53,14 +53,14 @@ scan() {
 TMP="$(mktemp)"
 {
   echo "---"
-  echo "gerado-por: skills/test/test-design/scripts/gerar-mapa-de-ids.sh"
+  echo "gerado-por: skills/test/test-design/scripts/generate-id-map.sh"
   echo "gerado-em: $(date +%F)"
   echo "---"
   echo
   echo "# ID map \`TS-*\`"
   echo
   echo "> An index, not a copy: it says **where** the rule is declared, never what it says."
-  echo "> Regenerate with \`bash skills/test/test-design/scripts/gerar-mapa-de-ids.sh\` —"
+  echo "> Regenerate with \`bash skills/test/test-design/scripts/generate-id-map.sh\` —"
   echo "> the same file is written into all three test skills."
   echo
   echo "## Aliases — citing one is an invalid finding"
@@ -78,7 +78,7 @@ TMP="$(mktemp)"
 } > "$TMP"
 
 for s in design review diagnose; do
-  cp "$TMP" "$FAMILIA/test-$s/references/mapa-de-ids.md"
+  cp "$TMP" "$FAMILIA/test-$s/references/id-map.md"
 done
 rm -f "$TMP"
-echo "written into 3 skills ($(grep -c '^| `TS' "$FAMILIA/test-design/references/mapa-de-ids.md") IDs)"
+echo "written into 3 skills ($(grep -c '^| `TS' "$FAMILIA/test-design/references/id-map.md") IDs)"
