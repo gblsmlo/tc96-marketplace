@@ -68,6 +68,12 @@ results file (`REACT-PERF-16`).
 | a row component the consumer passes as a prop | `countRenders(RowFn, 'rows')` on the **inner** function, before any `memo` | a `memo` object is not a function and cannot be wrapped |
 | `commits` | automatic when the case mounts through `tools.render` | one interaction should be one commit; two means a cascade (often an Effect that sets state, probe 8) |
 
+**Drag scenarios.** A drag library's overlay re-renders the dragged item a varying number of times, and its
+animation-frame timing adds or removes a commit. Count the consumer renderer for every item **except** the
+dragged one, set `commits: false` on the scenario, and make each iteration drag and return, so the count is
+"renders of the other items" and stays deterministic. The target is 0, plus items revealed or hidden by an
+overflow (`+N`) the move changes.
+
 Never count an internal component of the code under change: the refactor will move it and the
 baseline stops running (`REACT-PERF-14`).
 

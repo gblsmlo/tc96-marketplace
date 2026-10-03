@@ -7,6 +7,7 @@
 //   bun bench/my-component.bench.ts --compare bench/base.json [--gate] [--threshold 10]
 //   --case <text> / --scenario <text> run only matching ids
 //
+// A scenario with `commits: false` drops the commit counter: drag libraries vary it with animation-frame timing.
 // Env: BENCH_ITERATIONS (5), BENCH_MOUNT_ITERATIONS (3), BENCH_WARMUP (1), BENCH_THRESHOLD (10).
 // Import this file BEFORE anything that loads react-dom: it installs the DOM globals first.
 
@@ -161,6 +162,7 @@ export interface BenchScenario<Handle> {
   cases?: string[]
   iterations?: number
   warmup?: number
+  commits?: boolean
   setup?(handle: Handle, context: ScenarioContext): void | Promise<void>
   run(handle: Handle, context: ScenarioContext): void | Promise<void>
 }
@@ -245,7 +247,11 @@ function environment(seed: number | string | undefined): BenchEnvironment {
   }
 }
 
-async function measure(action: () => void | Promise<void>, profiled: () => boolean): Promise<Sample> {
+async function measure(
+  action: () => void | Promise<void>,
+  profiled: () => boolean,
+  countCommits = true,
+): Promise<Sample> {
   counts.clear()
   profilerMs = 0
   commits = 0
@@ -255,7 +261,7 @@ async function measure(action: () => void | Promise<void>, profiled: () => boole
   })
   const wallMs = performance.now() - start
   const renders: Record<string, number> = Object.fromEntries([...registered].map((c) => [c, counts.get(c) ?? 0]))
-  if (profiled()) renders.commits = commits
+  if (profiled() && countCommits) renders.commits = commits
   return { profilerMs: profiled() ? profilerMs : null, renders, wallMs }
 }
 
@@ -388,6 +394,7 @@ export function createBench<Handle>(options: BenchOptions<Handle>) {
           const sample = await measure(
             () => scenario.run(mounted.handle, context(index)),
             () => mounted.profiled,
+            scenario.commits ?? true,
           )
           if (index >= skip) samples.push(sample)
         }
