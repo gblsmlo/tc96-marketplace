@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Regenerates references/id-map.md for the two React skills, from the knowledge base.
+# Regenerates references/id-map.md for the React skills, from the family docs: the full map for
+# react-developer and react-review, and a scoped map (REACT-PERF-* plus the IDs its probes and
+# references cite) for react-component-performance.
 # The map is a router: ID -> satellite -> section. It never copies the rule's text,
 # because a rule copied into a skill becomes a stale replica (skills/README.md).
 #
@@ -29,6 +31,8 @@ links() {
 }
 OUT_DEV="$FAMILY/react-developer/references/id-map.md"
 OUT_REV="$FAMILY/react-review/references/id-map.md"
+OUT_PERF="$FAMILY/react-component-performance/references/id-map.md"
+PERF_IDS='REACT-PERF-[0-9]+|REACT-(PAT-01|STATE-07|REF-01|EFFECT-07|EFFECT-10|PURE-01|UTIL-02|CALL-01)'
 TMP="$(mktemp)"
 
 scan() {
@@ -82,6 +86,25 @@ scan() {
 } > "$TMP"
 
 cp "$TMP" "$OUT_DEV"
-mv "$TMP" "$OUT_REV"
+cp "$TMP" "$OUT_REV"
+
+# Scoped map: same header, no alias table (none of the aliases is a PERF ID), only the rows
+# whose ID this skill cites.
+if [ -d "$(dirname "$OUT_PERF")" ]; then
+  {
+    sed -n '1,/^## Aliases/p' "$TMP" | sed '$d' \
+      | sed -e 's/^# ID map `REACT-\*` — where each rule lives$/# ID map `REACT-PERF-*` — where each rule this skill cites lives/'
+    echo "Scope: every \`REACT-PERF-*\`, plus the IDs the probes and references of react-component-performance cite."
+    echo "For any other \`REACT-*\`, the full map lives in react-review."
+    echo
+    echo "## Index"
+    echo
+    echo "| ID | Satellite | Section |"
+    echo "| --- | --- | --- |"
+    grep -E "^\| \`($PERF_IDS)\`" "$TMP"
+  } > "$OUT_PERF"
+fi
+rm -f "$TMP"
 echo "written: $OUT_DEV ($(grep -c '^| `REACT' "$OUT_DEV") IDs)"
 echo "written: $OUT_REV"
+[ -f "$OUT_PERF" ] && echo "written: $OUT_PERF ($(grep -c '^| `REACT' "$OUT_PERF") IDs)"

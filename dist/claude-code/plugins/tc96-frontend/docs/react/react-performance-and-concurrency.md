@@ -28,6 +28,8 @@ Optimization without measurement is noise: it adds comparison cost, reading comp
 | --- | --- |
 | `REACT-PERF-01` | `memo`, `useMemo` and `useCallback` **MUST** have a measured justification — Profiler, a DevTools recording or reproducible slowness. |
 
+What counts as a measurement — baseline first, render count as the gate, timing as the report, the results file — is [React - Performance Measurement](react-performance-measurement.md) (`REACT-PERF-11..19`).
+
 **Exception to `REACT-PERF-01`:** stabilizing a Context's `value` (`REACT-STATE-07`) does not require measurement. There `useMemo` is not an optimization — it is what keeps every consumer from re-rendering on every render of the provider, a structural and predictable cost, not a hypothetical one. The measurement requirement applies to **speculative** memoization.
 | `REACT-PERF-02` | Before memoizing by hand, you **MUST** check whether the React Compiler is active in the project (§ 7). |
 
@@ -69,7 +71,7 @@ Measure before optimizing. `<Profiler>` programmatically measures a subtree.
 </Profiler>
 ```
 
-`phase` is `"mount"`, `"update"` or `"nested-update"`; `actualDuration` is the subtree's render time. It adds overhead — it is an investigation tool, not permanent instrumentation. For interactive use, the React DevTools profiler is usually enough.
+`phase` is `"mount"`, `"update"` or `"nested-update"`; `actualDuration` is the subtree's render time. It adds overhead — it is an investigation tool, not permanent instrumentation. For interactive use, the React DevTools profiler is usually enough. For a repeatable before/after, `actualDuration` is reported next to a render count, never used as the gate (`REACT-PERF-11`, [React - Performance Measurement](react-performance-measurement.md)).
 
 ---
 
@@ -306,6 +308,7 @@ function Legacy() {
 
 - [React.js](react-js.md) · [React - Hooks](react-hooks.md) · [React - Patterns](react-patterns.md) · [React - Rules of React](react-rules-of-react.md)
 - [React - Suspense and Async](react-suspense-and-async.md) — transitions and Suspense combine
+- [React - Performance Measurement](react-performance-measurement.md) — how to measure before and after (`REACT-PERF-11..19`)
 
 ## Sources consulted
 

@@ -98,7 +98,7 @@ code that violates Level 1: report the violation first.
 | If the scan reveals… | The review does not continue here |
 | --- | --- |
 | the problem is **where the file lives** or who imports whom | `react-structure`, the `REACT-ARCH-*` family |
-| the component is **confirmed slow** and needs a measured fix | *(no skill yet)* |
+| the component is **confirmed slow** and needs a measured fix | `react-component-performance`, the `REACT-PERF-11..19` measurement rules |
 
 ---
 

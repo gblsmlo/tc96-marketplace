@@ -1,6 +1,6 @@
 ---
 generated-by: skills/react/react-review/scripts/generate-id-map.sh
-generated-at: 2026-10-02
+generated-at: 2026-10-03
 ---
 
 # ID map `REACT-*` — where each rule lives
@@ -91,6 +91,15 @@ From [React.js](../../../docs/react/react-js.md) § 6.2. Always cite the canonic
 | `REACT-PERF-08` | [React - Performance and Concurrency](../../../docs/react/react-performance-and-concurrency.md) | 7. React Compiler |
 | `REACT-PERF-09` | [React - Performance and Concurrency](../../../docs/react/react-performance-and-concurrency.md) | 5. Reduce the rendered volume |
 | `REACT-PERF-10` | [React - Performance and Concurrency](../../../docs/react/react-performance-and-concurrency.md) | 4. Concurrency |
+| `REACT-PERF-11` | [React - Performance Measurement](../../../docs/react/react-performance-measurement.md) | 1. Two kinds of number |
+| `REACT-PERF-12` | [React - Performance Measurement](../../../docs/react/react-performance-measurement.md) | 1. Two kinds of number |
+| `REACT-PERF-13` | [React - Performance Measurement](../../../docs/react/react-performance-measurement.md) | 2. Order: baseline first |
+| `REACT-PERF-14` | [React - Performance Measurement](../../../docs/react/react-performance-measurement.md) | 2. Order: baseline first |
+| `REACT-PERF-15` | [React - Performance Measurement](../../../docs/react/react-performance-measurement.md) | 3. Iterations and statistics |
+| `REACT-PERF-16` | [React - Performance Measurement](../../../docs/react/react-performance-measurement.md) | 4. What travels with the numbers |
+| `REACT-PERF-17` | [React - Performance Measurement](../../../docs/react/react-performance-measurement.md) | 5. The results file |
+| `REACT-PERF-18` | [React - Performance Measurement](../../../docs/react/react-performance-measurement.md) | 6. Correctness after memoization |
+| `REACT-PERF-19` | [React - Performance Measurement](../../../docs/react/react-performance-measurement.md) | 7. The README section |
 | `REACT-PURE-01` | [React - Rules of React](../../../docs/react/react-rules-of-react.md) | 2. Components and Hooks must be pure |
 | `REACT-PURE-02` | [React - Rules of React](../../../docs/react/react-rules-of-react.md) | 2. Components and Hooks must be pure |
 | `REACT-PURE-03` | [React - Rules of React](../../../docs/react/react-rules-of-react.md) | 2. Components and Hooks must be pure |

@@ -140,7 +140,7 @@ Active surface of the official reference — what is used in new code. The **Sat
 | `<Fragment>` (`<>...</>`) | Group nodes without creating a DOM element. You only need the long form `<Fragment key={…}>` when rendering a list — the short form `<>` does not accept `key` | — |
 | `<Suspense>` | Show a fallback while children load | [React - Suspense and Async](react-suspense-and-async.md) |
 | `<StrictMode>` | Extra checks in development | [React - Rendering and Entrypoints](react-rendering-and-entrypoints.md) |
-| `<Profiler>` | Measure render performance programmatically | [React - Performance and Concurrency](react-performance-and-concurrency.md) |
+| `<Profiler>` | Measure render performance programmatically | [React - Performance and Concurrency](react-performance-and-concurrency.md) · how to turn it into a measurement: [React - Performance Measurement](react-performance-measurement.md) |
 | `<Activity>` | Hide and restore UI **preserving internal state** | [React - Performance and Concurrency](react-performance-and-concurrency.md) |
 
 ### `react` — APIs
@@ -415,7 +415,7 @@ Review findings cite the rule ID and the satellite, they do not paraphrase:
 1. **Verify before asserting.** If an API is not in section 4, it has not been verified in this doc. Consult react.dev and update the note — do not invent behavior.
 2. **The source wins.** A divergence between this note and react.dev is a bug in this note.
 3. **Rule before style.** A violation of `REACT-PURE-*` or `REACT-HOOK-*` takes precedence over any aesthetic preference.
-4. **Do not optimize without measurement.** `memo`, `useMemo` and `useCallback` require evidence of a problem. See `REACT-PERF-*`.
+4. **Do not optimize without measurement.** `memo`, `useMemo` and `useCallback` require evidence of a problem. See `REACT-PERF-*`; what counts as a measurement is [React - Performance Measurement](react-performance-measurement.md).
 5. **Prefer the bridge.** When section 8 indicates the stack solves the problem, use the stack instead of React's raw primitive.
 
 ### When creating a new React skill
@@ -453,6 +453,7 @@ The body of this doc is pure React, faithful to react.dev. But in my stack (`Tan
 - [React - Hooks](react-hooks.md) — API surface per Hook
 - [React - Patterns](react-patterns.md) — composition and architecture patterns
 - [React - Rules of React](react-rules-of-react.md) — normative basis
+- [React - Performance Measurement](react-performance-measurement.md) — baseline, render-count gate, results file (`REACT-PERF-11..19`)
 - [React Hook Form](react-hook-form.md) — complex forms; its § 5.4 decides between RHF and native Actions
 - `Frontend roadmap` — study track that consumes these notes
 - `Next.js` · `TanStack Router` · `Tailwind CSS` · `TypeScript`
