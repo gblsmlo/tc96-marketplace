@@ -46,7 +46,7 @@ if (process.env.NODE_ENV === 'production') {
 const { createRoot } = await import('react-dom/client')
 type Root = ReturnType<typeof createRoot>
 
-function installDom(jsdom: JSDOM) {
+function installDom(jsdom: InstanceType<typeof JSDOM>) {
   const window = jsdom.window as unknown as Window & typeof globalThis & Record<string, unknown>
   const proto = window.Element.prototype as unknown as Record<string, unknown>
   proto.scrollIntoView ??= () => undefined
