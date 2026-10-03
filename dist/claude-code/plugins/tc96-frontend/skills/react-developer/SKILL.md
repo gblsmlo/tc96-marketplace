@@ -30,7 +30,7 @@ Writing a **new** React component, custom Hook or feature — or rewriting a pas
 | is this code that **already exists** correct? | `react-review` |
 | where does this file live, who imports whom | `react-structure` |
 | a form with validation, conditional fields, field arrays | `react-hook-form` |
-| a component **already confirmed slow**, needing a measured fix | *(no skill yet)* |
+| a component **already confirmed slow**, needing a measured fix | `react-component-performance` |
 | the data comes from a server and someone else can change it | `tanstack-query` |
 | the state belongs to the URL (filter, tab, page) | `tanstack-router` |
 

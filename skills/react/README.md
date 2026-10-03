@@ -1,6 +1,6 @@
-# React skills — developer, review, structure, hook-form
+# React skills — developer, review, structure, hook-form, component-performance
 
-Four skills, one directory each, with their own `references/` and `scripts/`. The common
+Five skills, one directory each, with their own `references/` and `scripts/`. The common
 anatomy described in [Skills index](../README.md) holds; the supporting material lives in its
 own files instead of bloating the `SKILL.md`.
 
@@ -10,20 +10,23 @@ own files instead of bloating the `SKILL.md`.
 | `react-review` | is this code that **already exists** correct? | [React - Rules of React](docs/react-rules-of-react.md) | 4 references + 1 report + 2 scripts |
 | `react-structure` | **where** the file lives, who imports whom | [Feature-Based Architecture](docs/feature-based-architecture.md) | 3 references + 1 report + 2 scripts |
 | `react-hook-form` | forms: capture, validation, submission | [React Hook Form](docs/react-hook-form.md) | 4 references + 1 example + 2 scripts |
+| `react-component-performance` | a component **confirmed slow**: measure, fix, prove | [React - Performance Measurement](docs/react-performance-measurement.md) | 5 references + 1 harness + 1 example + 2 scripts |
 
-Two axes separate the four. Between `react-developer` and `react-review`, **new × already
+Two axes separate the first four. Between `react-developer` and `react-review`, **new × already
 exists** — and it is in the first words of each `description`. Between them and the other
 two, **interior × boundary**: `react-structure` handles where the code lives and who may
 import whom; `react-hook-form` handles a whole capability (form capture) that has a rule
-family of its own, `RHF-*`.
+family of its own, `RHF-*`. `react-component-performance` is a third axis, **measured ×
+assumed**: it starts only when a slowness is confirmed, and its output is a before/after
+comparison, not a review finding.
 
 **In a PR, the order is `react-structure` → `react-review`.** Moving a file can erase the
 interior finding, so reviewing the interior first is wasted work.
 
 ## The docs travel with the family
 
-The normative notes — the `React.js` hub with its twelve satellites, `React Hook Form` with its
-three, `Feature-Based Architecture` and `Architecture in React`, 198 IDs in all — live in
+The normative notes — the `React.js` hub with its thirteen satellites, `React Hook Form` with its
+three, `Feature-Based Architecture` and `Architecture in React`, 207 IDs in all — live in
 [`docs/`](docs/react-js.md), not in the tc96 `knowledge-base/`. That is what lets each skill
 work in a project that has nothing else from tc96:
 
@@ -92,17 +95,38 @@ react-hook-form/
 └── scripts/
     ├── probes.sh                     12 probes for an existing form
     └── generate-id-map.sh            regenerates from docs/react-hook-form*
+
+react-component-performance/
+├── SKILL.md
+├── references/
+│   ├── scenario-catalog.md           scenarios per view type, how to drive them, expected render counts
+│   ├── noise-and-stats.md            iterations, the noise band, what a delta may claim
+│   ├── memo-correctness.md           four ways memo goes stale, a test for each, the checklist
+│   ├── readme-bench-section.md       the README ## Benchmark template, with a filled example
+│   └── id-map.md                     generated: REACT-PERF-* and the IDs the skill cites
+└── scripts/
+    ├── probes.sh                     11 re-render hazard probes
+    ├── bench-harness.ts              copyable JSDOM benchmark harness (bench-harness v1)
+    ├── bench-compare.ts              compares two results files; --gate fails on render regressions
+    ├── bench-result.schema.json      JSON Schema of the results file (bench-result/v1)
+    └── example/bench-example.ts      runnable adapter against a tiny list
 ```
+
+The harness is **copied** into the consumer project (`bench-harness.ts` and `bench-compare.ts`
+together), never imported from the plugin: the project owns its benchmark, and the
+`bench-harness v1` line at the top says which version it copied. It needs `bun`, and `react`,
+`react-dom` and `jsdom` in the project; this repository has none of them, so the example runs from
+a project that does.
 
 ## The ID map
 
-**`id-map.md` is generated, not written** — in all four. It indexes the IDs by satellite and
+**`id-map.md` is generated, not written** — in all five. It indexes the IDs by satellite and
 section, and never carries the rule's **text**: a rule copied inside a skill becomes an outdated
 replica. Three generators, one per rule family, because the sources and the columns differ:
 
 | Generator | Family | Source | Columns |
 | --- | --- | --- | --- |
-| `react-review/scripts/generate-id-map.sh` | 105 `REACT-*` | `docs/react*` | satellite · section · aliases |
+| `react-review/scripts/generate-id-map.sh` | 114 `REACT-*` | `docs/react*` | satellite · section · aliases; also writes the scoped map of `react-component-performance` |
 | `react-structure/scripts/generate-id-map.sh` | 12 `REACT-ARCH-*` | [Feature-Based Architecture](docs/feature-based-architecture.md) | **severity** · **who enforces it** · section |
 | `react-hook-form/scripts/generate-id-map.sh` | 81 `RHF-*` | `docs/react-hook-form*` | satellite · section · cross-doc citation |
 
@@ -133,7 +157,6 @@ family, cited by name on purpose:
 | --- | --- | --- |
 | remote data, cache, invalidation, optimism | `tanstack-query` | `TanStack Query` |
 | routing, navigation, search params, loader | `tanstack-router` | `TanStack Router` |
-| a component confirmed slow, a measured fix | *(no skill yet)* | — |
 | configuring Storybook, writing a story | `storybook-setup` · `storybook-story` | `Storybook` |
 | an interaction test in the story, the **Vitest** runner | `storybook-test` | `Storybook - Testes e Interações` § 4 |
 | the test's **level**: unit × integration × e2e | `test-design` | `Teste de Software - Níveis e Escopo` |

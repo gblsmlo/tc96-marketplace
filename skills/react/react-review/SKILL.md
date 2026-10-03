@@ -31,7 +31,7 @@ Reviewing React code that **already exists**: a PR, a file, a component, a custo
 | writing a **new** component or Hook | `react-developer` |
 | where this file lives, who imports whom | `react-structure` |
 | a form with validation, conditional fields, field arrays | `react-hook-form` |
-| a component **already confirmed slow**, needing a measured fix | *(no skill yet)* |
+| a component **already confirmed slow**, needing a measured fix | `react-component-performance` |
 
 ---
 
@@ -129,7 +129,7 @@ See the corresponding satellite.
 If the `react*` notes in `docs/` changed since the last review, regenerate the map before citing — this runs in the source repository, not in an installed plugin:
 
 ```bash
-bash skills/react/react-review/scripts/generate-id-map.sh   # rewrites react-developer's and react-review's id-map.md
+bash skills/react/react-review/scripts/generate-id-map.sh   # rewrites the id-map.md of react-developer, react-review and react-component-performance
 bash build/claude-code.sh                                   # rebuilds the plugins
 ```
 <!-- authoring:end -->

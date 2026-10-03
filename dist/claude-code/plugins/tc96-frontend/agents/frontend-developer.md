@@ -37,7 +37,7 @@ The study map underpinning this agent is [Frontend roadmap](../referencias/front
 | the classes of a component or screen — tokens, variants, states, responsiveness | `tailwind-build` (plugin `tc96-tailwind`) | `tailwind-review` (that is `code-reviewer`'s) |
 | installing or configuring Tailwind, tokens, dark mode, migrating from v3 | `tailwind-setup` (plugin `tc96-tailwind`) | `tailwind-build` |
 | a story, `args`, controls, the docs page | `storybook-story` | `storybook-test` (that is `qa-engineer`'s) |
-| a component already **confirmed slow** | *(vague route — see `memory/STACK.md`)* | `react-developer` |
+| a component already **confirmed slow** | `react-component-performance` | `react-developer` |
 | should the validation live in the browser, the BFF or the backend? | `software-architect` | frontend-developer |
 
 ---

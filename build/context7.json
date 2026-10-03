@@ -135,6 +135,9 @@
     "react-review": [
       "react"
     ],
+    "react-component-performance": [
+      "react"
+    ],
     "react-structure": [
       "react"
     ],
