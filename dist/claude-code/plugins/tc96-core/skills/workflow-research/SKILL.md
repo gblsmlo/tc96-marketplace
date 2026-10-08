@@ -46,10 +46,11 @@ Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../refe
 | 1 | [Fluxo de Entrega — Quatro Pilares](../../referencias/fluxo-de-entrega-quatro-pilares.md) §0, §2 | the pillar × role distinction, the four-pillar table |
 | 2 | Same hub, §4.1 | the scope decision tree — the core of this skill |
 | 3 | Same hub, §6 `WF-CORE-*` and `WF-RES-*` | the 12 rules this skill enforces |
+| 4 | Same hub, §5 "Onde o artefato mora" and `WF-SPEC-*` | whether this scope writes `requirements.md` |
 
 **Never load §4.2–§4.4** (planning gates, implementation stop conditions, validation
 proportionality) — those belong to the sibling skills, loaded only when the handoff reaches
-them.
+them. The PRD template and the `DOC-PRD-*` rules load inside `workflow-spec`, not here.
 
 References in this skill:
 
@@ -121,10 +122,20 @@ Team opinion about the user, without that source, never substitutes for research
 | 7 | remaining gaps are declared explicitly, not implied | `WF-CORE-05` |
 | 8 | code was read by `repo-explorer`, and the decision went to a named agent | `WF-CORE-06` |
 | 9 | this conversation holds the envelope and the fact list, not code or a full report | `WF-CORE-07` |
+| 10 | a product scope has `requirements.md` written by `product-manager` through `workflow-spec`; other scopes have none | `WF-SPEC-01`, `WF-SPEC-03` |
+| 11 | `requirements.md` is `Approved` by the owner's answer, not by the writer | `WF-SPEC-06` |
 
 ---
 
 ## Step 6 — Hand off
+
+**Write the spec when the scope is product.** Call `workflow-spec` for
+`.specs/<feature>/requirements.md`: it reads the project's document set, starts
+`product-manager` with the template, and puts the `Draft` in front of the owner. The envelope's
+`artefato` is that path (`WF-SPEC-01`), and `Approved` comes only from the owner's answer
+(`WF-SPEC-06`). Architecture and implementation-detail scopes write no `requirements.md`: the
+envelope carries the decision, and planning records it in `design.md` or `tasks.md`
+(`WF-SPEC-03`).
 
 Return the envelope from hub §5 (`pilar: pesquisa`), and route by scope:
 
@@ -139,10 +150,12 @@ Return the envelope from hub §5 (`pilar: pesquisa`), and route by scope:
 what stays an open gap. The next pillar does not reopen this classification without new
 evidence.
 
-**Advance without asking.** If `proximo` is set and `lacunas` holds nothing that only the owner
+**Advance without asking.** This holds in a spec-only run too: research always continues into
+planning, and only planning stops (`WF-SPEC-05`). If `proximo` is set and `lacunas` holds nothing that only the owner
 can decide, start the next pillar now. Do not ask whether to continue. Stop only for an owner
-decision (a product question, an appetite breach under `WF-PLAN-02`) or for an action that is
-irreversible or visible to others (push, PR, deleting data).
+decision (a product question, an appetite breach under `WF-PLAN-02`, a `requirements.md`
+awaiting approval under `WF-SPEC-06`) or for an action that is irreversible or visible to
+others (push, PR, deleting data).
 
 **Reset the context at the boundary.** The next pillar runs in the named agent that owns it
 (hub §3), started with only this envelope and the facts it cites (`WF-CORE-06`). That agent
@@ -169,4 +182,5 @@ Full case: `references/separar-fato-hipotese-decisao.md`.
 
 - [Fluxo de Entrega — Quatro Pilares](../../referencias/fluxo-de-entrega-quatro-pilares.md) — source of this skill, §4.1, §6
 - `workflow-planning` — where the resolved decision goes next
+- `workflow-spec` — writes `requirements.md` and records the owner's approval
 - `product-manager` · `product-designer` · `software-architect` — where the scope-specific decision goes

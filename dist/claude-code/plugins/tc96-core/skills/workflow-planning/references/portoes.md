@@ -6,11 +6,11 @@ gate can reveal that what looked like one unit is actually two).
 
 ## 1. Product gate
 
-**Question:** if this touches `docs/specs/**` or an equivalent behavior contract, is there an
+**Question:** if this touches `.specs/**` or an equivalent behavior contract, is there an
 approved decision behind it?
 
-**Check:** can you point to the spec, ADR, or `workflow-research` handoff that approved this
-behavior? If the only answer is "it seemed obvious," this gate fails — return to
+**Check:** can you point to the `requirements.md` in `Approved`, the `design.md` in `Accepted`,
+the ADR in `.specs/adr/`, or the `workflow-research` handoff that approved this behavior? If the only answer is "it seemed obvious," this gate fails — return to
 `workflow-research`.
 
 ## 2. Decomposition gate

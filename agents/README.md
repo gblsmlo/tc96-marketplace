@@ -74,7 +74,7 @@ All twelve share the same shape, checkable by script, and it extends the anatomy
 | how long; who does what; risk; does it fit the scope; status | `project-manager` | `product-manager` · `software-architect` |
 | where is X, what calls Y, what does Z do **today** | `repo-explorer` | whoever decides with those facts |
 
-Two axes separate most of the pairs. **New × already exists** separates those who write from `code-reviewer` — the same axis as in [Skills](../skills/README.md). **Decide × execute** separates `software-architect`, `product-manager`, `product-designer`, and `project-manager` from the three that write code: the four that decide have no `Write`/`Edit` on the repository and deliver a recorded decision; those that execute receive the decision and return code with evidence.
+Two axes separate most of the pairs. **New × already exists** separates those who write from `code-reviewer` — the same axis as in [Skills](../skills/README.md). **Decide × execute** separates `software-architect`, `product-manager`, `product-designer`, and `project-manager` from the three that write code: the four that decide never write code and deliver a recorded decision (`software-architect` writes only under `.specs/`); those that execute receive the decision and return code with evidence.
 
 ## How agents hand off
 

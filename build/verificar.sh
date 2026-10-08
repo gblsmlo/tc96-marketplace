@@ -159,6 +159,13 @@ for skill in sorted((raiz / "skills/workflow").glob("*/SKILL.md")):
             delegacao.append(f"{skill.relative_to(raiz)}:{n}: agente sem nome")
 sondar("pilares delegados a agente nomeado (WF-CORE-06)", delegacao)
 
+sem_link = []
+for modelo in sorted((raiz / "skills/workflow").glob("*/references/template-*.md")):
+    skill = modelo.parent.parent / "SKILL.md"
+    if f"references/{modelo.name}" not in skill.read_text(encoding="utf-8"):
+        sem_link.append(f"{modelo.relative_to(raiz)}: não citado em {skill.relative_to(raiz)}")
+sondar("templates de workflow citados pela própria skill", sem_link)
+
 # --- 6. every .skill package stands alone -----------------------------------
 # Runs only when dist/skills/ exists (bash build/skill-packages.sh). Each package is
 # unzipped into an empty directory with nothing else around it, and must still

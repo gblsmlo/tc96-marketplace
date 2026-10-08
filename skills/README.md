@@ -37,9 +37,9 @@ skills/<family>/
 | **http** | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [http/](http/README.md) |
 | **drizzle** | `drizzle-review` | [drizzle/](drizzle/README.md) |
 | **kb** | `kb-coverage` | [kb/](kb/README.md) |
-| **workflow** | `workflow-research` · `workflow-planning` · `workflow-implementation` · `workflow-validation` | [workflow/](workflow/README.md) |
+| **workflow** | `workflow-research` · `workflow-planning` · `workflow-implementation` · `workflow-validation` · `workflow-spec` | [workflow/](workflow/README.md) |
 
-All 37 are in the neutral source, in English, with `idioma: en` in the frontmatter.
+All 38 are in the neutral source, in English, with `idioma: en` in the frontmatter.
 
 The importer (`build/importar-do-plugin.py`) stays as a provenance record: it skips a skill
 with `idioma: en`, because the hermes build it came from is Portuguese-only.

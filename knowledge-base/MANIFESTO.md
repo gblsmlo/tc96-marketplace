@@ -7,7 +7,7 @@ A single layer: each note lives directly in `knowledge-base/`, with no
 subfolder. Each note's title comes from the `titulo:` field in the file
 itself — the label skills use when linking to it.
 
-Notes: 130
+Notes: 131
 
 | File | Title | sha256 |
 | --- | --- | --- |
@@ -37,6 +37,7 @@ Notes: 130
 | `claude-code-paralelismo-e-escala.md` | Claude Code - Paralelismo e Escala | `355b5f0a648c` |
 | `claude-code-sessao-e-verificacao.md` | Claude Code - Sessão e Verificação | `47ee1777ce7e` |
 | `claude-code.md` | Claude Code | `712f92bca667` |
+| `documentos-de-decisao-prd-rfc-adr.md` | Documentos de Decisão — PRD, RFC e ADR | `867198224a62` |
 | `drizzle-orm.md` | Drizzle ORM | `86fb22d670a6` |
 | `drizzle-queries-e-relations.md` | Drizzle - Queries e Relations | `d2c4eefb0ed6` |
 | `drizzle-schema-e-migrations.md` | Drizzle - Schema e Migrations | `e1221c1d7aa0` |
@@ -46,7 +47,7 @@ Notes: 130
 | `elysia.md` | Elysia | `a4c1be7eead7` |
 | `feature-based-architecture.md` | Feature-Based Architecture | `d361ef1301a1` |
 | `feature-flags-modelo-visual-do-fluxo.md` | Feature Flags — modelo visual do fluxo | `fc1e90735a7c` |
-| `fluxo-de-entrega-quatro-pilares.md` | Fluxo de Entrega — Quatro Pilares | `da512b433687` |
+| `fluxo-de-entrega-quatro-pilares.md` | Fluxo de Entrega — Quatro Pilares | `6305df31c221` |
 | `forward-deployed-engineering.md` | Forward Deployed Engineering | `5522c590ec21` |
 | `fronteira-do-bff-forma-jornada-e-regra.md` | Fronteira do BFF - forma, jornada e regra | `d85add0942d9` |
 | `frontend-roadmap.md` | Frontend roadmap | `44e50bc18ad9` |

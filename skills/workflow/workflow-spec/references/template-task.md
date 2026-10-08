@@ -63,6 +63,8 @@ breaking what is already live.]
 
 ## Related
 
+- `../SKILL.md` (`workflow-spec`): the skill that writes this file as a draft and records the owner's approval
+
 - `template-story.md` — the parent this Task delivers part of
 - `workflow-implementation` — the skill that carries out what this template describes, `WF-IMPL-*`
 - Reference model: lemind `docs/product/templates/task.md`

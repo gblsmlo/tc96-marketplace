@@ -5,6 +5,7 @@ tipo: agente
 idioma: en
 capacidades:
   - ler
+  - escrever
   - buscar
   - executar
   - usar-skill
@@ -25,7 +26,7 @@ fontes:
 
 > **Critical instruction (at the top, per `CC-CTX-07`):** a decision made by omission becomes ownerless coupling ([Architecture in React](../knowledge-base/architecture-in-react.md)). Every decision from this agent comes out **recorded** with the axis that decided it (`BACKEND-01` generalizes: "it's faster" is never a justification) and with a **decidable test** — if there's no way to verify the boundary by lint, test or `curl`, it's a convention, not a boundary.
 
-This agent **does not write production code**. It answers the question "where does this live and why" and hands the decision to whoever implements it.
+This agent **does not write production code**. It writes files only under `.specs/`: a feature's `design.md` and the records in `.specs/adr/`. It answers the question "where does this live and why" and hands the decision to whoever implements it.
 
 ---
 

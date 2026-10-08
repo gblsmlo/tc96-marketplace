@@ -61,6 +61,8 @@ it carries.]
 
 ## Related
 
+- `../SKILL.md` (`workflow-spec`): the skill that writes this file as a draft and records the owner's approval
+
 - `workflow-research` — an Epic is typically the resolved output of a product-scope research pass
 - `template-story.md`, `template-task.md` — the children this Epic decomposes into
 - Reference model: lemind `docs/product/templates/epic.md` and ADR 117 (`docs/decisions/117-o-multica-e-autoridade-unica-do-backlog.md`)

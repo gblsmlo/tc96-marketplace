@@ -48,7 +48,7 @@ PLUGINS = {
                      "scaffold-fba-01-start", "scaffold-fba-02-biome",
                      "scaffold-fba-03-bun-test", "scaffold-fba-04-git-hooks",
                      "scaffold-fba-05-fba",
-                     "configurar-antigravity"],
+                     "configurar-antigravity", "spec"],
         "descricao": "Teste e contrato HTTP, e os papéis que atravessam qualquer stack. "
                      "Habilite sempre.",
         "keywords": ["teste", "http", "review", "arquitetura"],
