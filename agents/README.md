@@ -5,7 +5,7 @@ tags:
   - agent
   - index
 ---
-# Agents — Index
+# Agents
 
 Agents are **roles**: each one receives a task in its own context, loads the skills and notes that role uses, and returns a result in the format that role produces. They **do not** repeat rules or procedures — they route to [Skills](../skills/README.md) (procedure) and to the [knowledge-base](../knowledge-base/MANIFESTO.md) (rule), citing by ID wherever one exists.
 
@@ -25,8 +25,8 @@ These are three links, not four: the reasoning layer was cut on 2026-09-22 and i
 
 | Agent | Role | Skills it loads | Main sources |
 | --- | --- | --- | --- |
-| `code-reviewer` | Reviews a PR or an already-written file in fresh context: routes by family, classifies severity, cites ID and file:line, separates finding from opinion | `react-review` · `http-review` · `drizzle-review` · `playwright-review` · `bun-test-review` · `test-review` | `Code Review` · [Claude Code - Sessão e Verificação](../knowledge-base/claude-code-sessao-e-verificacao.md) |
-| `frontend-developer` | Writes React in this house's stack: where it lives → who owns the state → which API | `react-structure` · `react-developer` · `tanstack-router` · `tanstack-query` · `react-hook-form` · `storybook-story` | [Frontend roadmap](../knowledge-base/frontend-roadmap.md) · [Architecture in React](../knowledge-base/architecture-in-react.md) · [Feature-Based Architecture](../knowledge-base/feature-based-architecture.md) |
+| `code-reviewer` | Reviews a PR or an already-written file in fresh context: routes by family, classifies severity, cites ID and file:line, separates finding from opinion | `react-review` · `tailwind-review` · `http-review` · `drizzle-review` · `playwright-review` · `bun-test-review` · `test-review` | `Code Review` · [Claude Code - Sessão e Verificação](../knowledge-base/claude-code-sessao-e-verificacao.md) |
+| `frontend-developer` | Writes React in this house's stack: where it lives → who owns the state → which API | `react-structure` · `react-developer` · `tanstack-router` · `tanstack-query` · `react-hook-form` · `storybook-story` · `tailwind-setup` · `tailwind-build` | [Frontend roadmap](../knowledge-base/frontend-roadmap.md) · [Architecture in React](../knowledge-base/architecture-in-react.md) · [Feature-Based Architecture](../knowledge-base/feature-based-architecture.md) |
 | `backend-developer` | Writes services in Bun + Elysia/Hono + Drizzle: HTTP contract before the handler | `elysia-build` · `elysia-schema` · `elysia-diagnose` · `http-contract` · `http-cache` · `http-diagnose` · `bun-runtime` · `bun-workspace` · `bun-migrate` · `bun-test-build` | [Backend no runtime Bun](../knowledge-base/backend-no-runtime-bun.md) · [Elysia](../knowledge-base/elysia.md) · [HTTP](../knowledge-base/http.md) · [Drizzle ORM](../knowledge-base/drizzle-orm.md) |
 | `qa-engineer` | Decides the test level, writes it in the right tool, audits and diagnoses the suite | `test-design` · `test-review` · `test-diagnose` · `playwright-build` · `playwright-review` · `playwright-diagnose` · `bun-test-build` · `bun-test-review` · `storybook-test` | [Teste de Software](../knowledge-base/teste-de-software.md) · [Playwright](../knowledge-base/playwright.md) · [Bun - Testes](../knowledge-base/bun-testes.md) |
 | `software-architect` | Decides boundaries and responsibilities; records the decision with its axis, invariants, and migration path | `react-structure` | [Architecture in React](../knowledge-base/architecture-in-react.md) · [Fronteira do BFF - forma, jornada e regra](../knowledge-base/fronteira-do-bff-forma-jornada-e-regra.md) · Architecture, Design Patterns, and Microservices maps |

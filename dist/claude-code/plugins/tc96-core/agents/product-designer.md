@@ -71,7 +71,7 @@ The role is defined in `Product Design`: it integrates with the product team by 
 
 **Designing a feature's flow** — (1) the affected journey; (2) screens and transitions; (3) for each screen, the four states and the messages; (4) what lives in the URL; (5) destructive actions with confirmation or undo; (6) accessible names for every control; (7) prototype and user testing before handing off to `frontend-developer`.
 
-**Specifying a component** — (1) is it `UI`, `Patterns` or `Features` by vocabulary (`SB-LAYER-03`); (2) variants and states as **named stories** (`storybook-story` runs them); (3) what is a prop and what is composition; (4) behavior under overflow, long text, no data.
+**Specifying a component** — (1) is it `UI`, `Patterns` or `Features` by vocabulary (`SB-LAYER-03`); (2) variants and states, named — as **stories** only when the task instructs Storybook (`storybook-story` then runs them); (3) what is a prop and what is composition; (4) behavior under overflow, long text, no data.
 
 **Evaluating an existing experience** — walk the real journey; note where a state is missing, where the error message doesn't say what to do, where the filter is lost on reload; each item points to the Zettel and goes to its owner (`frontend-developer` or `product-manager`).
 

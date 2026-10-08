@@ -16,7 +16,7 @@ Notes: 131
 | `auth-e-cripto-siglas-da-decisao-de-framework.md` | Auth e cripto — siglas da decisão de framework | `f67689f00f8e` |
 | `backend-no-runtime-bun.md` | Backend no runtime Bun | `51b88008720c` |
 | `backend-pendencias-de-revisao.md` | Backend - Pendências de revisão | `494ce1ce14fd` |
-| `bun-bundler-e-build.md` | Bun - Bundler e Build | `889c3704a28e` |
+| `bun-bundler-e-build.md` | Bun - Bundler e Build | `f9991b500d2e` |
 | `bun-dados-e-persistencia.md` | Bun - Dados e Persistência | `7813a80a0ac8` |
 | `bun-gerenciador-de-pacotes.md` | Bun - Gerenciador de Pacotes | `52f57ac4db79` |
 | `bun-http-e-servidor.md` | Bun - HTTP e Servidor | `5a33919cec31` |
@@ -29,7 +29,7 @@ Notes: 131
 | `bun-testes-execucao-e-configuracao.md` | Bun - Testes - Execução e Configuração | `d5fe0023cabd` |
 | `bun-testes-mocks-e-tempo.md` | Bun - Testes - Mocks e Tempo | `3e4d1faa9ac0` |
 | `bun-testes.md` | Bun - Testes | `d34afb784f69` |
-| `bun.md` | Bun | `08f3cdf98e4a` |
+| `bun.md` | Bun | `a12327778b5d` |
 | `claude-api-docs.md` | Claude API Docs | `da3d29afcccc` |
 | `claude-code-automacao-externa.md` | Claude Code - Automação Externa | `de77dc4e5c5b` |
 | `claude-code-configuracao-do-repositorio.md` | Claude Code - Configuração do Repositório | `162ae0c476a5` |
@@ -37,7 +37,7 @@ Notes: 131
 | `claude-code-paralelismo-e-escala.md` | Claude Code - Paralelismo e Escala | `355b5f0a648c` |
 | `claude-code-sessao-e-verificacao.md` | Claude Code - Sessão e Verificação | `47ee1777ce7e` |
 | `claude-code.md` | Claude Code | `712f92bca667` |
-| `documentos-de-decisao-prd-rfc-adr.md` | Documentos de Decisão — PRD, RFC e ADR | `c012d0d36f9d` |
+| `documentos-de-decisao-prd-rfc-adr.md` | Documentos de Decisão — PRD, RFC e ADR | `867198224a62` |
 | `drizzle-orm.md` | Drizzle ORM | `86fb22d670a6` |
 | `drizzle-queries-e-relations.md` | Drizzle - Queries e Relations | `d2c4eefb0ed6` |
 | `drizzle-schema-e-migrations.md` | Drizzle - Schema e Migrations | `e1221c1d7aa0` |
@@ -47,7 +47,7 @@ Notes: 131
 | `elysia.md` | Elysia | `a4c1be7eead7` |
 | `feature-based-architecture.md` | Feature-Based Architecture | `d361ef1301a1` |
 | `feature-flags-modelo-visual-do-fluxo.md` | Feature Flags — modelo visual do fluxo | `fc1e90735a7c` |
-| `fluxo-de-entrega-quatro-pilares.md` | Fluxo de Entrega — Quatro Pilares | `ae2436feba62` |
+| `fluxo-de-entrega-quatro-pilares.md` | Fluxo de Entrega — Quatro Pilares | `6305df31c221` |
 | `forward-deployed-engineering.md` | Forward Deployed Engineering | `5522c590ec21` |
 | `fronteira-do-bff-forma-jornada-e-regra.md` | Fronteira do BFF - forma, jornada e regra | `d85add0942d9` |
 | `frontend-roadmap.md` | Frontend roadmap | `44e50bc18ad9` |
@@ -76,7 +76,7 @@ Notes: 131
 | `playwright-estrutura-de-testes.md` | Playwright - Estrutura de Testes | `636588b5810b` |
 | `playwright-execucao-retries-e-ci.md` | Playwright - Execução, Retries e CI | `a55463894391` |
 | `playwright-fixtures.md` | Playwright - Fixtures | `a956c24cfe46` |
-| `playwright-locators.md` | Playwright - Locators | `fc87f3319b59` |
+| `playwright-locators.md` | Playwright - Locators | `0acd3f000d9f` |
 | `playwright-rede-e-mocking.md` | Playwright - Rede e Mocking | `834cea8f765d` |
 | `playwright-snapshots-e-visual.md` | Playwright - Snapshots e Visual | `d0f86cc387a6` |
 | `playwright.md` | Playwright | `41a1aad8d73e` |
@@ -89,10 +89,10 @@ Notes: 131
 | `react-hook-form-estado-e-performance.md` | React Hook Form - Estado e Performance | `94e259d0281c` |
 | `react-hook-form-registro-e-controle.md` | React Hook Form - Registro e Controle | `60d23f5ea138` |
 | `react-hook-form-validacao-e-resolvers.md` | React Hook Form - Validação e Resolvers | `71fac7755884` |
-| `react-hook-form.md` | React Hook Form | `bf06eb08bd31` |
+| `react-hook-form.md` | React Hook Form | `c6cd2703ab86` |
 | `react-hooks-utilitarios.md` | React - Hooks Utilitários | `9aef41dcbb09` |
 | `react-hooks.md` | React - Hooks | `b348e38fc0be` |
-| `react-js.md` | React.js | `124e1d9fc686` |
+| `react-js.md` | React.js | `d107074ec537` |
 | `react-patterns.md` | React - Patterns | `fbb253c25fa8` |
 | `react-performance-e-concorrencia.md` | React - Performance e Concorrência | `1b90aa7ae175` |
 | `react-refs-e-dom.md` | React - Refs e DOM | `5b128948ed7d` |
@@ -114,7 +114,7 @@ Notes: 131
 | `storybook-stories-e-args.md` | Storybook - Stories e Args | `a3fb2a2b301f` |
 | `storybook-tanstack-react.md` | Storybook - TanStack React | `4de863626b59` |
 | `storybook-testes-e-interacoes.md` | Storybook - Testes e Interações | `9eae6da7e543` |
-| `storybook.md` | Storybook | `1c5dc5240960` |
+| `storybook.md` | Storybook | `3e2a4c34f462` |
 | `tanstack-query-cache-e-frescor.md` | TanStack Query - Cache e Frescor | `1f092c4c7412` |
 | `tanstack-query-mutations-e-invalidacao.md` | TanStack Query - Mutations e Invalidação | `2db82eb00aa7` |
 | `tanstack-query-o-que-um-dev-frontend-precisa-saber.md` | TanStack Query - O que um Dev Frontend Precisa Saber | `875704310239` |

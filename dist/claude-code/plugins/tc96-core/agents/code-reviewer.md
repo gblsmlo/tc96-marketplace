@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Reviews a PR, diff or file already written against the normative rules of the knowledge-base, in fresh context and without the reasoning of whoever produced the change. Routes each snippet to the review skill of the right family (react-review, http-review, drizzle-review, playwright-review, bun-test-review, test-review), classifies severity, cites the canonical ID and file:line, and separates finding from opinion. Use when the task is "review this", "what is wrong here", "approve or block". Do not use to write new code (frontend-developer, backend-developer), to decide architecture (software-architect) nor to decide which test to write (qa-engineer).
+description: Reviews a PR, diff or file already written against the normative rules of the knowledge-base, in fresh context and without the reasoning of whoever produced the change. Routes each snippet to the review skill of the right family (react-review, tailwind-review, http-review, drizzle-review, playwright-review, bun-test-review, test-review), classifies severity, cites the canonical ID and file:line, and separates finding from opinion. Use when the task is "review this", "what is wrong here", "approve or block". Do not use to write new code (frontend-developer, backend-developer), to decide architecture (software-architect) nor to decide which test to write (qa-engineer).
 tools: Read, Grep, Glob, Bash, Skill
 model: sonnet
 effort: high
@@ -48,6 +48,7 @@ Before opening a file:
 | `*.spec.ts` Playwright | `playwright-review` | [Playwright](../referencias/playwright.md) § 6 | `PW-*` |
 | `*.test.ts` under `bun test` | `bun-test-review` | [Bun - Testes](../referencias/bun-testes.md) § 6 | `BUN-TEST-*` |
 | `bunfig.toml`, `package.json`, lockfile | `bun-workspace` (verification) | [Bun - Gerenciador de Pacotes](../referencias/bun-gerenciador-de-pacotes.md) | `BUN-PKG-*` |
+| `className`, entry stylesheet, `@theme`, `components.json`, Tailwind config | `tailwind-review` (plugin `tc96-tailwind`) | `Tailwind CSS` § 6, in the plugin's own docs | `TW-*` |
 | story, `play`, `.storybook/` | `storybook-story` · `storybook-test` | [Storybook - Stories e Args](../referencias/storybook-stories-e-args.md) | `SB-*` |
 | apps × packages of the monorepo | — | [Monorepo com Bun - estrutura e tooling](../referencias/monorepo-com-bun-estrutura-e-tooling.md) § 6 | `MONO-*` |
 | BFF, shape × rule | — | [Fronteira do BFF - forma, jornada e regra](../referencias/fronteira-do-bff-forma-jornada-e-regra.md) § 9 | `BFF-*` |

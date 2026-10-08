@@ -12,7 +12,7 @@ set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="${1:-$RAIZ/dist/claude-code}"
-VERSAO="${VERSAO:-0.9.0}"   # 0.4: commands/ · 0.5: comandos em bun · 0.6: fases 3 em bun test · 0.7: modelo e esforco por papel · 0.9: .specs/, comando spec e workflow-spec
+VERSAO="${VERSAO:-0.9.0}"   # 0.4: commands/ · 0.5: comandos em bun · 0.6: fases 3 em bun test · 0.7: modelo e esforco por papel · 0.8: tc96-tailwind autocontido · 0.9: react-component-performance e bench harness
 
 rm -rf "$DEST"
 
@@ -67,6 +67,15 @@ PLUGINS = {
         "descricao": "Runtime Bun, Elysia e Drizzle — serviço HTTP, persistência e "
                      "dependências. Habilite em projeto com backend.",
         "keywords": ["bun", "elysia", "drizzle", "backend"],
+    },
+    # Autocontida: a familia traz a propria doc em skills/tailwind/docs/ e nao
+    # cita nota da knowledge-base, para poder ser habilitada sem o resto do tc96.
+    "tc96-tailwind": {
+        "familias": ["tailwind"],
+        "agentes": [],
+        "descricao": "Tailwind CSS v4 — setup, escrita e revisão de estilo, com a própria "
+                     "doc normativa (TW-*). Autocontido: habilite sozinho ou junto do tc96-frontend.",
+        "keywords": ["tailwind", "css", "design-system", "frontend"],
     },
     "tc96-e2e": {
         "familias": ["playwright"],
@@ -153,12 +162,23 @@ for plugin, cfg in PLUGINS.items():
     alvo = dest / "plugins" / plugin
     (alvo / ".claude-plugin").mkdir(parents=True, exist_ok=True)
 
+    # doc propria da familia (skills/<familia>/docs/) -> <plugin>/docs/<familia>/
+    for familia in cfg["familias"]:
+        doc_familia = raiz / "skills" / familia / "docs"
+        if doc_familia.is_dir():
+            shutil.copytree(doc_familia, alvo / "docs" / familia)
+
     for origem, campos, corpo in skills:
         destino = alvo / "skills" / origem.name
+        familia = origem.parent.name
         shutil.copytree(origem, destino)
         for arq in destino.rglob("*.md"):
             t = arq.read_text(encoding="utf-8")
             notas |= citadas(t)
+            # a doc da familia sobe para docs/<familia>/ na raiz do plugin;
+            # references/ primeiro, porque "../../docs/" contem "../docs/"
+            t = t.replace("](../../docs/", f"](../../../docs/{familia}/")
+            t = t.replace("](../docs/", f"](../../docs/{familia}/")
             # a familia sai do caminho: uma subida a menos
             t = t.replace("../../../knowledge-base/", "../../referencias/")
             t = t.replace("../../../../knowledge-base/", "../../../referencias/")
@@ -180,6 +200,9 @@ for plugin, cfg in PLUGINS.items():
             # e o link que ELES escrevem tem de ter a mesma profundidade que o
             # adaptador deu aos .md — senao regenerar o mapa quebra os links
             s = s.replace("../../../../knowledge-base/", "../../../referencias/")
+            # a doc propria da familia mora em <plugin>/docs/<familia>/ no alvo
+            s = s.replace('/../.." && pwd)/docs}', f'/../../.." && pwd)/docs/{familia}}}')
+            s = s.replace("](../../docs/", f"](../../../docs/{familia}/")
             sh.write_text(s, encoding="utf-8")
             sh.chmod(0o755)
 
@@ -232,7 +255,7 @@ for plugin, cfg in PLUGINS.items():
             destino = alvo / "referencias" / nota
             destino.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(origem, destino)
-    for extra in ("MANIFESTO.md",):
+    for extra in ("MANIFESTO.md",) if notas else ():
         if (raiz / "knowledge-base" / extra).exists():
             shutil.copy2(raiz / "knowledge-base" / extra, alvo / "referencias" / extra)
 

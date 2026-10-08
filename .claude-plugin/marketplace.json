@@ -25,6 +25,11 @@
       "description": "Runtime Bun, Elysia e Drizzle — serviço HTTP, persistência e dependências. Habilite em projeto com backend."
     },
     {
+      "name": "tc96-tailwind",
+      "source": "./dist/claude-code/plugins/tc96-tailwind",
+      "description": "Tailwind CSS v4 — setup, escrita e revisão de estilo, com a própria doc normativa (TW-*). Autocontido: habilite sozinho ou junto do tc96-frontend."
+    },
+    {
       "name": "tc96-e2e",
       "source": "./dist/claude-code/plugins/tc96-e2e",
       "description": "Playwright — escrita, auditoria e diagnóstico de teste E2E. Habilite em projeto com suíte E2E."

@@ -1,6 +1,6 @@
 # Most frequent antipatterns, with IDs
 
-> Quick scan grid. Check the ID in `mapa-de-ids.md` before citing — three are
+> Quick scan grid. Check the ID in `id-map.md` before citing — three are
 > aliases and citing them makes the finding invalid.
 
 | Antipattern | ID | Satellite |

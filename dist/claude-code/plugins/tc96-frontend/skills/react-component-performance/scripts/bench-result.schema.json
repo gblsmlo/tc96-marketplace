@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bench-result/v1",
+  "title": "bench-harness v1 results file",
+  "description": "One run of a React component benchmark (REACT-PERF-17). Written by bench-harness.ts --json, read by bench-compare.ts.",
+  "type": "object",
+  "required": ["schema", "harness", "name", "environment", "config", "results"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "bench-result/v1" },
+    "harness": { "type": "string", "pattern": "^bench-harness v[0-9]+$" },
+    "name": { "type": "string", "minLength": 1 },
+    "environment": {
+      "description": "REACT-PERF-16: what the numbers were measured on.",
+      "type": "object",
+      "required": ["date", "runtime", "runtimeVersion", "dom", "domVersion", "react", "nodeEnv", "platform", "cpu"],
+      "additionalProperties": false,
+      "properties": {
+        "date": { "type": "string", "format": "date-time" },
+        "runtime": { "enum": ["bun", "node"] },
+        "runtimeVersion": { "type": "string" },
+        "dom": { "type": "string" },
+        "domVersion": { "type": "string" },
+        "react": { "type": "string" },
+        "nodeEnv": { "type": "string" },
+        "platform": { "type": "string" },
+        "cpu": { "type": "string" },
+        "seed": { "type": ["number", "string"] },
+        "commit": { "type": "string" }
+      }
+    },
+    "config": {
+      "type": "object",
+      "required": ["iterations", "mountIterations", "warmup", "threshold"],
+      "additionalProperties": false,
+      "properties": {
+        "iterations": { "type": "integer", "minimum": 0 },
+        "mountIterations": { "type": "integer", "minimum": 0 },
+        "warmup": { "type": "integer", "minimum": 0 },
+        "threshold": { "type": "number", "minimum": 0, "description": "noise threshold in percent (REACT-PERF-12)" }
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/result" }
+    }
+  },
+  "$defs": {
+    "spread": {
+      "type": "object",
+      "required": ["median", "p95", "min", "max"],
+      "additionalProperties": false,
+      "properties": {
+        "median": { "type": "number" },
+        "p95": { "type": "number", "description": "nearest rank; equals max when n < 20" },
+        "min": { "type": "number" },
+        "max": { "type": "number" }
+      }
+    },
+    "result": {
+      "type": "object",
+      "required": ["case", "scenario", "kind", "n", "warmup", "wallMs", "profilerMs", "renders"],
+      "additionalProperties": false,
+      "properties": {
+        "case": { "type": "string" },
+        "scenario": { "type": "string" },
+        "kind": { "enum": ["mount", "interaction"] },
+        "n": { "type": "integer", "minimum": 1 },
+        "warmup": { "type": "integer", "minimum": 0 },
+        "wallMs": { "$ref": "#/$defs/spread" },
+        "profilerMs": {
+          "description": "null when the case did not mount through tools.render (no Profiler)",
+          "oneOf": [{ "$ref": "#/$defs/spread" }, { "type": "null" }]
+        },
+        "renders": {
+          "description": "deterministic counters: the gate (REACT-PERF-11). `commits` is added when the Profiler is wired.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["median", "min", "max"],
+            "additionalProperties": false,
+            "properties": {
+              "median": { "type": "number", "minimum": 0 },
+              "min": { "type": "number", "minimum": 0 },
+              "max": { "type": "number", "minimum": 0 }
+            }
+          }
+        },
+        "heapMb": { "type": "number", "description": "median heap delta of a mount, when a forced GC is available" }
+      }
+    }
+  }
+}

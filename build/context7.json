@@ -16,7 +16,7 @@
     "",
     "Reverificar: bash build/context7.sh --verificar"
   ],
-  "verificado_em": "2026-09-22",
+  "verificado_em": "2026-10-02",
   "fonte": "https://context7.com/api/v1/search",
   "bibliotecas": {
     "react": {
@@ -96,6 +96,36 @@
       "titulo": "Node.js",
       "snippets": 20841,
       "trust": 9.1
+    },
+    "tailwindcss": {
+      "id": "/tailwindlabs/tailwindcss.com",
+      "titulo": "Tailwind CSS",
+      "snippets": 2385,
+      "trust": 10
+    },
+    "tailwind-merge": {
+      "id": "/dcastil/tailwind-merge",
+      "titulo": "Tailwind Merge",
+      "snippets": 283,
+      "trust": 8.3
+    },
+    "cva": {
+      "id": "/joe-bell/cva",
+      "titulo": "Class Variance Authority",
+      "snippets": 508,
+      "trust": 9.1
+    },
+    "shadcn-ui": {
+      "id": "/shadcn-ui/ui",
+      "titulo": "Shadcn UI",
+      "snippets": 3914,
+      "trust": 10
+    },
+    "tailwindcss-v3": {
+      "id": "/websites/v3_tailwindcss",
+      "titulo": "Tailwind CSS V3",
+      "snippets": 2045,
+      "trust": 9.9
     }
   },
   "skills": {
@@ -103,6 +133,9 @@
       "react"
     ],
     "react-review": [
+      "react"
+    ],
+    "react-component-performance": [
       "react"
     ],
     "react-structure": [
@@ -162,6 +195,22 @@
     ],
     "drizzle-review": [
       "drizzle"
+    ],
+    "tailwind-setup": [
+      "tailwindcss",
+      "shadcn-ui",
+      "tailwindcss-v3"
+    ],
+    "tailwind-build": [
+      "tailwindcss",
+      "tailwind-merge",
+      "cva",
+      "shadcn-ui"
+    ],
+    "tailwind-review": [
+      "tailwindcss",
+      "tailwindcss-v3",
+      "tailwind-merge"
     ]
   },
   "sem_biblioteca": {

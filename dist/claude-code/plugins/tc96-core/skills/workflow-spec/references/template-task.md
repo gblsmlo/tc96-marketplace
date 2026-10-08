@@ -25,7 +25,7 @@ guessed at.
 | Discipline | Delivers |
 | --- | --- |
 | Engineering | contract, persistence, API, web, test |
-| Design system | a primitive or pattern in the shared UI layer, with a Storybook story |
+| Design system | a primitive or pattern in the shared UI layer — a Storybook story only when the Task instructs the agent to write one |
 | Design | flow, screen, state, and interface copy, before code |
 | User Experience | research, journey, and experience criteria |
 | User Interface | visual composition of an existing surface |

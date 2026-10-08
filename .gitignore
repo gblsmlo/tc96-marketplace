@@ -4,3 +4,6 @@ dist/*
 
 # saída de eval do skill kb-coverage — não é conteúdo fonte
 skills/kb/kb-coverage-workspace/
+
+# bytecode do Python dos scripts das skills
+__pycache__/

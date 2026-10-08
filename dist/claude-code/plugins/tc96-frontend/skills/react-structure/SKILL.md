@@ -1,7 +1,7 @@
 ---
 name: react-structure
 description: Decide where React code lives and who may import whom in a feature-based architecture, citing `REACT-ARCH-*` IDs, with eight executable import probes, a scan in the order that fails most and staged migration — use when the task is creating a feature, placing a new file, reviewing a PR's imports, extracting code into the shared layer, or configuring and migrating a repository's structure. Do not use for the inside of a component — writing is react-developer, reviewing is react-review — and in a PR the structural finding comes first, because moving a file can erase the interior finding.
-fonte: "[Feature-Based Architecture](../../referencias/feature-based-architecture.md)"
+fonte: "[Feature-Based Architecture](../../docs/react/feature-based-architecture.md)"
 docs:
   - /reactjs/react.dev
 tags:
@@ -12,13 +12,13 @@ tags:
 
 # react-structure
 
-> **Source of this skill:** [Feature-Based Architecture](../../referencias/feature-based-architecture.md) (structure, rules and enforcement), with [Architecture in React](../../referencias/architecture-in-react.md) as the router for the other decision axes.
+> **Source of this skill:** [Feature-Based Architecture](../../docs/react/feature-based-architecture.md) (structure, rules and enforcement), with [Architecture in React](../../docs/react/architecture-in-react.md) as the router for the other decision axes.
 > This skill **contains** neither the text of the rules nor the Biome configuration — it says what to load, in what order to decide and how to report. A rule rewritten here would become an outdated copy.
 >
-> **Resolving the links:** the source note is [Feature-Based Architecture](../../referencias/feature-based-architecture.md). It condenses an external article of the same name, which is **not** normative here: what the note says wins.
-> **API surface:** resolve it through Context7 — `/reactjs/react.dev`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
+> **Resolving the links:** the source note is [Feature-Based Architecture](../../docs/react/feature-based-architecture.md). It condenses an external article of the same name, which is **not** normative here: what the note says wins.
+> **API surface:** resolve it through Context7 — `/reactjs/react.dev`. Signature, option and per-version behavior come from there; the rule and the ID come from the family's docs.
 
-Contract this skill implements: [Feature-Based Architecture](../../referencias/feature-based-architecture.md) § 10, which in turn implements [React.js](../../referencias/react-js.md) § 7.
+Contract this skill implements: [Feature-Based Architecture](../../docs/react/feature-based-architecture.md) § 10, which in turn implements [React.js](../../docs/react/react-js.md) § 7.
 
 ---
 
@@ -44,7 +44,7 @@ The skills compose, almost always in pairs:
 
 ## Minimum loading
 
-Adapted from [Feature-Based Architecture](../../referencias/feature-based-architecture.md) § 10 — the `ON DEMAND` line is this skill's addition:
+Adapted from [Feature-Based Architecture](../../docs/react/feature-based-architecture.md) § 10 — the `ON DEMAND` line is this skill's addition:
 
 ```
 ALWAYS: § 2 (layers and dependency direction)
@@ -65,14 +65,14 @@ References in this skill — open only the one the step asks for:
 
 | File | What for |
 | --- | --- |
-| `references/arvore-de-colocacao.md` | the five questions, the tree, and import × duplicate × extract |
-| `references/varredura-de-imports.md` | the scan order, what the probe does not catch, format and the cut |
-| `references/mapa-de-ids.md` | ID → severity → **who enforces it** (lint or review) → section |
-| `references/exemplo-revisao-de-estrutura.md` | a whole PR review, from the probes to the closing |
-| `scripts/sondas-imports.sh` | eight boundary probes, in the order that fails most |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates `mapa-de-ids.md` from the source note |
+| `references/placement-tree.md` | the five questions, the tree, and import × duplicate × extract |
+| `references/import-scan.md` | the scan order, what the probe does not catch, format and the cut |
+| `references/id-map.md` | ID → severity → **who enforces it** (lint or review) → section |
+| `references/example-structure-review.md` | a whole PR review, from the probes to the closing |
+| `scripts/import-probes.sh` | eight boundary probes, in the order that fails most |
+| `scripts/generate-id-map.sh` | regenerates `id-map.md` from the source note |
 
-Before deciding something is overkill, check § 9 ("Quando não usar"). A single-domain app does not need this structure, and imposing the vertical slice on it is this skill's antipattern.
+Before deciding something is overkill, check § 9 ("When not to use it"). A single-domain app does not need this structure, and imposing the vertical slice on it is this skill's antipattern.
 
 ---
 
@@ -92,9 +92,9 @@ A **placement** finding ("this should not be here") comes out of the Step 3 scan
 
 ## Step 1 — The five questions before creating a feature
 
-A normative order ([Feature-Based Architecture](../../referencias/feature-based-architecture.md) § 10). Answer them **in writing**, one sentence each, before the first `mkdir`: is it a domain? does the domain already exist? is the data remote? is this public? who is going to import this?
+A normative order ([Feature-Based Architecture](../../docs/react/feature-based-architecture.md) § 10). Answer them **in writing**, one sentence each, before the first `mkdir`: is it a domain? does the domain already exist? is the data remote? is this public? who is going to import this?
 
-The full table, with what to do when each answer stalls, and the "capability born shared" exception: `references/arvore-de-colocacao.md`.
+The full table, with what to do when each answer stalls, and the "capability born shared" exception: `references/placement-tree.md`.
 
 If question 1 has no clear answer, **stop**: the problem is not structural, it is that the capability has not been defined yet. Structuring before that produces the wrong boundary (§ 9).
 
@@ -102,7 +102,7 @@ If question 1 has no clear answer, **stop**: the problem is not structural, it i
 
 ## Step 2 — The placement tree
 
-Walk `references/arvore-de-colocacao.md`. Two questions decide everything: **does it know product vocabulary?** and, if so, **how many capabilities consume it?**
+Walk `references/placement-tree.md`. Two questions decide everything: **does it know product vocabulary?** and, if so, **how many capabilities consume it?**
 
 The most common mistake is not about the tree, it is about vocabulary: `REACT-ARCH-08` answers *when to create a shared module*, **not** *whether I may import*. Importing, duplicating and extracting are three different moves, and the table in § 4 breaks the tie.
 
@@ -111,12 +111,12 @@ The most common mistake is not about the tree, it is about vocabulary: `REACT-AR
 ## Step 3 — Scan imports, in the order that fails most
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/react-structure/scripts/sondas-imports.sh src
+bash ${CLAUDE_PLUGIN_ROOT}/skills/react-structure/scripts/import-probes.sh src
 ```
 
 **Probe 0 is about enforcement and runs first**: without `biome.json` and without the rules in § 7, every finding below repeats in the next PR — and that is the **first finding of the report**, not a footnote.
 
-Then, in order: inverted direction (`REACT-ARCH-06`, `-07`) → deep import (`-05`) → own alias (`-04`) → barrel (`-02`, `-03`) → bloated route (`-09`) → placement (`-01`, `-08`) → convention (`-11`, `-12`). Detail, false positives and what the probe does **not** catch: `references/varredura-de-imports.md`.
+Then, in order: inverted direction (`REACT-ARCH-06`, `-07`) → deep import (`-05`) → own alias (`-04`) → barrel (`-02`, `-03`) → bloated route (`-09`) → placement (`-01`, `-08`) → convention (`-11`, `-12`). Detail, false positives and what the probe does **not** catch: `references/import-scan.md`.
 
 Stop detailing a file when a finding invalidates the next one: if the layer is wrong, do not review its imports.
 
@@ -124,7 +124,7 @@ Stop detailing a file when a finding invalidates the next one: if the layer is w
 
 ## Step 4 — Report
 
-Severity comes from `references/mapa-de-ids.md` — the normative column of § 4, **do not reclassify**. Dependency direction beats aesthetics, always (§ 10, invariant 2).
+Severity comes from `references/id-map.md` — the normative column of § 4, **do not reclassify**. Dependency direction beats aesthetics, always (§ 10, invariant 2).
 
 ```
 `RULE-ID` — file:line
@@ -141,7 +141,7 @@ When closing, **declare what the lint would already cover**. The *Enforced by* c
 
 ## Step 5 — Self-check before delivering
 
-Run the checklist in [Feature-Based Architecture](../../referencias/feature-based-architecture.md) § 10 in full: barrel, dependency direction, `queryKey` invalidation, co-located test, naming convention. **It does not verify aliases** — that is Step 6; if you touched `paths`, check the three files by hand.
+Run the checklist in [Feature-Based Architecture](../../docs/react/feature-based-architecture.md) § 10 in full: barrel, dependency direction, `queryKey` invalidation, co-located test, naming convention. **It does not verify aliases** — that is Step 6; if you touched `paths`, check the three files by hand.
 
 Three closing questions:
 
@@ -191,14 +191,14 @@ Where the `queryKey` lives and how it is invalidated is a boundary shared with `
 
 A PR that extracts formatting into `libs/` and creates a "billing" feature. The probes point at six candidates; the **reading** shows that the feature came out of a screen, not a capability (`REACT-ARCH-01`) — and that erases two interior findings that would have been wasted work. The same file comes out with `REACT-ARCH-06` **and** `REACT-ARCH-08`, which are different defects. The absence of `biome.json` closes the report as the highest-return item.
 
-Full report: `references/exemplo-revisao-de-estrutura.md`.
+Full report: `references/example-structure-review.md`.
 
 ---
 
 ## Related
 
-- [Feature-Based Architecture](../../referencias/feature-based-architecture.md) — source of this skill: structure, `REACT-ARCH-*` rules, enforcement
-- [Architecture in React](../../referencias/architecture-in-react.md) — router for the other architectural decision axes
+- [Feature-Based Architecture](../../docs/react/feature-based-architecture.md) — source of this skill: structure, `REACT-ARCH-*` rules, enforcement
+- [Architecture in React](../../docs/react/architecture-in-react.md) — router for the other architectural decision axes
 - `react-developer` — write the component that lives in the structure decided here
 - `react-review` — review the interior; this skill reviews the boundary
-- [React.js](../../referencias/react-js.md) § 7 — the original skill contract
+- [React.js](../../docs/react/react-js.md) § 7 — the original skill contract

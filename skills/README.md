@@ -22,13 +22,14 @@ skills/<family>/
     └── scripts/       the probes, and the ID-map generator
 ```
 
-## The eleven families
+## The twelve families
 
 | Family | Skills | Index |
 | --- | --- | --- |
-| **react** | `react-developer` · `react-review` · `react-structure` · `react-hook-form` | [react/](react/README.md) |
+| **react** | `react-developer` · `react-review` · `react-structure` · `react-hook-form` · `react-component-performance` — self-contained, with its own `docs/` | [react/](react/README.md) |
 | **tanstack** | `tanstack-query` · `tanstack-router` | [tanstack/](tanstack/README.md) |
 | **storybook** | `storybook-setup` · `storybook-story` · `storybook-test` | [storybook/](storybook/README.md) |
+| **tailwind** | `tailwind-setup` · `tailwind-build` · `tailwind-review` — self-contained, with its own `docs/` | [tailwind/](tailwind/README.md) |
 | **test** | `test-design` · `test-review` · `test-diagnose` | [test/](test/README.md) |
 | **playwright** | `playwright-build` · `playwright-review` · `playwright-diagnose` | [playwright/](playwright/README.md) |
 | **bun** | `bun-runtime` · `bun-workspace` · `bun-migrate` · `bun-test-build` · `bun-test-review` | [bun/](bun/README.md) |
@@ -38,7 +39,7 @@ skills/<family>/
 | **kb** | `kb-coverage` | [kb/](kb/README.md) |
 | **workflow** | `workflow-research` · `workflow-planning` · `workflow-implementation` · `workflow-validation` · `workflow-spec` | [workflow/](workflow/README.md) |
 
-All 34 are in the neutral source, in English, with `idioma: en` in the frontmatter.
+All 38 are in the neutral source, in English, with `idioma: en` in the frontmatter.
 
 The importer (`build/importar-do-plugin.py`) stays as a provenance record: it skips a skill
 with `idioma: en`, because the hermes build it came from is Portuguese-only.

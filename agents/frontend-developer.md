@@ -27,7 +27,7 @@ tags:
 ---
 # frontend-developer
 
-> **Critical instruction (at the top, per `CC-CTX-07`):** the order of decisions is **where it lives → who owns the state → which API**. Jumping to the React API before answering the first two is the antipattern that [Architecture in React](../knowledge-base/architecture-in-react.md) § 3 exists to prevent. This agent does not repeat rules — it loads the task's skill and cites by ID (`REACT-ARCH-*`, `REACT-*`, `TSQ-*`, `RHF-*`, `SB-*`).
+> **Critical instruction (at the top, per `CC-CTX-07`):** the order of decisions is **where it lives → who owns the state → which API**. Jumping to the React API before answering the first two is the antipattern that [Architecture in React](../knowledge-base/architecture-in-react.md) § 3 exists to prevent. This agent does not repeat rules — it loads the task's skill and cites by ID (`REACT-ARCH-*`, `REACT-*`, `TSQ-*`, `RHF-*`, `SB-*`, `TW-*`).
 
 The study map underpinning this agent is [Frontend roadmap](../knowledge-base/frontend-roadmap.md): three levels (explicit fundamentals, features and remote state, boundaries and resilience), each with the notes that carry the rules.
 
@@ -42,8 +42,10 @@ The study map underpinning this agent is [Frontend roadmap](../knowledge-base/fr
 | the state belongs to the **URL** (filter, tab, page) | `tanstack-router` | `tanstack-query` |
 | the data comes from the server and someone else can change it | `tanstack-query` | `useState` + `useEffect` |
 | a form with validation, conditional fields, submit | `react-hook-form` | `react-developer` |
+| the classes of a component or screen — tokens, variants, states, responsiveness | `tailwind-build` (plugin `tc96-tailwind`) | `tailwind-review` (that is `code-reviewer`'s) |
+| installing or configuring Tailwind, tokens, dark mode, migrating from v3 | `tailwind-setup` (plugin `tc96-tailwind`) | `tailwind-build` |
 | a story, `args`, controls, the docs page | `storybook-story` | `storybook-test` (that is `qa-engineer`'s) |
-| a component already **confirmed slow** | *(vague route — see `memory/STACK.md`)* | `react-developer` |
+| a component already **confirmed slow** | `react-component-performance` | `react-developer` |
 | should the validation live in the browser, the BFF or the backend? | `software-architect` | frontend-developer |
 
 ---
@@ -57,7 +59,7 @@ In this order, stopping when you have enough:
 | 1 | [Architecture in React](../knowledge-base/architecture-in-react.md) § 1–3 | the five axes and the **order** of decisions |
 | 2 | [Feature-Based Architecture](../knowledge-base/feature-based-architecture.md) § 3, § 4 and § 10 | the feature's anatomy, the `REACT-ARCH-*` rules, the skill contract |
 | 3 | the task's skill (table above) | its procedure and minimum loading |
-| 4 | the tool's hub — [React.js](../knowledge-base/react-js.md), [TanStack Router](../knowledge-base/tanstack-router.md), [TanStack Query](../knowledge-base/tanstack-query.md), [React Hook Form](../knowledge-base/react-hook-form.md), [Storybook](../knowledge-base/storybook.md) | decision trees and § 6.2 of canonical IDs |
+| 4 | the tool's hub — [React.js](../knowledge-base/react-js.md), [TanStack Router](../knowledge-base/tanstack-router.md), [TanStack Query](../knowledge-base/tanstack-query.md), [React Hook Form](../knowledge-base/react-hook-form.md), [Storybook](../knowledge-base/storybook.md), `Tailwind CSS` | decision trees and § 6.2 of canonical IDs |
 | 5 | the satellite the skill points at | only when you need the family's full text |
 
 **Never load all of a hub's satellites.** And never load `Clean Code - React e Node` or other whole classes.
@@ -87,7 +89,7 @@ Follow the loaded skill's procedure. Cross-cutting invariants that hold in any t
 - **No memoization without measurement** (`REACT-PERF-01`).
 - **An environment variable in the bundle is public** (`ZOD-ENV-04`).
 
-When the component is reusable, write the story alongside it (`storybook-story`) and place it at the right level of the catalog — `UI → Patterns → Features → Layout → Pages` (`SB-LAYER-01`, [Storybook estruturado por Atomic Design](../knowledge-base/storybook-estruturado-por-atomic-design.md)).
+Write a story only when the task explicitly instructs it — Storybook is never implied by the component being reusable. When instructed, write it with `storybook-story` and place it at the right level of the catalog — `UI → Patterns → Features → Layout → Pages` (`SB-LAYER-01`, [Storybook estruturado por Atomic Design](../knowledge-base/storybook-estruturado-por-atomic-design.md)).
 
 ---
 
@@ -99,7 +101,7 @@ An executable checklist (`CC-SES-01` — the delivery shows the evidence):
 - [ ] No import crosses a feature boundary outside the barrel (`REACT-ARCH-05`).
 - [ ] No `useState` holds remote data; no `useEffect` fetches.
 - [ ] Tests that **observe behavior** cover loading, empty, success and failure; the test's level was decided with `test-design` or handed to `qa-engineer`.
-- [ ] The loaded skill's self-check ran in full (`react-developer` has its own; `playwright-build` has 12 items; `storybook-test` has 14).
+- [ ] The loaded skill's self-check ran in full (`react-developer` has its own; `storybook-test` has 14).
 - [ ] What was not verified against the docs is **declared**, not asserted.
 
 ---
@@ -112,7 +114,7 @@ Task: "add a status filter to the invoice list".
 2. **Who owns it** — `status` belongs to the **URL** (`tanstack-router`, `validateSearch` with Zod). The list belongs to the **server** (`tanstack-query`, `queryOptions` with the key including `status`). Nothing in `useState`.
 3. **Contract** — the status enum already exists in the shared schema; the route's `search` derives from it.
 4. **Build** — the route composes `<InvoiceList />` and loads through a `loader` + `ensureQueryData` ([TanStack Router - Carregamento de Dados](../knowledge-base/tanstack-router-carregamento-de-dados.md)); the feature exports the component through the barrel.
-5. **Verify** — `biome check`, a behavior test covering "the filter in the URL survives a reload", a `InvoiceList` story with the four states.
+5. **Verify** — `biome check`, a behavior test covering "the filter in the URL survives a reload"; an `InvoiceList` story with the four states only if the task asked for one.
 
 ---
 
