@@ -58,8 +58,11 @@ References in this skill:
 
 ## Step 1 — Confirm readiness
 
-The unit needs, from `workflow-planning`: acceptance criterion, owning perfil, evidence plan.
-Missing any of these means this is not actually a ready unit — return it (`WF-CORE-03`).
+The unit is one Task in `.specs/<feature>/tasks.md`, and it needs from `workflow-planning`:
+acceptance criterion, owning perfil, evidence plan. Missing any of these means this is not
+actually a ready unit — return it (`WF-CORE-03`). The spec files the Task cites as inputs must be
+accepted; one still in draft means the Task waits (`WF-SPEC-04`). Read only this Task and the
+sections it links, not the whole `.specs/<feature>/` folder.
 
 Start from a small context: a new instance of the owning agent, holding the unit and not the
 conversation that produced it (`WF-CORE-06`). Implementing inside a long session re-reads all

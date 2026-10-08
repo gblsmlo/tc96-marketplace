@@ -12,7 +12,7 @@ set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="${1:-$RAIZ/dist/claude-code}"
-VERSAO="${VERSAO:-0.7.0}"   # 0.4: commands/ · 0.5: comandos em bun · 0.6: fases 3 em bun test · 0.7: modelo e esforco por papel
+VERSAO="${VERSAO:-0.9.0}"   # 0.4: commands/ · 0.5: comandos em bun · 0.6: fases 3 em bun test · 0.7: modelo e esforco por papel · 0.9: .specs/, comando spec e workflow-spec
 
 rm -rf "$DEST"
 
@@ -48,7 +48,7 @@ PLUGINS = {
                      "scaffold-fba-01-start", "scaffold-fba-02-biome",
                      "scaffold-fba-03-bun-test", "scaffold-fba-04-git-hooks",
                      "scaffold-fba-05-fba",
-                     "configurar-antigravity"],
+                     "configurar-antigravity", "spec"],
         "descricao": "Teste e contrato HTTP, e os papéis que atravessam qualquer stack. "
                      "Habilite sempre.",
         "keywords": ["teste", "http", "review", "arquitetura"],

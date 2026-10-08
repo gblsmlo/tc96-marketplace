@@ -7,13 +7,13 @@ A single layer: each note lives directly in `knowledge-base/`, with no
 subfolder. Each note's title comes from the `titulo:` field in the file
 itself — the label skills use when linking to it.
 
-Notes: 130
+Notes: 131
 
 | File | Title | sha256 |
 | --- | --- | --- |
 | `application-strategies.md` | Application Strategies | `cc6c1b1eaed0` |
 | `architecture-in-react.md` | Architecture in React | `421ff6cff528` |
-| `auth-e-cripto-siglas-da-decisao-de-framework.md` | Auth e cripto — siglas da decisão de framework | `acabe3a53d2e` |
+| `auth-e-cripto-siglas-da-decisao-de-framework.md` | Auth e cripto — siglas da decisão de framework | `f67689f00f8e` |
 | `backend-no-runtime-bun.md` | Backend no runtime Bun | `51b88008720c` |
 | `backend-pendencias-de-revisao.md` | Backend - Pendências de revisão | `494ce1ce14fd` |
 | `bun-bundler-e-build.md` | Bun - Bundler e Build | `889c3704a28e` |
@@ -37,6 +37,7 @@ Notes: 130
 | `claude-code-paralelismo-e-escala.md` | Claude Code - Paralelismo e Escala | `355b5f0a648c` |
 | `claude-code-sessao-e-verificacao.md` | Claude Code - Sessão e Verificação | `47ee1777ce7e` |
 | `claude-code.md` | Claude Code | `712f92bca667` |
+| `documentos-de-decisao-prd-rfc-adr.md` | Documentos de Decisão — PRD, RFC e ADR | `c012d0d36f9d` |
 | `drizzle-orm.md` | Drizzle ORM | `86fb22d670a6` |
 | `drizzle-queries-e-relations.md` | Drizzle - Queries e Relations | `d2c4eefb0ed6` |
 | `drizzle-schema-e-migrations.md` | Drizzle - Schema e Migrations | `e1221c1d7aa0` |
@@ -46,7 +47,7 @@ Notes: 130
 | `elysia.md` | Elysia | `a4c1be7eead7` |
 | `feature-based-architecture.md` | Feature-Based Architecture | `d361ef1301a1` |
 | `feature-flags-modelo-visual-do-fluxo.md` | Feature Flags — modelo visual do fluxo | `fc1e90735a7c` |
-| `fluxo-de-entrega-quatro-pilares.md` | Fluxo de Entrega — Quatro Pilares | `38e15d31edbe` |
+| `fluxo-de-entrega-quatro-pilares.md` | Fluxo de Entrega — Quatro Pilares | `ae2436feba62` |
 | `forward-deployed-engineering.md` | Forward Deployed Engineering | `5522c590ec21` |
 | `fronteira-do-bff-forma-jornada-e-regra.md` | Fronteira do BFF - forma, jornada e regra | `d85add0942d9` |
 | `frontend-roadmap.md` | Frontend roadmap | `44e50bc18ad9` |
@@ -63,9 +64,9 @@ Notes: 130
 | `http-status-e-redirecionamento.md` | HTTP - Status e Redirecionamento | `38910799b20e` |
 | `http.md` | HTTP | `31fc99555126` |
 | `monorepo-com-bun-estrutura-e-tooling.md` | Monorepo com Bun - estrutura e tooling | `0d32aae1bab3` |
-| `nist-rbac-ansi-incits-359.md` | NIST RBAC - ANSI INCITS 359 | `42ca35c10251` |
-| `oauth-2-0-for-browser-based-applications.md` | OAuth 2.0 for Browser-Based Applications | `a18457e80eb0` |
-| `owasp-sessao-e-autorizacao.md` | OWASP - Sessão e Autorização | `56e4580cf286` |
+| `nist-rbac-ansi-incits-359.md` | NIST RBAC - ANSI INCITS 359 | `e025fab0e82f` |
+| `oauth-2-0-for-browser-based-applications.md` | OAuth 2.0 for Browser-Based Applications | `bf505744de10` |
+| `owasp-sessao-e-autorizacao.md` | OWASP - Sessão e Autorização | `3b7067bb662e` |
 | `playwright-acoes-e-auto-waiting.md` | Playwright - Ações e Auto-waiting | `a661624c53db` |
 | `playwright-agents-cli-e-mcp.md` | Playwright - Agents, CLI e MCP | `a0d8374da7db` |
 | `playwright-assertions.md` | Playwright - Assertions | `3d862b241cd4` |
@@ -99,9 +100,9 @@ Notes: 130
 | `react-rules-of-react.md` | React - Rules of React | `d3832264e728` |
 | `react-server-components-e-diretivas.md` | React - Server Components e Diretivas | `2ba5c53bec7a` |
 | `react-suspense-e-assincronia.md` | React - Suspense e Assincronia | `00a2f6554825` |
-| `rfc-6265-cookies-http.md` | RFC 6265 - Cookies HTTP | `58646a55876a` |
-| `rfc-8725-jwt-best-current-practices.md` | RFC 8725 - JWT Best Current Practices | `ef7d961f4e00` |
-| `rfc-9700-oauth-2-0-security-bcp.md` | RFC 9700 - OAuth 2.0 Security BCP | `d288cf97cc0c` |
+| `rfc-6265-cookies-http.md` | RFC 6265 - Cookies HTTP | `4afd5ca93a64` |
+| `rfc-8725-jwt-best-current-practices.md` | RFC 8725 - JWT Best Current Practices | `7971922e1539` |
+| `rfc-9700-oauth-2-0-security-bcp.md` | RFC 9700 - OAuth 2.0 Security BCP | `acce6f4ff495` |
 | `storybook-cobertura-e-ci.md` | Storybook - Cobertura e CI | `181c0126458d` |
 | `storybook-configuracao-e-builder.md` | Storybook - Configuração e Builder | `5f96899b2efd` |
 | `storybook-decorators-e-contexto.md` | Storybook - Decorators e Contexto | `9e3165575a27` |
@@ -138,6 +139,6 @@ Notes: 130
 | `teste-de-software-tipos-e-atributos-de-qualidade.md` | Teste de Software - Tipos e Atributos de Qualidade | `d7ad56a62c21` |
 | `teste-de-software.md` | Teste de Software | `54a59ef6b44f` |
 | `trunk-based-development.md` | Trunk-based development | `176afa0bd401` |
-| `workos-authkit.md` | WorkOS - AuthKit | `d7b1c345b122` |
-| `workos-rbac.md` | WorkOS - RBAC | `55e7ca42fd69` |
+| `workos-authkit.md` | WorkOS - AuthKit | `dfde89f9b140` |
+| `workos-rbac.md` | WorkOS - RBAC | `f9b1c4ab38f0` |
 | `zod-validacao-de-ambiente.md` | Zod - Validação de Ambiente | `f4408a3db9cd` |

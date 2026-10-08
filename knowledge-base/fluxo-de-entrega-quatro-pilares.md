@@ -152,8 +152,9 @@ ela chega pronta na Implementação sem ninguém ter decidido se o produto dever
 
 Uma unidade só está pronta para a Implementação depois de passar por todos:
 
-1. **Portão de produto** — se a mudança altera `docs/specs/**` ou equivalente, existe
-   comportamento aprovado por trás? Sem isso, volta para `workflow-research`.
+1. **Portão de produto** — se a mudança altera `.specs/**` ou equivalente, existe
+   comportamento aprovado por trás (`requirements.md` em `Approved`, `design.md` em
+   `Accepted`, ou um ADR)? Sem isso, volta para `workflow-research`.
 2. **Portão de decomposição** — só divide em mais de uma unidade se cada uma tiver critério
    de aceite, evidência e dependência próprios (`WF-PLAN-03`). Dividir por conveniência de
    quem escreve, não por essas fronteiras, é fragmentação de custo.
@@ -198,7 +199,7 @@ reconstruir o que já foi decidido:
 ```yaml
 pilar: "pesquisa | planejamento | implementacao | validacao"
 resultado: uma frase com o resultado
-artefato: "<item de board, arquivo, commit ou PR onde a saída completa está>"
+artefato: "<arquivo em .specs/, item de board, commit ou PR onde a saída completa está>"
 evidencia: [E1, E2]
 decisoes: [D1]
 lacunas: [G1]
@@ -212,6 +213,43 @@ acompanhado de um artefato (`WF-CORE-01`), nunca só de uma frase de intenção.
 quem orquestra guarda só o envelope, que cabe em 30 linhas (`WF-CORE-07`). Um relatório
 inteiro devolvido à conversa principal é relido e cobrado em todo turno seguinte, de todos
 os pilares que vierem depois.
+
+### Onde o artefato mora: `.specs/`
+
+A saída de Pesquisa e de Planejamento é gravada no projeto, em `.specs/`, e o `artefato` do
+envelope aponta o caminho (`WF-SPEC-01`):
+
+```
+.specs/
+├── adr/
+│   └── NNNN-<slug>.md        software-architect · nunca editado, só substituído
+└── <feature>/
+    ├── requirements.md       Pesquisa · product-manager (o PRD)
+    ├── design.md             Planejamento · software-architect (RFC ou design doc)
+    ├── user-experience.md    Planejamento · product-designer (UX, UI, usabilidade, acessibilidade)
+    └── tasks.md              Planejamento · project-manager (um Task por unidade, com dono)
+```
+
+O escopo classificado na §4.1 decide quais arquivos nascem (`WF-SPEC-03`):
+
+| Escopo | Arquivos |
+| --- | --- |
+| detalhe de implementação | `tasks.md` |
+| arquitetura | `design.md`; um ADR por decisão que sobrevive à feature; `tasks.md` |
+| produto | `requirements.md`; `user-experience.md` quando há interface; `design.md` quando há fronteira ou contrato; `tasks.md` |
+
+O que cada documento de decisão é, e quando congela, está em
+[Documentos de Decisão — PRD, RFC e ADR](documentos-de-decisao-prd-rfc-adr.md). Cada arquivo tem
+um dono e cita os outros por link (`WF-SPEC-02`). Uma execução só de especificação para depois
+de `tasks.md` (`WF-SPEC-05`).
+
+**Quem escreve, em uma linha.** O pilar decide *quando* um arquivo é necessário; o escopo
+decide *qual*; o agente dono decide *o que ele diz*; `workflow-spec` decide *forma, lugar,
+status e revisão*. Todo arquivo nasce `Draft` (ADR nasce `Proposed`) e só muda de status pela
+resposta explícita do dono na conversa (`WF-SPEC-06`). Quais documentos o projeto mantém é
+decisão do dono, registrada uma vez na seção `## Specs` do `AGENTS.md` do projeto, com
+permissão, ou em `.specs/README.md`, e lida antes de escrever (`WF-SPEC-07`); `tasks.md` nunca
+é desligado, e documento desligado deixa sua decisão em uma linha no `tasks.md`.
 
 ---
 
@@ -271,9 +309,21 @@ Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
 | `WF-VAL-04` | Toda falha de Validação **MUST** ser roteada para o pilar de origem do problema — Pesquisa se é lacuna de decisão, Planejamento se é lacuna de escopo/evidência, Implementação se é defeito de código; corrigir no pilar errado **NEVER**. |
 | `WF-VAL-05` | Métrica de entrega (lead time, taxa de falha de mudança) **MUST** vir de dado medido, **NEVER** de percepção (Forsgren/Humble/Kim, *Accelerate* — métricas DORA). |
 
+### `WF-SPEC-*` — os arquivos de `.specs/`
+
+| ID | Regra |
+| --- | --- |
+| `WF-SPEC-01` | A saída de Pesquisa e de Planejamento **MUST** ser gravada em `.specs/`, e o `artefato` do envelope aponta o caminho; saída que só existe na conversa **NEVER**. † |
+| `WF-SPEC-02` | Cada arquivo de `.specs/` **MUST** ter um único dono e citar os outros por link; copiar conteúdo de um arquivo para outro **NEVER**, a cópia diverge. † |
+| `WF-SPEC-03` | Os arquivos gerados **MUST** seguir o escopo classificado na §4.1; gerar os quatro arquivos para um detalhe de implementação **NEVER** (ver `DOC-CORE-02`). † |
+| `WF-SPEC-04` | Um Task de `tasks.md` **MUST** começar só quando os arquivos que ele cita estão aceitos; começar sobre rascunho **NEVER** (`WF-CORE-03`). |
+| `WF-SPEC-05` | Uma execução só de especificação **MUST** parar depois de `tasks.md`, devolvendo o envelope de Planejamento; seguir para a Implementação sem novo pedido do dono **NEVER**. † |
+| `WF-SPEC-06` | Todo arquivo de `.specs/` **MUST** nascer `Draft` (ADR: `Proposed`) e mudar de status só pela resposta explícita do dono na conversa; o agente que escreveu aprovar o próprio arquivo, ou silêncio valer como aprovação, **NEVER**. † |
+| `WF-SPEC-07` | Quais documentos o projeto mantém **MUST** ser registrado uma vez (`## Specs` no `AGENTS.md`, com permissão do dono, ou `.specs/README.md`) e lido antes de escrever; perguntar de novo a cada execução **NEVER**; desligar `tasks.md` **NEVER**. † |
+
 ### Contagem
 
-**27 regras** em cinco famílias, um único arquivo — sem satélite nesta versão.
+**34 regras** em seis famílias, um único arquivo — sem satélite nesta versão.
 
 | Família | Regras |
 | --- | --- |
@@ -282,6 +332,7 @@ Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
 | `WF-PLAN-*` | 5 |
 | `WF-IMPL-*` | 5 |
 | `WF-VAL-*` | 5 |
+| `WF-SPEC-*` | 7 |
 
 ---
 
@@ -304,6 +355,9 @@ AO DECIDIR se a implementação para e devolve:
 
 AO DECIDIR quanta evidência a validação exige:
           § 4.4 + WF-VAL-*
+
+AO GRAVAR os arquivos de .specs/:
+          § 5 + WF-SPEC-* (e a nota de Documentos de Decisão, DOC-*, só para o documento em escrita)
 
 NUNCA:    esta estrutura inteira para uma tarefa cujo pilar já é óbvio
           (ex.: "corrija este typo" não precisa de classificação de pilar)
@@ -340,6 +394,7 @@ NUNCA:    esta estrutura inteira para uma tarefa cujo pilar já é óbvio
 | "passar pelos portões de planejamento" | § 4.2 + `WF-PLAN-*` | este hub |
 | "decidir se a implementação para e devolve" | § 4.3 + `WF-IMPL-*` | este hub |
 | "decidir quanta evidência a validação exige" | § 4.4 + `WF-VAL-*` | este hub |
+| "escrever e registrar um arquivo de `.specs/`" | § 5 + `WF-SPEC-*` | este hub e [Documentos de Decisão — PRD, RFC e ADR](documentos-de-decisao-prd-rfc-adr.md) |
 
 ---
 
@@ -355,6 +410,7 @@ NUNCA:    esta estrutura inteira para uma tarefa cujo pilar já é óbvio
 | Achado de autenticação, cookie ou segredo durante a validação | corrigir e seguir sem rotear | `devops-security` (`WF-VAL-04`) |
 | Cronograma, risco ou "isso cabe no escopo" durante o planejamento | o time de implementação decidir sozinho | `project-manager` |
 | Fronteira entre camadas ou serviços durante o planejamento | decidir dentro do código, sem registrar | `software-architect`, decisão registrada |
+| Escrever PRD, RFC, ADR, UX ou tasks em `.specs/` | inventar o formato, aprovar o próprio arquivo, ou editar um ADR aceito | `workflow-spec`, com [Documentos de Decisão — PRD, RFC e ADR](documentos-de-decisao-prd-rfc-adr.md) |
 
 **A ponte mais importante desta nota:** o pilar nunca substitui a skill ou o agente que já
 resolve a pergunta — ele só decide **quando** chamar cada um. Um `workflow-*` que responde a
@@ -396,7 +452,9 @@ contribuição principal deste projeto, sem paralelo direto numa única fonte.
   fluxograma que esta nota formaliza
 - [Teste de Software](teste-de-software.md) — §0, a distinção verificação × validação que o
   pilar de Validação reaproveita
-- `skills/workflow/` — as quatro skills que implementam este contrato
+- `skills/workflow/` — as quatro skills que implementam este contrato, e `workflow-spec`, que grava os arquivos de `.specs/`
+- [Documentos de Decisão — PRD, RFC e ADR](documentos-de-decisao-prd-rfc-adr.md) — o que é
+  cada documento de decisão gravado em `.specs/`
 - [Claude Code - Sessão e Verificação](claude-code-sessao-e-verificacao.md) — `CC-SES-07`,
   revisão em contexto fresco
 - [Claude Code - Paralelismo e Escala](claude-code-paralelismo-e-escala.md) — subagentes e

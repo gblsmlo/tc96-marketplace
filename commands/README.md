@@ -41,6 +41,11 @@ escrito por extenso:
 | [`scaffold-fba-04-git-hooks`](scaffold-fba-04-git-hooks.md) | Variante FBA — fase 4, git hooks |
 | [`scaffold-fba-05-fba`](scaffold-fba-05-fba.md) | Variante FBA — fase 5, estrutura de diretórios |
 
+## Especificação
+
+[`spec`](spec.md) — gera só a especificação de uma feature em `.specs/` e para antes da
+implementação: roda `workflow-research` e `workflow-planning`, nesta ordem.
+
 ## Ambiente
 
 [`configurar-antigravity`](configurar-antigravity.md) — configura o agente do Antigravity com as regras desta casa.
