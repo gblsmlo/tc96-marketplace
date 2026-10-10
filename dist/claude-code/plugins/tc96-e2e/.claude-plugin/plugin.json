@@ -1,6 +1,6 @@
 {
   "name": "tc96-e2e",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Playwright — escrita, auditoria e diagnóstico de teste E2E. Habilite em projeto com suíte E2E.",
   "author": {
     "name": "Gabriel Melo"
