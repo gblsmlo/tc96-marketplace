@@ -133,12 +133,13 @@ Team opinion about the user, without that source, never substitutes for research
 ## Step 6 — Hand off
 
 **Write the spec when the scope is product.** Call `workflow-spec` for
-`.specs/<feature>/requirements.md`: it reads the project's document set, starts
-`product-manager` with the template, and puts the `Draft` in front of the owner. The envelope's
-`artefato` is that path (`WF-SPEC-01`), and `Approved` comes only from the owner's answer
-(`WF-SPEC-06`). Architecture and implementation-detail scopes write no `requirements.md`: the
-envelope carries the decision, and planning records it in `design.md` or `tasks.md`
-(`WF-SPEC-03`).
+`.specs/<capability>/requirements.md` — the slug is the `capability` of the Epic, and a
+capability that already has an `Approved` PRD gets an amendment instead (`WF-SPEC-08`). It reads
+the project's document set, starts `product-manager` with the template, and puts the `Draft`
+in front of the owner. The envelope's `artefato` is that path (`WF-SPEC-01`), and `Approved`
+comes only from the owner's answer (`WF-SPEC-06`). Architecture and implementation-detail
+scopes write no `requirements.md`: the envelope carries the decision, and planning records it
+in `design.md` or in the increment's plan under `tasks/` (`WF-SPEC-03`).
 
 Return the envelope from hub §5 (`pilar: pesquisa`), and route by scope:
 
@@ -158,7 +159,7 @@ planning, and only planning stops (`WF-SPEC-05`). If `proximo` is set and `lacun
 can decide, start the next pillar now. Do not ask whether to continue. Stop only for an owner
 decision (a product question, an appetite breach under `WF-PLAN-02`, a `requirements.md`
 awaiting approval under `WF-SPEC-06`) or for an action that is irreversible or visible to
-others (push, PR, deleting data).
+others (push, PR, deleting or overwriting data, publishing to a board, a release).
 
 **Reset the context at the boundary.** The next pillar runs in the named agent that owns it
 (hub §3), started with only this envelope and the facts it cites (`WF-CORE-06`). That agent

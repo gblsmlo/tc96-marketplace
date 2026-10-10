@@ -1,6 +1,6 @@
 ---
 nome: workflow-spec
-descricao: Writes and records one spec document in `.specs/` — PRD, design or RFC, ADR, user experience, tasks, or a board item (Epic, Story, Task) — from the template it owns, in the project's recorded document set, as a `Draft` the owner reviews before any status moves to approved, citing `WF-SPEC-*` and `DOC-*` IDs. Use when a pillar needs a file written, when the owner asks for an ADR or a story outside a run, or when a project has not yet decided which documents it keeps. Do not use to decide what the document says — that is the owning agent (`product-manager`, `software-architect`, `product-designer`, `project-manager`). Do not use to decide whether a document is needed at all — that is the scope from `workflow-research`.
+descricao: Writes and records one spec document in `.specs/` — PRD, design or RFC, ADR, user experience, an increment's plan, or a board item (Epic, Story, Task) — from the template it owns, in the project's recorded document set, as a `Draft` the owner reviews before any status moves to approved, citing `WF-SPEC-*` and `DOC-*` IDs. Use when a pillar needs a file written, when the owner asks for an ADR or a story outside a run, or when a project has not yet decided which documents it keeps. Do not use to decide what the document says — that is the owning agent (`product-manager`, `software-architect`, `product-designer`, `project-manager`). Do not use to decide whether a document is needed at all — that is the scope from `workflow-research`.
 tipo: skill
 familia: workflow
 idioma: en
@@ -37,7 +37,7 @@ tags:
 
 | Situation | Go to |
 | --- | --- |
-| a pillar needs `requirements.md`, `design.md`, an ADR, `user-experience.md` or `tasks.md` | this skill, called by that pillar |
+| a pillar needs `requirements.md`, `design.md`, an ADR, `user-experience.md`, an amendment to one of them, or a plan in `tasks/` | this skill, called by that pillar |
 | the owner asks for one document outside a run ("record this as an ADR") | this skill, standalone |
 | the project has no record of which documents it keeps | this skill, Step 2 |
 | the question is what the document should say | the owning agent in Step 1's table |
@@ -50,7 +50,7 @@ tags:
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §5 and `WF-SPEC-*` | where each file lives, and the seven rules this skill enforces |
+| 1 | [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §5 and `WF-SPEC-*` | where each file lives, and the eight rules this skill enforces |
 | 2 | [Documentos de Decisão — PRD, RFC e ADR](../../../knowledge-base/documentos-de-decisao-prd-rfc-adr.md) §2, §3 | which document answers which question, and when it freezes |
 | 3 | Same note, the `DOC-*` family of the document being written | only that family: `DOC-PRD-*` for a PRD, `DOC-RFC-*` for a design, `DOC-ADR-*` for an ADR |
 
@@ -63,11 +63,11 @@ References in this skill:
 | --- | --- |
 | `references/project-document-set.md` | the one question that records which documents the project keeps, and where the answer is saved (Step 2) |
 | `references/owner-review.md` | the status protocol: `Draft`, the owner's review, what moves a status (Step 4) |
-| `references/template-requirements.md` | `.specs/<feature>/requirements.md`, the PRD |
-| `references/template-design.md` | `.specs/<feature>/design.md`, RFC or design doc |
-| `references/template-adr.md` | `.specs/adr/NNNN-<slug>.md`, one per decision that outlives the feature |
-| `references/template-user-experience.md` | `.specs/<feature>/user-experience.md` |
-| `references/template-tasks.md` | `.specs/<feature>/tasks.md`, one Task per unit |
+| `references/template-requirements.md` | `.specs/<capability>/requirements.md`, the capability's PRD |
+| `references/template-design.md` | `.specs/<capability>/design.md`, RFC or design doc |
+| `references/template-adr.md` | `.specs/adr/NNNN-<slug>.md`, one per decision that outlives the increment |
+| `references/template-user-experience.md` | `.specs/<capability>/user-experience.md` |
+| `references/template-tasks.md` | `.specs/<capability>/tasks/NNNN-<slug>.md`, one plan per increment, one Task per unit |
 | `references/template-epic.md` · `references/template-story.md` · `references/template-task.md` | tool-neutral board items, when the project keeps a tracker |
 
 ---
@@ -79,16 +79,28 @@ file, one question, one owner (`DOC-CORE-01`, `WF-SPEC-02`):
 
 | Question open | Document | File | Owner agent | Template |
 | --- | --- | --- | --- | --- |
-| what to build, and why | PRD | `.specs/<feature>/requirements.md` | `product-manager` | `template-requirements.md` |
-| how to build it, boundaries and contracts | design doc or RFC | `.specs/<feature>/design.md` | `software-architect` | `template-design.md` |
-| what was decided, lasting past the feature | ADR | `.specs/adr/NNNN-<slug>.md` | `software-architect` | `template-adr.md` |
-| how the person moves through it, every screen state | UX | `.specs/<feature>/user-experience.md` | `product-designer` | `template-user-experience.md` |
-| who does what, with which acceptance and evidence | tasks | `.specs/<feature>/tasks.md` | `project-manager` | `template-tasks.md` |
-| the same, as items in the project's tracker | Epic, Story, Task | the tracker | `project-manager` | `template-epic.md` · `template-story.md` · `template-task.md` |
+| what to build, and why | PRD | `.specs/<capability>/requirements.md` | `product-manager` | `template-requirements.md` |
+| how to build it, boundaries and contracts | design doc or RFC | `.specs/<capability>/design.md` | `software-architect` | `template-design.md` |
+| what was decided, lasting past the increment | ADR | `.specs/adr/NNNN-<slug>.md` | `software-architect` | `template-adr.md` |
+| how the person moves through it, every screen state | UX | `.specs/<capability>/user-experience.md` | `product-designer` | `template-user-experience.md` |
+| who does what, with which acceptance, evidence and test types | plan | `.specs/<capability>/tasks/NNNN-<slug>.md` | `project-manager` | `template-tasks.md` |
+| the same, as items in the project's tracker | Epic, Story, Task | the plan's **Board items** section; `repo-operator` publishes it on the owner's answer | `project-manager` | `template-epic.md` · `template-story.md` · `template-task.md` |
 
 If no row's question is open, no document is written (`DOC-CORE-02`): say so and return. If
 the caller is a pillar, the scope it classified decides the set of files (`WF-SPEC-03`); do not
 add a file the scope does not list.
+
+**The folder is the capability's** (`WF-SPEC-08`). Its slug is the `capability` field of the
+Epic; a capability with no Epic yet takes the slug research proposed and the owner confirmed
+(hub §5). A second increment in the same capability uses the same folder. Before writing, read only
+the status line of the file Step 1 named:
+
+| The file… | Write |
+| --- | --- |
+| does not exist | the file, from the template |
+| exists, still `Draft` or `Proposed` | a revision of that draft |
+| exists, `Approved` or `Accepted` | an amendment at the end of it; the approved text is never rewritten |
+| is a plan | a new `tasks/NNNN-<slug>.md`, numbered after the last one; an earlier plan is never extended |
 
 ---
 
@@ -100,8 +112,8 @@ documents this project keeps: the `## Specs` section of the project's `AGENTS.md
 question in that reference, then ask whether the answer may be written to `AGENTS.md`;
 on no, write it to `.specs/README.md`.
 
-Two things the record never changes: `tasks.md` is always kept, and a document marked off does
-not drop its decision — the decision goes as one line to `tasks.md` under **Origin** and to the
+Two things the record never changes: the plan in `tasks/` is always kept, and a document marked off does
+not drop its decision — the decision goes as one line to the plan under **Origin** and to the
 envelope's `decisoes`. If the document named in Step 1 is off, stop here and return that line
 instead of a file.
 
@@ -110,7 +122,7 @@ instead of a file.
 ## Step 3 — Delegate the writing to the owner agent
 
 Start the owner agent from Step 1 with exactly four things: the envelope that produced the
-need, the paths of the spec files that already exist for this feature, the absolute path of
+need, the paths of the spec files that already exist for this capability, the absolute path of
 the template, and the rules below. Not this conversation (`WF-CORE-06`). The agent writes the
 file with `status: Draft` and returns its path, the one-sentence problem or decision, and the
 open gaps — not the content (`WF-CORE-07`).
@@ -126,9 +138,10 @@ Rules the agent writes under, in the delegation prompt:
 | 5 | answer only this file's question; a second question is a second file | `DOC-CORE-01`, `DOC-PRD-03` |
 | 6 | `status: Draft`, never approved by the writer | `WF-SPEC-06` |
 | 7 | what only the owner can decide goes under **Open gaps**, never silently chosen | `WF-CORE-05` |
+| 8 | on an approved file, append `## Amendment NNN — YYYY-MM-DD — <one sentence>` with its own `status: Draft` and its own open gaps; never edit the text above it | `WF-SPEC-08`, `DOC-PRD-04` |
 
 An ADR takes `Proposed` instead of `Draft`, and its number is the next in `.specs/adr/`
-(`template-adr.md`, "Numbering").
+(`template-adr.md`, "Numbering"). A plan's number is the next in `.specs/<capability>/tasks/`.
 
 ---
 
@@ -140,6 +153,8 @@ reject?". Then stop. The status moves only on the owner's explicit answer in the
 (`WF-SPEC-06`): approve → `Approved` (PRD) or `Accepted` (design, ADR, UX); change → the owner
 agent revises and the file stays `Draft`; reject → the file keeps `Draft` or becomes
 `Rejected`, and the run returns to the pillar that owns the gap (`WF-VAL-04` applies by analogy).
+On an amendment, the status that moves is the amendment's, never the file's first one. Moving a
+status is one known field edit: make it here, without starting an agent (`WF-CORE-08`).
 
 Silence is not approval. A spec-only run with an unapproved file ends with that file under
 `lacunas`, not with an approval the agent gave itself.
@@ -160,6 +175,7 @@ Silence is not approval. A spec-only run with an unapproved file ends with that 
 | 8 | the owner saw path, sentence, gaps and the question, in one message | Step 4 |
 | 9 | this conversation holds the path and the envelope, not the file | `WF-CORE-07` |
 | 10 | `AGENTS.md` was written only after the owner said yes | `WF-SPEC-07` |
+| 11 | the file sits in the capability's folder; approved text got an amendment, and a new increment got a new plan | `WF-SPEC-08` |
 
 ---
 
@@ -171,7 +187,7 @@ file's path in `artefato` and its status in `resultado`:
 ```yaml
 pilar: "<the calling pillar, or the one that owns this document>"
 resultado: "<file> written, status <Draft | Approved | Accepted | Proposed>"
-artefato: ".specs/<feature>/<file>"
+artefato: ".specs/<capability>/<file>"
 evidencia: [the sources the file cites]
 decisoes: [the one-sentence decision, when approved]
 lacunas: ["awaiting owner approval: <path>", any open gap in the file]

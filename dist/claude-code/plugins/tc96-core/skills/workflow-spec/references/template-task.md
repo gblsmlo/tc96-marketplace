@@ -50,6 +50,10 @@ exact count, a regenerated status artifact, an authenticated screenshot. "Valida
 with no date, environment, and result is not evidence — see `WF-VAL-02`, proportional to
 risk, never absent.]
 
+**Test types:** [the types the Validation runs, each at the cheapest level that catches the
+defect (static · unit · contract · integration · component · E2E · manual); an integration or
+E2E adds the sentence of what only it catches (`WF-PLAN-06`).]
+
 **Out of this Task:** [what someone might expect here and belongs to a different Task, and
 why.]
 

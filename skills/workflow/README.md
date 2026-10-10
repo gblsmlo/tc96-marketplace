@@ -1,7 +1,7 @@
-# workflow skills — the procedure layer over the twelve agents
+# workflow skills — the procedure layer over the thirteen agents
 
 Four skills, one per pillar, plus one writer. The pillars decide **when** — which moment a
-task is in — never **who**: that stays with the twelve agents in `agents/README.md`. Each
+task is in — never **who**: that stays with the thirteen agents in `agents/README.md`. Each
 skill routes to an existing agent or skill; none of them re-decides architecture, product
 scope, or test level — those already have an owner. `workflow-spec` is not a pillar: it
 writes the `.specs/` file a pillar asked for, through the owning agent, and records the
@@ -68,11 +68,15 @@ written through `workflow-spec`, which owns the templates, reads the project's d
 
 | File | Pillar that asks | Agent that writes | Template, in `workflow-spec/references/` |
 | --- | --- | --- | --- |
-| `.specs/<feature>/requirements.md` | research | `product-manager` | `template-requirements.md` |
-| `.specs/<feature>/design.md` | planning | `software-architect` | `template-design.md` |
-| `.specs/<feature>/user-experience.md` | planning | `product-designer` | `template-user-experience.md` |
-| `.specs/<feature>/tasks.md` | planning | `project-manager` | `template-tasks.md` |
+| `.specs/<capability>/requirements.md` | research | `product-manager` | `template-requirements.md` |
+| `.specs/<capability>/design.md` | planning | `software-architect` | `template-design.md` |
+| `.specs/<capability>/user-experience.md` | planning | `product-designer` | `template-user-experience.md` |
+| `.specs/<capability>/tasks/NNNN-<slug>.md` | planning | `project-manager` | `template-tasks.md` |
 | `.specs/adr/NNNN-<slug>.md` | planning | `software-architect` | `template-adr.md` |
+
+One folder per capability, not per request: a later increment in the same capability amends
+the approved documents instead of rewriting them, and gets its own plan in `tasks/`, so the
+implementer reads only the current plan (`WF-SPEC-08`).
 
 Who writes, in one line: the pillar decides *when* a file is needed, the scope decides
 *which*, the owning agent decides *what it says*, `workflow-spec` decides *form, location,
@@ -82,6 +86,14 @@ why it runs in the orchestrating conversation and not inside an agent.
 
 What each decision document is, and when it freezes:
 [Documentos de Decisão — PRD, RFC e ADR](../../knowledge-base/documentos-de-decisao-prd-rfc-adr.md).
+
+## Which model runs each point
+
+Decisions stay on the owning agent's tier; mechanical operations — commit, PR body, push,
+moving, renaming or deleting files, publishing to the board, running the checks a plan names —
+go to `repo-operator`, on the cheapest tier, unless the agent already holding the content does
+them or the operation is one known command (`WF-CORE-08`). The full map, point by point, is in
+the hub, §3.1; what each tier costs per provider is in `agents/README.md`.
 
 ## Board and PR templates
 
@@ -112,7 +124,7 @@ project owner while dogfooding `workflow-research` on this exact task:
 
 Unlike the mature families (`react`, `test`, `http`), this one ships lean on purpose:
 
-- **No `scripts/gerar-mapa-de-ids.sh`.** The 34 `WF-*` rules live in one hub section, cited
+- **No `scripts/gerar-mapa-de-ids.sh`.** The 37 `WF-*` rules live in one hub section, cited
   inline by each skill — a generator earns its keep once a second consumer needs the same map.
 - **No satellite notes.** If the hub grows past what one file should hold, the natural cut is
   one satellite per pillar (four), not a replica of `teste-de-software.md`'s seven.

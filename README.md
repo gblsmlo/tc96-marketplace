@@ -117,6 +117,7 @@ Frontmatter declares **capability**, never a runtime's tool name. Each adapter t
 | `descricao:` | `description:` | **When to use** blockquote |
 | `capacidades: [ler, buscar, executar]` | `tools: Read, Grep, Glob, Bash` | — |
 | `modelo: alto \| medio \| rapido` | `model: opus \| sonnet \| haiku` | — |
+| `esforco: baixo \| medio \| alto` | `effort: low \| medium \| high` | — |
 | `tipo: skill \| agente \| comando` | dropped, the layout separates them | dropped |
 | `docs: [/websites/tanstack_query]` | `docs:`, resolved through Context7 | **API surface** table |
 | `familia:` | dropped, flattened layout | subdirectory |

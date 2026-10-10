@@ -1,6 +1,6 @@
 ---
 nome: spec
-descricao: Gera só a especificação de uma feature em .specs/ (requirements, design, user-experience, tasks, ADRs), cada arquivo como rascunho que o dono aprova, e para antes da implementação
+descricao: Gera só a especificação de um incremento em .specs/<capability>/ (requirements, design, user-experience, o plano em tasks/, ADRs), cada arquivo como rascunho que o dono aprova, e para antes da implementação
 tipo: comando
 idioma: en
 tags:
@@ -20,11 +20,19 @@ Rules: `WF-SPEC-*` in [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fl
 
 ---
 
-## Phase 0: Name the feature, read the project's document set
+## Phase 0: Name the capability, read the project's document set
 
-Pick a kebab-case slug for `.specs/<feature>/`. If the folder already exists, read only its
-files' status lines: an `Approved` `requirements.md` means research is done, and this run
-resumes at Phase 2; a `Draft` one means the run resumes at its review.
+The folder is the capability's, not the request's (`WF-SPEC-08`): its slug is the `capability`
+of the Epic this request belongs to, in kebab-case. With no Epic yet, propose the slug in one
+line and let the owner confirm it before Phase 1 writes anything. If `.specs/<capability>/` already exists,
+read only the status lines of its files and of their last amendment:
+
+| Found | This run |
+| --- | --- |
+| no folder | starts at Phase 1 and creates it |
+| a `Draft` file or amendment | resumes at that review |
+| everything approved, and this request already has an approved amendment or a new plan in `tasks/` | resumes at Phase 2 |
+| everything approved, nothing about this request | starts at Phase 1: research decides whether this increment needs an amendment |
 
 Read the record of which documents this project keeps: `## Specs` in `AGENTS.md`, then
 `.specs/README.md` (`WF-SPEC-07`). Missing: `workflow-spec` asks the owner once, and asks
@@ -37,13 +45,13 @@ before writing to `AGENTS.md`.
 Run `workflow-research` on the request.
 
 - The scope (product, architecture, implementation detail) decides which files exist (`WF-SPEC-03`).
-- Product scope: `workflow-spec` starts `product-manager` on `.specs/<feature>/requirements.md`
-  and returns the `Draft` to the owner: path, problem sentence, open gaps, "approve, change,
+- Product scope: `workflow-spec` starts `product-manager` on `.specs/<capability>/requirements.md`,
+  or on an amendment to it when it is already `Approved`, and returns the `Draft` to the owner: path, problem sentence, open gaps, "approve, change,
   or reject?".
 - An open gap that only the owner can decide stops the run here. Ask the owner, with the gap
   in one sentence.
 
-**Gate:** product scope requires `requirements.md` in `Approved` before Phase 2, and only the
+**Gate:** product scope requires `requirements.md`, and the amendment this run wrote, in `Approved` before Phase 2, and only the
 owner's answer sets it (`WF-SPEC-06`). No answer: the run ends here, with the path under
 `lacunas`.
 
@@ -56,12 +64,12 @@ returned to the owner for review before the next depends on it.
 
 | File | Agent | When |
 | --- | --- | --- |
-| `.specs/<feature>/design.md` | `software-architect` | architecture scope, or a boundary or contract |
-| `.specs/adr/NNNN-<slug>.md` | `software-architect` | one per accepted decision that outlives the feature |
-| `.specs/<feature>/user-experience.md` | `product-designer` | product scope with an interface |
-| `.specs/<feature>/tasks.md` | `project-manager` | always |
+| `.specs/<capability>/design.md`, or an amendment | `software-architect` | architecture scope, or a boundary or contract |
+| `.specs/adr/NNNN-<slug>.md` | `software-architect` | one per accepted decision that outlives the increment |
+| `.specs/<capability>/user-experience.md`, or an amendment | `product-designer` | product scope with an interface |
+| `.specs/<capability>/tasks/NNNN-<slug>.md` | `project-manager` | always, a new one per increment |
 
-A document the project turned off is not written; its decision goes as one line to `tasks.md`
+A document the project turned off is not written; its decision goes as one line to the plan
 under **Origin** (`WF-SPEC-07`).
 
 **Gate:** a `design.md` in `rfc` mode stays `In review` until its decision date; the run
@@ -84,5 +92,6 @@ owner, one Task at a time, and only on files the owner approved (`WF-SPEC-04`).
 - [ ] The scope is classified, and only the files it needs exist.
 - [ ] Each file was written by its own agent through `workflow-spec`, and links the others instead of copying them.
 - [ ] Every status past `Draft` came from the owner's answer in this conversation.
-- [ ] `tasks.md` names one owner, acceptance and evidence per Task.
+- [ ] The plan in `tasks/` names one owner, acceptance, evidence and test types per Task (`WF-PLAN-06`).
+- [ ] Approved text was amended, never rewritten; this increment got its own plan (`WF-SPEC-08`).
 - [ ] No code, branch, commit or PR was created.

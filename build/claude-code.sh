@@ -35,7 +35,7 @@ PLUGINS = {
         "agentes": ["code-reviewer", "software-architect", "qa-engineer",
                     "product-manager", "product-designer", "project-manager",
                     "devops-security", "ai-engineer", "monorepo-auditor",
-                    "repo-explorer"],
+                    "repo-explorer", "repo-operator"],
         # comando e ponto de entrada nomeado, invocado pela pessoa — nao e uma
         # quarta camada da cadeia, e um quarto tipo de artefato ao lado de
         # skill e agente. Como os agentes, entra por nome, nao por familia.

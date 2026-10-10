@@ -1,21 +1,29 @@
 # Spec template: User experience
 
-Tool-neutral, saved as `.specs/<feature>/user-experience.md`. It is the **experience contract**
-of one feature: how the person moves through it (UX), what each screen shows in every state
+Tool-neutral, saved as `.specs/<capability>/user-experience.md`. It is the **experience contract**
+of one capability: how the person moves through it (UX), what each screen shows in every state
 (UI), what keeps them from getting stuck (usability), and what every person can reach and
 operate (accessibility). `product-designer` writes it from `requirements.md`; every frontend
-Task in `tasks.md` cites it as input.
+Task in a plan under `tasks/` cites it as input.
 
 It never decides what to build, which is `requirements.md` and `product-manager`, nor how the
 React code is structured, which `frontend-developer` decides while executing the Task.
 
 ---
 
+## Amendments
+
+Once this file is `accepted`, its text is never rewritten. A later increment that changes it
+returns to the pillar that owns the change and appends, at the end of the file,
+`## Amendment NNN — YYYY-MM-DD — <one sentence>`, with its own `status` line starting at
+`draft` and its own open gaps (`WF-SPEC-08`). Only the owner's answer moves the amendment's
+status (`WF-SPEC-06`).
+
 ## Fields
 
 | Field | Meaning |
 | --- | --- |
-| `feature` | the slug of `.specs/<feature>/` |
+| `capability` | the slug of `.specs/<capability>/`: the Epic's `capability` field, or the slug the owner confirmed when no Epic exists yet (hub §5) |
 | `stories` | the stories from `requirements.md` this file covers, by ID |
 | `owner` | `product-designer` |
 | `status` | `draft` · `reviewed` · `accepted`; a frontend Task does not start on `draft` (`WF-SPEC-04`), and only the owner moves it (`WF-SPEC-06`) |

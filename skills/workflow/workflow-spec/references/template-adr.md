@@ -1,8 +1,8 @@
 # Spec template: ADR
 
 Tool-neutral, saved as `.specs/adr/NNNN-<slug>.md`. An ADR records **one** architecture
-decision that outlives the feature that produced it (`DOC-ADR-01`). `software-architect` writes
-it when a `design.md` reaches `Accepted`, or when a decision is made outside any feature. Rules:
+decision that outlives the increment that produced it (`DOC-ADR-01`). `software-architect` writes
+it when a `design.md` reaches `Accepted`, or when a decision is made outside any capability. Rules:
 `DOC-ADR-*` in [Documentos de Decisão — PRD, RFC e ADR](../../../../knowledge-base/documentos-de-decisao-prd-rfc-adr.md).
 
 ---
@@ -29,7 +29,7 @@ An `Accepted` ADR is never edited (`DOC-ADR-02`). When the decision changes:
 
 - **Status:** Proposed · Accepted · Superseded by ADR-NNNN; born `Proposed`, `Accepted` only on the owner's answer (`WF-SPEC-06`)
 - **Date:** [YYYY-MM-DD]
-- **Origin:** [`.specs/<feature>/design.md`, or "none"]
+- **Origin:** [`.specs/<capability>/design.md`, or "none"]
 - **Supersedes:** [ADR-NNNN, or "none"]
 
 ## Context
@@ -53,7 +53,7 @@ We will [the decision, in active voice].
 - **Gains:** [...]
 - **Costs:** [indirection, types, operations, migration effort; this section is not optional
   (`DOC-ADR-04`)]
-- **Verifiable invariants:** [`ID` or decidable test, and how it is verified]
+- **Verifiable invariants:** [`ID` or decidable test; the test type that proves it at the cheapest level (static · unit · contract · integration · component · E2E) and how it is run; an invariant that only an E2E proves says why (`WF-PLAN-06`, hub §4.2)]
 
 ---
 

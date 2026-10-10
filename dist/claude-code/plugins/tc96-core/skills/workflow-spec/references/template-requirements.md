@@ -1,19 +1,27 @@
 # Spec template: Requirements
 
-Tool-neutral, saved as `.specs/<feature>/requirements.md`. It is the feature's **PRD**: what is
+Tool-neutral, saved as `.specs/<capability>/requirements.md`. It is the capability's **PRD**: what is
 being built and why, before any design or code. `product-manager` writes it at the end of
 `workflow-research`, only when the scope is product (`WF-SPEC-03`). Rules: `DOC-PRD-*` in
 [Documentos de Decisão — PRD, RFC e ADR](../../../referencias/documentos-de-decisao-prd-rfc-adr.md).
 
 ---
 
+## Amendments
+
+Once this file is `Approved`, its text is never rewritten. A later increment that changes it
+returns to the pillar that owns the change and appends, at the end of the file,
+`## Amendment NNN — YYYY-MM-DD — <one sentence>`, with its own `status` line starting at
+`Draft` and its own open gaps (`WF-SPEC-08`). Only the owner's answer moves the amendment's
+status (`WF-SPEC-06`).
+
 ## Fields
 
 | Field | Meaning |
 | --- | --- |
-| `feature` | the slug of `.specs/<feature>/` |
+| `capability` | the slug of `.specs/<capability>/`: the Epic's `capability` field, or the slug the owner confirmed when no Epic exists yet (hub §5) |
 | `owner` | `product-manager` |
-| `status` | `Draft` · `In review` · `Approved`; once `Approved` it is frozen, and a change returns to `workflow-research` (`DOC-PRD-04`) |
+| `status` | `Draft` · `In review` · `Approved`; once `Approved` it is frozen, and a change returns to `workflow-research` as an amendment (`DOC-PRD-04`, `WF-SPEC-08`) |
 | `scope` | `product`, from the classification in hub §4.1 (`WF-RES-05`) |
 
 ## Body (copy from here down)
@@ -47,7 +55,7 @@ A goal with no metric is a wish, not a requirement (`DOC-PRD-02`).
 
 ### Non-goals
 
-- [what someone might expect from this feature and is deliberately left out, and why
+- [what someone might expect from this capability and is deliberately left out, and why
   (`DOC-PRD-01`)]
 
 ### Stories
@@ -82,7 +90,7 @@ Priority per story: Must · Should · Could.
 | --- | --- |
 | `design.md` | schema, API contract, service boundary (`DOC-PRD-03`) |
 | `user-experience.md` | flow, screen states, accessibility |
-| `tasks.md` | who implements what, appetite, evidence plan |
+| `tasks/NNNN-<slug>.md` | who implements what, appetite, evidence plan, test types |
 
 ---
 

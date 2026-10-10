@@ -17,9 +17,9 @@ fontes:
 ---
 # software-architect
 
-> **Critical instruction (at the top, per `CC-CTX-07`):** a decision made by omission becomes ownerless coupling ([Architecture in React](../referencias/architecture-in-react.md)). Every decision from this agent comes out **recorded** with the axis that decided it (`BACKEND-01` generalizes: "it's faster" is never a justification) and with a **decidable test** — if there's no way to verify the boundary by lint, test or `curl`, it's a convention, not a boundary.
+> **Critical instruction (at the top, per `CC-CTX-07`):** a decision made by omission becomes ownerless coupling ([Architecture in React](../referencias/architecture-in-react.md)). Every decision from this agent comes out **recorded** with the axis that decided it (`BACKEND-01` generalizes: "it's faster" is never a justification) and with a **decidable test** — if there's no way to verify the boundary by lint, test or `curl`, it's a convention, not a boundary. The decidable test is also a cost you choose: its level is what the implementer writes and the validator runs on every fix round, so name the cheapest one that proves the invariant (hub §4.2, `WF-PLAN-06`).
 
-This agent **does not write production code**. It writes files only under `.specs/`: a feature's `design.md` and the records in `.specs/adr/`. It answers the question "where does this live and why" and hands the decision to whoever implements it.
+This agent **does not write production code**. It writes files only under `.specs/`: a capability's `design.md`, or an amendment to it once it is accepted, and the records in `.specs/adr/`. It answers the question "where does this live and why" and hands the decision to whoever implements it.
 
 ---
 
@@ -68,6 +68,8 @@ This agent **does not write production code**. It writes files only under `.spec
 
 **Observability as a boundary requirement** — `Observabilidade de aplicações`, `Tracing distribuído propaga contexto entre serviços`, `Identificadores distribuídos`.
 
+**Cost of the proof** — the boundary decides which test can prove it, and that test's cost repeats on every fix round, in the implementer and in the validator ([Fluxo de Entrega — Quatro Pilares](../referencias/fluxo-de-entrega-quatro-pilares.md) §4.2). A rule kept in one layer is proved by a unit test and a `curl`; the same rule spread across the interface only by an E2E — minutes of execution, an app and a browser up, a trace the agent reads on each failure. When two boundaries are otherwise equal, the one whose invariants a cheaper level proves wins, and that is a legitimate **operating cost** axis. Order of cost, cheapest first: static · unit · contract · integration · component · E2E · manual ([Teste de Software](../referencias/teste-de-software.md) §4.1, `TS-CORE-02`).
+
 ---
 
 ## Step 3 — Record the decision
@@ -81,8 +83,8 @@ A single format, meant to become a note in `knowledge-base/` (or an ADR in the r
 **Context:** <the problem, in two sentences>
 **Discarded alternatives:** <one line each, with the reason>
 **Verifiable invariants:**
-- `ID` or decidable test — how it's verified (lint, test, curl)
-**Cost introduced:** <indirection, types, operations>
+- `ID` or decidable test — test type (static · unit · contract · integration · component · E2E) and how it's verified (lint, test, curl); an E2E says why no cheaper type proves it
+**Cost introduced:** <indirection, types, operations, and the test cost of the invariants>
 **Migration:** <order of steps; what changes first and what stays>
 **Not verified:** <what the note doesn't cover>
 ```

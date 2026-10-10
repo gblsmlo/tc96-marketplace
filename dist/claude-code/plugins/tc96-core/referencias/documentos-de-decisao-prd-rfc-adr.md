@@ -76,7 +76,7 @@ Falta alinhar O QUE construir e POR QUÊ?
     Há uma proposta de COMO construir, com alternativa real, ainda sem decisão?
     ├── sim → RFC
     └── não
-        Uma decisão técnica já foi tomada e vai durar mais que esta feature?
+        Uma decisão técnica já foi tomada e vai durar mais que este incremento?
         ├── sim → ADR
         └── não
             Há desenho técnico a registrar, sem alternativa em debate?
@@ -93,9 +93,9 @@ RFC aberto para aprovar o que já está construído é teatro: o registro certo 
 
 | Documento | Estados | Muda quando |
 | --- | --- | --- |
-| PRD | `Draft` → `In review` → `Approved` | livre na descoberta; depois de `Approved`, só por retorno deliberado à Pesquisa (`DOC-PRD-04`) |
+| PRD | `Draft` → `In review` → `Approved` | livre na descoberta; depois de `Approved`, só por retorno deliberado à Pesquisa, como emenda datada (`DOC-PRD-04`) |
 | RFC | `Draft` → `In review` → `Accepted` \| `Rejected` | revisado durante o comentário; fecha na data de decisão, com o dono decidindo (`DOC-RFC-02`) |
-| Design doc | `Draft` → `In review` → `Accepted` | revisado até aceito |
+| Design doc | `Draft` → `In review` → `Accepted` | revisado até aceito; depois, só por emenda datada |
 | ADR | `Proposed` → `Accepted` → `Superseded by ADR-NNNN` | livre em `Proposed`; depois de `Accepted`, nunca; a decisão nova é outro ADR (`DOC-ADR-02`) |
 
 O debate registrado num RFC vale tanto quanto o resultado: é ele que responde, um ano depois,
@@ -111,12 +111,15 @@ aprova o próprio documento (`WF-SPEC-06`, em
 
 | Documento | Arquivo | Template |
 | --- | --- | --- |
-| PRD | `.specs/<feature>/requirements.md` | `workflow-spec/references/template-requirements.md` |
-| RFC ou design doc | `.specs/<feature>/design.md` | `workflow-spec/references/template-design.md` |
+| PRD | `.specs/<capability>/requirements.md` | `workflow-spec/references/template-requirements.md` |
+| RFC ou design doc | `.specs/<capability>/design.md` | `workflow-spec/references/template-design.md` |
 | ADR | `.specs/adr/NNNN-<slug>.md` | `workflow-spec/references/template-adr.md` |
 
-O ADR fica fora da pasta da feature porque sobrevive a ela: a feature termina, a decisão
-continua valendo (`DOC-ADR-03`). `user-experience.md` e `tasks.md` não são documentos de
+A pasta é da capability, não da entrega: PRD e design doc acompanham a capability enquanto
+ela existe e mudam por emenda (`WF-SPEC-08`, em
+[Fluxo de Entrega — Quatro Pilares](fluxo-de-entrega-quatro-pilares.md) §5). O ADR fica fora
+dela porque uma decisão de arquitetura costuma valer para mais de uma capability, e a numeração
+é uma só para o repositório (`DOC-ADR-03`). `user-experience.md` e o plano em `tasks/` não são documentos de
 decisão desta nota; o dono e o momento deles estão em
 [Fluxo de Entrega — Quatro Pilares](fluxo-de-entrega-quatro-pilares.md) §5.
 
@@ -140,7 +143,7 @@ Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
 | `DOC-PRD-01` | O PRD **MUST** declarar não-objetivos explícitos; não-objetivo vago **NEVER**, ele é a porta do aumento de escopo. |
 | `DOC-PRD-02` | Todo requisito **MUST** ter uma métrica ou um cenário verificável; requisito sem medida **NEVER** é requisito, é desejo. |
 | `DOC-PRD-03` | O PRD **NEVER** contém desenho técnico (schema, contrato de API, fronteira de serviço); isso **MUST** ir para RFC, design doc ou ADR. |
-| `DOC-PRD-04` | PRD `Approved` **MUST** estar congelado; mudança depois disso volta à Pesquisa e fica registrada, editar em silêncio **NEVER**. |
+| `DOC-PRD-04` | PRD `Approved` **MUST** estar congelado; mudança depois disso volta à Pesquisa e entra como emenda datada no fim do arquivo, aprovada pelo dono; reescrever o texto aprovado, ou editar em silêncio, **NEVER**. |
 
 ### `DOC-RFC-*` — RFC
 

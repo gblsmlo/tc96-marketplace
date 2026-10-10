@@ -20,7 +20,8 @@ Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../k
 
 > **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`).** The unit runs in the agent planning
 > named as its owner (`frontend-developer`, `backend-developer`, `devops-security`). Never
-> delegate to a generic agent. That agent commits its code and returns the envelope with the
+> delegate to a generic agent. That agent commits its code — the diff is already in its
+> context, so no other agent re-reads it (`WF-CORE-08`) — and returns the envelope with the
 > commit or diff reference in `artefato`, not the code itself.
 
 > **Design note.** This is the **third pillar**: it writes the code, but it does not write new
@@ -58,11 +59,12 @@ References in this skill:
 
 ## Step 1 — Confirm readiness
 
-The unit is one Task in `.specs/<feature>/tasks.md`, and it needs from `workflow-planning`:
-acceptance criterion, owning perfil, evidence plan. Missing any of these means this is not
+The unit is one Task in the current plan, `.specs/<capability>/tasks/NNNN-<slug>.md`, and it
+needs from `workflow-planning`: acceptance criterion, owning perfil, evidence plan and test
+types (`WF-PLAN-06`). Missing any of these means this is not
 actually a ready unit — return it (`WF-CORE-03`). The spec files the Task cites as inputs must be
 accepted; one still in draft means the Task waits (`WF-SPEC-04`). Read only this Task and the
-sections it links, not the whole `.specs/<feature>/` folder.
+sections it links, not the whole `.specs/<capability>/` folder nor its earlier plans.
 
 Start from a small context: a new instance of the owning agent, holding the unit and not the
 conversation that produced it (`WF-CORE-06`). Implementing inside a long session re-reads all
@@ -92,10 +94,13 @@ existing contract, the existing tests, the existing conventions of that layer.
 
 ---
 
-## Step 3 — Decide test level, then write the focused test first
+## Step 3 — Write the test types the plan named, first
 
-Route to `test-design` for "what level, what cases" if that is not already obvious. The test
-accompanies the change, not a step tacked on after (`WF-IMPL-02`).
+The level was decided in planning, with its cost in time and tokens in view (`WF-PLAN-06`,
+hub §4.2); route to `test-design` only for the cases inside that level. Writing a more
+expensive type than the plan named — an E2E where it named a unit test — is a return to
+`workflow-planning`, not a choice made here. The test accompanies the change, not a step tacked
+on after (`WF-IMPL-02`).
 
 ---
 
@@ -125,7 +130,7 @@ later" (`WF-IMPL-04`).
 | # | Check | Rule |
 | --- | --- | --- |
 | 1 | no product decision was reopened or improvised here | `WF-IMPL-01` |
-| 2 | a focused test exists for the change, written alongside it | `WF-IMPL-02` |
+| 2 | a focused test exists for the change, written alongside it, of the types the plan named | `WF-IMPL-02`, `WF-PLAN-06` |
 | 3 | the scope is the smallest that satisfies the unit's acceptance criterion | `WF-IMPL-03` |
 | 4 | explicit contracts (types, schemas, boundaries) are preserved | `WF-IMPL-04` |
 | 5 | any local defect fixed along the way is recorded as evidence | `WF-IMPL-05` |

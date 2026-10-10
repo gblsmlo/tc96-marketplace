@@ -10,12 +10,13 @@ nothing; a spec-only run ends with every unapproved file listed under `lacunas`.
 
 | Document | Born as | Owner says approve | Owner says reject | After approval |
 | --- | --- | --- | --- | --- |
-| PRD | `Draft` | `Approved` | stays `Draft` | frozen; a change returns to `workflow-research` (`DOC-PRD-04`) |
-| Design doc | `Draft` | `Accepted` | `Rejected` | frozen; a new boundary is a new design or an ADR |
+| PRD | `Draft` | `Approved` | stays `Draft` | frozen; a change returns to `workflow-research` and enters as an amendment (`DOC-PRD-04`, `WF-SPEC-08`) |
+| Design doc | `Draft` | `Accepted` | `Rejected` | frozen; a change enters as an amendment, a lasting decision as an ADR (`WF-SPEC-08`) |
 | RFC (`design.md` in `rfc` mode) | `Draft` → `In review` | `Accepted`, on or after the decision date | `Rejected` | lists the ADRs it produced (`DOC-RFC-04`) |
 | ADR | `Proposed` | `Accepted` | file removed, it recorded nothing | never edited; superseded by a new ADR (`DOC-ADR-02`) |
-| User experience | `draft` | `accepted` | stays `draft` | a frontend Task may start (`WF-SPEC-04`) |
-| Tasks | `Draft` | `Ready` | stays `Draft` | the first Task may start (`WF-SPEC-04`) |
+| User experience | `draft` | `accepted` | stays `draft` | a frontend Task may start (`WF-SPEC-04`); a change enters as an amendment |
+| Plan (`tasks/NNNN-<slug>.md`) | `Draft` | `Ready` | stays `Draft` | the first Task may start (`WF-SPEC-04`); the next increment gets a new plan |
+| Amendment | `Draft` | the document's approved state | `Rejected`; the text above it is untouched | frozen, like the text above it (`WF-SPEC-08`) |
 
 "Change" is the third answer for every row: the owner agent revises from the owner's words,
 and the status does not move.
@@ -48,7 +49,7 @@ owner decision, the one case those rules already except.
 The `spec` command runs research and planning and stops (`WF-SPEC-05`). A product scope waits
 at `requirements.md` for the owner's answer before planning starts (`WF-CORE-03`); when the
 owner answers in the same conversation, the run continues; when not, the envelope returns
-with `lacunas: ["awaiting owner approval: .specs/<feature>/requirements.md"]` and a later
+with `lacunas: ["awaiting owner approval: .specs/<capability>/requirements.md"]` and a later
 run resumes from that file.
 
 ---

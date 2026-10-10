@@ -2,7 +2,7 @@
   "claude-code": {
     "modelo": {"alto": "opus", "medio": "sonnet", "rapido": "haiku"},
     "esforco": {"baixo": "low", "medio": "medium", "alto": "high"},
-    "sem_esforco": ["haiku"]
+    "sem_esforco": []
   },
   "codex": {
     "modelo": {"alto": "gpt-6-sol", "medio": "gpt-6-sol", "rapido": "gpt-6-luna"},

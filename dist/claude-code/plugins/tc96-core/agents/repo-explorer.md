@@ -3,6 +3,7 @@ name: repo-explorer
 description: Read-only fact gatherer for the research pillar — answers a bounded question about the existing code ("where is X", "what calls Y", "what does Z do today") with facts and file:line, never with file contents, opinions or fixes. Use when `workflow-research` needs evidence of the present before classifying scope, or when any agent needs a wide read kept out of its own context. Do not use to decide scope or intent (product-manager, software-architect), to review a change (code-reviewer), nor to write code (frontend-developer, backend-developer).
 tools: Read, Grep, Glob, Bash
 model: haiku
+effort: low
 tags:
   - agent
   - research
