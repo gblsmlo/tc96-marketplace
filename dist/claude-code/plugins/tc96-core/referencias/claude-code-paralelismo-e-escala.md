@@ -9,7 +9,7 @@ tags:
   - worktree
   - paralelismo
   - agent-context
-source: "Documentação oficial do Claude Code — Run agents in parallel, Create custom subagents, Orchestrate subagents at scale with dynamic workflows, Run parallel sessions with worktrees, Message your other Claude Code sessions, Commands (/batch)"
+source: "Documentação oficial do Claude Code — Run agents in parallel, Create custom subagents, Orchestrate subagents at scale with dynamic workflows, Run parallel sessions with worktrees, Message your other Claude Code sessions, Commands (/batch); descrição da ferramenta start_session do app desktop, observada em 2026-10-10 (§ 6.1)"
 verificado-em: 2026-08-21
 ---
 
@@ -48,6 +48,7 @@ Quem coordena?
 
 As tarefas tocam os mesmos arquivos? ────────► isole em worktree
 Mudança grande e divisível em unidades? ─────► /batch
+Uma sessão abre outra? ──────────────────────► model e effort explícitos; o papel roda como subagente (§ 6.1)
 
 NÃO é rodar agente:
   background bash — um comando de shell sem bloquear a conversa, sem agente
@@ -217,7 +218,31 @@ Alternativa por script, quando você quer o laço na sua mão: ver § 3 de [Clau
 
 ---
 
-## 6. Cross-session messaging
+## 6. Sessões separadas
+
+### 6.1 Abrir uma sessão a partir de outra
+
+O app desktop deixa uma sessão abrir outra (`start_session`), com worktree própria, para uma unidade rodar ao lado — uma sessão que a pessoa vê, abre e com que conversa. Parece um subagente com mais autonomia, e o erro mora aí: **é uma sessão inteira, não um subagente**, e o roteamento de modelo por papel não chega nela.
+
+| | Subagente com `subagent_type` | Sessão aberta por outra |
+| --- | --- | --- |
+| System prompt | o corpo do agente | o do Claude Code; a ferramenta não tem campo para escolher agente |
+| `model` e `effort` do frontmatter do agente | valem | **não se aplicam** — a sessão não adota agente nenhum |
+| `skills:` pré-carregadas e lista de `tools:` | valem | não |
+| Sem nada explícito, roda em | o `model` do frontmatter | **o modelo e o esforço de quem a abriu** |
+| Pode subir de tier | sim — o frontmatter, ou o `model` da chamada, vence o da sessão | **não** — só o mesmo tier ou um mais barato |
+
+Três consequências:
+
+- **Escrever "como `backend-developer`" no brief não roteia nada.** A sessão interpreta o papel no modelo que herdou, sem o corpo do agente.
+- **A herança encadeia.** Uma sessão raiz em Fable `xhigh` abre o planejamento, que abre cinco implementações: as sete rodam em Fable `xhigh`.
+- **`model` e `effort` só entram numa abertura `fresh`** — um fork sempre herda o modelo —, e só para baixo: modelo da mesma família ou mais barato, esforço igual ou menor.
+
+Por isso quem abre faz duas coisas (`CC-PAR-05`): passa `model` e `effort` explícitos, e escreve o brief para a sessão **chamar** o papel como subagente, em vez de interpretá-lo. O subagente é o único caminho que traz o corpo do agente, e o único que sobe de tier.
+
+> Observado em 2026-10-10: na descrição da ferramenta `start_session` do app desktop, e num run de quatro pilares em que a sessão de planejamento abriu cinco sessões de implementação sem `model` nem `effort` — todas rodaram no modelo dela, e o código foi escrito no laço principal de cada uma.
+
+### 6.2 Cross-session messaging
 
 O Claude lista e manda mensagem para as suas outras sessões do Claude Code — nesta máquina, em outra, ou na web. Serve para sessões que **você** roda passarem achado e status entre si.
 
@@ -247,6 +272,7 @@ Canônicas na § 6.4 de [Claude Code](claude-code.md).
 | `CC-PAR-02` | duas sessões paralelas editaram o mesmo arquivo e uma sobrescreveu a outra |
 | `CC-PAR-03` | o Claude está reiniciando o mesmo padrão de delegação a cada turno, em vez de um laço rodar sozinho |
 | `CC-PAR-04` | um pedido de "investigue X" sem arquivo, diretório ou pergunta delimitados |
+| `CC-PAR-05` | sessões abertas por outra rodam no mesmo modelo e esforço dela, ou o brief diz "como `<agente>`" e a sessão escreve o código ela mesma |
 
 ---
 

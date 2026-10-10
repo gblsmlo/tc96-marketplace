@@ -96,6 +96,10 @@ go to `repo-operator`, on the cheapest tier, unless the agent already holding th
 them or the operation is one known command (`WF-CORE-08`). The full map, point by point, is in
 the hub, §3.1; what each tier costs per provider is in `agents/README.md`.
 
+The owning agent's tier only applies when it is called as a subagent. A session opened for a
+unit inherits the opener's model, so it opens with `model` and `effort` set and calls the owner
+as a subagent, instead of playing the role (`WF-CORE-06`, `CC-PAR-05`).
+
 ## Board and PR templates
 
 `workflow-spec/references/` carries the tool-neutral work-item templates — Epic, Story,

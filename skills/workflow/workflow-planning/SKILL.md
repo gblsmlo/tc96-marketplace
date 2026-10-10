@@ -170,7 +170,7 @@ not ready (`WF-SPEC-04`); the file itself is `Ready` only on the owner's answer 
 | 5 | acceptance criteria are written, not implicit, with a line for each edge research answered | `WF-PLAN-04`, `WF-RES-06` |
 | 6 | the evidence plan for validation is named | — |
 | 7 | every contract shared between units has a real-output-against-real-validator test in its first consumer | `WF-PLAN-04` |
-| 8 | each unit names the agent that implements it, and that agent is in hub §3 | `WF-CORE-06` |
+| 8 | each unit names the agent that implements it, that agent is in hub §3, and it starts as a subagent — a session opened for the unit gets explicit `model` and `effort` and a brief that calls it | `WF-CORE-06`, `CC-PAR-05` |
 | 9 | the `.specs/` files match the scope, each written by its own agent through `workflow-spec` | `WF-SPEC-01`, `WF-SPEC-03` |
 | 10 | no spec file copies another; they link | `WF-SPEC-02` |
 | 11 | every status that moved past `Draft` moved on the owner's answer | `WF-SPEC-06` |
@@ -212,6 +212,14 @@ named (`frontend-developer`, `backend-developer`, `devops-security`), started wi
 (acceptance, owner, evidence plan) and the decisions it depends on (`WF-CORE-06`). The planning
 conversation does not travel with it
 ([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
+
+Started means called as a subagent, with that agent's name as `subagent_type`: that is what
+applies its `modelo` and `esforco`. When the units run in parallel sessions instead, open each
+one `fresh`, with `model` and `effort` set to the orchestration tier (`agents/README.md`), and a
+brief that has the session call the owner as a subagent and keep only the envelope, validation
+and the PR. A brief that says "as `backend-developer`" makes the session write the code itself,
+on the model it inherited from this one
+([`CC-PAR-05`](../../../knowledge-base/claude-code-paralelismo-e-escala.md)).
 
 ---
 
