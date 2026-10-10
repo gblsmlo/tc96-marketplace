@@ -137,7 +137,7 @@ Rules the agent writes under, in the delegation prompt:
 | 4 | link the other spec files by path; never restate their content | `WF-SPEC-02` |
 | 5 | answer only this file's question; a second question is a second file | `DOC-CORE-01`, `DOC-PRD-03` |
 | 6 | `status: Draft`, never approved by the writer | `WF-SPEC-06` |
-| 7 | what only the owner can decide goes under **Open gaps**, never silently chosen | `WF-CORE-05` |
+| 7 | a question the writer cannot answer goes under **Open gaps**, with who decides it and where it closes, never silently chosen | `WF-CORE-05`, `WF-CORE-09` |
 | 8 | on an approved file, append `## Amendment NNN — YYYY-MM-DD — <one sentence>` with its own `status: Draft` and its own open gaps; never edit the text above it | `WF-SPEC-08`, `DOC-PRD-04` |
 
 An ADR takes `Proposed` instead of `Draft`, and its number is the next in `.specs/adr/`
@@ -190,12 +190,16 @@ resultado: "<file> written, status <Draft | Approved | Accepted | Proposed>"
 artefato: ".specs/<capability>/<file>"
 evidencia: [the sources the file cites]
 decisoes: [the one-sentence decision, when approved]
-lacunas: ["awaiting owner approval: <path>", any open gap in the file]
+lacunas:
+  - pergunta: "awaiting owner approval: <path>"
+    decide: dono
+    fecha-em: "<pesquisa for requirements.md; planejamento for the others>"
 proximo: "<the calling pillar's next step, or none>"
 ```
 
-The calling pillar continues only when `lacunas` holds no unapproved file it depends on
-(`WF-SPEC-04`).
+Every open gap in the file joins `lacunas` in the same shape (hub §5 "Lacunas",
+`WF-CORE-09`). The calling pillar continues only when `lacunas` holds no unapproved file it
+depends on (`WF-SPEC-04`).
 
 ---
 
@@ -207,8 +211,9 @@ section with ADR on — no question asked. Step 3: `software-architect` writes
 `.specs/adr/0004-keep-sessions-in-postgres.md`, `Proposed`, with the axis (operating cost),
 one real alternative and its cost, and returns the path. Step 4: the owner reads it and answers
 "approve" — only then the status becomes `Accepted`, and `design.md` lists `ADR-0004`
-(`DOC-RFC-04`). Had the owner said nothing, the run would return with
-`lacunas: ["awaiting owner approval: .specs/adr/0004-keep-sessions-in-postgres.md"]`.
+(`DOC-RFC-04`). Had the owner said nothing, the run would return with the gap
+`pergunta: "awaiting owner approval: .specs/adr/0004-keep-sessions-in-postgres.md"`,
+`decide: dono`, `fecha-em: planejamento`.
 
 ---
 

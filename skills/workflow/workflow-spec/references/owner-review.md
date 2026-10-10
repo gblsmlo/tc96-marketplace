@@ -49,7 +49,8 @@ owner decision, the one case those rules already except.
 The `spec` command runs research and planning and stops (`WF-SPEC-05`). A product scope waits
 at `requirements.md` for the owner's answer before planning starts (`WF-CORE-03`); when the
 owner answers in the same conversation, the run continues; when not, the envelope returns
-with `lacunas: ["awaiting owner approval: .specs/<capability>/requirements.md"]` and a later
+with that file under `lacunas` (`decide: dono`, `fecha-em: pesquisa`, `WF-CORE-09`), its
+`pergunta` reading `awaiting owner approval: .specs/<capability>/requirements.md`, and a later
 run resumes from that file.
 
 ---

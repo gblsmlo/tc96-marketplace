@@ -48,8 +48,9 @@ Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../k
 | --- | --- | --- |
 | 1 | [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §2 | the four-pillar table, to confirm entry condition |
 | 2 | Same hub, §4.2 | the five gates and the test-cost table — the core of this skill |
-| 3 | Same hub, §6 `WF-CORE-*` and `WF-PLAN-*` | the 12 rules this skill enforces |
-| 4 | Same hub, §5 "Onde o artefato mora" and `WF-SPEC-*` | which `.specs/` files this scope needs |
+| 3 | Same hub, §6 `WF-CORE-*` and `WF-PLAN-*` | the 15 rules this skill enforces |
+| 4 | Same hub, §5 "Lacunas" | which gaps this pillar must close before a unit leaves |
+| 5 | Same hub, §5 "Onde o artefato mora" and `WF-SPEC-*` | which `.specs/` files this scope needs |
 
 The templates, the `DOC-*` rules and the owner's review load inside `workflow-spec`, not here.
 
@@ -68,6 +69,11 @@ If the task arrives here still carrying an open product or architecture question
 a pillar. Return it to `workflow-research` before doing anything else (`WF-CORE-03`). When the
 scope is product, `.specs/<capability>/requirements.md` must be `Approved`, and so must the
 amendment this increment depends on (`WF-SPEC-08`).
+
+Read `lacunas` in the research envelope (`WF-CORE-09`). A gap with `fecha-em: pesquisa` still
+open is the same return. Each gap with `fecha-em: planejamento` is this pillar's to close: start
+the agent its `decide` names (hub §3), or ask the owner in one sentence when it is `dono`. A
+unit that depends on a gap still open waits at the acceptance gate; the others go on.
 
 ---
 
@@ -110,7 +116,9 @@ test type at the cheapest level that proves it, and an invariant only an E2E pro
    takes (`WF-PLAN-01`). A unit that blows its appetite stops and returns to the decision
    table — it does not quietly get more time (`WF-PLAN-02`).
 5. **Acceptance gate** — every unit gets a written acceptance criterion before it is
-   considered ready (`WF-PLAN-04`).
+   considered ready (`WF-PLAN-04`), with a line for each edge research answered for it — a
+   story scenario, or a line under `decisoes` (`WF-RES-06`). An open gap the unit depends on is
+   a line nobody wrote yet: the unit waits for the answer (`WF-CORE-09`).
 
 ---
 
@@ -159,7 +167,7 @@ not ready (`WF-SPEC-04`); the file itself is `Ready` only on the owner's answer 
 | 2 | if split into multiple units, each has independent acceptance/evidence/dependency | `WF-PLAN-03` |
 | 3 | the owning perfil is named per unit, never "fullstack" | `WF-PLAN-05` |
 | 4 | appetite is decided before any time estimate | `WF-PLAN-01` |
-| 5 | acceptance criteria are written, not implicit | `WF-PLAN-04` |
+| 5 | acceptance criteria are written, not implicit, with a line for each edge research answered | `WF-PLAN-04`, `WF-RES-06` |
 | 6 | the evidence plan for validation is named | — |
 | 7 | every contract shared between units has a real-output-against-real-validator test in its first consumer | `WF-PLAN-04` |
 | 8 | each unit names the agent that implements it, and that agent is in hub §3 | `WF-CORE-06` |
@@ -168,6 +176,7 @@ not ready (`WF-SPEC-04`); the file itself is `Ready` only on the owner's answer 
 | 11 | every status that moved past `Draft` moved on the owner's answer | `WF-SPEC-06` |
 | 12 | every unit names its test types at the cheapest level, and every integration or E2E says what only it catches | `WF-PLAN-06` |
 | 13 | the files sit in the capability's folder; approved text got an amendment; this increment has its own plan | `WF-SPEC-08` |
+| 14 | no unit leaves with an open gap it depends on; every gap left in the envelope names `decide` and `fecha-em` | `WF-CORE-09` |
 
 ---
 
@@ -192,10 +201,11 @@ written back into the approved plan; each item links to the file (one-way).
 **Spec-only run.** When the run was started as spec generation only (the `spec` command), stop
 here: return the envelope and do not start `workflow-implementation` (`WF-SPEC-05`).
 
-**Advance without asking.** Otherwise, when the first unit is ready and `lacunas` holds nothing
-that only the owner can decide, start `workflow-implementation` on it now. Do not ask whether to
-continue. Stop only for an owner decision or for an action that is irreversible or visible to others
-(push, PR, deleting or overwriting data, publishing to a board, a release).
+**Advance without asking.** Otherwise, when the first unit is ready — no open gap it depends
+on (`WF-CORE-09`) — and `lacunas` holds no gap with `decide: dono`, start
+`workflow-implementation` on it now. Do not ask whether to continue. Stop only for an owner
+decision or for an action that is irreversible or visible to others (push, PR, deleting or
+overwriting data, publishing to a board, a release).
 
 **Reset the context at the boundary.** Each unit is implemented by the agent the boundary gate
 named (`frontend-developer`, `backend-developer`, `devops-security`), started with only the unit

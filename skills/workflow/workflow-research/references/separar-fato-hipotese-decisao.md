@@ -11,7 +11,7 @@ produces a confident-sounding answer that is actually a guess.
 | **Fact** | observed directly — in code, a log, a passed test, a dated ticket | can you point to the artifact right now? |
 | **Hypothesis** | a plausible explanation, not yet confirmed | would a different explanation also fit the same evidence? |
 | **Decision** | already made and accepted by whoever owns that scope | is there a dated record — a spec, an ADR, a merged PR — or just someone's memory of a meeting? |
-| **Gap** | genuinely unknown, and needs an answer before Planning can proceed | if you had to guess, would you be guessing? |
+| **Gap** | genuinely unknown, and needs an answer before the work that depends on it can proceed; it names who decides it and where it closes (`WF-CORE-09`) | if you had to guess, would you be guessing? |
 
 ## Worked example
 
@@ -22,7 +22,7 @@ produces a confident-sounding answer that is actually a guess.
 | the discount function returns `0.55` for a `0.5` input on line 42 | fact | reproducible in the code, right now |
 | "this only happens for orders over $1000" | hypothesis | plausible, but no one has checked the actual failing orders yet — `WF-RES-02` applies here too: the current code's behavior on those orders is evidence of the present bug, not evidence of what the correct rule is |
 | "discounts above 50% require manager approval" | decision, if there is a dated spec or ADR saying so; hypothesis, if it is only "I think that's how it should work" | check for the artifact before trusting the memory |
-| "should a discount above 50% require approval at all" | gap | this is very likely the actual question `workflow-research` needs to resolve — see the Step 3 classification |
+| "should a discount above 50% require approval at all" | gap — `decide: product-manager`, `fecha-em: pesquisa` | this is very likely the actual question `workflow-research` needs to resolve — see the Step 3 classification |
 
 ## Why code is evidence of the present, never authority over intent (`WF-RES-02`)
 
@@ -39,4 +39,5 @@ defect survives a research pass unchanged.
 - Treating a decision someone remembers from a meeting as equivalent to a decision with a
   dated record — memory drifts, records don't.
 - Calling a gap a decision because leaving it open feels unfinished. A declared gap
-  (`WF-CORE-05`) is honest work; a fabricated decision is not.
+  (`WF-CORE-05`), with who decides it and where it closes (`WF-CORE-09`), is honest work; a
+  fabricated decision is not.

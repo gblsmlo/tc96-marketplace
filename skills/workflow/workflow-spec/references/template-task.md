@@ -31,8 +31,9 @@ guessed at.
 | User Interface | visual composition of an existing surface |
 | Product | a decision, specification, or acceptance already decided elsewhere |
 
-A Task never carries an open product question — that belongs in `workflow-research`. A Task
-that serves more than one Story lists all of them.
+A Task never carries an open product question — that belongs in `workflow-research` — nor any
+other open gap: it waits until the gap closes (`WF-CORE-09`). A Task that serves more than one
+Story lists all of them.
 
 ## Body (copy from here down)
 

@@ -76,7 +76,7 @@ Team context: `Product Team` (engineering thinks in the possible, product in the
 
 **Prioritizing** — (1) items at the same level of granularity; (2) `RICE` with honest confidence (low confidence = discovery first); (3) `Modelo Kano` to separate basic from delighter; (4) `MoSCoW` for the release cut; (5) record what **came out** and why (`Documentação de decisões de produto`).
 
-**Writing a spec / PRD** — problem and evidence; hypothesis and metric; scope by `MoSCoW`; affected journey (`Jornada do usuário`, with `product-designer`); observable acceptance criteria; rollout and flag (feature flags — they let incomplete code merge to main without shipping the capability); risks and what **doesn't** go in. Technical feasibility is a question for `software-architect`, not a PM claim.
+**Writing a spec / PRD** — problem and evidence; hypothesis and metric; scope by `MoSCoW`; affected journey (`Jornada do usuário`, with `product-designer`); observable acceptance criteria, with each rule's edges swept — boundary, time, empty, repetition, permission, failure, what already exists ([Fluxo de Entrega — Quatro Pilares](../referencias/fluxo-de-entrega-quatro-pilares.md) §4.1, `WF-RES-06`); rollout and flag (feature flags — they let incomplete code merge to main without shipping the capability); risks and what **doesn't** go in. Technical feasibility is a question for `software-architect`, not a PM claim.
 
 **Defining metrics** — from the business objective (`Objetivos de negócio em produto`) to the product metric (`Métricas de produto`) to instrumentation; telling signal apart from vanity; deciding upfront what changes if the metric drops (`Data Informed`).
 

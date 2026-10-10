@@ -5,7 +5,7 @@ tags:
   - delivery
   - agent-context
   - reference
-source: "Barry Boehm, Software Engineering Economics (curva de custo de mudança, origem de verificação×validação); Marty Cagan, Inspired: How to Create Tech Products Customers Love; Teresa Torres, Continuous Discovery Habits; Ryan Singer/Basecamp, Shape Up: Stop Running in Circles; Kent Beck, Extreme Programming Explained; Winters/Manshreck/Wright, Software Engineering at Google (cultura de code review — já citado em TS-*); Forsgren/Humble/Kim, Accelerate (métricas DORA); precedente interno: lemind, ADR 114 — \"o workflow de agentes tem quatro pilares\" (implementação observada em produção, não autoridade acadêmica)"
+source: "Barry Boehm, Software Engineering Economics (curva de custo de mudança, origem de verificação×validação); Marty Cagan, Inspired: How to Create Tech Products Customers Love; Teresa Torres, Continuous Discovery Habits; Ryan Singer/Basecamp, Shape Up: Stop Running in Circles; Kent Beck, Extreme Programming Explained; Winters/Manshreck/Wright, Software Engineering at Google (cultura de code review — já citado em TS-*); Forsgren/Humble/Kim, Accelerate (métricas DORA); Glenford Myers, The Art of Software Testing (partição de equivalência e análise de valor-limite); Matt Wynne, Introducing Example Mapping (Cucumber); precedente interno: lemind, ADR 114 — \"o workflow de agentes tem quatro pilares\" (implementação observada em produção, não autoridade acadêmica)"
 verificado-em: 2026-09-23
 ---
 # Fluxo de Entrega — Quatro Pilares
@@ -28,7 +28,8 @@ verificado-em: 2026-09-23
 > [Teste de Software](teste-de-software.md) descreve para nível de teste: pular a camada de
 > conceito e ir direto para a ferramenta.
 
-Fontes consultadas em **2026-09-23**. Ver [Fontes consultadas](#fontes-consultadas).
+Fontes consultadas em **2026-09-23**; Myers e Wynne, acrescentados com a varredura de bordas
+(§4.1), em **2026-10-10**. Ver [Fontes consultadas](#fontes-consultadas).
 
 ---
 
@@ -94,13 +95,15 @@ funcionar neste projeto.
 
 | # | Pilar | Entra quando | Sai com |
 | --- | --- | --- | --- |
-| 1 | **Pesquisa** | o problema, o comportamento esperado ou uma decisão duradoura não está claro | decisão mínima resolvida, evidência, riscos, fontes |
+| 1 | **Pesquisa** | o problema, o comportamento esperado ou uma decisão duradoura não está claro | decisão mínima resolvida, com as bordas varridas (§4.1); evidência, riscos, fontes; lacunas com quem decide e onde fecham (§5) |
 | 2 | **Planejamento** | a decisão foi aceita mas o trabalho ainda não é executável | unidade(s) de trabalho delimitadas, dependências, perfil, critério de aceite, plano de evidência com os tipos de teste |
 | 3 | **Implementação** | a unidade está pronta e o comportamento já foi decidido | código ou nota alterada, teste focado, evidência de implementação |
 | 4 | **Validação** | existe uma mudança ou entrega e ela precisa de prova | checks focados e de repositório, achados de revisão, resultado claro |
 
 Nenhuma tarefa pula pilar (`WF-CORE-03`): pode **voltar** um pilar quando descobre uma lacuna,
 mas nunca decide "vou resolver isso na implementação mesmo" quando a lacuna é de pesquisa.
+Toda lacuna diz quem a decide e em que pilar fecha (§5, `WF-CORE-09`), e esse pilar nunca é a
+Implementação.
 
 ---
 
@@ -197,6 +200,38 @@ A mudança altera o que o produto faz ou promete?
 `WF-RES-05`. A classificação errada mais cara é tratar mudança de produto como detalhe —
 ela chega pronta na Implementação sem ninguém ter decidido se o produto deveria mesmo mudar.
 
+#### Varrer as bordas da decisão
+
+Classificar o escopo diz **quem** decide; a varredura diz se a decisão está **completa**. A
+pergunta que para uma unidade no meio do código raramente é a regra principal — é a borda
+dela: o valor exatamente no limite, o prazo contado a partir de quando, a lista vazia, o
+clique repetido. Antes do handoff, quem decide passa cada regra e cada cenário de aceite da
+decisão pelas sete categorias (`WF-RES-06`):
+
+| Categoria | A pergunta que costuma escapar |
+| --- | --- |
+| limite | o valor exatamente no limite entra ou não (`>` ou `>=`)? qual o mínimo, o máximo, o zero, o negativo, o arredondamento? |
+| tempo | conta a partir de quando? expira quando, em que fuso? e se os eventos chegarem fora de ordem? |
+| vazio | e a lista vazia, o campo opcional ausente, o primeiro uso, sem nada cadastrado ainda? |
+| repetição | e a mesma ação duas vezes (duplo clique, retry)? e duas pessoas ao mesmo tempo? |
+| permissão | quem pode — que papel, que dono do recurso, que tenant, que visitante sem sessão? |
+| falha | e se uma dependência cair, ou a operação parar no meio? o que a pessoa vê, o que se desfaz? |
+| o que já existe | e o dado gravado antes da mudança, o cliente na versão anterior, o comportamento atual de que alguém depende? |
+
+Cada borda que se aplica sai da Pesquisa com um de três destinos, e toda lacuna leva quem a
+decide e onde fecha (§5, `WF-CORE-09`). Categoria que não se aplica não deixa rastro.
+
+| Destino | Escopo de produto | Arquitetura e detalhe |
+| --- | --- | --- |
+| **respondida**, com fonte | cenário de aceite na story do `requirements.md` | linha em `decisoes`, que o Planejamento leva ao critério de aceite da unidade |
+| **fora** | não-objetivo no `requirements.md` | linha em `decisoes`: "fora deste incremento: …" |
+| **lacuna** | "Open gaps" do `requirements.md`; no envelope, quando fecha no Planejamento | no envelope |
+
+A varredura **aprofunda** a decisão, nunca a **alarga** (`WF-RES-03`): uma borda que pede
+decisão nova, fora do que foi pedido, vira não-objetivo ou lacuna — não pesquisa extra. Ela
+também testa a classificação acima: num escopo de detalhe, uma borda que se aplica e cuja
+resposta não está escrita em lugar nenhum mostra que o escopo era de produto (`WF-RES-05`).
+
 ### 4.2 Planejamento — os portões
 
 Uma unidade só está pronta para a Implementação depois de passar por todos:
@@ -212,7 +247,10 @@ Uma unidade só está pronta para a Implementação depois de passar por todos:
 4. **Portão de apetite** — quanto vale gastar aqui, decidido **antes** de perguntar quanto vai
    levar (`WF-PLAN-01`, Shape Up). Uma unidade que estoura o apetite para e volta à mesa de
    decisão — não estica o prazo em silêncio (`WF-PLAN-02`, circuit breaker).
-5. **Portão de aceite** — critério de aceite escrito, não implícito (`WF-PLAN-04`).
+5. **Portão de aceite** — critério de aceite escrito, não implícito (`WF-PLAN-04`), com uma
+   linha para cada borda que a Pesquisa respondeu para esta unidade (`WF-RES-06`). Uma lacuna
+   aberta da qual a unidade dependa é uma linha que ninguém escreveu ainda: a unidade espera a
+   resposta (`WF-CORE-09`).
 
 #### Plano de evidência: que teste a Validação vai rodar, e quanto ele custa
 
@@ -244,10 +282,22 @@ teste que o prova, e um invariante que só um E2E prova diz por quê.
 
 ### 4.3 Implementação — quando parar e devolver
 
-| Situação encontrada durante a implementação | Volta para |
+**Antes da primeira linha, as perguntas de quem implementa** (`WF-IMPL-06`). O agente dono da
+unidade lê a Task e o código que ela toca e lista o que precisaria saber para escrevê-la,
+passando a unidade pelas sete categorias de borda da §4.1. Cada pergunta sai de um de três
+jeitos: respondida por um artefato aceito, que ela cita; decidida ali mesmo, quando a resposta
+fica dentro do que a unidade já decidiu (um nome, a estrutura local, a API de uma biblioteca);
+ou devolvida pela tabela abaixo, antes de qualquer código, como lacuna com quem decide e onde
+fecha (§5, `WF-CORE-09`). A lista fica no contexto de quem implementa; ao orquestrador chegam
+só as lacunas (`WF-CORE-07`).
+
+A tabela vale antes e durante o código. Antes, o retorno custa só o retorno; durante, custa
+também o código já escrito sobre uma resposta inventada.
+
+| Situação encontrada antes ou durante a implementação | Volta para |
 | --- | --- |
-| comportamento de produto ausente ou contraditório | `workflow-research` |
-| escopo, dependência ou evidência insuficientes na unidade | `workflow-planning` |
+| comportamento de produto ausente ou contraditório | `workflow-research` (`fecha-em: pesquisa`) |
+| escopo, dependência ou evidência insuficientes na unidade | `workflow-planning` (`fecha-em: planejamento`) |
 | defeito local, dentro do que esta própria unidade já decidiu | corrige aqui mesmo, registra evidência (`WF-IMPL-05`) — não é retorno |
 
 `WF-IMPL-01`: implementação nunca reabre decisão de produto sozinha — mesmo quando o caminho
@@ -283,7 +333,10 @@ resultado: uma frase com o resultado
 artefato: "<arquivo em .specs/, item de board, commit ou PR onde a saída completa está>"
 evidencia: [E1, E2]
 decisoes: [D1]
-lacunas: [G1]
+lacunas:
+  - pergunta: G1, em uma frase
+    decide: "<agente da §3 | dono>"
+    fecha-em: "pesquisa | planejamento"
 proximo: "workflow-research | workflow-planning | workflow-implementation | workflow-validation | <agente>"
 ```
 
@@ -294,6 +347,41 @@ acompanhado de um artefato (`WF-CORE-01`), nunca só de uma frase de intenção.
 quem orquestra guarda só o envelope, que cabe em 30 linhas (`WF-CORE-07`). Um relatório
 inteiro devolvido à conversa principal é relido e cobrado em todo turno seguinte, de todos
 os pilares que vierem depois.
+
+### Lacunas: quem decide e onde fecham
+
+Lacuna é a pergunta cuja resposta pertence a outro dono, não a quem está com o bastão; o que
+quem implementa decide dentro da própria unidade não é lacuna. Cada item de `lacunas` leva
+dois campos além da pergunta (`WF-CORE-09`):
+
+- `decide` — o agente da §3 dono daquela decisão (`product-manager`, `product-designer`,
+  `software-architect`, `project-manager`), ou `dono`, quando só a pessoa pode responder.
+- `fecha-em` — o último pilar em que ela ainda pode estar aberta:
+
+| `fecha-em` | Quando | O que ela bloqueia |
+| --- | --- | --- |
+| `pesquisa` | a resposta muda o que o produto faz ou promete, ou o que entra no incremento | o Planejamento inteiro: ele não começa |
+| `planejamento` | a resposta só muda como a unidade é desenhada, dividida ou provada — fluxo e estados de tela, fronteira e contrato, dependência e ordem | só as unidades que dependem dela: nenhuma passa no portão de aceite (§4.2) |
+
+`implementacao` e `validacao` nunca são valores de `fecha-em`: lacuna de decisão não fecha no
+código (`WF-CORE-03`, `WF-IMPL-01`). O pilar que encontra uma lacuna pelo caminho — a
+Implementação pela §4.3, a Validação pela `WF-VAL-04` — a devolve já com os dois campos.
+
+O pilar de `fecha-em` não entrega adiante o que depende da lacuna antes da resposta: a
+Pesquisa não entrega nada com uma lacuna `pesquisa` aberta; o Planejamento não entrega a
+unidade que depende de uma lacuna aberta. Quem responde é quem `decide` nomeia — um agente da
+§3, começado na hora (`WF-CORE-06`), ou o dono, perguntado numa frase.
+
+O arquivo que espera a resposta do dono é a lacuna mais comum:
+`pergunta: "awaiting owner approval: <caminho>"`, `decide: dono`, e `fecha-em` o pilar que
+escreve o arquivo — `pesquisa` para o `requirements.md`, `planejamento` para os demais
+(`WF-SPEC-04`).
+
+**Sem resposta a tempo, a única saída é virar premissa.** A lacuna só avança se o dono a
+aceitar explicitamente na conversa como premissa, com o que a invalidaria (`WF-SPEC-06`). Ela
+sai de `lacunas`, entra em `decisoes` e fica escrita no artefato: em "Constraints and
+assumptions" do `requirements.md`, ou no plano em `tasks/`. Uma premissa invalidada durante a
+Implementação é a primeira linha da tabela da §4.3: volta para a Pesquisa.
 
 ### Onde o artefato mora: `.specs/`
 
@@ -363,6 +451,7 @@ Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
 | `WF-CORE-06` | Todo pilar delegado **MUST** ir a um agente nomeado da tabela da §3, que carrega modelo e esforço próprios; delegar a um agente genérico (o `general-purpose` do Claude Code, o spawn sem agente do Codex) **NEVER** — ele herda o modelo mais caro da sessão e todas as ferramentas. † |
 | `WF-CORE-07` | Quem orquestra os pilares **MUST** guardar só o envelope da §5, com a saída completa referenciada em `artefato`; ler código, o hub inteiro ou o relatório completo de um pilar na conversa principal **NEVER** — esse contexto é relido em todo turno até o fim do fluxo. † |
 | `WF-CORE-08` | Operação mecânica — cujo conteúdo um artefato já decidiu (diff, envelope, template, plano) — **MUST** rodar no agente que já tem esse conteúdo no contexto ou, se for preciso lê-lo, no `repo-operator`, de tier `rapido` (§3.1); ler diff, template ou saída de teste no tier mais caro da sessão para executá-la, ou deixar quem executa decidir o conteúdo, **NEVER**. † |
+| `WF-CORE-09` | Toda lacuna **MUST** sair no envelope com quem a decide (`decide`) e o último pilar em que pode estar aberta (`fecha-em`: `pesquisa` ou `planejamento`, §5); lacuna sem esses campos, ou deixada para a Implementação ou a Validação, **NEVER** — sem resposta a tempo, ela só avança como premissa que o dono aceitou, com o que a invalidaria (Wynne, os cartões vermelhos do Example Mapping). † |
 
 ### `WF-RES-*` — pesquisa
 
@@ -373,6 +462,7 @@ Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
 | `WF-RES-03` | A pesquisa **MUST** resolver a menor decisão que destrava o Planejamento; relatório extenso sem decisão anexada **NEVER** conta como saída deste pilar. |
 | `WF-RES-04` | Toda alegação sobre comportamento do usuário **MUST** vir com uma fonte (dado, entrevista, código, ticket); opinião do time sobre o usuário, sem essa fonte, **NEVER** substitui pesquisa (Cagan, risco de valor). |
 | `WF-RES-05` | Uma mudança de comportamento de produto, de arquitetura, ou só de detalhe de implementação **MUST** ser classificada antes de seguir — a classificação decide para qual agente este pilar roteia. |
+| `WF-RES-06` | Antes do handoff, cada regra e cada cenário de aceite da decisão **MUST** passar pelas sete categorias de borda da §4.1 — limite, tempo, vazio, repetição, permissão, falha, o que já existe —, e cada borda que se aplica sai respondida com fonte, fora como não-objetivo, ou como lacuna (`WF-CORE-09`); decisão com borda aplicável sem destino **NEVER** conta como resolvida, e a varredura **NEVER** alarga a decisão (`WF-RES-03`) (Myers, análise de valor-limite; Wynne, Example Mapping). |
 
 ### `WF-PLAN-*` — planejamento
 
@@ -394,6 +484,7 @@ Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
 | `WF-IMPL-03` | O escopo da mudança **MUST** ser o menor que resolve a unidade decidida; resolver problema adjacente não decidido nesta unidade **NEVER**, mesmo que pareça eficiente. |
 | `WF-IMPL-04` | Contrato explícito (tipo, schema, fronteira de tenant/auth) **MUST** ser preservado durante a implementação; mudar contrato implícito e "ajustar depois" **NEVER**. |
 | `WF-IMPL-05` | Defeito local encontrado durante a própria implementação **MUST** ser corrigido ali e registrado como evidência, sem abrir um ciclo de Validação separado só para ele. |
+| `WF-IMPL-06` | Antes da primeira linha de código, quem implementa **MUST** listar as perguntas que a unidade não responde — a Task e o código que ela toca, pelas categorias de borda da §4.1 — e cada uma sai respondida por um artefato aceito, decidida dentro do que a unidade já decidiu, ou devolvida pela §4.3 como lacuna (`WF-CORE-09`); começar a escrever sem essa lista **NEVER** — a pergunta achada no meio do código chega com uma resposta inventada já escrita nele. † |
 
 ### `WF-VAL-*` — validação
 
@@ -420,14 +511,14 @@ Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
 
 ### Contagem
 
-**37 regras** em seis famílias, um único arquivo — sem satélite nesta versão.
+**40 regras** em seis famílias, um único arquivo — sem satélite nesta versão.
 
 | Família | Regras |
 | --- | --- |
-| `WF-CORE-*` | 8 |
-| `WF-RES-*` | 5 |
+| `WF-CORE-*` | 9 |
+| `WF-RES-*` | 6 |
 | `WF-PLAN-*` | 6 |
-| `WF-IMPL-*` | 5 |
+| `WF-IMPL-*` | 6 |
 | `WF-VAL-*` | 5 |
 | `WF-SPEC-*` | 8 |
 
@@ -441,14 +532,17 @@ Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
 SEMPRE, ao decidir em que pilar uma tarefa ambígua está:
           Fluxo de Entrega - Quatro Pilares.md § 0, § 2, § 3
 
-AO CLASSIFICAR o escopo de uma pesquisa:
+AO CLASSIFICAR o escopo de uma pesquisa e varrer as bordas da decisão:
           § 4.1 + WF-RES-*
+
+AO DECLARAR uma lacuna, ou decidir se um pilar avança com ela:
+          § 5 "Lacunas" + WF-CORE-09
 
 AO PASSAR pelos portões de planejamento:
           § 4.2 + WF-PLAN-*
 
-AO DECIDIR se a implementação para e devolve:
-          § 4.3 + WF-IMPL-*
+AO LISTAR as perguntas antes do código, ou decidir se a implementação para e devolve:
+          § 4.3 + WF-IMPL-* (e a tabela de bordas da § 4.1)
 
 AO DECIDIR quanta evidência a validação exige:
           § 4.4 + WF-VAL-*
@@ -487,6 +581,9 @@ NUNCA:    esta estrutura inteira para uma tarefa cujo pilar já é óbvio
    existente, seguir em vez de reinventar o procedimento aqui.
 7. **Operação mecânica no tier mais barato** (`WF-CORE-08`) — quem orquestra não lê diff,
    template ou saída de teste para executar o que um artefato já decidiu.
+8. **Lacuna nunca fecha no código.** Toda lacuna tem quem decide e onde fecha (`WF-CORE-09`);
+   a Pesquisa varre as bordas antes de entregar (`WF-RES-06`), e quem implementa lista as
+   perguntas antes da primeira linha (`WF-IMPL-06`).
 
 ### Recortes para skills novas
 
@@ -507,6 +604,7 @@ NUNCA:    esta estrutura inteira para uma tarefa cujo pilar já é óbvio
 | Decisão | O que **não** fazer | A ponte |
 | --- | --- | --- |
 | Decidir se uma mudança é de produto, arquitetura ou detalhe | assumir e seguir para o código | `product-manager` / `software-architect` — §4.1 |
+| Responder a borda de uma regra — o limite, o prazo, o vazio, o clique repetido | escolher no código o que parecer razoável | a varredura de bordas da §4.1, na Pesquisa (`WF-RES-06`); no código, a lista de perguntas da §4.3 devolve (`WF-IMPL-06`) |
 | Abrir Epic/Story/Task no rastreador | criar o item assim que a ideia aparece, antes da decisão | `workflow-research` decide o escopo primeiro (§4.1) — o Board só abre no Planejamento, com a decisão já resolvida (§0.4, §3) |
 | Decidir em que nível um teste da unidade entra | deixar para a hora de escrever | `test-design`, existente — não é reimplementado aqui |
 | Revisar uma mudança já implementada | o próprio autor aprovar | `code-reviewer`, em contexto fresco (`WF-VAL-01`, `CC-SES-07`) |
@@ -538,6 +636,16 @@ outra camada deste projeto.
 - Winters, Manshreck, Wright, *Software Engineering at Google* — cultura de revisão de código
   por par independente (já citado em `TS-*`).
 - Forsgren, Humble, Kim, *Accelerate* — as quatro métricas DORA de performance de entrega.
+- Glenford Myers, *The Art of Software Testing* — partição de equivalência e análise de
+  valor-limite: o defeito se concentra na fronteira entre classes de entrada; base da
+  categoria "limite" da varredura de bordas (§4.1, `WF-RES-06`). Consultado em 2026-10-10 por
+  resumos do capítulo, não pelo texto do livro.
+- Matt Wynne, *Introducing Example Mapping* (blog do Cucumber) — regras, exemplos e perguntas:
+  a pergunta que ninguém na sala responde vira um cartão vermelho e a conversa segue, e uma
+  mesa coberta deles diz que a story ainda não está entendida; base de declarar a lacuna em
+  vez de adivinhar a resposta (`WF-CORE-09`) e de varrer a regra por exemplos (`WF-RES-06`).
+  Os campos `decide` e `fecha-em` são decisão desta doc, não do post. Consultado em
+  2026-10-10.
 - **Precedente interno, não autoridade acadêmica:** lemind (`studio-risine`), ADR 114 — "o
   workflow de agentes tem quatro pilares" (`docs/decisions/114-four-pillar-agent-workflow.md`)
   e `docs/engineering/agent-workflow.md` — a mesma forma de quatro pilares, implementada e em

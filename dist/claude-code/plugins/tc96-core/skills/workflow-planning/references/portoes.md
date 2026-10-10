@@ -11,7 +11,8 @@ approved decision behind it?
 
 **Check:** can you point to the `requirements.md` in `Approved`, the `design.md` in `Accepted`,
 the ADR in `.specs/adr/`, or the `workflow-research` handoff that approved this behavior? If the only answer is "it seemed obvious," this gate fails — return to
-`workflow-research`.
+`workflow-research`. So does a gap in the research envelope with `fecha-em: pesquisa` that is
+still open (`WF-CORE-09`).
 
 ## 2. Decomposition gate
 
@@ -48,3 +49,12 @@ scoped differently.
 **Check:** the criterion must be specific enough that `workflow-validation` can check it
 without asking the implementer what they meant. "Users can apply a discount" fails; "a
 request with `discount > 0.5` and no `approvedBy` returns 422" passes.
+
+Then two more checks on the same criterion:
+
+- **Every edge research answered for this unit is a line of it** (`WF-RES-06`) — a story
+  scenario, or a line under the envelope's `decisoes`. "Exactly 0.5 needs no approval" is a
+  line, not something the implementer rediscovers.
+- **No gap this unit depends on is still open** (`WF-CORE-09`). An open gap is a line nobody
+  wrote yet: "approval expires after 24 hours" passes only once "counted from the approval" is
+  written; while that is a gap, the unit waits and the units that do not depend on it go on.

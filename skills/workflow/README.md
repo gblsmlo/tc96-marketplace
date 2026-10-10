@@ -26,7 +26,8 @@ workflow/
 │   ├── SKILL.md
 │   └── references/
 │       ├── separar-fato-hipotese-decisao.md
-│       └── classificar-escopo.md
+│       ├── classificar-escopo.md
+│       └── varrer-bordas.md
 ├── workflow-planning/
 │   ├── SKILL.md
 │   └── references/
@@ -124,7 +125,7 @@ project owner while dogfooding `workflow-research` on this exact task:
 
 Unlike the mature families (`react`, `test`, `http`), this one ships lean on purpose:
 
-- **No `scripts/gerar-mapa-de-ids.sh`.** The 37 `WF-*` rules live in one hub section, cited
+- **No `scripts/gerar-mapa-de-ids.sh`.** The 40 `WF-*` rules live in one hub section, cited
   inline by each skill — a generator earns its keep once a second consumer needs the same map.
 - **No satellite notes.** If the hub grows past what one file should hold, the natural cut is
   one satellite per pillar (four), not a replica of `teste-de-software.md`'s seven.

@@ -82,7 +82,8 @@ In `design-doc` mode, write "No real alternative" and say why (`DOC-RFC-03`).
 
 ### Open questions
 
-- [what must be answered before `Accepted`, and who answers it]
+- [what must be answered before `Accepted` — decides: `dono` or the agent — closes in:
+  `planejamento` (hub §5 "Lacunas", `WF-CORE-09`)]
 
 ### Decision
 

@@ -62,7 +62,9 @@ A goal with no metric is a wish, not a requirement (`DOC-PRD-02`).
 
 One entry per story, in the shape of `template-story.md`:
 role, action, outcome, and three to eight acceptance scenarios in Given / When / Then.
-Priority per story: Must · Should · Could.
+Priority per story: Must · Should · Could. Every rule and scenario of a story goes through the
+edge sweep (hub §4.1, `WF-RES-06`): each edge that applies becomes one of its scenarios, a
+non-goal, or an open gap.
 
 1. **[STORY-<capability>-NNN] [title]** (Must)
    As a [role], I want [action], so that [outcome].
@@ -70,17 +72,23 @@ Priority per story: Must · Should · Could.
 
 ### Constraints and assumptions
 
-- [constraint or assumption, marked as such, with what would invalidate it]
+- [constraint or assumption, marked as such, with what would invalidate it. A gap the owner
+  accepted as an assumption, to proceed without an answer, comes here with the owner's words
+  (hub §5 "Lacunas", `WF-CORE-09`).]
 
 ### Open gaps
 
-- [what only the owner can decide, and blocks `Approved`. An empty list is a precondition for
-  `Approved`.]
+- [the question in one sentence — decides: `dono` or the agent — closes in: `pesquisa`. Only
+  gaps that close in research live here, and an empty list is a precondition for `Approved`.
+  A question whose answer only changes how the work is designed, split or proved goes to the
+  envelope with `fecha-em: planejamento` (`WF-CORE-09`).]
 
 ### Done when
 
 - The problem sentence exists and every claim has a source.
 - Every goal has a metric; every story has scenarios.
+- Every story's edges were swept: each one that applies is a scenario, a non-goal or an open
+  gap (`WF-RES-06`).
 - Non-goals are written, not implied.
 - Open gaps is empty, and the status is `Approved`.
 

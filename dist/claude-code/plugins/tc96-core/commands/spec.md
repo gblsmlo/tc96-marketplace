@@ -45,8 +45,9 @@ Run `workflow-research` on the request.
 - Product scope: `workflow-spec` starts `product-manager` on `.specs/<capability>/requirements.md`,
   or on an amendment to it when it is already `Approved`, and returns the `Draft` to the owner: path, problem sentence, open gaps, "approve, change,
   or reject?".
-- An open gap that only the owner can decide stops the run here. Ask the owner, with the gap
-  in one sentence.
+- A gap with `fecha-em: pesquisa` stops the run here: start the agent its `decide` names, or
+  ask the owner, with the gap in one sentence, when it is `dono`. A gap with
+  `fecha-em: planejamento` travels to Phase 2 (`WF-CORE-09`).
 
 **Gate:** product scope requires `requirements.md`, and the amendment this run wrote, in `Approved` before Phase 2, and only the
 owner's answer sets it (`WF-SPEC-06`). No answer: the run ends here, with the path under
@@ -77,7 +78,8 @@ reports it as an open gap instead of accepting it.
 ## Phase 3: Stop
 
 Return the planning envelope, with every `.specs/` path in `artefato` and every file not yet
-approved under `lacunas` as `awaiting owner approval: <path>`. Do not start
+approved under `lacunas` as `awaiting owner approval: <path>`, `decide: dono`. Every other gap
+still open stays there too, with its `decide` and `fecha-em` (`WF-CORE-09`). Do not start
 `workflow-implementation` (`WF-SPEC-05`). Implementation starts only on a new request from the
 owner, one Task at a time, and only on files the owner approved (`WF-SPEC-04`).
 
@@ -87,6 +89,8 @@ owner, one Task at a time, and only on files the owner approved (`WF-SPEC-04`).
 
 - [ ] The project's document set was read, or asked once and recorded with permission.
 - [ ] The scope is classified, and only the files it needs exist.
+- [ ] Every rule and scenario went through the edge sweep; each applicable edge is a scenario, a non-goal or a gap (`WF-RES-06`).
+- [ ] Every gap under `lacunas` names who decides it and where it closes, and none is left for implementation (`WF-CORE-09`).
 - [ ] Each file was written by its own agent through `workflow-spec`, and links the others instead of copying them.
 - [ ] Every status past `Draft` came from the owner's answer in this conversation.
 - [ ] The plan in `tasks/` names one owner, acceptance, evidence and test types per Task (`WF-PLAN-06`).

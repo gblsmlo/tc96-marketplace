@@ -51,7 +51,7 @@ Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../k
 | Order | Load | Why |
 | --- | --- | --- |
 | 1 | [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §4.4 | the evidence-proportionality tree — the core of this skill |
-| 2 | Same hub, §6 `WF-CORE-*` and `WF-VAL-*` | the 12 rules this skill enforces |
+| 2 | Same hub, §6 `WF-CORE-*` and `WF-VAL-*` | the 14 rules this skill enforces |
 | 3 | Same hub, §0.3 | the verification × validation distinction this pillar depends on |
 
 References in this skill:
@@ -109,13 +109,14 @@ diagnoses.
 
 | Failure | Route to |
 | --- | --- |
-| missing or contradicted product decision | `workflow-research` |
-| insufficient scope, dependency, or evidence plan | `workflow-planning` |
+| missing or contradicted product decision | `workflow-research`, the gap with `fecha-em: pesquisa` |
+| insufficient scope, dependency, or evidence plan | `workflow-planning`, the gap with `fecha-em: planejamento` |
 | defect in the code itself | `workflow-implementation` |
 | security-relevant finding (auth, cookie, secret) | `devops-security` |
 
 Fixing the wrong pillar's problem inside this one is never the answer — a code fix for a
-missing decision just produces a different wrong answer, faster.
+missing decision just produces a different wrong answer, faster. A gap routed back names who
+decides it, in `decide` (`WF-CORE-09`, hub §5 "Lacunas").
 
 ---
 

@@ -32,7 +32,8 @@ its default.
 
 Then the second question, separately: "May I record this in `AGENTS.md`, under a `## Specs`
 section?" Write there only on an explicit yes; on no, write `.specs/README.md`. On no to both,
-run with the defaults and say so in the envelope's `lacunas`.
+run with the defaults and say so in the envelope's `decisoes`: the owner already answered, so
+it is not a gap (`WF-CORE-09`).
 
 ## What off means
 

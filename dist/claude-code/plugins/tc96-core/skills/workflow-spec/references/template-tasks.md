@@ -42,7 +42,8 @@ records what they share.
 | `../user-experience.md` | [accepted, plus the amendment, or "not needed"] |
 | `../../adr/NNNN-<slug>.md` | [Accepted] |
 
-A Task that cites a file or an amendment not yet accepted is not ready (`WF-SPEC-04`).
+A Task that cites a file or an amendment not yet accepted is not ready (`WF-SPEC-04`); neither
+is one whose acceptance depends on a gap still open (`WF-CORE-09`).
 
 ### Order
 
@@ -56,7 +57,7 @@ between them can run in parallel.]
   - **Depends on:** [T-ids, or "none"]
   - **Inputs:** [the sections of `requirements.md`, `design.md` or `user-experience.md` this Task implements, by link]
   - **Scope:** [as in `template-task.md`]
-  - **Acceptance:** [one observable condition per line (`WF-PLAN-04`); a shared contract adds its shape test from `design.md`]
+  - **Acceptance:** [one observable condition per line (`WF-PLAN-04`), including each edge research answered for this Task (`WF-RES-06`); a shared contract adds its shape test from `design.md`]
   - **Evidence:** [the command that proves it, and the expected reading]
   - **Test types:** [the types the Validation runs, each at the cheapest level that catches the defect (static · unit · contract · integration · component · E2E · manual), with its cost class from hub §4.2; integration or E2E adds the sentence of what only it catches (`WF-PLAN-06`)]
   - **Out of this Task:** [...]
@@ -83,7 +84,8 @@ section. The text `repo-operator` publishes, word for word — it writes nothing
 - Every Task has a written acceptance criterion and an evidence plan.
 - Every Task names its test types, and no type sits above the cheapest that catches its defect
   without a sentence saying why (`WF-PLAN-06`).
-- Every input is accepted, or the Task that needs it waits.
+- Every input is accepted and every gap a Task depends on is closed, or the Task that needs it
+  waits (`WF-CORE-09`).
 - The sum of the Tasks fits the appetite; if it does not, the plan returns to the decision
   table instead of growing (`WF-PLAN-02`).
 
