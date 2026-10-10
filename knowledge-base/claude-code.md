@@ -177,6 +177,7 @@ Quem coordena?
 
 As tarefas tocam os mesmos arquivos? ──► isole em worktree
 Uma mudança grande e divisível?      ──► /batch (5 a 30 subagentes, cada um abre PR)
+Uma sessão abre outra?               ──► model e effort explícitos; o papel roda como subagente (CC-PAR-05)
 ```
 
 Detalhe decisivo: em subagente e skill, os resultados intermediários vivem **no contexto do Claude**. Em workflow, vivem em **variáveis do script** — o contexto guarda só a resposta final. É isso que faz workflow escalar para dezenas ou centenas de agentes, e o que o torna resumível. Procedimento em [Claude Code - Paralelismo e Escala](claude-code-paralelismo-e-escala.md).
@@ -255,6 +256,7 @@ IDs canônicos. Uma skill futura cita por ID sem parafrasear; uma revisão apont
 | `CC-PAR-02` | Tarefas paralelas que tocam os mesmos arquivos rodam em worktrees separadas. |
 | `CC-PAR-03` | Quando o plano precisa de laço, ramificação ou verificação cruzada, ele vira **script** (workflow) — não julgamento turno a turno. |
 | `CC-PAR-04` | Investigação sem escopo é antipadrão. Delimite ou delegue. |
+| `CC-PAR-05` | Sessão aberta por outra herda o modelo e o esforço de quem a abriu e não adota agente nenhum: quem abre passa `model` e `effort` explícitos, e o papel com tier próprio roda **como subagente** dentro dela — nunca "como `<agente>`" no brief. |
 
 ### 6.5 Automação — `CC-AUT-*`
 

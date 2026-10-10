@@ -1,6 +1,6 @@
 {
   "name": "tc96-tailwind",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "Tailwind CSS v4 — setup, escrita e revisão de estilo, com a própria doc normativa (TW-*). Autocontido: habilite sozinho ou junto do tc96-frontend.",
   "author": {
     "name": "Gabriel Melo"

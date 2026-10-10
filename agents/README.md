@@ -132,8 +132,9 @@ The tiers are neutral; [`build/modelos.json`](../build/modelos.json) maps them p
 | main cost lever | the model: three tiers, `opus` · `sonnet` · `haiku` | the reasoning effort: `alto` and `medio` both land on `gpt-6-sol`, `rapido` on `gpt-6-luna` |
 | where it lands | agent frontmatter `model` + `effort`; all three tiers take `effort` since Haiku 5.5 | `.codex/agents/<name>.toml`: `model` + `model_reasoning_effort`, and `sandbox_mode` from the capabilities |
 | agent spawned with no role | set `CLAUDE_CODE_SUBAGENT_MODEL=haiku` in your environment; a role's own `model` still wins over it, and a plugin cannot set it for you | `[agents] default_subagent_model` in `.codex/config.toml`, emitted by the build |
+| session opened by another (the desktop app's `start_session`) | inherits the opener's model and effort and adopts no agent, so no frontmatter applies; pass `model` (`claude-sonnet-5-5`) and `effort` (`medium`) on a `fresh` start, same tier or cheaper only, and have the brief call the role as a subagent — the only way up a tier ([`CC-PAR-05`](../knowledge-base/claude-code-paralelismo-e-escala.md)) | not covered here |
 
-Delegating a pillar to a generic agent skips all of this, since it runs on the session's model (`WF-CORE-06`). Which tier runs each point of the flow — including the mechanical operations inside a pillar — is in [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §3.1.
+Delegating a pillar to a generic agent, or to a new session told to act "as" a role, skips all of this: both run on the model of whoever opened them (`WF-CORE-06`). Which tier runs each point of the flow — including the mechanical operations inside a pillar — is in [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §3.1.
 
 ### What each Claude tier is, today
 
@@ -151,6 +152,8 @@ Two consequences for this table. Thinking cannot be turned off on any of the fou
 ### The orchestrating session
 
 A plugin cannot set the main session's model or effort; Claude Code drops those keys from a plugin's settings. The person picks them with `/model` and `/effort`. The orchestrating conversation is the biggest spend of a run, because its context is re-read on every turn until the end (`WF-CORE-07`), while the `alto` decisions already run in their own agents. Recommended start for a workflow run: `sonnet` at `medium`. If it routes wrongly — a skipped gate, the wrong pillar — move to `opus` at `medium` before raising effort. `opusplan` (Opus while planning, Sonnet while executing) is a middle ground.
+
+Sessions it opens inherit that choice unless it sets `model` and `effort` when opening them: a root on Fable at `xhigh` puts every child session on Fable at `xhigh`, and the cost multiplies by the number of units. A child session that runs one unit is an orchestrator too: open it on `sonnet` at `medium`, and let the owning agent bring its own tier as a subagent (`CC-PAR-05`).
 
 ## Usage in Claude Code
 

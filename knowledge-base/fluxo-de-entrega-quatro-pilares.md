@@ -118,8 +118,10 @@ Implementação.
 
 A coluna de agentes é também a lista fechada de quem pode receber um pilar delegado
 (`WF-CORE-06`): cada um declara `modelo` e `esforco` no próprio frontmatter, e é isso que
-impede o pilar de rodar no modelo da sessão. `repo-operator` não recebe pilar: recebe as
-operações mecânicas de qualquer um deles (§3.1, `WF-CORE-08`).
+impede o pilar de rodar no modelo da sessão — desde que o agente seja chamado como subagente.
+Uma sessão nova não adota agente nenhum: herda o modelo de quem a abriu, e o papel só chega
+nela se ela o chamar (§3.1). `repo-operator` não recebe pilar: recebe as operações mecânicas
+de qualquer um deles (§3.1, `WF-CORE-08`).
 
 Este mapeamento é o mesmo fluxograma de `agents/README.md`, seção "Como os agentes passam o
 bastão" — aqui só como tabela, sem repetir o mermaid. Quando um agente novo for adicionado lá, esta tabela é
@@ -161,6 +163,7 @@ effort per role".
 | qualquer | copiar, mover, renomear, organizar pasta | `repo-operator`, ou quem já está com o comando pronto | rapido · baixo | a lista ou o layout já foi decidido |
 | qualquer | apagar, sobrescrever, build e release | `repo-operator` | rapido · baixo | apagar, sobrescrever e publicar pedem a resposta do dono |
 | qualquer | orquestrar: envelopes, rotear, falar com o dono | a sessão principal | escolha da pessoa | um plugin não fixa o modelo da sessão; a recomendação está em `agents/README.md` |
+| qualquer | abrir uma sessão nova para uma unidade | a sessão que orquestra | medio · medio, passados na abertura | a sessão nova herda o modelo de quem abre e não adota o dono; ela orquestra a unidade, e o dono roda dentro dela como subagente, no tier dele (`CC-PAR-05`) |
 
 **Quando delegar uma operação mecânica.** Um subagente começa com prompt de sistema, ferramentas
 e cache próprios, e a resposta dele volta para quem chamou. Para um comando só, isso custa mais
@@ -177,6 +180,19 @@ A operação exige decidir algo que nenhum artefato decidiu?
         ├── sim → roda onde está, inclusive na sessão que orquestra
         └── não → repo-operator (rapido · baixo)
 ```
+
+**Quando o paralelismo é por sessão.** Abrir uma sessão por unidade (o `start_session` do app
+desktop) troca o subagente por algo que a pessoa vê e com que conversa, mas o tier não vem
+junto ([`CC-PAR-05`](claude-code-paralelismo-e-escala.md)). Quem abre:
+
+1. passa `modelo` e `esforco` explícitos, no tier de orquestração (medio · medio; o valor por
+   provedor está em `agents/README.md`), numa abertura `fresh` — um fork herda o modelo;
+2. escreve o brief para a sessão **chamar** o dono como subagente e cuidar só do envelope, da
+   Validação e do PR — "rode como `backend-developer`" faz a sessão escrever o código no
+   modelo que herdou, sem o corpo do agente.
+
+Uma sessão só abre outra no mesmo tier ou abaixo; quando o dono é `alto`, quem sobe é o
+subagente, pelo frontmatter dele.
 
 A sessão que orquestra é o maior gasto do fluxo: o contexto dela é relido em todo turno até o
 fim (`WF-CORE-07`). Ler um diff, um template ou uma saída de teste ali, no tier mais caro, é
@@ -448,7 +464,7 @@ Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
 | `WF-CORE-03` | Nenhum pilar **MUST** avançar com uma decisão em aberto: um retorno explícito ao pilar anterior é mais barato do que a decisão errada seguir adiante (Boehm, curva de custo de mudança). |
 | `WF-CORE-04` | Todo pilar de Implementação **MUST** terminar em Validação; **NEVER** termina em "pronto" sem prova. |
 | `WF-CORE-05` | Decisão sem evidência **MUST** ser tratada como hipótese, não fato; fingir certeza **NEVER** — é opinião empacotada. |
-| `WF-CORE-06` | Todo pilar delegado **MUST** ir a um agente nomeado da tabela da §3, que carrega modelo e esforço próprios; delegar a um agente genérico (o `general-purpose` do Claude Code, o spawn sem agente do Codex) **NEVER** — ele herda o modelo mais caro da sessão e todas as ferramentas. † |
+| `WF-CORE-06` | Todo pilar delegado **MUST** ir a um agente nomeado da tabela da §3, chamado como subagente, que carrega modelo e esforço próprios; se o pilar roda numa sessão nova, ela **MUST** abrir com `modelo` e `esforco` explícitos e chamar esse agente como subagente (§3.1, `CC-PAR-05`). Delegar a um agente genérico (o `general-purpose` do Claude Code, o spawn sem agente do Codex), ou a uma sessão que só interpreta o papel ("como `backend-developer`" no brief), **NEVER** — os dois herdam o modelo de quem os abriu, não o do dono, e nenhum carrega o corpo do agente. † |
 | `WF-CORE-07` | Quem orquestra os pilares **MUST** guardar só o envelope da §5, com a saída completa referenciada em `artefato`; ler código, o hub inteiro ou o relatório completo de um pilar na conversa principal **NEVER** — esse contexto é relido em todo turno até o fim do fluxo. † |
 | `WF-CORE-08` | Operação mecânica — cujo conteúdo um artefato já decidiu (diff, envelope, template, plano) — **MUST** rodar no agente que já tem esse conteúdo no contexto ou, se for preciso lê-lo, no `repo-operator`, de tier `rapido` (§3.1); ler diff, template ou saída de teste no tier mais caro da sessão para executá-la, ou deixar quem executa decidir o conteúdo, **NEVER**. † |
 | `WF-CORE-09` | Toda lacuna **MUST** sair no envelope com quem a decide (`decide`) e o último pilar em que pode estar aberta (`fecha-em`: `pesquisa` ou `planejamento`, §5); lacuna sem esses campos, ou deixada para a Implementação ou a Validação, **NEVER** — sem resposta a tempo, ela só avança como premissa que o dono aceitou, com o que a invalidaria (Wynne, os cartões vermelhos do Example Mapping). † |
@@ -584,6 +600,9 @@ NUNCA:    esta estrutura inteira para uma tarefa cujo pilar já é óbvio
 8. **Lacuna nunca fecha no código.** Toda lacuna tem quem decide e onde fecha (`WF-CORE-09`);
    a Pesquisa varre as bordas antes de entregar (`WF-RES-06`), e quem implementa lista as
    perguntas antes da primeira linha (`WF-IMPL-06`).
+9. **O papel vem do agente, não do brief.** Pilar delegado roda no agente nomeado, chamado como
+   subagente; uma sessão aberta para uma unidade abre com modelo e esforço explícitos e chama
+   esse agente, em vez de interpretá-lo (`WF-CORE-06`, `CC-PAR-05`).
 
 ### Recortes para skills novas
 

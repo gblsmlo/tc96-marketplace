@@ -19,10 +19,16 @@ tags:
 Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §7.
 
 > **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`).** The unit runs in the agent planning
-> named as its owner (`frontend-developer`, `backend-developer`, `devops-security`). Never
-> delegate to a generic agent. That agent commits its code — the diff is already in its
-> context, so no other agent re-reads it (`WF-CORE-08`) — and returns the envelope with the
-> commit or diff reference in `artefato`, not the code itself.
+> named as its owner (`frontend-developer`, `backend-developer`, `devops-security`), called as a
+> subagent. Never delegate to a generic agent. That agent commits its code — the diff is already
+> in its context, so no other agent re-reads it (`WF-CORE-08`) — and returns the envelope with
+> the commit or diff reference in `artefato`, not the code itself.
+>
+> **If your system prompt is not the owning agent's body, you are not that agent** — even when
+> the brief says "as `backend-developer`". A session that loads this skill orchestrates: it
+> starts the owner as a subagent with the unit, then runs validation and the PR, and writes no
+> code itself. Writing it here runs the unit on the model this session inherited, without the
+> agent's rules ([`CC-PAR-05`](../../../knowledge-base/claude-code-paralelismo-e-escala.md)).
 
 > **Design note.** This is the **third pillar**: it writes the code, but it does not write new
 > decisions. The moment a product question surfaces mid-implementation, the correct move is to
@@ -68,10 +74,10 @@ accepted; one still in draft means the Task waits (`WF-SPEC-04`), and so does an
 Task depends on (`WF-CORE-09`). Read only this Task and the sections it links, not the whole
 `.specs/<capability>/` folder nor its earlier plans.
 
-Start from a small context: a new instance of the owning agent, holding the unit and not the
-conversation that produced it (`WF-CORE-06`). Implementing inside a long session re-reads all
-of that history on every request
-([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
+Start from a small context: a new instance of the owning agent, called as a subagent so its
+`modelo` and `esforco` apply, holding the unit and not the conversation that produced it
+(`WF-CORE-06`). Implementing inside a long session re-reads all of that history on every
+request ([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
 
 **Returning with validation findings.** The owning agent runs on its declared tier, and rises
 only when that tier has already failed twice on this unit:
@@ -79,7 +85,7 @@ only when that tier has already failed twice on this unit:
 | Fix round | Who runs it | What it receives |
 | --- | --- | --- |
 | 1 and 2 | the same implementer, resumed, on its declared tier | only the findings |
-| 3 | a new instance of the owning agent, one tier up (`medio` → `alto`) | the unit, its acceptance criteria, the findings still open |
+| 3 | a new instance of the owning agent, one tier up (`medio` → `alto`), set as the `model` of the subagent call — a session cannot open another one tier up | the unit, its acceptance criteria, the findings still open |
 | 4 | nobody: stop and return to `workflow-planning` | the envelope, with the open findings under `lacunas` — `decide: dono`, `fecha-em: planejamento`, because the appetite is blown |
 
 Resuming is cheaper than re-reading the plan, but each resumed round adds to the implementer's
@@ -159,7 +165,7 @@ and whatever only the code reveals:
 | 4 | explicit contracts (types, schemas, boundaries) are preserved | `WF-IMPL-04` |
 | 5 | any local defect fixed along the way is recorded as evidence | `WF-IMPL-05` |
 | 6 | this pillar's output is code + evidence, not a claim of "done" | `WF-CORE-04` |
-| 7 | the unit ran in its owning agent, and the envelope references the commit or diff | `WF-CORE-06`, `WF-CORE-07` |
+| 7 | the unit ran in its owning agent called as a subagent — not in a session playing the role — and the envelope references the commit or diff | `WF-CORE-06`, `WF-CORE-07`, `CC-PAR-05` |
 | 8 | the questions were listed before the first line; each was cited, decided inside the unit, or returned with `decide` and `fecha-em` | `WF-IMPL-06`, `WF-CORE-09` |
 
 ---
