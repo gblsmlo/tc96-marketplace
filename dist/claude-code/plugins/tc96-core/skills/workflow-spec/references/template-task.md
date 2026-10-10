@@ -31,8 +31,9 @@ guessed at.
 | User Interface | visual composition of an existing surface |
 | Product | a decision, specification, or acceptance already decided elsewhere |
 
-A Task never carries an open product question — that belongs in `workflow-research`. A Task
-that serves more than one Story lists all of them.
+A Task never carries an open product question — that belongs in `workflow-research` — nor any
+other open gap: it waits until the gap closes (`WF-CORE-09`). A Task that serves more than one
+Story lists all of them.
 
 ## Body (copy from here down)
 
@@ -49,6 +50,10 @@ File names, routes, and component names belong here — whoever reads this is wh
 exact count, a regenerated status artifact, an authenticated screenshot. "Validated manually"
 with no date, environment, and result is not evidence — see `WF-VAL-02`, proportional to
 risk, never absent.]
+
+**Test types:** [the types the Validation runs, each at the cheapest level that catches the
+defect (static · unit · contract · integration · component · E2E · manual); an integration or
+E2E adds the sentence of what only it catches (`WF-PLAN-06`).]
 
 **Out of this Task:** [what someone might expect here and belongs to a different Task, and
 why.]

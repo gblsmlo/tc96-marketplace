@@ -21,7 +21,7 @@ These are three links, not four: the reasoning layer was cut on 2026-09-22 and i
 
 **The API surface doesn't live here.** A library's signature, options, and version-specific behavior resolve through Context7, using the library ID the skill declares in `docs:`. The knowledge base answers what's correct and which ID to cite in a review — not what a function accepts in this minor version.
 
-## The twelve agents
+## The thirteen agents
 
 | Agent | Role | Skills it loads | Main sources |
 | --- | --- | --- | --- |
@@ -37,10 +37,11 @@ These are three links, not four: the reasoning layer was cut on 2026-09-22 and i
 | `project-manager` | Scope, schedule, cost, risk, communication, and change as a system | — | `Gestão de Projetos - Mapa de Fundamentos` |
 | `monorepo-auditor` | Audits the layers of an already-written monorepo: dependency direction, public surface, who opens a transaction, which boundary is verifiable | `bun-workspace` · `drizzle-review` · `react-structure` | [Monorepo com Bun - estrutura e tooling](../knowledge-base/monorepo-com-bun-estrutura-e-tooling.md) `MONO-*` · [Architecture in React](../knowledge-base/architecture-in-react.md) · [Fronteira do BFF - forma, jornada e regra](../knowledge-base/fronteira-do-bff-forma-jornada-e-regra.md) |
 | `repo-explorer` | Gathers facts from existing code for the research pillar: a bounded question in, facts with file:line out, no file contents | — | [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) · [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) `WF-CORE-06` |
+| `repo-operator` | Executes mechanical operations another artifact already decided: commit, PR body, push, move or delete files, publish to the board, run the checks a plan names; never decides content | — | [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §3.1, `WF-CORE-08` |
 
 ## Common anatomy
 
-All twelve share the same shape, checkable by script, and it extends the anatomy from [Skills](../skills/README.md) with the fields a Claude Code subagent reads ([Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) § 7):
+All thirteen share the same shape, checkable by script, and it extends the anatomy from [Skills](../skills/README.md) with the fields a Claude Code subagent reads ([Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) § 7):
 
 | Element | Rule |
 | --- | --- |
@@ -73,6 +74,7 @@ All twelve share the same shape, checkable by script, and it extends the anatomy
 | how should this work for the user; flow; screen states; usable, accessible | `product-designer` | `product-manager` · `frontend-developer` |
 | how long; who does what; risk; does it fit the scope; status | `project-manager` | `product-manager` · `software-architect` |
 | where is X, what calls Y, what does Z do **today** | `repo-explorer` | whoever decides with those facts |
+| commit, PR body, push, move, rename or delete files, publish to the board, run the checks a plan names | `repo-operator` | whoever decides what they say |
 
 Two axes separate most of the pairs. **New × already exists** separates those who write from `code-reviewer` — the same axis as in [Skills](../skills/README.md). **Decide × execute** separates `software-architect`, `product-manager`, `product-designer`, and `project-manager` from the three that write code: the four that decide never write code and deliver a recorded decision (`software-architect` writes only under `.specs/`); those that execute receive the decision and return code with evidence.
 
@@ -97,11 +99,13 @@ flowchart LR
  AI[ai-engineer] -->|tool, MCP| BE
  AI -->|API key, deploy| DS
  PJ -->|cadence, DORA| DS
+ PJ -->|plan ready: board items| RO[repo-operator]
+ CR -->|clean: PR body, push| RO
 ```
 
 Each agent declares in its final step who it hands off to, and the arrow is always accompanied by an artifact: spec, recorded decision, flow with states, code with evidence, findings report.
 
-This flowchart has a formal procedure in `skills/workflow/` — four skills, one per moment (research, planning, implementation, validation), that decide **when** to route to which of the twelve agents, citing rules by ID in [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md). The diagram above remains the source of **who**; the newer note is the source of **when**.
+This flowchart has a formal procedure in `skills/workflow/` — four skills, one per moment (research, planning, implementation, validation), that decide **when** to route to which of the thirteen agents, citing rules by ID in [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md). The diagram above remains the source of **who**; the newer note is the source of **when**.
 
 ## Model and effort per role
 
@@ -117,6 +121,7 @@ The tier follows the task, not the role's prestige. Four properties decide it: h
 | `project-manager` | medio | medio | template-driven gates |
 | `frontend-developer` · `backend-developer` · `qa-engineer` | medio | medio | most tokens, and validation catches their errors |
 | `repo-explorer` | rapido | baixo | every fact carries the line that proves it |
+| `repo-operator` | rapido | baixo | the content was decided upstream; the result is an exit code or a diff (`WF-CORE-08`) |
 
 A fix round that fails twice on the declared tier runs once more one tier up, then returns to planning (`workflow-implementation`, Step 1).
 
@@ -125,10 +130,27 @@ The tiers are neutral; [`build/modelos.json`](../build/modelos.json) maps them p
 | | Claude Code | Codex |
 | --- | --- | --- |
 | main cost lever | the model: three tiers, `opus` · `sonnet` · `haiku` | the reasoning effort: `alto` and `medio` both land on `gpt-6-sol`, `rapido` on `gpt-6-luna` |
-| where it lands | agent frontmatter `model` + `effort` (no `effort` on `haiku`) | `.codex/agents/<name>.toml`: `model` + `model_reasoning_effort`, and `sandbox_mode` from the capabilities |
-| agent spawned with no role | set `CLAUDE_CODE_SUBAGENT_MODEL` in your environment; a role's own `model` still wins over it | `[agents] default_subagent_model` in `.codex/config.toml`, emitted by the build |
+| where it lands | agent frontmatter `model` + `effort`; all three tiers take `effort` since Haiku 5.5 | `.codex/agents/<name>.toml`: `model` + `model_reasoning_effort`, and `sandbox_mode` from the capabilities |
+| agent spawned with no role | set `CLAUDE_CODE_SUBAGENT_MODEL=haiku` in your environment; a role's own `model` still wins over it, and a plugin cannot set it for you | `[agents] default_subagent_model` in `.codex/config.toml`, emitted by the build |
 
-Delegating a pillar to a generic agent skips all of this, since it runs on the session's model (`WF-CORE-06`).
+Delegating a pillar to a generic agent skips all of this, since it runs on the session's model (`WF-CORE-06`). Which tier runs each point of the flow — including the mechanical operations inside a pillar — is in [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §3.1.
+
+### What each Claude tier is, today
+
+Verified on 2026-10-10 against Anthropic's model list and the Claude Code model configuration page. Prices change; re-check before quoting them.
+
+| Tier | Alias → model | Input / output, per million tokens | Context | Effort levels (default) | Used here for |
+| --- | --- | --- | --- | --- | --- |
+| — | `fable` → Claude Fable 5.1 | $10 / $50 | 1M | `low`–`max` (`high`); thinking always on | nothing by default: 2.5× Opus for the same agents; raise Opus's effort first |
+| `alto` | `opus` → Claude Opus 5.5 | $4 / $20 | 1M | `low`–`max` (`medium`) | decisions nothing checks later: product, architecture, security |
+| `medio` | `sonnet` → Claude Sonnet 5.5 | $2 / $10 | 1M | `low`–`max` (`high`) | writing code and plans, reviewing, diagnosing |
+| `rapido` | `haiku` → Claude Haiku 5.5 | $0.10 / $0.50 up to 100K prompt tokens; $0.50 / $2.50 beyond | 1M | `low`–`max` (`medium`) | facts with `file:line`, mechanical operations |
+
+Two consequences for this table. Thinking cannot be turned off on any of the four, so `esforco` is the lever inside a tier. And `rapido` is 40× cheaper than `alto` only while its prompt stays under 100K tokens: that is why `repo-explorer` and `repo-operator` read only what their task needs.
+
+### The orchestrating session
+
+A plugin cannot set the main session's model or effort; Claude Code drops those keys from a plugin's settings. The person picks them with `/model` and `/effort`. The orchestrating conversation is the biggest spend of a run, because its context is re-read on every turn until the end (`WF-CORE-07`), while the `alto` decisions already run in their own agents. Recommended start for a workflow run: `sonnet` at `medium`. If it routes wrongly — a skipped gate, the wrong pillar — move to `opus` at `medium` before raising effort. `opusplan` (Opus while planning, Sonnet while executing) is a middle ground.
 
 ## Usage in Claude Code
 
@@ -146,7 +168,7 @@ Created on 2026-09-01 from already-existing material, and extracted into this re
 
 **Inherited gaps, stated openly.** There is no build skill for Drizzle or for Hono — `backend-developer` reads the hub directly and reviews with `drizzle-review`. The OAuth, session, and RBAC cluster has no skill — `devops-security` works through the [OWASP - Sessão e Autorização](../knowledge-base/owasp-sessao-e-autorizacao.md) checklist item by item. The product and management agents derive from course maps that **have not** been extracted into this repository: they appear in a code span, by name. They have no rule ID to cite, and that is stated plainly, not hidden.
 
-**Criterion for a new agent.** A role someone actually performs, with a question none of the twelve already answers, and material in the knowledge base to answer it. An agent with no source note is packaged opinion — it doesn't get in.
+**Criterion for a new agent.** A role someone actually performs, with a question none of the thirteen already answers, and material in the knowledge base to answer it. An agent with no source note is packaged opinion — it doesn't get in.
 
 ## Related
 

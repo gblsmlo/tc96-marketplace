@@ -43,7 +43,7 @@ escrito por extenso:
 
 ## Especificação
 
-[`spec`](spec.md) — gera só a especificação de uma feature em `.specs/` e para antes da
+[`spec`](spec.md) — gera só a especificação de um incremento em `.specs/<capability>/` e para antes da
 implementação: roda `workflow-research` e `workflow-planning`, nesta ordem.
 
 ## Ambiente

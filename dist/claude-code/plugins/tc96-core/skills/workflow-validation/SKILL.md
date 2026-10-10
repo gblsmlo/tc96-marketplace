@@ -15,11 +15,13 @@ tags:
 
 Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../referencias/fluxo-de-entrega-quatro-pilares.md) §7.
 
-> **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`).** The diff goes to `code-reviewer`,
-> the checks and the test level to `qa-engineer`, a security finding to `devops-security`.
-> Never delegate to a generic agent. Check output (test logs, lint) stays inside the agent that
-> ran it; the orchestrating conversation receives the envelope with pass, fail, skipped and
-> unavailable counts, and the findings.
+> **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`, `WF-CORE-08`).** The diff goes to
+> `code-reviewer`; running the checks the plan named goes to `repo-operator`, on the cheapest
+> tier; diagnosing a check that failed, or a test level in dispute, goes to `qa-engineer`; a
+> security finding to `devops-security`; the PR body, push and PR, on the owner's answer, to
+> `repo-operator`. Never delegate to a generic agent. Check output (test logs, lint) stays
+> inside the agent that ran it; the orchestrating conversation receives the envelope with pass,
+> fail, skipped and unavailable counts, and the findings.
 
 > **Design note.** This is the **fourth pillar**, and it is a decision about evidence, not a
 > synonym for running the broadest suite (`WF-VAL-02`). It also never lets the change's own
@@ -46,7 +48,7 @@ Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../refe
 | Order | Load | Why |
 | --- | --- | --- |
 | 1 | [Fluxo de Entrega — Quatro Pilares](../../referencias/fluxo-de-entrega-quatro-pilares.md) §4.4 | the evidence-proportionality tree — the core of this skill |
-| 2 | Same hub, §6 `WF-CORE-*` and `WF-VAL-*` | the 12 rules this skill enforces |
+| 2 | Same hub, §6 `WF-CORE-*` and `WF-VAL-*` | the 14 rules this skill enforces |
 | 3 | Same hub, §0.3 | the verification × validation distinction this pillar depends on |
 
 References in this skill:
@@ -81,12 +83,20 @@ Does the change alter a public contract (API, schema, route)?
     └── no → focused checks on what changed are enough; declare what was not covered, don't hide it
 ```
 
+Start from the test types the plan named for the Task (`WF-PLAN-06`). A type more expensive
+than the plan named comes in only with the sentence of what it catches and the cheaper ones
+do not; without that sentence, the gap is the plan's and goes back to `workflow-planning`
+(`WF-VAL-04`).
+
 ---
 
 ## Step 3 — Run the checks, report separately
 
-Report pass / fail / skipped / unavailable as distinct outcomes — never collapse "skipped"
-into "passed."
+`repo-operator` runs exactly the commands the plan's evidence names, in its order, and returns
+each one's outcome (`WF-CORE-08`). Report pass / fail / skipped / unavailable as distinct
+outcomes — never collapse "skipped" into "passed." A failure goes to `qa-engineer` for the
+diagnosis only when its cause is not obvious from the first failing lines; the operator never
+diagnoses.
 
 ---
 
@@ -96,13 +106,14 @@ into "passed."
 
 | Failure | Route to |
 | --- | --- |
-| missing or contradicted product decision | `workflow-research` |
-| insufficient scope, dependency, or evidence plan | `workflow-planning` |
+| missing or contradicted product decision | `workflow-research`, the gap with `fecha-em: pesquisa` |
+| insufficient scope, dependency, or evidence plan | `workflow-planning`, the gap with `fecha-em: planejamento` |
 | defect in the code itself | `workflow-implementation` |
 | security-relevant finding (auth, cookie, secret) | `devops-security` |
 
 Fixing the wrong pillar's problem inside this one is never the answer — a code fix for a
-missing decision just produces a different wrong answer, faster.
+missing decision just produces a different wrong answer, faster. A gap routed back names who
+decides it, in `decide` (`WF-CORE-09`, hub §5 "Lacunas").
 
 ---
 
@@ -117,6 +128,7 @@ missing decision just produces a different wrong answer, faster.
 | 5 | any delivery metric cited comes from measured data, not impression | `WF-VAL-05` |
 | 6 | this pillar's output is a clear result, not a vague "looks fine" | `WF-CORE-01` |
 | 7 | review and checks ran in named agents, and only their envelopes came back | `WF-CORE-06`, `WF-CORE-07` |
+| 8 | the checks were the types the plan named, run by `repo-operator`; any costlier type carries the sentence of what only it catches | `WF-PLAN-06`, `WF-CORE-08` |
 
 ---
 
@@ -136,7 +148,8 @@ round number decides who runs it (resume, one tier up, or back to planning), per
 ([`CC-CTX-01`, `CC-CTX-03`](../../referencias/claude-code-contexto-e-cache.md)).
 A unit that failed validation is reviewed again after the fix.
 A clean result ends the flow here. A push or PR that follows is visible to others and needs the
-owner's go-ahead.
+owner's go-ahead; on that answer, `repo-operator` fills `template-pr.md` from the envelope,
+pushes and opens the PR, with the owner's words quoted in its request (`WF-CORE-08`).
 
 ---
 

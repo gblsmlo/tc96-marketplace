@@ -1,7 +1,7 @@
 # The project's document set — one question, recorded once
 
 Which documents a project keeps is the owner's decision, made once and read on every run
-(`WF-SPEC-07`). The scope still decides which files a given feature needs (`WF-SPEC-03`); the
+(`WF-SPEC-07`). The scope still decides which files a given capability needs (`WF-SPEC-03`); the
 record only says which of those this project writes at all.
 
 ---
@@ -23,21 +23,22 @@ its default.
 
 | Document | File | Default | Can be off |
 | --- | --- | --- | --- |
-| PRD | `.specs/<feature>/requirements.md` | on | yes |
-| Design doc or RFC | `.specs/<feature>/design.md` | on | yes |
+| PRD | `.specs/<capability>/requirements.md` | on | yes |
+| Design doc or RFC | `.specs/<capability>/design.md` | on | yes |
 | ADR | `.specs/adr/NNNN-<slug>.md` | on | yes |
-| User experience | `.specs/<feature>/user-experience.md` | on | yes |
-| Tasks | `.specs/<feature>/tasks.md` | on | **no** — the implementer reads only this file |
+| User experience | `.specs/<capability>/user-experience.md` | on | yes |
+| Plan | `.specs/<capability>/tasks/NNNN-<slug>.md` | on | **no** — the implementer reads only the current plan |
 | Board items (Epic, Story, Task) | the project's tracker | off | yes |
 
 Then the second question, separately: "May I record this in `AGENTS.md`, under a `## Specs`
 section?" Write there only on an explicit yes; on no, write `.specs/README.md`. On no to both,
-run with the defaults and say so in the envelope's `lacunas`.
+run with the defaults and say so in the envelope's `decisoes`: the owner already answered, so
+it is not a gap (`WF-CORE-09`).
 
 ## What off means
 
 A document marked off is not written, and its decision is not lost: the owning agent states
-it in one line, which goes to `tasks.md` under **Origin** and to the envelope's `decisoes`.
+it in one line, which goes to the plan under **Origin** and to the envelope's `decisoes`.
 Off never removes a gate: a product scope still needs the owner's decision before planning
 (`WF-CORE-03`); it only changes where that decision is recorded.
 
@@ -53,11 +54,11 @@ Spec files live in `.specs/`, written as `Draft` and approved by the owner in th
 
 | Document | Keep | File |
 | --- | --- | --- |
-| PRD | on | `.specs/<feature>/requirements.md` |
-| Design doc or RFC | on | `.specs/<feature>/design.md` |
+| PRD | on | `.specs/<capability>/requirements.md` |
+| Design doc or RFC | on | `.specs/<capability>/design.md` |
 | ADR | on | `.specs/adr/NNNN-<slug>.md` |
 | User experience | off | — |
-| Tasks | on | `.specs/<feature>/tasks.md` |
+| Plan | on | `.specs/<capability>/tasks/NNNN-<slug>.md` |
 | Board items | off | — |
 ```
 
