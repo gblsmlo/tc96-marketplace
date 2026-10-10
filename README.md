@@ -3,7 +3,7 @@
 # tc96-marketplace
 Agents, skills and rules for this house's stack, written once as a neutral source and built for each agent runtime
 
-![Version](https://img.shields.io/badge/version-0.10.0-0EA5E9?style=flat&labelColor=18181B)
+![Version](https://img.shields.io/badge/version-0.11.0-0EA5E9?style=flat&labelColor=18181B)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-plugins-D97757?style=flat&logo=claude&logoColor=white&labelColor=18181B)
 ![AGENTS.md](https://img.shields.io/badge/AGENTS.md-target-FFFFFF?style=flat&labelColor=18181B)
 ![Context7](https://img.shields.io/badge/Context7-API_surface-0EA5E9?style=flat&labelColor=18181B)
@@ -11,7 +11,7 @@ Agents, skills and rules for this house's stack, written once as a neutral sourc
 
 </div>
 
-> **Status:** 0.10.0. Families still in the old frontmatter format are skipped by the build until they migrate.
+> **Status:** 0.11.0. Families still in the old frontmatter format are skipped by the build until they migrate.
 
 ## ✨ Overview
 
