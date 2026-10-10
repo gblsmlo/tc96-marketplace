@@ -12,7 +12,7 @@ set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="${1:-$RAIZ/dist/claude-code}"
-VERSAO="${VERSAO:-0.9.0}"   # 0.4: commands/ · 0.5: comandos em bun · 0.6: fases 3 em bun test · 0.7: modelo e esforco por papel · 0.8: tc96-tailwind autocontido · 0.9: react-component-performance e bench harness
+VERSAO="${VERSAO:-0.10.0}"   # 0.4: commands/ · 0.5: comandos em bun · 0.6: fases 3 em bun test · 0.7: modelo e esforco por papel · 0.8: tc96-tailwind autocontido · 0.9: react-component-performance e bench harness · 0.10: .specs/, comando spec e workflow-spec
 
 rm -rf "$DEST"
 

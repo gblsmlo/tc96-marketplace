@@ -1,6 +1,6 @@
 {
   "name": "tc96-core",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Teste e contrato HTTP, e os papéis que atravessam qualquer stack. Habilite sempre.",
   "author": {
     "name": "Gabriel Melo"
