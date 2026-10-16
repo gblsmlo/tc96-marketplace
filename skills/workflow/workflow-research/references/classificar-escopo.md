@@ -48,7 +48,7 @@ inherits a decision that was never actually made — only guessed by whoever wro
 
 Treating **execution** as architecture is the opposite failure: a task that needed one line
 changed gets escalated through a decision-recording process it did not need, which is its own
-cost (`WF-PLAN-01`, appetite — the same economy applies one pillar earlier).
+cost.
 
 ## The tell that "execution" is actually a product question
 

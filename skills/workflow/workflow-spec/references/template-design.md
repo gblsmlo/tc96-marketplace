@@ -106,7 +106,7 @@ ADRs it produced (`DOC-RFC-04`).]
 | --- | --- |
 | `requirements.md` | whether to build it, goals, non-goals |
 | `user-experience.md` | flow, screen states, components, accessibility |
-| `tasks/NNNN-<slug>.md` | the units, owners, appetite, evidence plan and test types |
+| `tasks/NNNN-<slug>.md` | the units, owners, evidence plan and test types |
 | the Task, decided by the implementer | where a file lives inside a feature, which library API |
 
 ---

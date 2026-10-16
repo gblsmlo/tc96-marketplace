@@ -198,7 +198,7 @@ the envelope, and planning closes them (`WF-CORE-09`). A gap with `fecha-em: pes
 first to whoever `decide` names: start that agent now, or ask the owner in one sentence when it
 is `dono`. Do not ask whether to continue. Stop only for an owner decision — a gap with
 `decide: dono` and `fecha-em: pesquisa`, which includes a `requirements.md` awaiting approval
-(`WF-SPEC-06`), or an appetite breach under `WF-PLAN-02` — or for an action that is
+(`WF-SPEC-06`) — or for an action that is
 irreversible or visible to others (push, PR, deleting or overwriting data, publishing to a
 board, a release).
 

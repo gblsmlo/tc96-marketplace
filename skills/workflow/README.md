@@ -31,8 +31,7 @@ workflow/
 ├── workflow-planning/
 │   ├── SKILL.md
 │   └── references/
-│       ├── portoes.md
-│       └── apetite-e-corte.md
+│       └── portoes.md
 ├── workflow-spec/
 │   ├── SKILL.md
 │   └── references/

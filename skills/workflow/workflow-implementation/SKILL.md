@@ -86,11 +86,11 @@ only when that tier has already failed twice on this unit:
 | --- | --- | --- |
 | 1 and 2 | the same implementer, resumed, on its declared tier | only the findings |
 | 3 | a new instance of the owning agent, one tier up (`medio` → `alto`), set as the `model` of the subagent call — a session cannot open another one tier up | the unit, its acceptance criteria, the findings still open |
-| 4 | nobody: stop and return to `workflow-planning` | the envelope, with the open findings under `lacunas` — `decide: dono`, `fecha-em: planejamento`, because the appetite is blown |
+| 4 | nobody: stop and return to `workflow-planning` | the envelope, with the open findings under `lacunas` — `decide: dono`, `fecha-em: planejamento`, because three rounds could not close the unit |
 
 Resuming is cheaper than re-reading the plan, but each resumed round adds to the implementer's
 context. A unit that three rounds could not close is a planning problem, not a model problem:
-the appetite is blown (`WF-PLAN-02`). The tier ladder and what it maps to per provider are in
+it goes back to be re-sliced or re-decided. The tier ladder and what it maps to per provider are in
 `agents/README.md`, section "Model and effort per role".
 
 ---

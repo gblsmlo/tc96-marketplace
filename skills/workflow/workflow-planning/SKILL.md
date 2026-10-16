@@ -1,6 +1,6 @@
 ---
 nome: workflow-planning
-descricao: Turns an accepted decision into executable work — names the perfil/layer boundary, sets the appetite, decomposes only when each unit has independent acceptance and evidence, and writes the acceptance criteria before implementation starts, citing `WF-PLAN-*` and `WF-CORE-*` IDs. Use when intent is already resolved but the work is not executable yet, or when deciding whether to split a task into multiple units. Do not use when the intent itself is still unclear — that is `workflow-research`. Do not use once a unit already has acceptance criteria and an owner — that is `workflow-implementation`.
+descricao: Turns an accepted decision into executable work — names the perfil/layer boundary, decomposes only when each unit has independent acceptance and evidence, and writes the acceptance criteria before implementation starts, citing `WF-PLAN-*` and `WF-CORE-*` IDs. Use when intent is already resolved but the work is not executable yet, or when deciding whether to split a task into multiple units. Do not use when the intent itself is still unclear — that is `workflow-research`. Do not use once a unit already has acceptance criteria and an owner — that is `workflow-implementation`.
 tipo: skill
 familia: workflow
 idioma: en
@@ -47,7 +47,7 @@ Contract this skill implements: [Delivery Flow — Four Pillars](../../../knowle
 | Order | Load | Why |
 | --- | --- | --- |
 | 1 | [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §2 | the four-pillar table, to confirm entry condition |
-| 2 | Same hub, §4.2 | the five gates and the test-cost table — the core of this skill |
+| 2 | Same hub, §4.2 | the four gates and the test-cost table — the core of this skill |
 | 3 | Same hub, §6 `WF-CORE-*` and `WF-PLAN-*` | the 15 rules this skill enforces |
 | 4 | Same hub, §5 "Gaps" | which gaps this pillar must close before a unit leaves |
 | 5 | Same hub, §5 "Where the artifact lives" and `WF-SPEC-*` | which `.specs/` files this scope needs |
@@ -58,8 +58,7 @@ References in this skill:
 
 | File | What for |
 | --- | --- |
-| `references/portoes.md` | the five gates, one worked check each |
-| `references/apetite-e-corte.md` | appetite and circuit breaker, with a worked example |
+| `references/portoes.md` | the four gates, one worked check each |
 
 ---
 
@@ -103,7 +102,7 @@ test type at the cheapest level that proves it, and an invariant only an E2E pro
 
 ---
 
-## Step 3 — Pass the five gates
+## Step 3 — Pass the four gates
 
 `references/portoes.md`, hub §4.2:
 
@@ -112,10 +111,7 @@ test type at the cheapest level that proves it, and an invariant only an E2E pro
    acceptance, evidence, and dependencies (`WF-PLAN-03`).
 3. **Boundary gate** — name the owning perfil (`frontend-developer`, `backend-developer`,
    `devops-security`...) per unit. "Fullstack" is never an answer (`WF-PLAN-05`).
-4. **Appetite gate** — decide how much this is worth spending before estimating how long it
-   takes (`WF-PLAN-01`). A unit that blows its appetite stops and returns to the decision
-   table — it does not quietly get more time (`WF-PLAN-02`).
-5. **Acceptance gate** — every unit gets a written acceptance criterion before it is
+4. **Acceptance gate** — every unit gets a written acceptance criterion before it is
    considered ready (`WF-PLAN-04`), with a line for each edge research answered for it — a
    story scenario, or a line under `decisoes` (`WF-RES-06`). An open gap the unit depends on is
    a line nobody wrote yet: the unit waits for the answer (`WF-CORE-09`).
@@ -171,17 +167,16 @@ not ready (`WF-SPEC-04`); the file itself is `Ready` only on the owner's answer 
 | 1 | the decision behind this unit is resolved, not open | `WF-CORE-03` |
 | 2 | if split into multiple units, each has independent acceptance/evidence/dependency | `WF-PLAN-03` |
 | 3 | the owning perfil is named per unit, never "fullstack" | `WF-PLAN-05` |
-| 4 | appetite is decided before any time estimate | `WF-PLAN-01` |
-| 5 | acceptance criteria are written, not implicit, with a line for each edge research answered | `WF-PLAN-04`, `WF-RES-06` |
-| 6 | the evidence plan for validation is named | — |
-| 7 | every contract shared between units has a real-output-against-real-validator test in its first consumer | `WF-PLAN-04` |
-| 8 | each unit names the agent that implements it, that agent is in hub §3, and it starts as a subagent — a session opened for the unit gets explicit `model` and `effort` and a brief that calls it | `WF-CORE-06`, `CC-PAR-05` |
-| 9 | the `.specs/` files match the scope, each written by its own agent through `workflow-spec` | `WF-SPEC-01`, `WF-SPEC-03` |
-| 10 | no spec file copies another; they link | `WF-SPEC-02` |
-| 11 | every status that moved past `Draft` moved on the owner's answer | `WF-SPEC-06` |
-| 12 | every unit names its test types at the cheapest level, and every integration or E2E says what only it catches | `WF-PLAN-06` |
-| 13 | the files sit in the capability's folder; approved text got an amendment; this increment has its own plan | `WF-SPEC-08` |
-| 14 | no unit leaves with an open gap it depends on; every gap left in the envelope names `decide` and `fecha-em` | `WF-CORE-09` |
+| 4 | acceptance criteria are written, not implicit, with a line for each edge research answered | `WF-PLAN-04`, `WF-RES-06` |
+| 5 | the evidence plan for validation is named | — |
+| 6 | every contract shared between units has a real-output-against-real-validator test in its first consumer | `WF-PLAN-04` |
+| 7 | each unit names the agent that implements it, that agent is in hub §3, and it starts as a subagent — a session opened for the unit gets explicit `model` and `effort` and a brief that calls it | `WF-CORE-06`, `CC-PAR-05` |
+| 8 | the `.specs/` files match the scope, each written by its own agent through `workflow-spec` | `WF-SPEC-01`, `WF-SPEC-03` |
+| 9 | no spec file copies another; they link | `WF-SPEC-02` |
+| 10 | every status that moved past `Draft` moved on the owner's answer | `WF-SPEC-06` |
+| 11 | every unit names its test types at the cheapest level, and every integration or E2E says what only it catches | `WF-PLAN-06` |
+| 12 | the files sit in the capability's folder; approved text got an amendment; this increment has its own plan | `WF-SPEC-08` |
+| 13 | no unit leaves with an open gap it depends on; every gap left in the envelope names `decide` and `fecha-em` | `WF-CORE-09` |
 
 ---
 
@@ -230,7 +225,7 @@ on the model it inherited from this one
 
 ## Example
 
-*Resolved decision: "discounts above 50% require manager approval."* Appetite: small — one
+*Resolved decision: "discounts above 50% require manager approval."* One
 route, one check, no new service, so no `design.md` and no ADR; `user-experience.md` for the approval prompt, then the plan `.specs/checkout-discount/tasks/0001-approval-rule.md`. Boundary: `backend-developer` owns the validation rule;
 `frontend-developer` owns the approval prompt — two units, because each has its own acceptance
 criterion and can be verified independently. Acceptance for the backend unit: "a request with

@@ -5,7 +5,7 @@ tags:
   - delivery
   - agent-context
   - reference
-source: "Barry Boehm, Software Engineering Economics (cost-of-change curve, origin of verification×validation); Marty Cagan, Inspired: How to Create Tech Products Customers Love; Teresa Torres, Continuous Discovery Habits; Ryan Singer/Basecamp, Shape Up: Stop Running in Circles; Kent Beck, Extreme Programming Explained; Winters/Manshreck/Wright, Software Engineering at Google (code review culture — already cited in TS-*); Forsgren/Humble/Kim, Accelerate (DORA metrics); Glenford Myers, The Art of Software Testing (equivalence partitioning and boundary value analysis); Matt Wynne, Introducing Example Mapping (Cucumber); internal precedent: lemind, ADR 114 — \"the agent workflow has four pillars\" (implementation observed in production, not academic authority)"
+source: "Barry Boehm, Software Engineering Economics (cost-of-change curve, origin of verification×validation); Marty Cagan, Inspired: How to Create Tech Products Customers Love; Teresa Torres, Continuous Discovery Habits; Kent Beck, Extreme Programming Explained; Winters/Manshreck/Wright, Software Engineering at Google (code review culture — already cited in TS-*); Forsgren/Humble/Kim, Accelerate (DORA metrics); Glenford Myers, The Art of Software Testing (equivalence partitioning and boundary value analysis); Matt Wynne, Introducing Example Mapping (Cucumber); internal precedent: lemind, ADR 114 — \"the agent workflow has four pillars\" (implementation observed in production, not academic authority)"
 verificado-em: 2026-09-23
 ---
 # Delivery Flow — Four Pillars
@@ -132,7 +132,7 @@ table is what needs updating, not the other way around.
 The board level column is the whole "discover → task" path, end to end: Research resolves the
 decision (the `product-manager` calls this Discovery); Planning is where that decision first
 becomes a board item, decomposes into Stories and is sliced into Tasks, always through the
-five gates (§4.2); Implementation executes exactly one Task at a time; Validation reviews the
+four gates (§4.2); Implementation executes exactly one Task at a time; Validation reviews the
 PR that references that Task. No pillar writes at two board levels at once, and no level is
 born outside the pillar that produces it — opening a Task directly, with no Story and no Epic,
 is decomposition without criteria (`WF-PLAN-03`), just as opening an Epic with no Research
@@ -276,11 +276,7 @@ A unit is only ready for Implementation after passing all of them:
    not along those boundaries, is cost fragmentation.
 3. **Boundary gate** — which perfil (`frontend-developer`, `backend-developer`,
    `devops-security`...) owns each unit? "Fullstack" is never an answer (`WF-PLAN-05`).
-4. **Appetite gate** — how much it is worth spending here, decided **before** asking how long
-   it will take (`WF-PLAN-01`, Shape Up). A unit that blows its appetite stops and goes back to
-   the decision table — it does not silently stretch the deadline (`WF-PLAN-02`, circuit
-   breaker).
-5. **Acceptance gate** — acceptance criteria written, not implicit (`WF-PLAN-04`), with one
+4. **Acceptance gate** — acceptance criteria written, not implicit (`WF-PLAN-04`), with one
    line for each edge Research answered for this unit (`WF-RES-06`). An open gap the unit
    depends on is a line nobody has written yet: the unit waits for the answer (`WF-CORE-09`).
 
@@ -508,8 +504,6 @@ Convention: `MUST`/`NEVER` are normative. **†** marks a decision of this doc.
 
 | ID | Rule |
 | --- | --- |
-| `WF-PLAN-01` | Every work unit **MUST** have its appetite decided before any time estimate — "how much is it worth spending" comes before "how long will it take" (Shape Up). |
-| `WF-PLAN-02` | A unit that blows its appetite **MUST** stop and go back to the decision table; silently extending the deadline **NEVER** (Shape Up, circuit breaker). |
 | `WF-PLAN-03` | Decomposing into multiple units **MUST** follow a criterion — each unit with its own acceptance, evidence and dependency; decomposing without that criterion **NEVER**, it is cost fragmentation. |
 | `WF-PLAN-04` | Every unit **MUST** enter Implementation with written acceptance criteria; "ready to start" without them is **NEVER** ready (Definition of Ready). |
 | `WF-PLAN-05` | Each unit's layer/perfil boundary **MUST** be named in Planning; "fullstack" as a perfil **NEVER** — it hides the boundary instead of deciding it. |
@@ -551,13 +545,13 @@ Convention: `MUST`/`NEVER` are normative. **†** marks a decision of this doc.
 
 ### Count
 
-**40 rules** in six families, a single file — no satellite in this version.
+**38 rules** in six families, a single file — no satellite in this version.
 
 | Family | Rules |
 | --- | --- |
 | `WF-CORE-*` | 9 |
 | `WF-RES-*` | 6 |
-| `WF-PLAN-*` | 6 |
+| `WF-PLAN-*` | 4 (`WF-PLAN-01` and `WF-PLAN-02`, the appetite rules, are retired; the IDs are not reused) |
 | `WF-IMPL-*` | 6 |
 | `WF-VAL-*` | 5 |
 | `WF-SPEC-*` | 8 |
@@ -673,8 +667,6 @@ of this project.
   viability and feasibility risks in product discovery.
 - Teresa Torres, *Continuous Discovery Habits* — opportunity solution tree, continuous research
   instead of a one-off project.
-- Ryan Singer / Basecamp, *Shape Up: Stop Running in Circles* — appetite, betting table,
-  circuit breaker.
 - Kent Beck, *Extreme Programming Explained* — test before implementation, small batches.
 - Winters, Manshreck, Wright, *Software Engineering at Google* — culture of code review by an
   independent peer (already cited in `TS-*`).

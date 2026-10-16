@@ -98,7 +98,7 @@ non-goal, or an open gap.
 | --- | --- |
 | `design.md` | schema, API contract, service boundary (`DOC-PRD-03`) |
 | `user-experience.md` | flow, screen states, accessibility |
-| `tasks/NNNN-<slug>.md` | who implements what, appetite, evidence plan, test types |
+| `tasks/NNNN-<slug>.md` | who implements what, evidence plan, test types |
 
 ---
 
