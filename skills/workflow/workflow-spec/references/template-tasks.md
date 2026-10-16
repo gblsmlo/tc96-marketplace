@@ -108,4 +108,4 @@ section. The text `repo-operator` publishes, word for word — it writes nothing
 - `template-epic.md` · `template-story.md`: the bodies under **Board items**
 - `portoes.md`: the five gates every Task passed
 - `workflow-implementation`: reads one Task from this file at a time
-- [Fluxo de Entrega — Quatro Pilares](../../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §5: where this file sits in `.specs/`
+- [Delivery Flow — Four Pillars](../../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §5: where this file sits in `.specs/`

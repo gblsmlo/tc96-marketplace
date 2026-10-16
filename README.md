@@ -143,7 +143,7 @@ skills/                # 38 skills across 12 families (English)
 ├── bun/  elysia/  drizzle/
 └── kb/                # Coverage audit of this repository, not shipped
 commands/              # 18 commands (English body, descricao in Portuguese)
-knowledge-base/        # 131 notes, no subfolders (Portuguese: the rule, and its ID)
+knowledge-base/        # 131 notes, no subfolders (the rule, and its ID; being migrated from Portuguese to English)
 build/                 # Adapters, index, standalone .skill packager, link and frontmatter checks
 dist/claude-code/      # Built plugins, committed
 .claude-plugin/        # marketplace.json

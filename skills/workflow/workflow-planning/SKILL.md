@@ -4,7 +4,7 @@ descricao: Turns an accepted decision into executable work — names the perfil/
 tipo: skill
 familia: workflow
 idioma: en
-fonte: "[Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md)"
+fonte: "[Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md)"
 tags:
   - skill
   - workflow
@@ -13,10 +13,10 @@ tags:
 
 # workflow-planning
 
-> **Source of this skill:** [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md), §4.2 and the `WF-PLAN-*` / `WF-CORE-*` rules in §6.
+> **Source of this skill:** [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md), §4.2 and the `WF-PLAN-*` / `WF-CORE-*` rules in §6.
 > This skill **does not contain** the text of the rules — it says what to decide, in what order, and to whom to hand it off.
 
-Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §7.
+Contract this skill implements: [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §7.
 
 > **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`, `WF-CORE-08`).** The gates, the
 > decomposition and the plan in `tasks/` go to `project-manager`; boundaries, `design.md` and
@@ -46,11 +46,11 @@ Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../k
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §2 | the four-pillar table, to confirm entry condition |
+| 1 | [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §2 | the four-pillar table, to confirm entry condition |
 | 2 | Same hub, §4.2 | the five gates and the test-cost table — the core of this skill |
 | 3 | Same hub, §6 `WF-CORE-*` and `WF-PLAN-*` | the 15 rules this skill enforces |
-| 4 | Same hub, §5 "Lacunas" | which gaps this pillar must close before a unit leaves |
-| 5 | Same hub, §5 "Onde o artefato mora" and `WF-SPEC-*` | which `.specs/` files this scope needs |
+| 4 | Same hub, §5 "Gaps" | which gaps this pillar must close before a unit leaves |
+| 5 | Same hub, §5 "Where the artifact lives" and `WF-SPEC-*` | which `.specs/` files this scope needs |
 
 The templates, the `DOC-*` rules and the owner's review load inside `workflow-spec`, not here.
 
@@ -127,6 +127,11 @@ test type at the cheapest level that proves it, and an invariant only an E2E pro
 Decide now, not at validation time, what focused checks and what evidence this unit's
 completion will require — the next pillar inherits this plan, it does not invent one.
 
+An execution scope arrives with its subtype, and the subtype sets the floor of the evidence
+(hub §4.1): a **fix** needs the cited rule and a case that fails today; a **refactor** needs
+the existing tests passing unchanged; a **technical adjustment** needs a before/after
+measurement or a check of the adjustment.
+
 For each unit, name the test types the Validation will run (`WF-PLAN-06`), from the table in
 hub §4.2:
 
@@ -153,7 +158,7 @@ sides are built on it. The contracts come from the "Shared contracts" table in `
 Call `workflow-spec` for `.specs/<capability>/tasks/NNNN-<slug>.md`, numbered after the last
 plan of the capability (`WF-SPEC-08`); `project-manager` writes it: one Task per unit that
 passed the gates, with owner, dependencies, inputs, acceptance, evidence and test types.
-Every scope gets this file, including an implementation detail, and no project turns it off
+Every scope gets this file, including execution, and no project turns it off
 (`WF-SPEC-03`, `WF-SPEC-07`). A Task whose inputs are not accepted yet is listed, but it is
 not ready (`WF-SPEC-04`); the file itself is `Ready` only on the owner's answer (`WF-SPEC-06`).
 
@@ -238,7 +243,7 @@ both are caught below it (`WF-PLAN-06`).
 
 ## Related
 
-- [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — source of this skill, §4.2, §6
+- [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — source of this skill, §4.2, §6
 - `workflow-research` · `workflow-implementation` — the neighbors
 - `workflow-spec` — writes every `.specs/` file of this pillar and records the owner's approval
 - `project-manager` · `software-architect` — where cronograma/risk and boundary disputes go

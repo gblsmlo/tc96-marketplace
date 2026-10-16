@@ -1,7 +1,7 @@
 ---
 name: workflow-implementation
 description: Executes a ready work unit without reopening product decisions — confirms readiness, keeps scope to what the unit decided, preserves explicit contracts, and decides when to stop and return a pillar instead of deciding ad-hoc, citing `WF-IMPL-*` and `WF-CORE-*` IDs. Use once a unit has acceptance criteria and an owning perfil from `workflow-planning`. Do not use to decide what to build — that is `workflow-research` or `workflow-planning`. Do not use to prove the change is correct — that is `workflow-validation`.
-fonte: "[Fluxo de Entrega — Quatro Pilares](../../referencias/fluxo-de-entrega-quatro-pilares.md)"
+fonte: "[Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md)"
 tags:
   - skill
   - workflow
@@ -10,10 +10,10 @@ tags:
 
 # workflow-implementation
 
-> **Source of this skill:** [Fluxo de Entrega — Quatro Pilares](../../referencias/fluxo-de-entrega-quatro-pilares.md), §4.3 and the `WF-IMPL-*` / `WF-CORE-*` rules in §6.
+> **Source of this skill:** [Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md), §4.3 and the `WF-IMPL-*` / `WF-CORE-*` rules in §6.
 > This skill **does not contain** the text of the rules — it says what to decide, in what order, and to whom to hand it off.
 
-Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../referencias/fluxo-de-entrega-quatro-pilares.md) §7.
+Contract this skill implements: [Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md) §7.
 
 > **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`).** The unit runs in the agent planning
 > named as its owner (`frontend-developer`, `backend-developer`, `devops-security`), called as a
@@ -49,9 +49,9 @@ Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../refe
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Fluxo de Entrega — Quatro Pilares](../../referencias/fluxo-de-entrega-quatro-pilares.md) §4.3, and the edge table in §4.1 | the questions before the first line and the stop-and-return table — the core of this skill |
+| 1 | [Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md) §4.3, and the edge table in §4.1 | the questions before the first line and the stop-and-return table — the core of this skill |
 | 2 | Same hub, §6 `WF-CORE-*` and `WF-IMPL-*` | the 15 rules this skill enforces |
-| 3 | Same hub, §5 "Lacunas" | how a return names who decides its gap and where it closes |
+| 3 | Same hub, §5 "Gaps" | how a return names who decides its gap and where it closes |
 
 References in this skill:
 
@@ -196,7 +196,7 @@ Per `WF-IMPL-05`, it gets fixed here and recorded as evidence, not escalated as 
 
 ## Related
 
-- [Fluxo de Entrega — Quatro Pilares](../../referencias/fluxo-de-entrega-quatro-pilares.md) — source of this skill, §4.3, §6
+- [Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md) — source of this skill, §4.3, §6
 - `test-design` — where the test-level decision comes from
 - `frontend-developer` · `backend-developer` — the perfis that carry out this pillar
 - `workflow-validation` — always the next stop

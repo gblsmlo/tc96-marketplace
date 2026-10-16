@@ -58,5 +58,5 @@ Delete this section when the PR does not touch a product decision. -->
 ## Related
 
 - `../../workflow-spec/references/template-epic.md`, `template-story.md`, `template-task.md` — the work items this PR links back to
-- [Fluxo de Entrega — Quatro Pilares](../../../referencias/fluxo-de-entrega-quatro-pilares.md) §4.4 — the evidence-proportionality tree behind the Validation section
+- [Delivery Flow — Four Pillars](../../../referencias/fluxo-de-entrega-quatro-pilares.md) §4.4 — the evidence-proportionality tree behind the Validation section
 - Reference model: lemind `.github/pull_request_template.md`

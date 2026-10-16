@@ -1,7 +1,7 @@
 ---
 name: workflow-spec
 description: Writes and records one spec document in `.specs/` — PRD, design or RFC, ADR, user experience, an increment's plan, or a board item (Epic, Story, Task) — from the template it owns, in the project's recorded document set, as a `Draft` the owner reviews before any status moves to approved, citing `WF-SPEC-*` and `DOC-*` IDs. Use when a pillar needs a file written, when the owner asks for an ADR or a story outside a run, or when a project has not yet decided which documents it keeps. Do not use to decide what the document says — that is the owning agent (`product-manager`, `software-architect`, `product-designer`, `project-manager`). Do not use to decide whether a document is needed at all — that is the scope from `workflow-research`.
-fonte: "[Fluxo de Entrega — Quatro Pilares](../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 e [Documentos de Decisão — PRD, RFC e ADR](../../referencias/documentos-de-decisao-prd-rfc-adr.md)"
+fonte: "[Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 e [Decision Documents — PRD, RFC and ADR](../../referencias/documentos-de-decisao-prd-rfc-adr.md)"
 tags:
   - skill
   - workflow
@@ -11,7 +11,7 @@ tags:
 
 # workflow-spec
 
-> **Source of this skill:** [Fluxo de Entrega — Quatro Pilares](../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 and the `WF-SPEC-*` rules in §6; [Documentos de Decisão — PRD, RFC e ADR](../../referencias/documentos-de-decisao-prd-rfc-adr.md) §2–§5.
+> **Source of this skill:** [Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 and the `WF-SPEC-*` rules in §6; [Decision Documents — PRD, RFC and ADR](../../referencias/documentos-de-decisao-prd-rfc-adr.md) §2–§5.
 > This skill **does not contain** the text of the rules — it says which file to write, from which template, by whom, and how the owner approves it.
 
 > **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`).** The content of every file is written
@@ -47,8 +47,8 @@ tags:
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Fluxo de Entrega — Quatro Pilares](../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 and `WF-SPEC-*` | where each file lives, and the eight rules this skill enforces |
-| 2 | [Documentos de Decisão — PRD, RFC e ADR](../../referencias/documentos-de-decisao-prd-rfc-adr.md) §2, §3 | which document answers which question, and when it freezes |
+| 1 | [Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 and `WF-SPEC-*` | where each file lives, and the eight rules this skill enforces |
+| 2 | [Decision Documents — PRD, RFC and ADR](../../referencias/documentos-de-decisao-prd-rfc-adr.md) §2, §3 | which document answers which question, and when it freezes |
 | 3 | Same note, the `DOC-*` family of the document being written | only that family: `DOC-PRD-*` for a PRD, `DOC-RFC-*` for a design, `DOC-ADR-*` for an ADR |
 
 **Never load** hub §4.1–§4.4. The pillar that called this skill already decided the scope and
@@ -194,7 +194,7 @@ lacunas:
 proximo: "<the calling pillar's next step, or none>"
 ```
 
-Every open gap in the file joins `lacunas` in the same shape (hub §5 "Lacunas",
+Every open gap in the file joins `lacunas` in the same shape (hub §5 "Gaps",
 `WF-CORE-09`). The calling pillar continues only when `lacunas` holds no unapproved file it
 depends on (`WF-SPEC-04`).
 
@@ -216,7 +216,7 @@ one real alternative and its cost, and returns the path. Step 4: the owner reads
 
 ## Related
 
-- [Fluxo de Entrega — Quatro Pilares](../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 — where each file lives, `WF-SPEC-*`
-- [Documentos de Decisão — PRD, RFC e ADR](../../referencias/documentos-de-decisao-prd-rfc-adr.md) — what each decision document is, `DOC-*`
+- [Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 — where each file lives, `WF-SPEC-*`
+- [Decision Documents — PRD, RFC and ADR](../../referencias/documentos-de-decisao-prd-rfc-adr.md) — what each decision document is, `DOC-*`
 - `workflow-research` · `workflow-planning` — the pillars that call this skill
 - `workflow-validation` — owns the PR template, the one change artifact not written here

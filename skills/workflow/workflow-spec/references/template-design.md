@@ -4,7 +4,7 @@ Tool-neutral, saved as `.specs/<capability>/design.md`. It is the capability's *
 boundaries, contracts and the decisions behind them. `software-architect` writes it in
 `workflow-planning` when the scope is architecture, or when a product change needs a boundary
 or contract (`WF-SPEC-03`). Rules: `DOC-RFC-*` in
-[Documentos de Decisão — PRD, RFC e ADR](../../../../knowledge-base/documentos-de-decisao-prd-rfc-adr.md).
+[Decision Documents — PRD, RFC and ADR](../../../../knowledge-base/documentos-de-decisao-prd-rfc-adr.md).
 
 It runs in one of two modes, declared in the header (`DOC-RFC-03`):
 
@@ -83,7 +83,7 @@ In `design-doc` mode, write "No real alternative" and say why (`DOC-RFC-03`).
 ### Open questions
 
 - [what must be answered before `Accepted` — decides: `dono` or the agent — closes in:
-  `planejamento` (hub §5 "Lacunas", `WF-CORE-09`)]
+  `planejamento` (hub §5 "Gaps", `WF-CORE-09`)]
 
 ### Decision
 
@@ -118,4 +118,4 @@ ADRs it produced (`DOC-RFC-04`).]
 - `template-adr.md`: one per decision that outlives the increment
 - `template-tasks.md`: the units this design is implemented by
 - `software-architect`: the agent that writes this file
-- [Fluxo de Entrega — Quatro Pilares](../../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §5: where this file sits in `.specs/`
+- [Delivery Flow — Four Pillars](../../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §5: where this file sits in `.specs/`

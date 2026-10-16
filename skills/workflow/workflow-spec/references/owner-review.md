@@ -58,4 +58,4 @@ run resumes from that file.
 ## Related
 
 - `../SKILL.md` Step 4 — where this protocol runs
-- [Documentos de Decisão — PRD, RFC e ADR](../../../../knowledge-base/documentos-de-decisao-prd-rfc-adr.md) §3 — the lifecycle of each decision document
+- [Decision Documents — PRD, RFC and ADR](../../../../knowledge-base/documentos-de-decisao-prd-rfc-adr.md) §3 — the lifecycle of each decision document

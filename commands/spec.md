@@ -16,7 +16,7 @@ reviewed, and the planning envelope. No code.
 This command runs two pillars, `workflow-research` and `workflow-planning`, and stops. It does
 not decide anything those skills do not already decide; it fixes their order and the stop.
 Every file is written through `workflow-spec`.
-Rules: `WF-SPEC-*` in [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §5.
+Rules: `WF-SPEC-*` in [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §5.
 
 ---
 
@@ -44,7 +44,7 @@ before writing to `AGENTS.md`.
 
 Run `workflow-research` on the request.
 
-- The scope (product, architecture, implementation detail) decides which files exist (`WF-SPEC-03`).
+- The scope (product, architecture, execution) decides which files exist (`WF-SPEC-03`).
 - Product scope: `workflow-spec` starts `product-manager` on `.specs/<capability>/requirements.md`,
   or on an amendment to it when it is already `Approved`, and returns the `Draft` to the owner: path, problem sentence, open gaps, "approve, change,
   or reject?".

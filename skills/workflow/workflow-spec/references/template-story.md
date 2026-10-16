@@ -65,5 +65,5 @@ one.]
 
 - `template-epic.md` — the parent this Story belongs to
 - `template-task.md` — the children this Story decomposes into
-- [Fluxo de Entrega — Quatro Pilares](../../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §4.2 — the acceptance gate this template satisfies
+- [Delivery Flow — Four Pillars](../../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §4.2 — the acceptance gate this template satisfies
 - Reference model: lemind `docs/product/templates/story.md`

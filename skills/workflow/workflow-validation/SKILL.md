@@ -4,7 +4,7 @@ descricao: Decides how much evidence a change needs, proportional to its risk, a
 tipo: skill
 familia: workflow
 idioma: en
-fonte: "[Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md)"
+fonte: "[Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md)"
 tags:
   - skill
   - workflow
@@ -13,10 +13,10 @@ tags:
 
 # workflow-validation
 
-> **Source of this skill:** [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md), §4.4 and the `WF-VAL-*` / `WF-CORE-*` rules in §6.
+> **Source of this skill:** [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md), §4.4 and the `WF-VAL-*` / `WF-CORE-*` rules in §6.
 > This skill **does not contain** the text of the rules — it says what to decide, in what order, and to whom to hand it off.
 
-Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §7.
+Contract this skill implements: [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §7.
 
 > **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`, `WF-CORE-08`).** The diff goes to
 > `code-reviewer`; running the checks the plan named goes to `repo-operator`, on the cheapest
@@ -50,7 +50,7 @@ Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../k
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §4.4 | the evidence-proportionality tree — the core of this skill |
+| 1 | [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §4.4 | the evidence-proportionality tree — the core of this skill |
 | 2 | Same hub, §6 `WF-CORE-*` and `WF-VAL-*` | the 14 rules this skill enforces |
 | 3 | Same hub, §0.3 | the verification × validation distinction this pillar depends on |
 
@@ -116,7 +116,7 @@ diagnoses.
 
 Fixing the wrong pillar's problem inside this one is never the answer — a code fix for a
 missing decision just produces a different wrong answer, faster. A gap routed back names who
-decides it, in `decide` (`WF-CORE-09`, hub §5 "Lacunas").
+decides it, in `decide` (`WF-CORE-09`, hub §5 "Gaps").
 
 ---
 
@@ -169,6 +169,6 @@ this approval flow at all is a separate, later question for `product-manager` (`
 
 ## Related
 
-- [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — source of this skill, §4.4, §6
+- [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — source of this skill, §4.4, §6
 - [Teste de Software](../../../knowledge-base/teste-de-software.md) — §0, verification × validation
 - `code-reviewer` · `qa-engineer` · `devops-security` — who carries out this pillar
