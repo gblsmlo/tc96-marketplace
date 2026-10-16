@@ -19,8 +19,9 @@ tags:
 
 Contract this skill implements: [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §7.
 
-> **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`).** Reading code to gather facts goes to
-> `repo-explorer`, which returns facts with `file:line`, not file contents. The scope decision
+> **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`, `WF-CORE-10`).** Reading code to gather
+> facts goes to `repo-explorer`, one bounded question per call, the independent ones sent at once
+> (Step 2); it returns facts with `file:line`, not file contents. The scope decision
 > goes to `product-manager`, `product-designer` or `software-architect`. Never delegate to a
 > generic agent. The orchestrating conversation keeps the fact list and the envelope, never
 > the code that was read or a full report.
@@ -48,9 +49,10 @@ Contract this skill implements: [Delivery Flow — Four Pillars](../../../knowle
 | --- | --- | --- |
 | 1 | [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §0, §2 | the pillar × role distinction, the four-pillar table |
 | 2 | Same hub, §4.1 | the scope decision tree and the edge sweep — the core of this skill |
-| 3 | Same hub, §6 `WF-CORE-*` and `WF-RES-*` | the 15 rules this skill enforces |
+| 3 | Same hub, §6 `WF-CORE-*` and `WF-RES-*` | the 16 rules this skill enforces |
 | 4 | Same hub, §5 "Gaps" | how a gap names who decides it and where it closes |
 | 5 | Same hub, §5 "Where the artifact lives" and `WF-SPEC-*` | whether this scope writes `requirements.md` |
+| 6 | Same hub, §7 "Core self-check" | the rows C1–C6 that open the Step 6 self-check |
 
 **Never load §4.2–§4.4** (planning gates, implementation stop conditions, validation
 proportionality) — those belong to the sibling skills, loaded only when the handoff reaches
@@ -76,9 +78,14 @@ want first.
 
 ## Step 2 — Separate fact, hypothesis, decision, and gap
 
-`references/separar-fato-hipotese-decisao.md`. Send `repo-explorer` a bounded question (which
-files, which behavior) to read the existing code and tests; read tickets and prior decisions
-yourself. Sort everything you find into exactly one of these four buckets — never leave
+`references/separar-fato-hipotese-decisao.md`. Split what you need to know from the existing code
+and tests into fact questions, each bounded to which files and which behavior
+([`CC-PAR-04`](../../../knowledge-base/claude-code-paralelismo-e-escala.md)). Send the independent
+ones to `repo-explorer` at once, one call per question, in the shared directory — they only read
+(`WF-CORE-10`). Keep the calls alike — same agent, same brief shape, only the question changes —
+so they share the cached prefix ([Claude Code - Paralelismo e
+Escala](../../../knowledge-base/claude-code-paralelismo-e-escala.md) §4.3). A question that
+depends on another's answer waits for it. Read tickets and prior decisions yourself. Sort everything you find into exactly one of these four buckets — never leave
 an item unsorted (`WF-RES-01`). Every gap names who decides it and the last pillar it may stay
 open in, `pesquisa` or `planejamento` (`WF-CORE-09`, hub §5 "Gaps").
 
@@ -152,18 +159,17 @@ to Step 3.
 
 | # | Check | Rule |
 | --- | --- | --- |
-| 1 | the problem + outcome sentence exists | — |
-| 2 | facts, hypotheses, decisions, and gaps are sorted, not mixed | `WF-RES-01` |
-| 3 | code was treated as evidence of the present, not authority over intent | `WF-RES-02` |
-| 4 | the scope (product / architecture / execution) is classified; an execution scope names its subtype and cites where its rule is written | `WF-RES-05` |
-| 5 | every user-behavior claim has a source | `WF-RES-04` |
-| 6 | the output is a decision, not just a report | `WF-RES-03` |
-| 7 | every rule and scenario went through the edge sweep; each applicable edge is answered with a source, out as a non-goal, or a gap | `WF-RES-06` |
-| 8 | remaining gaps are declared explicitly, each with `decide` and `fecha-em`; none is left for implementation or validation | `WF-CORE-05`, `WF-CORE-09` |
-| 9 | code was read by `repo-explorer`, and the decision went to a named agent | `WF-CORE-06` |
-| 10 | this conversation holds the envelope and the fact list, not code or a full report | `WF-CORE-07` |
-| 11 | a product scope has `requirements.md` written by `product-manager` through `workflow-spec`; other scopes have none | `WF-SPEC-01`, `WF-SPEC-03` |
-| 12 | `requirements.md` is `Approved` by the owner's answer, not by the writer | `WF-SPEC-06` |
+| 1 | core self-check passed (hub §7) | `WF-CORE-01`, `WF-CORE-06` – `WF-CORE-10` |
+| 2 | the problem + outcome sentence exists | — |
+| 3 | facts, hypotheses, decisions, and gaps are sorted, not mixed; a claim without evidence is a hypothesis | `WF-RES-01`, `WF-CORE-05` |
+| 4 | code was treated as evidence of the present, not authority over intent | `WF-RES-02` |
+| 5 | the scope (product / architecture / execution) is classified; an execution scope names its subtype and cites where its rule is written | `WF-RES-05` |
+| 6 | every user-behavior claim has a source | `WF-RES-04` |
+| 7 | the output is a decision, not just a report | `WF-RES-03` |
+| 8 | every rule and scenario went through the edge sweep; each applicable edge is answered with a source, out as a non-goal, or a gap | `WF-RES-06` |
+| 9 | code was read by `repo-explorer`, one bounded question per call, the independent ones at once | `WF-CORE-06`, `WF-CORE-10`, `CC-PAR-04` |
+| 10 | a product scope has `requirements.md` written by `product-manager` through `workflow-spec`; other scopes have none | `WF-SPEC-01`, `WF-SPEC-03` |
+| 11 | `requirements.md` is `Approved` by the owner's answer, not by the writer | `WF-SPEC-06` |
 
 ---
 
