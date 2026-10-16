@@ -64,7 +64,8 @@ points to it (`WF-SPEC-01`). The scope decides which files exist (`WF-SPEC-03`);
 command runs both pillars and stops before implementation (`WF-SPEC-05`). Every file is
 written through `workflow-spec`, which owns the templates, reads the project's document set
 (`WF-SPEC-07`) and puts each `Draft` in front of the owner before any status moves
-(`WF-SPEC-06`).
+(`WF-SPEC-06`); planning's drafts go together, as one bundle in one message (hub §5, "The
+planning bundle").
 
 | File | Pillar that asks | Agent that writes | Template, in `workflow-spec/references/` |
 | --- | --- | --- | --- |
@@ -110,7 +111,8 @@ as of ADR 117 (`docs/decisions/117-o-multica-e-autoridade-unica-do-backlog.md`).
 The full "discover → task" path — where product Discovery ends and the board begins, and
 which pillar owns each board level — is the fourth distinction in the hub, §0.4 and the
 board column in §3: research never opens a board item, planning is where Epic → Story → Task
-is born, implementation executes one Task, validation reviews the PR that closes it.
+is born, each implementer instance executes one Task and independent Tasks run side by side
+(`WF-CORE-10`), validation reviews the PR that closes it.
 
 Two decisions were made adapting that model into the neutral source, both confirmed with the
 project owner while dogfooding `workflow-research` on this exact task:
@@ -128,7 +130,7 @@ project owner while dogfooding `workflow-research` on this exact task:
 
 Unlike the mature families (`react`, `test`, `http`), this one ships lean on purpose:
 
-- **No `scripts/gerar-mapa-de-ids.sh`.** The 40 `WF-*` rules live in one hub section, cited
+- **No `scripts/gerar-mapa-de-ids.sh`.** The 42 `WF-*` rules live in one hub section, cited
   inline by each skill — a generator earns its keep once a second consumer needs the same map.
 - **No satellite notes.** If the hub grows past what one file should hold, the natural cut is
   one satellite per pillar (four), not a replica of `teste-de-software.md`'s seven.
