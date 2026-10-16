@@ -2,7 +2,8 @@
 
 Which documents a project keeps is the owner's decision, made once and read on every run
 (`WF-SPEC-07`). The scope still decides which files a given capability needs (`WF-SPEC-03`); the
-record only says which of those this project writes at all.
+record only says which of those this project writes at all, and, optionally, how big a Task may
+be and how many run at once (hub §4.2 "Small units" and "Waves").
 
 ---
 
@@ -29,6 +30,16 @@ its default.
 | User experience | `.specs/<capability>/user-experience.md` | on | yes |
 | Plan | `.specs/<capability>/tasks/NNNN-<slug>.md` | on | **no** — the implementer reads only the current plan |
 | Board items (Epic, Story, Task) | the project's tracker | off | yes |
+
+In the same message, two optional rows the owner may fill or skip:
+
+| Setting | What it holds | Unanswered |
+| --- | --- | --- |
+| Review budget | the most changed lines, review families and owners one Task may have | the hub §4.2 default |
+| Wave width | how many writing Tasks run at once | the hub §4.2 default |
+
+They are asked only here, with the document set. A record that exists without them means the
+hub §4.2 defaults; it is never a reason to ask again (`WF-SPEC-07`).
 
 Then the second question, separately: "May I record this in `AGENTS.md`, under a `## Specs`
 section?" Write there only on an explicit yes; on no, write `.specs/README.md`. On no to both,
@@ -60,9 +71,13 @@ Spec files live in `.specs/`, written as `Draft` and approved by the owner in th
 | User experience | off | — |
 | Plan | on | `.specs/<capability>/tasks/NNNN-<slug>.md` |
 | Board items | off | — |
+
+Review budget: at most 200 changed lines, one review family, one owner per Task.
+Wave width: 3 writing Tasks at once.
 ```
 
-In `.specs/README.md` the same block goes under a `# Specs` title. Changing a row later is an
+The last two lines appear only when the owner answered them. In `.specs/README.md` the same
+block goes under a `# Specs` title. Changing a row later is an
 owner decision: edit the record, and note the date.
 
 ---
@@ -70,4 +85,4 @@ owner decision: edit the record, and note the date.
 ## Related
 
 - `../SKILL.md` Step 2 — where this record is read
-- [Delivery Flow — Four Pillars](../../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §5 — the files and the scope table
+- [Delivery Flow — Four Pillars](../../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §5 — the files and the scope table; §4.2 — the review budget and wave width, and their defaults

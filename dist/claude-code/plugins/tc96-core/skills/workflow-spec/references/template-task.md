@@ -17,6 +17,7 @@ guessed at.
 | `capability` | inherited from the Story/Epic chain |
 | `milestone` | optional roadmap block |
 | `cycle` | optional planning-cycle marker (e.g. an ISO week), mainly used at Task level |
+| `wave` | the wave of the plan this Task belongs to, from its **Order** (hub §4.2 "Waves"); none outside a plan |
 | `discipline` | one of: engineering · design-system · design · UX · UI · product |
 | `title` | `<what this delivers, verb-first> [<DISCIPLINE>] [STORY-<capability>-NNN]` |
 
@@ -44,7 +45,22 @@ File names, routes, and component names belong here — whoever reads this is wh
 
 **Enables scenarios:** [the scenario numbers, from which Story.]
 
-**Surface:** [files, packages, routes, and components this Task touches.]
+**Surface:** [files, packages, routes, and components this Task touches. Two Tasks run side by
+side only when their Surfaces share no file, except a contract an earlier Task landed; the
+reviewer compares the diff's file list with this line before reading code (hub §4.2, §4.4).]
+
+**Size:** [estimated changed lines, tests included, and the review families the diff touches.
+Inside the review budget — by default at most 300 changed lines, two families, one owner;
+above it, the Task is re-sliced by acceptance scenario or expand → migrate → contract step,
+never by layer or file (`WF-PLAN-07`).]
+
+**Risk:** [`contract` · `security` · `focused` — the hub §4.4 tree, applied when the Task was
+planned. Validation reads it, and re-runs the tree only if the diff leaves the Surface or
+touches a contract the plan did not foresee (hub §4.4, `WF-PLAN-06`).]
+
+**Edges answered:** [the acceptance lines and the `decisoes` that answer this Task's edges, by
+link or line. The implementer's question list starts here instead of sweeping them again
+(`WF-IMPL-06`).]
 
 **Evidence:** [the command that proves it, and the expected reading — a green test with the
 exact count, a regenerated status artifact, an authenticated screenshot. "Validated manually"

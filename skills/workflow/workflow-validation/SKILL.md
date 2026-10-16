@@ -21,8 +21,8 @@ Contract this skill implements: [Delivery Flow — Four Pillars](../../../knowle
 > **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`, `WF-CORE-08`).** The diff goes to
 > `code-reviewer`; running the checks the plan named goes to `repo-operator`, on the cheapest
 > tier; diagnosing a check that failed, or a test level in dispute, goes to `qa-engineer`; a
-> security finding to `devops-security`; the PR body, push and PR, on the owner's answer, to
-> `repo-operator`. Never delegate to a generic agent. Check output (test logs, lint) stays
+> security finding to `devops-security`; the PR body, push and PR, on the plan's **Delivery**
+> authorization or the owner's answer, to `repo-operator`. Never delegate to a generic agent. Check output (test logs, lint) stays
 > inside the agent that ran it; the orchestrating conversation receives the envelope with pass,
 > fail, skipped and unavailable counts, and the findings.
 
@@ -51,8 +51,9 @@ Contract this skill implements: [Delivery Flow — Four Pillars](../../../knowle
 | Order | Load | Why |
 | --- | --- | --- |
 | 1 | [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §4.4 | the evidence-proportionality tree — the core of this skill |
-| 2 | Same hub, §6 `WF-CORE-*` and `WF-VAL-*` | the 14 rules this skill enforces |
+| 2 | Same hub, §6 `WF-CORE-*` and `WF-VAL-*` | the 16 rules this skill enforces |
 | 3 | Same hub, §0.3 | the verification × validation distinction this pillar depends on |
+| 4 | the Task's **Surface** and **Risk** lines, and the plan's **Delivery** ([`template-task.md`](../workflow-spec/references/template-task.md), [`template-tasks.md`](../workflow-spec/references/template-tasks.md)) | what the reviewer compares, which tree branch applies, and whether push and PR are authorized |
 
 References in this skill:
 
@@ -64,18 +65,27 @@ References in this skill:
 
 ---
 
-## Step 1 — Inspect in a fresh, independent context
+## Step 1 — Start review, checks and security together
+
+Hub §4.4, "Review and checks start together". Three readers start at once, in the Task's
+directory, and none waits for another (`WF-CORE-10`): `code-reviewer` on the diff, `repo-operator`
+on the plan's checks (Step 3) and, when the Task's **Risk** is `security`, `devops-security` on
+the sensitive path.
 
 `references/revisao-em-contexto-independente.md`. The implementer does not approve the
-implementer's own change (`WF-VAL-01`) — route to `code-reviewer` for the diff inspection, in
-a context that received only the diff and the acceptance criterion, never the conversation
-that produced the change.
+implementer's own change (`WF-VAL-01`) — `code-reviewer` runs in fresh context and receives the
+input listed there, never the conversation that produced the change. Before reading code it
+compares the diff's file list with the Task's **Surface**: a file outside it is a finding
+(`WF-IMPL-03`). It reads the checks' envelope when Step 3 returns it, and does not run the
+checks again.
 
 ---
 
 ## Step 2 — Decide the evidence, proportional to risk
 
-`references/proporcionalidade-da-evidencia.md`, hub §4.4:
+`references/proporcionalidade-da-evidencia.md`, hub §4.4. Start from the Task's **Risk** line:
+the tree already ran in planning (`WF-PLAN-06`). Run it again only when the diff leaves the
+Surface (Step 1) or touches a contract the plan did not foresee, and report that departure.
 
 ```
 Does the change alter a public contract (API, schema, route)?
@@ -95,8 +105,9 @@ do not; without that sentence, the gap is the plan's and goes back to `workflow-
 
 ## Step 3 — Run the checks, report separately
 
-`repo-operator` runs exactly the commands the plan's evidence names, in its order, and returns
-each one's outcome (`WF-CORE-08`). Report pass / fail / skipped / unavailable as distinct
+Started in Step 1, not after the review. `repo-operator` runs exactly the commands the plan's
+evidence names, in its order, and returns each one's outcome (`WF-CORE-08`); that envelope also
+goes to the reviewer. Report pass / fail / skipped / unavailable as distinct
 outcomes — never collapse "skipped" into "passed." A failure goes to `qa-engineer` for the
 diagnosis only when its cause is not obvious from the first failing lines; the operator never
 diagnoses.
@@ -124,14 +135,16 @@ decides it, in `decide` (`WF-CORE-09`, hub §5 "Gaps").
 
 | # | Check | Rule |
 | --- | --- | --- |
-| 1 | the review happened in a context independent from the implementer | `WF-VAL-01` |
-| 2 | the evidence gathered matches the risk, not a fixed default | `WF-VAL-02` |
-| 3 | business acceptance was **not** required to close this pillar technically | `WF-VAL-03` |
-| 4 | any failure was routed to its actual pillar of origin | `WF-VAL-04` |
-| 5 | any delivery metric cited comes from measured data, not impression | `WF-VAL-05` |
-| 6 | this pillar's output is a clear result, not a vague "looks fine" | `WF-CORE-01` |
-| 7 | review and checks ran in named agents, and only their envelopes came back | `WF-CORE-06`, `WF-CORE-07` |
-| 8 | the checks were the types the plan named, run by `repo-operator`; any costlier type carries the sentence of what only it catches | `WF-PLAN-06`, `WF-CORE-08` |
+| 1 | core self-check passed (hub §7) | `WF-CORE-01`, `WF-CORE-06`–`WF-CORE-10` |
+| 2 | the review happened in a context independent from the implementer | `WF-VAL-01` |
+| 3 | review, checks and, for a `security` Task, `devops-security` started together; the reviewer read the checks' envelope instead of running them | hub §4.4 |
+| 4 | the diff's file list was compared with the Surface before reading code; each file outside it is a finding | `WF-IMPL-03` |
+| 5 | the evidence matches the Task's `Risk`; the tree re-ran only on a departure from the Surface or the plan's contracts | `WF-VAL-02`, `WF-PLAN-06` |
+| 6 | the checks were the types the plan named; any costlier type carries the sentence of what only it catches | `WF-PLAN-06`, `WF-VAL-04` |
+| 7 | business acceptance was **not** required to close this pillar technically | `WF-VAL-03` |
+| 8 | any failure was routed to its actual pillar of origin | `WF-VAL-04` |
+| 9 | a re-review after a fix was the delta, in a new instance | `WF-VAL-06` |
+| 10 | any delivery metric cited comes from measured data, not impression | `WF-VAL-05` |
 
 ---
 
@@ -149,20 +162,26 @@ ask whether to continue. Send only the findings, never this review's conversatio
 round number decides who runs it (resume, one tier up, or back to planning), per the table in
 `workflow-implementation` Step 1
 ([`CC-CTX-01`, `CC-CTX-03`](../../../knowledge-base/claude-code-contexto-e-cache.md)).
-A unit that failed validation is reviewed again after the fix.
-A clean result ends the flow here. A push or PR that follows is visible to others and needs the
-owner's go-ahead; on that answer, `repo-operator` fills `template-pr.md` from the envelope,
-pushes and opens the PR, with the owner's words quoted in its request (`WF-CORE-08`).
+After the fix, Step 1 runs again as a delta re-review (`WF-VAL-06`, hub §4.4), and Step 3 runs
+in full.
+
+A clean result ends the flow here. Push and PR follow the plan's **Delivery** (hub §5
+"Delivery"): with the owner's authorization quoted there, `repo-operator` fills
+`template-pr.md` from the envelope, pushes and opens the PR, quoting those words in its request
+(`WF-CORE-08`); without it, ask once per wave, naming the Tasks that closed clean. Merging stays
+with the owner.
 
 ---
 
 ## Example
 
-Change: the backend unit for "discount above 50% requires approval." It does not touch a
-public contract by itself (internal validation only) and does not touch auth — so per §4.4,
-focused checks on the changed function are enough; a full E2E run is not required
-(`WF-VAL-02`). `code-reviewer` inspects the diff in fresh context and confirms the boundary
-case (`>=` vs `>`) is covered. Clean — closes technically. Whether managers actually want
+Change: the backend unit for "discount above 50% requires approval." Its **Risk** line reads
+`focused`: internal validation only, no public contract, no auth — so focused checks on the
+changed function are enough; a full E2E run is not required (`WF-VAL-02`). `code-reviewer` and
+`repo-operator` start together. The diff's files all sit inside the Surface, so the tree does
+not run again; the reviewer reads the checks' envelope and confirms the boundary case (`>=` vs
+`>`) is covered. Clean — closes technically, and the PR opens on the plan's quoted **Delivery**
+authorization. Whether managers actually want
 this approval flow at all is a separate, later question for `product-manager` (`WF-VAL-03`).
 
 ---

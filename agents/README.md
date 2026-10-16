@@ -105,6 +105,8 @@ flowchart LR
 
 Each agent declares in its final step who it hands off to, and the arrow is always accompanied by an artifact: spec, recorded decision, flow with states, code with evidence, findings report.
 
+Independent Tasks run side by side, in waves: each writer works in its own worktree, while reviewers and checks, which only read, share the main directory ([Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §4.2 "Waves", `WF-CORE-10`).
+
 This flowchart has a formal procedure in `skills/workflow/` — four skills, one per moment (research, planning, implementation, validation), that decide **when** to route to which of the thirteen agents, citing rules by ID in [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md). The diagram above remains the source of **who**; the newer note is the source of **when**.
 
 ## Model and effort per role
@@ -163,7 +165,7 @@ Sessions it opens inherit that choice unless it sets `model` and `effort` when o
 
 **Invoking.** *"use code-reviewer on this diff"*, *"ask software-architect to decide where the CPF validation lives"*. The lead agent also delegates on its own when the `description` matches the task — which is why `description` carries **when not to use** and names the neighboring agent.
 
-**Review in fresh context.** `code-reviewer` should receive **only the diff and the criteria**, never the conversation that produced the change (`CC-SES-07`), and the prompt must bound what counts as a finding (`CC-SES-10`). Fanning out several homogeneous reviewers (same model, effort, and tools) shares the cache ([Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)).
+**Review in fresh context.** `code-reviewer` should receive **only the diff, the Task's acceptance, its Surface, its risk class and the checks' envelope**, never the conversation that produced the change (`CC-SES-07`), and the prompt must bound what counts as a finding (`CC-SES-10`). After a fix, a new instance re-reviews only the delta: the open findings and the diff since the last reviewed commit (`WF-VAL-06`). Fanning out several homogeneous reviewers (same model, effort, and tools) shares the cache ([Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)).
 
 ## What these notes are
 
