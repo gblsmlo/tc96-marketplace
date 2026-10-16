@@ -29,7 +29,10 @@ verificado-em: 2026-09-23
 > layer and going straight to the tool.
 
 Sources consulted on **2026-09-23**; Myers and Wynne, added with the edge sweep (§4.1), on
-**2026-10-10**. See [Sources consulted](#sources-consulted).
+**2026-10-10**; the small-unit and wave rules (§4.2), on **2026-10-16**, rest on this project's
+own notes, [Trunk-based development](trunk-based-development.md) and
+[Claude Code - Paralelismo e Escala](claude-code-paralelismo-e-escala.md). See
+[Sources consulted](#sources-consulted).
 
 ---
 
@@ -98,7 +101,7 @@ work in this project.
 | # | Pillar | Enters when | Leaves with |
 | --- | --- | --- | --- |
 | 1 | **Research** | the problem, the expected behavior or a lasting decision is not clear | minimum decision resolved, with its edges swept (§4.1); evidence, risks, sources; gaps with who decides them and where they close (§5) |
-| 2 | **Planning** | the decision was accepted but the work is not executable yet | bounded work unit(s), dependencies, perfil, acceptance criteria, evidence plan with the test types |
+| 2 | **Planning** | the decision was accepted but the work is not executable yet | bounded work unit(s), dependencies, perfil, acceptance criteria, evidence plan with the test types; each unit with its Surface, Size, risk class and wave (§4.2) |
 | 3 | **Implementation** | the unit is ready and the behavior has already been decided | changed code or note, focused test, implementation evidence |
 | 4 | **Validation** | a change or delivery exists and needs proof | focused and repository checks, review findings, a clear result |
 
@@ -115,7 +118,7 @@ pillar is never Implementation.
 | --- | --- | --- | --- |
 | Research | `workflow-research` | `product-manager` · `product-designer` · `software-architect`; gathering facts from the code: `repo-explorer` | — no item yet; leaves with the decision that authorizes one (§0.4) |
 | Planning | `workflow-planning` | `project-manager` · `software-architect` | opens and decomposes Epic → Story → Task (`template-epic.md` · `template-story.md` · `template-task.md`) |
-| Implementation | `workflow-implementation` | `frontend-developer` · `backend-developer` | executes one Task at a time — the only level the implementer reads (`WF-IMPL-03`) |
+| Implementation | `workflow-implementation` | `frontend-developer` · `backend-developer` | each implementer instance executes one Task — the only level the implementer reads (`WF-IMPL-03`); independent Tasks run side by side, as a wave (`WF-CORE-10`) |
 | Validation | `workflow-validation` | `qa-engineer` · `code-reviewer` · `devops-security` (when the finding is about security) | reviews the PR (`template-pr.md`), with a one-way link back to the Task/Story |
 
 The agents column is also the closed list of who can receive a delegated pillar
@@ -132,8 +135,9 @@ table is what needs updating, not the other way around.
 The board level column is the whole "discover → task" path, end to end: Research resolves the
 decision (the `product-manager` calls this Discovery); Planning is where that decision first
 becomes a board item, decomposes into Stories and is sliced into Tasks, always through the
-four gates (§4.2); Implementation executes exactly one Task at a time; Validation reviews the
-PR that references that Task. No pillar writes at two board levels at once, and no level is
+four gates (§4.2); each Implementation instance executes exactly one Task, and Tasks that do not
+depend on each other run side by side (`WF-CORE-10`); Validation reviews the PR that references
+that Task. No pillar writes at two board levels at once, and no level is
 born outside the pillar that produces it — opening a Task directly, with no Story and no Epic,
 is decomposition without criteria (`WF-PLAN-03`), just as opening an Epic with no Research
 decision behind it is moving forward without a resolved decision (`WF-CORE-03`).
@@ -154,14 +158,14 @@ provider is in `agents/README.md`, "Model and effort per role".
 | Planning | `design.md` and ADRs | `software-architect` | alto · alto | the boundary decides the cost of everything that follows, including the tests (§4.2) |
 | Planning | `user-experience.md` | `product-designer` | medio · alto | structured, but open |
 | Planning | gates, the `tasks/` plan and the text of the board items | `project-manager` | medio · medio | template-driven |
-| Planning | publish to the board the text the plan already carries | `repo-operator` | rapido · baixo | literal copy; asks for the owner's reply |
+| Planning | publish to the board the text the plan already carries | `repo-operator` | rapido · baixo | literal copy; the owner's reply is asked in the planning bundle (§5) |
 | Implementation | code and focused test | `frontend-developer` · `backend-developer` | medio · medio | more tokens; Validation catches the error |
 | Implementation | commit of its own diff | the same implementer | medio · medio | the diff is already in its context; rereading it in another agent costs more |
 | Validation | run the plan's checks and report | `repo-operator` | rapido · baixo | long output; the result is the exit code |
 | Validation | review the diff | `code-reviewer` | medio · alto | it is the verification; nobody reviews it |
 | Validation | diagnose a check that failed | `qa-engineer` | medio · medio | judgment about the suite |
 | Validation | security finding | `devops-security` | alto · alto | a missed finding costs more than the tokens |
-| Validation | PR body, push, open the PR | `repo-operator` | rapido · baixo | template filled from the envelope; push and PR ask for the owner's reply |
+| Validation | PR body, push, open the PR | `repo-operator` | rapido · baixo | template filled from the envelope; push and PR need the owner's go-ahead, given once in the plan's `Delivery` or asked once per wave (§5) |
 | any | copy, move, rename, organize a folder | `repo-operator`, or whoever already has the command ready | rapido · baixo | the list or the layout has already been decided |
 | any | delete, overwrite, build and release | `repo-operator` | rapido · baixo | deleting, overwriting and publishing ask for the owner's reply |
 | any | orchestrate: envelopes, routing, talking to the owner | the main session | the person's choice | a plugin does not pin the session's model; the recommendation is in `agents/README.md` |
@@ -191,7 +195,9 @@ does not come along ([`CC-PAR-05`](claude-code-paralelismo-e-escala.md)). Whoeve
    per provider is in `agents/README.md`), in a `fresh` opening — a fork inherits the model;
 2. writes the brief so the session **calls** the owner as a subagent and takes care only of
    the envelope, Validation and the PR — "run as `backend-developer`" makes the session write
-   the code on the model it inherited, without the agent's body.
+   the code on the model it inherited, without the agent's body;
+3. gives a unit that writes its own worktree, and keeps work that only reads — facts, review,
+   checks — in the shared directory (`WF-CORE-10`, §4.2 "Waves").
 
 A session only opens another at the same tier or below; when the owner is `alto`, what moves
 up is the subagent, through its frontmatter.
@@ -273,7 +279,9 @@ A unit is only ready for Implementation after passing all of them:
    Without it, it goes back to `workflow-research`.
 2. **Decomposition gate** — only split into more than one unit if each has its own acceptance
    criteria, evidence and dependency (`WF-PLAN-03`). Splitting for the writer's convenience,
-   not along those boundaries, is cost fragmentation.
+   not along those boundaries, is cost fragmentation. The opposite also fails the gate: a unit
+   above the review budget is split, along those same boundaries (`WF-PLAN-07`), and a contract
+   two units share lands first as its own unit (`WF-PLAN-08`) — see "Small units" below.
 3. **Boundary gate** — which perfil (`frontend-developer`, `backend-developer`,
    `devops-security`...) owns each unit? "Fullstack" is never an answer (`WF-PLAN-05`).
 4. **Acceptance gate** — acceptance criteria written, not implicit (`WF-PLAN-04`), with one
@@ -308,11 +316,82 @@ is proved with a unit test and a `curl`; the same rule spread across the interfa
 proved with E2E. That is why each verifiable invariant in `design.md` and in an ADR names the
 test type that proves it, and an invariant only an E2E can prove says why.
 
+**The risk class is decided here too.** Each unit leaves with the §4.4 tree already applied to
+it: `contract` (it alters a public contract), `security` (it touches authentication,
+authorization or sensitive data) or `focused` (neither). Validation reads that class instead of
+deciding it again, and re-runs the tree only when the diff reaches beyond what the plan foresaw
+(§4.4, `WF-PLAN-06`).
+
+#### Small units: Surface, Size and the review budget
+
+A review is as long as the diff it reads, and it repeats on every fix round. So each unit
+declares, in the plan:
+
+| Field | What it holds | Who reads it |
+| --- | --- | --- |
+| **Surface** | the files, packages, routes and components the unit touches | the wave rule below, and the reviewer, who checks the diff against it first |
+| **Size** | the estimated changed lines, tests included, and the review families it touches | the decomposition gate |
+
+and fits the project's **review budget** (`WF-PLAN-07`). The project records its budget with its
+document set (§5, `WF-SPEC-07`); with none recorded, the default is † **at most 300 changed
+lines, at most two review families, one owner**. Measured data replaces the default once it
+exists (`WF-VAL-05`). Small batches are what keep review continuous and fast
+([Trunk-based development](trunk-based-development.md)).
+
+A unit above the budget is re-sliced, in this order of preference, and every slice keeps its
+own acceptance, evidence and dependency (`WF-PLAN-03`):
+
+1. **by acceptance scenario** — each scenario cluster becomes a unit;
+2. **by expand → migrate → contract step** — add the new shape, move the callers, remove the
+   old one; each step ships alone;
+3. **never by layer or by file** — two halves that share one acceptance are one unit with two
+   writers, which is exactly what `WF-PLAN-03` forbids.
+
+**Contract first.** When two units share a contract — a schema and its client, a type and the
+component that fills it — and would otherwise be built side by side, the contract lands first as
+its own unit: the schema or type and its validator, nothing else (`WF-PLAN-08`). The shape test
+stays where it was, in the first consumer: its real output fed into the producer's real
+validator. Once the contract has landed, producer and consumer start together.
+
+#### Waves: which units run side by side
+
+The plan groups its units into waves by dependency: wave 0 holds the contract units and every
+unit with no dependency; each later wave holds the units whose dependencies sit in earlier ones.
+Waves are how the plan **reads**. Execution is **rolling**: a unit starts as soon as it meets all
+five conditions, without waiting for the rest of its wave (`WF-CORE-10`):
+
+1. every unit in its `Depends on` closed in Validation;
+2. every input it cites is accepted (`WF-SPEC-04`);
+3. no open gap it depends on (`WF-CORE-09`);
+4. its Surface shares no file with any running unit's Surface, except a contract an earlier
+   unit already landed;
+5. a slot is free inside the **wave width** — the number of writing units running at once. The
+   project records it next to its review budget; with none recorded, the default is † **4**.
+   Beyond that, Validation falls behind and the orchestrator holds more envelopes than it reads.
+
+Where each kind of work runs:
+
+| Work | Runs | Why |
+| --- | --- | --- |
+| a unit that writes | in its own worktree and branch; its PR follows the plan's `Delivery` — one per unit by default, or one per wave (§5) | two writers in one checkout clash on the same files and on the git index (`CC-PAR-02`) |
+| work that only reads: gathering facts, reviewing, running checks | in the shared directory, several at once | worktrees do not share the prompt cache, and homogeneous readers in one directory do ([Claude Code - Paralelismo e Escala](claude-code-paralelismo-e-escala.md) §3, §4.3) |
+| Validation of one unit and Implementation of the next | at the same time, pipelined | review time leaves the critical path |
+
+**Fan-in.** Every unit ships alone safely (`template-task.md`), so each PR merges on its own;
+under `pr-per-wave`, the units' commits land on one wave branch, and that PR merges once every
+unit in it closed in Validation.
+After a merge, every worktree still open rebases onto the new base, and the repository's
+baseline gates run once on the merged trunk, not once per unit. When a merged change breaks a
+unit still running, the orchestrator tells that unit's session, which treats the break as a
+fix round ([Claude Code - Paralelismo e Escala](claude-code-paralelismo-e-escala.md) §6.2).
+
 ### 4.3 Implementation — when to stop and return
 
 **Before the first line, the implementer's questions** (`WF-IMPL-06`). The agent that owns the
-unit reads the Task and the code it touches and lists what it would need to know to write it,
-running the unit through the seven edge categories of §4.1. Each question leaves in one of
+unit reads the Task and the code it touches and lists what it would need to know to write it.
+The list starts from the edges the Task already carries, under **Edges answered**, which it
+cites instead of deriving them again; then it runs the code the Task touches through the seven
+edge categories of §4.1, for what only the code reveals — mostly "what already exists". Each question leaves in one of
 three ways: answered by an accepted artifact, which it cites; decided right there, when the
 answer stays within what the unit has already decided (a name, the local structure, a
 library's API); or returned through the table below, before any code, as a gap with who
@@ -325,7 +404,7 @@ during, it also costs the code already written on top of an invented answer.
 | Situation found before or during implementation | Goes back to |
 | --- | --- |
 | product behavior missing or contradictory | `workflow-research` (`fecha-em: pesquisa`) |
-| insufficient scope, dependency or evidence in the unit | `workflow-planning` (`fecha-em: planejamento`) |
+| insufficient scope, dependency or evidence in the unit, or a change that will exceed the unit's Size by more than half | `workflow-planning` (`fecha-em: planejamento`) |
 | local defect, within what this unit itself has already decided | fix it right here, record evidence (`WF-IMPL-05`) — not a return |
 
 `WF-IMPL-01`: implementation never reopens a product decision on its own — even when the
@@ -349,6 +428,23 @@ plan did not foresee only comes in with the sentence saying what it catches that
 ones do not; without that sentence, the gap belongs to the plan and goes back to Planning
 (`WF-VAL-04`).
 
+**The tree already ran in Planning.** Each unit carries its risk class (§4.2). Validation reads
+it, and runs the tree again only when the diff leaves the unit's Surface or touches a contract
+the plan did not foresee — that departure is itself reported.
+
+**Review and checks start together.** The reviewer reads the diff; `repo-operator` runs the
+plan's checks; for a `security` unit, `devops-security` reads the sensitive path. None of them
+needs another's output, so the three start at once, in the shared directory (§4.2 "Waves").
+The reviewer reads the checks' envelope instead of running them again, and before reading code
+it compares the diff's file list with the unit's Surface: a file outside it is a finding
+(`WF-IMPL-03`).
+
+**After a fix, the re-review is the delta** (`WF-VAL-06`). A new reviewer instance, independent of
+the author (`WF-VAL-01`), receives the open findings and the diff since the last reviewed commit;
+it closes or keeps each finding and raises a new one only where the fix introduced it. The whole
+change is read again only when the fix diff leaves the Surface or touches a contract. The checks
+the plan named still run in full on every round: the delta narrows the reading, never the proof.
+
 ---
 
 ## 5. The handoff envelope
@@ -367,7 +463,13 @@ lacunas:
     decide: "<agent from §3 | dono>"
     fecha-em: "pesquisa | planejamento"
 proximo: "workflow-research | workflow-planning | workflow-implementation | workflow-validation | <agent>"
+inicio: "<ISO 8601 time the pillar started>"   # optional
+fim: "<ISO 8601 time it returned>"             # optional
 ```
+
+`inicio` and `fim` are optional. They exist so that lead time per unit, and the time a ready
+unit waited for a slot or for the owner, come from measured data rather than impression
+(`WF-VAL-05`).
 
 `proximo` is the transition field — it is what points to where the baton goes, and it is
 always accompanied by an artifact (`WF-CORE-01`), never by a mere statement of intent.
@@ -467,7 +569,22 @@ through the owner's explicit reply in the conversation (`WF-SPEC-06`). Which doc
 project keeps is the owner's decision, recorded once in the `## Specs` section of the project's
 `AGENTS.md`, with permission, or in `.specs/README.md`, and read before writing (`WF-SPEC-07`);
 the plan in `tasks/` is never switched off, and a document that is switched off leaves its
-decision in one line in the plan.
+decision in one line in the plan. The same record may hold the project's review budget and wave
+width (§4.2); without them, the defaults apply.
+
+**The planning bundle.** Planning drafts its files side by side — `design.md` with its ADRs,
+`user-experience.md`, and the plan citing them as `Draft` — and puts them in front of the owner
+in one message: per file, its path, its one sentence and its open gaps, plus which file depends
+on which. One reply may move several files when it names them (`WF-SPEC-06`); a "change" on one
+file re-drafts only the files that depend on it. The board items and the plan's `Delivery` are
+asked in that same message. Each unit then starts when the plan is `Ready` and its own inputs are
+accepted, so a unit that cites no unapproved file does not wait for one (`WF-SPEC-04`).
+
+**Delivery.** The plan records how its units reach the owner — `pr-per-task`, the default, or
+`pr-per-wave` — and whether the owner authorizes push and PR for its units once each closes clean
+in Validation. That authorization is the owner's reply quoted in the plan, covers that plan only,
+and never covers merging. Without it, push and PR are asked once per wave, naming the units that
+closed clean.
 
 ---
 
@@ -488,6 +605,7 @@ Convention: `MUST`/`NEVER` are normative. **†** marks a decision of this doc.
 | `WF-CORE-07` | Whoever orchestrates the pillars **MUST** keep only the §5 envelope, with the full output referenced in `artefato`; reading code, the whole hub or a pillar's full report in the main conversation **NEVER** — that context is reread on every turn until the end of the flow. † |
 | `WF-CORE-08` | A mechanical operation — one whose content an artifact has already decided (diff, envelope, template, plan) — **MUST** run in the agent that already has that content in context or, if it must be read, in `repo-operator`, of tier `rapido` (§3.1); reading a diff, template or test output on the session's most expensive tier in order to execute it, or letting the executor decide the content, **NEVER**. † |
 | `WF-CORE-09` | Every gap **MUST** leave in the envelope with who decides it (`decide`) and the last pillar in which it can be open (`fecha-em`: `pesquisa` or `planejamento`, §5); a gap without these fields, or left for Implementation or Validation, **NEVER** — with no answer in time, it only moves forward as an assumption the owner accepted, along with what would invalidate it (Wynne, Example Mapping's red cards). † |
+| `WF-CORE-10` | Units of one plan whose dependencies closed in Validation, whose inputs are accepted, whose Surfaces share no file — except a contract an earlier unit already landed — and that depend on no open gap **MUST** start side by side, up to the project's wave width (§4.2 "Waves"); running them one at a time with no stated reason **NEVER**. A unit that writes **MUST** run in its own worktree and branch, its PR following the plan's `Delivery` (§5); work that only reads — facts, review, checks — **MUST** share the directory, because worktrees do not share the prompt cache (`CC-PAR-02`). † |
 
 ### `WF-RES-*` — research
 
@@ -507,7 +625,9 @@ Convention: `MUST`/`NEVER` are normative. **†** marks a decision of this doc.
 | `WF-PLAN-03` | Decomposing into multiple units **MUST** follow a criterion — each unit with its own acceptance, evidence and dependency; decomposing without that criterion **NEVER**, it is cost fragmentation. |
 | `WF-PLAN-04` | Every unit **MUST** enter Implementation with written acceptance criteria; "ready to start" without them is **NEVER** ready (Definition of Ready). |
 | `WF-PLAN-05` | Each unit's layer/perfil boundary **MUST** be named in Planning; "fullstack" as a perfil **NEVER** — it hides the boundary instead of deciding it. |
-| `WF-PLAN-06` | Each unit's evidence plan **MUST** name the test types Validation will run, each at the cheapest level that catches the defect (`TS-CORE-02`), and each invariant in `design.md` or an ADR **MUST** name the type that proves it; integration or E2E without the sentence saying what only they catch **NEVER** — the cost in time and tokens repeats on every round (§4.2). † |
+| `WF-PLAN-06` | Each unit's evidence plan **MUST** name the test types Validation will run, each at the cheapest level that catches the defect (`TS-CORE-02`), and its risk class — `contract`, `security` or `focused`, the §4.4 tree applied at plan time — and each invariant in `design.md` or an ADR **MUST** name the type that proves it; integration or E2E without the sentence saying what only they catch **NEVER** — the cost in time and tokens repeats on every round (§4.2). † |
+| `WF-PLAN-07` | Each unit **MUST** declare its Surface (the files it touches) and its Size (estimated changed lines, tests included, and the review families it touches) and fit the project's review budget (§4.2 "Small units"); above it, the unit **MUST** be re-sliced by acceptance scenario or by expand → migrate → contract step, each slice with its own acceptance, evidence and dependency (`WF-PLAN-03`); slicing by layer or by file **NEVER** — it divides the writing, not the unit. † |
+| `WF-PLAN-08` | A contract shared by units that would otherwise be built side by side **MUST** land first, as its own unit holding only the contract and its validator, with the shape test kept in the first consumer; building producer and consumer at once on a contract neither has landed **NEVER** — the shapes drift while the names still match. † |
 
 ### `WF-IMPL-*` — implementation
 
@@ -518,7 +638,7 @@ Convention: `MUST`/`NEVER` are normative. **†** marks a decision of this doc.
 | `WF-IMPL-03` | The scope of the change **MUST** be the smallest that resolves the decided unit; solving an adjacent problem not decided in this unit **NEVER**, even if it seems efficient. |
 | `WF-IMPL-04` | An explicit contract (type, schema, tenant/auth boundary) **MUST** be preserved during implementation; changing an implicit contract and "adjusting later" **NEVER**. |
 | `WF-IMPL-05` | A local defect found during the implementation itself **MUST** be fixed there and recorded as evidence, without opening a separate Validation cycle just for it. |
-| `WF-IMPL-06` | Before the first line of code, the implementer **MUST** list the questions the unit does not answer — the Task and the code it touches, through the edge categories of §4.1 — and each one leaves answered by an accepted artifact, decided within what the unit has already decided, or returned through §4.3 as a gap (`WF-CORE-09`); starting to write without that list **NEVER** — a question found in the middle of the code arrives with an invented answer already written into it. † |
+| `WF-IMPL-06` | Before the first line of code, the implementer **MUST** list the questions the unit does not answer — starting from the edges the Task already carries, which it cites instead of deriving again, then the code it touches through the edge categories of §4.1 — and each one leaves answered by an accepted artifact, decided within what the unit has already decided, or returned through §4.3 as a gap (`WF-CORE-09`); starting to write without that list **NEVER** — a question found in the middle of the code arrives with an invented answer already written into it. † |
 
 ### `WF-VAL-*` — validation
 
@@ -529,6 +649,7 @@ Convention: `MUST`/`NEVER` are normative. **†** marks a decision of this doc.
 | `WF-VAL-03` | Technical verification ("did we build it right") and business validation ("is it the right thing") **MUST** be separate steps; the second **NEVER** blocks the technical closure of the first (see [Teste de Software](teste-de-software.md) §0). |
 | `WF-VAL-04` | Every Validation failure **MUST** be routed to the pillar where the problem originated — Research if it is a decision gap, Planning if it is a scope/evidence gap, Implementation if it is a code defect; fixing it in the wrong pillar **NEVER**. |
 | `WF-VAL-05` | A delivery metric (lead time, change failure rate) **MUST** come from measured data, **NEVER** from perception (Forsgren/Humble/Kim, *Accelerate* — DORA metrics). |
+| `WF-VAL-06` | A re-review after a fix round **MUST** run in a new instance independent of the author (`WF-VAL-01`) and receive only the open findings and the diff since the last reviewed commit, raising a new finding only where the fix introduced it; the whole change **MUST** be read again only when the fix diff leaves the unit's Surface or touches a contract; re-reading the whole change on every round by default **NEVER** — the checks the plan named still run in full, only the reading narrows (§4.4). † |
 
 ### `WF-SPEC-*` — the `.specs/` files
 
@@ -537,23 +658,23 @@ Convention: `MUST`/`NEVER` are normative. **†** marks a decision of this doc.
 | `WF-SPEC-01` | The output of Research and Planning **MUST** be stored in `.specs/`, and the envelope's `artefato` points to the path; output that exists only in the conversation **NEVER**. † |
 | `WF-SPEC-02` | Each `.specs/` file **MUST** have a single owner and cite the others by link; copying content from one file to another **NEVER**, the copy diverges. † |
 | `WF-SPEC-03` | The files generated **MUST** follow the scope classified in §4.1; generating the four files for an execution scope **NEVER** (see `DOC-CORE-02`). † |
-| `WF-SPEC-04` | A Task of the plan in `tasks/` **MUST** start only when the files it cites are accepted; starting on a draft **NEVER** (`WF-CORE-03`). |
+| `WF-SPEC-04` | A Task of the plan in `tasks/` **MUST** start only when the plan is `Ready` and the files that Task cites are accepted; starting on a draft **NEVER** (`WF-CORE-03`). The plan may be `Ready` while a file another Task cites is still `Draft`: that Task waits, the others start. |
 | `WF-SPEC-05` | A specification-only run **MUST** stop after the plan in `tasks/`, returning the Planning envelope; moving on to Implementation without a new request from the owner **NEVER**. † |
-| `WF-SPEC-06` | Every `.specs/` file **MUST** be born `Draft` (ADR: `Proposed`) and change status only through the owner's explicit reply in the conversation; the agent that wrote it approving its own file, or silence counting as approval, **NEVER**. † |
+| `WF-SPEC-06` | Every `.specs/` file **MUST** be born `Draft` (ADR: `Proposed`) and change status only through the owner's explicit reply in the conversation; one reply may move several files when it names them (the planning bundle, §5); the agent that wrote it approving its own file, or silence counting as approval, **NEVER**. † |
 | `WF-SPEC-07` | Which documents the project keeps **MUST** be recorded once (`## Specs` in `AGENTS.md`, with the owner's permission, or `.specs/README.md`) and read before writing; asking again on every run **NEVER**; switching off the plan in `tasks/` **NEVER**. † |
 | `WF-SPEC-08` | `.specs/` **MUST** have one folder per capability: an already-approved capability document receives a change as a dated amendment, which is born `Draft`, and each increment gets its own plan in `tasks/NNNN-<slug>.md`; rewriting approved text, or piling increments into a single plan, **NEVER**. † |
 
 ### Count
 
-**38 rules** in six families, a single file — no satellite in this version.
+**42 rules** in six families, a single file — no satellite in this version.
 
 | Family | Rules |
 | --- | --- |
-| `WF-CORE-*` | 9 |
+| `WF-CORE-*` | 10 |
 | `WF-RES-*` | 6 |
-| `WF-PLAN-*` | 4 (`WF-PLAN-01` and `WF-PLAN-02`, the appetite rules, are retired; the IDs are not reused) |
+| `WF-PLAN-*` | 6 (`WF-PLAN-01` and `WF-PLAN-02`, the appetite rules, are retired; the IDs are not reused) |
 | `WF-IMPL-*` | 6 |
-| `WF-VAL-*` | 5 |
+| `WF-VAL-*` | 6 |
 | `WF-SPEC-*` | 8 |
 
 ---
@@ -574,6 +695,9 @@ WHEN DECLARING a gap, or deciding whether a pillar moves forward with it:
 
 WHEN GOING through the planning gates:
           § 4.2 + WF-PLAN-*
+
+WHEN SIZING a unit, or deciding which units run side by side and where:
+          § 4.2 "Small units" and "Waves" + WF-PLAN-07, WF-PLAN-08, WF-CORE-10
 
 WHEN LISTING the questions before the code, or deciding whether implementation stops and returns:
           § 4.3 + WF-IMPL-* (and the edge table in § 4.1)
@@ -621,6 +745,23 @@ NEVER:    this whole structure for a task whose pillar is already obvious
 9. **The role comes from the agent, not from the brief.** A delegated pillar runs in the named
    agent, called as a subagent; a session opened for a unit opens with explicit model and
    effort and calls that agent, instead of playing it (`WF-CORE-06`, `CC-PAR-05`).
+10. **Small units, side by side.** A unit fits the review budget (`WF-PLAN-07`), a shared
+    contract lands first (`WF-PLAN-08`), and units that do not depend on each other run at the
+    same time — writers in their own worktrees, readers in the shared directory (`WF-CORE-10`).
+
+### Core self-check
+
+Every pillar's self-check starts with these rows. A skill cites them as one row — "core
+self-check passed (hub §7)" — and lists only the checks that belong to its own pillar.
+
+| # | Check | Rule |
+| --- | --- | --- |
+| C1 | the pillar returned a citable artifact, and the envelope's `artefato` points to it | `WF-CORE-01` |
+| C2 | each delegated piece ran in a named §3 agent, called as a subagent; a session opened for a unit got explicit model and effort, and called the owner instead of playing it | `WF-CORE-06`, `CC-PAR-05` |
+| C3 | this conversation holds envelopes and paths, not code, files or full reports | `WF-CORE-07` |
+| C4 | each mechanical operation ran where its content already was, or in `repo-operator` | `WF-CORE-08` |
+| C5 | every open gap names `decide` and `fecha-em`, and none is left for Implementation or Validation | `WF-CORE-09` |
+| C6 | units that could run side by side did, or the envelope says why not | `WF-CORE-10` |
 
 ### Slices for new skills
 
@@ -629,6 +770,7 @@ NEVER:    this whole structure for a task whose pillar is already obvious
 | "which pillar is this ambiguous task in" | § 0 + § 2 + § 3 | this hub |
 | "classify the scope of a research effort" | § 4.1 + `WF-RES-*` | this hub |
 | "go through the planning gates" | § 4.2 + `WF-PLAN-*` | this hub |
+| "size a unit and schedule the waves" | § 4.2 "Small units" and "Waves" + `WF-PLAN-07`, `WF-PLAN-08`, `WF-CORE-10` | this hub |
 | "decide whether implementation stops and returns" | § 4.3 + `WF-IMPL-*` | this hub |
 | "decide how much evidence validation requires" | § 4.4 + `WF-VAL-*` | this hub |
 | "decide who executes a mechanical operation" | § 3.1 + `WF-CORE-08` | this hub |
@@ -648,6 +790,8 @@ NEVER:    this whole structure for a task whose pillar is already obvious
 | Decide the HTTP contract of a new route | invent status/shape in the handler | `http-contract`, existing |
 | An authentication, cookie or secret finding during validation | fix it and move on without routing | `devops-security` (`WF-VAL-04`) |
 | Schedule, risk or "does this fit the scope" during planning | the implementation team deciding alone | `project-manager` |
+| Several ready units in one plan | run them one at a time out of habit, or two writers in one checkout | the wave rule of §4.2 (`WF-CORE-10`): side by side up to the wave width, writers in their own worktrees |
+| A unit too large to review in one pass | review it anyway, or split it by layer | re-slice by acceptance scenario or expand → migrate → contract step (§4.2, `WF-PLAN-07`) |
 | Boundary between layers or services during planning | decide it inside the code, without recording it | `software-architect`, recorded decision |
 | Write a PRD, RFC, ADR, UX or tasks in `.specs/` | invent the format, approve one's own file, or edit an accepted ADR | `workflow-spec`, with [Decision Documents — PRD, RFC and ADR](documentos-de-decisao-prd-rfc-adr.md) |
 
@@ -707,4 +851,7 @@ synthesis is this project's main contribution, with no direct parallel in a sing
 - [Claude Code - Sessão e Verificação](claude-code-sessao-e-verificacao.md) — `CC-SES-07`,
   review in fresh context
 - [Claude Code - Paralelismo e Escala](claude-code-paralelismo-e-escala.md) — subagents and how
-  the baton passes in Claude Code specifically
+  the baton passes in Claude Code specifically; worktrees and the shared cache behind the wave
+  rule (§4.2)
+- [Trunk-based development](trunk-based-development.md) — small batches and continuous review,
+  behind the review budget (§4.2)
