@@ -15,7 +15,7 @@ tags:
   - exploration
 fontes:
   - "[Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)"
-  - "[Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md)"
+  - "[Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md)"
 ---
 # repo-explorer
 
@@ -95,6 +95,6 @@ The discount is applied in one function, with no approval check anywhere.
 
 ## Related
 
-- [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — §3, the pillar that calls this agent; `WF-CORE-06`, `WF-CORE-07`
+- [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — §3, the pillar that calls this agent; `WF-CORE-06`, `WF-CORE-07`
 - [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) — why a wide read belongs in a subagent
 - `product-manager` · `software-architect` — who decides with these facts

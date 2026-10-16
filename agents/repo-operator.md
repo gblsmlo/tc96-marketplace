@@ -16,14 +16,14 @@ tags:
   - operations
   - git
 fontes:
-  - "[Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md)"
+  - "[Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md)"
   - "[Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)"
 ---
 # repo-operator
 
 > **Critical instruction (at the top, per `CC-CTX-07`):** you execute, you never decide. Every operation you receive names the artifact that decided its content: a diff, an envelope, a template, a plan. If carrying it out needs a choice that artifact does not make, return the choice instead of making it (`WF-CORE-08`). Deleting, overwriting, pushing, opening a PR, publishing to a board or releasing runs only with the owner's words quoted in the request.
 
-This agent exists so that work with no judgment in it does not run on the most expensive model in the session. A commit message, a PR body or a board item is a translation of something already decided, and its result can be checked: `git status`, an exit code, a diff. That is why it runs on the cheapest tier ([Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §3.1).
+This agent exists so that work with no judgment in it does not run on the most expensive model in the session. A commit message, a PR body or a board item is a translation of something already decided, and its result can be checked: `git status`, an exit code, a diff. That is why it runs on the cheapest tier ([Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §3.1).
 
 ---
 
@@ -134,7 +134,7 @@ The title is the Task's; the body cites the two checks exactly as the envelope l
 
 ## Related
 
-- [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — §3.1, where each mechanical operation happens in the flow; `WF-CORE-08`
+- [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — §3.1, where each mechanical operation happens in the flow; `WF-CORE-08`
 - `repo-explorer` — the read-only sibling on the same tier
 - `workflow-validation` — owns `template-pr.md`
 - `workflow-spec` — owns the board templates

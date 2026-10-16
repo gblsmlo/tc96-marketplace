@@ -3,7 +3,7 @@
 Tool-neutral, saved as `.specs/adr/NNNN-<slug>.md`. An ADR records **one** architecture
 decision that outlives the increment that produced it (`DOC-ADR-01`). `software-architect` writes
 it when a `design.md` reaches `Accepted`, or when a decision is made outside any capability. Rules:
-`DOC-ADR-*` in [Documentos de Decisão — PRD, RFC e ADR](../../../referencias/documentos-de-decisao-prd-rfc-adr.md).
+`DOC-ADR-*` in [Decision Documents — PRD, RFC and ADR](../../../referencias/documentos-de-decisao-prd-rfc-adr.md).
 
 ---
 

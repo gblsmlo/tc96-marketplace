@@ -3,7 +3,7 @@
 Tool-neutral, saved as `.specs/<capability>/requirements.md`. It is the capability's **PRD**: what is
 being built and why, before any design or code. `product-manager` writes it at the end of
 `workflow-research`, only when the scope is product (`WF-SPEC-03`). Rules: `DOC-PRD-*` in
-[Documentos de Decisão — PRD, RFC e ADR](../../../../knowledge-base/documentos-de-decisao-prd-rfc-adr.md).
+[Decision Documents — PRD, RFC and ADR](../../../../knowledge-base/documentos-de-decisao-prd-rfc-adr.md).
 
 ---
 
@@ -74,7 +74,7 @@ non-goal, or an open gap.
 
 - [constraint or assumption, marked as such, with what would invalidate it. A gap the owner
   accepted as an assumption, to proceed without an answer, comes here with the owner's words
-  (hub §5 "Lacunas", `WF-CORE-09`).]
+  (hub §5 "Gaps", `WF-CORE-09`).]
 
 ### Open gaps
 
@@ -98,7 +98,7 @@ non-goal, or an open gap.
 | --- | --- |
 | `design.md` | schema, API contract, service boundary (`DOC-PRD-03`) |
 | `user-experience.md` | flow, screen states, accessibility |
-| `tasks/NNNN-<slug>.md` | who implements what, appetite, evidence plan, test types |
+| `tasks/NNNN-<slug>.md` | who implements what, evidence plan, test types |
 
 ---
 
@@ -110,4 +110,4 @@ non-goal, or an open gap.
 - `product-manager`: the agent that writes it; its "Writing a spec / PRD" step is the source of
   these sections
 - `template-story.md`: the shape of each story
-- [Fluxo de Entrega — Quatro Pilares](../../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §5: where this file sits in `.specs/`
+- [Delivery Flow — Four Pillars](../../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §5: where this file sits in `.specs/`

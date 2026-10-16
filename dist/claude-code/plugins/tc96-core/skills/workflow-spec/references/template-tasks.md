@@ -1,7 +1,7 @@
 # Spec template: Tasks
 
 Tool-neutral, saved as `.specs/<capability>/tasks/NNNN-<slug>.md`. It is **one increment's
-executable plan**: every unit that passed the five gates (`portoes.md`), with its owner,
+executable plan**: every unit that passed the four gates (`portoes.md`), with its owner,
 acceptance, evidence and the test types the Validation will run. `project-manager` writes it at
 the end of `workflow-planning`. It is the only spec file an implementer reads to start work;
 the other files reach the implementer through the links in each Task.
@@ -26,7 +26,6 @@ records what they share.
 | `plan` | `NNNN`, from **Numbering** |
 | `owner` | `project-manager` |
 | `status` | `Draft` · `Ready`; the first Task starts only on `Ready`, set by the owner (`WF-SPEC-04`, `WF-SPEC-06`) |
-| `appetite` | how much this increment is worth, decided before any estimate (`WF-PLAN-01`) |
 | `inputs` | each spec file this plan depends on, with its status at the time of writing |
 
 ## Body (copy from here down)
@@ -86,8 +85,6 @@ section. The text `repo-operator` publishes, word for word — it writes nothing
   without a sentence saying why (`WF-PLAN-06`).
 - Every input is accepted and every gap a Task depends on is closed, or the Task that needs it
   waits (`WF-CORE-09`).
-- The sum of the Tasks fits the appetite; if it does not, the plan returns to the decision
-  table instead of growing (`WF-PLAN-02`).
 
 ### Out of this file
 
@@ -106,6 +103,6 @@ section. The text `repo-operator` publishes, word for word — it writes nothing
 
 - `template-task.md`: the fields and body of each Task
 - `template-epic.md` · `template-story.md`: the bodies under **Board items**
-- `portoes.md`: the five gates every Task passed
+- `portoes.md`: the four gates every Task passed
 - `workflow-implementation`: reads one Task from this file at a time
-- [Fluxo de Entrega — Quatro Pilares](../../../referencias/fluxo-de-entrega-quatro-pilares.md) §5: where this file sits in `.specs/`
+- [Delivery Flow — Four Pillars](../../../referencias/fluxo-de-entrega-quatro-pilares.md) §5: where this file sits in `.specs/`

@@ -17,7 +17,7 @@ owner's approval.
 
 **The order is research → planning → implementation → validation**, and a task may return one
 pillar back when it discovers a gap — it never skips forward past an open decision
-(`WF-CORE-03`). Source: [Fluxo de Entrega — Quatro Pilares](../../knowledge-base/fluxo-de-entrega-quatro-pilares.md).
+(`WF-CORE-03`). Source: [Delivery Flow — Four Pillars](../../knowledge-base/fluxo-de-entrega-quatro-pilares.md).
 
 ```
 workflow/
@@ -31,8 +31,7 @@ workflow/
 ├── workflow-planning/
 │   ├── SKILL.md
 │   └── references/
-│       ├── portoes.md
-│       └── apetite-e-corte.md
+│       └── portoes.md
 ├── workflow-spec/
 │   ├── SKILL.md
 │   └── references/
@@ -86,7 +85,7 @@ project keeps, whether `AGENTS.md` may hold that record, whether a draft is appr
 why it runs in the orchestrating conversation and not inside an agent.
 
 What each decision document is, and when it freezes:
-[Documentos de Decisão — PRD, RFC e ADR](../../knowledge-base/documentos-de-decisao-prd-rfc-adr.md).
+[Decision Documents — PRD, RFC and ADR](../../knowledge-base/documentos-de-decisao-prd-rfc-adr.md).
 
 ## Which model runs each point
 
@@ -144,5 +143,5 @@ house's plugin map already calls "the roles that cut across any stack".
 ## Related
 
 - [Skills index](../README.md)
-- [Fluxo de Entrega — Quatro Pilares](../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — the hub all four skills implement, §7 "Contrato de skill"
+- [Delivery Flow — Four Pillars](../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — the hub all four skills implement, §7 "Contrato de skill"
 - `agents/README.md` — "How agents hand off", the flow this family formalizes

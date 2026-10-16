@@ -36,8 +36,8 @@ These are three links, not four: the reasoning layer was cut on 2026-09-22 and i
 | `product-designer` | Persona, journey, flow, the four states of every screen, components, and catalog level | — | `Product Design` · `Product Team` · [Storybook estruturado por Atomic Design](../knowledge-base/storybook-estruturado-por-atomic-design.md) |
 | `project-manager` | Scope, schedule, cost, risk, communication, and change as a system | — | `Gestão de Projetos - Mapa de Fundamentos` |
 | `monorepo-auditor` | Audits the layers of an already-written monorepo: dependency direction, public surface, who opens a transaction, which boundary is verifiable | `bun-workspace` · `drizzle-review` · `react-structure` | [Monorepo com Bun - estrutura e tooling](../knowledge-base/monorepo-com-bun-estrutura-e-tooling.md) `MONO-*` · [Architecture in React](../knowledge-base/architecture-in-react.md) · [Fronteira do BFF - forma, jornada e regra](../knowledge-base/fronteira-do-bff-forma-jornada-e-regra.md) |
-| `repo-explorer` | Gathers facts from existing code for the research pillar: a bounded question in, facts with file:line out, no file contents | — | [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) · [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) `WF-CORE-06` |
-| `repo-operator` | Executes mechanical operations another artifact already decided: commit, PR body, push, move or delete files, publish to the board, run the checks a plan names; never decides content | — | [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §3.1, `WF-CORE-08` |
+| `repo-explorer` | Gathers facts from existing code for the research pillar: a bounded question in, facts with file:line out, no file contents | — | [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) · [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) `WF-CORE-06` |
+| `repo-operator` | Executes mechanical operations another artifact already decided: commit, PR body, push, move or delete files, publish to the board, run the checks a plan names; never decides content | — | [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §3.1, `WF-CORE-08` |
 
 ## Common anatomy
 
@@ -105,7 +105,7 @@ flowchart LR
 
 Each agent declares in its final step who it hands off to, and the arrow is always accompanied by an artifact: spec, recorded decision, flow with states, code with evidence, findings report.
 
-This flowchart has a formal procedure in `skills/workflow/` — four skills, one per moment (research, planning, implementation, validation), that decide **when** to route to which of the thirteen agents, citing rules by ID in [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md). The diagram above remains the source of **who**; the newer note is the source of **when**.
+This flowchart has a formal procedure in `skills/workflow/` — four skills, one per moment (research, planning, implementation, validation), that decide **when** to route to which of the thirteen agents, citing rules by ID in [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md). The diagram above remains the source of **who**; the newer note is the source of **when**.
 
 ## Model and effort per role
 
@@ -134,7 +134,7 @@ The tiers are neutral; [`build/modelos.json`](../build/modelos.json) maps them p
 | agent spawned with no role | set `CLAUDE_CODE_SUBAGENT_MODEL=haiku` in your environment; a role's own `model` still wins over it, and a plugin cannot set it for you | `[agents] default_subagent_model` in `.codex/config.toml`, emitted by the build |
 | session opened by another (the desktop app's `start_session`) | inherits the opener's model and effort and adopts no agent, so no frontmatter applies; pass `model` (`claude-sonnet-5-5`) and `effort` (`medium`) on a `fresh` start, same tier or cheaper only, and have the brief call the role as a subagent — the only way up a tier ([`CC-PAR-05`](../knowledge-base/claude-code-paralelismo-e-escala.md)) | not covered here |
 
-Delegating a pillar to a generic agent, or to a new session told to act "as" a role, skips all of this: both run on the model of whoever opened them (`WF-CORE-06`). Which tier runs each point of the flow — including the mechanical operations inside a pillar — is in [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §3.1.
+Delegating a pillar to a generic agent, or to a new session told to act "as" a role, skips all of this: both run on the model of whoever opened them (`WF-CORE-06`). Which tier runs each point of the flow — including the mechanical operations inside a pillar — is in [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §3.1.
 
 ### What each Claude tier is, today
 
@@ -176,7 +176,7 @@ Created on 2026-09-01 from already-existing material, and extracted into this re
 ## Related
 
 - [Skills](../skills/README.md) — skill index, common anatomy, and disambiguation
-- [Fluxo de Entrega — Quatro Pilares](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — the formal procedure for "how agents hand off," with `WF-*` rules
+- [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — the formal procedure for "how agents hand off," with `WF-*` rules
 - `Docs` — index of documentation structures and "which structures have a skill"
 - [Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) — § 7, custom subagents
 - [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) — subagents, fan-out, shared cache

@@ -3,7 +3,7 @@
 # tc96-marketplace
 Agents, skills and rules for this house's stack, written once as a neutral source and built for each agent runtime
 
-![Version](https://img.shields.io/badge/version-0.11.1-0EA5E9?style=flat&labelColor=18181B)
+![Version](https://img.shields.io/badge/version-0.12.0-0EA5E9?style=flat&labelColor=18181B)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-plugins-D97757?style=flat&logo=claude&logoColor=white&labelColor=18181B)
 ![AGENTS.md](https://img.shields.io/badge/AGENTS.md-target-FFFFFF?style=flat&labelColor=18181B)
 ![Context7](https://img.shields.io/badge/Context7-API_surface-0EA5E9?style=flat&labelColor=18181B)
@@ -11,7 +11,7 @@ Agents, skills and rules for this house's stack, written once as a neutral sourc
 
 </div>
 
-> **Status:** 0.11.1. Families still in the old frontmatter format are skipped by the build until they migrate.
+> **Status:** 0.12.0. Families still in the old frontmatter format are skipped by the build until they migrate.
 
 ## ✨ Overview
 
@@ -143,7 +143,7 @@ skills/                # 38 skills across 12 families (English)
 ├── bun/  elysia/  drizzle/
 └── kb/                # Coverage audit of this repository, not shipped
 commands/              # 18 commands (English body, descricao in Portuguese)
-knowledge-base/        # 131 notes, no subfolders (Portuguese: the rule, and its ID)
+knowledge-base/        # 131 notes, no subfolders (the rule, and its ID; being migrated from Portuguese to English)
 build/                 # Adapters, index, standalone .skill packager, link and frontmatter checks
 dist/claude-code/      # Built plugins, committed
 .claude-plugin/        # marketplace.json

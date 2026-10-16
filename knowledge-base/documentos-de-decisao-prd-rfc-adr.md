@@ -1,173 +1,173 @@
 ---
-titulo: Documentos de Decisão — PRD, RFC e ADR
+titulo: Decision Documents — PRD, RFC and ADR
 aliases:
-  - PRD, RFC e ADR
-  - Documentos de decisão
+  - PRD, RFC and ADR
+  - Decision documents
 tags:
   - workflow
   - documentation
   - architecture
   - product
   - reference
-source: "Michael Nygard, Documenting Architecture Decisions (2011, formato de ADR: contexto, decisão, status, consequências); IETF, a série RFC como registro de proposta aberta a comentário; Aridane Martín, PRD vs ADR vs RFC: The Documents Every Engineer Should Know (2026-08-09, síntese secundária do encadeamento PRD → RFC → ADR)"
+source: "Michael Nygard, Documenting Architecture Decisions (2011, ADR format: context, decision, status, consequences); IETF, the RFC series as a record of a proposal open to comment; Aridane Martín, PRD vs ADR vs RFC: The Documents Every Engineer Should Know (2026-08-09, secondary synthesis of the PRD → RFC → ADR chain)"
 verificado-em: 2026-10-07
 ---
-# Documentos de Decisão — PRD, RFC e ADR
+# Decision Documents — PRD, RFC and ADR
 
-> **O que esta nota é.** A regra de **qual documento registra qual decisão**, quando ele nasce,
-> quando congela e onde mora. Ela dá ID citável a três documentos que costumam ser tratados
-> como intercambiáveis: PRD, RFC e ADR.
+> **What this note is.** The rule for **which document records which decision**, when it is born,
+> when it freezes and where it lives. It gives a citable ID to three documents that are often treated
+> as interchangeable: PRD, RFC and ADR.
 >
-> **O que não é.** Não é o fluxo de entrega: o *quando* de cada pilar é
-> [Fluxo de Entrega — Quatro Pilares](fluxo-de-entrega-quatro-pilares.md), e é ele que diz qual
-> pilar grava qual arquivo em `.specs/`. Esta nota diz o que cada documento **é**.
+> **What it is not.** It is not the delivery flow: the *when* of each pillar is
+> [Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md), and that note is the one that says which
+> pillar writes which file in `.specs/`. This note says what each document **is**.
 >
-> **Por que ela existe.** Decisão que só existe na conversa ou no código é reconstruída de trás
-> para frente por quem chega depois, pessoa ou agente. Os três documentos guardam o *porquê*
-> em três momentos diferentes: a intenção, a proposta e o registro.
+> **Why it exists.** A decision that exists only in the conversation or in the code gets reconstructed backwards
+> by whoever arrives later, person or agent. The three documents keep the *why*
+> at three different moments: the intent, the proposal and the record.
 
-Fontes consultadas em **2026-10-07**. Ver [Fontes consultadas](#fontes-consultadas).
+Sources consulted on **2026-10-07**. See [Sources consulted](#sources-consulted).
 
 ---
 
-## 0. Antes de tudo: três perguntas, três documentos
+## 0. Before anything else: three questions, three documents
 
-| Documento | Pergunta | Quem escreve | Quando |
+| Document | Question | Who writes it | When |
 | --- | --- | --- | --- |
-| **PRD** | o que vamos construir, e por quê? | `product-manager` | antes de desenho e código |
-| **RFC** | como proponho construir, e o que vocês acham? | `software-architect` | antes de se comprometer com um desenho, só com a decisão em aberto |
-| **ADR** | o que decidimos, e por quê? | `software-architect` | no momento da decisão, muitas vezes ao fechar um RFC |
+| **PRD** | what are we going to build, and why? | `product-manager` | before design and code |
+| **RFC** | how do I propose to build it, and what do you think? | `software-architect` | before committing to a design, only while the decision is open |
+| **ADR** | what did we decide, and why? | `software-architect` | at the moment of the decision, often when closing an RFC |
 
-Os três formam uma cadeia: o PRD fixa a intenção, um ou mais RFCs propõem o como, e cada
-escolha de arquitetura que um RFC resolve vira um ADR. Uma iniciativa grande pode ter um PRD,
-alguns RFCs e uma dúzia de ADRs; uma correção de uma linha não tem nenhum (`DOC-CORE-02`).
+The three form a chain: the PRD fixes the intent, one or more RFCs propose the how, and each
+architecture choice an RFC resolves becomes an ADR. A large initiative may have one PRD,
+a few RFCs and a dozen ADRs; a one-line fix has none (`DOC-CORE-02`).
 
-**Design doc × RFC.** Um desenho técnico sem alternativa real em debate é um *design doc*,
-não um RFC. Os dois são legítimos; chamar um de outro não é (`DOC-RFC-03`).
-
----
-
-## 1. Como usar esta doc
-
-### Para uma pessoa
-
-Antes de escrever, pergunte qual das três perguntas da §0 está em aberto. Se nenhuma está,
-não escreva documento: entregue.
-
-### Para um agente de código
-
-Ao gravar a saída de Pesquisa ou Planejamento em `.specs/`, use a §4 para saber em que
-arquivo cada decisão mora, e a §3 para saber se o arquivo ainda pode mudar. A skill que
-grava é `workflow-spec`; o pilar só pede o arquivo.
-
-### Convenções
-
-`MUST`/`NEVER` são normativos, como em todo o resto da knowledge-base. **†** marca decisão
-desta doc, sem paralelo direto numa única fonte externa.
+**Design doc × RFC.** A technical design with no real alternative under debate is a *design doc*,
+not an RFC. Both are legitimate; calling one by the other's name is not (`DOC-RFC-03`).
 
 ---
 
-## 2. Árvore de decisão: qual documento escrever
+## 1. How to use this doc
+
+### For a person
+
+Before writing, ask which of the three questions in §0 is open. If none is,
+do not write a document: deliver.
+
+### For a coding agent
+
+When writing the output of Research or Planning to `.specs/`, use §4 to know which
+file each decision lives in, and §3 to know whether the file can still change. The skill that
+writes is `workflow-spec`; the pillar only requests the file.
+
+### Conventions
+
+`MUST`/`NEVER` are normative, as in the rest of the knowledge-base. **†** marks a decision
+of this doc, with no direct parallel in a single external source.
+
+---
+
+## 2. Decision tree: which document to write
 
 ```
-Falta alinhar O QUE construir e POR QUÊ?
-├── sim → PRD
-└── não
-    Há uma proposta de COMO construir, com alternativa real, ainda sem decisão?
-    ├── sim → RFC
-    └── não
-        Uma decisão técnica já foi tomada e vai durar mais que este incremento?
-        ├── sim → ADR
-        └── não
-            Há desenho técnico a registrar, sem alternativa em debate?
-            ├── sim → design doc
-            └── não → nenhum documento; entregue
+Is WHAT to build and WHY still unaligned?
+├── yes → PRD
+└── no
+    Is there a proposal for HOW to build it, with a real alternative, still undecided?
+    ├── yes → RFC
+    └── no
+        Has a technical decision already been made that will outlast this increment?
+        ├── yes → ADR
+        └── no
+            Is there a technical design to record, with no alternative under debate?
+            ├── yes → design doc
+            └── no → no document; deliver
 ```
 
-RFC aberto para aprovar o que já está construído é teatro: o registro certo é um ADR
+An RFC opened to approve what is already built is theater: the right record is an ADR
 (`DOC-RFC-01`).
 
 ---
 
-## 3. Ciclo de vida
+## 3. Lifecycle
 
-| Documento | Estados | Muda quando |
+| Document | States | Changes when |
 | --- | --- | --- |
-| PRD | `Draft` → `In review` → `Approved` | livre na descoberta; depois de `Approved`, só por retorno deliberado à Pesquisa, como emenda datada (`DOC-PRD-04`) |
-| RFC | `Draft` → `In review` → `Accepted` \| `Rejected` | revisado durante o comentário; fecha na data de decisão, com o dono decidindo (`DOC-RFC-02`) |
-| Design doc | `Draft` → `In review` → `Accepted` | revisado até aceito; depois, só por emenda datada |
-| ADR | `Proposed` → `Accepted` → `Superseded by ADR-NNNN` | livre em `Proposed`; depois de `Accepted`, nunca; a decisão nova é outro ADR (`DOC-ADR-02`) |
+| PRD | `Draft` → `In review` → `Approved` | freely during discovery; after `Approved`, only through a deliberate return to Research, as a dated amendment (`DOC-PRD-04`) |
+| RFC | `Draft` → `In review` → `Accepted` \| `Rejected` | revised during the comment period; closes on the decision date, with the owner deciding (`DOC-RFC-02`) |
+| Design doc | `Draft` → `In review` → `Accepted` | revised until accepted; afterwards, only through a dated amendment |
+| ADR | `Proposed` → `Accepted` → `Superseded by ADR-NNNN` | freely while `Proposed`; after `Accepted`, never; the new decision is another ADR (`DOC-ADR-02`) |
 
-O debate registrado num RFC vale tanto quanto o resultado: é ele que responde, um ano depois,
-por que a alternativa óbvia foi descartada.
+The debate recorded in an RFC is worth as much as the outcome: it is what answers, a year later,
+why the obvious alternative was discarded.
 
-Quem move o status é o dono, com resposta explícita na conversa; o agente que escreveu nunca
-aprova o próprio documento (`WF-SPEC-06`, em
-[Fluxo de Entrega — Quatro Pilares](fluxo-de-entrega-quatro-pilares.md) §5).
+The owner is the one who moves the status, with an explicit answer in the conversation; the agent that wrote it never
+approves its own document (`WF-SPEC-06`, in
+[Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md) §5).
 
 ---
 
-## 4. Onde cada documento mora em `.specs/`
+## 4. Where each document lives in `.specs/`
 
-| Documento | Arquivo | Template |
+| Document | File | Template |
 | --- | --- | --- |
 | PRD | `.specs/<capability>/requirements.md` | `workflow-spec/references/template-requirements.md` |
-| RFC ou design doc | `.specs/<capability>/design.md` | `workflow-spec/references/template-design.md` |
+| RFC or design doc | `.specs/<capability>/design.md` | `workflow-spec/references/template-design.md` |
 | ADR | `.specs/adr/NNNN-<slug>.md` | `workflow-spec/references/template-adr.md` |
 
-A pasta é da capability, não da entrega: PRD e design doc acompanham a capability enquanto
-ela existe e mudam por emenda (`WF-SPEC-08`, em
-[Fluxo de Entrega — Quatro Pilares](fluxo-de-entrega-quatro-pilares.md) §5). O ADR fica fora
-dela porque uma decisão de arquitetura costuma valer para mais de uma capability, e a numeração
-é uma só para o repositório (`DOC-ADR-03`). `user-experience.md` e o plano em `tasks/` não são documentos de
-decisão desta nota; o dono e o momento deles estão em
-[Fluxo de Entrega — Quatro Pilares](fluxo-de-entrega-quatro-pilares.md) §5.
+The folder belongs to the capability, not to the delivery: PRD and design doc follow the capability for as long as
+it exists and change by amendment (`WF-SPEC-08`, in
+[Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md) §5). The ADR stays outside
+it because an architecture decision usually applies to more than one capability, and the numbering
+is a single one for the repository (`DOC-ADR-03`). `user-experience.md` and the plan in `tasks/` are not decision
+documents of this note; their owner and their moment are in
+[Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md) §5.
 
 ---
 
-## 5. Regras normativas
+## 5. Normative rules
 
-Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
+Convention: `MUST`/`NEVER` are normative. **†** marks a decision of this doc.
 
-### `DOC-CORE-*` — o que vale para os três
+### `DOC-CORE-*` — what applies to all three
 
-| ID | Regra |
+| ID | Rule |
 | --- | --- |
-| `DOC-CORE-01` | Cada documento **MUST** responder uma única pergunta da §0; um documento que responde duas **NEVER** fica assim, ele é dois documentos. |
-| `DOC-CORE-02` | O número de documentos **MUST** ser proporcional ao custo de errar a decisão; abrir documento para mudança sem trade-off real **NEVER**. |
+| `DOC-CORE-01` | Each document **MUST** answer a single question from §0; a document that answers two **NEVER** stays that way, it is two documents. |
+| `DOC-CORE-02` | The number of documents **MUST** be proportional to the cost of getting the decision wrong; opening a document for a change with no real trade-off **NEVER**. |
 
 ### `DOC-PRD-*` — PRD
 
-| ID | Regra |
+| ID | Rule |
 | --- | --- |
-| `DOC-PRD-01` | O PRD **MUST** declarar não-objetivos explícitos; não-objetivo vago **NEVER**, ele é a porta do aumento de escopo. |
-| `DOC-PRD-02` | Todo requisito **MUST** ter uma métrica ou um cenário verificável; requisito sem medida **NEVER** é requisito, é desejo. |
-| `DOC-PRD-03` | O PRD **NEVER** contém desenho técnico (schema, contrato de API, fronteira de serviço); isso **MUST** ir para RFC, design doc ou ADR. |
-| `DOC-PRD-04` | PRD `Approved` **MUST** estar congelado; mudança depois disso volta à Pesquisa e entra como emenda datada no fim do arquivo, aprovada pelo dono; reescrever o texto aprovado, ou editar em silêncio, **NEVER**. |
+| `DOC-PRD-01` | The PRD **MUST** declare explicit non-goals; a vague non-goal **NEVER**, it is the door to scope creep. |
+| `DOC-PRD-02` | Every requirement **MUST** have a metric or a verifiable scenario; a requirement with no measure **NEVER** is a requirement, it is a wish. |
+| `DOC-PRD-03` | The PRD **NEVER** contains technical design (schema, API contract, service boundary); that **MUST** go to an RFC, design doc or ADR. |
+| `DOC-PRD-04` | An `Approved` PRD **MUST** be frozen; a change after that returns to Research and enters as a dated amendment at the end of the file, approved by the owner; rewriting the approved text, or editing silently, **NEVER**. |
 
 ### `DOC-RFC-*` — RFC
 
-| ID | Regra |
+| ID | Rule |
 | --- | --- |
-| `DOC-RFC-01` | RFC **MUST** abrir só para decisão ainda não tomada; RFC para aprovar o que já está construído **NEVER**, o registro é um ADR. |
-| `DOC-RFC-02` | RFC **MUST** ter um dono que decide e uma data de decisão; RFC sem prazo **NEVER**, ele trava o trabalho que espera por ele. |
-| `DOC-RFC-03` | Alternativa num RFC **MUST** ser real, com o motivo do descarte; alternativa de espantalho **NEVER**. Sem alternativa real, o documento **MUST** se declarar design doc. |
-| `DOC-RFC-04` | RFC resolvido **MUST** registrar a decisão e listar os ADRs que produziu. † |
+| `DOC-RFC-01` | An RFC **MUST** open only for a decision not yet made; an RFC to approve what is already built **NEVER**, the record is an ADR. |
+| `DOC-RFC-02` | An RFC **MUST** have an owner who decides and a decision date; an RFC with no deadline **NEVER**, it blocks the work that waits on it. |
+| `DOC-RFC-03` | An alternative in an RFC **MUST** be real, with the reason it was discarded; a straw-man alternative **NEVER**. With no real alternative, the document **MUST** declare itself a design doc. |
+| `DOC-RFC-04` | A resolved RFC **MUST** record the decision and list the ADRs it produced. † |
 
 ### `DOC-ADR-*` — ADR
 
-| ID | Regra |
+| ID | Rule |
 | --- | --- |
-| `DOC-ADR-01` | Um ADR **MUST** registrar uma única decisão; três escolhas são três ADRs. |
-| `DOC-ADR-02` | ADR `Accepted` **NEVER** é editado; decisão que muda **MUST** virar ADR novo, e o antigo recebe só `Superseded by ADR-NNNN` no status. |
-| `DOC-ADR-03` | ADR **MUST** morar no repositório do código, em `.specs/adr/NNNN-<slug>.md`, numerado em sequência com quatro dígitos; ADR em wiki **NEVER**. † |
-| `DOC-ADR-04` | ADR **MUST** registrar as consequências, custo incluído, e as alternativas descartadas; registrar só o ganho **NEVER**. |
+| `DOC-ADR-01` | An ADR **MUST** record a single decision; three choices are three ADRs. |
+| `DOC-ADR-02` | An `Accepted` ADR is **NEVER** edited; a decision that changes **MUST** become a new ADR, and the old one receives only `Superseded by ADR-NNNN` in its status. |
+| `DOC-ADR-03` | An ADR **MUST** live in the code repository, in `.specs/adr/NNNN-<slug>.md`, numbered in sequence with four digits; an ADR in a wiki **NEVER**. † |
+| `DOC-ADR-04` | An ADR **MUST** record the consequences, cost included, and the discarded alternatives; recording only the gain **NEVER**. |
 
-### Contagem
+### Count
 
-**14 regras** em quatro famílias.
+**14 rules** in four families.
 
-| Família | Regras |
+| Family | Rules |
 | --- | --- |
 | `DOC-CORE-*` | 2 |
 | `DOC-PRD-*` | 4 |
@@ -176,58 +176,58 @@ Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
 
 ---
 
-## 6. Contrato de skill
+## 6. Skill contract
 
-### O que carregar
+### What to load
 
 ```
-AO ESCREVER requirements.md:      § 0, § 3 + DOC-CORE-*, DOC-PRD-*
-AO ESCREVER design.md:            § 0, § 2, § 3 + DOC-CORE-*, DOC-RFC-*
-AO ESCREVER ou SUBSTITUIR um ADR: § 3, § 4 + DOC-ADR-*
-NUNCA:                            esta nota para uma tarefa de detalhe de implementação
-                                  (ela não abre documento de decisão, DOC-CORE-02)
+WHEN WRITING requirements.md:      § 0, § 3 + DOC-CORE-*, DOC-PRD-*
+WHEN WRITING design.md:            § 0, § 2, § 3 + DOC-CORE-*, DOC-RFC-*
+WHEN WRITING or SUPERSEDING an ADR: § 3, § 4 + DOC-ADR-*
+NEVER:                             this note for an execution task (a fix, refactor or technical adjustment)
+                                   (it does not open a decision document, DOC-CORE-02)
 ```
 
-### Como citar
+### How to cite
 
-> `DOC-ADR-02` — o ADR 0007 escolheu PostgreSQL e a equipe quer trocar por SQLite no
-> ambiente de teste. Editar o 0007 apaga o porquê da escolha original; o certo é o ADR 0012,
-> e o 0007 recebe `Superseded by ADR-0012`.
-> Ver [Documentos de Decisão — PRD, RFC e ADR](documentos-de-decisao-prd-rfc-adr.md) § 3.
+> `DOC-ADR-02` — ADR 0007 chose PostgreSQL and the team wants to switch to SQLite in the
+> test environment. Editing 0007 erases the why of the original choice; the right move is ADR 0012,
+> and 0007 receives `Superseded by ADR-0012`.
+> See [Decision Documents — PRD, RFC and ADR](documentos-de-decisao-prd-rfc-adr.md) § 3.
 
 ---
 
-## 7. Pontes com o stack
+## 7. Bridges to the stack
 
-| Decisão | O que **não** fazer | A ponte |
+| Decision | What **not** to do | The bridge |
 | --- | --- | --- |
-| Quando cada arquivo de `.specs/` é escrito, e por qual pilar | decidir aqui | [Fluxo de Entrega — Quatro Pilares](fluxo-de-entrega-quatro-pilares.md) §5, `WF-SPEC-*` |
-| O formato da decisão de arquitetura | inventar outro | `software-architect`, "Output format": o ADR herda eixo, invariantes e custo |
-| O formato da decisão de produto | inventar outro | `product-manager`, "Writing a spec / PRD" |
-| Cenário de aceite de um requisito | escrever prosa | `workflow-spec/references/template-story.md` |
+| When each `.specs/` file is written, and by which pillar | decide it here | [Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md) §5, `WF-SPEC-*` |
+| The format of the architecture decision | invent another one | `software-architect`, "Output format": the ADR inherits axis, invariants and cost |
+| The format of the product decision | invent another one | `product-manager`, "Writing a spec / PRD" |
+| Acceptance scenario for a requirement | write prose | `workflow-spec/references/template-story.md` |
 
 ---
 
-## Fontes consultadas
+## Sources consulted
 
-- Michael Nygard, *Documenting Architecture Decisions* (2011) — o formato de ADR com contexto,
-  decisão, status e consequências, e a regra de nunca reescrever um ADR aceito.
-- IETF, a série RFC — a origem do nome e do modelo de proposta aberta a comentário.
+- Michael Nygard, *Documenting Architecture Decisions* (2011) — the ADR format with context,
+  decision, status and consequences, and the rule of never rewriting an accepted ADR.
+- IETF, the RFC series — the origin of the name and of the model of a proposal open to comment.
 - Aridane Martín, *PRD vs ADR vs RFC: The Documents Every Engineer Should Know* (2026-08-09) —
-  fonte **secundária**: a cadeia PRD → RFC → ADR, os anti-padrões e a ordem de adoção.
+  **secondary** source: the PRD → RFC → ADR chain, the anti-patterns and the adoption order.
 
-**O que não foi possível verificar por fonte primária nesta versão:** os textos de Nygard e da
-IETF não foram relidos nesta data; as regras `DOC-*` são síntese própria. A fonte secundária
-tem duas inconsistências internas, resolvidas aqui: o estado `Superseded` falta no template de
-RFC dela (aqui o RFC fecha em `Accepted` ou `Rejected`, e quem é substituído é o ADR), e o
-template de ADR dela não tem seção de alternativas (aqui tem, `DOC-ADR-04`).
+**What could not be verified against a primary source in this version:** the texts by Nygard and the
+IETF were not reread on this date; the `DOC-*` rules are our own synthesis. The secondary source
+has two internal inconsistencies, resolved here: the `Superseded` state is missing from its RFC
+template (here the RFC closes in `Accepted` or `Rejected`, and what gets superseded is the ADR), and
+its ADR template has no alternatives section (here it does, `DOC-ADR-04`).
 
 ---
 
-## Relacionados
+## Related
 
-- [Fluxo de Entrega — Quatro Pilares](fluxo-de-entrega-quatro-pilares.md) — §5, onde os
-  arquivos de `.specs/` entram no fluxo
-- `skills/workflow/workflow-spec/` — a skill que grava cada documento desta nota, com seus templates
-- `agents/software-architect.md` — escreve `design.md` e os ADRs
-- `agents/product-manager.md` — escreve `requirements.md`
+- [Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md) — §5, where the
+  `.specs/` files enter the flow
+- `skills/workflow/workflow-spec/` — the skill that writes each document in this note, with its templates
+- `agents/software-architect.md` — writes `design.md` and the ADRs
+- `agents/product-manager.md` — writes `requirements.md`

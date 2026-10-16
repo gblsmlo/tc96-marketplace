@@ -1,692 +1,710 @@
 ---
-titulo: Fluxo de Entrega — Quatro Pilares
+titulo: Delivery Flow — Four Pillars
 tags:
   - workflow
   - delivery
   - agent-context
   - reference
-source: "Barry Boehm, Software Engineering Economics (curva de custo de mudança, origem de verificação×validação); Marty Cagan, Inspired: How to Create Tech Products Customers Love; Teresa Torres, Continuous Discovery Habits; Ryan Singer/Basecamp, Shape Up: Stop Running in Circles; Kent Beck, Extreme Programming Explained; Winters/Manshreck/Wright, Software Engineering at Google (cultura de code review — já citado em TS-*); Forsgren/Humble/Kim, Accelerate (métricas DORA); Glenford Myers, The Art of Software Testing (partição de equivalência e análise de valor-limite); Matt Wynne, Introducing Example Mapping (Cucumber); precedente interno: lemind, ADR 114 — \"o workflow de agentes tem quatro pilares\" (implementação observada em produção, não autoridade acadêmica)"
+source: "Barry Boehm, Software Engineering Economics (cost-of-change curve, origin of verification×validation); Marty Cagan, Inspired: How to Create Tech Products Customers Love; Teresa Torres, Continuous Discovery Habits; Kent Beck, Extreme Programming Explained; Winters/Manshreck/Wright, Software Engineering at Google (code review culture — already cited in TS-*); Forsgren/Humble/Kim, Accelerate (DORA metrics); Glenford Myers, The Art of Software Testing (equivalence partitioning and boundary value analysis); Matt Wynne, Introducing Example Mapping (Cucumber); internal precedent: lemind, ADR 114 — \"the agent workflow has four pillars\" (implementation observed in production, not academic authority)"
 verificado-em: 2026-09-23
 ---
-# Fluxo de Entrega — Quatro Pilares
+# Delivery Flow — Four Pillars
 
-> **O que esta nota é.** A **camada de procedimento sobre os onze agentes**: o momento em
-> que uma tarefa está — pesquisa, planejamento, implementação ou validação — separado de
-> **quem** a exerce. É o que decide para qual agente ou skill uma tarefa vai a seguir, quando
-> isso ainda não está óbvio pelo pedido.
+> **What this note is.** The **procedure layer over the eleven agents**: the moment a task
+> is in — research, planning, implementation or validation — kept separate from **who**
+> carries it out. It is what decides which agent or skill a task goes to next, when that is
+> not yet obvious from the request.
 >
-> **O que não é.** Não substitui nenhum dos onze agentes nem redefine o que cada um faz.
-> Não é um quinto agente. É a formalização, com regra citável, do fluxograma que já existia
-> implicitamente em `agents/README.md` ("How agents hand off") — que
-> continua sendo a fonte do *quem*; esta nota é a fonte do *quando*.
+> **What it is not.** It does not replace any of the eleven agents nor redefine what each one
+> does. It is not a fifth agent. It is the formalization, with citable rules, of the flowchart
+> that already existed implicitly in `agents/README.md` ("How agents hand off") — which
+> remains the source of the *who*; this note is the source of the *when*.
 >
-> **Por que ela existe.** O projeto tinha onze papéis e um diagrama mermaid informal de como
-> um bastão passa de um para o outro, mas nenhuma regra citável para decidir, no meio de uma
-> tarefa, se o que falta é decisão (volta para trás), execução (segue) ou prova (evidência
-> antes de fechar). Sem essa camada, a tendência é pular direto para "escrever código" com uma
-> decisão de produto ainda em aberto — o equivalente, neste domínio, ao antipadrão que
-> [Teste de Software](teste-de-software.md) descreve para nível de teste: pular a camada de
-> conceito e ir direto para a ferramenta.
+> **Why it exists.** The project had eleven roles and an informal mermaid diagram of how the
+> baton passes from one to another, but no citable rule for deciding, in the middle of a task,
+> whether what is missing is a decision (go back), execution (move on) or proof (evidence
+> before closing). Without this layer, the tendency is to jump straight to "writing code" with
+> a product decision still open — the equivalent, in this domain, of the anti-pattern that
+> [Teste de Software](teste-de-software.md) describes for test levels: skipping the concept
+> layer and going straight to the tool.
 
-Fontes consultadas em **2026-09-23**; Myers e Wynne, acrescentados com a varredura de bordas
-(§4.1), em **2026-10-10**. Ver [Fontes consultadas](#fontes-consultadas).
+Sources consulted on **2026-09-23**; Myers and Wynne, added with the edge sweep (§4.1), on
+**2026-10-10**. See [Sources consulted](#sources-consulted).
 
 ---
 
-## 0. Antes de tudo: quatro distinções que decidem a conversa
+## 0. Before anything else: four distinctions that settle the conversation
 
-**1. Pilar × papel.** *Pilar* é o momento do trabalho — pesquisa, planejamento, implementação
-ou validação. *Papel* é quem o exerce — um dos onze agentes de `agents/README.md`.
-Os dois eixos são **ortogonais**: o mesmo `software-architect` aparece no pilar de Pesquisa
-(decidindo se uma mudança é arquitetural) e no de Planejamento (nomeando a fronteira de uma
-unidade); o mesmo `qa-engineer` aparece na Implementação (nível do teste) e na Validação
-(rodar a suíte). Reduzir um agente a um único pilar é o erro mais comum ao adotar este modelo
-(`WF-CORE-02`).
+**1. Pillar × role.** A *pillar* is the moment of the work — research, planning,
+implementation or validation. A *role* is who carries it out — one of the eleven agents in
+`agents/README.md`. The two axes are **orthogonal**: the same `software-architect` appears in
+the Research pillar (deciding whether a change is architectural) and in Planning (naming a
+unit's boundary); the same `qa-engineer` appears in Implementation (the test's level) and in
+Validation (running the suite). Reducing an agent to a single pillar is the most common
+mistake when adopting this model (`WF-CORE-02`).
 
-**2. Pesquisa × descoberta contínua.** Pesquisa, aqui, não é um relatório extenso encomendado
-uma vez por trimestre — é a menor investigação que resolve a decisão que trava o próximo
-pilar, repetida quantas vezes uma tarefa precisar (Torres, *Continuous Discovery Habits*).
-Uma pesquisa que devolve mais perguntas do que a decisão pedida não terminou.
+**2. Research × continuous discovery.** Research, here, is not a lengthy report commissioned
+once a quarter — it is the smallest investigation that resolves the decision blocking the next
+pillar, repeated as many times as a task needs (Torres, *Continuous Discovery Habits*). A
+research effort that returns more questions than the decision it was asked for has not
+finished.
 
-**3. Verificação × validação.** Já registrado em [Teste de Software](teste-de-software.md)
-§0, e vale repetir no nível do fluxo inteiro, não só do teste: verificação pergunta
-"construímos certo?" (contrato, comportamento, regra); validação pergunta "construímos a
-coisa certa?" (aceite de negócio). O pilar de Validação desta nota cobre a **primeira**
-pergunta — é verificação técnica. A segunda pergunta é responsabilidade do `product-manager`
-e acontece **depois** do fechamento técnico, nunca o bloqueando (`WF-VAL-03`).
+**3. Verification × validation.** Already recorded in [Teste de Software](teste-de-software.md)
+§0, and worth repeating at the level of the whole flow, not just of testing: verification asks
+"did we build it right?" (contract, behavior, rule); validation asks "did we build the right
+thing?" (business acceptance). This note's Validation pillar covers the **first** question —
+it is technical verification. The second question is the responsibility of the
+`product-manager` and happens **after** technical closure, never blocking it (`WF-VAL-03`).
 
-**4. Pilar × nível de board.** *Nível de board* é a granularidade em que uma decisão vira
-trabalho rastreável — Epic (capacidade permanente), Story (unidade de aceite) ou Task (corte
-executável), definidos em `workflow-spec/references/template-{epic,story,task}.md`. A
-Pesquisa (a descoberta contínua do item 2) **nunca** produz um item de board diretamente: ela
-produz a decisão mínima que autoriza o Planejamento a abrir um. É no Planejamento, pelos
-portões de decomposição e de fronteira (§4.2, `WF-PLAN-03`, `WF-PLAN-05`), que a árvore
-Epic → Story → Task nasce. Abrir o Epic no rastreador assim que alguém tem uma ideia é o erro
-espelhado de `WF-CORE-03`: em vez de pular a Pesquisa, finge que ela já terminou. Tabela
-completa em §3. †
+**4. Pillar × board level.** A *board level* is the granularity at which a decision becomes
+trackable work — Epic (permanent capability), Story (unit of acceptance) or Task (executable
+slice), defined in `workflow-spec/references/template-{epic,story,task}.md`. Research (the
+continuous discovery of item 2) **never** produces a board item directly: it produces the
+minimum decision that authorizes Planning to open one. It is in Planning, through the
+decomposition and boundary gates (§4.2, `WF-PLAN-03`, `WF-PLAN-05`), that the
+Epic → Story → Task tree is born. Opening the Epic in the tracker as soon as someone has an
+idea is the mirror mistake of `WF-CORE-03`: instead of skipping Research, it pretends Research
+has already finished. Full table in §3. †
 
 ---
 
-## 1. Como usar esta doc
+## 1. How to use this doc
 
-### Para uma pessoa
+### For a person
 
-Antes de pedir a um agente para "implementar X", pergunte: falta decidir alguma coisa sobre
-**o que** fazer (→ pilar de Pesquisa), sobre **como dividir e quando** (→ Planejamento), ou já
-está tudo decidido e é hora de **escrever** (→ Implementação)? Se o código já existe e a
-pergunta é "isso está certo", vá direto para `code-reviewer` — a Validação já é o pilar dele.
+Before asking an agent to "implement X", ask: is something still undecided about **what** to
+do (→ Research pillar), about **how to split it and when** (→ Planning), or is everything
+already decided and it is time to **write** (→ Implementation)? If the code already exists and
+the question is "is this right", go straight to `code-reviewer` — Validation is already its
+pillar.
 
-### Para um agente de código
+### For a coding agent
 
-Ao receber uma tarefa ambígua, classifique o pilar **antes** de escolher a skill ou o agente
-seguinte (§2). Uma tarefa que chega pedindo implementação mas carrega uma decisão de produto
-não resolvida **não é** uma tarefa de implementação ainda — é uma tarefa de Pesquisa disfarçada
+On receiving an ambiguous task, classify the pillar **before** choosing the next skill or
+agent (§2). A task that arrives asking for implementation but carries an unresolved product
+decision **is not** an implementation task yet — it is a Research task in disguise
 (`WF-CORE-03`).
 
-### Convenções
+### Conventions
 
-`MUST`/`NEVER` são normativos, como em todo o resto da knowledge-base. **†** marca decisão
-desta doc — sem paralelo direto numa única fonte externa, mas necessária para o modelo
-funcionar neste projeto.
-
----
-
-## 2. Modelo mental
-
-| # | Pilar | Entra quando | Sai com |
-| --- | --- | --- | --- |
-| 1 | **Pesquisa** | o problema, o comportamento esperado ou uma decisão duradoura não está claro | decisão mínima resolvida, com as bordas varridas (§4.1); evidência, riscos, fontes; lacunas com quem decide e onde fecham (§5) |
-| 2 | **Planejamento** | a decisão foi aceita mas o trabalho ainda não é executável | unidade(s) de trabalho delimitadas, dependências, perfil, critério de aceite, plano de evidência com os tipos de teste |
-| 3 | **Implementação** | a unidade está pronta e o comportamento já foi decidido | código ou nota alterada, teste focado, evidência de implementação |
-| 4 | **Validação** | existe uma mudança ou entrega e ela precisa de prova | checks focados e de repositório, achados de revisão, resultado claro |
-
-Nenhuma tarefa pula pilar (`WF-CORE-03`): pode **voltar** um pilar quando descobre uma lacuna,
-mas nunca decide "vou resolver isso na implementação mesmo" quando a lacuna é de pesquisa.
-Toda lacuna diz quem a decide e em que pilar fecha (§5, `WF-CORE-09`), e esse pilar nunca é a
-Implementação.
+`MUST`/`NEVER` are normative, as in the rest of the knowledge-base. **†** marks a decision of
+this doc — with no direct parallel in a single external source, but needed for the model to
+work in this project.
 
 ---
 
-## 3. Onde cada pilar roteia
+## 2. Mental model
 
-| Pilar | Skill | Agente(s) que o exercem, hoje | Nível de board |
+| # | Pillar | Enters when | Leaves with |
 | --- | --- | --- | --- |
-| Pesquisa | `workflow-research` | `product-manager` · `product-designer` · `software-architect`; levantamento de fatos no código: `repo-explorer` | — nenhum item ainda; sai com a decisão que autoriza um (§0.4) |
-| Planejamento | `workflow-planning` | `project-manager` · `software-architect` | abre e decompõe Epic → Story → Task (`template-epic.md` · `template-story.md` · `template-task.md`) |
-| Implementação | `workflow-implementation` | `frontend-developer` · `backend-developer` | executa um Task por vez — o único nível que quem implementa lê (`WF-IMPL-03`) |
-| Validação | `workflow-validation` | `qa-engineer` · `code-reviewer` · `devops-security` (quando o achado é de segurança) | revisa o PR (`template-pr.md`), com link de mão única de volta ao Task/Story |
+| 1 | **Research** | the problem, the expected behavior or a lasting decision is not clear | minimum decision resolved, with its edges swept (§4.1); evidence, risks, sources; gaps with who decides them and where they close (§5) |
+| 2 | **Planning** | the decision was accepted but the work is not executable yet | bounded work unit(s), dependencies, perfil, acceptance criteria, evidence plan with the test types |
+| 3 | **Implementation** | the unit is ready and the behavior has already been decided | changed code or note, focused test, implementation evidence |
+| 4 | **Validation** | a change or delivery exists and needs proof | focused and repository checks, review findings, a clear result |
 
-A coluna de agentes é também a lista fechada de quem pode receber um pilar delegado
-(`WF-CORE-06`): cada um declara `modelo` e `esforco` no próprio frontmatter, e é isso que
-impede o pilar de rodar no modelo da sessão — desde que o agente seja chamado como subagente.
-Uma sessão nova não adota agente nenhum: herda o modelo de quem a abriu, e o papel só chega
-nela se ela o chamar (§3.1). `repo-operator` não recebe pilar: recebe as operações mecânicas
-de qualquer um deles (§3.1, `WF-CORE-08`).
+No task skips a pillar (`WF-CORE-03`): it can **go back** a pillar when it discovers a gap, but
+it never decides "I'll just sort this out in implementation" when the gap belongs to research.
+Every gap states who decides it and in which pillar it closes (§5, `WF-CORE-09`), and that
+pillar is never Implementation.
 
-Este mapeamento é o mesmo fluxograma de `agents/README.md`, seção "Como os agentes passam o
-bastão" — aqui só como tabela, sem repetir o mermaid. Quando um agente novo for adicionado lá, esta tabela é
-quem precisa de atualização, não o inverso.
+---
 
-A coluna de nível de board é o percurso "descobrir → tarefa" por inteiro, de ponta a ponta:
-Pesquisa resolve a decisão (o `product-manager` chama isso de Discovery); Planejamento é onde
-essa decisão primeiro vira item de board, se decompõe em Story e corta em Task, sempre pelos
-cinco portões (§4.2); Implementação executa exatamente um Task por vez; Validação revisa o PR
-que referencia esse Task. Nenhum pilar escreve em dois níveis de board ao mesmo tempo, e
-nenhum nível nasce fora do pilar que o produz — abrir uma Task direto, sem Story e sem Epic,
-é decomposição sem critério (`WF-PLAN-03`), do mesmo jeito que abrir um Epic sem decisão de
-Pesquisa por trás é avanço sem decisão resolvida (`WF-CORE-03`).
+## 3. Where each pillar routes
 
-### 3.1 Modelo por ponto do fluxo
+| Pillar | Skill | Agent(s) that carry it out, today | Board level |
+| --- | --- | --- | --- |
+| Research | `workflow-research` | `product-manager` · `product-designer` · `software-architect`; gathering facts from the code: `repo-explorer` | — no item yet; leaves with the decision that authorizes one (§0.4) |
+| Planning | `workflow-planning` | `project-manager` · `software-architect` | opens and decomposes Epic → Story → Task (`template-epic.md` · `template-story.md` · `template-task.md`) |
+| Implementation | `workflow-implementation` | `frontend-developer` · `backend-developer` | executes one Task at a time — the only level the implementer reads (`WF-IMPL-03`) |
+| Validation | `workflow-validation` | `qa-engineer` · `code-reviewer` · `devops-security` (when the finding is about security) | reviews the PR (`template-pr.md`), with a one-way link back to the Task/Story |
 
-O tier segue a operação, não o pilar. Dentro de um mesmo pilar há **decisão**, que fica no
-tier do agente dono, e **operação mecânica**, cujo conteúdo um artefato já decidiu e que vai
-para o tier mais barato (`WF-CORE-08`). `repo-operator` atravessa os quatro pilares fazendo a
-segunda; o mapa de tier para modelo de cada provedor está em `agents/README.md`, "Model and
-effort per role".
+The agents column is also the closed list of who can receive a delegated pillar
+(`WF-CORE-06`): each one declares `modelo` and `esforco` in its own frontmatter, and that is
+what keeps the pillar from running on the session's model — as long as the agent is called as
+a subagent. A new session adopts no agent at all: it inherits the model of whoever opened it,
+and the role only reaches it if it calls that role (§3.1). `repo-operator` does not receive a
+pillar: it receives the mechanical operations of any of them (§3.1, `WF-CORE-08`).
 
-| Pilar | Ponto | Quem executa | `modelo` · `esforco` | Por quê |
+This mapping is the same flowchart as in `agents/README.md`, section "How agents hand off" —
+here only as a table, without repeating the mermaid. When a new agent is added there, this
+table is what needs updating, not the other way around.
+
+The board level column is the whole "discover → task" path, end to end: Research resolves the
+decision (the `product-manager` calls this Discovery); Planning is where that decision first
+becomes a board item, decomposes into Stories and is sliced into Tasks, always through the
+four gates (§4.2); Implementation executes exactly one Task at a time; Validation reviews the
+PR that references that Task. No pillar writes at two board levels at once, and no level is
+born outside the pillar that produces it — opening a Task directly, with no Story and no Epic,
+is decomposition without criteria (`WF-PLAN-03`), just as opening an Epic with no Research
+decision behind it is moving forward without a resolved decision (`WF-CORE-03`).
+
+### 3.1 Model per point of the flow
+
+The tier follows the operation, not the pillar. Within a single pillar there is **decision**,
+which stays on the owning agent's tier, and **mechanical operation**, whose content an
+artifact has already decided and which goes to the cheapest tier (`WF-CORE-08`).
+`repo-operator` crosses all four pillars doing the latter; the tier-to-model map for each
+provider is in `agents/README.md`, "Model and effort per role".
+
+| Pillar | Point | Who executes | `modelo` · `esforco` | Why |
 | --- | --- | --- | --- | --- |
-| Pesquisa | ler o código e levantar fatos | `repo-explorer` | rapido · baixo | todo fato traz o `arquivo:linha` que o prova |
-| Pesquisa | classificar o escopo e decidir | `product-manager` · `software-architect` | alto · alto | ambíguo, poucos tokens, nada confere depois |
-| Pesquisa | escrever `requirements.md` | `product-manager`, via `workflow-spec` | alto · alto | o arquivo é a própria decisão |
-| Planejamento | `design.md` e ADRs | `software-architect` | alto · alto | a fronteira decide o custo de tudo que vem depois, inclusive dos testes (§4.2) |
-| Planejamento | `user-experience.md` | `product-designer` | medio · alto | estruturado, mas aberto |
-| Planejamento | portões, plano de `tasks/` e o texto dos itens de board | `project-manager` | medio · medio | guiado por template |
-| Planejamento | publicar no board o texto que o plano já traz | `repo-operator` | rapido · baixo | cópia literal; pede a resposta do dono |
-| Implementação | código e teste focado | `frontend-developer` · `backend-developer` | medio · medio | mais tokens; a Validação pega o erro |
-| Implementação | commit do próprio diff | o mesmo implementador | medio · medio | o diff já está no contexto dele; reler em outro agente custa mais |
-| Validação | rodar os checks do plano e reportar | `repo-operator` | rapido · baixo | saída longa; o resultado é o código de saída |
-| Validação | revisar o diff | `code-reviewer` | medio · alto | é a verificação; ninguém a revisa |
-| Validação | diagnosticar um check que falhou | `qa-engineer` | medio · medio | julgamento sobre a suíte |
-| Validação | achado de segurança | `devops-security` | alto · alto | um achado perdido custa mais que os tokens |
-| Validação | corpo do PR, push, abrir o PR | `repo-operator` | rapido · baixo | template preenchido do envelope; push e PR pedem a resposta do dono |
-| qualquer | copiar, mover, renomear, organizar pasta | `repo-operator`, ou quem já está com o comando pronto | rapido · baixo | a lista ou o layout já foi decidido |
-| qualquer | apagar, sobrescrever, build e release | `repo-operator` | rapido · baixo | apagar, sobrescrever e publicar pedem a resposta do dono |
-| qualquer | orquestrar: envelopes, rotear, falar com o dono | a sessão principal | escolha da pessoa | um plugin não fixa o modelo da sessão; a recomendação está em `agents/README.md` |
-| qualquer | abrir uma sessão nova para uma unidade | a sessão que orquestra | medio · medio, passados na abertura | a sessão nova herda o modelo de quem abre e não adota o dono; ela orquestra a unidade, e o dono roda dentro dela como subagente, no tier dele (`CC-PAR-05`) |
+| Research | read the code and gather facts | `repo-explorer` | rapido · baixo | every fact carries the `file:line` that proves it |
+| Research | classify the scope and decide | `product-manager` · `software-architect` | alto · alto | ambiguous, few tokens, nothing checks it afterwards |
+| Research | write `requirements.md` | `product-manager`, via `workflow-spec` | alto · alto | the file is the decision itself |
+| Planning | `design.md` and ADRs | `software-architect` | alto · alto | the boundary decides the cost of everything that follows, including the tests (§4.2) |
+| Planning | `user-experience.md` | `product-designer` | medio · alto | structured, but open |
+| Planning | gates, the `tasks/` plan and the text of the board items | `project-manager` | medio · medio | template-driven |
+| Planning | publish to the board the text the plan already carries | `repo-operator` | rapido · baixo | literal copy; asks for the owner's reply |
+| Implementation | code and focused test | `frontend-developer` · `backend-developer` | medio · medio | more tokens; Validation catches the error |
+| Implementation | commit of its own diff | the same implementer | medio · medio | the diff is already in its context; rereading it in another agent costs more |
+| Validation | run the plan's checks and report | `repo-operator` | rapido · baixo | long output; the result is the exit code |
+| Validation | review the diff | `code-reviewer` | medio · alto | it is the verification; nobody reviews it |
+| Validation | diagnose a check that failed | `qa-engineer` | medio · medio | judgment about the suite |
+| Validation | security finding | `devops-security` | alto · alto | a missed finding costs more than the tokens |
+| Validation | PR body, push, open the PR | `repo-operator` | rapido · baixo | template filled from the envelope; push and PR ask for the owner's reply |
+| any | copy, move, rename, organize a folder | `repo-operator`, or whoever already has the command ready | rapido · baixo | the list or the layout has already been decided |
+| any | delete, overwrite, build and release | `repo-operator` | rapido · baixo | deleting, overwriting and publishing ask for the owner's reply |
+| any | orchestrate: envelopes, routing, talking to the owner | the main session | the person's choice | a plugin does not pin the session's model; the recommendation is in `agents/README.md` |
+| any | open a new session for a unit | the orchestrating session | medio · medio, passed at opening | the new session inherits the model of whoever opens it and does not adopt the owner; it orchestrates the unit, and the owner runs inside it as a subagent, on its own tier (`CC-PAR-05`) |
 
-**Quando delegar uma operação mecânica.** Um subagente começa com prompt de sistema, ferramentas
-e cache próprios, e a resposta dele volta para quem chamou. Para um comando só, isso custa mais
-do que rodar o comando:
+**When to delegate a mechanical operation.** A subagent starts with its own system prompt,
+tools and cache, and its answer goes back to whoever called it. For a single command, that
+costs more than running the command:
 
 ```
-A operação exige decidir algo que nenhum artefato decidiu?
-├── sim → não é mecânica: volta ao dono da decisão
-└── não
-    O conteúdo de que ela precisa já está no contexto de um agente medio ou rapido em trabalho?
-    ├── sim → esse agente executa (o implementador faz o commit do próprio diff)
-    └── não
-        É um único comando já conhecido, sem nada a ler antes?
-        ├── sim → roda onde está, inclusive na sessão que orquestra
-        └── não → repo-operator (rapido · baixo)
+Does the operation require deciding something no artifact has decided?
+├── yes → it is not mechanical: back to the decision's owner
+└── no
+    Is the content it needs already in the context of a medio or rapido agent at work?
+    ├── yes → that agent executes it (the implementer commits its own diff)
+    └── no
+        Is it a single, already-known command, with nothing to read first?
+        ├── yes → run it where you are, including in the orchestrating session
+        └── no → repo-operator (rapido · baixo)
 ```
 
-**Quando o paralelismo é por sessão.** Abrir uma sessão por unidade (o `start_session` do app
-desktop) troca o subagente por algo que a pessoa vê e com que conversa, mas o tier não vem
-junto ([`CC-PAR-05`](claude-code-paralelismo-e-escala.md)). Quem abre:
+**When parallelism is per session.** Opening one session per unit (the desktop app's
+`start_session`) swaps the subagent for something the person sees and talks to, but the tier
+does not come along ([`CC-PAR-05`](claude-code-paralelismo-e-escala.md)). Whoever opens it:
 
-1. passa `modelo` e `esforco` explícitos, no tier de orquestração (medio · medio; o valor por
-   provedor está em `agents/README.md`), numa abertura `fresh` — um fork herda o modelo;
-2. escreve o brief para a sessão **chamar** o dono como subagente e cuidar só do envelope, da
-   Validação e do PR — "rode como `backend-developer`" faz a sessão escrever o código no
-   modelo que herdou, sem o corpo do agente.
+1. passes explicit `modelo` and `esforco`, at the orchestration tier (medio · medio; the value
+   per provider is in `agents/README.md`), in a `fresh` opening — a fork inherits the model;
+2. writes the brief so the session **calls** the owner as a subagent and takes care only of
+   the envelope, Validation and the PR — "run as `backend-developer`" makes the session write
+   the code on the model it inherited, without the agent's body.
 
-Uma sessão só abre outra no mesmo tier ou abaixo; quando o dono é `alto`, quem sobe é o
-subagente, pelo frontmatter dele.
+A session only opens another at the same tier or below; when the owner is `alto`, what moves
+up is the subagent, through its frontmatter.
 
-A sessão que orquestra é o maior gasto do fluxo: o contexto dela é relido em todo turno até o
-fim (`WF-CORE-07`). Ler um diff, um template ou uma saída de teste ali, no tier mais caro, é
-exatamente o que `WF-CORE-08` proíbe.
+The orchestrating session is the flow's largest expense: its context is reread on every turn
+until the end (`WF-CORE-07`). Reading a diff, a template or a test output there, on the most
+expensive tier, is exactly what `WF-CORE-08` forbids.
 
 ---
 
-## 4. Árvores de decisão
+## 4. Decision trees
 
-### 4.1 Pesquisa — classificar o escopo
+### 4.1 Research — classify the scope
 
 ```
-A mudança altera o que o produto faz ou promete?
-├── sim → escopo de PRODUTO → product-manager decide, product-designer desenha o fluxo
-└── não
-    A mudança altera onde uma responsabilidade mora, ou introduz um novo limite de serviço?
-    ├── sim → escopo de ARQUITETURA → software-architect decide
-    └── não → escopo de DETALHE DE IMPLEMENTAÇÃO → segue direto para workflow-planning
+1. Does the change alter what the product does or promises?
+   └── yes → PRODUCT scope → product-manager decides, product-designer designs the flow
+2. Does it move where a responsibility lives, or introduce a new service boundary?
+   └── yes → ARCHITECTURE scope → software-architect decides
+3. Is the expected behavior already decided and written down?
+   (spec, ADR, test, contract, accepted ticket)
+   ├── no  → PRODUCT scope: an undecided rule in disguise → product-manager decides
+   └── yes → EXECUTION scope → go straight to workflow-planning, citing where the rule is written
 ```
 
-`WF-RES-05`. A classificação errada mais cara é tratar mudança de produto como detalhe —
-ela chega pronta na Implementação sem ninguém ter decidido se o produto deveria mesmo mudar.
+Execution is defined by what it keeps, not by how small it is: the rule is already decided and
+written down, and the change alters only how it is carried out.
 
-#### Varrer as bordas da decisão
-
-Classificar o escopo diz **quem** decide; a varredura diz se a decisão está **completa**. A
-pergunta que para uma unidade no meio do código raramente é a regra principal — é a borda
-dela: o valor exatamente no limite, o prazo contado a partir de quando, a lista vazia, o
-clique repetido. Antes do handoff, quem decide passa cada regra e cada cenário de aceite da
-decisão pelas sete categorias (`WF-RES-06`):
-
-| Categoria | A pergunta que costuma escapar |
-| --- | --- |
-| limite | o valor exatamente no limite entra ou não (`>` ou `>=`)? qual o mínimo, o máximo, o zero, o negativo, o arredondamento? |
-| tempo | conta a partir de quando? expira quando, em que fuso? e se os eventos chegarem fora de ordem? |
-| vazio | e a lista vazia, o campo opcional ausente, o primeiro uso, sem nada cadastrado ainda? |
-| repetição | e a mesma ação duas vezes (duplo clique, retry)? e duas pessoas ao mesmo tempo? |
-| permissão | quem pode — que papel, que dono do recurso, que tenant, que visitante sem sessão? |
-| falha | e se uma dependência cair, ou a operação parar no meio? o que a pessoa vê, o que se desfaz? |
-| o que já existe | e o dado gravado antes da mudança, o cliente na versão anterior, o comportamento atual de que alguém depende? |
-
-Cada borda que se aplica sai da Pesquisa com um de três destinos, e toda lacuna leva quem a
-decide e onde fecha (§5, `WF-CORE-09`). Categoria que não se aplica não deixa rastro.
-
-| Destino | Escopo de produto | Arquitetura e detalhe |
+| Subtype | When | Evidence planning requires |
 | --- | --- | --- |
-| **respondida**, com fonte | cenário de aceite na story do `requirements.md` | linha em `decisoes`, que o Planejamento leva ao critério de aceite da unidade |
-| **fora** | não-objetivo no `requirements.md` | linha em `decisoes`: "fora deste incremento: …" |
-| **lacuna** | "Open gaps" do `requirements.md`; no envelope, quando fecha no Planejamento | no envelope |
+| **fix** | the code diverges from the written rule (a bug) | the rule, cited, and a case that fails today |
+| **refactor** | same behavior, structure changes inside the same boundary | the existing tests still pass, unchanged |
+| **technical adjustment** | performance, dependency, configuration — same promise, same boundaries | a before/after measurement, or a check of the adjustment |
 
-A varredura **aprofunda** a decisão, nunca a **alarga** (`WF-RES-03`): uma borda que pede
-decisão nova, fora do que foi pedido, vira não-objetivo ou lacuna — não pesquisa extra. Ela
-também testa a classificação acima: num escopo de detalhe, uma borda que se aplica e cuja
-resposta não está escrita em lugar nenhum mostra que o escopo era de produto (`WF-RES-05`).
+`WF-RES-05`. The most expensive misclassification is treating a product change as execution —
+it reaches Implementation ready-made without anyone having decided whether the product should
+change at all. Question 3 is the guard: execution that cannot point at where its rule is
+written is product.
 
-### 4.2 Planejamento — os portões
+#### Sweeping the decision's edges
 
-Uma unidade só está pronta para a Implementação depois de passar por todos:
+Classifying the scope says **who** decides; the sweep says whether the decision is
+**complete**. The question that stops a unit in the middle of the code is rarely the main
+rule — it is the rule's edge: the value exactly at the limit, the deadline counted from when,
+the empty list, the repeated click. Before the handoff, whoever decides runs each rule and
+each acceptance scenario of the decision through the seven categories (`WF-RES-06`):
 
-1. **Portão de produto** — se a mudança altera `.specs/**` ou equivalente, existe
-   comportamento aprovado por trás (`requirements.md` em `Approved`, `design.md` em
-   `Accepted`, ou um ADR)? Sem isso, volta para `workflow-research`.
-2. **Portão de decomposição** — só divide em mais de uma unidade se cada uma tiver critério
-   de aceite, evidência e dependência próprios (`WF-PLAN-03`). Dividir por conveniência de
-   quem escreve, não por essas fronteiras, é fragmentação de custo.
-3. **Portão de fronteira** — qual perfil (`frontend-developer`, `backend-developer`,
-   `devops-security`...) é dono de cada unidade? "Fullstack" nunca é resposta (`WF-PLAN-05`).
-4. **Portão de apetite** — quanto vale gastar aqui, decidido **antes** de perguntar quanto vai
-   levar (`WF-PLAN-01`, Shape Up). Uma unidade que estoura o apetite para e volta à mesa de
-   decisão — não estica o prazo em silêncio (`WF-PLAN-02`, circuit breaker).
-5. **Portão de aceite** — critério de aceite escrito, não implícito (`WF-PLAN-04`), com uma
-   linha para cada borda que a Pesquisa respondeu para esta unidade (`WF-RES-06`). Uma lacuna
-   aberta da qual a unidade dependa é uma linha que ninguém escreveu ainda: a unidade espera a
-   resposta (`WF-CORE-09`).
-
-#### Plano de evidência: que teste a Validação vai rodar, e quanto ele custa
-
-Passados os portões, cada unidade nomeia os tipos de teste que vão prová-la, e a Validação
-herda essa lista em vez de inventar outra (`WF-PLAN-06`). O nível segue
-[Teste de Software](teste-de-software.md) §4.1: cada asserção na camada mais barata que ainda
-pega o defeito (`TS-CORE-02`). Para um agente, o custo tem duas moedas, e as duas se repetem a
-cada rodada de correção:
-
-| Tipo | Pega | Tempo de execução | Tokens do agente (escrever, rodar, ler a saída, diagnosticar) | Precisa de pé |
-| --- | --- | --- | --- | --- |
-| estático (tipo, lint) | erro de tipo, import, regra de lint | baixo | baixo: nada a escrever, saída curta | nada |
-| unidade | regra, cálculo, parse, invariante de domínio | baixo | baixo | nada |
-| contrato | a forma do que atravessa uma fronteira | baixo | baixo a médio: um schema, ou um `curl` por rota | o servidor, no caso do `curl` |
-| integração | peças minhas conversando com dependência real | médio | médio: preparo de dados, saída maior | banco ou serviço local |
-| componente (story com `play`) | estado visual e interação de um componente | médio | médio: story, `play` e render | Storybook |
-| E2E | a jornada crítica de ponta a ponta | alto | alto: app e navegador de pé, sessão, trace e DOM lidos a cada falha, reexecução por instabilidade | app, navegador e sessão |
-| manual | o que nenhum check automatiza | — | — (é o tempo de uma pessoa) | pessoa, data e ambiente registrados |
-
-Os valores são ordem relativa, não medição: cada projeto mede os seus. O que a tabela fixa é a
-direção. Uma asserção que sobe de unidade para E2E troca segundos por minutos e uma saída curta
-por um trace inteiro lido pelo agente, em toda rodada.
-
-**Quem fixa esse custo é a fronteira, antes do teste.** Ao escolher onde uma regra mora, o
-`software-architect` escolhe também o teste mais barato capaz de prová-la: uma regra no backend
-se prova com um teste de unidade e um `curl`; a mesma regra espalhada pela interface só se
-prova com E2E. Por isso cada invariante verificável de `design.md` e de um ADR nomeia o tipo de
-teste que o prova, e um invariante que só um E2E prova diz por quê.
-
-### 4.3 Implementação — quando parar e devolver
-
-**Antes da primeira linha, as perguntas de quem implementa** (`WF-IMPL-06`). O agente dono da
-unidade lê a Task e o código que ela toca e lista o que precisaria saber para escrevê-la,
-passando a unidade pelas sete categorias de borda da §4.1. Cada pergunta sai de um de três
-jeitos: respondida por um artefato aceito, que ela cita; decidida ali mesmo, quando a resposta
-fica dentro do que a unidade já decidiu (um nome, a estrutura local, a API de uma biblioteca);
-ou devolvida pela tabela abaixo, antes de qualquer código, como lacuna com quem decide e onde
-fecha (§5, `WF-CORE-09`). A lista fica no contexto de quem implementa; ao orquestrador chegam
-só as lacunas (`WF-CORE-07`).
-
-A tabela vale antes e durante o código. Antes, o retorno custa só o retorno; durante, custa
-também o código já escrito sobre uma resposta inventada.
-
-| Situação encontrada antes ou durante a implementação | Volta para |
+| Category | The question that tends to slip through |
 | --- | --- |
-| comportamento de produto ausente ou contraditório | `workflow-research` (`fecha-em: pesquisa`) |
-| escopo, dependência ou evidência insuficientes na unidade | `workflow-planning` (`fecha-em: planejamento`) |
-| defeito local, dentro do que esta própria unidade já decidiu | corrige aqui mesmo, registra evidência (`WF-IMPL-05`) — não é retorno |
+| boundary | is the value exactly at the limit in or out (`>` or `>=`)? what are the minimum, the maximum, zero, negatives, rounding? |
+| time | counted from when? expires when, in which time zone? and what if events arrive out of order? |
+| empty | what about the empty list, the missing optional field, first use, nothing registered yet? |
+| repetition | what about the same action twice (double click, retry)? and two people at the same time? |
+| permission | who can — which role, which resource owner, which tenant, which visitor with no session? |
+| failure | what if a dependency goes down, or the operation stops halfway? what does the person see, what is undone? |
+| what already exists | what about data stored before the change, the client on the previous version, the current behavior someone depends on? |
 
-`WF-IMPL-01`: implementação nunca reabre decisão de produto sozinha — mesmo quando o caminho
-mais rápido pareceria decidir ali.
+Each edge that applies leaves Research with one of three destinations, and every gap carries
+who decides it and where it closes (§5, `WF-CORE-09`). A category that does not apply leaves
+no trace.
 
-### 4.4 Validação — proporcionalidade da evidência
+| Destination | Product scope | Architecture and execution |
+| --- | --- | --- |
+| **answered**, with a source | acceptance scenario in the `requirements.md` story | a line in `decisoes`, which Planning carries into the unit's acceptance criteria |
+| **out** | non-goal in `requirements.md` | a line in `decisoes`: "out of this increment: …" |
+| **gap** | "Open gaps" in `requirements.md`; in the envelope, when it closes in Planning | in the envelope |
 
-Evidência é uma **decisão sobre risco**, não sinônimo de "rodar tudo" (`WF-VAL-02`):
+The sweep **deepens** the decision, never **widens** it (`WF-RES-03`): an edge that calls for
+a new decision, outside what was asked, becomes a non-goal or a gap — not extra research. It
+also tests the classification above: in an execution scope, an edge that applies and whose
+answer is written nowhere shows that the scope was product (`WF-RES-05`).
+
+### 4.2 Planning — the gates
+
+A unit is only ready for Implementation after passing all of them:
+
+1. **Product gate** — if the change alters `.specs/**` or equivalent, is there approved
+   behavior behind it (`requirements.md` in `Approved`, `design.md` in `Accepted`, or an ADR)?
+   Without it, it goes back to `workflow-research`.
+2. **Decomposition gate** — only split into more than one unit if each has its own acceptance
+   criteria, evidence and dependency (`WF-PLAN-03`). Splitting for the writer's convenience,
+   not along those boundaries, is cost fragmentation.
+3. **Boundary gate** — which perfil (`frontend-developer`, `backend-developer`,
+   `devops-security`...) owns each unit? "Fullstack" is never an answer (`WF-PLAN-05`).
+4. **Acceptance gate** — acceptance criteria written, not implicit (`WF-PLAN-04`), with one
+   line for each edge Research answered for this unit (`WF-RES-06`). An open gap the unit
+   depends on is a line nobody has written yet: the unit waits for the answer (`WF-CORE-09`).
+
+#### Evidence plan: which test Validation will run, and what it costs
+
+Once past the gates, each unit names the test types that will prove it, and Validation
+inherits that list instead of inventing another (`WF-PLAN-06`). The level follows
+[Teste de Software](teste-de-software.md) §4.1: each assertion at the cheapest layer that still
+catches the defect (`TS-CORE-02`). For an agent, the cost comes in two currencies, and both
+repeat on every fix round:
+
+| Type | Catches | Execution time | Agent tokens (write, run, read the output, diagnose) | Needs running |
+| --- | --- | --- | --- | --- |
+| static (types, lint) | type error, import, lint rule | low | low: nothing to write, short output | nothing |
+| unit | rule, calculation, parsing, domain invariant | low | low | nothing |
+| contract | the shape of what crosses a boundary | low | low to medium: a schema, or one `curl` per route | the server, in the `curl` case |
+| integration | my pieces talking to a real dependency | medium | medium: data setup, larger output | local database or service |
+| component (story with `play`) | a component's visual state and interaction | medium | medium: story, `play` and render | Storybook |
+| E2E | the critical journey end to end | high | high: app and browser up, session, trace and DOM read on every failure, reruns for flakiness | app, browser and session |
+| manual | what no check automates | — | — (it is a person's time) | person, date and environment recorded |
+
+The values are relative order, not measurement: each project measures its own. What the table
+fixes is the direction. An assertion that moves up from unit to E2E trades seconds for minutes
+and a short output for an entire trace read by the agent, on every round.
+
+**What fixes this cost is the boundary, before the test.** When choosing where a rule lives,
+the `software-architect` also chooses the cheapest test able to prove it: a rule in the backend
+is proved with a unit test and a `curl`; the same rule spread across the interface can only be
+proved with E2E. That is why each verifiable invariant in `design.md` and in an ADR names the
+test type that proves it, and an invariant only an E2E can prove says why.
+
+### 4.3 Implementation — when to stop and return
+
+**Before the first line, the implementer's questions** (`WF-IMPL-06`). The agent that owns the
+unit reads the Task and the code it touches and lists what it would need to know to write it,
+running the unit through the seven edge categories of §4.1. Each question leaves in one of
+three ways: answered by an accepted artifact, which it cites; decided right there, when the
+answer stays within what the unit has already decided (a name, the local structure, a
+library's API); or returned through the table below, before any code, as a gap with who
+decides it and where it closes (§5, `WF-CORE-09`). The list stays in the implementer's context;
+only the gaps reach the orchestrator (`WF-CORE-07`).
+
+The table applies before and during the code. Before, the return costs only the return;
+during, it also costs the code already written on top of an invented answer.
+
+| Situation found before or during implementation | Goes back to |
+| --- | --- |
+| product behavior missing or contradictory | `workflow-research` (`fecha-em: pesquisa`) |
+| insufficient scope, dependency or evidence in the unit | `workflow-planning` (`fecha-em: planejamento`) |
+| local defect, within what this unit itself has already decided | fix it right here, record evidence (`WF-IMPL-05`) — not a return |
+
+`WF-IMPL-01`: implementation never reopens a product decision on its own — even when the
+fastest path would seem to be deciding it right there.
+
+### 4.4 Validation — proportionality of evidence
+
+Evidence is a **decision about risk**, not a synonym for "run everything" (`WF-VAL-02`):
 
 ```
-A mudança altera contrato público (API, schema, rota)?
-├── sim → checks de contrato + revisão independente obrigatórios
-└── não
-    A mudança toca caminho de autenticação, autorização ou dado sensível?
-    ├── sim → checks de segurança + revisão independente obrigatórios (rotear achado para devops-security)
-    └── não → checks focados no que mudou bastam; declarar o que não foi coberto, não escondê-lo
+Does the change alter a public contract (API, schema, route)?
+├── yes → contract checks + independent review required
+└── no
+    Does the change touch an authentication, authorization or sensitive-data path?
+    ├── yes → security checks + independent review required (route the finding to devops-security)
+    └── no → focused checks on what changed are enough; state what was not covered, do not hide it
 ```
 
-A Validação parte dos tipos de teste que o plano nomeou (`WF-PLAN-06`). Um tipo mais caro que o
-plano não previu só entra com a frase do que ele pega e os mais baratos não; sem essa frase, a
-lacuna é do plano e volta ao Planejamento (`WF-VAL-04`).
+Validation starts from the test types the plan named (`WF-PLAN-06`). A more expensive type the
+plan did not foresee only comes in with the sentence saying what it catches that the cheaper
+ones do not; without that sentence, the gap belongs to the plan and goes back to Planning
+(`WF-VAL-04`).
 
 ---
 
-## 5. O envelope de handoff
+## 5. The handoff envelope
 
-Toda skill deste pilar devolve o mesmo formato, para o próximo pilar (ou pessoa) não precisar
-reconstruir o que já foi decidido:
+Every skill of this pillar returns the same format, so the next pillar (or person) does not
+need to reconstruct what has already been decided:
 
 ```yaml
 pilar: "pesquisa | planejamento | implementacao | validacao"
-resultado: uma frase com o resultado
-artefato: "<arquivo em .specs/, item de board, commit ou PR onde a saída completa está>"
+resultado: one sentence with the outcome
+artefato: "<file in .specs/, board item, commit or PR where the full output lives>"
 evidencia: [E1, E2]
 decisoes: [D1]
 lacunas:
-  - pergunta: G1, em uma frase
-    decide: "<agente da §3 | dono>"
+  - pergunta: G1, in one sentence
+    decide: "<agent from §3 | dono>"
     fecha-em: "pesquisa | planejamento"
-proximo: "workflow-research | workflow-planning | workflow-implementation | workflow-validation | <agente>"
+proximo: "workflow-research | workflow-planning | workflow-implementation | workflow-validation | <agent>"
 ```
 
-`proximo` é o campo de transição — é ele que aponta para onde o bastão vai, e é sempre
-acompanhado de um artefato (`WF-CORE-01`), nunca só de uma frase de intenção.
+`proximo` is the transition field — it is what points to where the baton goes, and it is
+always accompanied by an artifact (`WF-CORE-01`), never by a mere statement of intent.
 
-`artefato` é a referência, não o conteúdo. A saída completa do pilar mora fora da conversa;
-quem orquestra guarda só o envelope, que cabe em 30 linhas (`WF-CORE-07`). Um relatório
-inteiro devolvido à conversa principal é relido e cobrado em todo turno seguinte, de todos
-os pilares que vierem depois.
+`artefato` is the reference, not the content. The pillar's full output lives outside the
+conversation; whoever orchestrates keeps only the envelope, which fits in 30 lines
+(`WF-CORE-07`). A whole report returned to the main conversation is reread and charged on
+every following turn, by every pillar that comes after.
 
-### Lacunas: quem decide e onde fecham
+### Gaps: who decides and where they close
 
-Lacuna é a pergunta cuja resposta pertence a outro dono, não a quem está com o bastão; o que
-quem implementa decide dentro da própria unidade não é lacuna. Cada item de `lacunas` leva
-dois campos além da pergunta (`WF-CORE-09`):
+A gap is the question whose answer belongs to another owner, not to whoever holds the baton;
+what the implementer decides within their own unit is not a gap. Each item in `lacunas`
+carries two fields besides the question (`WF-CORE-09`):
 
-- `decide` — o agente da §3 dono daquela decisão (`product-manager`, `product-designer`,
-  `software-architect`, `project-manager`), ou `dono`, quando só a pessoa pode responder.
-- `fecha-em` — o último pilar em que ela ainda pode estar aberta:
+- `decide` — the §3 agent that owns that decision (`product-manager`, `product-designer`,
+  `software-architect`, `project-manager`), or `dono`, when only the person can answer.
+- `fecha-em` — the last pillar in which it can still be open:
 
-| `fecha-em` | Quando | O que ela bloqueia |
+| `fecha-em` | When | What it blocks |
 | --- | --- | --- |
-| `pesquisa` | a resposta muda o que o produto faz ou promete, ou o que entra no incremento | o Planejamento inteiro: ele não começa |
-| `planejamento` | a resposta só muda como a unidade é desenhada, dividida ou provada — fluxo e estados de tela, fronteira e contrato, dependência e ordem | só as unidades que dependem dela: nenhuma passa no portão de aceite (§4.2) |
+| `pesquisa` | the answer changes what the product does or promises, or what goes into the increment | all of Planning: it does not start |
+| `planejamento` | the answer only changes how the unit is designed, split or proved — flow and screen states, boundary and contract, dependency and order | only the units that depend on it: none passes the acceptance gate (§4.2) |
 
-`implementacao` e `validacao` nunca são valores de `fecha-em`: lacuna de decisão não fecha no
-código (`WF-CORE-03`, `WF-IMPL-01`). O pilar que encontra uma lacuna pelo caminho — a
-Implementação pela §4.3, a Validação pela `WF-VAL-04` — a devolve já com os dois campos.
+`implementacao` and `validacao` are never values of `fecha-em`: a decision gap does not close
+in the code (`WF-CORE-03`, `WF-IMPL-01`). The pillar that runs into a gap along the way —
+Implementation through §4.3, Validation through `WF-VAL-04` — returns it with both fields
+already filled in.
 
-O pilar de `fecha-em` não entrega adiante o que depende da lacuna antes da resposta: a
-Pesquisa não entrega nada com uma lacuna `pesquisa` aberta; o Planejamento não entrega a
-unidade que depende de uma lacuna aberta. Quem responde é quem `decide` nomeia — um agente da
-§3, começado na hora (`WF-CORE-06`), ou o dono, perguntado numa frase.
+The `fecha-em` pillar does not hand on what depends on the gap before the answer: Research
+hands on nothing with an open `pesquisa` gap; Planning does not hand on a unit that depends on
+an open gap. Whoever answers is whoever `decide` names — a §3 agent, started on the spot
+(`WF-CORE-06`), or the owner, asked in one sentence.
 
-O arquivo que espera a resposta do dono é a lacuna mais comum:
-`pergunta: "awaiting owner approval: <caminho>"`, `decide: dono`, e `fecha-em` o pilar que
-escreve o arquivo — `pesquisa` para o `requirements.md`, `planejamento` para os demais
+The file awaiting the owner's reply is the most common gap:
+`pergunta: "awaiting owner approval: <path>"`, `decide: dono`, and `fecha-em` the pillar that
+writes the file — `pesquisa` for `requirements.md`, `planejamento` for the others
 (`WF-SPEC-04`).
 
-**Sem resposta a tempo, a única saída é virar premissa.** A lacuna só avança se o dono a
-aceitar explicitamente na conversa como premissa, com o que a invalidaria (`WF-SPEC-06`). Ela
-sai de `lacunas`, entra em `decisoes` e fica escrita no artefato: em "Constraints and
-assumptions" do `requirements.md`, ou no plano em `tasks/`. Uma premissa invalidada durante a
-Implementação é a primeira linha da tabela da §4.3: volta para a Pesquisa.
+**With no answer in time, the only way out is to become an assumption.** The gap only moves
+forward if the owner explicitly accepts it in the conversation as an assumption, along with
+what would invalidate it (`WF-SPEC-06`). It leaves `lacunas`, enters `decisoes` and is written
+down in the artifact: under "Constraints and assumptions" in `requirements.md`, or in the plan
+in `tasks/`. An assumption invalidated during Implementation is the first row of the §4.3
+table: it goes back to Research.
 
-### Onde o artefato mora: `.specs/`
+### Where the artifact lives: `.specs/`
 
-A saída de Pesquisa e de Planejamento é gravada no projeto, em `.specs/`, e o `artefato` do
-envelope aponta o caminho (`WF-SPEC-01`):
+The output of Research and Planning is stored in the project, in `.specs/`, and the
+envelope's `artefato` points to the path (`WF-SPEC-01`):
 
 ```
 .specs/
 ├── adr/
-│   └── NNNN-<slug>.md            software-architect · nunca editado, só substituído
+│   └── NNNN-<slug>.md            software-architect · never edited, only superseded
 └── <capability>/
-    ├── requirements.md           Pesquisa · product-manager (o PRD da capability)
-    ├── design.md                 Planejamento · software-architect (RFC ou design doc)
-    ├── user-experience.md        Planejamento · product-designer (UX, UI, usabilidade, acessibilidade)
+    ├── requirements.md           Research · product-manager (the capability's PRD)
+    ├── design.md                 Planning · software-architect (RFC or design doc)
+    ├── user-experience.md        Planning · product-designer (UX, UI, usability, accessibility)
     └── tasks/
-        └── NNNN-<slug>.md        Planejamento · project-manager (o plano de um incremento)
+        └── NNNN-<slug>.md        Planning · project-manager (the plan of one increment)
 ```
 
-**Uma pasta por capability, não por entrega.** A capability é permanente, como o Epic que a
-representa (§0.4): a segunda entrega na mesma capability não abre outra pasta. O slug da pasta
-é o campo `capability` do Epic, quando ele existe; numa capability ainda sem Epic, a Pesquisa
-propõe o slug — o `product-manager`, quando o escopo é produto, quem orquestra nos demais — o
-dono o confirma, e o Epic nasce depois com esse valor. Dois efeitos (`WF-SPEC-08`):
+**One folder per capability, not per delivery.** The capability is permanent, like the Epic
+that represents it (§0.4): the second delivery in the same capability does not open another
+folder. The folder's slug is the Epic's `capability` field, when the Epic exists; for a
+capability with no Epic yet, Research proposes the slug — the `product-manager` when the scope
+is product, the orchestrator in the others — the owner confirms it, and the Epic is born later
+with that value. Two effects (`WF-SPEC-08`):
 
-- `requirements.md`, `design.md` e `user-experience.md` são da capability e vivem enquanto ela
-  vive. Texto aprovado não é reescrito: a mudança volta à Pesquisa e entra como **emenda
-  datada** no fim do arquivo, que nasce `Draft` e só vale depois da resposta do dono.
-- O plano é do incremento: cada um ganha `tasks/NNNN-<slug>.md`, numerado em sequência como os
-  ADRs. Quem implementa lê só o plano atual, não o histórico da capability.
+- `requirements.md`, `design.md` and `user-experience.md` belong to the capability and live as
+  long as it lives. Approved text is not rewritten: the change goes back to Research and comes
+  in as a **dated amendment** at the end of the file, which is born `Draft` and only takes
+  effect after the owner's reply.
+- The plan belongs to the increment: each one gets `tasks/NNNN-<slug>.md`, numbered in
+  sequence like the ADRs. The implementer reads only the current plan, not the capability's
+  history.
 
-O escopo classificado na §4.1 decide quais arquivos nascem ou recebem emenda (`WF-SPEC-03`):
+The scope classified in §4.1 decides which files are born or receive an amendment
+(`WF-SPEC-03`):
 
-| Escopo | Arquivos |
+| Scope | Files |
 | --- | --- |
-| detalhe de implementação | um plano em `tasks/` |
-| arquitetura | `design.md` ou emenda nele; um ADR por decisão que sobrevive ao incremento; um plano em `tasks/` |
-| produto | `requirements.md` ou emenda nele; `user-experience.md` quando há interface; `design.md` quando há fronteira ou contrato; um plano em `tasks/` |
+| execution | a plan in `tasks/` |
+| architecture | `design.md` or an amendment to it; one ADR per decision that outlives the increment; a plan in `tasks/` |
+| product | `requirements.md` or an amendment to it; `user-experience.md` when there is an interface; `design.md` when there is a boundary or contract; a plan in `tasks/` |
 
-O que cada documento de decisão é, e quando congela, está em
-[Documentos de Decisão — PRD, RFC e ADR](documentos-de-decisao-prd-rfc-adr.md). Cada arquivo tem
-um dono e cita os outros por link (`WF-SPEC-02`). Uma execução só de especificação para depois
-do plano em `tasks/` (`WF-SPEC-05`).
+What each decision document is, and when it freezes, is in
+[Decision Documents — PRD, RFC and ADR](documentos-de-decisao-prd-rfc-adr.md). Each file has
+one owner and cites the others by link (`WF-SPEC-02`). A specification-only run stops after the
+plan in `tasks/` (`WF-SPEC-05`).
 
-**Quem escreve, em uma linha.** O pilar decide *quando* um arquivo é necessário; o escopo
-decide *qual*; o agente dono decide *o que ele diz*; `workflow-spec` decide *forma, lugar,
-status e revisão*. Todo arquivo nasce `Draft` (ADR nasce `Proposed`) e só muda de status pela
-resposta explícita do dono na conversa (`WF-SPEC-06`). Quais documentos o projeto mantém é
-decisão do dono, registrada uma vez na seção `## Specs` do `AGENTS.md` do projeto, com
-permissão, ou em `.specs/README.md`, e lida antes de escrever (`WF-SPEC-07`); o plano em
-`tasks/` nunca é desligado, e documento desligado deixa sua decisão em uma linha no plano.
+**Who writes, in one line.** The pillar decides *when* a file is needed; the scope decides
+*which*; the owning agent decides *what it says*; `workflow-spec` decides *form, place, status
+and review*. Every file is born `Draft` (an ADR is born `Proposed`) and only changes status
+through the owner's explicit reply in the conversation (`WF-SPEC-06`). Which documents the
+project keeps is the owner's decision, recorded once in the `## Specs` section of the project's
+`AGENTS.md`, with permission, or in `.specs/README.md`, and read before writing (`WF-SPEC-07`);
+the plan in `tasks/` is never switched off, and a document that is switched off leaves its
+decision in one line in the plan.
 
 ---
 
-## 6. Regras normativas
+## 6. Normative rules
 
-Convenção: `MUST`/`NEVER` são normativos. **†** marca decisão desta doc.
+Convention: `MUST`/`NEVER` are normative. **†** marks a decision of this doc.
 
-### `WF-CORE-*` — o que sobrevive a qualquer pilar
+### `WF-CORE-*` — what survives any pillar
 
-| ID | Regra |
+| ID | Rule |
 | --- | --- |
-| `WF-CORE-01` | Todo pilar **MUST** devolver um artefato citável (decisão, unidade de trabalho, código com evidência, ou relatório de achados). "Concluído" sem esse artefato **NEVER**. † |
-| `WF-CORE-02` | Pilar é o momento do trabalho; papel é quem o exerce — os dois eixos **MUST** ficar ortogonais. Reduzir um agente a um único pilar ("`product-manager` só faz pesquisa") **NEVER** — o mesmo papel atravessa pilares diferentes em tarefas diferentes. † |
-| `WF-CORE-03` | Nenhum pilar **MUST** avançar com uma decisão em aberto: um retorno explícito ao pilar anterior é mais barato do que a decisão errada seguir adiante (Boehm, curva de custo de mudança). |
-| `WF-CORE-04` | Todo pilar de Implementação **MUST** terminar em Validação; **NEVER** termina em "pronto" sem prova. |
-| `WF-CORE-05` | Decisão sem evidência **MUST** ser tratada como hipótese, não fato; fingir certeza **NEVER** — é opinião empacotada. |
-| `WF-CORE-06` | Todo pilar delegado **MUST** ir a um agente nomeado da tabela da §3, chamado como subagente, que carrega modelo e esforço próprios; se o pilar roda numa sessão nova, ela **MUST** abrir com `modelo` e `esforco` explícitos e chamar esse agente como subagente (§3.1, `CC-PAR-05`). Delegar a um agente genérico (o `general-purpose` do Claude Code, o spawn sem agente do Codex), ou a uma sessão que só interpreta o papel ("como `backend-developer`" no brief), **NEVER** — os dois herdam o modelo de quem os abriu, não o do dono, e nenhum carrega o corpo do agente. † |
-| `WF-CORE-07` | Quem orquestra os pilares **MUST** guardar só o envelope da §5, com a saída completa referenciada em `artefato`; ler código, o hub inteiro ou o relatório completo de um pilar na conversa principal **NEVER** — esse contexto é relido em todo turno até o fim do fluxo. † |
-| `WF-CORE-08` | Operação mecânica — cujo conteúdo um artefato já decidiu (diff, envelope, template, plano) — **MUST** rodar no agente que já tem esse conteúdo no contexto ou, se for preciso lê-lo, no `repo-operator`, de tier `rapido` (§3.1); ler diff, template ou saída de teste no tier mais caro da sessão para executá-la, ou deixar quem executa decidir o conteúdo, **NEVER**. † |
-| `WF-CORE-09` | Toda lacuna **MUST** sair no envelope com quem a decide (`decide`) e o último pilar em que pode estar aberta (`fecha-em`: `pesquisa` ou `planejamento`, §5); lacuna sem esses campos, ou deixada para a Implementação ou a Validação, **NEVER** — sem resposta a tempo, ela só avança como premissa que o dono aceitou, com o que a invalidaria (Wynne, os cartões vermelhos do Example Mapping). † |
+| `WF-CORE-01` | Every pillar **MUST** return a citable artifact (decision, work unit, code with evidence, or findings report). "Done" without that artifact **NEVER**. † |
+| `WF-CORE-02` | A pillar is the moment of the work; a role is who carries it out — the two axes **MUST** stay orthogonal. Reducing an agent to a single pillar ("`product-manager` only does research") **NEVER** — the same role crosses different pillars in different tasks. † |
+| `WF-CORE-03` | A pillar **NEVER** moves forward with a decision still open: an explicit return to the previous pillar is cheaper than the wrong decision carrying on (Boehm, cost-of-change curve). |
+| `WF-CORE-04` | Every Implementation pillar **MUST** end in Validation; it **NEVER** ends in "done" without proof. |
+| `WF-CORE-05` | A decision without evidence **MUST** be treated as a hypothesis, not a fact; feigning certainty **NEVER** — it is packaged opinion. |
+| `WF-CORE-06` | Every delegated pillar **MUST** go to a named agent from the §3 table, called as a subagent, which carries its own model and effort; if the pillar runs in a new session, that session **MUST** open with explicit `modelo` and `esforco` and call that agent as a subagent (§3.1, `CC-PAR-05`). Delegating to a generic agent (Claude Code's `general-purpose`, Codex's agentless spawn), or to a session that merely plays the role ("as `backend-developer`" in the brief), **NEVER** — both inherit the model of whoever opened them, not the owner's, and neither carries the agent's body. † |
+| `WF-CORE-07` | Whoever orchestrates the pillars **MUST** keep only the §5 envelope, with the full output referenced in `artefato`; reading code, the whole hub or a pillar's full report in the main conversation **NEVER** — that context is reread on every turn until the end of the flow. † |
+| `WF-CORE-08` | A mechanical operation — one whose content an artifact has already decided (diff, envelope, template, plan) — **MUST** run in the agent that already has that content in context or, if it must be read, in `repo-operator`, of tier `rapido` (§3.1); reading a diff, template or test output on the session's most expensive tier in order to execute it, or letting the executor decide the content, **NEVER**. † |
+| `WF-CORE-09` | Every gap **MUST** leave in the envelope with who decides it (`decide`) and the last pillar in which it can be open (`fecha-em`: `pesquisa` or `planejamento`, §5); a gap without these fields, or left for Implementation or Validation, **NEVER** — with no answer in time, it only moves forward as an assumption the owner accepted, along with what would invalidate it (Wynne, Example Mapping's red cards). † |
 
-### `WF-RES-*` — pesquisa
+### `WF-RES-*` — research
 
-| ID | Regra |
+| ID | Rule |
 | --- | --- |
-| `WF-RES-01` | A pesquisa **MUST** separar fato, hipótese, decisão e lacuna antes de propor solução; misturar os quatro **NEVER** (Torres, opportunity solution tree). |
-| `WF-RES-02` | Código existente **MUST** ser tratado como evidência do presente, **NEVER** como autoridade sobre a intenção — o comportamento atual pode ser o próprio defeito. |
-| `WF-RES-03` | A pesquisa **MUST** resolver a menor decisão que destrava o Planejamento; relatório extenso sem decisão anexada **NEVER** conta como saída deste pilar. |
-| `WF-RES-04` | Toda alegação sobre comportamento do usuário **MUST** vir com uma fonte (dado, entrevista, código, ticket); opinião do time sobre o usuário, sem essa fonte, **NEVER** substitui pesquisa (Cagan, risco de valor). |
-| `WF-RES-05` | Uma mudança de comportamento de produto, de arquitetura, ou só de detalhe de implementação **MUST** ser classificada antes de seguir — a classificação decide para qual agente este pilar roteia. |
-| `WF-RES-06` | Antes do handoff, cada regra e cada cenário de aceite da decisão **MUST** passar pelas sete categorias de borda da §4.1 — limite, tempo, vazio, repetição, permissão, falha, o que já existe —, e cada borda que se aplica sai respondida com fonte, fora como não-objetivo, ou como lacuna (`WF-CORE-09`); decisão com borda aplicável sem destino **NEVER** conta como resolvida, e a varredura **NEVER** alarga a decisão (`WF-RES-03`) (Myers, análise de valor-limite; Wynne, Example Mapping). |
+| `WF-RES-01` | Research **MUST** separate fact, hypothesis, decision and gap before proposing a solution; mixing the four **NEVER** (Torres, opportunity solution tree). |
+| `WF-RES-02` | Existing code **MUST** be treated as evidence of the present, **NEVER** as authority over intent — the current behavior may be the defect itself. |
+| `WF-RES-03` | Research **MUST** resolve the smallest decision that unblocks Planning; a lengthy report with no decision attached **NEVER** counts as output of this pillar. |
+| `WF-RES-04` | Every claim about user behavior **MUST** come with a source (data, interview, code, ticket); the team's opinion about the user, without that source, **NEVER** replaces research (Cagan, value risk). |
+| `WF-RES-05` | A change **MUST** be classified as product, architecture or execution before moving on — and an execution scope **MUST** name its subtype and cite where its rule is written; the classification decides which agent this pillar routes to. |
+| `WF-RES-06` | Before the handoff, each rule and each acceptance scenario of the decision **MUST** go through the seven edge categories of §4.1 — boundary, time, empty, repetition, permission, failure, what already exists — and each edge that applies leaves answered with a source, out as a non-goal, or as a gap (`WF-CORE-09`); a decision with an applicable edge that has no destination **NEVER** counts as resolved, and the sweep **NEVER** widens the decision (`WF-RES-03`) (Myers, boundary value analysis; Wynne, Example Mapping). |
 
-### `WF-PLAN-*` — planejamento
+### `WF-PLAN-*` — planning
 
-| ID | Regra |
+| ID | Rule |
 | --- | --- |
-| `WF-PLAN-01` | Toda unidade de trabalho **MUST** ter apetite decidido antes de estimativa de prazo — "quanto vale gastar" vem antes de "quanto vai levar" (Shape Up). |
-| `WF-PLAN-02` | Unidade que estoura o apetite **MUST** parar e voltar à mesa de decisão; estender o prazo em silêncio **NEVER** (Shape Up, circuit breaker). |
-| `WF-PLAN-03` | Decompor em múltiplas unidades **MUST** ter critério — cada unidade com aceite, evidência e dependência próprios; decompor sem esse critério **NEVER**, é fragmentação de custo. |
-| `WF-PLAN-04` | Toda unidade **MUST** entrar em Implementação com critério de aceite escrito; "pronta para começar" sem isso **NEVER** é pronta (Definition of Ready). |
-| `WF-PLAN-05` | A fronteira de camada/perfil de cada unidade **MUST** ser nomeada no Planejamento; "fullstack" como perfil **NEVER** — esconde a fronteira em vez de decidi-la. |
-| `WF-PLAN-06` | O plano de evidência de cada unidade **MUST** nomear os tipos de teste que a Validação vai rodar, cada um no nível mais barato que pega o defeito (`TS-CORE-02`), e cada invariante de `design.md` ou ADR **MUST** nomear o tipo que o prova; integração ou E2E sem a frase do que só eles pegam **NEVER** — o custo em tempo e tokens se repete a cada rodada (§4.2). † |
+| `WF-PLAN-03` | Decomposing into multiple units **MUST** follow a criterion — each unit with its own acceptance, evidence and dependency; decomposing without that criterion **NEVER**, it is cost fragmentation. |
+| `WF-PLAN-04` | Every unit **MUST** enter Implementation with written acceptance criteria; "ready to start" without them is **NEVER** ready (Definition of Ready). |
+| `WF-PLAN-05` | Each unit's layer/perfil boundary **MUST** be named in Planning; "fullstack" as a perfil **NEVER** — it hides the boundary instead of deciding it. |
+| `WF-PLAN-06` | Each unit's evidence plan **MUST** name the test types Validation will run, each at the cheapest level that catches the defect (`TS-CORE-02`), and each invariant in `design.md` or an ADR **MUST** name the type that proves it; integration or E2E without the sentence saying what only they catch **NEVER** — the cost in time and tokens repeats on every round (§4.2). † |
 
-### `WF-IMPL-*` — implementação
+### `WF-IMPL-*` — implementation
 
-| ID | Regra |
+| ID | Rule |
 | --- | --- |
-| `WF-IMPL-01` | A Implementação **NEVER** reabre uma decisão de produto já registrada no Planejamento; divergência encontrada aqui **MUST** voltar para Pesquisa, não ser decidida ad-hoc. |
-| `WF-IMPL-02` | Teste focado **MUST** acompanhar a mudança, não ser etapa posterior; implementar tudo e "testar depois" **NEVER** (XP, test-first). |
-| `WF-IMPL-03` | O escopo da mudança **MUST** ser o menor que resolve a unidade decidida; resolver problema adjacente não decidido nesta unidade **NEVER**, mesmo que pareça eficiente. |
-| `WF-IMPL-04` | Contrato explícito (tipo, schema, fronteira de tenant/auth) **MUST** ser preservado durante a implementação; mudar contrato implícito e "ajustar depois" **NEVER**. |
-| `WF-IMPL-05` | Defeito local encontrado durante a própria implementação **MUST** ser corrigido ali e registrado como evidência, sem abrir um ciclo de Validação separado só para ele. |
-| `WF-IMPL-06` | Antes da primeira linha de código, quem implementa **MUST** listar as perguntas que a unidade não responde — a Task e o código que ela toca, pelas categorias de borda da §4.1 — e cada uma sai respondida por um artefato aceito, decidida dentro do que a unidade já decidiu, ou devolvida pela §4.3 como lacuna (`WF-CORE-09`); começar a escrever sem essa lista **NEVER** — a pergunta achada no meio do código chega com uma resposta inventada já escrita nele. † |
+| `WF-IMPL-01` | Implementation **NEVER** reopens a product decision already recorded in Planning; a divergence found here **MUST** go back to Research, not be decided ad hoc. |
+| `WF-IMPL-02` | A focused test **MUST** accompany the change, not be a later step; implementing everything and "testing later" **NEVER** (XP, test-first). |
+| `WF-IMPL-03` | The scope of the change **MUST** be the smallest that resolves the decided unit; solving an adjacent problem not decided in this unit **NEVER**, even if it seems efficient. |
+| `WF-IMPL-04` | An explicit contract (type, schema, tenant/auth boundary) **MUST** be preserved during implementation; changing an implicit contract and "adjusting later" **NEVER**. |
+| `WF-IMPL-05` | A local defect found during the implementation itself **MUST** be fixed there and recorded as evidence, without opening a separate Validation cycle just for it. |
+| `WF-IMPL-06` | Before the first line of code, the implementer **MUST** list the questions the unit does not answer — the Task and the code it touches, through the edge categories of §4.1 — and each one leaves answered by an accepted artifact, decided within what the unit has already decided, or returned through §4.3 as a gap (`WF-CORE-09`); starting to write without that list **NEVER** — a question found in the middle of the code arrives with an invented answer already written into it. † |
 
-### `WF-VAL-*` — validação
+### `WF-VAL-*` — validation
 
-| ID | Regra |
+| ID | Rule |
 | --- | --- |
-| `WF-VAL-01` | Quem implementa **NEVER** aprova a própria mudança; a Validação **MUST** inspecionar em contexto independente do autor (Google SWE Practices; ver `CC-SES-07`). |
-| `WF-VAL-02` | A evidência exigida **MUST** ser proporcional ao risco da mudança; "rodar a suíte inteira" como resposta padrão **NEVER** — é decisão de evidência preguiçosa, não rigorosa. |
-| `WF-VAL-03` | Verificação técnica ("construímos certo") e validação de negócio ("é a coisa certa") **MUST** ser etapas separadas; a segunda **NEVER** bloqueia o fechamento técnico da primeira (ver [Teste de Software](teste-de-software.md) §0). |
-| `WF-VAL-04` | Toda falha de Validação **MUST** ser roteada para o pilar de origem do problema — Pesquisa se é lacuna de decisão, Planejamento se é lacuna de escopo/evidência, Implementação se é defeito de código; corrigir no pilar errado **NEVER**. |
-| `WF-VAL-05` | Métrica de entrega (lead time, taxa de falha de mudança) **MUST** vir de dado medido, **NEVER** de percepção (Forsgren/Humble/Kim, *Accelerate* — métricas DORA). |
+| `WF-VAL-01` | The implementer **NEVER** approves their own change; Validation **MUST** inspect in a context independent of the author (Google SWE Practices; see `CC-SES-07`). |
+| `WF-VAL-02` | The evidence required **MUST** be proportional to the change's risk; "run the whole suite" as the default answer **NEVER** — it is a lazy evidence decision, not a rigorous one. |
+| `WF-VAL-03` | Technical verification ("did we build it right") and business validation ("is it the right thing") **MUST** be separate steps; the second **NEVER** blocks the technical closure of the first (see [Teste de Software](teste-de-software.md) §0). |
+| `WF-VAL-04` | Every Validation failure **MUST** be routed to the pillar where the problem originated — Research if it is a decision gap, Planning if it is a scope/evidence gap, Implementation if it is a code defect; fixing it in the wrong pillar **NEVER**. |
+| `WF-VAL-05` | A delivery metric (lead time, change failure rate) **MUST** come from measured data, **NEVER** from perception (Forsgren/Humble/Kim, *Accelerate* — DORA metrics). |
 
-### `WF-SPEC-*` — os arquivos de `.specs/`
+### `WF-SPEC-*` — the `.specs/` files
 
-| ID | Regra |
+| ID | Rule |
 | --- | --- |
-| `WF-SPEC-01` | A saída de Pesquisa e de Planejamento **MUST** ser gravada em `.specs/`, e o `artefato` do envelope aponta o caminho; saída que só existe na conversa **NEVER**. † |
-| `WF-SPEC-02` | Cada arquivo de `.specs/` **MUST** ter um único dono e citar os outros por link; copiar conteúdo de um arquivo para outro **NEVER**, a cópia diverge. † |
-| `WF-SPEC-03` | Os arquivos gerados **MUST** seguir o escopo classificado na §4.1; gerar os quatro arquivos para um detalhe de implementação **NEVER** (ver `DOC-CORE-02`). † |
-| `WF-SPEC-04` | Um Task do plano em `tasks/` **MUST** começar só quando os arquivos que ele cita estão aceitos; começar sobre rascunho **NEVER** (`WF-CORE-03`). |
-| `WF-SPEC-05` | Uma execução só de especificação **MUST** parar depois do plano em `tasks/`, devolvendo o envelope de Planejamento; seguir para a Implementação sem novo pedido do dono **NEVER**. † |
-| `WF-SPEC-06` | Todo arquivo de `.specs/` **MUST** nascer `Draft` (ADR: `Proposed`) e mudar de status só pela resposta explícita do dono na conversa; o agente que escreveu aprovar o próprio arquivo, ou silêncio valer como aprovação, **NEVER**. † |
-| `WF-SPEC-07` | Quais documentos o projeto mantém **MUST** ser registrado uma vez (`## Specs` no `AGENTS.md`, com permissão do dono, ou `.specs/README.md`) e lido antes de escrever; perguntar de novo a cada execução **NEVER**; desligar o plano em `tasks/` **NEVER**. † |
-| `WF-SPEC-08` | `.specs/` **MUST** ter uma pasta por capability: documento da capability já aprovado recebe mudança como emenda datada, que nasce `Draft`, e cada incremento ganha seu plano em `tasks/NNNN-<slug>.md`; reescrever texto aprovado, ou acumular incrementos num plano só, **NEVER**. † |
+| `WF-SPEC-01` | The output of Research and Planning **MUST** be stored in `.specs/`, and the envelope's `artefato` points to the path; output that exists only in the conversation **NEVER**. † |
+| `WF-SPEC-02` | Each `.specs/` file **MUST** have a single owner and cite the others by link; copying content from one file to another **NEVER**, the copy diverges. † |
+| `WF-SPEC-03` | The files generated **MUST** follow the scope classified in §4.1; generating the four files for an execution scope **NEVER** (see `DOC-CORE-02`). † |
+| `WF-SPEC-04` | A Task of the plan in `tasks/` **MUST** start only when the files it cites are accepted; starting on a draft **NEVER** (`WF-CORE-03`). |
+| `WF-SPEC-05` | A specification-only run **MUST** stop after the plan in `tasks/`, returning the Planning envelope; moving on to Implementation without a new request from the owner **NEVER**. † |
+| `WF-SPEC-06` | Every `.specs/` file **MUST** be born `Draft` (ADR: `Proposed`) and change status only through the owner's explicit reply in the conversation; the agent that wrote it approving its own file, or silence counting as approval, **NEVER**. † |
+| `WF-SPEC-07` | Which documents the project keeps **MUST** be recorded once (`## Specs` in `AGENTS.md`, with the owner's permission, or `.specs/README.md`) and read before writing; asking again on every run **NEVER**; switching off the plan in `tasks/` **NEVER**. † |
+| `WF-SPEC-08` | `.specs/` **MUST** have one folder per capability: an already-approved capability document receives a change as a dated amendment, which is born `Draft`, and each increment gets its own plan in `tasks/NNNN-<slug>.md`; rewriting approved text, or piling increments into a single plan, **NEVER**. † |
 
-### Contagem
+### Count
 
-**40 regras** em seis famílias, um único arquivo — sem satélite nesta versão.
+**38 rules** in six families, a single file — no satellite in this version.
 
-| Família | Regras |
+| Family | Rules |
 | --- | --- |
 | `WF-CORE-*` | 9 |
 | `WF-RES-*` | 6 |
-| `WF-PLAN-*` | 6 |
+| `WF-PLAN-*` | 4 (`WF-PLAN-01` and `WF-PLAN-02`, the appetite rules, are retired; the IDs are not reused) |
 | `WF-IMPL-*` | 6 |
 | `WF-VAL-*` | 5 |
 | `WF-SPEC-*` | 8 |
 
 ---
 
-## 7. Contrato de skill
+## 7. Skill contract
 
-### O que carregar
+### What to load
 
 ```
-SEMPRE, ao decidir em que pilar uma tarefa ambígua está:
-          Fluxo de Entrega - Quatro Pilares.md § 0, § 2, § 3
+ALWAYS, when deciding which pillar an ambiguous task is in:
+          Delivery Flow - Four Pillars.md § 0, § 2, § 3
 
-AO CLASSIFICAR o escopo de uma pesquisa e varrer as bordas da decisão:
+WHEN CLASSIFYING the scope of a research effort and sweeping the decision's edges:
           § 4.1 + WF-RES-*
 
-AO DECLARAR uma lacuna, ou decidir se um pilar avança com ela:
-          § 5 "Lacunas" + WF-CORE-09
+WHEN DECLARING a gap, or deciding whether a pillar moves forward with it:
+          § 5 "Gaps" + WF-CORE-09
 
-AO PASSAR pelos portões de planejamento:
+WHEN GOING through the planning gates:
           § 4.2 + WF-PLAN-*
 
-AO LISTAR as perguntas antes do código, ou decidir se a implementação para e devolve:
-          § 4.3 + WF-IMPL-* (e a tabela de bordas da § 4.1)
+WHEN LISTING the questions before the code, or deciding whether implementation stops and returns:
+          § 4.3 + WF-IMPL-* (and the edge table in § 4.1)
 
-AO DECIDIR quanta evidência a validação exige:
+WHEN DECIDING how much evidence validation requires:
           § 4.4 + WF-VAL-*
 
-AO GRAVAR os arquivos de .specs/:
-          § 5 + WF-SPEC-* (e a nota de Documentos de Decisão, DOC-*, só para o documento em escrita)
+WHEN STORING the .specs/ files:
+          § 5 + WF-SPEC-* (and the Decision Documents note, DOC-*, only for the document being written)
 
-AO DECIDIR quem executa uma operação mecânica (commit, PR, mover, apagar, publicar, rodar checks):
+WHEN DECIDING who executes a mechanical operation (commit, PR, move, delete, publish, run checks):
           § 3.1 + WF-CORE-08
 
-NUNCA:    esta estrutura inteira para uma tarefa cujo pilar já é óbvio
-          (ex.: "corrija este typo" não precisa de classificação de pilar)
+NEVER:    this whole structure for a task whose pillar is already obvious
+          (e.g. "fix this typo" needs no pillar classification)
 ```
 
-### Como citar
+### How to cite
 
-> `WF-CORE-03` — a tarefa pede para implementar um novo limite de desconto, mas ninguém
-> decidiu ainda se acima de 50% precisa de aprovação manual. Isso é uma decisão de produto em
-> aberto chegando disfarçada de tarefa de implementação; a resposta correta é devolver para
-> `workflow-research`, não escolher um valor e seguir.
-> Ver [Fluxo de Entrega — Quatro Pilares](fluxo-de-entrega-quatro-pilares.md) § 4.1.
+> `WF-CORE-03` — the task asks to implement a new discount limit, but nobody has decided yet
+> whether anything above 50% needs manual approval. That is an open product decision arriving
+> disguised as an implementation task; the correct response is to return it to
+> `workflow-research`, not to pick a value and move on.
+> See [Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md) § 4.1.
 
-### Invariantes que a skill deve fazer valer
+### Invariants the skill must enforce
 
-1. **Pilar antes de agente.** Nunca escolher `frontend-developer` ou `backend-developer`
-   antes de confirmar que a tarefa já passou pelos pilares anteriores.
-2. **Retorno é mais barato que avanço errado.** Voltar um pilar não é falha do processo —
-   é o processo funcionando (`WF-CORE-03`).
-3. **Não reabrir decisão de produto na implementação** (`WF-IMPL-01`) — sinalizar e devolver,
-   nunca decidir ad-hoc no meio do código.
-4. **Evidência proporcional, nunca "a suíte inteira" por padrão** (`WF-VAL-02`), e o tipo de
-   teste decidido no plano, com o custo dele à vista (`WF-PLAN-06`).
-5. **Verificação técnica não espera validação de negócio, nem o contrário** (`WF-VAL-03`) —
-   as duas são reais, mas não se bloqueiam.
-6. **Seguir a ponte.** Quando a §8 indicar que a decisão pertence a uma skill ou agente já
-   existente, seguir em vez de reinventar o procedimento aqui.
-7. **Operação mecânica no tier mais barato** (`WF-CORE-08`) — quem orquestra não lê diff,
-   template ou saída de teste para executar o que um artefato já decidiu.
-8. **Lacuna nunca fecha no código.** Toda lacuna tem quem decide e onde fecha (`WF-CORE-09`);
-   a Pesquisa varre as bordas antes de entregar (`WF-RES-06`), e quem implementa lista as
-   perguntas antes da primeira linha (`WF-IMPL-06`).
-9. **O papel vem do agente, não do brief.** Pilar delegado roda no agente nomeado, chamado como
-   subagente; uma sessão aberta para uma unidade abre com modelo e esforço explícitos e chama
-   esse agente, em vez de interpretá-lo (`WF-CORE-06`, `CC-PAR-05`).
+1. **Pillar before agent.** Never choose `frontend-developer` or `backend-developer` before
+   confirming the task has already gone through the earlier pillars.
+2. **Going back is cheaper than moving forward wrongly.** Going back a pillar is not a failure
+   of the process — it is the process working (`WF-CORE-03`).
+3. **Do not reopen a product decision in implementation** (`WF-IMPL-01`) — flag it and return
+   it, never decide ad hoc in the middle of the code.
+4. **Proportional evidence, never "the whole suite" by default** (`WF-VAL-02`), and the test
+   type decided in the plan, with its cost in plain sight (`WF-PLAN-06`).
+5. **Technical verification does not wait for business validation, nor the reverse**
+   (`WF-VAL-03`) — both are real, but they do not block each other.
+6. **Follow the bridge.** When §8 indicates that the decision belongs to an existing skill or
+   agent, follow it instead of reinventing the procedure here.
+7. **Mechanical operation on the cheapest tier** (`WF-CORE-08`) — whoever orchestrates does not
+   read a diff, template or test output to execute what an artifact has already decided.
+8. **A gap never closes in the code.** Every gap has who decides it and where it closes
+   (`WF-CORE-09`); Research sweeps the edges before handing off (`WF-RES-06`), and the
+   implementer lists the questions before the first line (`WF-IMPL-06`).
+9. **The role comes from the agent, not from the brief.** A delegated pillar runs in the named
+   agent, called as a subagent; a session opened for a unit opens with explicit model and
+   effort and calls that agent, instead of playing it (`WF-CORE-06`, `CC-PAR-05`).
 
-### Recortes para skills novas
+### Slices for new skills
 
-| Skill | Carrega | Fonte declarada |
+| Skill | Loads | Declared source |
 | --- | --- | --- |
-| "que pilar é esta tarefa ambígua" | § 0 + § 2 + § 3 | este hub |
-| "classificar escopo de uma pesquisa" | § 4.1 + `WF-RES-*` | este hub |
-| "passar pelos portões de planejamento" | § 4.2 + `WF-PLAN-*` | este hub |
-| "decidir se a implementação para e devolve" | § 4.3 + `WF-IMPL-*` | este hub |
-| "decidir quanta evidência a validação exige" | § 4.4 + `WF-VAL-*` | este hub |
-| "decidir quem executa uma operação mecânica" | § 3.1 + `WF-CORE-08` | este hub |
-| "escrever e registrar um arquivo de `.specs/`" | § 5 + `WF-SPEC-*` | este hub e [Documentos de Decisão — PRD, RFC e ADR](documentos-de-decisao-prd-rfc-adr.md) |
+| "which pillar is this ambiguous task in" | § 0 + § 2 + § 3 | this hub |
+| "classify the scope of a research effort" | § 4.1 + `WF-RES-*` | this hub |
+| "go through the planning gates" | § 4.2 + `WF-PLAN-*` | this hub |
+| "decide whether implementation stops and returns" | § 4.3 + `WF-IMPL-*` | this hub |
+| "decide how much evidence validation requires" | § 4.4 + `WF-VAL-*` | this hub |
+| "decide who executes a mechanical operation" | § 3.1 + `WF-CORE-08` | this hub |
+| "write and record a `.specs/` file" | § 5 + `WF-SPEC-*` | this hub and [Decision Documents — PRD, RFC and ADR](documentos-de-decisao-prd-rfc-adr.md) |
 
 ---
 
-## 8. Pontes com o stack
+## 8. Bridges to the stack
 
-| Decisão | O que **não** fazer | A ponte |
+| Decision | What **not** to do | The bridge |
 | --- | --- | --- |
-| Decidir se uma mudança é de produto, arquitetura ou detalhe | assumir e seguir para o código | `product-manager` / `software-architect` — §4.1 |
-| Responder a borda de uma regra — o limite, o prazo, o vazio, o clique repetido | escolher no código o que parecer razoável | a varredura de bordas da §4.1, na Pesquisa (`WF-RES-06`); no código, a lista de perguntas da §4.3 devolve (`WF-IMPL-06`) |
-| Abrir Epic/Story/Task no rastreador | criar o item assim que a ideia aparece, antes da decisão | `workflow-research` decide o escopo primeiro (§4.1) — o Board só abre no Planejamento, com a decisão já resolvida (§0.4, §3) |
-| Decidir em que nível um teste da unidade entra | deixar para a hora de escrever | `test-design`, existente — não é reimplementado aqui |
-| Revisar uma mudança já implementada | o próprio autor aprovar | `code-reviewer`, em contexto fresco (`WF-VAL-01`, `CC-SES-07`) |
-| Decidir o contrato HTTP de uma rota nova | inventar status/shape no handler | `http-contract`, existente |
-| Achado de autenticação, cookie ou segredo durante a validação | corrigir e seguir sem rotear | `devops-security` (`WF-VAL-04`) |
-| Cronograma, risco ou "isso cabe no escopo" durante o planejamento | o time de implementação decidir sozinho | `project-manager` |
-| Fronteira entre camadas ou serviços durante o planejamento | decidir dentro do código, sem registrar | `software-architect`, decisão registrada |
-| Escrever PRD, RFC, ADR, UX ou tasks em `.specs/` | inventar o formato, aprovar o próprio arquivo, ou editar um ADR aceito | `workflow-spec`, com [Documentos de Decisão — PRD, RFC e ADR](documentos-de-decisao-prd-rfc-adr.md) |
+| Decide whether a change is product, architecture or execution | assume and go on to the code | `product-manager` / `software-architect` — §4.1 |
+| Answer a rule's edge — the limit, the deadline, the empty case, the repeated click | pick in the code whatever seems reasonable | the edge sweep of §4.1, in Research (`WF-RES-06`); in the code, the question list of §4.3 returns it (`WF-IMPL-06`) |
+| Open an Epic/Story/Task in the tracker | create the item as soon as the idea shows up, before the decision | `workflow-research` decides the scope first (§4.1) — the Board only opens in Planning, with the decision already resolved (§0.4, §3) |
+| Decide which level a unit's test goes in | leave it for when it is being written | `test-design`, existing — not reimplemented here |
+| Review an already-implemented change | the author approving it themselves | `code-reviewer`, in fresh context (`WF-VAL-01`, `CC-SES-07`) |
+| Decide the HTTP contract of a new route | invent status/shape in the handler | `http-contract`, existing |
+| An authentication, cookie or secret finding during validation | fix it and move on without routing | `devops-security` (`WF-VAL-04`) |
+| Schedule, risk or "does this fit the scope" during planning | the implementation team deciding alone | `project-manager` |
+| Boundary between layers or services during planning | decide it inside the code, without recording it | `software-architect`, recorded decision |
+| Write a PRD, RFC, ADR, UX or tasks in `.specs/` | invent the format, approve one's own file, or edit an accepted ADR | `workflow-spec`, with [Decision Documents — PRD, RFC and ADR](documentos-de-decisao-prd-rfc-adr.md) |
 
-**A ponte mais importante desta nota:** o pilar nunca substitui a skill ou o agente que já
-resolve a pergunta — ele só decide **quando** chamar cada um. Um `workflow-*` que responde a
-pergunta de arquitetura em vez de rotear para `software-architect` está duplicando regra que
-já existe em outro lugar, e duplicação de regra apodrece no dia seguinte, igual a qualquer
-outra camada deste projeto.
-
----
-
-## Fontes consultadas
-
-- Barry Boehm, *Software Engineering Economics* — curva de custo de mudança; base da origem
-  histórica da distinção verificação × validação.
-- Marty Cagan, *Inspired: How to Create Tech Products Customers Love* — riscos de valor,
-  usabilidade, viabilidade e factibilidade na descoberta de produto.
-- Teresa Torres, *Continuous Discovery Habits* — árvore de oportunidade-solução, pesquisa
-  contínua em vez de projeto único.
-- Ryan Singer / Basecamp, *Shape Up: Stop Running in Circles* — apetite, mesa de aposta,
-  circuit breaker.
-- Kent Beck, *Extreme Programming Explained* — teste antes da implementação, lotes pequenos.
-- Winters, Manshreck, Wright, *Software Engineering at Google* — cultura de revisão de código
-  por par independente (já citado em `TS-*`).
-- Forsgren, Humble, Kim, *Accelerate* — as quatro métricas DORA de performance de entrega.
-- Glenford Myers, *The Art of Software Testing* — partição de equivalência e análise de
-  valor-limite: o defeito se concentra na fronteira entre classes de entrada; base da
-  categoria "limite" da varredura de bordas (§4.1, `WF-RES-06`). Consultado em 2026-10-10 por
-  resumos do capítulo, não pelo texto do livro.
-- Matt Wynne, *Introducing Example Mapping* (blog do Cucumber) — regras, exemplos e perguntas:
-  a pergunta que ninguém na sala responde vira um cartão vermelho e a conversa segue, e uma
-  mesa coberta deles diz que a story ainda não está entendida; base de declarar a lacuna em
-  vez de adivinhar a resposta (`WF-CORE-09`) e de varrer a regra por exemplos (`WF-RES-06`).
-  Os campos `decide` e `fecha-em` são decisão desta doc, não do post. Consultado em
-  2026-10-10.
-- **Precedente interno, não autoridade acadêmica:** lemind (`studio-risine`), ADR 114 — "o
-  workflow de agentes tem quatro pilares" (`docs/decisions/114-four-pillar-agent-workflow.md`)
-  e `docs/engineering/agent-workflow.md` — a mesma forma de quatro pilares, implementada e em
-  produção num projeto real; a distinção pilar × perfil desta nota vem diretamente de lá.
-
-**O que não foi possível verificar por fonte primária nesta versão:** citação de página ou
-edição específica de cada livro acima — as regras `WF-*` são uma síntese própria dos conceitos
-centrais de cada obra, não transcrição literal. Marcado com † nas regras onde a síntese é a
-contribuição principal deste projeto, sem paralelo direto numa única fonte.
+**The most important bridge in this note:** the pillar never replaces the skill or agent that
+already resolves the question — it only decides **when** to call each one. A `workflow-*` that
+answers the architecture question instead of routing to `software-architect` is duplicating a
+rule that already exists elsewhere, and duplicated rules rot the next day, like any other layer
+of this project.
 
 ---
 
-## Relacionados
+## Sources consulted
 
-- `agents/README.md` — os onze papéis; "How agents hand off" é o
-  fluxograma que esta nota formaliza
-- [Teste de Software](teste-de-software.md) — §0, a distinção verificação × validação que o
-  pilar de Validação reaproveita
-- `skills/workflow/` — as quatro skills que implementam este contrato, e `workflow-spec`, que grava os arquivos de `.specs/`
-- [Documentos de Decisão — PRD, RFC e ADR](documentos-de-decisao-prd-rfc-adr.md) — o que é
-  cada documento de decisão gravado em `.specs/`
+- Barry Boehm, *Software Engineering Economics* — cost-of-change curve; basis of the historical
+  origin of the verification × validation distinction.
+- Marty Cagan, *Inspired: How to Create Tech Products Customers Love* — value, usability,
+  viability and feasibility risks in product discovery.
+- Teresa Torres, *Continuous Discovery Habits* — opportunity solution tree, continuous research
+  instead of a one-off project.
+- Kent Beck, *Extreme Programming Explained* — test before implementation, small batches.
+- Winters, Manshreck, Wright, *Software Engineering at Google* — culture of code review by an
+  independent peer (already cited in `TS-*`).
+- Forsgren, Humble, Kim, *Accelerate* — the four DORA delivery performance metrics.
+- Glenford Myers, *The Art of Software Testing* — equivalence partitioning and boundary value
+  analysis: defects concentrate at the boundary between input classes; basis of the "boundary"
+  category of the edge sweep (§4.1, `WF-RES-06`). Consulted on 2026-10-10 through chapter
+  summaries, not the book's text.
+- Matt Wynne, *Introducing Example Mapping* (Cucumber blog) — rules, examples and questions:
+  the question nobody in the room can answer becomes a red card and the conversation moves on,
+  and a table covered in them says the story is not yet understood; basis for declaring the gap
+  instead of guessing the answer (`WF-CORE-09`) and for sweeping the rule through examples
+  (`WF-RES-06`). The `decide` and `fecha-em` fields are a decision of this doc, not of the
+  post. Consulted on 2026-10-10.
+- **Internal precedent, not academic authority:** lemind (`studio-risine`), ADR 114 — "the
+  agent workflow has four pillars" (`docs/decisions/114-four-pillar-agent-workflow.md`) and
+  `docs/engineering/agent-workflow.md` — the same four-pillar shape, implemented and in
+  production in a real project; this note's pillar × perfil distinction comes directly from
+  there.
+
+**What could not be verified against a primary source in this version:** page or specific
+edition citations for each book above — the `WF-*` rules are an original synthesis of each
+work's central concepts, not a literal transcription. Marked with † on the rules where the
+synthesis is this project's main contribution, with no direct parallel in a single source.
+
+---
+
+## Related
+
+- `agents/README.md` — the eleven roles; "How agents hand off" is the flowchart this note
+  formalizes
+- [Teste de Software](teste-de-software.md) — §0, the verification × validation distinction
+  that the Validation pillar reuses
+- `skills/workflow/` — the four skills that implement this contract, and `workflow-spec`, which
+  stores the `.specs/` files
+- [Decision Documents — PRD, RFC and ADR](documentos-de-decisao-prd-rfc-adr.md) — what each
+  decision document stored in `.specs/` is
 - [Claude Code - Sessão e Verificação](claude-code-sessao-e-verificacao.md) — `CC-SES-07`,
-  revisão em contexto fresco
-- [Claude Code - Paralelismo e Escala](claude-code-paralelismo-e-escala.md) — subagentes e
-  como o bastão passa em Claude Code especificamente
+  review in fresh context
+- [Claude Code - Paralelismo e Escala](claude-code-paralelismo-e-escala.md) — subagents and how
+  the baton passes in Claude Code specifically

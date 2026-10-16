@@ -70,4 +70,4 @@ owner decision: edit the record, and note the date.
 ## Related
 
 - `../SKILL.md` Step 2 — where this record is read
-- [Fluxo de Entrega — Quatro Pilares](../../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 — the files and the scope table
+- [Delivery Flow — Four Pillars](../../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 — the files and the scope table

@@ -1,7 +1,7 @@
-# The five gates
+# The four gates
 
 `WF-PLAN-*`, hub §4.2. A unit is not ready for `workflow-implementation` until it has passed
-all five — in order, because a later gate can invalidate an earlier answer (e.g. the boundary
+all four — in order, because a later gate can invalidate an earlier answer (e.g. the boundary
 gate can reveal that what looked like one unit is actually two).
 
 ## 1. Product gate
@@ -33,16 +33,7 @@ share one acceptance criterion, it is not two units — it is one unit with two 
 actually been decided (`WF-PLAN-05`). If a unit genuinely needs two perfis working together
 sequentially, that is a sign it is still two units, not one — back to gate 2.
 
-## 4. Appetite gate
-
-**Question:** how much is this worth spending, decided before any estimate of how long it
-will take?
-
-**Check:** see `apetite-e-corte.md`. The appetite is a cap, not a target — "small" or "one
-cycle" is a legitimate appetite even for a task that could theoretically take longer if
-scoped differently.
-
-## 5. Acceptance gate
+## 4. Acceptance gate
 
 **Question:** is there a written, checkable criterion for "this unit is done"?
 

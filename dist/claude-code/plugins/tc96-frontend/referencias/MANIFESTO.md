@@ -37,7 +37,7 @@ Notes: 131
 | `claude-code-paralelismo-e-escala.md` | Claude Code - Paralelismo e Escala | `856d326ba215` |
 | `claude-code-sessao-e-verificacao.md` | Claude Code - Sessão e Verificação | `47ee1777ce7e` |
 | `claude-code.md` | Claude Code | `3609d626d6e7` |
-| `documentos-de-decisao-prd-rfc-adr.md` | Documentos de Decisão — PRD, RFC e ADR | `486e3248eb64` |
+| `documentos-de-decisao-prd-rfc-adr.md` | Decision Documents — PRD, RFC and ADR | `a977bc84a6b0` |
 | `drizzle-orm.md` | Drizzle ORM | `86fb22d670a6` |
 | `drizzle-queries-e-relations.md` | Drizzle - Queries e Relations | `d2c4eefb0ed6` |
 | `drizzle-schema-e-migrations.md` | Drizzle - Schema e Migrations | `e1221c1d7aa0` |
@@ -47,7 +47,7 @@ Notes: 131
 | `elysia.md` | Elysia | `a4c1be7eead7` |
 | `feature-based-architecture.md` | Feature-Based Architecture | `d361ef1301a1` |
 | `feature-flags-modelo-visual-do-fluxo.md` | Feature Flags — modelo visual do fluxo | `fc1e90735a7c` |
-| `fluxo-de-entrega-quatro-pilares.md` | Fluxo de Entrega — Quatro Pilares | `7859957284dd` |
+| `fluxo-de-entrega-quatro-pilares.md` | Delivery Flow — Four Pillars | `1bb3ff4abe01` |
 | `forward-deployed-engineering.md` | Forward Deployed Engineering | `5522c590ec21` |
 | `fronteira-do-bff-forma-jornada-e-regra.md` | Fronteira do BFF - forma, jornada e regra | `d85add0942d9` |
 | `frontend-roadmap.md` | Frontend roadmap | `44e50bc18ad9` |

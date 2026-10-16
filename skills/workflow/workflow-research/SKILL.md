@@ -1,10 +1,10 @@
 ---
 nome: workflow-research
-descricao: Decide whether a task's intent is actually resolved yet — separates fact, hypothesis, decision and gap, classifies whether a change is product, architecture, or implementation detail, and routes to the agent that owns that decision, citing `WF-RES-*` and `WF-CORE-*` IDs. Use when a task arrives ambiguous, when "implement X" carries an undecided product or architecture question, or when you need to know whether a decision is safe to proceed on. Do not use once the decision is already made and accepted — that is `workflow-planning`. Do not use to write the fix for a bug already understood — that is `workflow-implementation`.
+descricao: Decide whether a task's intent is actually resolved yet — separates fact, hypothesis, decision and gap, classifies whether a change is product, architecture, or execution (a fix, refactor or technical adjustment to an already-written rule), and routes to the agent that owns that decision, citing `WF-RES-*` and `WF-CORE-*` IDs. Use when a task arrives ambiguous, when "implement X" carries an undecided product or architecture question, or when you need to know whether a decision is safe to proceed on. Do not use once the decision is already made and accepted — that is `workflow-planning`. Do not use to write the fix for a bug already understood — that is `workflow-implementation`.
 tipo: skill
 familia: workflow
 idioma: en
-fonte: "[Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md)"
+fonte: "[Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md)"
 tags:
   - skill
   - workflow
@@ -14,10 +14,10 @@ tags:
 
 # workflow-research
 
-> **Source of this skill:** [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md), §4.1 and the `WF-RES-*` / `WF-CORE-*` rules in §6.
+> **Source of this skill:** [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md), §4.1 and the `WF-RES-*` / `WF-CORE-*` rules in §6.
 > This skill **does not contain** the text of the rules — it says what to decide, in what order, and to whom to hand it off.
 
-Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §7.
+Contract this skill implements: [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §7.
 
 > **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`).** Reading code to gather facts goes to
 > `repo-explorer`, which returns facts with `file:line`, not file contents. The scope decision
@@ -46,11 +46,11 @@ Contract this skill implements: [Fluxo de Entrega — Quatro Pilares](../../../k
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §0, §2 | the pillar × role distinction, the four-pillar table |
+| 1 | [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §0, §2 | the pillar × role distinction, the four-pillar table |
 | 2 | Same hub, §4.1 | the scope decision tree and the edge sweep — the core of this skill |
 | 3 | Same hub, §6 `WF-CORE-*` and `WF-RES-*` | the 15 rules this skill enforces |
-| 4 | Same hub, §5 "Lacunas" | how a gap names who decides it and where it closes |
-| 5 | Same hub, §5 "Onde o artefato mora" and `WF-SPEC-*` | whether this scope writes `requirements.md` |
+| 4 | Same hub, §5 "Gaps" | how a gap names who decides it and where it closes |
+| 5 | Same hub, §5 "Where the artifact lives" and `WF-SPEC-*` | whether this scope writes `requirements.md` |
 
 **Never load §4.2–§4.4** (planning gates, implementation stop conditions, validation
 proportionality) — those belong to the sibling skills, loaded only when the handoff reaches
@@ -61,7 +61,7 @@ References in this skill:
 | File | What for |
 | --- | --- |
 | `references/separar-fato-hipotese-decisao.md` | the technique and a worked example (Step 2) |
-| `references/classificar-escopo.md` | the product/architecture/detail tree, expanded with examples (Step 3) |
+| `references/classificar-escopo.md` | the product/architecture/execution tree and the execution subtypes, with examples (Step 3) |
 | `references/varrer-bordas.md` | the seven edge categories, where each edge goes, and a worked sweep (Step 5) |
 
 ---
@@ -80,7 +80,7 @@ want first.
 files, which behavior) to read the existing code and tests; read tickets and prior decisions
 yourself. Sort everything you find into exactly one of these four buckets — never leave
 an item unsorted (`WF-RES-01`). Every gap names who decides it and the last pillar it may stay
-open in, `pesquisa` or `planejamento` (`WF-CORE-09`, hub §5 "Lacunas").
+open in, `pesquisa` or `planejamento` (`WF-CORE-09`, hub §5 "Gaps").
 
 Existing code is evidence of the **present**, never authority over the **intent** — the
 current behavior may itself be the defect (`WF-RES-02`).
@@ -92,16 +92,28 @@ current behavior may itself be the defect (`WF-RES-02`).
 `references/classificar-escopo.md`, or hub §4.1:
 
 ```
-Does the change alter what the product does or promises?
-├── yes → PRODUCT scope → product-manager decides, product-designer designs the flow
-└── no
-    Does it move where a responsibility lives, or introduce a new service boundary?
-    ├── yes → ARCHITECTURE scope → software-architect decides
-    └── no → IMPLEMENTATION DETAIL → go straight to workflow-planning
+1. Does the change alter what the product does or promises?
+   └── yes → PRODUCT scope → product-manager decides, product-designer designs the flow
+2. Does it move where a responsibility lives, or introduce a new service boundary?
+   └── yes → ARCHITECTURE scope → software-architect decides
+3. Is the expected behavior already decided and written down?
+   (spec, ADR, test, contract, accepted ticket)
+   ├── no  → PRODUCT scope: an undecided rule in disguise → product-manager decides
+   └── yes → EXECUTION scope → go straight to workflow-planning, citing where the rule is written
 ```
 
-The most expensive misclassification is treating a product change as a detail — it arrives at
+Execution means the rule is decided and written, and the change alters only how it is carried
+out. Name the subtype, because each one asks planning for different evidence:
+
+| Subtype | When | Evidence planning requires |
+| --- | --- | --- |
+| **fix** | the code diverges from the written rule (a bug) | the rule, cited, and a case that fails today |
+| **refactor** | same behavior, structure changes inside the same boundary | the existing tests still pass, unchanged |
+| **technical adjustment** | performance, dependency, configuration — same promise, same boundaries | a before/after measurement, or a check of the adjustment |
+
+The most expensive misclassification is treating a product change as execution — it arrives at
 Implementation with no one having decided whether the product should change at all (`WF-RES-05`).
+Question 3 is the guard: execution that cannot point at where its rule is written is product.
 
 ---
 
@@ -129,7 +141,7 @@ decision outside the request becomes a non-goal or a gap, not more research.
 
 The agent that owns the decision runs it, inside its own context — `product-manager` on the
 stories it writes into `requirements.md`, `software-architect` on its decision — so ask for the
-sweep in the same delegation as the decision. An implementation-detail scope has no owning
+sweep in the same delegation as the decision. An execution scope has no owning
 agent: check only that the rule already decided answers each edge the change touches. An
 applicable edge whose answer is written nowhere means the scope was product after all — back
 to Step 3.
@@ -143,7 +155,7 @@ to Step 3.
 | 1 | the problem + outcome sentence exists | — |
 | 2 | facts, hypotheses, decisions, and gaps are sorted, not mixed | `WF-RES-01` |
 | 3 | code was treated as evidence of the present, not authority over intent | `WF-RES-02` |
-| 4 | the scope (product / architecture / detail) is classified | `WF-RES-05` |
+| 4 | the scope (product / architecture / execution) is classified; an execution scope names its subtype and cites where its rule is written | `WF-RES-05` |
 | 5 | every user-behavior claim has a source | `WF-RES-04` |
 | 6 | the output is a decision, not just a report | `WF-RES-03` |
 | 7 | every rule and scenario went through the edge sweep; each applicable edge is answered with a source, out as a non-goal, or a gap | `WF-RES-06` |
@@ -162,7 +174,7 @@ to Step 3.
 capability that already has an `Approved` PRD gets an amendment instead (`WF-SPEC-08`). It reads
 the project's document set, starts `product-manager` with the template, and puts the `Draft`
 in front of the owner. The envelope's `artefato` is that path (`WF-SPEC-01`), and `Approved`
-comes only from the owner's answer (`WF-SPEC-06`). Architecture and implementation-detail
+comes only from the owner's answer (`WF-SPEC-06`). Architecture and execution
 scopes write no `requirements.md`: the envelope carries the decision, and planning records it
 in `design.md` or in the increment's plan under `tasks/` (`WF-SPEC-03`).
 
@@ -173,10 +185,10 @@ Return the envelope from hub §5 (`pilar: pesquisa`), and route by scope:
 | product | `product-manager` |
 | user flow / UX | `product-designer` |
 | architecture | `software-architect` |
-| implementation detail, decision resolved | `workflow-planning` |
+| execution (fix, refactor, technical adjustment), rule written | `workflow-planning` |
 
-**Hand the decision over with it:** the one-sentence problem, the scope classification, the
-edges the sweep answered, and every open gap with its `decide` and `fecha-em`. The next pillar
+**Hand the decision over with it:** the one-sentence problem, the scope classification
+(for execution, its subtype and where the rule is written), the edges the sweep answered, and every open gap with its `decide` and `fecha-em`. The next pillar
 does not reopen this classification without new evidence.
 
 **Advance without asking.** This holds in a spec-only run too: research always continues into
@@ -186,7 +198,7 @@ the envelope, and planning closes them (`WF-CORE-09`). A gap with `fecha-em: pes
 first to whoever `decide` names: start that agent now, or ask the owner in one sentence when it
 is `dono`. Do not ask whether to continue. Stop only for an owner decision — a gap with
 `decide: dono` and `fecha-em: pesquisa`, which includes a `requirements.md` awaiting approval
-(`WF-SPEC-06`), or an appetite breach under `WF-PLAN-02` — or for an action that is
+(`WF-SPEC-06`) — or for an action that is
 irreversible or visible to others (push, PR, deleting or overwriting data, publishing to a
 board, a release).
 
@@ -220,7 +232,7 @@ Full case: `references/separar-fato-hipotese-decisao.md`; the whole sweep:
 
 ## Related
 
-- [Fluxo de Entrega — Quatro Pilares](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — source of this skill, §4.1, §6
+- [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — source of this skill, §4.1, §6
 - `workflow-planning` — where the resolved decision goes next
 - `workflow-spec` — writes `requirements.md` and records the owner's approval
 - `product-manager` · `product-designer` · `software-architect` — where the scope-specific decision goes
