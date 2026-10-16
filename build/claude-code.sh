@@ -12,7 +12,7 @@ set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="${1:-$RAIZ/dist/claude-code}"
-VERSAO="${VERSAO:-0.11.1}"   # 0.4: commands/ · 0.5: comandos em bun · 0.6: fases 3 em bun test · 0.7: modelo e esforco por papel · 0.8: tc96-tailwind autocontido · 0.9: react-component-performance e bench harness · 0.10: .specs/, comando spec e workflow-spec · 0.11: repo-operator, custo por ponto do fluxo e lacunas com dono · 0.11.1: sessão aberta por outra passa modelo e chama o papel como subagente
+VERSAO="${VERSAO:-0.12.0}"   # 0.4: commands/ · 0.5: commands on bun · 0.6: phase 3 on bun test · 0.7: model and effort per role · 0.8: self-contained tc96-tailwind · 0.9: react-component-performance and bench harness · 0.10: .specs/, spec command and workflow-spec · 0.11: repo-operator, cost per point of the flow and gaps with an owner · 0.11.1: a session opened by another passes the model and calls the role as a subagent · 0.12: execution scope, workflow hub in English, no appetite gate
 
 rm -rf "$DEST"
 
