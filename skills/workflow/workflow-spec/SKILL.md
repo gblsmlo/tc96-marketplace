@@ -110,7 +110,8 @@ the status line of the file Step 1 named:
 documents this project keeps: the `## Specs` section of the project's `AGENTS.md`, then
 `.specs/README.md`. Found: use it, do not ask (`WF-SPEC-07`). Not found: ask the owner the one
 question in that reference, then ask whether the answer may be written to `AGENTS.md`;
-on no, write it to `.specs/README.md`.
+on no, write it to `.specs/README.md`. The same record may hold the project's review budget
+and wave width; a record without them means the hub §4.2 defaults, never a second question.
 
 Two things the record never changes: the plan in `tasks/` is always kept, and a document marked off does
 not drop its decision — the decision goes as one line to the plan under **Origin** and to the
@@ -147,17 +148,28 @@ An ADR takes `Proposed` instead of `Draft`, and its number is the next in `.spec
 
 ## Step 4 — Put it in front of the owner
 
-`references/owner-review.md`. Return to the owner, in one message: the path, the
-one-sentence problem or decision, the open gaps, and the question "approve, change, or
-reject?". Then stop. The status moves only on the owner's explicit answer in the conversation
-(`WF-SPEC-06`): approve → `Approved` (PRD) or `Accepted` (design, ADR, UX); change → the owner
-agent revises and the file stays `Draft`; reject → the file keeps `Draft` or becomes
-`Rejected`, and the run returns to the pillar that owns the gap (`WF-VAL-04` applies by analogy).
-On an amendment, the status that moves is the amendment's, never the file's first one. Moving a
-status is one known field edit: make it here, without starting an agent (`WF-CORE-08`).
+`references/owner-review.md`. One message to the owner, in one of two shapes, then stop:
 
-Silence is not approval. A spec-only run with an unapproved file ends with that file under
-`lacunas`, not with an approval the agent gave itself.
+| The request | The message holds |
+| --- | --- |
+| one file — a standalone request, or a pillar that needs a single file | the path, the one-sentence problem or decision, the open gaps, and "approve, change, or reject?" |
+| a bundle — a pillar's stage that ran Steps 1–3 for several files side by side, as Planning does for `design.md`, its ADRs, `user-experience.md` and the plan (hub §5 "The planning bundle") | per file, its path, its one sentence and its open gaps; which file depends on which; the same question, answerable per file; and, for a plan, whether to publish its board items and its `Delivery` mode and push-and-PR authorization |
+
+The calling pillar assembles the bundle: it collects the Step 3 results of its side-by-side
+`workflow-spec` calls and sends the one message; each of those calls skips its own single-file
+message and returns to the pillar after Step 3.
+
+The status moves only on the owner's explicit answer in the conversation (`WF-SPEC-06`): approve →
+`Approved` (PRD) or `Accepted` (design, ADR, UX); change → the owner agent revises and the file
+stays `Draft`; reject → the file keeps `Draft` or becomes `Rejected`, and the run returns to the
+pillar that owns the gap (`WF-VAL-04` applies by analogy). In a bundle, one reply may move several
+files when it names them, and a file the reply does not name keeps its status. A "change" re-drafts
+that file and only the files the message listed as depending on it; the others keep the answer
+they got. On an amendment, the status that moves is the amendment's, never the file's first one.
+Moving a status is one known field edit: make it here, without starting an agent (`WF-CORE-08`).
+
+Silence is not approval, for one file or for a bundle. A spec-only run with an unapproved file ends
+with that file under `lacunas`, not with an approval the agent gave itself.
 
 ---
 
@@ -165,15 +177,15 @@ Silence is not approval. A spec-only run with an unapproved file ends with that 
 
 | # | Check | Rule |
 | --- | --- | --- |
-| 1 | the file answers one question, and that question was open | `DOC-CORE-01`, `DOC-CORE-02` |
-| 2 | the project's document set was read before writing, and asked at most once | `WF-SPEC-07` |
-| 3 | the file is the one the scope lists, written by its owner agent | `WF-SPEC-01`, `WF-SPEC-03` |
-| 4 | it links the other files, copies none | `WF-SPEC-02` |
-| 5 | no bracketed hint survived; every field is filled or `none` | Step 3, rule 1 |
-| 6 | every claim has a source | `WF-RES-04` |
-| 7 | the status is `Draft` or `Proposed` until the owner answered | `WF-SPEC-06` |
-| 8 | the owner saw path, sentence, gaps and the question, in one message | Step 4 |
-| 9 | this conversation holds the path and the envelope, not the file | `WF-CORE-07` |
+| 1 | core self-check passed (hub §7) | `WF-CORE-01`, `WF-CORE-06`–`WF-CORE-10` |
+| 2 | the file answers one question, and that question was open | `DOC-CORE-01`, `DOC-CORE-02` |
+| 3 | the project's document set was read before writing, and asked at most once | `WF-SPEC-07` |
+| 4 | the file is the one the scope lists, stored in `.specs/` | `WF-SPEC-01`, `WF-SPEC-03` |
+| 5 | it links the other files, copies none | `WF-SPEC-02` |
+| 6 | no bracketed hint survived; every field is filled or `none` | Step 3, rule 1 |
+| 7 | every claim has a source | `WF-RES-04` |
+| 8 | the status is `Draft` or `Proposed` until the owner answered; a bundle reply moved only the files it named | `WF-SPEC-06` |
+| 9 | the owner saw path, sentence, gaps and the question, in one message; a bundle also showed which file depends on which | Step 4 |
 | 10 | `AGENTS.md` was written only after the owner said yes | `WF-SPEC-07` |
 | 11 | the file sits in the capability's folder; approved text got an amendment, and a new increment got a new plan | `WF-SPEC-08` |
 
@@ -198,8 +210,9 @@ proximo: "<the calling pillar's next step, or none>"
 ```
 
 Every open gap in the file joins `lacunas` in the same shape (hub §5 "Gaps",
-`WF-CORE-09`). The calling pillar continues only when `lacunas` holds no unapproved file it
-depends on (`WF-SPEC-04`).
+`WF-CORE-09`); a bundle returns one envelope, with every path in `artefato` and one
+`awaiting owner approval` gap per file still unapproved. The calling pillar continues only
+where `lacunas` holds no unapproved file it depends on (`WF-SPEC-04`).
 
 ---
 
