@@ -50,8 +50,9 @@ Contract this skill implements: [Delivery Flow — Four Pillars](../../referenci
 | Order | Load | Why |
 | --- | --- | --- |
 | 1 | [Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md) §4.3, and the edge table in §4.1 | the questions before the first line and the stop-and-return table — the core of this skill |
-| 2 | Same hub, §6 `WF-CORE-*` and `WF-IMPL-*` | the 15 rules this skill enforces |
-| 3 | Same hub, §5 "Gaps" | how a return names who decides its gap and where it closes |
+| 2 | Same hub, §4.2 "Small units" and "Waves" | Surface, Size, and when a Task runs beside others |
+| 3 | Same hub, §6 `WF-CORE-*` and `WF-IMPL-*`, and §7 "Core self-check" | the 16 rules this skill enforces, and the shared rows of Step 7 |
+| 4 | Same hub, §5 "Gaps" | how a return names who decides its gap and where it closes |
 
 References in this skill:
 
@@ -63,18 +64,24 @@ References in this skill:
 
 ## Step 1 — Confirm readiness
 
-The unit is one Task in the current plan, `.specs/<capability>/tasks/NNNN-<slug>.md`, and it
-needs from `workflow-planning`: acceptance criterion, owning perfil, evidence plan and test
-types (`WF-PLAN-06`). Missing any of these means this is not
-actually a ready unit — return it (`WF-CORE-03`). The spec files the Task cites as inputs must be
-accepted; one still in draft means the Task waits (`WF-SPEC-04`), and so does an open gap the
-Task depends on (`WF-CORE-09`). Read only this Task and the sections it links, not the whole
+The unit is one Task in the current plan, `.specs/<capability>/tasks/NNNN-<slug>.md`. Planning
+already ran its gates on it, so this step derives nothing again. It re-reads three status
+lines and nothing else: the plan's own `status`, the status of each file in the Task's
+**Inputs**, and the status of each Task in its **Depends on**. The plan `Ready` and every input
+accepted is `WF-SPEC-04`; every dependency closed in Validation is condition 1 of hub §4.2
+"Waves" (`WF-CORE-10`). All three hold, and the Task starts. Otherwise it waits, and the other
+Tasks of the plan go ahead. Read only this Task and the sections it links, not the whole
 `.specs/<capability>/` folder nor its earlier plans.
 
 Start from a small context: a new instance of the owning agent, called as a subagent so its
 `modelo` and `esforco` apply, holding the unit and not the conversation that produced it
 (`WF-CORE-06`). Implementing inside a long session re-reads all of that history on every
 request ([`CC-CTX-01`, `CC-CTX-03`](../../referencias/claude-code-contexto-e-cache.md)).
+
+**One Task per instance, not one Task per plan.** Tasks that meet hub §4.2 "Waves" run side by
+side, each in its own owner instance, worktree and branch, its PR following the plan's
+**Delivery** (`WF-CORE-10`). This instance writes only inside its Task's **Surface**. Merges and
+the breaks they cause follow hub §4.2 "Fan-in".
 
 **Returning with validation findings.** The owning agent runs on its declared tier, and rises
 only when that tier has already failed twice on this unit:
@@ -87,7 +94,8 @@ only when that tier has already failed twice on this unit:
 
 Resuming is cheaper than re-reading the plan, but each resumed round adds to the implementer's
 context. A unit that three rounds could not close is a planning problem, not a model problem:
-it goes back to be re-sliced or re-decided. The tier ladder and what it maps to per provider are in
+it goes back to be re-sliced or re-decided. After each round, the reviewer's re-read is the
+delta (`WF-VAL-06`). The tier ladder and what it maps to per provider are in
 `agents/README.md`, section "Model and effort per role".
 
 ---
@@ -99,12 +107,13 @@ existing contract, the existing tests, the existing conventions of that layer.
 
 ---
 
-## Step 3 — List the questions before the first line
+## Step 3 — List the questions before the first line: the delta sweep
 
-`WF-IMPL-06`, hub §4.3. With the Task and the code it touches read, list what you would need to
-know to write it: run the unit through the seven edge categories of hub §4.1 — boundary, time,
-empty, repetition, permission, failure, what already exists — against this Task and this code.
-Each question leaves one of three ways:
+`WF-IMPL-06`, hub §4.3. Start from the Task's **Edges answered**: research swept those, and the
+plan carries them as acceptance lines. Cite each one, do not derive it again. Then sweep only
+what the code it touches reveals beyond them. Run that code through the edge categories of hub
+§4.1, where "what already exists" usually yields the most. Each question leaves one of three
+ways:
 
 | The answer | Then |
 | --- | --- |
@@ -147,7 +156,7 @@ and whatever only the code reveals:
 | Found before or during implementation | Action |
 | --- | --- |
 | missing or contradicted product behavior | stop, return to `workflow-research`, the gap with `fecha-em: pesquisa` |
-| insufficient scope, dependency, or evidence plan in the unit | stop, return to `workflow-planning`, the gap with `fecha-em: planejamento` |
+| insufficient scope, dependency, or evidence plan in the unit; a Task found to lack a field the template requires (`WF-CORE-03`); a change that needs a file outside the Task's **Surface** (`WF-IMPL-03`); or a change that will exceed the Task's **Size** by more than half | stop, return to `workflow-planning`, the gap with `fecha-em: planejamento` |
 | a local defect inside what this unit already decided | fix here, record as evidence (`WF-IMPL-05`) — not a return |
 
 ---
@@ -156,14 +165,16 @@ and whatever only the code reveals:
 
 | # | Check | Rule |
 | --- | --- | --- |
-| 1 | no product decision was reopened or improvised here | `WF-IMPL-01` |
-| 2 | a focused test exists for the change, written alongside it, of the types the plan named | `WF-IMPL-02`, `WF-PLAN-06` |
-| 3 | the scope is the smallest that satisfies the unit's acceptance criterion | `WF-IMPL-03` |
-| 4 | explicit contracts (types, schemas, boundaries) are preserved | `WF-IMPL-04` |
-| 5 | any local defect fixed along the way is recorded as evidence | `WF-IMPL-05` |
-| 6 | this pillar's output is code + evidence, not a claim of "done" | `WF-CORE-04` |
-| 7 | the unit ran in its owning agent called as a subagent — not in a session playing the role — and the envelope references the commit or diff | `WF-CORE-06`, `WF-CORE-07`, `CC-PAR-05` |
-| 8 | the questions were listed before the first line; each was cited, decided inside the unit, or returned with `decide` and `fecha-em` | `WF-IMPL-06`, `WF-CORE-09` |
+| 1 | core self-check passed | hub §7, C1–C6 |
+| 2 | no product decision was reopened or improvised here | `WF-IMPL-01` |
+| 3 | a focused test exists for the change, written alongside it, of the types the plan named | `WF-IMPL-02`, `WF-PLAN-06` |
+| 4 | the scope is the smallest that satisfies the unit's acceptance criterion | `WF-IMPL-03` |
+| 5 | every changed file is inside the Task's Surface, and the diff has not outgrown its Size by more than half; otherwise the unit went back through Step 6's planning row | `WF-IMPL-03`, `WF-PLAN-07` |
+| 6 | explicit contracts (types, schemas, boundaries) are preserved | `WF-IMPL-04` |
+| 7 | any local defect fixed along the way is recorded as evidence | `WF-IMPL-05` |
+| 8 | this pillar's output is code + evidence, not a claim of "done" | `WF-CORE-04` |
+| 9 | the unit ran in its own worktree and branch, and `artefato` names that branch and commit | `WF-CORE-10` |
+| 10 | the questions were listed before the first line, starting from the Task's Edges answered | `WF-IMPL-06` |
 
 ---
 
@@ -183,13 +194,14 @@ departure returns to `workflow-research` instead (`WF-IMPL-01`).
 ## Example
 
 Unit: "a request with `discount > 0.5` and no `approvedBy` returns 422." Before the first line,
-the developer's list runs the edge categories against the Task: exactly 0.5 is answered by the
-criterion itself (`> 0.5`); an `approvedBy` naming the requester is answered by a story
-scenario — the sweep raised it in research, and the owner answered it there; the other
-categories do not touch this check. Nothing leaves the unit, so it goes ahead. `test-design`
-routes this to a unit test (a pure validation rule, not a journey). While implementing, the
-developer notices the existing discount function also silently clamps negative discounts to
-zero — a local defect, inside what this unit already touches, unrelated to the approval rule.
+the developer's list starts from the Task's **Edges answered** and cites them. Exactly 0.5 is
+answered by the criterion itself (`> 0.5`). An `approvedBy` naming the requester is answered by
+a story scenario: research's sweep raised it and the owner answered it. The sweep of the code
+finds nothing more that this check touches. Nothing leaves the unit, so it goes ahead.
+`test-design` routes this to a unit test (a pure validation rule, not a journey). While
+implementing, the developer notices the existing discount function also silently clamps
+negative discounts to zero — a local defect, inside what this unit already touches, unrelated
+to the approval rule.
 Per `WF-IMPL-05`, it gets fixed here and recorded as evidence, not escalated as a new unit.
 
 ---
