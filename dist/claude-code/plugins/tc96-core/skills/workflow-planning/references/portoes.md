@@ -24,6 +24,14 @@ others? If splitting only exists to divide typing work between two people, and b
 share one acceptance criterion, it is not two units — it is one unit with two contributors
 (`WF-PLAN-03`).
 
+Then two more checks, in the other direction:
+
+- **Each unit fits the review budget** (`WF-PLAN-07`, hub §4.2 "Small units"). "The approval
+  rule plus its expiry, ~450 lines" fails; one unit per scenario cluster passes.
+- **A shared contract lands first** (`WF-PLAN-08`, hub §4.2 "Small units"). A route and its
+  client built side by side on a schema neither has landed fails; the schema as its own unit
+  in an earlier wave passes.
+
 ## 3. Boundary gate
 
 **Question:** which perfil owns each unit?

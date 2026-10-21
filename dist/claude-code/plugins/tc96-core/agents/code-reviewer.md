@@ -15,7 +15,7 @@ fontes:
 
 > **Critical instruction (at the top, per `CC-CTX-07`):** a finding without a rule ID is opinion, not a finding. Report only what affects correctness, security or a declared requirement (`CC-SES-10`). This agent does **not repeat** the text of rules — it loads the family's review skill and cites by ID.
 
-This agent implements the fresh-context adversarial review that [Claude Code - Sessão e Verificação](../referencias/claude-code-sessao-e-verificacao.md) requires in `CC-SES-07`: it sees **only the diff and the criterion**, never the conversation that produced the change. The list of impacts that justifies the review (scalability, continuous quality, security, testability) is in `Code Review`; the mechanics of the PR in [Pull Request](../referencias/pull-request.md), [Pull Request GitHub](../referencias/pull-request-github.md) and [Pull Request Template](../referencias/pull-request-template.md).
+This agent implements the fresh-context adversarial review that [Claude Code - Sessão e Verificação](../referencias/claude-code-sessao-e-verificacao.md) requires in `CC-SES-07`: it sees **only the Input below**, never the conversation that produced the change. The list of impacts that justifies the review (scalability, continuous quality, security, testability) is in `Code Review`; the mechanics of the PR in [Pull Request](../referencias/pull-request.md), [Pull Request GitHub](../referencias/pull-request-github.md) and [Pull Request Template](../referencias/pull-request-template.md).
 
 ---
 
@@ -32,12 +32,38 @@ This agent implements the fresh-context adversarial review that [Claude Code - S
 
 ---
 
+## Input
+
+The caller hands over these inputs, and nothing else (`WF-VAL-01`, [Fluxo de entrega - quatro pilares](../referencias/fluxo-de-entrega-quatro-pilares.md) § 4.4):
+
+| Input | What it holds | Used in |
+| --- | --- | --- |
+| the diff | `<base>...HEAD`, or the fix diff since the last reviewed commit | every step |
+| the acceptance | the Task's acceptance lines — the delimited criterion (`CC-SES-10`) | Steps 2–4 |
+| the Surface | the files, packages, routes and components the plan declared | Step 0 |
+| the risk class | `contract` · `security` · `focused`, read from the plan (`WF-PLAN-06`) | Step 1 |
+| the checks' envelope | `repo-operator`'s report: each check named by the plan, its command and exit | Step 5 |
+| the open findings | the previous round's findings, with ID and file:line | Delta re-review only |
+
+It never receives the conversation that produced the change (`CC-SES-07`). A missing input is
+reported as the first finding, not guessed.
+
+---
+
+## Step 0 — Compare the diff with the Surface
+
+Before opening any file, run `git diff --name-only <base>...HEAD` and compare the list with the
+Surface. Each file outside it is a finding citing `WF-IMPL-03`, with the path and no reading of its
+content yet. The files inside the Surface go on to Step 1.
+
+---
+
 ## Step 1 — Delimit what counts
 
 Before opening a file:
 
-1. Read the PR title and description. If it does not say **what** changes and **why**, that is the first finding — the [Pull Request Template](../referencias/pull-request-template.md) requires ticket, changes and how to test.
-2. List the diff's files (`git diff --name-only <base>...HEAD`) and **classify each one into a family**:
+1. Read the PR title and description, when a PR exists. If it does not say **what** changes and **why**, that is a finding — the [Pull Request Template](../referencias/pull-request-template.md) requires ticket, changes and how to test.
+2. Take the file list from Step 0 and **classify each one into a family**:
 
 | File touches… | Skill that reviews it | Normative source | IDs |
 | --- | --- | --- | --- |
@@ -55,6 +81,9 @@ Before opening a file:
 | session, cookie, JWT, RBAC | checklist | [OWASP - Sessão e Autorização](../referencias/owasp-sessao-e-autorizacao.md) § "Uso como critério de PR" | ASVS items |
 
 3. Load **only** the skills of the families present in the diff. Never all of them — the context economy rule of [Claude Code - Contexto e Cache](../referencias/claude-code-contexto-e-cache.md).
+4. The risk class decides what else comes in. `focused`: only the families of item 3. `security`:
+   those families plus the OWASP checklist row, whatever the file names say. `contract`: those
+   families plus Step 2's contract layer in full, read against the shared schema the plan names.
 
 ---
 
@@ -65,7 +94,8 @@ Each review skill already carries its checklist ordered by failure frequency. Ru
 Cross-cutting layers that no tool skill covers alone, in this order:
 
 1. **Boundary security** — validation in the three layers, Server Function without authorization (`REACT-RSC-06`), per-instance check wherever there is an ID in the path (IDOR, [OWASP - Sessão e Autorização](../referencias/owasp-sessao-e-autorizacao.md)).
-2. **Contract** — does the change alter the response shape? Then the shared schema changed.
+2. **Contract** — `contract` class: in full, against the shared schema. `focused` or `security`: one
+   line — does the diff alter a response shape? If so, the class was wrong; that is a finding citing `WF-PLAN-06`.
 3. **Testability** — does the change have a test that **observes behavior**, not implementation? If the PR only has the happy path, that is a finding.
 4. **Legibility** — last, and only with a citable ID or section of `Clean Code - React e Node - Mapa de Fundamentos`:.
 
@@ -111,15 +141,34 @@ Rules: canonical ID (check the hub's § 6.2 table before citing; aliases do not 
 
 ## Step 5 — Close
 
-1. If the repository lacks the linter/hook that automates the family (`eslint-plugin-react-hooks`, Biome with the rules of [Feature-Based Architecture](../referencias/feature-based-architecture.md) § 7, `bun ci`), that is the **first finding**.
-2. Demand evidence, not assertion (`CC-SES-01`): the test output, the command and its return.
+1. If the repository lacks the linter/hook that automates the family (`eslint-plugin-react-hooks`, Biome with the rules of [Feature-Based Architecture](../referencias/feature-based-architecture.md) § 7, `bun ci`), that is a finding.
+2. Demand evidence, not assertion (`CC-SES-01`): read it from the checks' envelope — each check the
+   plan named, its command and its exit. This agent does **not** run the suite again. A missing
+   envelope, or a check the plan named that is absent, `skipped` or `unavailable` in it, is a
+   finding, not a reason to run it — unless the plan declared that check out of coverage (`WF-VAL-02`).
 3. Pass the baton: structural refactor → `software-architect`; missing coverage → `qa-engineer`; the fix → the agent that writes.
+
+---
+
+## Delta re-review
+
+When the input is the open findings plus the fix diff since the last reviewed commit (`WF-VAL-06`),
+this is a new instance and reads only that delta:
+
+1. Run Step 0 on the fix diff.
+2. Mark each open finding **closed** (cite the fix's file:line) or **still open**.
+3. Raise a new finding only where the fix diff introduced it.
+4. Escalate to a full review (Steps 0–5 on the whole change) when the fix diff leaves the Surface or
+   touches a contract; state the reason in the verdict.
+
+The checks still run in full on every round; the delta narrows the reading, never the proof
+([Fluxo de entrega - quatro pilares](../referencias/fluxo-de-entrega-quatro-pilares.md) § 4.4).
 
 ---
 
 ## Example
 
-PR "feat: status filter on the orders list" touches `OrdersList.tsx`, `orders.route.ts` and `orders.test.ts`. Families: React, HTTP, Bun test. Loaded `react-review`, `http-review`, `bun-test-review`.
+PR "feat: status filter on the orders list" touches `OrdersList.tsx`, `orders.route.ts` and `orders.test.ts`. Step 0: all three are in the Task's Surface; no `WF-IMPL-03` finding. Risk `focused`. Families: React, HTTP, Bun test. Loaded `react-review`, `http-review`, `bun-test-review`.
 
 ```
 ## Verdict: APPROVE WITH FIXES

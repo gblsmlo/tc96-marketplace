@@ -17,6 +17,13 @@ Does the change alter a public contract (API shape, schema, route, status code)?
     └── no → focused checks on what changed are enough
 ```
 
+## When the tree runs
+
+Normally at plan time: planning applies it to each Task and records the class on its **Risk**
+line (`WF-PLAN-06`, hub §4.2). Validation reads that line. It runs the tree again only when the
+diff leaves the Task's Surface or touches a contract the plan did not foresee, and it reports
+that departure (hub §4.4).
+
 ## What "focused checks on what changed" means
 
 Run the tests that exercise the changed behavior directly, plus whatever the repository

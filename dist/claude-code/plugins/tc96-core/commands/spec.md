@@ -57,8 +57,19 @@ owner's answer sets it (`WF-SPEC-06`). No answer: the run ends here, with the pa
 
 ## Phase 2: Planning
 
-Run `workflow-planning` from the research envelope. One `workflow-spec` call per file, each
-returned to the owner for review before the next depends on it.
+Run `workflow-planning` from the research envelope. Its files are drafted side by side and
+reviewed once, as a bundle (hub §5 "The planning bundle"):
+
+1. one `workflow-spec` call per file. `software-architect` receives `design.md` and the ADRs it
+   produces in one delegation, the ADRs `Proposed`; `product-designer` drafts
+   `user-experience.md` at the same time, since both start from `requirements.md`. An ADR
+   depends on the design for re-drafting, not for starting;
+2. the plan, as soon as those drafts exist, citing them by path while they are still `Draft`;
+3. one bundle message for all of them, in the `workflow-spec` Step 4 shape: this phase collects
+   every call's result and sends it, so no call sends its own. Per file, path, sentence and gaps,
+   plus which file depends on which. A "change" re-drafts only that file and its dependents
+   (`WF-SPEC-06`). The same message also asks for the board items and the plan's `Delivery`
+   (hub §5).
 
 | File | Agent | When |
 | --- | --- | --- |
@@ -81,18 +92,16 @@ Return the planning envelope, with every `.specs/` path in `artefato` and every 
 approved under `lacunas` as `awaiting owner approval: <path>`, `decide: dono`. Every other gap
 still open stays there too, with its `decide` and `fecha-em` (`WF-CORE-09`). Do not start
 `workflow-implementation` (`WF-SPEC-05`). Implementation starts only on a new request from the
-owner, one Task at a time, and only on files the owner approved (`WF-SPEC-04`).
+owner, per wave: each Task when the plan is `Ready` and its own inputs are accepted (`WF-SPEC-04`),
+side by side with the others that qualify (`WF-CORE-10`).
 
 ---
 
 ## Checklist
 
-- [ ] The project's document set was read, or asked once and recorded with permission.
-- [ ] The scope is classified, and only the files it needs exist.
-- [ ] Every rule and scenario went through the edge sweep; each applicable edge is a scenario, a non-goal or a gap (`WF-RES-06`).
-- [ ] Every gap under `lacunas` names who decides it and where it closes, and none is left for implementation (`WF-CORE-09`).
-- [ ] Each file was written by its own agent through `workflow-spec`, and links the others instead of copying them.
-- [ ] Every status past `Draft` came from the owner's answer in this conversation.
-- [ ] The plan in `tasks/` names one owner, acceptance, evidence and test types per Task (`WF-PLAN-06`).
-- [ ] Approved text was amended, never rewritten; this increment got its own plan (`WF-SPEC-08`).
+- [ ] `workflow-research` and `workflow-planning` passed their Step 6 self-check, and every
+      `workflow-spec` call passed its Step 5; each starts with the core self-check (hub §7).
+- [ ] Phase 2 put its drafts in front of the owner as one bundle, not one message per file.
+- [ ] The run stopped after the plan in `tasks/`, with `workflow-implementation` not started
+      (`WF-SPEC-05`).
 - [ ] No code, branch, commit or PR was created.

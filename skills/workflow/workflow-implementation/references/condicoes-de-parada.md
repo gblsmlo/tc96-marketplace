@@ -2,9 +2,9 @@
 
 Hub §4.3. Three situations can surface in implementation, and only one of them is fixed
 without leaving this pillar. The cheapest moment to meet them is before the first line, in the
-question list of Step 3 (`WF-IMPL-06`) — and earlier still, in research's edge sweep
-(`WF-RES-06`). The table is the same mid-code, only more expensive. A return carries its gap
-with `decide` and `fecha-em` (`WF-CORE-09`).
+question list of Step 3, which starts from the Task's Edges answered (`WF-IMPL-06`) — and
+earlier still, in research's edge sweep (`WF-RES-06`). The table is the same mid-code, only
+more expensive. A return carries its gap with `decide` and `fecha-em` (`WF-CORE-09`).
 
 ## 1. Missing or contradicted product behavior → `workflow-research`
 
@@ -18,16 +18,25 @@ keep going (`WF-IMPL-01`). It is the time edge of the hub §4.1 sweep: research 
 asked it, and the list before the first line should have caught it before any code. Return it
 as a gap: `decide: product-manager`, `fecha-em: pesquisa`.
 
-## 2. Insufficient scope, dependency, or evidence plan → `workflow-planning`
+## 2. Insufficient scope, dependency, evidence plan, or Size → `workflow-planning`
 
-**Signal:** the unit's boundary turns out to be wrong once you are inside the code — it
-actually depends on a change in a different perfil's area, or the acceptance criterion cannot
-be checked with the evidence plan that was named.
+**Signal:** the unit's boundary turns out to be wrong once you are inside the code. It actually
+depends on a change in a different perfil's area, or the acceptance criterion cannot be checked
+with the evidence plan that was named. Or it turns out to be a change that needs a file outside
+the Task's **Surface** (`WF-IMPL-03`), or a change that will exceed the Task's **Size** by more
+than half (hub §4.2 "Small units"). A Task found to lack a field the template requires
+(`WF-CORE-03`) returns the same way.
 
 **Example:** the backend unit for the approval rule turns out to require a new field on a
 shared type that the frontend unit also depends on, but the two units were planned as fully
 independent. That dependency needs to go back through the decomposition gate: return it with
 `decide: project-manager`, `fecha-em: planejamento`.
+
+**Example, Size:** the Task says `Size: ~120 lines`. The sweep shows every caller of the
+discount function must move to the new signature, about 200 lines. That is more than half
+again its Size, so stop before writing. Return it to be re-sliced by expand → migrate →
+contract step, with `decide: project-manager`, `fecha-em: planejamento`. Do not ship one
+oversized PR.
 
 ## 3. A local defect inside what this unit already decided → fix here
 

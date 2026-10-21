@@ -1,8 +1,8 @@
 # Review in independent context
 
 `WF-VAL-01`. The builder does not approve the builder's own feature — validation must inspect
-the approved acceptance criteria and the diff in a context independent from whoever
-implemented the change (Google, *Software Engineering at Google*, on code review culture; see
+the diff against the approved acceptance criteria, the Task's Surface and Risk, and the checks'
+result, in a context independent from whoever implemented the change (Google, *Software Engineering at Google*, on code review culture; see
 also `CC-SES-07` in [Claude Code - Sessão e Verificação](../../../../knowledge-base/claude-code-sessao-e-verificacao.md), which states the same requirement at the level of a Claude Code
 subagent).
 
@@ -16,16 +16,26 @@ context does not carry that commitment.
 
 ## What "fresh context" means in practice
 
-`code-reviewer` (the agent that carries out most of this pillar) should receive:
+`code-reviewer` (the agent that carries out most of this pillar) receives the Task's:
 
-- the diff
-- the acceptance criterion from `workflow-planning`
-- **not** the conversation that produced the change
+- diff
+- acceptance criterion from `workflow-planning`
+- **Surface** and **Risk** lines ([`template-task.md`](../../workflow-spec/references/template-task.md))
+- checks' envelope from `repo-operator`, when it returns: the checks run at the same time
+  (hub §4.4)
 
-This mirrors `CC-SES-07` exactly: a reviewer who reads the implementer's reasoning tends to
-inherit the implementer's blind spots along with the reasoning. The diff plus the criterion is
-enough to judge whether the criterion is met; the conversation is not needed for that judgment
+and nothing else — **not** the conversation that produced the change.
+
+This mirrors `CC-SES-07`: a reviewer who reads the implementer's reasoning tends to
+inherit the implementer's blind spots along with the reasoning. The diff, the criterion, the
+Surface, the Risk and the checks' envelope are enough to judge whether the criterion is met
+inside the planned scope; the conversation is not needed for that judgment
 and actively risks contaminating it.
+
+Before reading code, the reviewer compares the diff's file list with the Surface: a file outside
+it is a finding (`WF-IMPL-03`), caught without reading a line. It reads the checks' envelope
+rather than running the checks again. After a fix, a new instance gets the delta instead
+(`WF-VAL-06`).
 
 ## When the "independent context" is a person, not an agent
 
