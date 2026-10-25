@@ -50,7 +50,7 @@ V3DIR=$("${RG[@]}" -l -g '*.{css,scss}' -e '@tailwind\s+(base|components|utiliti
 [ -n "$V3DIR" ] && echo "$V3DIR" | sed 's|^|   v3 @tailwind |'
 [ -z "$ENTRIES$V3DIR" ] && echo "   (none found — the project has no Tailwind yet, or the CSS lives somewhere unusual)"
 # more than one entry inside the SAME app/package is TW-CFG-06; one per app is right
-REPEATED=$(printf '%s\n' "$ENTRIES" | grep . | sed -E 's#^\./##; s#^((apps|packages)/[^/]+)/.*#\1#; t; s#.*#(root)#' | sort | uniq -d)
+REPEATED=$(printf '%s\n' "$ENTRIES" | grep . | sed -E -e 's#^\./##' -e 's#^((apps|packages)/[^/]+)/.*#\1#' -e 't' -e 's#.*#(root)#' | sort | uniq -d)
 if [ -n "$REPEATED" ]; then
   echo "   -> more than one stylesheet imports tailwindcss inside: $(echo $REPEATED) — one per app (TW-CFG-06)"
 fi

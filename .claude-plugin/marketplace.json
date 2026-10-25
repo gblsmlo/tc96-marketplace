@@ -27,7 +27,7 @@
     {
       "name": "tc96-tailwind",
       "source": "./dist/claude-code/plugins/tc96-tailwind",
-      "description": "Tailwind CSS v4 — setup, escrita e revisão de estilo, com a própria doc normativa (TW-*). Autocontido: habilite sozinho ou junto do tc96-frontend."
+      "description": "Tailwind CSS v4: setup, migration, build, variant split and review skills, each with its own normative docs (TW-*). Self-contained: enable alone or with tc96-frontend."
     },
     {
       "name": "tc96-e2e",

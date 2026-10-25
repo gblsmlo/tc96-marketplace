@@ -1,6 +1,6 @@
 # States, responsiveness and the accessibility minimum
 
-Source: [Tailwind CSS - Utilities and Variants](../../docs/tailwindcss-utilities-and-variants.md) § 4–6.
+Source: [Tailwind CSS - Utilities and Variants](../docs/tailwindcss-utilities-and-variants.md) § 4–6.
 
 Whether a variant exists in the installed version is a Context7 question: `/tailwindlabs/tailwindcss.com`, topic `hover focus and other states` or `responsive design`.
 

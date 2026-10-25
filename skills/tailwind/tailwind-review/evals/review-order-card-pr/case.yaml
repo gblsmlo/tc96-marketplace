@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: review-order-card-pr
+expected_outcome: |
+  Reports, with ID, severity and file:line: the interpolated badge class (TW-SRC-01, Blocking), the unloaded
+  tailwind.config.ts (TW-CFG-08, Blocking) explaining the arbitrary brand color, grid+flex (TW-UTIL-01), cn
+  hiding p-4/p-2 (TW-COMP-02), focus:outline-none without replacement (TW-A11Y-01), the unnamed icon button
+  (TW-A11Y-03), --warning missing in .dark (TW-THEME-13), className first in cn (TW-COMP-03), bg-opacity-50 (TW-
+  MIG-04), sm:text-center as mobile (TW-VAR-01). Class order is not reported.
+context:
+  scaffold_script: place-files.sh

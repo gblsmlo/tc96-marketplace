@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: split-follows-variants-convention
+expected_outcome: |
+  button, badge and alert get sibling .variants.ts files in the card style (xVariants + XVariants type), alert's
+  cva declared inside the component moves to top level first, badge's shared class constant lives in the
+  variants file and is imported back, buttonVariants stays importable from @/components/ui/button for
+  pricing.tsx, no class string changes, and no .tsx under components/ui declares cva anymore.
+context:
+  scaffold_script: place-files.sh

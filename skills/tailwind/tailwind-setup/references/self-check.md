@@ -18,6 +18,5 @@ Every `->` line from Step 1 must be gone, or explained in the delivery.
 | 8 | tokens: `@theme inline` when pointing at a variable; every token in `:root` **and** `.dark` | `TW-THEME-05`, `TW-THEME-13` |
 | 9 | dark toggle → `@custom-variant dark` + inline script in `<head>` | `TW-THEME-09`, `TW-THEME-10` |
 | 10 | shadcn/ui: `tailwind.config` empty, `tw-animate-css` | `TW-THEME-14` |
-| 11 | migration: every changed default has a recorded decision | `TW-MIG-05` |
 
 **Then start the app and look — light and dark.** A missing `@source`, an unmapped token, an ignored config: none of them raises an error (`TW-CORE-04`).

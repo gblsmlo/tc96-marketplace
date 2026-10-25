@@ -43,7 +43,9 @@ The study map underpinning this agent is [Frontend roadmap](../knowledge-base/fr
 | the data comes from the server and someone else can change it | `tanstack-query` | `useState` + `useEffect` |
 | a form with validation, conditional fields, submit | `react-hook-form` | `react-developer` |
 | the classes of a component or screen — tokens, variants, states, responsiveness | `tailwind-build` (plugin `tc96-tailwind`) | `tailwind-review` (that is `code-reviewer`'s) |
-| installing or configuring Tailwind, tokens, dark mode, migrating from v3 | `tailwind-setup` (plugin `tc96-tailwind`) | `tailwind-build` |
+| installing or configuring Tailwind, tokens, dark mode | `tailwind-setup` (plugin `tc96-tailwind`) | `tailwind-build` |
+| migrating from Tailwind v3 to v4 | `tailwind-migrate` (plugin `tc96-tailwind`) | `tailwind-setup` |
+| moving a component's `cva`/`tv` variants to their own `.variants.ts` file | `tailwind-split-variants` (plugin `tc96-tailwind`) | `tailwind-build` |
 | a story, `args`, controls, the docs page | `storybook-story` | `storybook-test` (that is `qa-engineer`'s) |
 | a component already **confirmed slow** | `react-component-performance` | `react-developer` |
 | should the validation live in the browser, the BFF or the backend? | `software-architect` | frontend-developer |

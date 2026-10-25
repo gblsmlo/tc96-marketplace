@@ -1,6 +1,6 @@
 # Composing classes
 
-Source: [Tailwind CSS - Components and Composition](../../docs/tailwindcss-components-and-composition.md).
+Source: [Tailwind CSS - Components and Composition](../docs/tailwindcss-components-and-composition.md).
 
 ## Join × merge
 

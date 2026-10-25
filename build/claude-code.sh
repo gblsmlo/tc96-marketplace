@@ -68,13 +68,13 @@ PLUGINS = {
                      "dependências. Habilite em projeto com backend.",
         "keywords": ["bun", "elysia", "drizzle", "backend"],
     },
-    # Autocontida: a familia traz a propria doc em skills/tailwind/docs/ e nao
+    # Autocontida: cada skill traz a propria doc em skills/tailwind/<skill>/docs/ e nao
     # cita nota da knowledge-base, para poder ser habilitada sem o resto do tc96.
     "tc96-tailwind": {
         "familias": ["tailwind"],
         "agentes": [],
-        "descricao": "Tailwind CSS v4 — setup, escrita e revisão de estilo, com a própria "
-                     "doc normativa (TW-*). Autocontido: habilite sozinho ou junto do tc96-frontend.",
+        "descricao": "Tailwind CSS v4: setup, migration, build, variant split and review skills, each with its own "
+                     "normative docs (TW-*). Self-contained: enable alone or with tc96-frontend.",
         "keywords": ["tailwind", "css", "design-system", "frontend"],
     },
     "tc96-e2e": {
@@ -187,6 +187,7 @@ for plugin, cfg in PLUGINS.items():
     for origem, campos, corpo in skills:
         destino = alvo / "skills" / origem.name
         familia = origem.parent.name
+        doc_na_familia = (raiz / "skills" / familia / "docs").is_dir()
         # evals/ is authoring material (claude plugin eval reads it from the source); it does not ship
         shutil.copytree(origem, destino, ignore=shutil.ignore_patterns("evals", "*-workspace"))
         for arq in destino.rglob("*.md"):
@@ -194,8 +195,9 @@ for plugin, cfg in PLUGINS.items():
             notas |= citadas(t)
             # a doc da familia sobe para docs/<familia>/ na raiz do plugin;
             # references/ primeiro, porque "../../docs/" contem "../docs/"
-            t = t.replace("](../../docs/", f"](../../../docs/{familia}/")
-            t = t.replace("](../docs/", f"](../../docs/{familia}/")
+            if doc_na_familia:
+                t = t.replace("](../../docs/", f"](../../../docs/{familia}/")
+                t = t.replace("](../docs/", f"](../../docs/{familia}/")
             # a familia sai do caminho: uma subida a menos
             t = t.replace("../../../knowledge-base/", "../../referencias/")
             t = t.replace("../../../../knowledge-base/", "../../../referencias/")
@@ -218,8 +220,9 @@ for plugin, cfg in PLUGINS.items():
             # adaptador deu aos .md — senao regenerar o mapa quebra os links
             s = s.replace("../../../../knowledge-base/", "../../../referencias/")
             # a doc propria da familia mora em <plugin>/docs/<familia>/ no alvo
-            s = s.replace('/../.." && pwd)/docs}', f'/../../.." && pwd)/docs/{familia}}}')
-            s = s.replace("](../../docs/", f"](../../../docs/{familia}/")
+            if doc_na_familia:
+                s = s.replace('/../.." && pwd)/docs}', f'/../../.." && pwd)/docs/{familia}}}')
+                s = s.replace("](../../docs/", f"](../../../docs/{familia}/")
             sh.write_text(s, encoding="utf-8")
             sh.chmod(0o755)
 

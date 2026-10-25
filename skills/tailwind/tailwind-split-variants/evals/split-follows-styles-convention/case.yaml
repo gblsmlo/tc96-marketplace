@@ -1,0 +1,7 @@
+schema_version: "1.1"
+name: split-follows-styles-convention
+expected_outcome: |
+  The project uses *.styles.ts, so the variants go to src/components/ui/input.styles.ts (not input.variants.ts),
+  the component imports from it, no class changes, and input.tsx no longer declares cva.
+context:
+  scaffold_script: place-files.sh

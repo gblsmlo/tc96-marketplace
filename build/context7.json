@@ -220,11 +220,19 @@
       "shadcn-ui",
       "tailwindcss-v3"
     ],
+    "tailwind-migrate": [
+      "tailwindcss",
+      "tailwindcss-v3"
+    ],
     "tailwind-build": [
       "tailwindcss",
       "tailwind-merge",
       "cva",
       "shadcn-ui"
+    ],
+    "tailwind-split-variants": [
+      "cva",
+      "tailwindcss"
     ],
     "tailwind-review": [
       "tailwindcss",
