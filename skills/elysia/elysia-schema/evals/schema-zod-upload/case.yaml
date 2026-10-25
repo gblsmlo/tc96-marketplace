@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: schema-zod-upload
+expected_outcome: |
+  The avatar is checked by its bytes (fileType in the Zod refine, with its rejection turned into a validation
+  failure, or t.File with a type), createdAt is declared in the response schema with the explanation that normalize
+  strips undeclared fields, and a VALIDATION handler (or equivalent) keeps the submitted input — the password — out
+  of the 422 body, proven under NODE_ENV=production. The shared Zod schema stays the body schema. Cites ELYSIA-TYPE-02.
+context:
+  scaffold_script: place-files.sh

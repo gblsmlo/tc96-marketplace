@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: build-auth-plugin
+expected_outcome: |
+  A named auth plugin that resolves the user with resolve (not derive), returns status(401)/status(403) instead of
+  throwing, and declares a scope that reaches the feature modules that .use() it; /health stays public; tests hit the
+  feature modules' routes (the consuming instances) without a token and get 401, as a member on /admin and get 403.
+  Cites ELYSIA-LIFE-01 and ELYSIA-LIFE-02.
+context:
+  scaffold_script: place-files.sh

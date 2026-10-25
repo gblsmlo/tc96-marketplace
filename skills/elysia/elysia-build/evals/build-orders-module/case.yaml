@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: build-orders-module
+expected_outcome: |
+  A prefixed orders module whose expected errors are returned with status(…) and declared in response maps
+  (404 on lookup, 409 with the sku on creation, 201 through status), an app-level onError registered before
+  the routes that logs and answers unknown errors generically without swallowing the module's 409, tests
+  through app.handle, tsc clean. Cites ELYSIA-CORE-01/-03/-07.
+context:
+  scaffold_script: place-files.sh

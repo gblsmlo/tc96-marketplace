@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: eden-order-query
+expected_outcome: |
+  The queryFn unwraps the Eden result and throws the error so a 404 ends in the error state, retry skips 4xx,
+  the client uses parseDate: false (dates stay strings, structural sharing keeps references), the message comes
+  from error.status/error.value rather than error.message, the server type is imported with `import type`, and
+  tests drive the real server through treaty(app) or a fetcher over app.handle. Cites ELYSIA-TYPE-09 and -10.
+context:
+  scaffold_script: place-files.sh

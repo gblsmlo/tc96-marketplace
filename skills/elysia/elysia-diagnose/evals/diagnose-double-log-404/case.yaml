@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: diagnose-double-log-404
+expected_outcome: |
+  The logger is an unnamed plugin used by two modules, so its global hook is registered twice and runs twice for the routes registered after the second use (ELYSIA-LIFE-03): giving it a
+  name (or registering it once) yields one entry per request, proven by a test. The 404 comes from the test's
+  one-label origin `http://x`: Elysia slices the path from index 11, so every route is 404; switching to
+  http://localhost fixes it. Scope and registration order are not the 404's cause.
+context:
+  scaffold_script: place-files.sh
