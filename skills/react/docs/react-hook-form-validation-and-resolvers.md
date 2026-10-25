@@ -1,6 +1,6 @@
 ---
-titulo: React Hook Form - Validation and Resolvers
-Link: https://react-hook-form.com/docs/useform
+title: React Hook Form - Validation and Resolvers
+link: https://react-hook-form.com/docs/useform
 tags:
   - react
   - forms
@@ -9,7 +9,7 @@ tags:
   - validation
   - agent-context
 source: "Official React Hook Form documentation — useForm, setError, trigger, resolvers"
-verificado-em: 2026-08-15
+verified-at: 2026-08-15
 ---
 
 # React Hook Form — Validation and Resolvers

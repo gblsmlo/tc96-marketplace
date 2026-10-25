@@ -1,10 +1,10 @@
 ---
-nome: react-component-performance
-descricao: Diagnose and fix a React component already confirmed slow, and prove it with a measurement, citing `REACT-PERF-*` IDs — eleven re-render hazard probes, a baseline taken before any change with a copyable JSDOM benchmark harness that drives only the public API, consumer render counts as the deterministic CI gate, fixes in the order the rules set, a before/after comparison, the correctness tests memoization needs, and the README Benchmark section. Use when a grid, list, kanban, tree or form is measurably slow on mount, focus, selection, sort, scroll or typing, when a memo, useMemo or useCallback needs the measurement REACT-PERF-01 demands, or when a performance refactor needs a gate. Not for rule review (react-review), new code (react-developer), file placement (react-structure) or slowness from the network or data cache (tanstack-query).
-tipo: skill
-familia: react
-idioma: en
-fonte: "[React - Performance Measurement](../docs/react-performance-measurement.md)"
+name: react-component-performance
+description: Diagnose and fix a React component already confirmed slow, and prove it with a measurement, citing `REACT-PERF-*` IDs — eleven re-render hazard probes, a baseline taken before any change with a copyable JSDOM benchmark harness that drives only the public API, consumer render counts as the deterministic CI gate, fixes in the order the rules set, a before/after comparison, the correctness tests memoization needs, and the README Benchmark section. Use when a grid, list, kanban, tree or form is measurably slow on mount, focus, selection, sort, scroll or typing, when a memo, useMemo or useCallback needs the measurement REACT-PERF-01 demands, or when a performance refactor needs a gate. Not for rule review (react-review), new code (react-developer), file placement (react-structure) or slowness from the network or data cache (tanstack-query).
+type: skill
+family: react
+language: en
+source: "[React - Performance Measurement](../docs/react-performance-measurement.md)"
 docs:
   - /reactjs/react.dev
 tags:

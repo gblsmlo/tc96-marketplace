@@ -1,13 +1,13 @@
 ---
-titulo: React - Rules of React
-Link: https://react.dev/reference/rules
+title: React - Rules of React
+link: https://react.dev/reference/rules
 tags:
   - react
   - rules
   - reference
   - agent-context
 source: "Official React documentation — react.dev/reference/rules"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 # React — Rules of React
 

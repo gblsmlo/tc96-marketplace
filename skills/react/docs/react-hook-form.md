@@ -1,6 +1,6 @@
 ---
-titulo: React Hook Form
-Link: https://react-hook-form.com/get-started
+title: React Hook Form
+link: https://react-hook-form.com/get-started
 tags:
   - react
   - forms
@@ -9,7 +9,7 @@ tags:
   - reference
   - agent-context
 source: "Official React Hook Form documentation — react-hook-form.com"
-verificado-em: 2026-08-15
+verified-at: 2026-08-15
 ---
 
 # React Hook Form — guided reference

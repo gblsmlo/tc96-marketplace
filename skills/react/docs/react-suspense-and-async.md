@@ -1,13 +1,13 @@
 ---
-titulo: React - Suspense and Async
-Link: https://react.dev/reference/react/Suspense
+title: React - Suspense and Async
+link: https://react.dev/reference/react/Suspense
 tags:
   - react
   - suspense
   - async
   - agent-context
 source: "Official React documentation — Suspense, lazy, use"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Suspense and Async

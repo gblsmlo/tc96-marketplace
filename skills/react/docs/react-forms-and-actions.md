@@ -1,13 +1,13 @@
 ---
-titulo: React - Forms and Actions
-Link: https://react.dev/reference/react/useActionState
+title: React - Forms and Actions
+link: https://react.dev/reference/react/useActionState
 tags:
   - react
   - forms
   - actions
   - agent-context
 source: "Official React documentation — useActionState, useOptimistic, useFormStatus"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Forms and Actions

@@ -1,10 +1,10 @@
 ---
-nome: react-review
-descricao: Review React code that already exists — a PR, diff, file, component or custom Hook — against the `REACT-*` rules, with fifteen executable probes run before reading, a five-level scan in the order that fails most, fixed severity and a fixed finding format that cites the canonical ID and file:line. Use for "review this", "what is wrong here", "approve or block", or when hunting a Rules of Hooks violation, a fetch or derived state in an Effect, remote data in useState, prop mutation, Suspense without an Error Boundary, an unvalidated Server Function or memoization without measurement. Not for writing new code (react-developer), file placement and imports (react-structure), forms (react-hook-form), a whole-codebase health audit (react-audit) or a component confirmed slow (react-component-performance).
-tipo: skill
-familia: react
-idioma: en
-fonte: "[React - Rules of React](../docs/react-rules-of-react.md)"
+name: react-review
+description: Review React code that already exists — a PR, diff, file, component or custom Hook — against the `REACT-*` rules, with fifteen executable probes run before reading, a five-level scan in the order that fails most, fixed severity and a fixed finding format that cites the canonical ID and file:line. Use for "review this", "what is wrong here", "approve or block", or when hunting a Rules of Hooks violation, a fetch or derived state in an Effect, remote data in useState, prop mutation, Suspense without an Error Boundary, an unvalidated Server Function or memoization without measurement. Not for writing new code (react-developer), file placement and imports (react-structure), forms (react-hook-form), a whole-codebase health audit (react-audit) or a component confirmed slow (react-component-performance).
+type: skill
+family: react
+language: en
+source: "[React - Rules of React](../docs/react-rules-of-react.md)"
 docs:
   - /reactjs/react.dev
 tags:

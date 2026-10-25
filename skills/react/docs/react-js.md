@@ -1,13 +1,13 @@
 ---
-titulo: React.js
-Link: https://react.dev/reference/react
+title: React.js
+link: https://react.dev/reference/react
 tags:
   - react
   - frontend
   - reference
   - agent-context
 source: "Official React documentation — react.dev/reference"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 # React.js — guided reference
 

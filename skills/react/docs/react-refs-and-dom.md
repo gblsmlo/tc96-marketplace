@@ -1,13 +1,13 @@
 ---
-titulo: React - Refs and DOM
-Link: https://react.dev/reference/react/useRef
+title: React - Refs and DOM
+link: https://react.dev/reference/react/useRef
 tags:
   - react
   - refs
   - dom
   - agent-context
 source: "Official React documentation — useRef, useImperativeHandle, createPortal, flushSync"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Refs and DOM

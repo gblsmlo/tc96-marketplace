@@ -1,13 +1,13 @@
 ---
-titulo: React - Hooks
-Link: https://react.dev/reference/react/hooks
+title: React - Hooks
+link: https://react.dev/reference/react/hooks
 tags:
   - react
   - hooks
   - reference
   - agent-context
 source: "Official React documentation — react.dev/reference/react/hooks"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Hooks

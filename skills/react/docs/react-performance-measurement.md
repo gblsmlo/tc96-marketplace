@@ -1,13 +1,13 @@
 ---
-titulo: React - Performance Measurement
-Link: https://react.dev/reference/react/Profiler
+title: React - Performance Measurement
+link: https://react.dev/reference/react/Profiler
 tags:
   - react
   - performance
   - benchmark
   - agent-context
 source: "Official React documentation — Profiler, memo; the field record of a DataGrid memoization refactor (2026-10-03)"
-verificado-em: 2026-10-03
+verified-at: 2026-10-03
 ---
 
 # React — Performance Measurement

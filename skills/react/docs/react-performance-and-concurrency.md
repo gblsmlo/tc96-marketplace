@@ -1,13 +1,13 @@
 ---
-titulo: React - Performance and Concurrency
-Link: https://react.dev/reference/react/memo
+title: React - Performance and Concurrency
+link: https://react.dev/reference/react/memo
 tags:
   - react
   - performance
   - concurrency
   - agent-context
 source: "Official React documentation — memo, useMemo, useCallback, useTransition, useDeferredValue, Activity, Profiler, React Compiler"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Performance and Concurrency

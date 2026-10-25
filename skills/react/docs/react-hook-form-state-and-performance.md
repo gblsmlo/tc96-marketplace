@@ -1,6 +1,6 @@
 ---
-titulo: React Hook Form - State and Performance
-Link: https://react-hook-form.com/docs/useform/formstate
+title: React Hook Form - State and Performance
+link: https://react-hook-form.com/docs/useform/formstate
 tags:
   - react
   - forms
@@ -8,7 +8,7 @@ tags:
   - performance
   - agent-context
 source: "Official documentation — https://react-hook-form.com/docs"
-verificado-em: 2026-08-15
+verified-at: 2026-08-15
 ---
 
 # React Hook Form — State and Performance

@@ -1,13 +1,13 @@
 ---
-titulo: React - Server Components and Directives
-Link: https://react.dev/reference/rsc/server-components
+title: React - Server Components and Directives
+link: https://react.dev/reference/rsc/server-components
 tags:
   - react
   - rsc
   - server-components
   - agent-context
 source: "Official React documentation — RSC, 'use client', 'use server', cache, taint (experimental)"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Server Components and Directives

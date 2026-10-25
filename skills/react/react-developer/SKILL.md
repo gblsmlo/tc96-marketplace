@@ -1,10 +1,10 @@
 ---
-nome: react-developer
-descricao: Write new React code — a component, custom Hook or feature — by answering three structural questions before any JSX, choosing each API through the decision trees instead of habit, avoiding the reflexes that produce violations, and running an executable self-check before delivering, citing `REACT-*` IDs. Use when creating a component or Hook from scratch, rewriting one until its structure is back on the table, deciding who owns a piece of state, choosing between neighboring Hooks, extracting a custom Hook, placing Error Boundaries and Suspense, or composing instead of configuring. Not for reviewing existing code (react-review), file placement (react-structure), forms with validation (react-hook-form) or a component confirmed slow (react-component-performance).
-tipo: skill
-familia: react
-idioma: en
-fonte: "[React - Patterns](../docs/react-patterns.md)"
+name: react-developer
+description: Write new React code — a component, custom Hook or feature — by answering three structural questions before any JSX, choosing each API through the decision trees instead of habit, avoiding the reflexes that produce violations, and running an executable self-check before delivering, citing `REACT-*` IDs. Use when creating a component or Hook from scratch, rewriting one until its structure is back on the table, deciding who owns a piece of state, choosing between neighboring Hooks, extracting a custom Hook, placing Error Boundaries and Suspense, or composing instead of configuring. Not for reviewing existing code (react-review), file placement (react-structure), forms with validation (react-hook-form) or a component confirmed slow (react-component-performance).
+type: skill
+family: react
+language: en
+source: "[React - Patterns](../docs/react-patterns.md)"
 docs:
   - /reactjs/react.dev
 tags:

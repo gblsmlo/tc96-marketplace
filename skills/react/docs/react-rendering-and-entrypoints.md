@@ -1,13 +1,13 @@
 ---
-titulo: React - Rendering and Entrypoints
-Link: https://react.dev/reference/react-dom/client
+title: React - Rendering and Entrypoints
+link: https://react.dev/reference/react-dom/client
 tags:
   - react
   - rendering
   - ssr
   - agent-context
 source: "Official React documentation — react-dom/client, react-dom/server, react-dom/static, StrictMode, preloading"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Rendering and Entrypoints
