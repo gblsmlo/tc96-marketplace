@@ -1,6 +1,6 @@
 ---
-titulo: Tailwind CSS - Utilities and Variants
-Link: https://tailwindcss.com/docs/styling-with-utility-classes
+title: Tailwind CSS - Utilities and Variants
+link: https://tailwindcss.com/docs/styling-with-utility-classes
 tags:
   - tailwindcss
   - css
@@ -8,12 +8,12 @@ tags:
   - accessibility
   - agent-context
 source: "Official Tailwind CSS documentation — Styling with utility classes, Hover/focus and other states, Responsive design, Adding custom styles, Display, Outline style, Forced color adjust"
-verificado-em: 2026-10-02
+verified-at: 2026-10-02
 ---
 
 # Tailwind CSS — Utilities and Variants
 
-> Satellite of [Tailwind CSS](tailwindcss.md). Covers **what you write in `className`**: conflicts between utilities, arbitrary values and when they are the exception, runtime values, `@utility` and `@apply`, state variants, responsiveness, container queries and the accessibility utilities.
+> Satellite of `Tailwind CSS`. Covers **what you write in `className`**: conflicts between utilities, arbitrary values and when they are the exception, runtime values, `@utility` and `@apply`, state variants, responsiveness, container queries and the accessibility utilities.
 >
 > **The note has one axis:** a utility is a **constraint** — the value comes from the design system, not from the keyboard. Every rule below protects that constraint or says when to break it on purpose.
 
@@ -65,7 +65,7 @@ In v4 the `!` goes **at the end**: `bg-red-500!`, `hover:bg-red-600/50!`. The fo
 | arbitrary property | `[mask-type:luminance]` · `[--gutter:1rem] lg:[--gutter:2rem]` |
 | arbitrary variant | `[&_p]:mt-4` · `lg:[&:nth-child(-n+3)]:hover:underline` |
 
-An arbitrary value that appears **once** is the exception the source describes. The same arbitrary value in several places is a **token nobody declared**, and its place is `@theme` ([Tailwind CSS - Theme and Tokens](tailwindcss-theme-and-tokens.md), `TW-THEME-04`).
+An arbitrary value that appears **once** is the exception the source describes. The same arbitrary value in several places is a **token nobody declared**, and its place is `@theme` (`Tailwind CSS - Theme and Tokens`, `TW-THEME-04`).
 
 An arbitrary property or variant that **reproduces an existing utility** (`[display:flex]`, `[&:hover]:underline`, `[@media_print]:hidden`) is not an exception: it is the utility written wrong — and tailwind-merge cannot resolve it against the canonical form. The IntelliSense extension flags it with `suggestCanonicalClasses`.
 
@@ -221,7 +221,7 @@ About `outline-hidden` and `outline-none`, both source pages repeat: **"it's hig
 
 **`:focus-visible` and the browser floor.** Safari only supports `:focus-visible` from **15.4**. Under the line 4 floor (Safari 16.4) this does not matter; in a project that stays on line 3 to serve Safari 15.0–15.3, `focus-visible:` **never** shows the ring on those devices — there the ring goes in `focus:`. It is the case where `TW-A11Y-02` yields to `TW-A11Y-01`: visible focus always beats pretty focus.
 
-A list with `list-style: none` (the Preflight default) **is not announced as a list** by VoiceOver — see [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md) § 4.
+A list with `list-style: none` (the Preflight default) **is not announced as a list** by VoiceOver — see `Tailwind CSS - Installation and Detection` § 4.
 
 ### 6.1 Rules — `TW-A11Y-01` to `TW-A11Y-08`
 
@@ -272,10 +272,10 @@ It does not open on touch — in v4, by the tool's design (`TW-A11Y-08`).
 
 ## Related
 
-- [Tailwind CSS](tailwindcss.md) — hub
-- [Tailwind CSS - Theme and Tokens](tailwindcss-theme-and-tokens.md) — where the value the utility constrains comes from
+- `Tailwind CSS` — hub
+- `Tailwind CSS - Theme and Tokens` — where the value the utility constrains comes from
 - [Tailwind CSS - Components and Composition](tailwindcss-components-and-composition.md) — when the conflict is wanted, and how to compose
-- [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md) — why a runtime value cannot be a class
+- `Tailwind CSS - Installation and Detection` — why a runtime value cannot be a class
 - `Playwright - Locators` — why a class is not a selector
 - `Storybook - Testes e Interações` — the a11y scan, which catches part of § 6
 

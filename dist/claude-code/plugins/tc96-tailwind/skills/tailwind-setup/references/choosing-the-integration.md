@@ -1,6 +1,6 @@
 # Choosing the integration
 
-Source: [Tailwind CSS - Installation and Detection](../../../docs/tailwind/tailwindcss-installation-and-detection.md) § 1–3 · the tree is [Tailwind CSS](../../../docs/tailwind/tailwindcss.md) § 5.1.
+Source: [Tailwind CSS - Installation and Detection](../docs/tailwindcss-installation-and-detection.md) § 1–3 · the tree is `Tailwind CSS` § 5.1.
 
 ## The tree
 

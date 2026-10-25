@@ -1,6 +1,6 @@
 ---
-titulo: Tailwind CSS
-Link: https://tailwindcss.com/docs
+title: Tailwind CSS
+link: https://tailwindcss.com/docs
 tags:
   - tailwindcss
   - css
@@ -9,7 +9,7 @@ tags:
   - reference
   - agent-context
 source: "Official Tailwind CSS documentation — tailwindcss.com/docs, line 4.x"
-verificado-em: 2026-10-02
+verified-at: 2026-10-02
 ---
 # Tailwind CSS — guided reference
 
@@ -17,7 +17,7 @@ verificado-em: 2026-10-02
 >
 > **What it is not.** It does not replace the source. When they diverge, [tailwindcss.com/docs](https://tailwindcss.com/docs) wins, and this note must be corrected.
 >
-> **A self-contained package.** These notes live inside the `tailwind` skill family, so the family can ship on its own. Names in code spans — `Playwright - Locators`, `Storybook - Configuração e Builder`, `Monorepo com Bun - estrutura e tooling` — and IDs from other families (`PW-*`, `SB-*`, `REACT-*`) belong to the tc96 knowledge base: useful context when it is installed, never required to apply a `TW-*` rule.
+> **Where the notes live.** Each note lives inside the skill that owns it: this hub in `tailwind-review`, Installation and Theme in `tailwind-setup`, Utilities and Components in `tailwind-build`, Migration in `tailwind-migrate`. Every skill carries a generated `references/rules.md` with all 77 rules, so none needs a sibling's note to cite. Names in code spans — `Playwright - Locators`, `Storybook - Configuração e Builder`, `Monorepo com Bun - estrutura e tooling` — and IDs from other families (`PW-*`, `SB-*`, `REACT-*`) belong to the tc96 knowledge base: useful context when it is installed, never required to apply a `TW-*` rule.
 
 Inventory verified directly on tailwindcss.com on **2026-10-02**.
 See [Sources consulted](#sources-consulted).
@@ -46,7 +46,7 @@ The `TW-*` rules were written **for line 4**. Line 3 has a different configurati
 | The project… | Use |
 | --- | --- |
 | is on 4.x | this note and the satellites |
-| is on 3.x and will migrate | [Tailwind CSS - Migration v3 to v4](tailwindcss-migration-v3-to-v4.md) first |
+| is on 3.x and will migrate | `Tailwind CSS - Migration v3 to v4` first |
 | is on 3.x and stays (browser floor, `TW-CFG-11`) | only the **line-independent** rules — `TW-SRC-01`, `TW-SRC-02`, `TW-UTIL-01`, `TW-A11Y-*`, `TW-COMP-*`. API surface from the v3 docs (`/websites/v3_tailwindcss` on Context7) |
 
 **Citing `TW-CFG-*`, `TW-THEME-*` or `TW-MIG-*` against a project that stays on line 3 is an invalid finding** — except as a migration recommendation, kept separate from the findings.
@@ -59,15 +59,7 @@ Read § 2 (mental model) once — it is the difference between using Tailwind as
 
 ### For a coding agent
 
-Load in this order, stopping as soon as you have enough:
-
-| Step | Load | When |
-| ----- | -------- | ------ |
-| 1 | This note (§ 2, § 5, § 6) | whenever the task involves Tailwind |
-| 2 | [Tailwind CSS - Utilities and Variants](tailwindcss-utilities-and-variants.md) | whenever you will **write or review** `className` |
-| 3 | the satellite for the surface — via § 4 | configuring (Installation), tokens and dark mode (Theme), component with variants (Components), line 3 (Migration) |
-
-**Context economy rule:** never load all five satellites. Writing a component needs § 2 + § 6 + Utilities and Variants + Components and Composition. See the cuts in § 7.
+Start from the skill, not from this note: `tailwind-setup` (configure, tokens, dark mode), `tailwind-migrate` (line 3 → 4), `tailwind-build` (write classes), `tailwind-split-variants` (variants in their own file), `tailwind-review` (audit). Each skill cites by grepping its `references/rules.md` and opens a note **section** only when it needs the reasoning behind a rule. Never load all the notes at once.
 
 ### Conventions and vocabulary
 
@@ -138,16 +130,16 @@ In a single-app repository, the first three rows collapse into `src/styles.css` 
 
 | Directive | What for | Satellite |
 | --- | --- | --- |
-| `@import "tailwindcss"` | the entry stylesheet; options `source()`, `prefix()`, `important`, `theme()` | [Installation and Detection](tailwindcss-installation-and-detection.md) § 2 |
-| `@source` · `@source not` · `@source inline()` | register, exclude and force classes | [Installation and Detection](tailwindcss-installation-and-detection.md) § 3 |
-| `@reference` | resolve theme and utilities without emitting CSS (CSS module, `<style>`) | [Installation and Detection](tailwindcss-installation-and-detection.md) § 2.3 |
-| `@theme` · `@theme inline` · `@theme static` | tokens | [Theme and Tokens](tailwindcss-theme-and-tokens.md) § 1–2 |
-| `@custom-variant` | custom variant, dark mode by class/attribute | [Theme and Tokens](tailwindcss-theme-and-tokens.md) § 4 |
-| `@utility` | custom utility, simple or functional (`--value()`, `--modifier()`) | [Utilities and Variants](tailwindcss-utilities-and-variants.md) § 3 |
-| `@variant` | apply a variant inside your own CSS | [Utilities and Variants](tailwindcss-utilities-and-variants.md) § 3 |
-| `@apply` | utilities inside third-party CSS | [Utilities and Variants](tailwindcss-utilities-and-variants.md) § 3 |
-| `@layer base` · `@layer components` | reset and single-element class | [Installation and Detection](tailwindcss-installation-and-detection.md) § 4 |
-| `@config` · `@plugin` | **compatibility** with line 3 | [Installation and Detection](tailwindcss-installation-and-detection.md) § 2.5 |
+| `@import "tailwindcss"` | the entry stylesheet; options `source()`, `prefix()`, `important`, `theme()` | `Tailwind CSS - Installation and Detection` § 2 |
+| `@source` · `@source not` · `@source inline()` | register, exclude and force classes | `Tailwind CSS - Installation and Detection` § 3 |
+| `@reference` | resolve theme and utilities without emitting CSS (CSS module, `<style>`) | `Tailwind CSS - Installation and Detection` § 2.3 |
+| `@theme` · `@theme inline` · `@theme static` | tokens | `Tailwind CSS - Theme and Tokens` § 1–2 |
+| `@custom-variant` | custom variant, dark mode by class/attribute | `Tailwind CSS - Theme and Tokens` § 4 |
+| `@utility` | custom utility, simple or functional (`--value()`, `--modifier()`) | `Tailwind CSS - Utilities and Variants` § 3 |
+| `@variant` | apply a variant inside your own CSS | `Tailwind CSS - Utilities and Variants` § 3 |
+| `@apply` | utilities inside third-party CSS | `Tailwind CSS - Utilities and Variants` § 3 |
+| `@layer base` · `@layer components` | reset and single-element class | `Tailwind CSS - Installation and Detection` § 4 |
+| `@config` · `@plugin` | **compatibility** with line 3 | `Tailwind CSS - Installation and Detection` § 2.5 |
 
 ### 4.2 Build functions
 
@@ -161,12 +153,12 @@ In a single-app repository, the first three rows collapse into `src/styles.css` 
 
 | Tool | What for | Satellite |
 | --- | --- | --- |
-| `clsx` · `twJoin` | concatenate classes that do not conflict | [Components and Composition](tailwindcss-components-and-composition.md) § 2 |
-| `tailwind-merge` · `cn` | merge at the component boundary | [Components and Composition](tailwindcss-components-and-composition.md) § 2 |
-| `cva` · `tailwind-variants` | declared variants | [Components and Composition](tailwindcss-components-and-composition.md) § 3 |
-| shadcn/ui | semantic tokens and components | [Theme and Tokens](tailwindcss-theme-and-tokens.md) § 5 |
-| `prettier-plugin-tailwindcss` · Biome · IntelliSense | sorting and lint in the editor | [Components and Composition](tailwindcss-components-and-composition.md) § 4 |
-| `@tailwindcss/upgrade` | migration from line 3 | [Migration v3 to v4](tailwindcss-migration-v3-to-v4.md) § 1 |
+| `clsx` · `twJoin` | concatenate classes that do not conflict | `Tailwind CSS - Components and Composition` § 2 |
+| `tailwind-merge` · `cn` | merge at the component boundary | `Tailwind CSS - Components and Composition` § 2 |
+| `cva` · `tailwind-variants` | declared variants | `Tailwind CSS - Components and Composition` § 3 |
+| shadcn/ui | semantic tokens and components | `Tailwind CSS - Theme and Tokens` § 5 |
+| `prettier-plugin-tailwindcss` · Biome · IntelliSense | sorting and lint in the editor | `Tailwind CSS - Components and Composition` § 4 |
+| `@tailwindcss/upgrade` | migration from line 3 | `Tailwind CSS - Migration v3 to v4` § 1 |
 
 ---
 
@@ -255,29 +247,29 @@ The full families live in the satellites, but **these need to travel with the mi
 <!-- critical:start -->
 | ID | Rule | Satellite |
 | --- | --- | --- |
-| `TW-CFG-01` | A project that runs Vite **MUST** integrate Tailwind through `@tailwindcss/vite`. PostCSS **NEVER** when there is Vite. | [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md) |
-| `TW-CFG-05` | The entry stylesheet **MUST** start with `@import "tailwindcss"`. `@tailwind base/components/utilities` **NEVER** in v4. | [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md) |
-| `TW-CFG-06` | Each app **MUST** have a single stylesheet that imports `tailwindcss`. A CSS module or component `<style>` that uses `@apply` or a token **MUST** use `@reference`, and **NEVER** a second `@import "tailwindcss"`. | [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md) |
-| `TW-CFG-08` | A new project **NEVER** creates `tailwind.config.*`. A legacy config **MUST** be loaded through `@config` — without it the file is silently ignored. | [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md) |
-| `TW-SRC-01` | Every class name **MUST** appear complete and literal in the source code. Building a class name by interpolation or concatenation **NEVER**. | [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md) |
-| `TW-SRC-03` | A library in `node_modules` that ships Tailwind classes **MUST** be registered with `@source` in the entry stylesheet. | [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md) |
-| `TW-SRC-04` | In a monorepo, the app's stylesheet **MUST** declare the base (`source(…)`) or each consumed UI package (`@source`). Depending on the directory the build runs from **NEVER**. † | [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md) |
-| `TW-THEME-04` | A value that exists as a token **MUST** be used through the token's utility. An arbitrary value that duplicates a token (`p-[16px]` with `p-4` available, `bg-[#0ea5e9]` with `bg-sky-500` available) **NEVER**. † | [Tailwind CSS - Theme and Tokens](tailwindcss-theme-and-tokens.md) |
-| `TW-THEME-05` | A theme variable that references another variable **MUST** be declared in `@theme inline`. | [Tailwind CSS - Theme and Tokens](tailwindcss-theme-and-tokens.md) |
-| `TW-THEME-06` | A token that swaps at runtime (dark mode, `data-theme`, brand) **MUST** have its value in a regular variable swapped by selector, mapped through `@theme inline`. Redefining the `@theme` token by selector, or repeating `dark:` on every use of a semantic color, **NEVER**. † | [Tailwind CSS - Theme and Tokens](tailwindcss-theme-and-tokens.md) |
-| `TW-THEME-11` | A design system component **MUST** use a semantic token (`bg-primary`, `text-muted-foreground`, `border-border`). A raw palette color (`bg-zinc-900`) in a `components/ui` component **NEVER**. † | [Tailwind CSS - Theme and Tokens](tailwindcss-theme-and-tokens.md) |
-| `TW-THEME-13` | A new semantic token **MUST** be declared in `:root` **and** `.dark`, and mapped in `@theme inline`. Declared only in light **NEVER** — dark silently inherits the light value. | [Tailwind CSS - Theme and Tokens](tailwindcss-theme-and-tokens.md) |
-| `TW-UTIL-01` | Two utilities that set the same property **NEVER** coexist on the same element. The choice **MUST** be a condition that emits only one. | [Tailwind CSS - Utilities and Variants](tailwindcss-utilities-and-variants.md) |
-| `TW-UTIL-05` | A value known only at runtime **MUST** arrive through a CSS variable in `style`, consumed by a utility (`bg-(--x)`). `style` with a static value **NEVER**. | [Tailwind CSS - Utilities and Variants](tailwindcss-utilities-and-variants.md) |
-| `TW-UTIL-07` | `@apply` **MUST** be restricted to three places: markup the project does not write, the body of an `@utility` composed from utilities, and global element rules in `@layer base`. As a component class of the project's own (`.btn { @apply … }`) **NEVER** — the component is the unit of reuse. † | [Tailwind CSS - Utilities and Variants](tailwindcss-utilities-and-variants.md) |
-| `TW-VAR-01` | The mobile style **MUST** be the unprefixed one, and the prefixes **MUST** override upward. `sm:` to target mobile **NEVER**. | [Tailwind CSS - Utilities and Variants](tailwindcss-utilities-and-variants.md) |
-| `TW-A11Y-01` | Removing the outline (`outline-hidden`, `outline-none`) **MUST** come with a focus style of your own. Removing it with no replacement **NEVER**. | [Tailwind CSS - Utilities and Variants](tailwindcss-utilities-and-variants.md) |
-| `TW-A11Y-03` | An icon-only control **MUST** have an accessible name — text in `sr-only` or `aria-label`. | [Tailwind CSS - Utilities and Variants](tailwindcss-utilities-and-variants.md) |
-| `TW-COMP-02` | Conditional classes **internal** to the component **MUST** be joined without merge (`clsx`, `twJoin`) and structured so they do not conflict. Merge to resolve an internal conflict **NEVER**. | [Tailwind CSS - Components and Composition](tailwindcss-components-and-composition.md) |
-| `TW-COMP-03` | A `className` received from outside **MUST** go through `twMerge`/`cn`, **last**. | [Tailwind CSS - Components and Composition](tailwindcss-components-and-composition.md) |
-| `TW-COMP-06` | A component with design variation **MUST** declare it as a variant (cva or tailwind-variants), with the derived type (`VariantProps`). Design variation passed through `className` **NEVER**. † | [Tailwind CSS - Components and Composition](tailwindcss-components-and-composition.md) |
-| `TW-MIG-03` | v3's `outline-none` **MUST** become `outline-hidden`. Keeping it as `outline-none` **NEVER** — it removes visible focus in forced colors. | [Tailwind CSS - Migration v3 to v4](tailwindcss-migration-v3-to-v4.md) |
-| `TW-MIG-05` | Each default that changed (§ 3) **MUST** be decided explicitly in the migration — adopted, or restored with the source's CSS in `@layer base`/`@theme`. Letting the change through without a decision **NEVER**. | [Tailwind CSS - Migration v3 to v4](tailwindcss-migration-v3-to-v4.md) |
+| `TW-CFG-01` | A project that runs Vite **MUST** integrate Tailwind through `@tailwindcss/vite`. PostCSS **NEVER** when there is Vite. | `Tailwind CSS - Installation and Detection` |
+| `TW-CFG-05` | The entry stylesheet **MUST** start with `@import "tailwindcss"`. `@tailwind base/components/utilities` **NEVER** in v4. | `Tailwind CSS - Installation and Detection` |
+| `TW-CFG-06` | Each app **MUST** have a single stylesheet that imports `tailwindcss`. A CSS module or component `<style>` that uses `@apply` or a token **MUST** use `@reference`, and **NEVER** a second `@import "tailwindcss"`. | `Tailwind CSS - Installation and Detection` |
+| `TW-CFG-08` | A new project **NEVER** creates `tailwind.config.*`. A legacy config **MUST** be loaded through `@config` — without it the file is silently ignored. | `Tailwind CSS - Installation and Detection` |
+| `TW-SRC-01` | Every class name **MUST** appear complete and literal in the source code. Building a class name by interpolation or concatenation **NEVER**. | `Tailwind CSS - Installation and Detection` |
+| `TW-SRC-03` | A library in `node_modules` that ships Tailwind classes **MUST** be registered with `@source` in the entry stylesheet. | `Tailwind CSS - Installation and Detection` |
+| `TW-SRC-04` | In a monorepo, the app's stylesheet **MUST** declare the base (`source(…)`) or each consumed UI package (`@source`). Depending on the directory the build runs from **NEVER**. † | `Tailwind CSS - Installation and Detection` |
+| `TW-THEME-04` | A value that exists as a token **MUST** be used through the token's utility. An arbitrary value that duplicates a token (`p-[16px]` with `p-4` available, `bg-[#0ea5e9]` with `bg-sky-500` available) **NEVER**. † | `Tailwind CSS - Theme and Tokens` |
+| `TW-THEME-05` | A theme variable that references another variable **MUST** be declared in `@theme inline`. | `Tailwind CSS - Theme and Tokens` |
+| `TW-THEME-06` | A token that swaps at runtime (dark mode, `data-theme`, brand) **MUST** have its value in a regular variable swapped by selector, mapped through `@theme inline`. Redefining the `@theme` token by selector, or repeating `dark:` on every use of a semantic color, **NEVER**. † | `Tailwind CSS - Theme and Tokens` |
+| `TW-THEME-11` | A design system component **MUST** use a semantic token (`bg-primary`, `text-muted-foreground`, `border-border`). A raw palette color (`bg-zinc-900`) in a `components/ui` component **NEVER**. † | `Tailwind CSS - Theme and Tokens` |
+| `TW-THEME-13` | A new semantic token **MUST** be declared in `:root` **and** `.dark`, and mapped in `@theme inline`. Declared only in light **NEVER** — dark silently inherits the light value. | `Tailwind CSS - Theme and Tokens` |
+| `TW-UTIL-01` | Two utilities that set the same property **NEVER** coexist on the same element. The choice **MUST** be a condition that emits only one. | `Tailwind CSS - Utilities and Variants` |
+| `TW-UTIL-05` | A value known only at runtime **MUST** arrive through a CSS variable in `style`, consumed by a utility (`bg-(--x)`). `style` with a static value **NEVER**. | `Tailwind CSS - Utilities and Variants` |
+| `TW-UTIL-07` | `@apply` **MUST** be restricted to three places: markup the project does not write, the body of an `@utility` composed from utilities, and global element rules in `@layer base`. As a component class of the project's own (`.btn { @apply … }`) **NEVER** — the component is the unit of reuse. † | `Tailwind CSS - Utilities and Variants` |
+| `TW-VAR-01` | The mobile style **MUST** be the unprefixed one, and the prefixes **MUST** override upward. `sm:` to target mobile **NEVER**. | `Tailwind CSS - Utilities and Variants` |
+| `TW-A11Y-01` | Removing the outline (`outline-hidden`, `outline-none`) **MUST** come with a focus style of your own. Removing it with no replacement **NEVER**. | `Tailwind CSS - Utilities and Variants` |
+| `TW-A11Y-03` | An icon-only control **MUST** have an accessible name — text in `sr-only` or `aria-label`. | `Tailwind CSS - Utilities and Variants` |
+| `TW-COMP-02` | Conditional classes **internal** to the component **MUST** be joined without merge (`clsx`, `twJoin`) and structured so they do not conflict. Merge to resolve an internal conflict **NEVER**. | `Tailwind CSS - Components and Composition` |
+| `TW-COMP-03` | A `className` received from outside **MUST** go through `twMerge`/`cn`, **last**. | `Tailwind CSS - Components and Composition` |
+| `TW-COMP-06` | A component with design variation **MUST** declare it as a variant (cva or tailwind-variants), with the derived type (`VariantProps`). Design variation passed through `className` **NEVER**. † | `Tailwind CSS - Components and Composition` |
+| `TW-MIG-03` | v3's `outline-none` **MUST** become `outline-hidden`. Keeping it as `outline-none` **NEVER** — it removes visible focus in forced colors. | `Tailwind CSS - Migration v3 to v4` |
+| `TW-MIG-05` | Each default that changed (§ 3) **MUST** be decided explicitly in the migration — adopted, or restored with the source's CSS in `@layer base`/`@theme`. Letting the change through without a decision **NEVER**. | `Tailwind CSS - Migration v3 to v4` |
 <!-- critical:end -->
 
 ### 6.2 Canonical IDs
@@ -297,65 +289,25 @@ The full families live in the satellites, but **these need to travel with the mi
 
 | Family | Satellite |
 | --- | --- |
-| `TW-CFG-*` · `TW-SRC-*` | [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md) |
-| `TW-THEME-*` | [Tailwind CSS - Theme and Tokens](tailwindcss-theme-and-tokens.md) |
-| `TW-UTIL-*` · `TW-VAR-*` · `TW-A11Y-*` | [Tailwind CSS - Utilities and Variants](tailwindcss-utilities-and-variants.md) |
-| `TW-COMP-*` · `TW-TOOL-*` | [Tailwind CSS - Components and Composition](tailwindcss-components-and-composition.md) |
-| `TW-MIG-*` | [Tailwind CSS - Migration v3 to v4](tailwindcss-migration-v3-to-v4.md) — applies **only** to a project coming from line 3 |
+| `TW-CFG-*` · `TW-SRC-*` | `Tailwind CSS - Installation and Detection` |
+| `TW-THEME-*` | `Tailwind CSS - Theme and Tokens` |
+| `TW-UTIL-*` · `TW-VAR-*` · `TW-A11Y-*` | `Tailwind CSS - Utilities and Variants` |
+| `TW-COMP-*` · `TW-TOOL-*` | `Tailwind CSS - Components and Composition` |
+| `TW-MIG-*` | `Tailwind CSS - Migration v3 to v4` — applies **only** to a project coming from line 3 |
 
 ---
 
 ## 7. Skill contract
 
-How a Tailwind skill should consume this doc.
+| Skill | Owns | Loads, only when needed |
+| --- | --- | --- |
+| `tailwind-setup` | `Tailwind CSS - Installation and Detection`, `Tailwind CSS - Theme and Tokens` | the section `rules.md` names |
+| `tailwind-migrate` | `Tailwind CSS - Migration v3 to v4` | § 3 of its note, for the restore CSS |
+| `tailwind-build` | `Tailwind CSS - Utilities and Variants`, `Tailwind CSS - Components and Composition` | the section `rules.md` names |
+| `tailwind-split-variants` | nothing: a pure move of `cva`/`tv` to `<name>.variants.ts` | `Tailwind CSS - Components and Composition` § 3, only when a rule is in doubt |
+| `tailwind-review` | this hub | § 6.2 when a finding sits on a pair; nothing else by default |
 
-### What to load
-
-```
-ALWAYS:   tailwindcss.md § 2 (mental model)
-          tailwindcss.md § 5 (decision trees)
-          tailwindcss.md § 6 + § 6.1 (normative and critical rules)
-
-BEFORE ANYTHING ELSE, to discover the project's line:
-          package.json (tailwindcss, @tailwindcss/*) and the entry stylesheet
-
-WHEN CONFIGURING the project:
-          Tailwind CSS - Installation and Detection.md
-          Tailwind CSS - Theme and Tokens.md          (if there are tokens or dark mode)
-          Tailwind CSS - Migration v3 to v4.md        (if the project comes from line 3)
-
-WHEN WRITING/REVIEWING className:
-          Tailwind CSS - Utilities and Variants.md
-          Tailwind CSS - Components and Composition.md (if it is a reusable component)
-
-NEVER:    all five satellites at once
-```
-
-### How to cite
-
-Review findings cite the rule ID and the satellite; they do not paraphrase:
-
-> `TW-SRC-01` — `` className={`bg-${tone}-600`} `` in `Badge.tsx:14`. The scanner reads text and never sees `bg-red-600`; the class only exists as long as another file happens to use it. Map `tone` to the complete string (`TW-SRC-02`).
-> See [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md).
-
-### Invariants the skill must enforce
-
-1. **Discover before prescribing** (`TW-CORE-01`). The line and the integration decide which IDs apply.
-2. **Verify before asserting.** If an API is not in § 4 or in a satellite, it was not verified in this doc. Consult the source (Context7 `/tailwindlabs/tailwindcss.com`) and update the note — do not invent a utility or an option.
-3. **The source wins.** A divergence between this note and the official docs is a bug in this note.
-4. **Constraint before aesthetics.** Before "improving the visuals", check whether the value comes from the theme (`TW-THEME-04`) and whether the component uses a semantic token (`TW-THEME-11`).
-5. **Render before delivering** (`TW-CORE-04`).
-6. **Prefer the bridge.** When § 8 indicates the problem belongs to another note (React, Storybook, Playwright), follow the bridge.
-
-### Cuts
-
-| Skill | Loads |
-| --- | --- |
-| "configure or migrate Tailwind in a project" | § 5.1 + § 6 + [Installation and Detection](tailwindcss-installation-and-detection.md) + [Theme and Tokens](tailwindcss-theme-and-tokens.md), and [Migration](tailwindcss-migration-v3-to-v4.md) if coming from line 3 |
-| "write a component or screen with Tailwind" | § 2 + § 5.2–5.4 + § 6 + [Utilities and Variants](tailwindcss-utilities-and-variants.md) + [Components and Composition](tailwindcss-components-and-composition.md) |
-| "review existing styles" | § 6 + § 6.1 + the finding's satellite, opened one at a time |
-
-Record at the start of the skill which satellite is the source, so that updates to the doc propagate.
+Invariants every skill enforces: discover the line before prescribing (`TW-CORE-01`); the source wins over a note, and a divergence is a bug in the note; constraint before aesthetics (`TW-THEME-04`, `TW-THEME-11`); render before delivering (`TW-CORE-04`). Findings cite the ID and file:line and do not paraphrase the rule.
 
 ---
 
@@ -366,7 +318,7 @@ The body of this doc is pure Tailwind, faithful to the source. In my stack (`Rea
 | Problem | Raw practice | What to use in the stack |
 | --- | --- | --- |
 | wiring the CSS in TanStack Start | `import './styles.css'` | `?url` in the root route's `head().links` — `TW-CFG-04` |
-| component with variants | conditional `className` scattered around | `cva` + `cn` — [Components and Composition](tailwindcss-components-and-composition.md) § 3; each variant is a story (`SB-CSF-04`) |
+| component with variants | conditional `className` scattered around | `cva` + `cn` — `Tailwind CSS - Components and Composition` § 3; each variant is a story (`SB-CSF-04`) |
 | theme and tokens in Storybook | inline `style` in the story | import the entry stylesheet in `preview.tsx` and toggle `.dark` with a global decorator — `Storybook - Configuração e Builder` § 2 |
 | selecting an element in a test | `locator('.bg-blue-500')` | role and accessible name — `PW-LOC-01`, `Playwright - Locators` § 8.2 |
 | visual regression in the migration | looking at the screen | `toHaveScreenshot` — `Playwright - Snapshots e Visual` |
@@ -380,7 +332,7 @@ The body of this doc is pure Tailwind, faithful to the source. In my stack (`Rea
 
 ## Related
 
-- [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md) · [Tailwind CSS - Theme and Tokens](tailwindcss-theme-and-tokens.md) · [Tailwind CSS - Utilities and Variants](tailwindcss-utilities-and-variants.md) · [Tailwind CSS - Components and Composition](tailwindcss-components-and-composition.md) · [Tailwind CSS - Migration v3 to v4](tailwindcss-migration-v3-to-v4.md) — the satellites
+- `Tailwind CSS - Installation and Detection` · `Tailwind CSS - Theme and Tokens` · `Tailwind CSS - Utilities and Variants` · `Tailwind CSS - Components and Composition` · `Tailwind CSS - Migration v3 to v4` — the satellites
 - `React.js` · `React - Patterns` — the component that carries the classes
 - `Storybook` — where each variant becomes a named state
 - `Playwright - Locators` — why a class is not a selector

@@ -1,78 +1,54 @@
 #!/usr/bin/env bash
-# Regenerates references/id-map.md for the three Tailwind skills, from tailwindcss*.
+# Regenerates references/rules.md in every Tailwind skill from the rule tables of the docs
+# that each skill owns (<skill>/docs/tailwindcss*.md). Authoring only: the file is committed.
+#   bash skills/tailwind/tailwind-setup/scripts/generate-id-map.sh
 set -euo pipefail
-BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)/docs/tailwind}"
-# The map is generated at authoring time and committed: source and destination are
-# both this family (pass another docs path as $1 if you need to).
 FAMILY="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-DOCS="$BASE"
 
-# Title of each note, from the `titulo:` field in the file itself — the link label.
-titles() {
-  awk 'FNR == 1 { name = FILENAME; sub(/.*\//, "", name); sub(/\.md$/, "", name) }
-       /^titulo: / { print name "\t" substr($0, 9); nextfile }' "$DOCS"/*.md
-}
+FAMILY="$FAMILY" python3 <<'PY'
+import datetime, os, pathlib, re
 
-# Rewrites a note's own relative links to how they are seen from
-# <family>/<skill>/references/ — nothing here points outside the project.
-links() {
-  sed -E -e 's#\]\(([^)/]+\.md)#](../../../docs/tailwind/\1#g'
-}
-HUB="$DOCS/tailwindcss.md"
+family = pathlib.Path(os.environ["FAMILY"])
+docs = sorted(family.glob("tailwind-*/docs/tailwindcss*.md"))
+skills = sorted(p.parent for p in family.glob("tailwind-*/SKILL.md"))
 
-scan() {
-  for f in "$DOCS"/tailwindcss*.md; do
-    base="$(basename "$f" .md)"
-    awk -v sat="$base" -v hub="tailwindcss" '
-      /^## / { h2 = $0; sub(/^## /, "", h2) }
-      /^#{2,4} / { h = $0; sub(/^#+ /, "", h) }
-      {
-        if (match($0, /TW-[A-Z0-9]+-[0-9]+/) == 0) next
-        id = substr($0, RSTART, RLENGTH)
-        rank = -1
-        if ($0 ~ /^#{2,4} `TW-[A-Z0-9]+-[0-9]+`/)   rank = 0
-        else if ($0 ~ /^\| `TW-[A-Z0-9]+-[0-9]+`/) {
-          if ($0 ~ /MUST|NEVER/) rank = (sat == hub ? 2 : 1)
-          else                   rank = 3
-        }
-        if (rank < 0) next
-        sec = (rank == 3 ? h : h2)
-        printf "%s\t%d\t%s\t%s\n", id, rank, sat, (sec == "" ? "—" : sec)
-      }
-    ' "$f"
-  done
-}
+rules = {}
+# satellites first: the hub's critical table repeats their rows, but the satellite owns the ID
+for doc in sorted(docs, key=lambda d: d.name == "tailwindcss.md"):
+    text = doc.read_text(encoding="utf-8")
+    title = re.search(r"^title: (.+)$", text, re.M).group(1)
+    section = ""
+    for line in text.splitlines():
+        if line.startswith("## "):
+            section = line[3:].split(". ", 1)[0] if re.match(r"## \d", line) else line[3:]
+        m = re.match(r"^\| `(TW-[A-Z0-9]+-\d+)` \| (.+?) \|", line)
+        if m and m.group(1) not in rules:
+            rules[m.group(1)] = (m.group(2), doc, title, section)
 
-TMP="$(mktemp)"
-{
-  echo "---"
-  echo "generated-by: skills/tailwind/tailwind-setup/scripts/generate-id-map.sh"
-  echo "generated-at: $(date +%F)"
-  echo "---"
-  echo
-  echo "# ID map \`TW-*\`"
-  echo
-  echo "> An index, not a copy. **The TW-* rules are written for line 4.** On a project that stays on"
-  echo "> line 3, only \`TW-SRC-01\`, \`TW-SRC-02\`, \`TW-UTIL-01\`, \`TW-A11Y-*\` and \`TW-COMP-*\` may be cited."
-  echo "> Discover the line first — \`bash \${CLAUDE_PLUGIN_ROOT}/skills/tailwind-setup/scripts/discover-line.sh\`."
-  echo "> Regenerate with \`bash skills/tailwind/tailwind-setup/scripts/generate-id-map.sh\`."
-  echo
-  echo "## Canonical IDs and the pairs that look like aliases"
-  echo
-  awk '/^### 6\.2/,/^### Full families/' "$HUB" | grep -vE '^### ' | cat -s | links || true
-  echo
-  echo "## Full index"
-  echo
-  echo "| ID | Satellite | Section |"
-  echo "| --- | --- | --- |"
-  scan | sort -t$'\t' -k1,1 -k2,2n \
-    | awk -F'\t' 'NR == FNR { title[$1] = $2; next }
-                  !seen[$1]++ { printf "| `%s` | [%s](../../../docs/tailwind/%s.md) | %s |\n", \
-                                $1, ($3 in title ? title[$3] : $3), $3, $4 }' <(titles) -
-} > "$TMP"
+ORDER = ["CORE", "CFG", "SRC", "THEME", "UTIL", "VAR", "A11Y", "COMP", "TOOL", "MIG"]
+key = lambda i: (ORDER.index(i.split("-")[1]), int(i.split("-")[2]))
 
-for s in setup build review; do
-  cp "$TMP" "$FAMILY/tailwind-$s/references/id-map.md"
-done
-rm -f "$TMP"
-echo "written into 3 skills ($(grep -c '^| `TW' "$FAMILY/tailwind-setup/references/id-map.md") IDs)"
+for skill in skills:
+    out = ["---",
+           "generated-by: skills/tailwind/tailwind-setup/scripts/generate-id-map.sh",
+           f"generated-at: {datetime.date.today()}",
+           "---", "",
+           "# `TW-*` rules", "",
+           "> Grep, never load whole: `grep -h 'TW-SRC-01' references/rules.md` (or a family: `'TW-A11Y-'`).",
+           "> `MUST`/`NEVER` are normative. `†` marks a house decision, debatable in review and never Blocking alone.",
+           "> A project that stays on line 3: only `TW-SRC-01/02`, `TW-UTIL-01`, `TW-A11Y-*`, `TW-COMP-*` apply.", "",
+           "| ID | Rule | Source |", "| --- | --- | --- |"]
+    for rid in sorted(rules, key=key):
+        rule, doc, title, section = rules[rid]
+        src = (f"[{title}](../docs/{doc.name}) § {section}" if doc.parent.parent == skill
+               else f"`{title}` § {section} ({doc.parent.parent.name})")
+        out.append(f"| `{rid}` | {rule} | {src} |")
+    out += ["", "## Pairs that look like aliases and are not", "",
+            "- `TW-THEME-04` (arbitrary duplicating a token: use it) × `TW-UTIL-03` (repeated arbitrary, no token: create it).",
+            "- `TW-SRC-02` (scanner: complete strings) × `TW-COMP-06` (API: design variation is a variant).",
+            "- `TW-UTIL-01` (conflict on the element) × `TW-COMP-02` (merge hiding an internal conflict).",
+            "- `TW-MIG-03` (rename `outline-none` → `outline-hidden`) × `TW-A11Y-01` (focus replacement, for both).", ""]
+    (skill / "references" / "rules.md").write_text("\n".join(out), encoding="utf-8")
+
+print(f"references/rules.md written into {len(skills)} skills ({len(rules)} rules)")
+PY

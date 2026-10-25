@@ -1,10 +1,10 @@
 # The sequence
 
-Source: [Tailwind CSS - Installation and Detection](../../../docs/tailwind/tailwindcss-installation-and-detection.md) and [Tailwind CSS - Theme and Tokens](../../../docs/tailwind/tailwindcss-theme-and-tokens.md).
+Source: [Tailwind CSS - Installation and Detection](../docs/tailwindcss-installation-and-detection.md) and [Tailwind CSS - Theme and Tokens](../docs/tailwindcss-theme-and-tokens.md).
 
 ## Installation, in order
 
-1. **Discover** — `discover-line.sh`. LINE 3 or MIXED → `migration.md` first.
+1. **Discover** — `discover-line.sh`. LINE 3 or MIXED → `tailwind-migrate` first.
 2. **Browser floor** — Safari 16.4 · Chrome 111 · Firefox 128 accepted by the product (`TW-CFG-11`).
 3. **Packages** — `tailwindcss` + `@tailwindcss/vite`, **same version** (`TW-CFG-03`). With Bun: `bun add -d tailwindcss @tailwindcss/vite`.
 4. **Plugin** — `tailwindcss()` in `vite.config.ts`. Remove `postcss.config.*` if Tailwind was its only job, and `autoprefixer`/`postcss-import` (`TW-CFG-01`, `TW-CFG-02`).

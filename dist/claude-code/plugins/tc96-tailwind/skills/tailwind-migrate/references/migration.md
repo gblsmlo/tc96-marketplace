@@ -1,6 +1,6 @@
 # Migrating from line 3
 
-Source: [Tailwind CSS - Migration v3 to v4](../../../docs/tailwind/tailwindcss-migration-v3-to-v4.md).
+Source: [Tailwind CSS - Migration v3 to v4](../docs/tailwindcss-migration-v3-to-v4.md).
 
 **The risk is not the build breaking — it is the build passing.** `shadow-sm` still compiles, smaller; `border` still compiles, another color.
 

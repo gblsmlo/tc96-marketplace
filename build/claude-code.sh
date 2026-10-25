@@ -12,7 +12,7 @@ set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="${1:-$RAIZ/dist/claude-code}"
-VERSAO="${VERSAO:-0.14.0}"   # 0.4: commands/ · 0.5: commands on bun · 0.6: phase 3 on bun test · 0.7: model and effort per role · 0.8: self-contained tc96-tailwind · 0.9: react-component-performance and bench harness · 0.10: .specs/, spec command and workflow-spec · 0.11: repo-operator, cost per point of the flow and gaps with an owner · 0.11.1: a session opened by another passes the model and calls the role as a subagent · 0.12: execution scope, workflow hub in English, no appetite gate · 0.13: small units side by side — waves, review budget, planning bundle, delta re-review · 0.14: Spec Driven Development replaces the four pillars — PRD with waves, feature bundles, spec-writer, orchestrated runs, harness scripts
+VERSAO="${VERSAO:-0.15.0}"   # 0.4: commands/ · 0.5: commands on bun · 0.6: phase 3 on bun test · 0.7: model and effort per role · 0.8: self-contained tc96-tailwind · 0.9: react-component-performance and bench harness · 0.10: .specs/, spec command and workflow-spec · 0.11: repo-operator, cost per point of the flow and gaps with an owner · 0.11.1: a session opened by another passes the model and calls the role as a subagent · 0.12: execution scope, workflow hub in English, no appetite gate · 0.13: small units side by side — waves, review budget, planning bundle, delta re-review · 0.14: Spec Driven Development replaces the four pillars — PRD with waves, feature bundles, spec-writer, orchestrated runs, harness scripts · 0.15: self-contained tanstack family with tanstack-review, Tailwind docs inside each skill with migrate and split-variants
 
 rm -rf "$DEST"
 

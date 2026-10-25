@@ -1,6 +1,6 @@
 # Deciding the value and the style
 
-Source: [Tailwind CSS](../../../docs/tailwind/tailwindcss.md) § 5.2–5.3 · bodies in [Tailwind CSS - Utilities and Variants](../../../docs/tailwind/tailwindcss-utilities-and-variants.md) § 2–3 and [Tailwind CSS - Theme and Tokens](../../../docs/tailwind/tailwindcss-theme-and-tokens.md).
+Source: `Tailwind CSS` § 5.2–5.3 · bodies in [Tailwind CSS - Utilities and Variants](../docs/tailwindcss-utilities-and-variants.md) § 2–3 and `Tailwind CSS - Theme and Tokens`.
 
 ## Per value
 
