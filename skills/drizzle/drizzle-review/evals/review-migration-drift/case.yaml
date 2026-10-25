@@ -1,0 +1,12 @@
+schema_version: "1.1"
+name: review-migration-drift
+expected_outcome: |
+  The review finds drizzle/0001_archived_status.sql written by hand and absent from meta/_journal.json, with no snapshot —
+  drizzle-kit migrate will never apply it and the next generate diffs from the stale 0000 snapshot (and runs generate to show it,
+  or says it could not). It flags push and migrate both scripted for the same schema (DRZ-MIG-04, push local-only DRZ-MIG-01), and
+  the enum change made outside the generate/migrate discipline (DRZ-MIG-05). It flags card_events not exported (DRZ-CORE-02) so
+  drizzle-kit never creates it, cards.parentId referencing cards without AnyPgColumn (DRZ-SCHEMA-02, tsc error TS7022), and
+  cards_board_idx as a strict prefix of cards_board_status_idx (no DRZ ID — cites the doc section). Ordered by severity with
+  file:line, and states which commands ran.
+context:
+  scaffold_script: place-files.sh

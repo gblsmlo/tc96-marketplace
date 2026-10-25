@@ -340,7 +340,7 @@ NUNCA:   decidir camada por conveniência de digitação
 - ·
 - — a camada de fora
 - ·
-- [Elysia](elysia.md) · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — a ferramenta que torna `BFF-07` verificável
+- `Elysia` · `Elysia - Schema e Eden` — a ferramenta que torna `BFF-07` verificável
 - [TanStack Query - Padrões de Consulta](tanstack-query-padroes-de-consulta.md) — leque e waterfall pelo lado do cliente
 
 ## Procedência

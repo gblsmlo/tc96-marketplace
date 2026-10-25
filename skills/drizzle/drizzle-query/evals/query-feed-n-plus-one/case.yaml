@@ -1,0 +1,12 @@
+schema_version: "1.1"
+name: query-feed-n-plus-one
+expected_outcome: |
+  listFeed issues a constant number of statements per page (1 with db.query + with + extras, or 2 with a
+  page query plus one grouped inArray count), proven by a test that counts statements through the logger
+  for at least two data sizes. Pages are bounded (20) with a keyset or offset cursor ordered with the primary
+  key as a tiebreaker. The item shape is unchanged. If the rewrite uses db.query ... with, it also fixes
+  src/db/client.ts, which registers the tables but not the relations (DRZ-REL-05) — otherwise `with` throws.
+  The response reports 2N+1 statements before (401 for 200 posts) and the measured count after, and cites
+  DRZ-RQB-01.
+context:
+  scaffold_script: place-files.sh

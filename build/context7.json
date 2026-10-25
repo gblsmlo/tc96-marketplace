@@ -193,11 +193,27 @@
     "elysia-schema": [
       "elysia"
     ],
+    "elysia-eden": [
+      "elysia"
+    ],
+    "elysia-openapi": [
+      "elysia"
+    ],
     "elysia-diagnose": [
       "elysia"
     ],
     "drizzle-review": [
       "drizzle"
+    ],
+    "drizzle-query": [
+      "drizzle"
+    ],
+    "drizzle-mutation": [
+      "drizzle"
+    ],
+    "drizzle-zod": [
+      "drizzle",
+      "zod"
     ],
     "tailwind-setup": [
       "tailwindcss",

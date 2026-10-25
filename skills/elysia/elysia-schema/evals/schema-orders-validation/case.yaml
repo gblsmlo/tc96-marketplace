@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: schema-orders-validation
+expected_outcome: |
+  Lowercase header names (x-tenant) applied to every route without the POST's own headers replacing the guard
+  (standalone guard or both declared), query page/pageSize coerced by t.Number, an { items, total, hasMore }
+  envelope, response maps with 404 for the lookup, internalCost stripped by the response schema, interfaces derived
+  with typeof Schema.static, and a test proving a string quantity in the JSON body is rejected. Cites ELYSIA-TYPE-03, -05, -06.
+context:
+  scaffold_script: place-files.sh

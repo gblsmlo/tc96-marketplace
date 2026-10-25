@@ -23,9 +23,9 @@ tags:
 fontes:
   - "[Backend no runtime Bun](../knowledge-base/backend-no-runtime-bun.md)"
   - "[Bun](../knowledge-base/bun.md)"
-  - "[Elysia](../knowledge-base/elysia.md)"
+  - "`Elysia` (tc96-backend docs/elysia)"
   - "[HTTP](../knowledge-base/http.md)"
-  - "[Drizzle ORM](../knowledge-base/drizzle-orm.md)"
+  - "`Drizzle ORM` (tc96-backend docs/drizzle)"
 ---
 # backend-developer
 
@@ -39,8 +39,10 @@ The highest-consequence rule of each family, which this agent checks **before** 
 
 | The question is… | Skill this agent loads | Explicitly **not** it |
 | --- | --- | --- |
-| route, handler, error, cookie in Elysia | `elysia-build` | `elysia-schema` |
-| schema, `response` per status, Eden client, OpenAPI | `elysia-schema` | `elysia-build` |
+| route, handler, error, cookie, auth plugin in Elysia | `elysia-build` | `elysia-schema` |
+| request/response schema, coercion, `response` per status, guard, models | `elysia-schema` | `elysia-build` |
+| a TypeScript client over Eden, TanStack Query on top of it | `elysia-eden` | `elysia-schema` |
+| API documentation, `/openapi`, a client generated for another language | `elysia-openapi` | `elysia-eden` |
 | hook or plugin that does not affect the route | `elysia-diagnose` | `elysia-build` |
 | which method, which status, `Location`, idempotency | `http-contract` | `http-cache` |
 | how long to cache, `ETag`, concurrent writes | `http-cache` | `http-contract` |
@@ -49,7 +51,10 @@ The highest-consequence rule of each family, which this agent checks **before** 
 | dependency, lockfile, workspace, `bun ci` | `bun-workspace` | `bun-runtime` |
 | moving off Node and it does not run; container; Dockerfile | `bun-migrate` | `bun-runtime` |
 | unit or integration test under `bun test` | `bun-test-build` | `test-design` (the level is already decided) |
-| Drizzle schema, migration, query with relations | — no build skill; read [Drizzle ORM](../knowledge-base/drizzle-orm.md) § 6 and [Drizzle - Schema e Migrations](../knowledge-base/drizzle-schema-e-migrations.md) directly; review with `drizzle-review` | — |
+| Drizzle read: listing, relations, N+1, pagination | `drizzle-query` | `drizzle-zod` (the response schema) |
+| Drizzle write: insert, upsert, update, delete, transaction | `drizzle-mutation` | `drizzle-zod` (the body schema) |
+| request or response schema for a Drizzle table | `drizzle-zod` | `elysia-schema` |
+| Drizzle table, migration, `drizzle-kit` | — no skill; read `Drizzle - Schema and Migrations` (the drizzle family's docs) | `drizzle-review` (that is `code-reviewer`'s) |
 | route in Hono | — no skill yet; read [Hono](../knowledge-base/hono.md) § 6.1 and § 8 directly | — |
 | where the rule lives: browser, BFF or backend | `software-architect` | backend-developer |
 
@@ -61,7 +66,7 @@ The highest-consequence rule of each family, which this agent checks **before** 
 | --- | --- | --- |
 | 1 | [Backend no runtime Bun](../knowledge-base/backend-no-runtime-bun.md) § 3–4 and § 6 | confirm the chosen boundary and the `BACKEND-*` rules |
 | 2 | the task's skill | procedure and minimum loading |
-| 3 | the family's hub — [Elysia](../knowledge-base/elysia.md), [Hono](../knowledge-base/hono.md), [HTTP](../knowledge-base/http.md), [Bun](../knowledge-base/bun.md), [Drizzle ORM](../knowledge-base/drizzle-orm.md) | symptom → API tree, § 6.1 criticals, § 6.2 canonical IDs |
+| 3 | the family's hub — `Elysia`, [Hono](../knowledge-base/hono.md), [HTTP](../knowledge-base/http.md), [Bun](../knowledge-base/bun.md), `Drizzle ORM` (the drizzle skills load it) | symptom → API tree, § 6.1 criticals, § 6.2 canonical IDs |
 | 4 | [Fronteira do BFF - forma, jornada e regra](../knowledge-base/fronteira-do-bff-forma-jornada-e-regra.md) § 2–4 | when the route belongs to a BFF: what is shape, what is rule (`BFF-01`, `BFF-02`) |
 | 5 | the satellite the skill points at | only with the finding in hand |
 
@@ -89,7 +94,7 @@ In this order, with `http-contract`:
 - **Configuration validated at boot, in a single module** (`ZOD-ENV-01`, `ZOD-ENV-02`). A secret never takes a public prefix (`ZOD-ENV-04`). What is a real secret and how it reaches the process is `devops-security`'s.
 - **Persistence** — RQB with `with` instead of N queries (`DRZ-RQB-01`); `push` only local/prototype (`DRZ-MIG-01`); versioned migration.
 - **Structured logs** with request context; trace context propagated.
-- **OpenAPI generated from the schema**, not written apart (`elysia-schema`).
+- **OpenAPI generated from the schema**, not written apart, with explicit `operationId`s and `security` on protected routes (`elysia-openapi`).
 - **Upload**: stream, not buffer; validate type and size.
 
 ---

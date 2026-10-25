@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: diagnose-auth-scope
+expected_outcome: |
+  Identifies the auth hook's default local scope as the cause (ELYSIA-LIFE-01) with a consumer-side test that
+  answered 200 before the fix, notes that the existing test only hit the plugin's own route (and that its "rejection"
+  was a 500 from a thrown Error), fixes the scope so it reaches through the intermediate `protected` plugin (scoped on
+  both levels, or global), returns status(401) instead of throwing, proves 401 without a token and 200 with one on
+  PATCH /profile/rename, and reports in the rule/file:line/evidence/cause/fix format.
+context:
+  scaffold_script: place-files.sh

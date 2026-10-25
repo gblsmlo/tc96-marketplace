@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: eden-mutation-stock-error
+expected_outcome: |
+  The server returns status(409, { error, sku }) instead of throwing it and declares 409 in the route's response
+  map, so the Eden type carries it; the client's mutation error is typed (Treaty.Error or equivalent narrowing) and
+  the form helper narrows error.status === 409 to read value.sku without casts; validation (422) stays distinct;
+  tests prove the message end to end. Cites ELYSIA-CORE-03 and ELYSIA-TYPE-06.
+context:
+  scaffold_script: place-files.sh

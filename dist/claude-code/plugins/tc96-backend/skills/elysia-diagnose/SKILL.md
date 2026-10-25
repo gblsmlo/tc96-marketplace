@@ -1,7 +1,7 @@
 ---
 name: elysia-diagnose
-description: Diagnose why a plugin or hook does not affect a route in Elysia, and pick the right lifecycle point — registration order, `local`/`scoped`/`global` scope, plugin `name`, `derive` × `resolve`, `state` × `decorate`, macro, tracing — citing `ELYSIA-LIFE-*` IDs, with ten executable probes — use when the task is investigating a hook that does not run, authentication that does not protect the consumer's route, a frozen `store` value, a plugin whose lifecycle runs only once, or an `anonymous` span in OpenTelemetry. Do not use to write routes and handlers, which is elysia-build, nor for schemas and Eden, which is elysia-schema.
-source: "[Elysia - Lifecycle e Plugins](../../referencias/elysia-lifecycle-e-plugins.md)"
+description: Diagnoses why an Elysia hook, plugin, guard or onError does not affect a route, or why state behaves strangely — registration order, `local`/`scoped`/`global` scope and `as()`, plugin `name` and dedup, `derive` × `resolve`, `onRequest`'s PreContext, `store` and `decorate`, macros, async plugins, tracing span names, `cors` defaults — citing `ELYSIA-LIFE-*` and `ELYSIA-CORE-01` IDs, with an AST probe and a scope test that proves the cause. Use for an auth plugin that does not protect the app's routes, a hook that runs for some routes and not others, a hook that runs twice, `onRequest` reading undefined, a route that is 404 only in tests, a store value that looks stale, or spans named anonymous. Not for writing new routes or plugins (elysia-build), schema or typed-client problems (elysia-schema, elysia-eden), or a request the browser blocks (http-diagnose).
+source: "[Elysia - Lifecycle and Plugins](../../docs/elysia/elysia-lifecycle-and-plugins.md)"
 docs:
   - /websites/elysiajs
 tags:
@@ -12,24 +12,23 @@ tags:
 
 # elysia-diagnose
 
-> **Source of this skill:** [Elysia - Lifecycle e Plugins](../../referencias/elysia-lifecycle-e-plugins.md), with the [Elysia](../../referencias/elysia.md) hub as the router.
-> This skill **does not contain** the text of the rules — it says what to probe, in what order to eliminate hypotheses, and what **proves** each one.
-> **API surface:** resolve it through Context7 — `/websites/elysiajs`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
+> **Source of this skill:** [Elysia - Lifecycle and Plugins](../../docs/elysia/elysia-lifecycle-and-plugins.md) — § 0.3 is the "why does my plugin not affect this route" tree, and every `ELYSIA-LIFE-*` rule has its body there.
+> **API surface:** resolve it through Context7 — `/websites/elysiajs`, topics `lifecycle`, `plugin`, `scope`, `macro`. Signatures come from there; the rule and the ID come from the family docs.
 
-Contract this skill implements: [Elysia](../../referencias/elysia.md) § 7 ("Contrato de skill").
+Elysia's lifecycle fails in the quietest possible way: nothing throws, nothing warns, the route simply does not pass through the hook. Reading the plugin rarely settles it, because `local` and `scoped` produce identical code inside the plugin — the difference only exists in the instance that consumes it. This skill eliminates hypotheses in the order they fail, and closes each one with evidence: a probe that points, then a test that proves.
 
 ---
 
 ## When to use
 
-A hook, plugin, `derive`, `resolve` or `onError` **is not affecting** the route — or state behaves unexpectedly.
-
 | Situation | Go to |
 | --- | --- |
-| writing routes and handlers | `elysia-build` |
-| schema, `response`, Eden client | `elysia-schema` |
-| a request blocked by the browser, preflight | `http-diagnose` |
-| a flaky test under `bun test` | `bun-test-review` |
+| writing a route, a plugin or auth from scratch | `elysia-build` |
+| a validation error, a field that disappears, a header "never sent" | `elysia-schema` |
+| the client gets `unknown`, `null` data, `any`, or a query that never errors | `elysia-eden` |
+| a route missing from `/openapi/json` | `elysia-openapi` |
+| the browser blocks a request (preflight, CORS) | `http-diagnose` |
+| a flaky test in general | `bun-test-review` |
 
 ---
 
@@ -37,114 +36,58 @@ A hook, plugin, `derive`, `resolve` or `onError` **is not affecting** the route 
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Elysia](../../referencias/elysia.md) § 2 | the mental model of instance and plugin |
-| 2 | [Elysia](../../referencias/elysia.md) § 6 + § 6.1 + § 6.2 | rules, critical ones and canonical IDs |
-| 3 | [Elysia - Lifecycle e Plugins](../../referencias/elysia-lifecycle-e-plugins.md) | the source |
-
-References in this skill:
+| 1 | `references/id-map.md` | which doc and section holds each rule the probe names |
+| 2 | [Elysia - Lifecycle and Plugins](../../docs/elysia/elysia-lifecycle-and-plugins.md) § 0, § 2, § 5 | only when the probe points at scope, order or a hook phase |
+| 3 | [Elysia - Routing and Handler](../../docs/elysia/elysia-routing-and-handler.md) § 5, § 6 | only when the symptom is `onError`, a 404 in tests, or `app.modules` |
 
 | File | What for |
 | --- | --- |
-| `references/duas-causas.md` | registration order and undeclared scope — nearly every case is here |
-| `references/arvore.md` | the five branches, and `derive` × `resolve` × `state` × `decorate` |
-| `references/macro-tracing-e-cors.md` | the three that fail without breaking anything |
-| `references/prova-de-escopo.md` | the test that tells `local` from `scoped`, and the cut of what is not lifecycle |
-| `references/antipadroes.md` | the grid, with IDs |
-| `references/mapa-de-ids.md` | the 44 `ELYSIA-*`: declaration, satellite of the body and section |
-| `references/exemplo-plugin-sem-escopo.md` | a whole diagnosis, from the probe to the finding |
-| `scripts/sondas.sh` | ten lifecycle probes |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates the map across the three Elysia skills |
+| `references/probes-and-proof.md` | what each probe means, the scope test that proves `local` × `scoped`, and the symptoms that are not lifecycle |
+| `references/example.md` | a whole diagnosis, from the probe to the finding |
+| `references/antipatterns.md` | the grid with IDs and doc sections |
+| `scripts/probes.sh` | version line, then the AST scan (groups `lifecycle` and `route`) |
+| `scripts/elysia-scan.mjs` | the AST scan itself, shared by the whole family |
 
 ---
 
-## Step 1 — Probe
+## Step 1 — Probe before reading
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/elysia-diagnose/scripts/sondas.sh src
+bash ${CLAUDE_PLUGIN_ROOT}/skills/elysia-diagnose/scripts/probes.sh .
 ```
 
-**S1 measures order by line number** — a hook registered after the file's first route. It is the **first hypothesis, always** (`ELYSIA-CORE-01`), and it raises neither error nor warning: the route simply does not pass through the hook.
+It prints findings with `file:line` and a confidence. `high` is the shape of the defect; `candidate` needs reading. It never proves absence.
 
-The other nine: undeclared scope, plugin without a `name`, `derive` deciding auth, `onRequest` reading `body`/`query`, a destructured `store`, a mutated `decorate`, an anonymous hook under tracing, default `cors`, a macro with `throw`, a plugin as a callback.
+## Step 2 — Eliminate in this order
 
----
+1. **Order** (`ELYSIA-CORE-01`) — a hook, `.use()` or `onError` reaches only routes registered after it. `onRequest` is the only global one.
+2. **Scope** (`ELYSIA-LIFE-01`) — a plugin's hooks are `local` by default and do not reach the instance that `.use()`s it. `scoped` climbs **one** level: through an intermediate plugin, that plugin also needs `.as('scoped')`, or the hook is `global` (`ELYSIA-LIFE-09`).
+3. **Dedup** (`ELYSIA-LIFE-03`) — an unnamed plugin used by two instances runs its global hooks **twice** per request; with `name` they run once.
+4. **Phase** — `onRequest` has no `body`, `query`, `params`, `cookie` **or `headers`** (`ELYSIA-LIFE-04`); `derive` runs before validation, so it must not decide access (`ELYSIA-LIFE-02`).
+5. **Error routing** — a module's `onError` runs **after** the parent's handlers registered before `.use()`: a catch-all in the app that answers every code swallows the module's codes. A thrown `status(404)` reaches `onError` as `code === 404`.
+6. **Async registration** (`ELYSIA-CORE-10`) — a lazy `import()` plugin exists only after `await app.modules`; an async plugin *function* still pending when the first request arrived keeps its route 404 **for good**.
+7. **State** — `decorate` is shared and immutable by contract (`ELYSIA-LIFE-05`); a `store` primitive destructured in the parameter is a snapshot taken at that moment, stale against writes later in the same call (`ELYSIA-LIFE-06`).
 
-## Step 2 — The two causes
+The tree with every branch is § 0.3 of the doc.
 
-**1. Registered after the route** (`ELYSIA-CORE-01`) — hooks only apply to routes registered **after** them.
+## Step 3 — Prove it
 
-**2. Undeclared scope** (`ELYSIA-LIFE-01`) — the default is **`local`**: the hook stays inside the plugin and **does not cross** into the consuming instance. An authentication plugin without a declared scope protects its own routes and **none** of the consumer's.
+The probe points; a test proves. For scope, the only assertion that separates `local` from `scoped` hits a route of the **consuming** instance (`ELYSIA-LIFE-08`) — the template is in `references/probes-and-proof.md`. Use `http://localhost/...` in `app.handle`: a one-label host such as `http://x/` answers 404 for every route and fakes a "the route does not exist" symptom.
 
-```
-local → only the plugin's own instance
-scoped → the direct consumer
-global → the whole tree
-```
-
-A cross-cutting hook — tracing, logging, CORS — uses `global` (`ELYSIA-LIFE-09`), not a chain of `scoped`.
-
----
-
-## Step 3 — The tree
-
-`references/arvore.md`, five branches. Two that produce a bewildering bug:
-
-- **`ELYSIA-LIFE-03`** — a plugin without a `name` applied twice has its lifecycle executed **once**; the symptom is the hook running for half the routes.
-- **`ELYSIA-LIFE-04`** — `onRequest` receives a `PreContext`, which has **no** `body`, `query`, `params` or `cookie`; it reads `undefined`, and `undefined` often passes as "no filter".
-
-**The security rule:** an auth/authorization decision **never** uses `derive` (`ELYSIA-LIFE-02`) — `derive` runs **before** validation. Use `resolve` or `macro.resolve`.
-
----
-
-## Step 4 — State
-
-| Symptom | Cause | Rule |
-| --- | --- | --- |
-| frozen `store` value | a primitive destructured in the parameter — the reference is lost | `ELYSIA-LIFE-06` |
-| mutated `decorate`, unpredictable behavior | `decorate` is immutable; mutable is `state` | `ELYSIA-LIFE-05` |
-
----
-
-## Step 5 — Prove it
-
-**The probe points; it does not prove.** `local` and `scoped` produce the same code inside the plugin: the difference only appears in the instance that consumes it.
-
-`references/prova-de-escopo.md` carries the test `ELYSIA-LIFE-08` requires — a route of the **consuming** instance rejected without credentials. It is the only assertion that tells the two scopes apart.
-
----
-
-## Step 6 — Report
+## Step 4 — Report
 
 ```
 `RULE-ID` — file:line
 Symptom: <what does not happen>
-Evidence: <the test, the log, or the registration order>
+Evidence: <the test and its output, or the registration order>
 Cause: <one sentence>
-Fix: <concrete change>
-See the corresponding satellite.
+Fix: <the concrete change>
 ```
 
-**Evidence is a test or the registration order**, not an impression.
-
----
-
-## Step 7 — The cut: what is not lifecycle
-
-An error arriving as `unknown` in Eden, `null` `data`, a type that lost routes, a header that "never arrives", a numeric body that fails, a flaky test with an async plugin, SSE that drops — **none of these is lifecycle**. The table with the owner of each is in `references/prova-de-escopo.md`.
+Evidence is a test result or the registration order, not an impression. Write every rule ID in full (`ELYSIA-LIFE-01`, never `-01`). Say what you did not verify.
 
 ---
 
 ## Example
 
-An auth plugin whose test routes are rejected correctly, while the server's routes pass without credentials. S1 clean, S2 pointing at `.onBeforeHandle(verify)` without a scope — and the test on the consuming instance returning **200 where it should return 401**. The test that existed ran **inside** the plugin, and that is why it never caught it.
-
-Full diagnosis: `references/exemplo-plugin-sem-escopo.md`.
-
----
-
-## Related
-
-- [Elysia - Lifecycle e Plugins](../../referencias/elysia-lifecycle-e-plugins.md) — source of this skill
-- [Elysia](../../referencias/elysia.md) § 6, § 7
-- `elysia-build` · `elysia-schema` — the sibling skills
-- `http-diagnose` — when the symptom is CORS in the browser
+"Our auth plugin works in its own tests, but `PATCH /profile/rename` on the server answers without a token." The probe shows `.onBeforeHandle(verify)` in `packages/auth` with no scope (`ELYSIA-LIFE-01`, high) and no order problem. A test on the consuming app hits `PATCH /profile/rename` without a token: **200**. With `.resolve({ as: 'scoped' }, …)` returning `status(401, …)`: 401 — and the hook's `throw new Error` (a 500) became a typed 401 (`ELYSIA-LIFE-10`). Full trace: `references/example.md`.
