@@ -415,7 +415,7 @@ NUNCA:   criar pacote por simetria, sem duplicação que o justifique
 - ·
 - [Bun](bun.md) · [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) (`BUN-PKG-08`: overrides só na raiz) · [Bun - Testes](bun-testes.md)
 - `Elysia` · `Elysia - Schema e Eden` — a degradação para `any` e suas causas
-- [TanStack Router](tanstack-router.md) — rotas virtuais, quando a convenção de arquivo colide com a feature
+- `TanStack Router` — rotas virtuais, quando a convenção de arquivo colide com a feature
 - [Architecture in React](architecture-in-react.md) — o roteador das decisões arquiteturais
 - `Monorepo Architecture - The Ultimate Guide for 2025` — fonte externa (blog do FSD): o mesmo
   problema resolvido com pnpm, Turborepo e Nx. Confirma fronteira, direção e API pública; diverge em

@@ -518,7 +518,7 @@ Derive-a de **um** satélite, não desta nota inteira. Para teste, a fonte é a 
 
 ## 8. Pontes com o stack
 
-Bun toca o meu stack de frontend ([React.js](react-js.md), [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md), [TanStack Router](tanstack-router.md), `Tailwind CSS`, `TypeScript`) nos pontos abaixo, e substitui `Node.js` como runtime.
+Bun toca o meu stack de frontend ([React.js](react-js.md), `TanStack Query - Fundamentals`, `TanStack Router`, `Tailwind CSS`, `TypeScript`) nos pontos abaixo, e substitui `Node.js` como runtime.
 
 | Problema | Primitiva crua | O que usar no stack |
 | --- | --- | --- |
@@ -529,7 +529,7 @@ Bun toca o meu stack de frontend ([React.js](react-js.md), [TanStack Query](tans
 | Testar componente React | Jest + jsdom + babel | `bun test` + `@happy-dom/global-registrator` em `[test] preload` — [Bun - Testes](bun-testes.md) |
 | Instalar dependências | `npm`/`pnpm` | `bun install`, `bun ci` em CI — [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) |
 | Validar payload na fronteira | checagem manual | · |
-| Estado de servidor no cliente | `useEffect` + `fetch` | [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md) — |
+| Estado de servidor no cliente | `useEffect` + `fetch` | `TanStack Query - Fundamentals` — |
 
 **Bun como runtime de dev de app React.** A fonte documenta `bun init --react`, que gera um template com app React e servidor de API no mesmo projeto, com `bun dev` (hot reloading), `bun start` (servidor + frontend em um processo) e `bun run build` (site estático em `dist/`). O mecanismo por trás é o import de HTML como rota em `Bun.serve` — o bundler roda em cima das tags `<script>` e `<link>` do HTML, transpilando TS/JSX e processando CSS. Detalhe em [Bun - Bundler e Build](bun-bundler-e-build.md).
 
@@ -556,7 +556,7 @@ Bun toca o meu stack de frontend ([React.js](react-js.md), [TanStack Query](tans
 - [Backend no runtime Bun](backend-no-runtime-bun.md) — escolher entre `Bun.serve` cru, [Hono](hono.md) e `Elysia`
 - `Node.js` — o runtime que Bun busca substituir; a fronteira está na § 8
 - `TypeScript` ·
-- [React.js](react-js.md) · [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md) · [TanStack Router](tanstack-router.md) · `Tailwind CSS` · `Next.js`
+- [React.js](react-js.md) · `TanStack Query - Fundamentals` · `TanStack Router` · `Tailwind CSS` · `Next.js`
 
 ## Fontes consultadas
 

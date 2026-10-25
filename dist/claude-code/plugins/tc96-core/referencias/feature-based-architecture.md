@@ -484,7 +484,7 @@ Quatro linhas. A rota decide **qual** capacidade aparece naquele path e o que pr
 sabe como uma fatura é renderizada (`REACT-ARCH-09`). Todo import vem do barrel (`REACT-ARCH-05`).
 
 Quando a convenção de arquivo do router colidir com a organização por feature, a saída são rotas
-virtuais em vez de desmontar as features — ver [TanStack Router - Virtual File Routes](tanstack-router-virtual-file-routes.md).
+virtuais em vez de desmontar as features — ver `TanStack Router - Virtual File Routes`.
 
 ### 5.5 Formulário: captura e validação separadas
 
@@ -843,7 +843,7 @@ sem `entities/`/`widgets/`, sem numeração de camadas.
 - — a ideia conceitual
 - [React - Patterns](react-patterns.md) — decisão dentro do componente
 - [React.js](react-js.md) — hub de React e § 7, o contrato de skill
-- [TanStack Router - Virtual File Routes](tanstack-router-virtual-file-routes.md) — quando a rota colide com a feature
+- `TanStack Router - Virtual File Routes` — quando a rota colide com a feature
 - [Frontend roadmap](frontend-roadmap.md) — trilha de estudos
 
 ## Fontes consultadas

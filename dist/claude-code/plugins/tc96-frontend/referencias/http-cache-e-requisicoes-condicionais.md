@@ -13,7 +13,7 @@ verificado-em: 2026-08-15
 
 > Cache privado × compartilhado · `Cache-Control` diretiva a diretiva · frescor heurístico e `Age` · revalidação com `ETag`/`If-None-Match` e `Last-Modified`/`If-Modified-Since` · `304` · `ETag` forte × fraco · `If-Match`/`If-Unmodified-Since` e escrita concorrente com `412` · `Vary` e cache envenenado · por que não existe purge no protocolo.
 >
-> **Não cobre:** quais métodos são cacheáveis e o que invalida cache por escrita ([HTTP - Métodos e Semântica](http-metodos-e-semantica.md)) · a semântica completa de `304` como redirecionamento e a família 4xx/5xx ([HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md)) · `Vary` como contrapartida da negociação e `Range`/`206` ([HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md)) · `staleTime`/`gcTime` de cache de cliente em React ([TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md)).
+> **Não cobre:** quais métodos são cacheáveis e o que invalida cache por escrita ([HTTP - Métodos e Semântica](http-metodos-e-semantica.md)) · a semântica completa de `304` como redirecionamento e a família 4xx/5xx ([HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md)) · `Vary` como contrapartida da negociação e `Range`/`206` ([HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md)) · `staleTime`/`gcTime` de cache de cliente em React (`TanStack Query - Cache and Freshness`).
 
 Entrada: [HTTP](http.md) · Base normativa: [HTTP](http.md) § 6
 
@@ -37,7 +37,7 @@ Não responder é responder mal. O bug característico não é "o cache não fun
 
 ### A fronteira com o cache de cliente — leia isto antes de confundir as camadas
 
-Este arquivo trata do **cache de protocolo**: um contrato entre o servidor e todo intermediário no caminho, expresso em headers, obedecido por software que você não controla (o browser, a CDN, o proxy da operadora). [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) trata do **cache de cliente em memória**: uma estrutura de dados dentro da sua aplicação React, com `staleTime` e `gcTime`, que some ao recarregar a página.
+Este arquivo trata do **cache de protocolo**: um contrato entre o servidor e todo intermediário no caminho, expresso em headers, obedecido por software que você não controla (o browser, a CDN, o proxy da operadora). `TanStack Query - Cache and Freshness` trata do **cache de cliente em memória**: uma estrutura de dados dentro da sua aplicação React, com `staleTime` e `gcTime`, que some ao recarregar a página.
 
 | | `Cache-Control` (protocolo) | `staleTime` (TanStack Query) |
 | --- | --- | --- |
@@ -375,7 +375,7 @@ E a nota que fecha o assunto: `no-cache`, não `no-store` — *"since we don't w
 | Negociar idioma/encoding e não emitir `Vary` | a primeira resposta armazenada é servida a todos; o bug depende de quem chegou primeiro e não reproduz em dev | `Vary` com os headers usados — `HTTP-CACHE-10` |
 | `Vary: Cookie` para isolar conteúdo por usuário | cada sessão vira uma entrada única; cache com 0% de reaproveitamento e o dado ainda no cache compartilhado | `Cache-Control: private` — `HTTP-CACHE-11` |
 | Subir `staleTime` do TanStack Query para "reduzir requisições" | as requisições já podiam estar sendo servidas do cache HTTP; a camada errada foi ajustada | verificar `Cache-Control` da resposta antes — § 1 |
-| Esperar que `Cache-Control: no-store` force refetch na tela | `no-store` age sobre armazenamento HTTP, não sobre o cache em memória do `QueryClient` | `staleTime`/invalidação no cliente — [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) |
+| Esperar que `Cache-Control: no-store` force refetch na tela | `no-store` age sobre armazenamento HTTP, não sobre o cache em memória do `QueryClient` | `staleTime`/invalidação no cliente — `TanStack Query - Cache and Freshness` |
 
 ---
 
@@ -401,7 +401,7 @@ E a nota que fecha o assunto: `no-cache`, não `no-store` — *"since we don't w
 - [HTTP](http.md) — hub; § 5 tem a árvore "este recurso pode ser cacheado, e por quanto tempo?"
 - [HTTP - Métodos e Semântica](http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) · [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) · [HTTP - CORS](http-cors.md) · [HTTP - Specs e RFCs](http-specs-e-rfcs.md)
 - · ·
-- [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) — a outra camada; § 1 desta nota traça a fronteira
+- `TanStack Query - Cache and Freshness` — a outra camada; § 1 desta nota traça a fronteira
 - · ·
 - [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) ·
 

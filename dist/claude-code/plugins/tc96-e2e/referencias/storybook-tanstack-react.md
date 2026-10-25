@@ -171,7 +171,7 @@ export const ComDadosCarregados: Story = {
 
 Isso substitui um `sb.mock` do módulo de API na maioria dos casos, e é mais direto: o ponto de substituição é a fronteira da rota, não um módulo interno (`SB-TS-07`).
 
-`validateSearch` também é sobrescrevível — útil para uma story que quer exercitar search param inválido sem mexer no schema real. Ver [TanStack Router - Search Params](tanstack-router-search-params.md).
+`validateSearch` também é sobrescrevível — útil para uma story que quer exercitar search param inválido sem mexer no schema real. Ver `TanStack Router - Search Params`.
 
 ### 4.4 `context` e `useRouterContext`
 
@@ -216,10 +216,10 @@ export default preview;
 Três decisões, e nenhuma é cosmética:
 
 - **`retry: false`.** Com o retry default, uma story de erro fica segundos tentando de novo antes de mostrar o estado que ela existe para mostrar — e no runner isso vira teste lento e instável (`SB-TS-05`).
-- **`staleTime: Infinity`.** Elimina refetch por foco de janela e por remontagem. Numa story, refetch é ruído. Ver [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md).
+- **`staleTime: Infinity`.** Elimina refetch por foco de janela e por remontagem. Numa story, refetch é ruído. Ver `TanStack Query - Cache and Freshness`.
 - **`queryClient.clear()` em `beforeEach`.** O client é único para todo o Storybook. Sem limpar, a segunda story renderiza com o cache da primeira, e o resultado depende de uma ordem que não é garantida (`SB-TS-04`, alias de `SB-CTX-04`).
 
-O `queryClient` entra pelo **contexto do router**, que é onde o app real também o coloca — ver [TanStack Router - Route Context e Code Splitting](tanstack-router-route-context-e-code-splitting.md). Isso mantém story e app com o mesmo formato de injeção.
+O `queryClient` entra pelo **contexto do router**, que é onde o app real também o coloca — ver `TanStack Router - Route Context and Code Splitting`. Isso mantém story e app com o mesmo formato de injeção.
 
 ---
 
@@ -349,10 +349,10 @@ Os stubs de `createServerFn()` existem para app Start. Numa SPA com BFF, a chama
 - [Storybook - React Vite](storybook-react-vite.md) — o outro caminho
 - [Storybook - Mocking](storybook-mocking.md) — `sb.mock`, MSW e módulos server-only
 - [Storybook - Configuração e Builder](storybook-configuracao-e-builder.md) — requisitos de plataforma e a armadilha de augmentation
-- [TanStack Router - Route Context e Code Splitting](tanstack-router-route-context-e-code-splitting.md) — o contexto que a story injeta
-- [TanStack Router - Carregamento de Dados](tanstack-router-carregamento-de-dados.md) — `loader` e `beforeLoad` no app real
-- [TanStack Router - Search Params](tanstack-router-search-params.md) — `validateSearch`, sobrescrevível por `routeOverrides`
-- [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) — `staleTime`, `retry` e invalidação
+- `TanStack Router - Route Context and Code Splitting` — o contexto que a story injeta
+- `TanStack Router - Data Loading` — `loader` e `beforeLoad` no app real
+- `TanStack Router - Search Params` — `validateSearch`, sobrescrevível por `routeOverrides`
+- `TanStack Query - Cache and Freshness` — `staleTime`, `retry` e invalidação
 - [Backend no runtime Bun](backend-no-runtime-bun.md) — por que a metade Start fica inerte numa SPA com BFF
 - [Monorepo com Bun - estrutura e tooling](monorepo-com-bun-estrutura-e-tooling.md) — a direção de dependência que a § 10 invoca
 

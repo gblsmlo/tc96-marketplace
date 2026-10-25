@@ -1,7 +1,7 @@
 ---
 name: tanstack-query
-description: Work with server state in TanStack Query — reading remote data, freshness policy, mutations and invalidation, optimistic updates with rollback, paginated and infinite lists, integration with the route loader — citing `TSQ-*` IDs, with twelve executable probes and a symptom-based diagnostic table — use when the task is fetching data someone else can change, deciding `staleTime`, invalidating after a write, building an optimistic update, paginating, or understanding why the screen does not update or why there are too many requests. Do not use for ephemeral UI state, which is react-developer, for state that belongs to the URL, which is tanstack-router, nor for HTTP caching, which is http-cache.
-source: "[TanStack Query](../../referencias/tanstack-query.md)"
+description: Writes TanStack Query v5 code: queries, mutations, staleTime, optimistic, paging
+source: "[TanStack Query](../../docs/tanstack/tanstack-query.md)"
 docs:
   - /websites/tanstack_query
 tags:
@@ -12,117 +12,66 @@ tags:
 
 # tanstack-query
 
-> **Source of this skill:** [TanStack Query](../../referencias/tanstack-query.md), with the five satellites loaded **one at a time**.
-> This skill **contains** neither the text of the rules nor the API surface — it routes by task and diagnoses by symptom.
-> **API surface:** resolve it through Context7 — `/websites/tanstack_query`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
+> **Source:** [TanStack Query](../../docs/tanstack/tanstack-query.md) (hub, § 5 decision trees) and five satellites. Rule bodies live only in the docs; this file routes and says what to check.
+> **API surface:** Context7 `/websites/tanstack_query` for signatures in the installed version.
 
-Contract this skill implements: [TanStack Query](../../referencias/tanstack-query.md) § 7.
+Writes or changes code whose data **comes from a server that someone else can change**.
 
----
-
-## When to use
-
-The data **comes from a server and someone else can change it**: reading, writing, invalidating, paginating, deciding freshness, or understanding the cache.
-
-Before anything, go through the first tree in [TanStack Query](../../referencias/tanstack-query.md) § 5 ("Este dado é da Query?"):
-
-| The data is… | Go to |
+| The question is… | Go to |
 | --- | --- |
-| ephemeral UI state, or component structure | `react-developer` · `react-review` |
-| state that belongs to the URL (filter, tab, page, sorting) | `tanstack-router` |
-| a route's data, loaded by the loader | `tanstack-router`, **and** task 6 |
-| global client state with frequent writes | |
-| freshness decided by the **server**, through headers | `http-cache` — another layer |
+| state that belongs to the URL (filter, page, tab), or a route loader | `tanstack-router` |
+| why existing code misbehaves, or a review of it | `tanstack-review` |
+| ephemeral UI state, component structure | `react-developer` |
+| freshness decided by server headers | `http-cache` |
+| an Eden client as `queryFn` (it must throw) | `elysia-eden` |
 
----
+## Load one satellite per task
 
-## Minimum loading
+Open only the row's doc and section. Open the hub only to walk a § 5 tree you cannot decide without.
 
+| Task | Load | Check before calling it done |
+| --- | --- | --- |
+| Read remote data | [Fundamentals](../../docs/tanstack/tanstack-query-fundamentals.md) § 3-5, § 7 | `QueryClient` outside render (`TSQ-BASE-01`); every variable the `queryFn` reads is in the key (`-03`); absent data is `null` (`-04`); throw on `!res.ok` (`-05`); one exported `queryOptions` per data, shared by every consumer (`-09`) |
+| Freshness | [Cache and Freshness](../../docs/tanstack/tanstack-query-cache-and-freshness.md) § 2-4 | explicit `staleTime` chosen by volatility (`TSQ-CACHE-01`); never `'static'` on data a mutation changes (`-02`); calibrate `staleTime` before switching any trigger off (`-03`) |
+| Write and invalidate | [Mutations and Invalidation](../../docs/tanstack/tanstack-query-mutations-and-invalidation.md) § 2-4 | writes in `useMutation` (`TSQ-MUT-01`); the callback **returns** the invalidation Promise (`-02`); cache work in `useMutation`, toast/navigate in `mutate` (`-03`); the narrowest prefix that covers the effect (`-07`); `setQueryData` immutable and `undefined`-safe (`-08`, `-09`) |
+| Optimistic update | same doc § 5 | pick **one** layer first (table below); `cancelQueries` → snapshot returned from `onMutate` → `setQueryData` → rollback in `onError` → invalidate in `onSettled` (`TSQ-MUT-10`, `-11`, `-12`) |
+| Paginated or infinite list | [Query Patterns](../../docs/tanstack/tanstack-query-query-patterns.md) § 3-4 | page in the key + `placeholderData: keepPreviousData` (`TSQ-PATTERN-04`); controls disabled while `isPlaceholderData` (`-05`); `initialPageParam` + `getNextPageParam` (`-06`); `fetchNextPage` guarded (`-07`); `maxPages` (`-08`) |
+| Dependent, parallel, lazy, `select` | same doc § 2, § 5-7 | the waterfall is justified (`TSQ-PATTERN-01`); a variable count uses `useQueries` (`-02`); manual trigger is `enabled: false` (`-09`) |
+| Route loader | [TanStack Router - Data Loading](../../docs/tanstack/tanstack-router-data-loading.md) § 8 | a cache-respecting read with the component's `queryOptions` (`TSR-LOAD-15`, `-16`); router has `defaultPreloadStaleTime: 0` (`TSR-LOAD-14`) |
+| Suspense, SSR, cancellation | [Suspense and SSR](../../docs/tanstack/tanstack-query-suspense-and-ssr.md) | one `QueryClient` per request on the server (`TSQ-SSR-04`); client `staleTime` > 0 (`-05`); `queryFn` passes `signal` (`-10`) |
+
+## v5 facts not to write from memory
+
+Verified on `@tanstack/query-core` 5.104.5:
+
+```ts
+onMutate:  (variables, context) => onMutateResult
+onError:   (error, variables, onMutateResult, context) => …
+onSuccess: (data, variables, onMutateResult, context) => …
+onSettled: (data, error, variables, onMutateResult, context) => …
 ```
-ALWAYS: TanStack Query § 2 (mental model) and § 5 (trees)
-ON DEMAND, via § 4: the satellite for the task
-IF it involves a route/loader: TanStack Router - Carregamento de Dados
-NEVER: all satellites at once
-```
 
-The five satellites add up to more than 100 KB. **Loading all of them is the most expensive context mistake in this doc.**
+5.104.5 also deprecates `ensureQueryData`, `fetchQuery` and `prefetchQuery` in favour of `queryClient.query()`: `query({ ...options, staleTime: 'static' })` is the cache-respecting read. Use whichever the installed types do not mark deprecated.
 
-References in this skill:
+The snapshot `onMutate` returns arrives as **`onMutateResult`, the third argument**. The last one, `context`, is `MutationFunctionContext` (`client`, `meta`, `mutationKey`), so a rollback reading `context.previous` restores nothing and fails silently (`TSQ-MUT-11`).
 
-| File | What for |
+| Optimism lives in… | Use |
 | --- | --- |
-| `references/por-tarefa.md` | the task → satellite map, and the seven cuts |
-| `references/nao-assumir-de-memoria.md` | the callback signatures in v5, and the two layers of optimism |
-| `references/diagnostico.md` | "the screen does not update" and "too many requests", symptom by symptom |
-| `references/fronteira.md` | what belongs to another skill |
-| `references/mapa-de-ids.md` | the 55 `TSQ-*` by satellite and section |
-| `references/exemplo.md` | worked case |
-| `scripts/sondas.sh` | twelve probes over the code |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `knowledge-base/tanstack-query*` |
+| one place, inside a form or Action | `useOptimistic` (skill `react-developer`) |
+| several places, or it must survive navigation | the cache cycle above (`TSQ-MUT-10`) |
+| one row of a list, no cache write needed | render the mutation's `variables` while `isPending` |
 
----
+Never both layers in one flow; the optimistic value is never the source of truth (`REACT-FORM-07`).
 
-## Step 1 — Probe
+## Self-check, then report
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/tanstack-query/scripts/sondas.sh src
+bash ${CLAUDE_PLUGIN_ROOT}/skills/tanstack-review/scripts/probes.sh src query
+bunx tsc --noEmit
 ```
 
-**The two that pay most:**
-
-| Probe | What it reveals |
-| --- | --- |
-| **S1** — `staleTime` never declared | **every piece of data is born stale** (`TSQ-CACHE-01`): network on every mount, tab focus and reconnect |
-| **S6** — optimistic update without `cancelQueries`/`onError`/`onSettled` | an incomplete cycle (`TSQ-MUT-10`): it flickers and reverts, or does not roll back |
-
-And the most misleading one: **S2**, a trigger switched off as a remedy. `refetchOnWindowFocus: false` erases the symptom and leaves `refetchOnMount` with the opposite policy on the same cache — two contradictory rules about the same data (`TSQ-CACHE-03`).
-
----
-
-## Step 2 — Route by task
-
-`references/por-tarefa.md`: reading data · freshness policy · writing and invalidating · optimistic update · paginated list · route loader · diagnosing the cache.
-
----
-
-## Step 3 — Do not assume from memory
-
-`references/nao-assumir-de-memoria.md`:
-
-1. **The mutation callback signatures changed within v5.** The return of `onMutate` arrives as the **third argument**. Code written against the old form reads the wrong object, and the rollback **fails silently** (`TSQ-MUT-11`). The old form dominates the training material — it is what generated code produces by default.
-2. **Optimism has two layers.** `useOptimistic` and the cache update solve the same problem in different places; using both creates two provisional states with independent rollbacks. In either of them, **the optimistic value is never the source of truth** (`REACT-FORM-07`).
-
----
-
-## Step 4 — Diagnose by symptom
-
-`references/diagnostico.md`, two tables: **"the screen does not update"** and **"too many requests"**. Start with the table, open **one** satellite.
-
-**The fix is almost never switching off a trigger** — calibrate `staleTime` first (`TSQ-CACHE-03`).
-
----
-
-## Step 5 — Closing
-
-1. **If the data belongs to a route**, freshness is decided in **one** cache only: `defaultPreloadStaleTime: 0` (`TSR-LOAD-14`) — `tanstack-router`.
-2. **If the client is Eden**, the `queryFn` has to **throw** (`ELYSIA-TYPE-09`), otherwise the query stays in `success` with the error inside `data` — `elysia-schema`.
-3. **If the symptom is re-rendering**, check structural sharing (`TSQ-CACHE-04`) and tracked properties (`TSQ-CACHE-05`) before memoizing.
-4. **Declare what you did not verify.**
-
----
+Treat each probe hit in a file you touched as a defect to fix or to justify. Then report: what each query and mutation decided (key, `staleTime`, what it invalidates and what it deliberately leaves alone), the IDs behind each choice, and what you did not verify.
 
 ## Example
 
-An invoice listing with a filter in the URL, an approval mutation and an optimistic update: the key includes the filter; the mutation does `cancelQueries` → snapshot → immutable write → rollback in `onError` → `invalidateQueries` returning the Promise in `onSettled`. What habit would produce: a key without the filter, a rollback reading the wrong argument, and `refetchOnWindowFocus: false` to "solve" the excess requests.
-
-Full case: `references/exemplo.md`.
-
----
-
-## Related
-
-- [TanStack Query](../../referencias/tanstack-query.md) — source of this skill: § 2, § 4, § 5, § 7
-- `tanstack-router` — route data, and preloading
-- `react-developer` · `react-review` — the component around it
-- `elysia-schema` — the bridge with Eden
-- `http-cache` — the server's cache layer
+"Approve an invoice; the list and the summary must reflect it." Key `['invoices', 'list', status]` with `staleTime` set; the mutation's `onSettled` returns `Promise.all` invalidating `['invoices','list']`, `['invoices','summary']` and the detail, and leaves `['customers']` alone because approving does not change a customer. Optimism, if asked for, follows the cycle with the snapshot read from the third argument. Cites `TSQ-BASE-03`, `TSQ-CACHE-01`, `TSQ-MUT-02`, `TSQ-MUT-07`, `TSQ-MUT-10`.

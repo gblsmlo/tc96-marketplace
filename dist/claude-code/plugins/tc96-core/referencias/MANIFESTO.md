@@ -7,15 +7,15 @@ A single layer: each note lives directly in `knowledge-base/`, with no
 subfolder. Each note's title comes from the `titulo:` field in the file
 itself — the label skills use when linking to it.
 
-Notes: 124
+Notes: 108
 
 | File | Title | sha256 |
 | --- | --- | --- |
 | `application-strategies.md` | Application Strategies | `cc6c1b1eaed0` |
-| `architecture-in-react.md` | Architecture in React | `421ff6cff528` |
+| `architecture-in-react.md` | Architecture in React | `827b55a45e38` |
 | `auth-e-cripto-siglas-da-decisao-de-framework.md` | Auth e cripto — siglas da decisão de framework | `f67689f00f8e` |
-| `backend-no-runtime-bun.md` | Backend no runtime Bun | `0908dc58764a` |
-| `backend-pendencias-de-revisao.md` | Backend - Pendências de revisão | `2b487b433c72` |
+| `backend-no-runtime-bun.md` | Backend no runtime Bun | `fa65a6e3fad9` |
+| `backend-pendencias-de-revisao.md` | Backend - Pendências de revisão | `05b74b09f003` |
 | `bun-bundler-e-build.md` | Bun - Bundler e Build | `f9991b500d2e` |
 | `bun-dados-e-persistencia.md` | Bun - Dados e Persistência | `ec9ab3336c95` |
 | `bun-gerenciador-de-pacotes.md` | Bun - Gerenciador de Pacotes | `52f57ac4db79` |
@@ -28,8 +28,8 @@ Notes: 124
 | `bun-testes-escrita-e-assercoes.md` | Bun - Testes - Escrita e Asserções | `bd00eb071351` |
 | `bun-testes-execucao-e-configuracao.md` | Bun - Testes - Execução e Configuração | `d5fe0023cabd` |
 | `bun-testes-mocks-e-tempo.md` | Bun - Testes - Mocks e Tempo | `3e4d1faa9ac0` |
-| `bun-testes.md` | Bun - Testes | `beb6a05f51a4` |
-| `bun.md` | Bun | `5c1ca9f1527e` |
+| `bun-testes.md` | Bun - Testes | `055b46ac19af` |
+| `bun.md` | Bun | `04b1bee97212` |
 | `claude-api-docs.md` | Claude API Docs | `da3d29afcccc` |
 | `claude-code-automacao-externa.md` | Claude Code - Automação Externa | `de77dc4e5c5b` |
 | `claude-code-configuracao-do-repositorio.md` | Claude Code - Configuração do Repositório | `162ae0c476a5` |
@@ -38,32 +38,25 @@ Notes: 124
 | `claude-code-sessao-e-verificacao.md` | Claude Code - Sessão e Verificação | `47ee1777ce7e` |
 | `claude-code.md` | Claude Code | `3609d626d6e7` |
 | `documentos-de-decisao-prd-rfc-adr.md` | Decision Documents — PRD, RFC and ADR | `18aa267d985e` |
-| `drizzle-orm.md` | Drizzle ORM | `86fb22d670a6` |
-| `drizzle-queries-e-relations.md` | Drizzle - Queries e Relations | `d2c4eefb0ed6` |
-| `drizzle-schema-e-migrations.md` | Drizzle - Schema e Migrations | `e1221c1d7aa0` |
-| `elysia-lifecycle-e-plugins.md` | Elysia - Lifecycle e Plugins | `0fbed64501ab` |
-| `elysia-roteamento-e-handler.md` | Elysia - Roteamento e Handler | `8e3fafa75821` |
-| `elysia-schema-e-eden.md` | Elysia - Schema e Eden | `92a937c2ebd5` |
-| `elysia.md` | Elysia | `a4c1be7eead7` |
-| `feature-based-architecture.md` | Feature-Based Architecture | `d361ef1301a1` |
+| `feature-based-architecture.md` | Feature-Based Architecture | `926247f36bd2` |
 | `feature-flags-modelo-visual-do-fluxo.md` | Feature Flags — modelo visual do fluxo | `fc1e90735a7c` |
 | `fluxo-de-entrega-sdd.md` | Delivery Flow — Spec Driven Development | `5b4eab84fa81` |
 | `forward-deployed-engineering.md` | Forward Deployed Engineering | `5522c590ec21` |
-| `fronteira-do-bff-forma-jornada-e-regra.md` | Fronteira do BFF - forma, jornada e regra | `73a8e697e6d0` |
-| `frontend-roadmap.md` | Frontend roadmap | `233f288c7e86` |
+| `fronteira-do-bff-forma-jornada-e-regra.md` | Fronteira do BFF - forma, jornada e regra | `21d5a0ccd231` |
+| `frontend-roadmap.md` | Frontend roadmap | `e895b76f3b74` |
 | `github-actions.md` | Github Actions | `3c5a660ece12` |
 | `hono-middleware-e-ciclo-de-vida.md` | Hono - Middleware e Ciclo de Vida | `4c765f4959ea` |
 | `hono-roteamento-e-contexto.md` | Hono - Roteamento e Contexto | `35a9e351053c` |
-| `hono-validacao-e-rpc.md` | Hono - Validação e RPC | `a95b2063aa36` |
-| `hono.md` | Hono | `a7618dbece52` |
-| `http-cache-e-requisicoes-condicionais.md` | HTTP - Cache e Requisições Condicionais | `af80611901ae` |
+| `hono-validacao-e-rpc.md` | Hono - Validação e RPC | `d4daab96814d` |
+| `hono.md` | Hono | `798052a6da18` |
+| `http-cache-e-requisicoes-condicionais.md` | HTTP - Cache e Requisições Condicionais | `4e98a1ca4d15` |
 | `http-cors.md` | HTTP - CORS | `b4fb970729c4` |
 | `http-metodos-e-semantica.md` | HTTP - Métodos e Semântica | `7165dac60911` |
 | `http-negociacao-de-conteudo-e-range.md` | HTTP - Negociação de Conteúdo e Range | `c03afba62969` |
-| `http-specs-e-rfcs.md` | HTTP - Specs e RFCs | `68fc86583405` |
+| `http-specs-e-rfcs.md` | HTTP - Specs e RFCs | `198cddd2a413` |
 | `http-status-e-redirecionamento.md` | HTTP - Status e Redirecionamento | `33f2c68970ba` |
-| `http.md` | HTTP | `8ea5ac834e0e` |
-| `monorepo-com-bun-estrutura-e-tooling.md` | Monorepo com Bun - estrutura e tooling | `b6aa258701ec` |
+| `http.md` | HTTP | `11f9a9115012` |
+| `monorepo-com-bun-estrutura-e-tooling.md` | Monorepo com Bun - estrutura e tooling | `51a1b9ffb748` |
 | `nist-rbac-ansi-incits-359.md` | NIST RBAC - ANSI INCITS 359 | `e025fab0e82f` |
 | `oauth-2-0-for-browser-based-applications.md` | OAuth 2.0 for Browser-Based Applications | `bf505744de10` |
 | `owasp-sessao-e-autorizacao.md` | OWASP - Sessão e Autorização | `3b7067bb662e` |
@@ -77,29 +70,29 @@ Notes: 124
 | `playwright-execucao-retries-e-ci.md` | Playwright - Execução, Retries e CI | `a55463894391` |
 | `playwright-fixtures.md` | Playwright - Fixtures | `a956c24cfe46` |
 | `playwright-locators.md` | Playwright - Locators | `0acd3f000d9f` |
-| `playwright-rede-e-mocking.md` | Playwright - Rede e Mocking | `07ebf1f0a758` |
+| `playwright-rede-e-mocking.md` | Playwright - Rede e Mocking | `0cd4e978b8c3` |
 | `playwright-snapshots-e-visual.md` | Playwright - Snapshots e Visual | `d0f86cc387a6` |
-| `playwright.md` | Playwright | `465c7a3fd4eb` |
+| `playwright.md` | Playwright | `2b2440d99e26` |
 | `pull-request-github.md` | Pull Request GitHub | `9dbe5119e02f` |
 | `pull-request-template.md` | Pull Request Template | `cee4f492615c` |
 | `pull-request.md` | Pull Request | `09a1ab46518b` |
 | `react-efeitos-e-sincronizacao.md` | React - Efeitos e Sincronização | `186c54789bbd` |
 | `react-estado-e-reatividade.md` | React - Estado e Reatividade | `976763660192` |
 | `react-formularios-e-actions.md` | React - Formulários e Actions | `e34896708f85` |
-| `react-hook-form-estado-e-performance.md` | React Hook Form - Estado e Performance | `94e259d0281c` |
+| `react-hook-form-estado-e-performance.md` | React Hook Form - Estado e Performance | `bf99cc885cb9` |
 | `react-hook-form-registro-e-controle.md` | React Hook Form - Registro e Controle | `60d23f5ea138` |
 | `react-hook-form-validacao-e-resolvers.md` | React Hook Form - Validação e Resolvers | `71fac7755884` |
-| `react-hook-form.md` | React Hook Form | `c6cd2703ab86` |
+| `react-hook-form.md` | React Hook Form | `a39d576ed52c` |
 | `react-hooks-utilitarios.md` | React - Hooks Utilitários | `9aef41dcbb09` |
 | `react-hooks.md` | React - Hooks | `b348e38fc0be` |
-| `react-js.md` | React.js | `d107074ec537` |
-| `react-patterns.md` | React - Patterns | `fbb253c25fa8` |
+| `react-js.md` | React.js | `67b866642d18` |
+| `react-patterns.md` | React - Patterns | `47162d6a853d` |
 | `react-performance-e-concorrencia.md` | React - Performance e Concorrência | `1b90aa7ae175` |
 | `react-refs-e-dom.md` | React - Refs e DOM | `5b128948ed7d` |
-| `react-renderizacao-e-entrypoints.md` | React - Renderização e Entrypoints | `c0ada2eecec5` |
+| `react-renderizacao-e-entrypoints.md` | React - Renderização e Entrypoints | `a0247f116b90` |
 | `react-rules-of-react.md` | React - Rules of React | `d3832264e728` |
 | `react-server-components-e-diretivas.md` | React - Server Components e Diretivas | `2ba5c53bec7a` |
-| `react-suspense-e-assincronia.md` | React - Suspense e Assincronia | `00a2f6554825` |
+| `react-suspense-e-assincronia.md` | React - Suspense e Assincronia | `04b1e908eef7` |
 | `rfc-6265-cookies-http.md` | RFC 6265 - Cookies HTTP | `4afd5ca93a64` |
 | `rfc-8725-jwt-best-current-practices.md` | RFC 8725 - JWT Best Current Practices | `7971922e1539` |
 | `rfc-9700-oauth-2-0-security-bcp.md` | RFC 9700 - OAuth 2.0 Security BCP | `acce6f4ff495` |
@@ -108,29 +101,13 @@ Notes: 124
 | `storybook-decorators-e-contexto.md` | Storybook - Decorators e Contexto | `9e3165575a27` |
 | `storybook-docs-e-autodocs.md` | Storybook - Docs e Autodocs | `6d14d3192283` |
 | `storybook-estruturado-por-atomic-design.md` | Storybook estruturado por Atomic Design | `5fb5356c202b` |
-| `storybook-mocking.md` | Storybook - Mocking | `627e5ede277a` |
+| `storybook-mocking.md` | Storybook - Mocking | `a0c68f772afb` |
 | `storybook-pendencias-de-revisao.md` | Storybook - Pendências de revisão | `3ce82ee6aa9d` |
-| `storybook-react-vite.md` | Storybook - React Vite | `909cb89db5e1` |
+| `storybook-react-vite.md` | Storybook - React Vite | `e5431f1ba953` |
 | `storybook-stories-e-args.md` | Storybook - Stories e Args | `a3fb2a2b301f` |
-| `storybook-tanstack-react.md` | Storybook - TanStack React | `4de863626b59` |
+| `storybook-tanstack-react.md` | Storybook - TanStack React | `1b34085a5fad` |
 | `storybook-testes-e-interacoes.md` | Storybook - Testes e Interações | `9eae6da7e543` |
-| `storybook.md` | Storybook | `3c8e3c396e6e` |
-| `tanstack-query-cache-e-frescor.md` | TanStack Query - Cache e Frescor | `1f092c4c7412` |
-| `tanstack-query-mutations-e-invalidacao.md` | TanStack Query - Mutations e Invalidação | `2db82eb00aa7` |
-| `tanstack-query-o-que-um-dev-frontend-precisa-saber.md` | TanStack Query - O que um Dev Frontend Precisa Saber | `875704310239` |
-| `tanstack-query-padroes-de-consulta.md` | TanStack Query - Padrões de Consulta | `9e7cab7f4daa` |
-| `tanstack-query-suspense-e-ssr.md` | TanStack Query - Suspense e SSR | `fac4e07378b9` |
-| `tanstack-query.md` | TanStack Query | `1d878a9b3237` |
-| `tanstack-router-carregamento-de-dados.md` | TanStack Router - Carregamento de Dados | `bf7fc7c5f149` |
-| `tanstack-router-file-based-routing.md` | TanStack Router - File-Based Routing | `a9a741f9d25b` |
-| `tanstack-router-navegacao.md` | TanStack Router - Navegação | `b742dad73ebf` |
-| `tanstack-router-route-context-e-code-splitting.md` | TanStack Router - Route Context e Code Splitting | `eb037bedfd8f` |
-| `tanstack-router-route-matching.md` | TanStack Router - Route Matching | `7e7ab9fc1f48` |
-| `tanstack-router-route-trees.md` | TanStack Router - Route Trees | `8f0b75d61d33` |
-| `tanstack-router-routing-concepts.md` | TanStack Router - Routing Concepts | `45ae8a451983` |
-| `tanstack-router-search-params.md` | TanStack Router - Search Params | `894dc350dbd5` |
-| `tanstack-router-virtual-file-routes.md` | TanStack Router - Virtual File Routes | `c47e8768f367` |
-| `tanstack-router.md` | TanStack Router | `8d1bb6db5332` |
+| `storybook.md` | Storybook | `3f5428b9b7db` |
 | `teste-de-software-confiabilidade-da-suite.md` | Teste de Software - Confiabilidade da Suíte | `c3c10ca895cd` |
 | `teste-de-software-dubles-de-teste.md` | Teste de Software - Dublês de Teste | `a83adf1e4370` |
 | `teste-de-software-niveis-e-escopo.md` | Teste de Software - Níveis e Escopo | `e75d7e97d980` |
