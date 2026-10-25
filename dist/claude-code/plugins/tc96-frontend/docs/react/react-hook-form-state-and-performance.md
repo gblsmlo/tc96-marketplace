@@ -865,7 +865,7 @@ In that case: `trigger(['a','b'])` to advance, `isValid` does **not** work for t
 - [React - Rules of React](react-rules-of-react.md) — normative base; the Proxy does not suspend any purity rule
 - [React - State and Reactivity](react-state-and-reactivity.md) · — step 1 of § 5
 - [React - Hooks](react-hooks.md) — `useEffect` and dependencies
-- `TanStack Query - Mutations e Invalidação` — the other side of the submission, and the origin of the `values` data
+- `tanstack-query` — the skill on the other side of the submission, and the origin of the `values` data
 
 ## Sources consulted
 

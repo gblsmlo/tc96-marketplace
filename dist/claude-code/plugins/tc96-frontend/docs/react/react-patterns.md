@@ -77,7 +77,7 @@ The children receive ready data and do not know a filter exists — they stay re
 
 A question most code skips. State belongs in the URL when it needs to **survive a refresh**, **be shareable by link** or **work with the back button**. Search filter, active tab, page, sort order and date range almost always meet at least one criterion.
 
-When it does, the source of truth is the route — in my stack, the typed search params of `TanStack Router` — and not `useState`. Ephemeral UI state (open menu, hover, focus, field draft) stays in `useState`.
+When it does, the source of truth is the route — in my stack, the typed search params of `tanstack-router` — and not `useState`. Ephemeral UI state (open menu, hover, focus, field draft) stays in `useState`.
 
 | ID | Rule |
 | --- | --- |
@@ -145,7 +145,7 @@ Passing JSX as children avoids forwarding props through intermediate levels that
 
 ### When to extract a component
 
-The vault's criterion, in: extract when the component represents a concept, repeats, isolates relevant behavior, or reduces the parent's cognitive load. **Splitting every visual block into a file is not good design** — excessive fragmentation increases navigation and prop passing.
+The house criterion, in: extract when the component represents a concept, repeats, isolates relevant behavior, or reduces the parent's cognitive load. **Splitting every visual block into a file is not good design** — excessive fragmentation increases navigation and prop passing.
 
 For visual variants.
 
@@ -281,7 +281,6 @@ When reviewing code, the table in § 8 is the checklist. When proposing a refact
 - [React.js](react-js.md) — hub, API map and decision trees
 - [React - Hooks](react-hooks.md) — API surface per Hook
 - [React - Rules of React](react-rules-of-react.md) — normative base
-- `Frontend roadmap` — study track that consumes these notes
 
 ## Sources consulted
 

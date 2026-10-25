@@ -1,6 +1,6 @@
 ---
 name: react-component-performance
-description: Diagnose and fix a React component already confirmed slow, with a measurement that proves it, citing `REACT-PERF-*` IDs — eleven re-render hazard probes, a baseline taken before any change with a copyable JSDOM benchmark harness that drives only the public API, render counts of consumer renderers as the deterministic gate and Profiler and wall time as the report, fixes in the order the performance rules set, a before/after comparison, the correctness tests memoization needs, and the README Benchmark section — use when a grid, list, kanban, tree or form is measurably slow on mount, focus, selection, sort, scroll or typing, when a memo, useMemo or useCallback needs the measurement REACT-PERF-01 demands, or when a performance refactor needs a CI gate. Do not use to review code for rule violations, which is react-review, to write a new component, which is react-developer, to decide where files live, which is react-structure, nor for slowness that comes from the network or the data cache, which is tanstack-query.
+description: Diagnose and fix a React component already confirmed slow, and prove it with a measurement, citing `REACT-PERF-*` IDs — eleven re-render hazard probes, a baseline taken before any change with a copyable JSDOM benchmark harness that drives only the public API, consumer render counts as the deterministic CI gate, fixes in the order the rules set, a before/after comparison, the correctness tests memoization needs, and the README Benchmark section. Use when a grid, list, kanban, tree or form is measurably slow on mount, focus, selection, sort, scroll or typing, when a memo, useMemo or useCallback needs the measurement REACT-PERF-01 demands, or when a performance refactor needs a gate. Not for rule review (react-review), new code (react-developer), file placement (react-structure) or slowness from the network or data cache (tanstack-query).
 fonte: "[React - Performance Measurement](../../docs/react/react-performance-measurement.md)"
 docs:
   - /reactjs/react.dev
@@ -14,11 +14,8 @@ tags:
 
 > **Circuit breaker, before anything else:** if a fix requires changing how an external store or table subscribes (`useSyncExternalStore`, a table's state atoms, a selector library), **stop and return** with the measurement and the proposal. That is an architecture decision with its own blast radius, not a memo. Probe 11 shows where it applies.
 
-> **Source of this skill:** [React - Performance Measurement](../../docs/react/react-performance-measurement.md) (`REACT-PERF-11..19`, how to measure), with [React - Performance and Concurrency](../../docs/react/react-performance-and-concurrency.md) (`REACT-PERF-01..10`, what to change) and the [React.js](../../docs/react/react-js.md) hub as the router.
-> This skill **does not contain** the rules — it says what to run, in what order, and how to report. For a rule's text, open the doc.
-> **API surface:** resolve it through Context7 — `/reactjs/react.dev` (`<Profiler>`, `memo`, `useDeferredValue`). The rule and the ID come from the family's docs.
-
-Contract this skill implements: [React.js](../../docs/react/react-js.md) § 7 ("Skill contract").
+> **Source:** [React - Performance Measurement](../../docs/react/react-performance-measurement.md) (`REACT-PERF-11..19`, how to measure) and [React - Performance and Concurrency](../../docs/react/react-performance-and-concurrency.md) (`REACT-PERF-01..10`, what to change), routed by [React.js](../../docs/react/react-js.md) (§ 7 is the skill contract). Rule text lives only in the docs.
+> **API surface:** Context7 `/reactjs/react.dev` (`<Profiler>`, `memo`, `useDeferredValue`).
 
 ---
 
@@ -47,7 +44,7 @@ A component that **already exists** and is **measurably slow**, or a memoization
 | 3 | `references/id-map.md` | where each `REACT-PERF-*` is declared |
 | 4 | the reference the current step names | only that one |
 
-**Never load all the satellites.** The hub's context-economy rule.
+Never load every satellite.
 
 | File | What for |
 | --- | --- |

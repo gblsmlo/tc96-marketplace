@@ -10,8 +10,7 @@ Ready-made script: `scripts/probes.sh [target]` — runs all fifteen and prints 
 bash ${CLAUDE_PLUGIN_ROOT}/skills/react-review/scripts/probes.sh src
 ```
 
-Default target: `src`, or `.` when there is none. In the vault source the path is
-`${CLAUDE_PLUGIN_ROOT}/skills/react-review/scripts/probes.sh`.
+Default target: `src`, or `.` when there is none. Pass the narrowest directory the diff allows.
 
 ---
 

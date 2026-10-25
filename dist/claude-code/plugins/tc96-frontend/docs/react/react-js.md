@@ -11,11 +11,11 @@ verificado-em: 2026-08-14
 ---
 # React.js — guided reference
 
-> **What this note is.** The single entry point for React in this vault: for me when consulting, and for coding agents when generating or reviewing React. It is not a linear summary of the documentation — it is a **router**. It decides what to load, offers the mental model that makes the rest make sense, and exposes citable rules that a skill or a code review can reference by ID.
+> **What this note is.** The single entry point for React in this family: for me when consulting, and for coding agents when generating or reviewing React. It is not a linear summary of the documentation — it is a **router**. It decides what to load, offers the mental model that makes the rest make sense, and exposes citable rules that a skill or a code review can reference by ID.
 >
 > **What it is not.** It does not replace the source. When they diverge, [react.dev/reference](https://react.dev/reference/react) wins, and this note must be corrected.
 >
-> **A self-contained family.** These notes live inside the `react` skill family, not in the tc96 knowledge base, so the family can move without it. Names in code spans — `TanStack Query`, `TanStack Router`, `Storybook`, `Monorepo com Bun - estrutura e tooling` — and IDs from other families (`TSQ-*`, `TSR-*`, `SB-*`, `PW-*`) belong to the tc96 knowledge base: useful context when it is installed, never required to apply a `REACT-*`, `RHF-*` or `REACT-ARCH-*` rule.
+> **A self-contained family.** These notes live inside the `react` skill family and depend on nothing outside it. A neighboring layer is cited by the **skill** that owns it, in a code span (`tanstack-query`, `tanstack-router`, `storybook-test`), and IDs from other families (`TSQ-*`, `TSR-*`, `SB-*`, `PW-*`) belong to those skills: useful context when they are installed, never required to apply a `REACT-*`, `RHF-*` or `REACT-ARCH-*` rule.
 
 Inventory verified directly on react.dev on **2026-08-14**.
 See [Sources consulted](#sources-consulted).
@@ -426,14 +426,14 @@ Derive it from a satellite, not from this whole note: a skill focused on forms l
 
 ## 8. Bridges to the stack
 
-The body of this doc is pure React, faithful to react.dev. But in my stack (`TanStack Router`, `TanStack Query`, TanStack Start, `Tailwind CSS`, `TypeScript`) several raw React practices are replaced. The satellites mark these points as a *bridge*.
+The body of this doc is pure React, faithful to react.dev. But in my stack (TanStack Router, TanStack Query, TanStack Start, Tailwind CSS, TypeScript) several raw React practices are replaced. The satellites mark these points as a *bridge*.
 
 | Problem | Raw React primitive | What to use in the stack |
 | --- | --- | --- |
 | Fetch remote data | `useEffect` + `useState` | TanStack Query — |
 | Data cache and freshness | manual | `staleTime`, invalidation — |
 | Optimistic update | `useOptimistic` | the Query's optimistic mutation |
-| Navigation and URL state | `useState` + history | TanStack Router — `TanStack Router - Routing Concepts` |
+| Navigation and URL state | `useState` + history | TanStack Router — skill `tanstack-router` |
 | Mutation on the server | Server Function | always validate at the boundary |
 | Global client state | Context | when there are frequent writes |
 | Boundary validation | manual | a schema (Zod) at the boundary — [React - Forms and Actions](react-forms-and-actions.md) § 3 |
@@ -455,8 +455,7 @@ The body of this doc is pure React, faithful to react.dev. But in my stack (`Tan
 - [React - Rules of React](react-rules-of-react.md) — normative basis
 - [React - Performance Measurement](react-performance-measurement.md) — baseline, render-count gate, results file (`REACT-PERF-11..19`)
 - [React Hook Form](react-hook-form.md) — complex forms; its § 5.4 decides between RHF and native Actions
-- `Frontend roadmap` — study track that consumes these notes
-- `Next.js` · `TanStack Router` · `Tailwind CSS` · `TypeScript`
+- `tanstack-router` · `tanstack-query` — the skills that own the stack bridges in § 8
 
 ## Sources consulted
 

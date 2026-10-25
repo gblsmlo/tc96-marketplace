@@ -21,8 +21,8 @@ Question 1 alone already eliminated two `useState` calls that habit would have c
 
 | Owner | Path in [React.js](../../../docs/react/react-js.md) § 5 | Exit | Rule |
 | --- | --- | --- | --- |
-| invoices | "does the data come from the server?" → yes | `TanStack Query`, not `useState` + `useEffect` | `REACT-PAT-03`, `REACT-EFFECT-06` |
-| filter | it survives a refresh, is shareable by link, respects the back button | `TanStack Router` search params | `REACT-PAT-10` |
+| invoices | "does the data come from the server?" → yes | `tanstack-query`, not `useState` + `useEffect` | `REACT-PAT-03`, `REACT-EFFECT-06` |
+| filter | it survives a refresh, is shareable by link, respects the back button | `tanstack-router` search params | `REACT-PAT-10` |
 | selection | ephemeral, dies when leaving the screen | `useState` in the **nearest** common ancestor — the panel, not the root | `REACT-PAT-02` |
 | total | derivable from invoices + selection | computed in the render, with no state and no Effect | `REACT-PAT-01` |
 

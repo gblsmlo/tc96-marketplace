@@ -1,6 +1,6 @@
 ---
 name: react-structure
-description: Decide where React code lives and who may import whom in a feature-based architecture, citing `REACT-ARCH-*` IDs, with eight executable import probes, a scan in the order that fails most and staged migration — use when the task is creating a feature, placing a new file, reviewing a PR's imports, extracting code into the shared layer, or configuring and migrating a repository's structure. Do not use for the inside of a component — writing is react-developer, reviewing is react-review — and in a PR the structural finding comes first, because moving a file can erase the interior finding.
+description: Decide where React code lives and who may import whom in a feature-based architecture, citing `REACT-ARCH-*` IDs, with eight executable import probes, a scan in the order that fails most and a staged migration. Use when creating a feature, placing a new file, reviewing a PR's imports, layers or barrels, extracting code into the shared layer, or configuring and migrating a repository's folder structure, aliases and Biome boundary rules. In a PR it runs before react-review, because moving a file can erase an interior finding. Not for the inside of a component: writing is react-developer, reviewing is react-review, and a whole-codebase health audit is react-audit.
 fonte: "[Feature-Based Architecture](../../docs/react/feature-based-architecture.md)"
 docs:
   - /reactjs/react.dev
@@ -12,119 +12,71 @@ tags:
 
 # react-structure
 
-> **Source of this skill:** [Feature-Based Architecture](../../docs/react/feature-based-architecture.md) (structure, rules and enforcement), with [Architecture in React](../../docs/react/architecture-in-react.md) as the router for the other decision axes.
-> This skill **contains** neither the text of the rules nor the Biome configuration — it says what to load, in what order to decide and how to report. A rule rewritten here would become an outdated copy.
->
-> **Resolving the links:** the source note is [Feature-Based Architecture](../../docs/react/feature-based-architecture.md). It condenses an external article of the same name, which is **not** normative here: what the note says wins.
-> **API surface:** resolve it through Context7 — `/reactjs/react.dev`. Signature, option and per-version behavior come from there; the rule and the ID come from the family's docs.
+> **Source:** [Feature-Based Architecture](../../docs/react/feature-based-architecture.md) (structure, rules, enforcement; § 10 is the skill contract), with [Architecture in React](../../docs/react/architecture-in-react.md) routing the other decision axes. This skill holds neither rule text nor Biome configuration; what the note says wins.
+> **API surface:** Context7 `/reactjs/react.dev`. The rule and its ID come from the family's docs.
 
-Contract this skill implements: [Feature-Based Architecture](../../docs/react/feature-based-architecture.md) § 10, which in turn implements [React.js](../../docs/react/react-js.md) § 7.
-
----
-
-## When to use
-
-When the question is **where the code lives or who imports whom**: creating a feature, placing a new file, reviewing a PR's imports, extracting shared code, configuring or migrating a repository's structure.
+## Scope
 
 | The question is… | Go to |
 | --- | --- |
-| where does this file live? who may import this? | **this skill** |
+| where does this file live? who may import it? | **this skill** |
 | how do I write this component or Hook? | `react-developer` |
-| is this existing React code correct? | `react-review` |
-| a form with validation, conditional fields, arrays | `react-hook-form` |
-| how do I define this route, navigate, load data? | `tanstack-router` |
+| is this existing component correct? | `react-review` |
+| a form | `react-hook-form` |
+| how do I define this route or load its data? | `tanstack-router` |
 
-The skills compose, almost always in pairs:
+The skills compose in pairs: **creating a feature** — this one decides the structure, `react-developer` writes inside it; **extracting to shared** — this one picks the destination (`REACT-ARCH-08`), `react-developer` writes the module; **reviewing a PR** — this one covers the boundary, `react-review` the interior, and the structural finding comes first.
 
-- **creating a feature** — this one decides the structure, `react-developer` writes each component inside it;
-- **extracting into the shared layer** — this one decides the destination (`REACT-ARCH-08`), `react-developer` writes the module in `features/core/`;
-- **reviewing a PR** — this one covers the boundary (imports, layers, barrel), `react-review` covers the interior. A complete report runs both, and **the structural finding comes first**: moving a file can erase the interior finding.
+Before imposing the structure, check § 9 ("When not to use it"): a single-domain app does not need vertical slices.
 
----
-
-## Minimum loading
-
-Adapted from [Feature-Based Architecture](../../docs/react/feature-based-architecture.md) § 10 — the `ON DEMAND` line is this skill's addition:
+## Load
 
 ```
-ALWAYS: § 2 (layers and dependency direction)
- § 4 (REACT-ARCH-* rules and severity)
-
-WHEN CREATING A FEATURE: § 3 (anatomy) + § 5 (examples in this stack)
-WHEN MOVING CODE: § 8 (migration) + REACT-ARCH-08
-WHEN REVIEWING AN IMPORT: § 6 (antipatterns) + § 7 (what the lint covers)
-WHEN CONFIGURING A REPO: § 7 (biome.json, aliases) + § 8
-
-ON DEMAND: Architecture in React § 2, when the decision is not
- about physical structure and needs another axis
-
-NEVER: invent a new layer without recording it in the source note
+ALWAYS                  § 2 (layers, dependency direction) · § 4 (REACT-ARCH-* and severity)
+CREATING A FEATURE      § 3 (anatomy) + § 5 (examples in this stack)
+MOVING CODE             § 8 (migration) + REACT-ARCH-08
+REVIEWING AN IMPORT     § 6 (antipatterns) + § 7 (what the lint covers)
+CONFIGURING A REPO      § 7 (biome.json, aliases) + § 8
+ON DEMAND               Architecture in React § 2, for a decision that is not physical structure
+NEVER                   invent a layer without recording it in the source note
 ```
 
-References in this skill — open only the one the step asks for:
-
-| File | What for |
-| --- | --- |
-| `references/placement-tree.md` | the five questions, the tree, and import × duplicate × extract |
-| `references/import-scan.md` | the scan order, what the probe does not catch, format and the cut |
-| `references/id-map.md` | ID → severity → **who enforces it** (lint or review) → section |
-| `references/example-structure-review.md` | a whole PR review, from the probes to the closing |
-| `scripts/import-probes.sh` | eight boundary probes, in the order that fails most |
-| `scripts/generate-id-map.sh` | regenerates `id-map.md` from the source note |
-
-Before deciding something is overkill, check § 9 ("When not to use it"). A single-domain app does not need this structure, and imposing the vertical slice on it is this skill's antipattern.
-
----
+References: `placement-tree.md` (five questions, the tree, import × duplicate × extract), `import-scan.md` (scan order, blind spots, format), `id-map.md` (ID → severity → **who enforces it** → section), `example-structure-review.md`.
 
 ## Routing by task
 
 | Task | Steps |
 | --- | --- |
-| Creating a new feature | 1 → 2 → 5 |
-| Placing a new file | 2 → 5 |
-| Reviewing structure and imports (PR, folder, repo) | 3 → 4 |
-| Extracting shared code | 2 → 5 |
-| Configuring a repo from scratch, or migrating | 6 |
+| create a feature | 1 → 2 → 5 |
+| place a new file · extract shared code | 2 → 5 |
+| review structure and imports (PR, folder, repo) | 3 → 4 |
+| configure a repo from scratch, or migrate | 6 |
 
-A **placement** finding ("this should not be here") comes out of the Step 3 scan — you do not need to run Step 2 to audit. Step 2 decides where to put things; it does not audit what is already placed.
+A placement finding comes from the Step 3 scan; Step 2 decides where new things go, it does not audit what is placed.
 
----
+## Step 1 — Five questions before creating a feature
 
-## Step 1 — The five questions before creating a feature
+In writing, one sentence each, before the first `mkdir` (§ 10): is it a domain? does it exist already? is the data remote? is this public? who will import it? Stalled answers and the "capability born shared" exception: `references/placement-tree.md`.
 
-A normative order ([Feature-Based Architecture](../../docs/react/feature-based-architecture.md) § 10). Answer them **in writing**, one sentence each, before the first `mkdir`: is it a domain? does the domain already exist? is the data remote? is this public? who is going to import this?
-
-The full table, with what to do when each answer stalls, and the "capability born shared" exception: `references/placement-tree.md`.
-
-If question 1 has no clear answer, **stop**: the problem is not structural, it is that the capability has not been defined yet. Structuring before that produces the wrong boundary (§ 9).
-
----
+If question 1 has no clear answer, **stop**: the capability is undefined, and structuring now draws the wrong boundary (§ 9).
 
 ## Step 2 — The placement tree
 
-Walk `references/placement-tree.md`. Two questions decide everything: **does it know product vocabulary?** and, if so, **how many capabilities consume it?**
-
-The most common mistake is not about the tree, it is about vocabulary: `REACT-ARCH-08` answers *when to create a shared module*, **not** *whether I may import*. Importing, duplicating and extracting are three different moves, and the table in § 4 breaks the tie.
-
----
+Walk `references/placement-tree.md`. Two questions decide it: **does it know product vocabulary?** and, if so, **how many capabilities consume it?** `REACT-ARCH-08` answers *when to create a shared module*, not *whether I may import*; importing, duplicating and extracting are three moves, and § 4 breaks the tie.
 
 ## Step 3 — Scan imports, in the order that fails most
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/react-structure/scripts/import-probes.sh src
+bash ${CLAUDE_PLUGIN_ROOT}/skills/react-structure/scripts/import-probes.sh <target>
 ```
 
-**Probe 0 is about enforcement and runs first**: without `biome.json` and without the rules in § 7, every finding below repeats in the next PR — and that is the **first finding of the report**, not a footnote.
+**Probe 0 is enforcement and runs first.** Without `biome.json` and the § 7 rules every finding below returns next PR, so the missing gate is the **first** finding.
 
-Then, in order: inverted direction (`REACT-ARCH-06`, `-07`) → deep import (`-05`) → own alias (`-04`) → barrel (`-02`, `-03`) → bloated route (`-09`) → placement (`-01`, `-08`) → convention (`-11`, `-12`). Detail, false positives and what the probe does **not** catch: `references/import-scan.md`.
-
-Stop detailing a file when a finding invalidates the next one: if the layer is wrong, do not review its imports.
-
----
+Then: inverted direction (`REACT-ARCH-06`, `-07`) → deep import (`-05`) → own alias (`-04`) → barrel (`-02`, `-03`) → bloated route (`-09`) → placement (`-01`, `-08`) → convention (`-11`, `-12`). False positives and blind spots: `references/import-scan.md`. If the layer is wrong, do not review its imports.
 
 ## Step 4 — Report
 
-Severity comes from `references/id-map.md` — the normative column of § 4, **do not reclassify**. Dependency direction beats aesthetics, always (§ 10, invariant 2).
+Severity comes from `references/id-map.md`, the normative § 4 column. **Do not reclassify.** Dependency direction beats aesthetics (§ 10, invariant 2).
 
 ```
 `RULE-ID` — file:line
@@ -133,72 +85,40 @@ Fix: <concrete change>
 See Feature-Based Architecture § <section>.
 ```
 
-**A finding without an ID is an opinion.** There is an ID in § 4 → a finding. It is an antipattern in § 6 with no ID → cite the section. Neither → "Suggestions (no rule)", separately. **Never invent** a `REACT-ARCH-*`.
-
-When closing, **declare what the lint would already cover**. The *Enforced by* column of the map says which IDs depend on human review: those are the ones that come back in the next PR.
-
----
+An ID in § 4 → finding. An antipattern in § 6 without ID → cite the section. Neither → "Suggestions (no rule)". **Never invent** a `REACT-ARCH-*`. Close by naming the IDs the lint would already catch if switched on: the *Enforced by* column shows which depend on human review and will return.
 
 ## Step 5 — Self-check before delivering
 
-Run the checklist in [Feature-Based Architecture](../../docs/react/feature-based-architecture.md) § 10 in full: barrel, dependency direction, `queryKey` invalidation, co-located test, naming convention. **It does not verify aliases** — that is Step 6; if you touched `paths`, check the three files by hand.
+Run the § 10 checklist: barrel, dependency direction, `queryKey` invalidation, co-located test, naming. It does **not** check aliases; if you touched `paths`, check all three config files by hand. Then:
 
-Three closing questions:
+1. Did a new feature come from a **screen** instead of a **capability**?
+2. Was anything moved to shared with fewer than three consumers?
+3. Is a reported rule lint-verifiable but switched off? Then the real finding is the missing configuration.
 
-1. Did any new feature come out of a **screen** instead of a **capability**?
-2. Was anything extracted into the shared layer with fewer than three consumers?
-3. Is any rule I reported verifiable by the lint and simply was not switched on?
+`biome check src` passes, or the work is not done. Without `biome.json` or installed dependencies, say it is not runnable and report the missing configuration first. Unverifiable is reported as unverified, never as approved.
 
-If 3 is "yes", the real finding is the missing configuration, not the individual violation.
+## Step 6 — Configure or migrate a repository
 
-`pnpm biome check src` passes or the work is not done. **If the project has no `biome.json` or no installed dependencies**, the command is not runnable — declare that, and treat the missing configuration as the first finding. An item that cannot be verified is reported as not verified, never as approved.
+One PR per step, app green at each (§ 8): aliases → extract the genuinely generic → migrate one whole feature → barrels → `noImportCycles` → `noRestrictedImports` per layer → `features/core/` only when `REACT-ARCH-08` fires.
 
----
+Where migrations break (§ 2, § 7):
 
-## Step 6 — Configuring or migrating a repository
+- aliases must exist in **all three** of `tsconfig.json`, `vite.config.ts`, `vitest.config.ts`, or it "works in the build, breaks in the test" (probe 0 measures it);
+- a layer addressed through its barrel needs a `paths` entry **without** a wildcard;
+- Biome `overrides` is **first-match-wins**: a top-level rule is replaced inside an override, not merged.
 
-Do not reorganize everything in one PR. The order in § 8 keeps the app green at each step: aliases → extract the genuinely generic → migrate a whole feature → barrels → `noImportCycles` → `noRestrictedImports` per layer → `features/core/` only when `REACT-ARCH-08` fires.
+A Biome rule missing from the § 7 table is unverified: check `biomejs.dev` and update the source note, not this skill.
 
-Three points where migrations usually break (§ 2 and § 7):
+## Neighbors
 
-- the aliases have to exist in **all three** files — `tsconfig.json`, `vite.config.ts`, `vitest.config.ts`. Divergence shows up as "works in the build, breaks in the test" (probe 0 measures that);
-- a layer addressed through the barrel needs the entry **without** a wildcard in `paths`, otherwise the bare import does not resolve;
-- Biome's `overrides` is **first-match-wins**: a top-level rule does not add to an override — it is replaced.
-
-One PR per step. If a Biome rule is not in the § 7 table, it has not been verified: consult `biomejs.dev` and update the **source note**, not this skill (§ 10, invariants 4 and 5).
-
----
-
-## Neighbors — when the decision leaves structure
-
-| The layer is… | Skill |
+| Layer | Skill |
 | --- | --- |
-| the component's interior: writing · reviewing | `react-developer` · `react-review` |
-| a form | `react-hook-form` |
-| routing, navigation, search params, loader | `tanstack-router` |
-| remote data, `queryKey`, invalidation | `tanstack-query` |
-| a story and a component test | `storybook-story` · `storybook-test` |
-| the test's **level** (unit × integration × e2e) | `test-design` |
-| unit and integration in `bun test` · e2e | `bun-test-build` · `playwright-build` |
-| an API route and schema · persistence · the HTTP contract | `elysia-build` · `drizzle-review` · `http-contract` |
+| component interior: write · review | `react-developer` · `react-review` |
+| routing · remote data and `queryKey` | `tanstack-router` · `tanstack-query` |
 | workspace, monorepo aliases, lockfile | `bun-workspace` |
 
-Where the `queryKey` lives and how it is invalidated is a boundary shared with `tanstack-query`: the **placement** of the `api/` file is this skill's; the **freshness policy** is theirs.
-
----
+The `api/` file's **placement** is this skill's; its freshness policy is `tanstack-query`'s.
 
 ## Example
 
-A PR that extracts formatting into `libs/` and creates a "billing" feature. The probes point at six candidates; the **reading** shows that the feature came out of a screen, not a capability (`REACT-ARCH-01`) — and that erases two interior findings that would have been wasted work. The same file comes out with `REACT-ARCH-06` **and** `REACT-ARCH-08`, which are different defects. The absence of `biome.json` closes the report as the highest-return item.
-
-Full report: `references/example-structure-review.md`.
-
----
-
-## Related
-
-- [Feature-Based Architecture](../../docs/react/feature-based-architecture.md) — source of this skill: structure, `REACT-ARCH-*` rules, enforcement
-- [Architecture in React](../../docs/react/architecture-in-react.md) — router for the other architectural decision axes
-- `react-developer` — write the component that lives in the structure decided here
-- `react-review` — review the interior; this skill reviews the boundary
-- [React.js](../../docs/react/react-js.md) § 7 — the original skill contract
+`references/example-structure-review.md`: a PR that extracts formatting into `libs/` and creates a "billing" feature. The reading shows the feature came from a screen (`REACT-ARCH-01`), which erases two interior findings; one file carries both `REACT-ARCH-06` and `REACT-ARCH-08`; the missing `biome.json` closes the report as the highest-return item.

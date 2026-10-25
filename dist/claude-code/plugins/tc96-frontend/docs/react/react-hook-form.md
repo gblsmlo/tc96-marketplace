@@ -14,11 +14,11 @@ verificado-em: 2026-08-15
 
 # React Hook Form — guided reference
 
-> **What this note is.** The single entry point for React Hook Form in this vault: for me when looking things up, and for coding agents when generating or reviewing forms. It is not a linear summary of Get Started — it is a **router**. It decides what to load, offers the mental model that makes the rest make sense, and exposes citable rules that a skill or a code review can reference by ID.
+> **What this note is.** The single entry point for React Hook Form in this family: for me when looking things up, and for coding agents when generating or reviewing forms. It is not a linear summary of Get Started — it is a **router**. It decides what to load, offers the mental model that makes the rest make sense, and exposes citable rules that a skill or a code review can reference by ID.
 >
 > **What it is not.** It does not replace the source. When they diverge, [react-hook-form.com](https://react-hook-form.com/docs) wins, and this note must be corrected.
 >
-> **A self-contained family.** These notes live inside the `react` skill family, not in the tc96 knowledge base, so the family can move without it. Names in code spans — `TanStack Query`, `TanStack Router`, `Storybook`, `Monorepo com Bun - estrutura e tooling` — and IDs from other families (`TSQ-*`, `TSR-*`, `SB-*`, `PW-*`) belong to the tc96 knowledge base: useful context when it is installed, never required to apply a `REACT-*`, `RHF-*` or `REACT-ARCH-*` rule.
+> **A self-contained family.** These notes live inside the `react` skill family and depend on nothing outside it. A neighboring layer is cited by the **skill** that owns it, in a code span (`tanstack-query`, `tanstack-router`, `storybook-test`), and IDs from other families (`TSQ-*`, `TSR-*`, `SB-*`, `PW-*`) belong to those skills: useful context when they are installed, never required to apply a `REACT-*`, `RHF-*` or `REACT-ARCH-*` rule.
 
 Surface verified directly on react-hook-form.com on **2026-08-15**, on the **v7** line (version references go up to v7.85.0).
 See [Sources consulted](#sources-consulted).
@@ -576,7 +576,7 @@ Derive it from a satellite, not from this whole note: a form accessibility skill
 
 ## 8. Bridges to the stack
 
-The body of this doc is pure RHF, faithful to the source. In my stack (`TanStack Router`, `TanStack Query`, TanStack Start, `Tailwind CSS`, `TypeScript`) several raw practices change owner.
+The body of this doc is pure RHF, faithful to the source. In my stack (TanStack Router, TanStack Query, TanStack Start, Tailwind CSS, TypeScript) several raw practices change owner.
 
 | Problem | Raw practice | What to use in the stack |
 | --- | --- | --- |
@@ -584,7 +584,7 @@ The body of this doc is pure RHF, faithful to the source. In my stack (`TanStack
 | Sending the mutation | `fetch` inside `onSubmit` | TanStack Query's `mutateAsync` inside `handleSubmit` |
 | Invalidating cache after saving | manual | `invalidateQueries` in the mutation — |
 | Optimistic update | `useOptimistic` | Query's optimistic mutation — |
-| Wizard state across routes | global store | the Router's typed search params — `TanStack Router - Search Params` |
+| Wizard state across routes | global store | the Router's typed search params — skill `tanstack-router` |
 | Boundary validation | manual `if` | the same Zod schema on client and server — |
 | Server error in the UI | loose `alert`/toast | `setError` on the field or in `root.serverError` · `RHF-ERR-02` |
 
@@ -707,7 +707,7 @@ useForm({
 - [React Hook Form - State and Performance](react-hook-form-state-and-performance.md) — reading state, lists, re-render
 - [React.js](react-js.md) — React entry point; `REACT-PURE-*` and `REACT-HOOK-*` apply here
 - [React - Forms and Actions](react-forms-and-actions.md) — the native alternative; see § 5.4 before choosing
-- `TanStack Query - Mutations e Invalidação` · `Frontend roadmap`
+- `tanstack-query` — the skill that owns mutations and invalidation
 
 ## Sources consulted
 

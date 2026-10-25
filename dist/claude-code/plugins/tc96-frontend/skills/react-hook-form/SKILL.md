@@ -1,6 +1,6 @@
 ---
 name: react-hook-form
-description: Work with forms in React Hook Form — triaging whether RHF is the tool, connecting fields, validating with Zod, conditional fields and dynamic lists, submitting, and diagnosing re-renders and a field that does not submit, citing `RHF-*` IDs, with twelve executable probes — use when the task is building a new form, integrating a controlled UI component through Controller, mapping a server error onto a field, using useFieldArray, deciding who owns the submission state, or reviewing an existing form. Do not use for an isolated field with no validation, which is the native Actions through react-developer, for server state, which is tanstack-query, nor for state that belongs to the URL, which is tanstack-router.
+description: Build, review or debug a form in React Hook Form, citing `RHF-*` IDs — triage first on whether RHF is the right tool at all, then field connection, Zod validation, conditional fields and dynamic lists, submission ownership, and twelve executable probes for an existing form. Use when building a new form, wiring a controlled UI component through Controller, mapping a server error onto a field, using useFieldArray or a wizard, deciding who owns the submitting state, reviewing a form, or diagnosing re-renders per keystroke or a field that does not submit. Not for a single field without validation (native Actions via react-developer), server state (tanstack-query) or URL state (tanstack-router).
 fonte: "[React Hook Form](../../docs/react/react-hook-form.md)"
 docs:
   - /react-hook-form/documentation
@@ -13,11 +13,8 @@ tags:
 
 # react-hook-form
 
-> **Source of this skill:** [React Hook Form](../../docs/react/react-hook-form.md) and its three satellites in the family's `docs/`.
-> A **task → note** router, not an API summary. It contains neither the text of the `RHF-*` rules, nor signatures, options, nor the behavior of the `formState` Proxy: that lives in the satellites, and that is where it is read and updated. Technical procedure written here becomes a copy that goes stale on its own.
-> **API surface:** resolve it through Context7 — `/react-hook-form/documentation` · `/reactjs/react.dev`. Signature, option and per-version behavior come from there; the rule and the ID come from the family's docs.
-
-Contract this skill implements: [React Hook Form](../../docs/react/react-hook-form.md) § 7. The invariants there hold in every task, without repetition per section.
+> **Source:** [React Hook Form](../../docs/react/react-hook-form.md) and its three satellites (§ 7 is the skill contract; its invariants hold in every task). A task → note router: rule text, signatures and `formState` behavior live only in the satellites.
+> **API surface:** Context7 `/react-hook-form/documentation` · `/reactjs/react.dev`. The rule and its ID come from the family's docs.
 
 ---
 
@@ -109,16 +106,13 @@ When reporting, use `react-review`'s format: canonical ID + `file:line` + concre
 
 | The question is about | Skill |
 | --- | --- |
-| whether this form should use RHF at all | Step 0 — if the answer is native Actions, `react-developer` |
+| whether this form should use RHF at all | Step 0; if native Actions, `react-developer` |
 | capture, field connection, validation, field errors, submission | **this one** |
 | what the write made stale: key, freshness, invalidation, optimism | `tanstack-query` |
-| where the wizard's step lives, route data in the form, a filter in the URL | `tanstack-router` |
-| the component around it: purity, Hooks, boundaries | `react-review` · `react-developer` |
-| where the form's file lives, who imports whom | `react-structure` |
-| a story and an interaction test for the form | `storybook-story` · `storybook-test` |
-| the form test's **level** (unit × integration × e2e) | `test-design` |
-| a unit test · an e2e of the submission journey | `bun-test-build` · `playwright-build` |
-| the endpoint receiving the submit: schema, status, errors | `elysia-schema` · `http-contract` |
+| the wizard step in the URL, route data in the form | `tanstack-router` |
+| the component around it · where its file lives | `react-review` / `react-developer` · `react-structure` |
+| a story and interaction test · the test's level | `storybook-test` · `test-design` |
+| the endpoint receiving the submit | `elysia-schema` · `http-contract` |
 
 Three boundary rules that decide the citation:
 
@@ -140,7 +134,5 @@ Full case, with code and the table of what each decision prevented: `references/
 
 ## Related
 
-- [React Hook Form](../../docs/react/react-hook-form.md) — hub, mental model, decision trees, skill contract (source)
-- [React Hook Form - Registration and Control](../../docs/react/react-hook-form-registration-and-control.md) · [React Hook Form - Validation and Resolvers](../../docs/react/react-hook-form-validation-and-resolvers.md) · [React Hook Form - State and Performance](../../docs/react/react-hook-form-state-and-performance.md) — satellites, one at a time
-- [React - Forms and Actions](../../docs/react/react-forms-and-actions.md) — the native alternative, which Step 0 may point to
-- `react-developer` · `react-review` · `react-structure` · `tanstack-query` · `tanstack-router` — neighboring skills
+- Satellites, one at a time: [Registration and Control](../../docs/react/react-hook-form-registration-and-control.md) · [Validation and Resolvers](../../docs/react/react-hook-form-validation-and-resolvers.md) · [State and Performance](../../docs/react/react-hook-form-state-and-performance.md)
+- [React - Forms and Actions](../../docs/react/react-forms-and-actions.md) — the native alternative Step 0 may point to
