@@ -34,29 +34,28 @@ preceding char, so `N+1` matches "N1", "NN1", …, not the literal text) — a r
 grep -rniF "N+1" knowledge-base/ skills/
 ```
 
-Two hits: `knowledge-base/drizzle-orm.md:85` ("sem N+1 escondido") and
-`knowledge-base/drizzle-queries-e-relations.md:495`, inside § 5.6 "A garantia de
-performance" — right before § 5.8, a table of `DRZ-RQB-*` rules. Reading that table:
+The Drizzle hits are under `skills/drizzle/docs/` — the family is self-contained, so its notes
+are not in `knowledge-base/`. `drizzle-orm.md:93` ("no hidden N+1") states the mental model, and
+`drizzle-reads-and-relations.md:51` sits inside § 0.2 "One query or several?", a decision tree
+that ends on a rule ID. Following the ID to that note's § 3.8 table:
 
 ```
-DRZ-RQB-01 — Busca que aninha mais de uma tabela relacionada MUST usar
-db.query.tabela.findMany/findFirst com with, NEVER N chamadas separadas —
-RQB garante uma única query SQL.
+DRZ-RQB-01 — A read that nests more than one related table MUST use
+db.query.table.findMany/findFirst with with, NEVER N separate calls —
+RQB guarantees a single SQL query.
 ```
 
-That is the rule. It also shows up verbatim in `drizzle-review`'s own `descricao:` ("finding
-N+1" is one of its eleven probes) — two of the four "developed" criteria at once (ID +
-skill trigger phrase).
+That is the rule. It also shows up in `drizzle-query`'s own `descricao:` ("folding a per-item
+lookup (N+1) into one query") — two of the four "developed" criteria at once (ID + skill
+trigger phrase).
 
 ```
 Tema: N+1 query (Drizzle)
 Status: Coberto
-Nota de entrada: docs/drizzle-queries-e-relations.md § 5.6–5.8 (DRZ-RQB-01)
-Skill(s): drizzle-review (review only — writing the fix still routes through
-          Drizzle ORM § 5 directly, since there is no build skill; see the
-          "known structural gaps" note in indice-por-familia.md)
-Por quê: DRZ-RQB-01 names the exact failure and the exact fix, and
-          drizzle-review's description lists "finding N+1" as a stated probe.
+Nota de entrada: skills/drizzle/docs/drizzle-reads-and-relations.md § 0.2, § 3.6–3.8 (DRZ-RQB-01)
+Skill(s): drizzle-query (writing the fix) · drizzle-review (finding it in existing code)
+Por quê: DRZ-RQB-01 names the exact failure and the exact fix, drizzle-query's description
+          names N+1 as a task it handles, and drizzle-review's scan flags a read inside a loop.
 ```
 
 ## 3. "Persistência (dados no navegador)" — Parcial

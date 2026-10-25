@@ -199,6 +199,16 @@
     "drizzle-review": [
       "drizzle"
     ],
+    "drizzle-query": [
+      "drizzle"
+    ],
+    "drizzle-mutation": [
+      "drizzle"
+    ],
+    "drizzle-zod": [
+      "drizzle",
+      "zod"
+    ],
     "tailwind-setup": [
       "tailwindcss",
       "shadcn-ui",

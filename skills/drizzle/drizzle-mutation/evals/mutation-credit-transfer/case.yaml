@@ -1,0 +1,12 @@
+schema_version: "1.1"
+name: mutation-credit-transfer
+expected_outcome: |
+  transfer runs every write in one db.transaction using tx throughout (the credit currently uses the outer db, DRZ-TX-03).
+  The overdraft guard moves into the debit itself (balance >= amount in the update's where, checking returning), or the row is
+  locked with for('update') — the JS check on an unlocked read lets concurrent transfers both pass (DRZ-TX-05); the debit also
+  stops writing an absolute balance computed in JS. Idempotency relies on a unique constraint on idempotencyKey (added to the
+  schema, with a note that it needs a migration) plus onConflictDoNothing or a caught 23505 — not select-then-insert
+  (DRZ-QUERY-06). Insufficient funds is a distinguishable domain error. Tests cover replay, overdraft (balances and transfer rows
+  unchanged) and the happy path. The response says the concurrent race was not reproduced on single-connection PGlite.
+context:
+  scaffold_script: place-files.sh

@@ -1,0 +1,13 @@
+schema_version: "1.1"
+name: review-tasks-repo
+expected_outcome: |
+  The review reports first that src/db/client.ts registers the tables without the relations, so getProject's 
+  throws (DRZ-REL-05). Blocking: archiveDone(everything) updates every task with no where (DRZ-QUERY-04); searchTasks puts q in
+  sql.raw — SQL injection (DRZ-QUERY-02); the deploy workflow runs drizzle-kit push against production (DRZ-MIG-02);
+  createTaskBody is the whole insert schema, so a caller sets ownerId/done/archived (DRZ-ZOD-03, mass assignment). High:
+  listProjectTasks does an owner lookup per task (DRZ-RQB-01); completeTask uses the outer db inside the transaction
+  (DRZ-TX-03) and decides on a value read outside the transaction (DRZ-TX-05). Medium/other: shareToken .default(crypto.randomUUID())
+  freezes one token for every row (DRZ-SCHEMA-04); taskResponse is fine but createSelectSchema whole. Each finding has
+  file:line, no invented IDs, probe output pasted, and what was not verified (no database).
+context:
+  scaffold_script: place-files.sh

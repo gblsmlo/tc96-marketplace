@@ -7,7 +7,7 @@ A single layer: each note lives directly in `knowledge-base/`, with no
 subfolder. Each note's title comes from the `titulo:` field in the file
 itself — the label skills use when linking to it.
 
-Notes: 131
+Notes: 128
 
 | File | Title | sha256 |
 | --- | --- | --- |
@@ -17,7 +17,7 @@ Notes: 131
 | `backend-no-runtime-bun.md` | Backend no runtime Bun | `51b88008720c` |
 | `backend-pendencias-de-revisao.md` | Backend - Pendências de revisão | `494ce1ce14fd` |
 | `bun-bundler-e-build.md` | Bun - Bundler e Build | `f9991b500d2e` |
-| `bun-dados-e-persistencia.md` | Bun - Dados e Persistência | `7813a80a0ac8` |
+| `bun-dados-e-persistencia.md` | Bun - Dados e Persistência | `ec9ab3336c95` |
 | `bun-gerenciador-de-pacotes.md` | Bun - Gerenciador de Pacotes | `52f57ac4db79` |
 | `bun-http-e-servidor.md` | Bun - HTTP e Servidor | `5a33919cec31` |
 | `bun-runtime-e-apis.md` | Bun - Runtime e APIs | `51cb89879881` |
@@ -38,9 +38,6 @@ Notes: 131
 | `claude-code-sessao-e-verificacao.md` | Claude Code - Sessão e Verificação | `47ee1777ce7e` |
 | `claude-code.md` | Claude Code | `3609d626d6e7` |
 | `documentos-de-decisao-prd-rfc-adr.md` | Decision Documents — PRD, RFC and ADR | `a977bc84a6b0` |
-| `drizzle-orm.md` | Drizzle ORM | `86fb22d670a6` |
-| `drizzle-queries-e-relations.md` | Drizzle - Queries e Relations | `d2c4eefb0ed6` |
-| `drizzle-schema-e-migrations.md` | Drizzle - Schema e Migrations | `e1221c1d7aa0` |
 | `elysia-lifecycle-e-plugins.md` | Elysia - Lifecycle e Plugins | `0fbed64501ab` |
 | `elysia-roteamento-e-handler.md` | Elysia - Roteamento e Handler | `8e3fafa75821` |
 | `elysia-schema-e-eden.md` | Elysia - Schema e Eden | `92a937c2ebd5` |
@@ -79,7 +76,7 @@ Notes: 131
 | `playwright-locators.md` | Playwright - Locators | `0acd3f000d9f` |
 | `playwright-rede-e-mocking.md` | Playwright - Rede e Mocking | `834cea8f765d` |
 | `playwright-snapshots-e-visual.md` | Playwright - Snapshots e Visual | `d0f86cc387a6` |
-| `playwright.md` | Playwright | `41a1aad8d73e` |
+| `playwright.md` | Playwright | `eaedd9a91fb5` |
 | `pull-request-github.md` | Pull Request GitHub | `9dbe5119e02f` |
 | `pull-request-template.md` | Pull Request Template | `cee4f492615c` |
 | `pull-request.md` | Pull Request | `09a1ab46518b` |
@@ -132,12 +129,12 @@ Notes: 131
 | `tanstack-router-virtual-file-routes.md` | TanStack Router - Virtual File Routes | `c47e8768f367` |
 | `tanstack-router.md` | TanStack Router | `8d1bb6db5332` |
 | `teste-de-software-confiabilidade-da-suite.md` | Teste de Software - Confiabilidade da Suíte | `c3c10ca895cd` |
-| `teste-de-software-dubles-de-teste.md` | Teste de Software - Dublês de Teste | `a93456f22d54` |
+| `teste-de-software-dubles-de-teste.md` | Teste de Software - Dublês de Teste | `b60bc76e14dc` |
 | `teste-de-software-niveis-e-escopo.md` | Teste de Software - Níveis e Escopo | `b3090e58217c` |
 | `teste-de-software-processo-e-artefatos.md` | Teste de Software - Processo e Artefatos | `588f7dcf5930` |
 | `teste-de-software-tecnicas-de-design-de-caso.md` | Teste de Software - Técnicas de Design de Caso | `db419126a198` |
-| `teste-de-software-tipos-e-atributos-de-qualidade.md` | Teste de Software - Tipos e Atributos de Qualidade | `d7ad56a62c21` |
-| `teste-de-software.md` | Teste de Software | `54a59ef6b44f` |
+| `teste-de-software-tipos-e-atributos-de-qualidade.md` | Teste de Software - Tipos e Atributos de Qualidade | `130be9e62cea` |
+| `teste-de-software.md` | Teste de Software | `93e77fd6becd` |
 | `trunk-based-development.md` | Trunk-based development | `176afa0bd401` |
 | `workos-authkit.md` | WorkOS - AuthKit | `dfde89f9b140` |
 | `workos-rbac.md` | WorkOS - RBAC | `f9b1c4ab38f0` |

@@ -17,7 +17,7 @@ fontes:
   - "[Bun](../referencias/bun.md)"
   - "[Elysia](../referencias/elysia.md)"
   - "[HTTP](../referencias/http.md)"
-  - "[Drizzle ORM](../referencias/drizzle-orm.md)"
+  - "`Drizzle ORM` (tc96-backend docs/drizzle)"
 ---
 # backend-developer
 
@@ -41,7 +41,10 @@ The highest-consequence rule of each family, which this agent checks **before** 
 | dependency, lockfile, workspace, `bun ci` | `bun-workspace` | `bun-runtime` |
 | moving off Node and it does not run; container; Dockerfile | `bun-migrate` | `bun-runtime` |
 | unit or integration test under `bun test` | `bun-test-build` | `test-design` (the level is already decided) |
-| Drizzle schema, migration, query with relations | — no build skill; read [Drizzle ORM](../referencias/drizzle-orm.md) § 6 and [Drizzle - Schema e Migrations](../referencias/drizzle-schema-e-migrations.md) directly; review with `drizzle-review` | — |
+| Drizzle read: listing, relations, N+1, pagination | `drizzle-query` | `drizzle-zod` (the response schema) |
+| Drizzle write: insert, upsert, update, delete, transaction | `drizzle-mutation` | `drizzle-zod` (the body schema) |
+| request or response schema for a Drizzle table | `drizzle-zod` | `elysia-schema` |
+| Drizzle table, migration, `drizzle-kit` | — no skill; read `Drizzle - Schema and Migrations` (the drizzle family's docs) | `drizzle-review` (that is `code-reviewer`'s) |
 | route in Hono | — no skill yet; read [Hono](../referencias/hono.md) § 6.1 and § 8 directly | — |
 | where the rule lives: browser, BFF or backend | `software-architect` | backend-developer |
 
@@ -53,7 +56,7 @@ The highest-consequence rule of each family, which this agent checks **before** 
 | --- | --- | --- |
 | 1 | [Backend no runtime Bun](../referencias/backend-no-runtime-bun.md) § 3–4 and § 6 | confirm the chosen boundary and the `BACKEND-*` rules |
 | 2 | the task's skill | procedure and minimum loading |
-| 3 | the family's hub — [Elysia](../referencias/elysia.md), [Hono](../referencias/hono.md), [HTTP](../referencias/http.md), [Bun](../referencias/bun.md), [Drizzle ORM](../referencias/drizzle-orm.md) | symptom → API tree, § 6.1 criticals, § 6.2 canonical IDs |
+| 3 | the family's hub — [Elysia](../referencias/elysia.md), [Hono](../referencias/hono.md), [HTTP](../referencias/http.md), [Bun](../referencias/bun.md), `Drizzle ORM` (the drizzle skills load it) | symptom → API tree, § 6.1 criticals, § 6.2 canonical IDs |
 | 4 | [Fronteira do BFF - forma, jornada e regra](../referencias/fronteira-do-bff-forma-jornada-e-regra.md) § 2–4 | when the route belongs to a BFF: what is shape, what is rule (`BFF-01`, `BFF-02`) |
 | 5 | the satellite the skill points at | only with the finding in hand |
 

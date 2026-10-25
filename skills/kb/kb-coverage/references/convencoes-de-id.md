@@ -17,7 +17,7 @@ prose that merely uses capital letters and hyphens.
 | tanstack (router) | `TSR-*` | `docs/tanstack-router*.md` |
 | http | `HTTP-*`, `HTTP-CACHE-*`, `HTTP-CORS-*`, `HTTP-NEG-*` | `docs/http*.md` (um satélite por sufixo) |
 | elysia | `ELYSIA-CORE-*`, `ELYSIA-APP-*`, `ELYSIA-TYPE-*`, `ELYSIA-LIFE-*` | `docs/elysia*.md` |
-| drizzle | `DRZ-*` | `docs/drizzle-orm.md` + satélites de schema/queries |
+| drizzle | `DRZ-*` | `skills/drizzle/docs/drizzle-orm.md` + satellites: schema, reads, writes, zod |
 | bun | `BUN-RT-*`, `BUN-SYS-*`, `BUN-PKG-*`, `BUN-CORE-*`, `BUN-TEST-*` | `docs/bun*.md` |
 | test (estratégia) | `TS-*` | `docs/teste-de-software*.md` |
 | playwright | `PW-*` | `docs/playwright*.md` |

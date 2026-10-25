@@ -96,7 +96,7 @@ Esta nota decide o nível. A partir daí, o "como" está aqui — e este mapa é
 | contrato entre cliente tipado e servidor | tipo exportado do servidor | [Hono - Validação e RPC](hono-validacao-e-rpc.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 | validação de entrada em runtime | Zod / TypeBox | [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 | estático (tipo e lint) | TypeScript + Biome | `TypeScript` |
-| persistência e migração | Drizzle + Postgres local | [Drizzle - Schema e Migrations](drizzle-schema-e-migrations.md) |
+| persistência e migração | Drizzle + Postgres local | `Drizzle - Schema and Migrations` |
 
 **A fronteira componente × jornada** é a que mais gera indecisão, e o critério é curto: se o teste precisa de **rota, login ou mais de uma tela**, é Playwright; se ele varia **props de um componente**, é story. A [Playwright](playwright.md) § 8 registra ainda que o component testing do Playwright (não-experimental desde a 1.62) cria uma sobreposição nova com Storybook, e a decisão deste vault é não migrar o que já funciona.
 
@@ -362,7 +362,7 @@ NUNCA:    esta estrutura inteira para uma tarefa de escrever um teste
 | Verificar o contrato com o BFF | redigitar o shape no mock | reusar o tipo do servidor — [Hono - Validação e RPC](hono-validacao-e-rpc.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
 | Verificar entrada inválida | só o caminho feliz | valor limite + Zod na fronteira — [Teste de Software - Técnicas de Design de Caso](teste-de-software-tecnicas-de-design-de-caso.md) |
 | Preparar estado para um teste de UI | criar pela interface | criar por API — [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 5 |
-| Isolar dado entre execuções paralelas | um banco compartilhado | schema/banco efêmero por worker — [Drizzle - Schema e Migrations](drizzle-schema-e-migrations.md) |
+| Isolar dado entre execuções paralelas | um banco compartilhado | schema/banco efêmero por worker — `Drizzle - Schema and Migrations` |
 | Testar expiração e "há 3 dias" | esperar o tempo passar | relógio controlado (`TS-DUB-05`) — [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 7, [Bun - Testes - Mocks e Tempo](bun-testes-mocks-e-tempo.md) |
 | Testar autorização por papel | um usuário com tudo liberado | um estado por papel — [Playwright - Autenticação e Isolamento](playwright-autenticacao-e-isolamento.md), e o critério de achado em [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) |
 | Garantir contrato de status e cache | afirmar `200` sempre | [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md), [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) |

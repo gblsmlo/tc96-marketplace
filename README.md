@@ -141,7 +141,8 @@ skills/                # 38 skills across 12 families (English)
 ├── react/             # self-contained: its own docs/ (the REACT-* and RHF-* rules) travel with it
 ├── tailwind/          # self-contained: its own docs/ (the TW-* rules) travel with it
 ├── bun/               # self-contained: its own docs/ (the BUN-* rules) travel with it
-├── elysia/  drizzle/
+├── drizzle/           # self-contained: its own docs/ (the DRZ-* rules) travel with it
+├── elysia/
 └── kb/                # Coverage audit of this repository, not shipped
 commands/              # 18 commands (English body, descricao in Portuguese)
 knowledge-base/        # 131 notes, no subfolders (the rule, and its ID; being migrated from Portuguese to English)

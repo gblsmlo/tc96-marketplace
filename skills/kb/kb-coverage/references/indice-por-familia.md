@@ -50,7 +50,7 @@ Not yet audited topic-by-topic; these are the entry point a live search should t
 | tanstack (router) | `docs/tanstack-router.md` | `tanstack-router` |
 | http | `docs/http.md` | `http-contract`, `http-cache`, `http-diagnose`, `http-review` |
 | elysia | `docs/elysia.md` | `elysia-build`, `elysia-schema`, `elysia-diagnose` |
-| drizzle | `docs/drizzle-orm.md` | `drizzle-review` (no build skill yet — the skill's own description says so) |
+| drizzle | `skills/drizzle/docs/drizzle-orm.md` | `drizzle-query` · `drizzle-mutation` · `drizzle-zod` · `drizzle-review` |
 | bun | `docs/bun.md` | `bun-runtime`, `bun-workspace`, `bun-migrate`, `bun-test-build`, `bun-test-review` |
 | test | `docs/teste-de-software.md` | `test-design`, `test-review`, `test-diagnose` |
 | playwright | `docs/playwright.md` | `playwright-build`, `playwright-review`, `playwright-diagnose` |
@@ -58,10 +58,10 @@ Not yet audited topic-by-topic; these are the entry point a live search should t
 
 ## Known structural gaps (not topic-specific)
 
-- **Drizzle has review coverage but no build skill.** `skills/drizzle/drizzle-review/SKILL.md`
-  says so directly: "Do not use to write a new schema or query — follow the decision trees in
-  Drizzle ORM § 5 directly, because there is no build skill yet." Any topic that needs
-  *writing* a schema/query (not just reviewing one) inherits this gap.
+- **Drizzle has no schema/migration build skill.** Reads (`drizzle-query`), writes
+  (`drizzle-mutation`) and the Zod boundary (`drizzle-zod`) each have one; declaring a table or
+  running `drizzle-kit` still routes to `skills/drizzle/docs/drizzle-schema-and-migrations.md`
+  directly, and `drizzle-review` covers migrations only in review.
 - **`architecture-in-react.md` § 2 is a router with several blank cells** despite the
   underlying content existing (see above). Treat a blank cell there as "not yet routed", not
   as "not documented" — check the doc layer before concluding gap.

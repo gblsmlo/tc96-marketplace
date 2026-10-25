@@ -35,7 +35,7 @@ skills/<family>/
 | **bun** | `bun-runtime` · `bun-workspace` · `bun-migrate` · `bun-test-build` · `bun-test-review` — self-contained, with its own `docs/` | [bun/](bun/README.md) |
 | **elysia** | `elysia-build` · `elysia-schema` · `elysia-diagnose` | [elysia/](elysia/README.md) |
 | **http** | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [http/](http/README.md) |
-| **drizzle** | `drizzle-review` | [drizzle/](drizzle/README.md) |
+| **drizzle** | `drizzle-query` · `drizzle-mutation` · `drizzle-zod` · `drizzle-review` — self-contained, with its own `docs/` | [drizzle/](drizzle/README.md) |
 | **kb** | `kb-coverage` | [kb/](kb/README.md) |
 | **workflow** | `workflow-research` · `workflow-planning` · `workflow-implementation` · `workflow-validation` · `workflow-spec` | [workflow/](workflow/README.md) |
 
