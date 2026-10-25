@@ -9,6 +9,14 @@ tags:
 ---
 # Architecture in React
 
+## Contents
+
+- [1. The five decision axes](#1-the-five-decision-axes)
+- [2. Map: each axis and its entry note](#2-map-each-axis-and-its-entry-note)
+- [3. Order of decisions](#3-order-of-decisions)
+- [4. The decision adopted for physical organization](#4-the-decision-adopted-for-physical-organization)
+- [5. Use by an agent](#5-use-by-an-agent)
+
 A map of the architectural decisions in a React application and of the note that answers each one. This page
 **routes**; the content lives in the notes it points to.
 
@@ -163,12 +171,3 @@ of this house, with conventions that only exist in this project. A page with a s
 as a rule; this page, which only routes, is not. When a tool doc contradicts one of these
 three on a verifiable fact — Biome behavior, the TanStack API — the doc wins and the normative
 page is corrected.
-
----
-
-## Related
-
-- [Feature-Based Architecture](feature-based-architecture.md) — child note: physical organization of the code
-- [React.js](react-js.md) — React hub: mental model, API map, skill contract
-- [React - Patterns](react-patterns.md) — structural decision inside the component
-- [React - Rules of React](react-rules-of-react.md) — normative base

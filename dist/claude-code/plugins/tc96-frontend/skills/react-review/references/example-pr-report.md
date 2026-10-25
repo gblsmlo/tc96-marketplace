@@ -1,5 +1,12 @@
 # Worked example — reviewing a PR
 
+## Contents
+
+- [Step 1 — probes before opening any file](#step-1--probes-before-opening-any-file)
+- [Step 2 — reading, in the grid's order](#step-2--reading-in-the-grids-order)
+- [Step 3 — the report](#step-3--the-report)
+- [What this example demonstrates](#what-this-example-demonstrates)
+
 PR: *"adds customer search with a filter and export"*. Three files touched.
 
 ---

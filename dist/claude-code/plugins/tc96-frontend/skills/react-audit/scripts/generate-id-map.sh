@@ -5,7 +5,7 @@ set -euo pipefail
 
 FAMILY="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 OUT="$FAMILY/react-audit/references/id-map.md"
-body() { sed '1,/^---$/d' "$1" | sed '/^# /d'; }
+body() { sed '1,/^---$/d' "$1" | sed '/^# /d' | sed '/^## Contents$/,/^$/d'; }
 {
   echo "---"
   echo "generated-by: skills/react/react-audit/scripts/generate-id-map.sh"
@@ -15,6 +15,11 @@ body() { sed '1,/^---$/d' "$1" | sed '/^# /d'; }
   echo "# ID map for the audit — \`REACT-*\`, \`REACT-ARCH-*\`, \`RHF-*\`"
   echo
   echo "> Joined from the maps of react-review, react-structure and react-hook-form. Where a rule lives, never what it says."
+  echo
+  echo "## Contents"
+  echo "- [\`REACT-*\`](#react-)"
+  echo "- [\`REACT-ARCH-*\`](#react-arch-)"
+  echo "- [\`RHF-*\`](#rhf-)"
   echo
   echo "## \`REACT-*\`"
   body "$FAMILY/react-review/references/id-map.md" | sed 's/^## /### /'

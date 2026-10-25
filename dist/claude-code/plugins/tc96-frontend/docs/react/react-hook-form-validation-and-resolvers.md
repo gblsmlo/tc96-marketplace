@@ -14,6 +14,15 @@ verified-at: 2026-08-15
 
 # React Hook Form — Validation and Resolvers
 
+## Contents
+
+- [1. Concept: three layers, one source](#1-concept-three-layers-one-source)
+- [2. When to validate](#2-when-to-validate)
+- [3. Resolver with Zod](#3-resolver-with-zod)
+- [4. Errors](#4-errors)
+- [5. Native browser validation](#5-native-browser-validation)
+- [6. Antipatterns](#6-antipatterns)
+
 > `mode` · `resolver` · `zodResolver` · `setError` · `trigger` · server errors
 >
 > What is valid, when it is checked, and what happens to what the server rejects.
@@ -397,25 +406,3 @@ Two distinct options that are often confused — and that the source declares **
 | `useEffect` observing `errors` for telemetry | `handleSubmit`'s 2nd callback · `RHF-ERR-07` |
 | `mode: 'onChange'` as the project default | `'onTouched'` · `RHF-VAL-03` |
 | Trusting client validation | revalidate on the server · `RHF-CORE-05` |
-
----
-
-## Related
-
-- [React Hook Form](react-hook-form.md) — entry, the tree in § 5.3 and § 5.5
-- [React Hook Form - Registration and Control](react-hook-form-registration-and-control.md) · [React Hook Form - State and Performance](react-hook-form-state-and-performance.md)
-- [React - Suspense and Async](react-suspense-and-async.md) — `REACT-ASYNC-09`, the canonical ID
-- [React - Server Components and Directives](react-server-components-and-directives.md) § 3 — the same boundary, on the server side
-
-## Sources consulted
-
-Verified on 2026-08-15:
-
-- [useForm](https://react-hook-form.com/docs/useform) — `mode`, `criteriaMode`, `delayError`, the resolver contract, `validate` × `resolver` exclusivity
-- [setError](https://react-hook-form.com/docs/useform/seterror) — non-persistence on a field with rules, `root.serverError`, effect on `isValid`
-- [trigger](https://react-hook-form.com/docs/useform/trigger) — render isolation only with a single name
-- [handleSubmit](https://react-hook-form.com/docs/useform/handlesubmit) — exceptions are not swallowed; `SubmitErrorHandler`
-- [formState](https://react-hook-form.com/docs/useform/formstate) — `isValidating`, `validatingFields`, `isValid` behavior
-- [register](https://react-hook-form.com/docs/useform/register) — `validate`, `deps`
-- [@hookform/resolvers](https://github.com/react-hook-form/resolvers) — `zodResolver`, typing of transformed values
-- [TypeScript](https://react-hook-form.com/ts) — `Resolver`, `ValidateForm`, `useForm` generics

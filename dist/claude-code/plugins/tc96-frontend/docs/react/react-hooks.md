@@ -12,6 +12,14 @@ verified-at: 2026-08-14
 
 # React — Hooks
 
+## Contents
+
+- [1. The three rules that apply to all of them](#1-the-three-rules-that-apply-to-all-of-them)
+- [2. Full index](#2-full-index)
+- [3. Quick choice](#3-quick-choice)
+- [4. Custom Hooks](#4-custom-hooks)
+- [5. Antipatterns](#5-antipatterns)
+
 > **API lookup** structure: signature, parameters, return and caveats of each Hook. To decide *which* Hook to use, go to the decision trees in [React.js](react-js.md) § 5. To decide *how to structure* the component around it, go to [React - Patterns](react-patterns.md).
 
 Entry: [React.js](react-js.md) · Normative basis: [React - Rules of React](react-rules-of-react.md)
@@ -209,20 +217,3 @@ const a = useA()
 const b = useB()
 const value = condition ? a : b
 ```
-
----
-
-## Related
-
-- [React.js](react-js.md) — hub and decision trees
-- [React - Patterns](react-patterns.md) — composition and architecture patterns
-- [React - Rules of React](react-rules-of-react.md) — full normative basis
-
-## Sources consulted
-
-Verified on 2026-08-14:
-
-- [Built-in React Hooks](https://react.dev/reference/react/hooks)
-- [Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks)
-- [react-dom Hooks](https://react.dev/reference/react-dom/hooks)
-- [useOptimistic](https://react.dev/reference/react/useOptimistic)

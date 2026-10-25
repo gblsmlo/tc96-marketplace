@@ -1,12 +1,16 @@
 ---
 generated-by: skills/react/react-review/scripts/generate-id-map.sh
-generated-at: 2026-10-03
+generated-at: 2026-10-25
 ---
 
 # ID map `REACT-*` — where each rule lives
 
 > A router, not a copy: this file says **where** the rule is declared, never what it says.
 > For the text, open the satellite. Regenerate with `bash skills/react/react-review/scripts/generate-id-map.sh`.
+
+## Contents
+- [Aliases — never cite one in a review](#aliases--never-cite-one-in-a-review)
+- [Full index](#full-index)
 
 ## Aliases — never cite one in a review
 

@@ -12,6 +12,15 @@ verified-at: 2026-08-14
 
 # React — Server Components and Directives
 
+## Contents
+
+- [1. Server Components](#1-server-components)
+- [2. `'use client'`](#2-use-client)
+- [3. `'use server'`](#3-use-server)
+- [4. `cache`](#4-cache)
+- [5. Taint — **experimental**](#5-taint--experimental)
+- [6. Review checklist](#6-review-checklist)
+
 > Server Components · Server Functions · `'use client'` · `'use server'` · `cache` · taint (experimental)
 >
 > The server/client boundary is the most expensive architectural decision to reverse later. This satellite exists so that it is made on purpose.
@@ -241,19 +250,3 @@ const profile = { id: user.id, name: user.name, avatarUrl: user.avatarUrl }
 - [ ] Does every Server Function authenticate, validate and authorize? → `REACT-RSC-06`
 - [ ] Does any whole entity cross the boundary instead of a DTO? → `REACT-RSC-09`
 - [ ] `useState`/`useEffect` in a component without `'use client'`? → `REACT-RSC-01`
-
----
-
-## Related
-
-- [React.js](react-js.md) · [React - Patterns](react-patterns.md) · [React - Rules of React](react-rules-of-react.md)
-- [React - Forms and Actions](react-forms-and-actions.md) · [React - Suspense and Async](react-suspense-and-async.md) · [React - Rendering and Entrypoints](react-rendering-and-entrypoints.md)
-
-## Sources consulted
-
-Verified on 2026-08-14:
-
-- [Server Components](https://react.dev/reference/rsc/server-components) · [Directives](https://react.dev/reference/rsc/directives)
-- ['use client'](https://react.dev/reference/rsc/use-client) — placement rules and serialization table
-- ['use server'](https://react.dev/reference/rsc/use-server) · [cache](https://react.dev/reference/react/cache)
-- [experimental_taintObjectReference](https://react.dev/reference/react/experimental_taintObjectReference) — warnings quoted literally

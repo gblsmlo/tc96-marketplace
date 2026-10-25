@@ -1,11 +1,16 @@
 ---
 generated-by: skills/react/react-audit/scripts/generate-id-map.sh
-generated-at: 2026-10-24
+generated-at: 2026-10-25
 ---
 
 # ID map for the audit — `REACT-*`, `REACT-ARCH-*`, `RHF-*`
 
 > Joined from the maps of react-review, react-structure and react-hook-form. Where a rule lives, never what it says.
+
+## Contents
+- [`REACT-*`](#react-)
+- [`REACT-ARCH-*`](#react-arch-)
+- [`RHF-*`](#rhf-)
 
 ## `REACT-*`
 

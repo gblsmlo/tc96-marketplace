@@ -1,5 +1,14 @@
 # The five tasks
 
+## Contents
+
+- [1. Building a new form](#1-building-a-new-form)
+- [2. Integrating a controlled UI component](#2-integrating-a-controlled-ui-component)
+- [3. Validating with Zod and mapping errors onto fields](#3-validating-with-zod-and-mapping-errors-onto-fields)
+- [4. Conditional fields and dynamic lists](#4-conditional-fields-and-dynamic-lists)
+- [5. Submitting](#5-submitting)
+- [Related](#related)
+
 > A task → note router. It contains no signatures, no options and no `formState` Proxy
 > behavior: that lives in the satellites, and that is where it is read and updated.
 > Short names: **Registration**, **Validation**, **State**; the **hub** is [React Hook Form](../../../docs/react/react-hook-form.md).

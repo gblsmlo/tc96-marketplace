@@ -12,6 +12,17 @@ verified-at: 2026-08-14
 
 # React — Performance and Concurrency
 
+## Contents
+
+- [1. The rule that comes before all others](#1-the-rule-that-comes-before-all-others)
+- [2. `<Profiler>`](#2-profiler)
+- [3. Memoization](#3-memoization)
+- [4. Concurrency](#4-concurrency)
+- [5. Reduce the rendered volume](#5-reduce-the-rendered-volume)
+- [6. `<Activity>`](#6-activity)
+- [7. React Compiler](#7-react-compiler)
+- [8. Antipatterns](#8-antipatterns)
+
 > `memo` · `useMemo` · `useCallback` · `useTransition` · `startTransition` · `useDeferredValue` · `<Activity>` · `<Profiler>` · React Compiler
 >
 > Two distinct families that are often confused: **memoization** avoids repeated work; **concurrency** reorders work by priority. They solve different problems.
@@ -301,21 +312,3 @@ function Legacy() {
 | `useDeferredValue` without `memo` in the consumer | the expensive work runs anyway | memoize the derived computation |
 | Manual memoization with the Compiler active | redundant and noisy | remove · `REACT-PERF-02` |
 | `<Activity>` expecting live Effects | Effects are cleaned up on hide | `REACT-PERF-07` |
-
----
-
-## Related
-
-- [React.js](react-js.md) · [React - Hooks](react-hooks.md) · [React - Patterns](react-patterns.md) · [React - Rules of React](react-rules-of-react.md)
-- [React - Suspense and Async](react-suspense-and-async.md) — transitions and Suspense combine
-- [React - Performance Measurement](react-performance-measurement.md) — how to measure before and after (`REACT-PERF-11..19`)
-
-## Sources consulted
-
-Verified on 2026-08-14:
-
-- [memo](https://react.dev/reference/react/memo) · [useMemo](https://react.dev/reference/react/useMemo) · [useCallback](https://react.dev/reference/react/useCallback)
-- [useTransition](https://react.dev/reference/react/useTransition) · [startTransition](https://react.dev/reference/react/startTransition) · [useDeferredValue](https://react.dev/reference/react/useDeferredValue)
-- [Activity](https://react.dev/reference/react/Activity) — caveats quoted literally
-- [Profiler](https://react.dev/reference/react/Profiler)
-- [React Compiler — Configuration](https://react.dev/reference/react-compiler/configuration) · [Directives](https://react.dev/reference/react-compiler/directives)

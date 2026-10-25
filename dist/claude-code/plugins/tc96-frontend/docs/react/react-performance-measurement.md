@@ -12,6 +12,17 @@ verified-at: 2026-10-03
 
 # React — Performance Measurement
 
+## Contents
+
+- [1. Two kinds of number](#1-two-kinds-of-number)
+- [2. Order: baseline first](#2-order-baseline-first)
+- [3. Iterations and statistics](#3-iterations-and-statistics)
+- [4. What travels with the numbers](#4-what-travels-with-the-numbers)
+- [5. The results file](#5-the-results-file)
+- [6. Correctness after memoization](#6-correctness-after-memoization)
+- [7. The README section](#7-the-readme-section)
+- [8. Antipatterns](#8-antipatterns)
+
 > Baseline · public-API harness · render count · `<Profiler>` · wall time · noise · results file · README section
 >
 > `REACT-PERF-01` says memoization **MUST** have a measured justification. This note says what counts as a measurement: how it is taken, which number may block a merge, which number may only be reported, and where the result is written.
@@ -152,18 +163,3 @@ The component's README carries the result, so that the next person changing it k
 | a table with no date, no versions | cannot be reproduced or compared | `REACT-PERF-16` |
 | numbers pasted from a terminal into the README | nothing can be re-compared | `REACT-PERF-17` |
 | memo shipped without a stale-state test | the benchmark rewards the bug | `REACT-PERF-18` |
-
----
-
-## Related
-
-- [React - Performance and Concurrency](react-performance-and-concurrency.md) — what to change once the measurement points at a cause (`REACT-PERF-01..10`)
-- [React.js](react-js.md) · [React - Patterns](react-patterns.md) · [React - Refs and DOM](react-refs-and-dom.md)
-
-## Sources consulted
-
-Verified on 2026-10-03:
-
-- [Profiler](https://react.dev/reference/react/Profiler) — `onRender`, `actualDuration`, the overhead caveat
-- [memo](https://react.dev/reference/react/memo) — shallow comparison, why one unstable prop cancels it
-- Field record: a DataGrid refactor (rows and cells memoized, 200×10 to 1000×20 cases, JSDOM, `bun`), including two baseline runs of unchanged code and an independent review of the memoized code

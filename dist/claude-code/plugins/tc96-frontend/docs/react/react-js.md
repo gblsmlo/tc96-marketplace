@@ -11,6 +11,17 @@ verified-at: 2026-08-14
 ---
 # React.js — guided reference
 
+## Contents
+
+- [1. How to use this doc](#1-how-to-use-this-doc)
+- [2. Mental model](#2-mental-model)
+- [3. Package boundaries](#3-package-boundaries)
+- [4. API map](#4-api-map)
+- [5. Decision trees](#5-decision-trees)
+- [6. Normative rules](#6-normative-rules)
+- [7. Skill contract](#7-skill-contract)
+- [8. Bridges to the stack](#8-bridges-to-the-stack)
+
 > **What this note is.** The single entry point for React in this family: for me when consulting, and for coding agents when generating or reviewing React. It is not a linear summary of the documentation — it is a **router**. It decides what to load, offers the mental model that makes the rest make sense, and exposes citable rules that a skill or a code review can reference by ID.
 >
 > **What it is not.** It does not replace the source. When they diverge, [react.dev/reference](https://react.dev/reference/react) wins, and this note must be corrected.
@@ -18,7 +29,7 @@ verified-at: 2026-08-14
 > **A self-contained family.** These notes live inside the `react` skill family and depend on nothing outside it. A neighboring layer is cited by the **skill** that owns it, in a code span (`tanstack-query`, `tanstack-router`, `storybook-test`), and IDs from other families (`TSQ-*`, `TSR-*`, `SB-*`, `PW-*`) belong to those skills: useful context when they are installed, never required to apply a `REACT-*`, `RHF-*` or `REACT-ARCH-*` rule.
 
 Inventory verified directly on react.dev on **2026-08-14**.
-See [Sources consulted](#sources-consulted).
+Sources are recorded in the family's `docs/SOURCES.md`, which is not packaged.
 
 ---
 
@@ -445,38 +456,3 @@ The body of this doc is pure React, faithful to react.dev. But in my stack (TanS
 - **`useOptimistic` is React's answer when the data does not live in a cache.** If the data is in the TanStack Query cache, the optimism belongs to the Query's mutation, with explicit snapshot and rollback. Do not stack the two: they become two diverging sources of truth.
 
 **`useActionState` + `useMutation` together?** Pick one owner for the submission. If the operation invalidates cache, let the Query's mutation be the owner and use a plain `<form>` with a handler. If it is an isolated submission with no cache to invalidate, `useActionState` alone is enough.
-
----
-
-## Related
-
-- [React - Hooks](react-hooks.md) — API surface per Hook
-- [React - Patterns](react-patterns.md) — composition and architecture patterns
-- [React - Rules of React](react-rules-of-react.md) — normative basis
-- [React - Performance Measurement](react-performance-measurement.md) — baseline, render-count gate, results file (`REACT-PERF-11..19`)
-- [React Hook Form](react-hook-form.md) — complex forms; its § 5.4 decides between RHF and native Actions
-- `tanstack-router` · `tanstack-query` — the skills that own the stack bridges in § 8
-
-## Sources consulted
-
-Verified directly on **2026-08-14**:
-
-- [React Reference Overview](https://react.dev/reference/react)
-- [Hooks](https://react.dev/reference/react/hooks) · [Components](https://react.dev/reference/react/components) · [APIs](https://react.dev/reference/react/apis)
-- [Rules of React](https://react.dev/reference/rules)
-- [react-dom](https://react.dev/reference/react-dom) · [react-dom/server](https://react.dev/reference/react-dom/server) · [react-dom hooks](https://react.dev/reference/react-dom/hooks)
-- [Server Components](https://react.dev/reference/rsc/server-components) · [Directives](https://react.dev/reference/rsc/directives)
-- [React Compiler Directives](https://react.dev/reference/react-compiler/directives)
-- [useOptimistic](https://react.dev/reference/react/useOptimistic)
-
-**Verification notes** — points where the source contradicts what is assumed out of habit:
-
-- `useEffectEvent` appears in the Hooks index as **stable**, with no experimental marking.
-- **`forwardRef` is not deprecated yet.** The banner says it "is no longer necessary" and that it "will be deprecated in a future release" — those are different things.
-- **React Compiler is stable 1.0 since 2025-10-07** ([announcement](https://react.dev/blog/2025/10/07/react-compiler-1)), compatible with React 17+. The reference's configuration page does not state a status; I had to go to the blog.
-- **`useActionState` works without a framework.** Only `permalink` requires RSC.
-- **The taint APIs are experimental** (`experimental_taintObjectReference`), and the doc itself warns against treating them as a security mechanism.
-- **`startTransition` accepts an `async` function**; the restriction applies only to `setState` after an `await`.
-- `renderToString` and `renderToStaticMarkup` are marked as legacy, with limited functionality.
-
-**About review:** this structure went through a reading test with four agents without context (forms, data fetching, state colocation, performance) and a contradiction audit, on 2026-08-14. The corrections applied included: inverting the order of the state tree (the data's origin became the first question), promoting the satellites' critical rules to § 6.1, creating the canonical IDs table, and fixing three wrong ID citations. When editing this doc, repeating the test is cheaper than trusting a re-read.

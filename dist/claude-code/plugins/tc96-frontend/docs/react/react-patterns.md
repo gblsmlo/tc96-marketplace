@@ -12,6 +12,18 @@ verified-at: 2026-08-14
 
 # React — Patterns
 
+## Contents
+
+- [1. The axis that organizes everything](#1-the-axis-that-organizes-everything)
+- [2. State ownership and placement](#2-state-ownership-and-placement)
+- [3. Composition](#3-composition)
+- [4. Controlled × uncontrolled](#4-controlled--uncontrolled)
+- [5. Logic extraction](#5-logic-extraction)
+- [6. Boundaries](#6-boundaries)
+- [7. Data flow](#7-data-flow)
+- [8. Antipatterns](#8-antipatterns)
+- [9. Use by an agent](#9-use-by-an-agent)
+
 > A **decision** structure: where state lives, what to compose, what to extract, where to draw boundaries. It does not repeat the API surface — for a Hook signature, go to [React - Hooks](react-hooks.md); for the full API map, [React.js](react-js.md) § 4.
 >
 > **This note's role:** it is the bridge between the official reference and the structural decisions the skills make. Each pattern names the satellite that develops the idea — the satellite carries the reasoning, this note is the actionable index.
@@ -273,15 +285,3 @@ When you receive a structure task ("where do I put this", "how do I organize thi
 > `REACT-PAT-01` — `total` is derivable from `items`. Do not create state; compute it during render.
 
 When reviewing code, the table in § 8 is the checklist. When proposing a refactor, cite the section — this note carries the decision; the satellite carries the reasoning.
-
----
-
-## Related
-
-- [React.js](react-js.md) — hub, API map and decision trees
-- [React - Hooks](react-hooks.md) — API surface per Hook
-- [React - Rules of React](react-rules-of-react.md) — normative base
-
-## Sources consulted
-
-- [React — Learn](https://react.dev/learn) and [Reference](https://react.dev/reference/react), verified on 2026-08-14
