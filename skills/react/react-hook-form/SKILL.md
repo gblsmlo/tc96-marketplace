@@ -1,6 +1,6 @@
 ---
 name: react-hook-form
-description: Build, review or debug a form in React Hook Form, citing `RHF-*` IDs — triage first on whether RHF is the right tool at all, then field connection, Zod validation, conditional fields and dynamic lists, submission ownership, and twelve executable probes for an existing form. Use when building a new form, wiring a controlled UI component through Controller, mapping a server error onto a field, using useFieldArray or a wizard, deciding who owns the submitting state, reviewing a form, or diagnosing re-renders per keystroke or a field that does not submit. Not for a single field without validation (native Actions via react-developer), server state (tanstack-query) or URL state (tanstack-router).
+description: Builds, reviews or debugs a form in React Hook Form, citing `RHF-*` IDs — triage first on whether RHF is the right tool at all, then field connection, Zod validation, conditional fields and dynamic lists, submission ownership, and twelve executable probes for an existing form. Use when building a new form, wiring a controlled UI component through Controller, mapping a server error onto a field, using useFieldArray or a wizard, deciding who owns the submitting state, reviewing a form, or diagnosing re-renders per keystroke or a field that does not submit. Not for a single field without validation (native Actions via react-developer), server state (tanstack-query) or URL state (tanstack-router).
 type: skill
 family: react
 language: en
