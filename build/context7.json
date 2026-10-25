@@ -193,6 +193,12 @@
     "elysia-schema": [
       "elysia"
     ],
+    "elysia-eden": [
+      "elysia"
+    ],
+    "elysia-openapi": [
+      "elysia"
+    ],
     "elysia-diagnose": [
       "elysia"
     ],

@@ -20,12 +20,12 @@ confident as a fresh one — the only way to catch drift is to check.
 | Arquitetura e responsabilidades | Coberto | `pages/architecture-in-react.md` | (router — no single skill) |
 | Estrutura de pastas e fronteiras | Coberto | `pages/feature-based-architecture.md` | `react-structure` |
 | Coesão por capacidade | Coberto | `pages/feature-based-architecture.md` § 1 | `react-structure` |
-| Contratos full-stack | Coberto | `docs/elysia-schema-e-eden.md` § 7 | `elysia-schema` |
+| Contratos full-stack | Coberto | `skills/elysia/docs/elysia-eden.md` | `elysia-eden` |
 | Composition | Coberto | `docs/react-patterns.md` § 3 (`REACT-PAT-04/05`) | `react-developer` |
 | Clean Code | **Gap confirmado** (dangling ref.) | — | none — `agents/code-reviewer.md` and `agents/frontend-developer.md` cite a hub that does not exist in `knowledge-base/` |
 | Testes | Coberto | `docs/teste-de-software.md` | `test-design`, `test-review`, `test-diagnose`, plus `bun-test-*`/`playwright-*` |
 | Data flow | Coberto (thin) | `docs/react-patterns.md` § 7 | `react-developer` |
-| Zod | Coberto | `docs/elysia-schema-e-eden.md` § 2 (boundary) + `docs/react-hook-form-validacao-e-resolvers.md` (forms) | `elysia-schema`, `react-hook-form` |
+| Zod | Coberto | `skills/elysia/docs/elysia-schema-and-validation.md` § 2 (boundary) + `docs/react-hook-form-validacao-e-resolvers.md` (forms) | `elysia-schema`, `react-hook-form` |
 | React Hook Form | Coberto | `docs/react-hook-form.md` | `react-hook-form` |
 | Hooks | Coberto | `docs/react-hooks.md` | `react-developer`, `react-review` |
 | Persistência (browser) | **Parcial** | `docs/react-patterns.md` § 2, one unlinked row, no `REACT-PAT-*` ID | none |
@@ -49,7 +49,7 @@ Not yet audited topic-by-topic; these are the entry point a live search should t
 | --- | --- | --- |
 | tanstack (router) | `docs/tanstack-router.md` | `tanstack-router` |
 | http | `docs/http.md` | `http-contract`, `http-cache`, `http-diagnose`, `http-review` |
-| elysia | `docs/elysia.md` | `elysia-build`, `elysia-schema`, `elysia-diagnose` |
+| elysia | `skills/elysia/docs/elysia.md` | `elysia-build` · `elysia-schema` · `elysia-eden` · `elysia-openapi` · `elysia-diagnose` |
 | drizzle | `skills/drizzle/docs/drizzle-orm.md` | `drizzle-query` · `drizzle-mutation` · `drizzle-zod` · `drizzle-review` |
 | bun | `docs/bun.md` | `bun-runtime`, `bun-workspace`, `bun-migrate`, `bun-test-build`, `bun-test-review` |
 | test | `docs/teste-de-software.md` | `test-design`, `test-review`, `test-diagnose` |
