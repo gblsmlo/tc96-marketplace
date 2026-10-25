@@ -1,7 +1,7 @@
 ---
 name: storybook-setup
 description: Configure Storybook in a project or monorepo — choosing between the two frameworks by their version floors, `main.ts`, `preview.tsx`, where the Vite config is inherited from, CSS and theming — citing `SB-CFG-*` and `SB-CORE-*` IDs, with a script that discovers the path and checks the floors — use when the task is installing Storybook from scratch, migrating from line 8 or 9, choosing the framework, fixing an empty sidebar, aligning package versions, or carving out `apps/storybook` in a monorepo. Do not use to write a story, which is storybook-story, for the test inside it, which is storybook-test, nor for coverage and CI, which is the Cobertura e CI satellite.
-fonte: "[Storybook - Configuração e Builder](../../referencias/storybook-configuracao-e-builder.md)"
+source: "[Storybook - Configuração e Builder](../../referencias/storybook-configuracao-e-builder.md)"
 docs:
   - /storybookjs/storybook
 tags:

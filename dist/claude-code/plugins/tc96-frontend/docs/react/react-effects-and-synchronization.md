@@ -1,13 +1,13 @@
 ---
-titulo: React - Effects and Synchronization
-Link: https://react.dev/reference/react/useEffect
+title: React - Effects and Synchronization
+link: https://react.dev/reference/react/useEffect
 tags:
   - react
   - effects
   - hooks
   - agent-context
 source: "Official React documentation — useEffect, useLayoutEffect, useInsertionEffect, useEffectEvent"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Effects and Synchronization

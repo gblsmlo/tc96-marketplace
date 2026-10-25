@@ -1,7 +1,7 @@
 ---
 name: workflow-spec
 description: Writes and records one spec document in `.specs/` — PRD, design or RFC, ADR, user experience, an increment's plan, or a board item (Epic, Story, Task) — from the template it owns, in the project's recorded document set, as a `Draft` the owner reviews before any status moves to approved, citing `WF-SPEC-*` and `DOC-*` IDs. Use when a pillar needs a file written, when the owner asks for an ADR or a story outside a run, or when a project has not yet decided which documents it keeps. Do not use to decide what the document says — that is the owning agent (`product-manager`, `software-architect`, `product-designer`, `project-manager`). Do not use to decide whether a document is needed at all — that is the scope from `workflow-research`.
-fonte: "[Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 e [Decision Documents — PRD, RFC and ADR](../../referencias/documentos-de-decisao-prd-rfc-adr.md)"
+source: "[Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 e [Decision Documents — PRD, RFC and ADR](../../referencias/documentos-de-decisao-prd-rfc-adr.md)"
 tags:
   - skill
   - workflow

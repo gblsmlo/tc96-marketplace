@@ -1,7 +1,7 @@
 ---
 name: react-audit
 description: Audit the health of a whole React codebase or app, not one change — runs every probe set of the React family in one pass (rules, imports and layers, forms, re-render hazards), aggregates hits per rule and per hotspot file, confirms each pattern by sampling, and returns a prioritized backlog that puts missing enforcement first, citing `REACT-*`, `REACT-ARCH-*` and `RHF-*` IDs. Use for "audit our frontend", "how healthy is this React code", "where do we start fixing", "what should the lint enforce", onboarding onto an inherited codebase, or before a large refactor or migration. Not for reviewing a PR or diff (react-review, react-structure), writing code (react-developer), or measuring a slow component (react-component-performance).
-fonte: "[React.js](../../docs/react/react-js.md)"
+source: "[React.js](../../docs/react/react-js.md)"
 docs:
   - /reactjs/react.dev
 tags:

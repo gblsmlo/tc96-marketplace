@@ -1,5 +1,5 @@
 ---
-titulo: Feature-Based Architecture
+title: Feature-Based Architecture
 aliases:
   - FBA
   - Feature-based architecture

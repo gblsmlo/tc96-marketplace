@@ -1,7 +1,7 @@
 ---
 name: tanstack-query
 description: Work with server state in TanStack Query — reading remote data, freshness policy, mutations and invalidation, optimistic updates with rollback, paginated and infinite lists, integration with the route loader — citing `TSQ-*` IDs, with twelve executable probes and a symptom-based diagnostic table — use when the task is fetching data someone else can change, deciding `staleTime`, invalidating after a write, building an optimistic update, paginating, or understanding why the screen does not update or why there are too many requests. Do not use for ephemeral UI state, which is react-developer, for state that belongs to the URL, which is tanstack-router, nor for HTTP caching, which is http-cache.
-fonte: "[TanStack Query](../../referencias/tanstack-query.md)"
+source: "[TanStack Query](../../referencias/tanstack-query.md)"
 docs:
   - /websites/tanstack_query
 tags:

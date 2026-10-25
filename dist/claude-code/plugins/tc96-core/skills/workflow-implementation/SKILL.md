@@ -1,7 +1,7 @@
 ---
 name: workflow-implementation
 description: Executes a ready work unit without reopening product decisions — confirms readiness, keeps scope to what the unit decided, preserves explicit contracts, and decides when to stop and return a pillar instead of deciding ad-hoc, citing `WF-IMPL-*` and `WF-CORE-*` IDs. Use once a unit has acceptance criteria and an owning perfil from `workflow-planning`. Do not use to decide what to build — that is `workflow-research` or `workflow-planning`. Do not use to prove the change is correct — that is `workflow-validation`.
-fonte: "[Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md)"
+source: "[Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md)"
 tags:
   - skill
   - workflow

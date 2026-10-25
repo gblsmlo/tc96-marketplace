@@ -1,7 +1,7 @@
 ---
 name: playwright-review
 description: Audit an existing Playwright suite with eight executable probes before reading code, an eleven-level scan by defect frequency, an extra checklist for agent-generated tests, and findings with `PW-*` IDs — use when the task is reviewing a repository's or a PR's E2E suite, hunting for an assertion that asserts nothing, a time-based wait, a fragile locator, a committed session, a `test.only` with no gate, a disabled trace or a misconfigured shard. Do not use to write a new test, which is playwright-build, to diagnose a concrete failure, which is playwright-diagnose, nor to audit the shape of the suite across levels, which is test-review.
-fonte: "[Playwright](../../referencias/playwright.md)"
+source: "[Playwright](../../referencias/playwright.md)"
 docs:
   - /microsoft/playwright
 tags:

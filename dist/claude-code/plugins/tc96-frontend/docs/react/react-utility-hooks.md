@@ -1,12 +1,12 @@
 ---
-titulo: React - Utility Hooks
-Link: https://react.dev/reference/react/useId
+title: React - Utility Hooks
+link: https://react.dev/reference/react/useId
 tags:
   - react
   - hooks
   - agent-context
 source: "Official React documentation — useId, useSyncExternalStore, useDebugValue"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Utility Hooks

@@ -1,7 +1,7 @@
 ---
 name: http-contract
 description: Design or change the HTTP contract of an endpoint — method, status, `Location`, idempotency, error body — citing `HTTP-*` IDs, with an executable `curl` check before delivering — use when the task is creating a new route, choosing between `PUT` and `PATCH`, deciding which status to return, designing a redirect, making a write safe to retry, or standardizing an API's error body. Do not use for cache policy and conditional requests, which is http-cache, for a request blocked by the browser, which is http-diagnose, nor to audit a whole API, which is http-review.
-fonte: "[HTTP - Métodos e Semântica](../../referencias/http-metodos-e-semantica.md)"
+source: "[HTTP - Métodos e Semântica](../../referencias/http-metodos-e-semantica.md)"
 tags:
   - skill
   - http

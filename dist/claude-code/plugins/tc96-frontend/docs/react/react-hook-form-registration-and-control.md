@@ -1,6 +1,6 @@
 ---
-titulo: React Hook Form - Registration and Control
-Link: https://react-hook-form.com/docs/useform/register
+title: React Hook Form - Registration and Control
+link: https://react-hook-form.com/docs/useform/register
 tags:
   - react
   - forms
@@ -8,7 +8,7 @@ tags:
   - a11y
   - agent-context
 source: "Official React Hook Form documentation — register, Controller, useController, useFormContext"
-verificado-em: 2026-08-15
+verified-at: 2026-08-15
 ---
 
 # React Hook Form — Registration and Control

@@ -1,13 +1,13 @@
 ---
-titulo: React - State and Reactivity
-Link: https://react.dev/reference/react/useState
+title: React - State and Reactivity
+link: https://react.dev/reference/react/useState
 tags:
   - react
   - state
   - hooks
   - agent-context
 source: "Official React documentation — useState, useReducer, useContext, createContext"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — State and Reactivity

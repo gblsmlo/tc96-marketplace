@@ -1,7 +1,7 @@
 ---
 name: react-structure
 description: Decide where React code lives and who may import whom in a feature-based architecture, citing `REACT-ARCH-*` IDs, with eight executable import probes, a scan in the order that fails most and a staged migration. Use when creating a feature, placing a new file, reviewing a PR's imports, layers or barrels, extracting code into the shared layer, or configuring and migrating a repository's folder structure, aliases and Biome boundary rules. In a PR it runs before react-review, because moving a file can erase an interior finding. Not for the inside of a component: writing is react-developer, reviewing is react-review, and a whole-codebase health audit is react-audit.
-fonte: "[Feature-Based Architecture](../../docs/react/feature-based-architecture.md)"
+source: "[Feature-Based Architecture](../../docs/react/feature-based-architecture.md)"
 docs:
   - /reactjs/react.dev
 tags:

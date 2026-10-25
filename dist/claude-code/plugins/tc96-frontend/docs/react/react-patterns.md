@@ -1,13 +1,13 @@
 ---
-titulo: React - Patterns
-Link: https://react.dev/learn
+title: React - Patterns
+link: https://react.dev/learn
 tags:
   - react
   - patterns
   - architecture
   - agent-context
 source: "react.dev (Learn + Reference)"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Patterns

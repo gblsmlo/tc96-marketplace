@@ -1,7 +1,7 @@
 ---
 name: http-cache
 description: Decide a resource's HTTP cache policy and implement conditional requests — `Cache-Control` directive by directive, `ETag`, `304`, `If-Match` for concurrent writes, `Vary` — citing `HTTP-CACHE-*` IDs, with `curl` probes that prove whether the conditional is handled — use when the task is defining a route's freshness, turning on `ETag` and answering `304`, protecting a concurrent write against overwriting, choosing between `no-store` and `no-cache`, versioning an asset, or understanding why a cache served the wrong response. Do not use to design method and status, which is http-contract, for a request blocked by the browser, which is http-diagnose, nor for the TanStack Query cache, which is another layer.
-fonte: "[HTTP - Cache e Requisições Condicionais](../../referencias/http-cache-e-requisicoes-condicionais.md)"
+source: "[HTTP - Cache e Requisições Condicionais](../../referencias/http-cache-e-requisicoes-condicionais.md)"
 tags:
   - skill
   - http

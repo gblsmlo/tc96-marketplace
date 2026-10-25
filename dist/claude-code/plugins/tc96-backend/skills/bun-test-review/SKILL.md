@@ -1,7 +1,7 @@
 ---
 name: bun-test-review
 description: Review an existing `bun test` suite and diagnose flaky tests, citing `BUN-TEST-*` IDs, with seven executable probes for the defects that reading code does not find — use when the task is reviewing a project's tests, investigating "passes alone and fails in the suite", finding a test that never runs, checking whether the coverage and type gates actually close, or classifying the severity of a test finding. Do not use to write a new test or configure a suite from scratch, which is bun-test-build, nor for the shape of the suite across levels, which is test-review.
-fonte: "[Bun - Testes](../../referencias/bun-testes.md)"
+source: "[Bun - Testes](../../referencias/bun-testes.md)"
 docs:
   - /oven-sh/bun
 tags:

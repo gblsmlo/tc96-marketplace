@@ -1,7 +1,7 @@
 ---
 name: drizzle-review
 description: Review an existing Drizzle and PostgreSQL persistence layer, citing `DRZ-*` IDs, with eleven executable probes for the defects that reading code does not find — use when the task is reviewing a schema, migrations, repositories or queries, checking whether the applied migration matches the schema, finding N+1, a write without `where` or interpolation in raw SQL, or confirming the package's version line before coding. Do not use to write a new schema or query — follow the decision trees in Drizzle ORM § 5 directly, because there is no build skill yet.
-fonte: "[Drizzle ORM](../../referencias/drizzle-orm.md)"
+source: "[Drizzle ORM](../../referencias/drizzle-orm.md)"
 docs:
   - /drizzle-team/drizzle-orm-docs
 tags:

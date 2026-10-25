@@ -1,7 +1,7 @@
 ---
 name: workflow-validation
 description: Decides how much evidence a change needs, proportional to its risk, and requires an independent reviewer rather than the change's own author — routes failures back to the pillar that actually owns the gap, citing `WF-VAL-*` and `WF-CORE-*` IDs. Use once a change or delivery artifact exists and needs proof before closing. Do not use to write the fix — that is `workflow-implementation`. Do not use for business acceptance ("is this the right thing") — that is a separate step owned by `product-manager`, after this pillar closes technically.
-fonte: "[Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md)"
+source: "[Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md)"
 tags:
   - skill
   - workflow

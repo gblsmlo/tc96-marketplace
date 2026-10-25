@@ -1,7 +1,7 @@
 ---
 name: storybook-story
 description: Write or review a component story — file anatomy, typing with `satisfies`, `args` at the three levels, `argTypes` as an exception, tags and the docs page — citing `SB-CSF-*` and `SB-CTX-*` IDs, with an executable self-check — use when the task is creating a new story, deciding what is `args` and what is environment, composing a variation by spread, offering a control for a non-serializable value, naming the `title` in a design system, or turning on autodocs. Do not use for the test inside the story, which is storybook-test, nor to configure the project, which is storybook-setup.
-fonte: "[Storybook - Stories e Args](../../referencias/storybook-stories-e-args.md)"
+source: "[Storybook - Stories e Args](../../referencias/storybook-stories-e-args.md)"
 docs:
   - /storybookjs/storybook
 tags:

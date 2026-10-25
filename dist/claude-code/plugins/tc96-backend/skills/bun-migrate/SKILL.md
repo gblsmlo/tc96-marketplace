@@ -1,7 +1,7 @@
 ---
 name: bun-migrate
 description: Migrate Node code to Bun and diagnose what does not run — `node:*` compatibility matrix, crypto gaps, async hooks that are stubs, IPC across runtimes, container shutdown, Dockerfile — citing `BUN-SYS-*` and `BUN-CORE-*` IDs, with a script that enumerates the modules used by the code **and by transitive dependencies** — use when the task is planning the migration of a Node service, investigating a module that behaves differently, deciding whether a transitive dependency is supported, assembling a production image, or making the container shut down without dropping a request. Do not use to write new code with Bun APIs, which is bun-runtime, nor for lockfile and workspace, which is bun-workspace.
-fonte: "[Bun - Shell, FFI e Compat Node](../../referencias/bun-shell-ffi-e-compat-node.md)"
+source: "[Bun - Shell, FFI e Compat Node](../../referencias/bun-shell-ffi-e-compat-node.md)"
 docs:
   - /oven-sh/bun
 tags:

@@ -18,10 +18,10 @@ BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)/docs/react}"
 FAMILY="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DOCS="$BASE"
 
-# Title of each note, from the `heading:` field in the file itself — the link label.
+# Title of each note, from the `title:` field in the file itself — the link label.
 titles() {
   awk 'FNR == 1 { name = FILENAME; sub(/.*\//, "", name); sub(/\.md$/, "", name) }
-       /^titulo: / { print name "\t" substr($0, 9); nextfile }' "$DOCS"/*.md
+       /^title: / { print name "\t" substr($0, 8); nextfile }' "$DOCS"/*.md
 }
 
 # Rewrites a note's own relative links to how they are seen from
