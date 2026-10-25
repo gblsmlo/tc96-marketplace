@@ -517,7 +517,7 @@ Derive-a de um satélite, não desta nota inteira: uma skill de cache carrega [H
 
 ## 8. Pontes com o stack
 
-O corpo desta doc é HTTP puro. Mas quase tudo que os satélites descrevem, o stack do vault ([Bun.serve](bun-http-e-servidor.md), [Hono](hono.md), `Elysia`, [TanStack Query](tanstack-query.md)) **já resolve ou já erra por você**. Implementar à mão o que o framework embute é como a maioria dos bugs de header nasce.
+O corpo desta doc é HTTP puro. Mas quase tudo que os satélites descrevem, o stack do vault ([Bun.serve](bun-http-e-servidor.md), [Hono](hono.md), `Elysia`, `TanStack Query`) **já resolve ou já erra por você**. Implementar à mão o que o framework embute é como a maioria dos bugs de header nasce.
 
 ### 8.1 O que `Bun.serve` faz sozinho — e o que não faz
 
@@ -578,7 +578,7 @@ Este é o ponto do stack que mais confunde, porque os dois usam a palavra "stale
 - **O cache HTTP é compartilhado; o do Query não.** Um `Cache-Control: public, max-age=60` numa resposta específica de usuário é um vazamento entre contas. Nenhum `staleTime` protege disso, porque o problema acontece antes da resposta chegar ao JavaScript.
 - **O `304` é invisível para o TanStack Query.** A revalidação condicional acontece na camada do `fetch`; a query só vê o corpo. Um endpoint bem configurado com `ETag` economiza banda mesmo com `staleTime: 0`.
 
-**Por que `staleTime` não substitui `Cache-Control`.** São camadas diferentes, com **donos diferentes**: `staleTime` é uma decisão de um cliente sobre a própria memória; `Cache-Control` é uma instrução do servidor a toda a infraestrutura. Um app com `staleTime` bem calibrado e sem `Cache-Control` continua sem política de cache — a política existe só enquanto aquela aba estiver aberta, e não vale para o segundo cliente, para o mobile, nem para a CDN. Ver [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) § 1 e.
+**Por que `staleTime` não substitui `Cache-Control`.** São camadas diferentes, com **donos diferentes**: `staleTime` é uma decisão de um cliente sobre a própria memória; `Cache-Control` é uma instrução do servidor a toda a infraestrutura. Um app com `staleTime` bem calibrado e sem `Cache-Control` continua sem política de cache — a política existe só enquanto aquela aba estiver aberta, e não vale para o segundo cliente, para o mobile, nem para a CDN. Ver `TanStack Query - Cache and Freshness` § 1 e.
 
 Regra prática de divisão: **o servidor decide por quanto tempo a resposta é válida para qualquer um; o cliente decide com que agressividade ele revalida o que já tem.** As duas decisões coexistem, e nenhuma cobre a outra.
 
@@ -603,7 +603,7 @@ Regra prática de divisão: **o servidor decide por quanto tempo a resposta é v
 - · ·
 - [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) · [RFC 9700 - OAuth 2.0 Security BCP](rfc-9700-oauth-2-0-security-bcp.md) · [RFC 8725 - JWT Best Current Practices](rfc-8725-jwt-best-current-practices.md) · [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md)
 - [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Hono](hono.md) · [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) · [Hono - Validação e RPC](hono-validacao-e-rpc.md) · `Elysia` · [Backend no runtime Bun](backend-no-runtime-bun.md)
-- [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) · [React.js](react-js.md) ·
+- `TanStack Query - Cache and Freshness` · [React.js](react-js.md) ·
 - · · · · ·
 
 ## Fontes consultadas

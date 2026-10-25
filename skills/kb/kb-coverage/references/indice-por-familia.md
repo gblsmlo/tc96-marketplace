@@ -29,9 +29,9 @@ confident as a fresh one — the only way to catch drift is to check.
 | React Hook Form | Coberto | `docs/react-hook-form.md` | `react-hook-form` |
 | Hooks | Coberto | `docs/react-hooks.md` | `react-developer`, `react-review` |
 | Persistência (browser) | **Parcial** | `docs/react-patterns.md` § 2, one unlinked row, no `REACT-PAT-*` ID | none |
-| Cache | Coberto (layered, not fragmented — see `mentioned-vs-developed.md`) | `docs/tanstack-query-cache-e-frescor.md` + `docs/http-cache-e-requisicoes-condicionais.md` | `tanstack-query`, `http-cache` |
-| TanStack Query | Coberto | `docs/tanstack-query.md` | `tanstack-query` |
-| Optimistic update | Coberto | `docs/tanstack-query-mutations-e-invalidacao.md` | `tanstack-query` |
+| Cache | Coberto (layered, not fragmented — see `mentioned-vs-developed.md`) | `skills/tanstack/docs/tanstack-query-cache-and-freshness.md` + `docs/http-cache-e-requisicoes-condicionais.md` | `tanstack-query`, `http-cache` |
+| TanStack Query | Coberto | `skills/tanstack/docs/tanstack-query.md` | `tanstack-query` |
+| Optimistic update | Coberto | `skills/tanstack/docs/tanstack-query-mutations-and-invalidation.md` | `tanstack-query` |
 | Server Actions | Coberto | `docs/react-server-components-e-diretivas.md` (`REACT-RSC-06`) | `react-developer`, `react-review`, `react-hook-form` |
 | Error handling | Coberto (fragmented across 3 layers) | `docs/react-patterns.md` § 6 + `docs/react-hook-form-validacao-e-resolvers.md` + `elysia-build`'s error taxonomy | `react-developer`, `react-hook-form`, `elysia-build` |
 
@@ -47,7 +47,7 @@ Not yet audited topic-by-topic; these are the entry point a live search should t
 
 | Família | Hub doc | Skills |
 | --- | --- | --- |
-| tanstack (router) | `docs/tanstack-router.md` | `tanstack-router` |
+| tanstack (router) | `skills/tanstack/docs/tanstack-router.md` | `tanstack-router` |
 | http | `docs/http.md` | `http-contract`, `http-cache`, `http-diagnose`, `http-review` |
 | elysia | `skills/elysia/docs/elysia.md` | `elysia-build` · `elysia-schema` · `elysia-eden` · `elysia-openapi` · `elysia-diagnose` |
 | drizzle | `skills/drizzle/docs/drizzle-orm.md` | `drizzle-query` · `drizzle-mutation` · `drizzle-zod` · `drizzle-review` |

@@ -424,14 +424,14 @@ Derive-a de um satélite, não desta nota inteira: uma skill focada em formulár
 
 ## 8. Pontes com o stack
 
-O corpo desta doc é React puro, fiel a react.dev. Mas no meu stack ([TanStack Router](tanstack-router.md), [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md), TanStack Start, `Tailwind CSS`, `TypeScript`) várias práticas cruas do React são substituídas. Os satélites marcam esses pontos como *ponte*.
+O corpo desta doc é React puro, fiel a react.dev. Mas no meu stack (`TanStack Router`, `TanStack Query - Fundamentals`, TanStack Start, `Tailwind CSS`, `TypeScript`) várias práticas cruas do React são substituídas. Os satélites marcam esses pontos como *ponte*.
 
 | Problema | Primitiva crua do React | O que usar no stack |
 | --- | --- | --- |
 | Buscar dados remotos | `useEffect` + `useState` | TanStack Query — |
 | Cache e frescor de dados | manual | `staleTime`, invalidação — |
 | Update otimista | `useOptimistic` | mutation otimista da Query — |
-| Navegação e estado de URL | `useState` + history | TanStack Router — [TanStack Router - Routing Concepts](tanstack-router-routing-concepts.md) |
+| Navegação e estado de URL | `useState` + history | TanStack Router — `TanStack Router - Routing Concepts` |
 | Mutação no servidor | Server Function | validar sempre na fronteira — |
 | Estado global de cliente | Context | quando houver escrita frequente |
 | Validação de fronteira | manual | |
@@ -453,7 +453,7 @@ O corpo desta doc é React puro, fiel a react.dev. Mas no meu stack ([TanStack R
 - [React - Rules of React](react-rules-of-react.md) — base normativa
 - [React Hook Form](react-hook-form.md) — formulário complexo; a § 5.4 de lá decide entre RHF e Actions nativas
 - [Frontend roadmap](frontend-roadmap.md) — trilha de estudos que consome estas notas
-- `Next.js` · [TanStack Router](tanstack-router.md) · `Tailwind CSS` · `TypeScript`
+- `Next.js` · `TanStack Router` · `Tailwind CSS` · `TypeScript`
 
 ## Fontes consultadas
 

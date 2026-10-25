@@ -6,14 +6,14 @@ were re-verified against the files on disk while writing this reference (2026-09
 
 ## 1. "TanStack Query" — Coberto, straight from the seed index
 
-Already a row in `references/indice-por-familia.md`. Re-opening it: `docs/tanstack-query.md`
+Already a row in `references/indice-por-familia.md`. Re-opening it: `skills/tanstack/docs/tanstack-query.md`
 exists, is the declared `fonte:` of the `tanstack-query` skill, and its body has `TSQ-*` IDs
 throughout. Nothing to search for — report and move on.
 
 ```
 Tema: TanStack Query
 Status: Coberto
-Nota de entrada: docs/tanstack-query.md
+Nota de entrada: skills/tanstack/docs/tanstack-query.md
 Skill(s): tanstack-query
 Por quê: hub doc, TSQ-* IDs, and it is the skill's own declared `fonte:`.
 ```

@@ -137,7 +137,7 @@ Consequência para a árvore do § 3: o nó do schema (Zod já estabelecido) con
 
 Duas outras diferenças reais entre eles:
 
-- **Elysia converte strings de data em `Date` por padrão** (`parseDate: true`), o que quebra o structural sharing do cache — ver `TSQ-CACHE-04` em [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) e `ELYSIA-TYPE-10`.
+- **Elysia converte strings de data em `Date` por padrão** (`parseDate: true`), o que quebra o structural sharing do cache — ver `TSQ-CACHE-04` em `TanStack Query - Cache and Freshness` e `ELYSIA-TYPE-10`.
 - **Hono documenta um custo de tipo** em app grande, com seção própria de *known issues* e a recomendação de pré-compilar o cliente (`hcWithType`). Elysia documenta o equivalente ao sugerir Eden Fetch acima de ~500 rotas consumidas num só frontend.
 
 Nos dois casos, os dois lados precisam de `strict: true` no `tsconfig.json` e da mesma versão do pacote. Não é recomendação — é requisito documentado.
@@ -232,7 +232,7 @@ Os três rodam sobre o mesmo `Bun.serve`. A diferença de throughput entre eles 
 - [Bun](bun.md) — runtime, e a fronteira HTTP nativa em [Bun - HTTP e Servidor](bun-http-e-servidor.md)
 - [Hono](hono.md) · [Hono - Validação e RPC](hono-validacao-e-rpc.md) — o cliente RPC e seus limites
 - `Elysia` · `Elysia - Schema e Eden` — schema como fonte única e o Eden
-- [React.js](react-js.md) · [TanStack Query - O que um Dev Frontend Precisa Saber](tanstack-query-o-que-um-dev-frontend-precisa-saber.md) — o outro lado do contrato
+- [React.js](react-js.md) · `TanStack Query - Fundamentals` — o outro lado do contrato
 - · ·
 - ·
 - · `Nest.js` · `Node.js` — as opções fora do runtime Bun

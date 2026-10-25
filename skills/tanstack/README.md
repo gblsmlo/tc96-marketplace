@@ -1,67 +1,82 @@
-# TanStack skills
+# TanStack skills: query, router, review
 
-Two skills, and the boundary between them is **who owns the data**.
+Three skills, one directory each. The family is **self-contained**: its normative docs live in
+[`docs/`](docs/tanstack-query.md), not in the tc96 `knowledge-base/` (the sixteen Portuguese notes were
+removed on 2026-10-25), and every `.skill` package carries them.
 
-| Skill | The question it answers | Source | Internal support |
-| --- | --- | --- | --- |
-| `tanstack-query` | the data comes from a server and someone else can change it | [TanStack Query](../../knowledge-base/tanstack-query.md) | 6 references + 2 scripts |
-| `tanstack-router` | the state belongs to the URL, or the route loads the data | [TanStack Router](../../knowledge-base/tanstack-router.md) | 5 references + 2 scripts |
-
-## What the packages added
-
-| Skill | Gained | Gap it closed |
+| Skill | The question it answers | Source |
 | --- | --- | --- |
-| `tanstack-query` | **12 probes** | the skill had the best diagnostic tables in the vault — and no command |
-| `tanstack-router` | **16 probes** + **`regras-por-tarefa.md`** | it **cited no ID at all** |
+| `tanstack-query` | how do I read, write, cache or paginate data someone else can change? | [TanStack Query](docs/tanstack-query.md) |
+| `tanstack-router` | how do I declare this route, navigate, keep state in the URL, load or guard it? | [TanStack Router](docs/tanstack-router.md) |
+| `tanstack-review` | what is wrong with this Query/Router code, or why does it misbehave? | both hubs, § 5.1 and § 6.1 |
 
-**The status fix that came out of here.** `tanstack-router` opened with a "doc status warning"
-saying the satellites were **under construction**, and for that reason borrowed `REACT-*` instead
-of citing a family of its own. The ten satellites exist today and add up to **102 declared
-`TSR-*` rules**. The warning is gone; every task now has a citable family, and the map is
-generated from the docs.
+## Why three, not two
 
-**The probes that pay most, one from each:**
+The old pair mixed writing with reviewing, and neither had a finding format: `code-reviewer` had no TanStack
+skill to route a PR to. `tanstack-review` owns the probes, the symptom tables and the report; the two
+writing skills run the same probes as a self-check on the files they touched.
 
-- **Query, S6** — an optimistic update **without** `cancelQueries`/`onError`/`onSettled`: the
- script says which of the three is missing, file by file (`TSQ-MUT-10`);
-- **Router, S15** — a loader using Query **without** `defaultPreloadStaleTime: 0`: two caches
- deciding freshness (`TSR-LOAD-14`), whose symptom is "stale data with Query apparently
- right".
+## Docs
 
-Both point at the **same boundary**, from opposite sides — and that is why Query's diagnostic
-table ends on a row citing `TSR-LOAD-14`.
+Two hubs and fourteen satellites, one per old note, with the same rule IDs (55 `TSQ-*`, 102 `TSR-*`) and the
+same section numbers, so every "§ N" citation still holds. Translation dropped the "Relacionados" and review
+checklist sections (every item mapped to a declared ID) and moved the upstream source lists to
+`docs/SOURCES.md`, which no skill links and no build target ships. Every doc over 100 lines has a table of
+contents.
 
-## The ID maps
+Re-checked against the installed packages on 2026-10-25 (`@tanstack/react-query` 5.104.5,
+`@tanstack/react-router` 1.170.46, `@tanstack/router-plugin`):
 
-One generator per skill, because the sources are distinct: **55 `TSQ-*`** and **102 `TSR-*`**.
+- mutation callbacks are `onError(error, variables, onMutateResult, context)`; the old skill implied the
+  rollback reads "the wrong object" in the old form, but the snapshot was the third argument in both. The real
+  trap is reading `context.previous` from the new fourth argument;
+- `mutationOptions` exists (the old note marked it unverified);
+- `codeSplittingOptions.splitBehavior` returns `CodeSplitGroupings` (an array of arrays); the old example
+  returned a string.
 
-```bash
-bash plugins/tc96-frontend/skills/tanstack-query/scripts/gerar-mapa-de-ids.sh
-bash plugins/tc96-frontend/skills/tanstack-router/scripts/gerar-mapa-de-ids.sh
-bash scripts/instalar.sh
-```
+## Scripts
+
+- `tanstack-review/scripts/probes.sh <dir> [all|query|router]`: 13 Query and 16 Router probes on `rg` and
+  `perl`. Block-aware checks replaced the line greps where those missed or over-fired: a key missing a variable
+  its `queryFn` interpolates, an invalidation whose key root matches no query, a rollback reading the fourth
+  argument, a snapshot in `.current`, `defaultPreloadStaleTime` searched across the project instead of only
+  `./router.*`, the Zod v3 probe skipped on Zod 4.
+- `tanstack-review/scripts/generate-id-map.sh`: writes `references/id-map.md`, ID to doc and section in about
+  2.3k tokens (the two old maps were 7.7k).
+
+## Evals
+
+Two cases per skill under `<skill>/evals/<case>/`, in the layout `claude plugin eval` reads, each with a
+type-checking fixture in `files/` and one grader per verifiable statement.
+
+<!-- eval:inicio -->
+Results on 2026-10-25, one run per configuration, against the old skills with their knowledge-base notes. Tokens
+and time are per run (mean of six cases); pass rate counts graded statements, blind to the configuration.
+
+| Iteration | New skills | Old skills | Tokens per run | Time per run |
+| ---: | ---: | ---: | ---: | ---: |
+| 1 | 59/59 | 58/59 | 105k vs 127k (-18%) | 173 s vs 235 s (-26%) |
+| 2 (after the fixes iteration 1 surfaced) | 59/59 | 58/59 | 101k vs 127k (-20%) | 160 s vs 235 s (-32%) |
+
+Five of six cases tie on pass rate; the old notes were long but mostly right. The one split: the old review flagged
+the clean `customersQuery.ts`. Iteration 1 also corrected two graders and fed three facts back into the docs: the
+deprecated `ensureQueryData`/`fetchQuery`/`prefetchQuery` (`TSR-LOAD-16` reworded), `maxPages` with
+`getPreviousPageParam`, plus five probe false positives, one miss and one wrong line number the runs reported.
+Iteration 2 reran only the new skills; its old-skill column is the iteration-1 baseline.
+<!-- eval:fim -->
 
 <!-- tokens:inicio -->
 ## Context budget
 
-Measured by `skill-validator` (tiktoken), on 2026-09-05. **The number that matters is the
-`SKILL.md` column**: it is what enters the context before the skill decides what to open.
-References load on demand, one at a time.
+Measured with tiktoken (`cl100k_base`) on 2026-10-25. **Before step 1** is what a skill loads before it starts work.
 
-| Skill | `SKILL.md` | largest `references/` | total | refs |
-| --- | ---: | --- | ---: | ---: |
-| `tanstack-query` | 1.467 | `por-tarefa.md` (3.535) | 9.969 | 6 |
-| `tanstack-router` | 1.272 | `mapa-de-ids.md` (3.467) | 8.066 | 5 |
+| Skill | description | `SKILL.md` | before step 1 | loads |
+| --- | ---: | ---: | ---: | --- |
+| `tanstack-query` | 18 | 1.611 | 4.9k-5.9k | one satellite (3.3k-4.3k) |
+| `tanstack-router` | 18 | 1.369 | 2.9k-7.1k | one satellite (1.6k-5.8k) |
+| `tanstack-review` | 20 | 1.041 | 1.0k | probes first; `id-map.md` (2.3k) and one section per finding |
 
-Loading all 2 skills in this group at once would cost **2.739 tokens** in `SKILL.md` alone,
-and **18.035** with every reference. That is why each skill declares what it must **never** load.
-
-Regenerate: `bash scripts/medir.sh`
+The old `tanstack-query` loaded its `SKILL.md`, the Portuguese hub and `por-tarefa.md` before step 1: **9.127**, plus a
+satellite. The three descriptions cost **56** tokens against **260** for the old two. The sixteen docs total
+**59.312** tokens against **89.924** for the Portuguese notes (-34%); `docs/SOURCES.md` (3.1k) ships nowhere.
 <!-- tokens:fim -->
-
-## Related
-
-- [Skills index](../README.md)
-- [react family](../react/README.md) — the component around it
-- `tc96-backend: elysia family` — the bridge with Eden (`ELYSIA-TYPE-09`)
-- `http-cache` — a camada de cache do servidor
