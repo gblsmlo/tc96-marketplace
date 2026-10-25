@@ -21,7 +21,7 @@ These are three links, not four: the reasoning layer was cut on 2026-09-22 and i
 
 **The API surface doesn't live here.** A library's signature, options, and version-specific behavior resolve through Context7, using the library ID the skill declares in `docs:`. The knowledge base answers what's correct and which ID to cite in a review — not what a function accepts in this minor version.
 
-## The thirteen agents
+## The fourteen agents
 
 | Agent | Role | Skills it loads | Main sources |
 | --- | --- | --- | --- |
@@ -36,12 +36,13 @@ These are three links, not four: the reasoning layer was cut on 2026-09-22 and i
 | `product-designer` | Persona, journey, flow, the four states of every screen, components, and catalog level | — | `Product Design` · `Product Team` · [Storybook estruturado por Atomic Design](../knowledge-base/storybook-estruturado-por-atomic-design.md) |
 | `project-manager` | Scope, schedule, cost, risk, communication, and change as a system | — | `Gestão de Projetos - Mapa de Fundamentos` |
 | `monorepo-auditor` | Audits the layers of an already-written monorepo: dependency direction, public surface, who opens a transaction, which boundary is verifiable | `bun-workspace` · `drizzle-review` · `react-structure` | [Monorepo com Bun - estrutura e tooling](../knowledge-base/monorepo-com-bun-estrutura-e-tooling.md) `MONO-*` · [Architecture in React](../knowledge-base/architecture-in-react.md) · [Fronteira do BFF - forma, jornada e regra](../knowledge-base/fronteira-do-bff-forma-jornada-e-regra.md) |
-| `repo-explorer` | Gathers facts from existing code for the research pillar: a bounded question in, facts with file:line out, no file contents | — | [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) · [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) `WF-CORE-06` |
-| `repo-operator` | Executes mechanical operations another artifact already decided: commit, PR body, push, move or delete files, publish to the board, run the checks a plan names; never decides content | — | [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §3.1, `WF-CORE-08` |
+| `spec-writer` | Writes one feature's bundle — `spec.md`, `plan.md`, `contract.md` — from the approved PRD and the repo-search facts; the contract is the reviewer's only checklist | — | [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) `SDD-SPEC-*` · [Teste de Software](../knowledge-base/teste-de-software.md) |
+| `repo-explorer` | Gathers facts from existing code for the Spec Writer's repo search: a bounded question in, facts with file:line out, no file contents | — | [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) · [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) `SDD-SPEC-01` |
+| `repo-operator` | Executes mechanical operations another artifact already decided: commit, PR body, push, move or delete files; never decides content | — | [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) §3, `SDD-CORE-05` |
 
 ## Common anatomy
 
-All thirteen share the same shape, checkable by script, and it extends the anatomy from [Skills](../skills/README.md) with the fields a Claude Code subagent reads ([Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) § 7):
+All fourteen share the same shape, checkable by script, and it extends the anatomy from [Skills](../skills/README.md) with the fields a Claude Code subagent reads ([Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) § 7):
 
 | Element | Rule |
 | --- | --- |
@@ -73,16 +74,23 @@ All thirteen share the same shape, checkable by script, and it extends the anato
 | is it worth building; what to prioritize; how to measure it; spec; hypothesis | `product-manager` | `product-designer` · `project-manager` |
 | how should this work for the user; flow; screen states; usable, accessible | `product-designer` | `product-manager` · `frontend-developer` |
 | how long; who does what; risk; does it fit the scope; status | `project-manager` | `product-manager` · `software-architect` |
+| what does this feature expose, how is it built, how do we prove it | `spec-writer` | `product-manager` · `software-architect` |
 | where is X, what calls Y, what does Z do **today** | `repo-explorer` | whoever decides with those facts |
-| commit, PR body, push, move, rename or delete files, publish to the board, run the checks a plan names | `repo-operator` | whoever decides what they say |
+| commit, PR body, push, move, rename or delete files | `repo-operator` | whoever decides what they say |
 
-Two axes separate most of the pairs. **New × already exists** separates those who write from `code-reviewer` — the same axis as in [Skills](../skills/README.md). **Decide × execute** separates `software-architect`, `product-manager`, `product-designer`, and `project-manager` from the three that write code: the four that decide never write code and deliver a recorded decision (`software-architect` writes only under `.specs/`); those that execute receive the decision and return code with evidence.
+Two axes separate most of the pairs. **New × already exists** separates those who write from `code-reviewer` — the same axis as in [Skills](../skills/README.md). **Decide × execute** separates `software-architect`, `product-manager`, `product-designer`, `project-manager` and `spec-writer` from the three that write code: the five that decide never write code and deliver a recorded decision (`software-architect` writes only under `.specs/adr/`, `spec-writer` only under `.specs/features/`); those that execute receive the decision and return code with evidence.
 
 ## How agents hand off
 
 ```mermaid
 flowchart LR
- PM[product-manager] -->|spec, hypothesis| PD[product-designer]
+ PM[product-manager] -->|PRD| SW[spec-writer]
+ PM -->|spec, hypothesis| PD[product-designer]
+ RE[repo-explorer] -->|facts| SW
+ SW -->|lasting decision| SA
+ SW -->|spec, plan, contract| FE
+ SW -->|spec, plan, contract| BE
+ SW -->|contract| CR
  PM -->|scope, priority| PJ[project-manager]
  PD -->|flow, states| FE[frontend-developer]
  PM -->|feasible?| SA[software-architect]
@@ -99,23 +107,23 @@ flowchart LR
  AI[ai-engineer] -->|tool, MCP| BE
  AI -->|API key, deploy| DS
  PJ -->|cadence, DORA| DS
- PJ -->|plan ready: board items| RO[repo-operator]
- CR -->|clean: PR body, push| RO
+ CR -->|contract met: PR body, push| RO[repo-operator]
 ```
 
 Each agent declares in its final step who it hands off to, and the arrow is always accompanied by an artifact: spec, recorded decision, flow with states, code with evidence, findings report.
 
-Independent Tasks run side by side, in waves: each writer works in its own worktree, while reviewers and checks, which only read, share the main directory ([Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §4.2 "Waves", `WF-CORE-10`).
+Independent features run side by side, in the PRD's waves: each implementer works in its own worktree, started by the harness scripts, while reviewers, which only read, share the main directory ([Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) §5.1, `SDD-RUN-01`).
 
-This flowchart has a formal procedure in `skills/workflow/` — four skills, one per moment (research, planning, implementation, validation), that decide **when** to route to which of the thirteen agents, citing rules by ID in [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md). The diagram above remains the source of **who**; the newer note is the source of **when**.
+This flowchart has a formal procedure in `skills/sdd/` and `skills/spec/` — the PRD (`spec-prd`), the feature bundle (`sdd-spec-writer`), the run (`sdd-orchestrator`) and the contract review (`sdd-contract-review`) — citing rules by ID in [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md). The diagram above remains the source of **who**; the note is the source of **when**.
 
 ## Model and effort per role
 
-The tier follows the task, not the role's prestige. Four properties decide it: how ambiguous the work is, how many tokens it spends, whether a later pillar checks its output, and how costly a miss is. Work that spends many tokens and gets checked downstream goes down a tier; work that is ambiguous, spends few tokens and is checked by no one stays up.
+The tier follows the task, not the role's prestige. Four properties decide it: how ambiguous the work is, how many tokens it spends, whether a later step checks its output, and how costly a miss is. Work that spends many tokens and gets checked downstream goes down a tier; work that is ambiguous, spends few tokens and is checked by no one stays up.
 
 | Role | `modelo` | `esforco` | Why |
 | --- | --- | --- | --- |
 | `product-manager` · `software-architect` | alto | alto | ambiguous, few tokens, nothing checks it later |
+| `spec-writer` | alto | alto | every fix round, gate and review inherits its choices; the contract is the only check |
 | `devops-security` | alto | alto | a missed finding costs more than the tokens |
 | `monorepo-auditor` · `ai-engineer` | alto | medio | rare, wide judgment |
 | `code-reviewer` | medio | alto | it is the check; nothing reviews it |
@@ -123,9 +131,9 @@ The tier follows the task, not the role's prestige. Four properties decide it: h
 | `project-manager` | medio | medio | template-driven gates |
 | `frontend-developer` · `backend-developer` · `qa-engineer` | medio | medio | most tokens, and validation catches their errors |
 | `repo-explorer` | rapido | baixo | every fact carries the line that proves it |
-| `repo-operator` | rapido | baixo | the content was decided upstream; the result is an exit code or a diff (`WF-CORE-08`) |
+| `repo-operator` | rapido | baixo | the content was decided upstream; the result is an exit code or a diff (`SDD-CORE-05`) |
 
-A fix round that fails twice on the declared tier runs once more one tier up, then returns to planning (`workflow-implementation`, Step 1).
+A feature whose review fails gets at most two fix rounds, on the implementer's declared tier, and then becomes a new item for `spec-writer`; no round moves a tier up (`SDD-RUN-05`, `SDD-RUN-06`).
 
 The tiers are neutral; [`build/modelos.json`](../build/modelos.json) maps them per provider, and the lever differs:
 
@@ -136,7 +144,7 @@ The tiers are neutral; [`build/modelos.json`](../build/modelos.json) maps them p
 | agent spawned with no role | set `CLAUDE_CODE_SUBAGENT_MODEL=haiku` in your environment; a role's own `model` still wins over it, and a plugin cannot set it for you | `[agents] default_subagent_model` in `.codex/config.toml`, emitted by the build |
 | session opened by another (the desktop app's `start_session`) | inherits the opener's model and effort and adopts no agent, so no frontmatter applies; pass `model` (`claude-sonnet-5-5`) and `effort` (`medium`) on a `fresh` start, same tier or cheaper only, and have the brief call the role as a subagent — the only way up a tier ([`CC-PAR-05`](../knowledge-base/claude-code-paralelismo-e-escala.md)) | not covered here |
 
-Delegating a pillar to a generic agent, or to a new session told to act "as" a role, skips all of this: both run on the model of whoever opened them (`WF-CORE-06`). Which tier runs each point of the flow — including the mechanical operations inside a pillar — is in [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §3.1.
+Delegating a step to a generic agent, or to a new session told to act "as" a role, skips all of this: both run on the model of whoever opened them (`SDD-CORE-02`). Which tier runs each point of the flow — and which points are scripts, with no model at all — is in [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) §3.
 
 ### What each Claude tier is, today
 
@@ -153,7 +161,7 @@ Two consequences for this table. Thinking cannot be turned off on any of the fou
 
 ### The orchestrating session
 
-A plugin cannot set the main session's model or effort; Claude Code drops those keys from a plugin's settings. The person picks them with `/model` and `/effort`. The orchestrating conversation is the biggest spend of a run, because its context is re-read on every turn until the end (`WF-CORE-07`), while the `alto` decisions already run in their own agents. Recommended start for a workflow run: `sonnet` at `medium`. If it routes wrongly — a skipped gate, the wrong pillar — move to `opus` at `medium` before raising effort. `opusplan` (Opus while planning, Sonnet while executing) is a middle ground.
+A plugin cannot set the main session's model or effort; Claude Code drops those keys from a plugin's settings. The person picks them with `/model` and `/effort`. The orchestrating conversation is the biggest spend of a run, because its context is re-read on every turn until the end (`SDD-CORE-04`), while the `alto` decisions already run in their own agents. Recommended start for an SDD run: `sonnet` at `medium`. If it routes wrongly — a skipped gate, a feature started before its provider — move to `opus` at `medium` before raising effort. `opusplan` (Opus while planning, Sonnet while executing) is a middle ground.
 
 Sessions it opens inherit that choice unless it sets `model` and `effort` when opening them: a root on Fable at `xhigh` puts every child session on Fable at `xhigh`, and the cost multiplies by the number of units. A child session that runs one unit is an orchestrator too: open it on `sonnet` at `medium`, and let the owning agent bring its own tier as a subagent (`CC-PAR-05`).
 
@@ -165,7 +173,7 @@ Sessions it opens inherit that choice unless it sets `model` and `effort` when o
 
 **Invoking.** *"use code-reviewer on this diff"*, *"ask software-architect to decide where the CPF validation lives"*. The lead agent also delegates on its own when the `description` matches the task — which is why `description` carries **when not to use** and names the neighboring agent.
 
-**Review in fresh context.** `code-reviewer` should receive **only the diff, the Task's acceptance, its Surface, its risk class and the checks' envelope**, never the conversation that produced the change (`CC-SES-07`), and the prompt must bound what counts as a finding (`CC-SES-10`). After a fix, a new instance re-reviews only the delta: the open findings and the diff since the last reviewed commit (`WF-VAL-06`). Fanning out several homogeneous reviewers (same model, effort, and tools) shares the cache ([Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)).
+**Review in fresh context.** In an SDD run, `code-reviewer` receives **only the feature's `contract.md`, its Surface, the diff and the gate summary**, never the conversation that produced the change (`CC-SES-07`), and the prompt must bound what counts as a finding (`CC-SES-10`). After a fix, a new instance re-reviews only the delta: the open findings and the diff since the last reviewed commit (`sdd-contract-review`, delta re-review). Fanning out several homogeneous reviewers (same model, effort, and tools) shares the cache ([Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)).
 
 ## What these notes are
 
@@ -173,12 +181,12 @@ Created on 2026-09-01 from already-existing material, and extracted into this re
 
 **Inherited gaps, stated openly.** There is no build skill for Drizzle or for Hono — `backend-developer` reads the hub directly and reviews with `drizzle-review`. The OAuth, session, and RBAC cluster has no skill — `devops-security` works through the [OWASP - Sessão e Autorização](../knowledge-base/owasp-sessao-e-autorizacao.md) checklist item by item. The product and management agents derive from course maps that **have not** been extracted into this repository: they appear in a code span, by name. They have no rule ID to cite, and that is stated plainly, not hidden.
 
-**Criterion for a new agent.** A role someone actually performs, with a question none of the thirteen already answers, and material in the knowledge base to answer it. An agent with no source note is packaged opinion — it doesn't get in.
+**Criterion for a new agent.** A role someone actually performs, with a question none of the fourteen already answers, and material in the knowledge base to answer it. An agent with no source note is packaged opinion — it doesn't get in.
 
 ## Related
 
 - [Skills](../skills/README.md) — skill index, common anatomy, and disambiguation
-- [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) — the formal procedure for "how agents hand off," with `WF-*` rules
+- [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) — the formal procedure for "how agents hand off," with `SDD-*` rules
 - `Docs` — index of documentation structures and "which structures have a skill"
 - [Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) — § 7, custom subagents
 - [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) — subagents, fan-out, shared cache

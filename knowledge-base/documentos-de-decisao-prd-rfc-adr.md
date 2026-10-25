@@ -18,9 +18,9 @@ verificado-em: 2026-10-07
 > when it freezes and where it lives. It gives a citable ID to three documents that are often treated
 > as interchangeable: PRD, RFC and ADR.
 >
-> **What it is not.** It is not the delivery flow: the *when* of each pillar is
-> [Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md), and that note is the one that says which
-> pillar writes which file in `.specs/`. This note says what each document **is**.
+> **What it is not.** It is not the delivery flow: the *when* of each document is
+> [Delivery Flow — Spec Driven Development](fluxo-de-entrega-sdd.md), and that note is the one that says which
+> step writes which file in `.specs/`. This note says what each document **is**.
 >
 > **Why it exists.** A decision that exists only in the conversation or in the code gets reconstructed backwards
 > by whoever arrives later, person or agent. The three documents keep the *why*
@@ -56,9 +56,9 @@ do not write a document: deliver.
 
 ### For a coding agent
 
-When writing the output of Research or Planning to `.specs/`, use §4 to know which
-file each decision lives in, and §3 to know whether the file can still change. The skill that
-writes is `workflow-spec`; the pillar only requests the file.
+When writing to `.specs/`, use §4 to know which file each decision lives in, and §3 to know
+whether the file can still change. The PRD is written through `spec-prd`, an ADR through
+`spec-adr`, and a feature's design through `sdd-spec-writer`.
 
 ### Conventions
 
@@ -93,7 +93,7 @@ An RFC opened to approve what is already built is theater: the right record is a
 
 | Document | States | Changes when |
 | --- | --- | --- |
-| PRD | `Draft` → `In review` → `Approved` | freely during discovery; after `Approved`, only through a deliberate return to Research, as a dated amendment (`DOC-PRD-04`) |
+| PRD | `Draft` → `In review` → `Approved` | freely during discovery; after `Approved`, only as a dated amendment the owner approves (`DOC-PRD-04`) |
 | RFC | `Draft` → `In review` → `Accepted` \| `Rejected` | revised during the comment period; closes on the decision date, with the owner deciding (`DOC-RFC-02`) |
 | Design doc | `Draft` → `In review` → `Accepted` | revised until accepted; afterwards, only through a dated amendment |
 | ADR | `Proposed` → `Accepted` → `Superseded by ADR-NNNN` | freely while `Proposed`; after `Accepted`, never; the new decision is another ADR (`DOC-ADR-02`) |
@@ -102,8 +102,8 @@ The debate recorded in an RFC is worth as much as the outcome: it is what answer
 why the obvious alternative was discarded.
 
 The owner is the one who moves the status, with an explicit answer in the conversation; the agent that wrote it never
-approves its own document (`WF-SPEC-06`, in
-[Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md) §5).
+approves its own document (`SDD-CORE-03`, in
+[Delivery Flow — Spec Driven Development](fluxo-de-entrega-sdd.md) §5.6).
 
 ---
 
@@ -111,17 +111,17 @@ approves its own document (`WF-SPEC-06`, in
 
 | Document | File | Template |
 | --- | --- | --- |
-| PRD | `.specs/<capability>/requirements.md` | `spec/spec-prd/references/template.md` |
-| RFC or design doc | `.specs/<capability>/design.md` | `spec/spec-rfc/references/template.md` |
+| PRD | `.specs/PRD.md`, one per product | `spec/spec-prd/references/template.md` |
+| Design doc | the `spec.md` of each feature, in `.specs/features/<ID>-<slug>/` | `sdd/sdd-spec-writer/references/template-spec.md` |
+| RFC | no file of its own: an open technical decision is settled by the owner before the feature's bundle, and recorded as an ADR | — |
 | ADR | `.specs/adr/NNNN-<slug>.md` | `spec/spec-adr/references/template.md` |
 
-The folder belongs to the capability, not to the delivery: PRD and design doc follow the capability for as long as
-it exists and change by amendment (`WF-SPEC-08`, in
-[Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md) §5). The ADR stays outside
-it because an architecture decision usually applies to more than one capability, and the numbering
-is a single one for the repository (`DOC-ADR-03`). `user-experience.md` and the plan in `tasks/` are not decision
-documents of this note; their owner and their moment are in
-[Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md) §5.
+The PRD belongs to the product and changes by amendment (`SDD-PRD-06`). A feature's design is
+frozen once the feature merges; a later change is a new item with its own folder (`SDD-SPEC-08`).
+The ADR stays outside the feature folders because an architecture decision usually applies to more
+than one feature, and the numbering is a single one for the repository (`DOC-ADR-03`). A feature's
+`plan.md` and `contract.md` are not decision documents of this note; their owner and their moment
+are in [Delivery Flow — Spec Driven Development](fluxo-de-entrega-sdd.md) §4.3.
 
 ---
 
@@ -181,8 +181,8 @@ Convention: `MUST`/`NEVER` are normative. **†** marks a decision of this doc.
 ### What to load
 
 ```
-WHEN WRITING requirements.md:      § 0, § 3 + DOC-CORE-*, DOC-PRD-*
-WHEN WRITING design.md:            § 0, § 2, § 3 + DOC-CORE-*, DOC-RFC-*
+WHEN WRITING the PRD:              § 0, § 3 + DOC-CORE-*, DOC-PRD-*
+WHEN WRITING a feature's spec.md:  § 0, § 2, § 3 + DOC-CORE-*, DOC-RFC-03
 WHEN WRITING or SUPERSEDING an ADR: § 3, § 4 + DOC-ADR-*
 NEVER:                             this note for an execution task (a fix, refactor or technical adjustment)
                                    (it does not open a decision document, DOC-CORE-02)
@@ -201,10 +201,10 @@ NEVER:                             this note for an execution task (a fix, refac
 
 | Decision | What **not** to do | The bridge |
 | --- | --- | --- |
-| When each `.specs/` file is written, and by which pillar | decide it here | [Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md) §5, `WF-SPEC-*` |
+| When each `.specs/` file is written, and by which step | decide it here | [Delivery Flow — Spec Driven Development](fluxo-de-entrega-sdd.md) §4, `SDD-*` |
 | The format of the architecture decision | invent another one | `software-architect`, "Output format": the ADR inherits axis, invariants and cost |
 | The format of the product decision | invent another one | `product-manager`, "Writing a spec / PRD" |
-| Acceptance scenario for a requirement | write prose | `spec/spec-story/references/template.md` |
+| Acceptance criterion for a requirement | write prose | an `AC-NN` in the PRD, Given / When / Then (`SDD-PRD-03`) |
 
 ---
 
@@ -226,8 +226,9 @@ its ADR template has no alternatives section (here it does, `DOC-ADR-04`).
 
 ## Related
 
-- [Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md) — §5, where the
+- [Delivery Flow — Spec Driven Development](fluxo-de-entrega-sdd.md) — §4, where the
   `.specs/` files enter the flow
-- `skills/workflow/workflow-spec/` — the skill that writes each document in this note, with its templates
-- `agents/software-architect.md` — writes `design.md` and the ADRs
-- `agents/product-manager.md` — writes `requirements.md`
+- `skills/spec/` — `spec-prd` and `spec-adr`, with their templates
+- `skills/sdd/sdd-spec-writer/` — the feature's `spec.md`, the design doc of this note
+- `agents/software-architect.md` — writes the ADRs
+- `agents/product-manager.md` — writes the PRD

@@ -1,110 +1,86 @@
 ---
 nome: spec
-descricao: Gera só a especificação de um incremento em .specs/<capability>/ (requirements, design, user-experience, o plano em tasks/, ADRs), cada arquivo como rascunho que o dono aprova, e para antes da implementação
+descricao: Plans big and stops — writes or amends .specs/PRD.md, then each feature's bundle (spec.md, plan.md, contract.md) in .specs/features/, every file a draft the owner approves, and stops before any code
 tipo: comando
 idioma: en
 tags:
-  - workflow
+  - sdd
   - spec
 ---
 # Spec generation only
 
-**Input:** the request the person typed with the command: a feature, a change, or a problem.
-**Output:** the files in `.specs/` that the scope needs, each written as a draft the owner
-reviewed, and the planning envelope. No code.
+**Input:** the request the person typed with the command: a product, a feature, a change, or a
+fix.
+**Output:** the PRD or its amendment, and the bundle of every feature the request touches, each
+reviewed by the owner. No code, no branch, no run.
 
-This command runs two pillars, `workflow-research` and `workflow-planning`, and stops. It does
-not decide anything those skills do not already decide; it fixes their order and the stop.
-Every file is written through `workflow-spec`.
-Rules: `WF-SPEC-*` in [Delivery Flow — Four Pillars](../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §5.
+This command runs the "plan big" half of the flow, in order, and stops. It decides nothing those
+skills do not already decide; it fixes their order and the stop.
+Rules: `SDD-PRD-*` and `SDD-SPEC-*` in [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md).
 
 ---
 
-## Phase 0: Name the capability, read the project's document set
+## Phase 0: Read where the request stands
 
-The folder is the capability's, not the request's (`WF-SPEC-08`): its slug is the `capability`
-of the Epic this request belongs to, in kebab-case. With no Epic yet, propose the slug in one
-line and let the owner confirm it before Phase 1 writes anything. If `.specs/<capability>/` already exists,
-read only the status lines of its files and of their last amendment:
+Read only status lines: `.specs/PRD.md` and its last amendment, and the folders in
+`.specs/features/`.
 
 | Found | This run |
 | --- | --- |
-| no folder | starts at Phase 1 and creates it |
-| a `Draft` file or amendment | resumes at that review |
-| everything approved, and this request already has an approved amendment or a new plan in `tasks/` | resumes at Phase 2 |
-| everything approved, nothing about this request | starts at Phase 1: research decides whether this increment needs an amendment |
-
-Read the record of which documents this project keeps: `## Specs` in `AGENTS.md`, then
-`.specs/README.md` (`WF-SPEC-07`). Missing: `workflow-spec` asks the owner once, and asks
-before writing to `AGENTS.md`.
+| no PRD | starts at Phase 1 |
+| a `Draft` PRD or amendment | resumes at that review, in Phase 1 |
+| an approved PRD, and the request changes what the product does or adds a feature | Phase 1 writes an amendment |
+| an approved PRD, and the request is a fix or refactor that changes no product behavior | skips to Phase 2, fast lane (`SDD-SPEC-09`) |
+| an approved PRD that already covers the request | starts at Phase 2 |
 
 ---
 
-## Phase 1: Research
+## Phase 1: PRD
 
-Run `workflow-research` on the request.
+Run `spec-prd` on the request. It starts `product-manager` on `.specs/PRD.md`, or on an amendment
+to it, and puts the `Draft` in front of the owner: path, summary sentence, waves, open gaps,
+"approve, change, or reject?".
 
-- The scope (product, architecture, execution) decides which files exist (`WF-SPEC-03`).
-- Product scope: `workflow-spec` starts `product-manager` on `.specs/<capability>/requirements.md`,
-  or on an amendment to it when it is already `Approved`, and returns the `Draft` to the owner: path, problem sentence, open gaps, "approve, change,
-  or reject?".
-- A gap with `fecha-em: pesquisa` stops the run here: start the agent its `decide` names, or
-  ask the owner, with the gap in one sentence, when it is `dono`. A gap with
-  `fecha-em: planejamento` travels to Phase 2 (`WF-CORE-09`).
-
-**Gate:** product scope requires `requirements.md`, and the amendment this run wrote, in `Approved` before Phase 2, and only the
-owner's answer sets it (`WF-SPEC-06`). No answer: the run ends here, with the path under
-`lacunas`.
+**Gate:** the PRD, or the amendment this run wrote, is `Approved` before Phase 2, and only the
+owner's answer sets it (`SDD-CORE-03`). No answer: the run ends here, with the path and its open
+gaps.
 
 ---
 
-## Phase 2: Planning
+## Phase 2: Feature bundles
 
-Run `workflow-planning` from the research envelope. Its files are drafted side by side and
-reviewed once, as a bundle (hub §5 "The planning bundle"):
-
-1. one `workflow-spec` call per file. `software-architect` receives `design.md` and the ADRs it
-   produces in one delegation, the ADRs `Proposed`; `product-designer` drafts
-   `user-experience.md` at the same time, since both start from `requirements.md`. An ADR
-   depends on the design for re-drafting, not for starting;
-2. the plan, as soon as those drafts exist, citing them by path while they are still `Draft`;
-3. one bundle message for all of them, in the `workflow-spec` Step 4 shape: this phase collects
-   every call's result and sends it, so no call sends its own. Per file, path, sentence and gaps,
-   plus which file depends on which. A "change" re-drafts only that file and its dependents
-   (`WF-SPEC-06`). The same message also asks for the board items and the plan's `Delivery`
-   (hub §5).
+Run `sdd-spec-writer` for the features this request touches — by default, every feature of the
+approved PRD with no approved folder, in wave order; in the fast lane, the one fix. It runs the
+repo search through `repo-explorer`, has `spec-writer` write each bundle, sends lasting decisions
+to `software-architect` as ADRs, and puts every bundle and ADR in front of the owner in one
+message.
 
 | File | Agent | When |
 | --- | --- | --- |
-| `.specs/<capability>/design.md`, or an amendment | `software-architect` | architecture scope, or a boundary or contract |
-| `.specs/adr/NNNN-<slug>.md` | `software-architect` | one per accepted decision that outlives the increment |
-| `.specs/<capability>/user-experience.md`, or an amendment | `product-designer` | product scope with an interface |
-| `.specs/<capability>/tasks/NNNN-<slug>.md` | `project-manager` | always, a new one per increment |
+| `.specs/features/<ID>-<slug>/spec.md` | `spec-writer` | every feature; in the fast lane only when an interface changes |
+| `.specs/features/<ID>-<slug>/plan.md` | `spec-writer` | always |
+| `.specs/features/<ID>-<slug>/contract.md` | `spec-writer` | always; met only when it proves every acceptance criterion it traces |
+| `.specs/adr/NNNN-<slug>.md` | `software-architect` | one per decision that outlives a feature |
 
-A document the project turned off is not written; its decision goes as one line to the plan
-under **Origin** (`WF-SPEC-07`).
-
-**Gate:** a `design.md` in `rfc` mode stays `In review` until its decision date; the run
-reports it as an open gap instead of accepting it.
+A gap that changes what the product promises goes back to Phase 1 as an amendment, not into a
+bundle.
 
 ---
 
 ## Phase 3: Stop
 
-Return the planning envelope, with every `.specs/` path in `artefato` and every file not yet
-approved under `lacunas` as `awaiting owner approval: <path>`, `decide: dono`. Every other gap
-still open stays there too, with its `decide` and `fecha-em` (`WF-CORE-09`). Do not start
-`workflow-implementation` (`WF-SPEC-05`). Implementation starts only on a new request from the
-owner, per wave: each Task when the plan is `Ready` and its own inputs are accepted (`WF-SPEC-04`),
-side by side with the others that qualify (`WF-CORE-10`).
+Report every `.specs/` path with its status, and every open gap with who decides it. Do not start
+`sdd-orchestrator`. The run starts only on a new request from the owner, and each feature only
+when its bundle is approved and its providers have merged (`SDD-RUN-01`).
 
 ---
 
 ## Checklist
 
-- [ ] `workflow-research` and `workflow-planning` passed their Step 6 self-check, and every
-      `workflow-spec` call passed its Step 5; each starts with the core self-check (hub §7).
-- [ ] Phase 2 put its drafts in front of the owner as one bundle, not one message per file.
-- [ ] The run stopped after the plan in `tasks/`, with `workflow-implementation` not started
-      (`WF-SPEC-05`).
-- [ ] No code, branch, commit or PR was created.
+- [ ] `spec-prd` and `sdd-spec-writer` passed their self-checks.
+- [ ] A repo search ran before every bundle (`SDD-SPEC-01`).
+- [ ] Phase 2 put its bundles in front of the owner as one message, not one per feature.
+- [ ] Every contract has a check for each acceptance criterion it traces and a **Met when** line
+      (`SDD-SPEC-06`).
+- [ ] The run stopped with `sdd-orchestrator` not started; no code, branch, commit or PR was
+      created.

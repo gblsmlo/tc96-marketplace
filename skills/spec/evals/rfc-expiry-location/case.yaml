@@ -1,4 +1,0 @@
-schema_version: "1.1"
-name: rfc-expiry-location
-expected_outcome: |
-  A Draft design with mode declared, decider and date when RFC, real alternatives with reasons, invariants naming test types, cost, and a shared-contract shape test.
