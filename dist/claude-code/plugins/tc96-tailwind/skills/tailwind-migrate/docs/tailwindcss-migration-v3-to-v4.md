@@ -1,18 +1,18 @@
 ---
-titulo: Tailwind CSS - Migration v3 to v4
-Link: https://tailwindcss.com/docs/upgrade-guide
+title: Tailwind CSS - Migration v3 to v4
+link: https://tailwindcss.com/docs/upgrade-guide
 tags:
   - tailwindcss
   - css
   - migration
   - agent-context
 source: "Official Tailwind CSS documentation — Upgrade guide, Compatibility; release notes 4.0 to 4.3.3"
-verificado-em: 2026-10-02
+verified-at: 2026-10-02
 ---
 
 # Tailwind CSS — Migration v3 to v4
 
-> Satellite of [Tailwind CSS](tailwindcss.md). Covers the move from line 3 to line 4: the official tool, the renames, the **defaults that changed value** and the syntax that changed form.
+> Satellite of `Tailwind CSS`. Covers the move from line 3 to line 4: the official tool, the renames, the **defaults that changed value** and the syntax that changed form.
 >
 > **The risk of this migration is not the build breaking — it is the build passing.** Almost nothing in the list below raises an error. `shadow-sm` still compiles; it just gets **smaller**. `border` still compiles; it just changes **color**. Reviewing a migration is visual, or it is not a review.
 
@@ -102,7 +102,7 @@ This is the part no tool decides for you — every line is a **visual change wit
 | `space-*` and `divide-*` selector | `> :not([hidden]) ~ :not([hidden])`, margin on top | `> :not(:last-child)`, margin at the bottom | the source recommends `flex flex-col gap-*` |
 | gradient with a variant | the variant reset the gradient | values preserved | `via-none` to undo the third stop |
 
-**`hover:` on touch.** In v4, on a device without hover, `hover:` simply does not fire. The source treats hover as **enhancement**, not as the only path to a piece of information — a menu that only opens on hover stops opening on mobile, and the defect was in the design before the migration. The rule is general, not migration-specific: `TW-A11Y-08` in [Tailwind CSS - Utilities and Variants](tailwindcss-utilities-and-variants.md).
+**`hover:` on touch.** In v4, on a device without hover, `hover:` simply does not fire. The source treats hover as **enhancement**, not as the only path to a piece of information — a menu that only opens on hover stops opening on mobile, and the defect was in the design before the migration. The rule is general, not migration-specific: `TW-A11Y-08` in `Tailwind CSS - Utilities and Variants`.
 
 ### 3.1 Rules — `TW-MIG-05` and `TW-MIG-06`
 
@@ -128,7 +128,7 @@ This is the part no tool decides for you — every line is a **visual change wit
 | `resolveConfig` | imported from the package | **does not exist** — `getComputedStyle` or `var()` |
 | `corePlugins`, `safelist`, `separator` | config | not supported — safelist becomes `@source inline()` |
 
-Variant order gets no ID here: it applies to any code, migrated or new — `TW-VAR-07` in [Tailwind CSS - Utilities and Variants](tailwindcss-utilities-and-variants.md).
+Variant order gets no ID here: it applies to any code, migrated or new — `TW-VAR-07` in `Tailwind CSS - Utilities and Variants`.
 
 ### 4.1 Rules — `TW-MIG-07` and `TW-MIG-08`
 
@@ -161,9 +161,9 @@ The tool converts to CSS; when an `@config` is left over, it is because somethin
 
 ## Related
 
-- [Tailwind CSS](tailwindcss.md) — hub
-- [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md) — the target integration
-- [Tailwind CSS - Theme and Tokens](tailwindcss-theme-and-tokens.md) — where `theme.extend` goes
+- `Tailwind CSS` — hub
+- `Tailwind CSS - Installation and Detection` — the target integration
+- `Tailwind CSS - Theme and Tokens` — where `theme.extend` goes
 - `Playwright - Snapshots e Visual` — the visual comparison of step 7
 - `Storybook - Cobertura e CI` — the other visual regression surface
 

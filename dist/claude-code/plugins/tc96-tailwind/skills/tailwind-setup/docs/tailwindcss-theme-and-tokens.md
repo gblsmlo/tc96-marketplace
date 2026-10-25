@@ -1,6 +1,6 @@
 ---
-titulo: Tailwind CSS - Theme and Tokens
-Link: https://tailwindcss.com/docs/theme
+title: Tailwind CSS - Theme and Tokens
+link: https://tailwindcss.com/docs/theme
 tags:
   - tailwindcss
   - css
@@ -9,12 +9,12 @@ tags:
   - dark-mode
   - agent-context
 source: "Official Tailwind CSS documentation — Theme variables, Colors, Dark mode, Functions and directives; shadcn/ui documentation — Tailwind v4, Theming, components.json"
-verificado-em: 2026-10-02
+verified-at: 2026-10-02
 ---
 
 # Tailwind CSS — Theme and Tokens
 
-> Satellite of [Tailwind CSS](tailwindcss.md). Covers `@theme`, the namespaces that decide which utilities exist, the difference between `@theme`, `@theme inline` and `:root`, dark mode, and the shadcn/ui semantic token pattern.
+> Satellite of `Tailwind CSS`. Covers `@theme`, the namespaces that decide which utilities exist, the difference between `@theme`, `@theme inline` and `:root`, dark mode, and the shadcn/ui semantic token pattern.
 >
 > **The idea that organizes the note:** in line 4, the theme **is** the list of utilities. A token in the right namespace creates the class; a token outside it is just a variable. Getting the namespace wrong gives no error — it gives a class that does not exist.
 
@@ -155,7 +155,7 @@ The default palette has **26 names** (red, orange, amber, yellow, lime, green, e
 | in your own CSS | `color: var(--color-gray-950)` |
 | with alpha in CSS | `--alpha(var(--color-gray-950) / 10%)` → `color-mix(in oklab, …)` |
 
-The `bg-opacity-*`, `text-opacity-*` utilities and the like **do not exist** in v4 — see [Tailwind CSS - Migration v3 to v4](tailwindcss-migration-v3-to-v4.md).
+The `bg-opacity-*`, `text-opacity-*` utilities and the like **do not exist** in v4 — see `Tailwind CSS - Migration v3 to v4`.
 
 ---
 
@@ -274,9 +274,9 @@ See [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-det
 
 ## Related
 
-- [Tailwind CSS](tailwindcss.md) — hub
+- `Tailwind CSS` — hub
 - [Tailwind CSS - Installation and Detection](tailwindcss-installation-and-detection.md) — the stylesheet where `@theme` lives
-- [Tailwind CSS - Components and Composition](tailwindcss-components-and-composition.md) — how the component consumes the token
+- `Tailwind CSS - Components and Composition` — how the component consumes the token
 - `Storybook - Configuração e Builder` § 2.3 — theme in Storybook, through a global decorator
 - `Monorepo com Bun - estrutura e tooling` — `packages/ui` as owner of the tokens file
 

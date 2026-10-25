@@ -1,6 +1,6 @@
 ---
-titulo: Tailwind CSS - Components and Composition
-Link: https://tailwindcss.com/docs/styling-with-utility-classes#managing-duplication
+title: Tailwind CSS - Components and Composition
+link: https://tailwindcss.com/docs/styling-with-utility-classes#managing-duplication
 tags:
   - tailwindcss
   - react
@@ -8,12 +8,12 @@ tags:
   - tooling
   - agent-context
 source: "Official Tailwind CSS documentation — Styling with utility classes; tailwind-merge 3.7.0, clsx, cva, tailwind-variants, shadcn/ui, prettier-plugin-tailwindcss, Tailwind CSS IntelliSense, Biome"
-verificado-em: 2026-10-02
+verified-at: 2026-10-02
 ---
 
 # Tailwind CSS — Components and Composition
 
-> Satellite of [Tailwind CSS](tailwindcss.md). Covers **how a React component carries classes**: reuse through components, conditional composition, declared variants, the `className` that comes from outside and the editor and formatter tools.
+> Satellite of `Tailwind CSS`. Covers **how a React component carries classes**: reuse through components, conditional composition, declared variants, the `className` that comes from outside and the editor and formatter tools.
 >
 > **The distinction that organizes the note:** joining classes **that do not conflict** is concatenation; resolving classes **that conflict** is merge. They are two tools, with different costs, and using the second where the first was enough hides the defect that `TW-UTIL-01` forbids.
 
@@ -201,9 +201,9 @@ One in `lib/utils.ts` with `twMerge(clsx())` and another from the `cn` package, 
 
 ## Related
 
-- [Tailwind CSS](tailwindcss.md) — hub
+- `Tailwind CSS` — hub
 - [Tailwind CSS - Utilities and Variants](tailwindcss-utilities-and-variants.md) — the conflict the merge resolves, and why it should not exist inside the component
-- [Tailwind CSS - Theme and Tokens](tailwindcss-theme-and-tokens.md) — the semantic tokens the variants use
+- `Tailwind CSS - Theme and Tokens` — the semantic tokens the variants use
 - `React - Refs e DOM` — `ref` as a prop (`REACT-REF-03`)
 - `React - Patterns` — composition instead of configuration
 - `Feature-Based Architecture` — where the generic component lives

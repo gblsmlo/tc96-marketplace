@@ -1,6 +1,6 @@
 ---
-titulo: Tailwind CSS - Installation and Detection
-Link: https://tailwindcss.com/docs/installation/using-vite
+title: Tailwind CSS - Installation and Detection
+link: https://tailwindcss.com/docs/installation/using-vite
 tags:
   - tailwindcss
   - css
@@ -8,12 +8,12 @@ tags:
   - configuration
   - agent-context
 source: "Official Tailwind CSS documentation — Installation, Framework guides, Compatibility, Functions and directives, Detecting classes in source files, Preflight"
-verificado-em: 2026-10-02
+verified-at: 2026-10-02
 ---
 
 # Tailwind CSS — Installation and Detection
 
-> Satellite of [Tailwind CSS](tailwindcss.md). Covers **how Tailwind enters the build** — the integration (Vite plugin, PostCSS, CLI), the entry stylesheet, Preflight, what the compiler sees in the source code and what it does not.
+> Satellite of `Tailwind CSS`. Covers **how Tailwind enters the build** — the integration (Vite plugin, PostCSS, CLI), the entry stylesheet, Preflight, what the compiler sees in the source code and what it does not.
 >
 > **The characteristic failure of this note is silent:** a class the scanner did not find produces no error and no warning — the element simply ends up unstyled. That is why half the rules here are about **what the scanner sees**.
 
@@ -320,9 +320,9 @@ The file exists, has `theme.extend`, and **nothing from it reaches the CSS** —
 
 ## Related
 
-- [Tailwind CSS](tailwindcss.md) — hub
+- `Tailwind CSS` — hub
 - [Tailwind CSS - Theme and Tokens](tailwindcss-theme-and-tokens.md) — what goes into `@theme` once the stylesheet exists
-- [Tailwind CSS - Migration v3 to v4](tailwindcss-migration-v3-to-v4.md) — when the project comes from line 3
+- `Tailwind CSS - Migration v3 to v4` — when the project comes from line 3
 - `Monorepo com Bun - estrutura e tooling` — why Vite is the bundler, and where `packages/ui` lives
 - `Bun - Bundler e Build` § 10.1 — Vite × Bun, and Tailwind's place in that decision
 - `Storybook - Configuração e Builder` § 2 — global CSS in Storybook, which inherits the app's Vite
