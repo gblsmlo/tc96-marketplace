@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: ux-quote-approval
+expected_outcome: |
+  A draft UX contract with all four states per screen, recovery paths, an accessibility table with role and accessible name, URL state, and unvalidated assumptions listed.

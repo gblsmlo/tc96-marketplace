@@ -22,7 +22,7 @@ skills/<family>/
     └── scripts/       the probes, and the ID-map generator
 ```
 
-## The twelve families
+## The thirteen families
 
 | Family | Skills | Index |
 | --- | --- | --- |
@@ -37,9 +37,10 @@ skills/<family>/
 | **http** | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [http/](http/README.md) |
 | **drizzle** | `drizzle-review` | [drizzle/](drizzle/README.md) |
 | **kb** | `kb-coverage` | [kb/](kb/README.md) |
+| **spec** | `spec-prd` · `spec-rfc` · `spec-adr` · `spec-ux` · `spec-epic` · `spec-story` · `spec-task` — one standalone skill per spec document, each carrying its own template and rules | [spec/](spec/README.md) |
 | **workflow** | `workflow-research` · `workflow-planning` · `workflow-implementation` · `workflow-validation` · `workflow-spec` | [workflow/](workflow/README.md) |
 
-All 38 are in the neutral source, in English, with `idioma: en` in the frontmatter.
+All 45 are in the neutral source, in English, with `idioma: en` in the frontmatter.
 
 The importer (`build/importar-do-plugin.py`) stays as a provenance record: it skips a skill
 with `idioma: en`, because the hermes build it came from is Portuguese-only.

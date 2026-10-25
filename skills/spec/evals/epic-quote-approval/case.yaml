@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: epic-quote-approval
+expected_outcome: |
+  A capability-level Epic with unique capability slug, no implementation names, a what-a-person-can-do list, an out-of-scope list and acceptance deferred to the child Stories.

@@ -111,9 +111,9 @@ approves its own document (`WF-SPEC-06`, in
 
 | Document | File | Template |
 | --- | --- | --- |
-| PRD | `.specs/<capability>/requirements.md` | `workflow-spec/references/template-requirements.md` |
-| RFC or design doc | `.specs/<capability>/design.md` | `workflow-spec/references/template-design.md` |
-| ADR | `.specs/adr/NNNN-<slug>.md` | `workflow-spec/references/template-adr.md` |
+| PRD | `.specs/<capability>/requirements.md` | `spec/spec-prd/references/template.md` |
+| RFC or design doc | `.specs/<capability>/design.md` | `spec/spec-rfc/references/template.md` |
+| ADR | `.specs/adr/NNNN-<slug>.md` | `spec/spec-adr/references/template.md` |
 
 The folder belongs to the capability, not to the delivery: PRD and design doc follow the capability for as long as
 it exists and change by amendment (`WF-SPEC-08`, in
@@ -204,7 +204,7 @@ NEVER:                             this note for an execution task (a fix, refac
 | When each `.specs/` file is written, and by which pillar | decide it here | [Delivery Flow — Four Pillars](fluxo-de-entrega-quatro-pilares.md) §5, `WF-SPEC-*` |
 | The format of the architecture decision | invent another one | `software-architect`, "Output format": the ADR inherits axis, invariants and cost |
 | The format of the product decision | invent another one | `product-manager`, "Writing a spec / PRD" |
-| Acceptance scenario for a requirement | write prose | `workflow-spec/references/template-story.md` |
+| Acceptance scenario for a requirement | write prose | `spec/spec-story/references/template.md` |
 
 ---
 

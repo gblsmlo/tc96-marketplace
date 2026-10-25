@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: task-plan-approval-expiry
+expected_outcome: |
+  A Draft plan numbered 0002 with per-Task owner, Surface, Size, risk, test types, waves with a contract Task first, delivery mode, and not extended from 0001.

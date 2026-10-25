@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: story-approve-quote
+expected_outcome: |
+  A Story with the role/action/outcome sentence, 3 to 8 executable scenarios including a refusal and an unauthorized case, a parent Epic, and a done-when that demands an executable test.

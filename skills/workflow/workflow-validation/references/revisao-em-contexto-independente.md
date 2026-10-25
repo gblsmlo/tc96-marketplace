@@ -20,7 +20,7 @@ context does not carry that commitment.
 
 - diff
 - acceptance criterion from `workflow-planning`
-- **Surface** and **Risk** lines ([`template-task.md`](../../workflow-spec/references/template-task.md))
+- **Surface** and **Risk** lines (`template-task.md` in the `spec-task` skill)
 - checks' envelope from `repo-operator`, when it returns: the checks run at the same time
   (hub §4.4)
 

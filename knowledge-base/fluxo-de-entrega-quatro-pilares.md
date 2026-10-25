@@ -61,7 +61,7 @@ it is technical verification. The second question is the responsibility of the
 
 **4. Pillar × board level.** A *board level* is the granularity at which a decision becomes
 trackable work — Epic (permanent capability), Story (unit of acceptance) or Task (executable
-slice), defined in `workflow-spec/references/template-{epic,story,task}.md`. Research (the
+slice), defined in `spec/spec-epic`, `spec/spec-story` and `spec/spec-task`. Research (the
 continuous discovery of item 2) **never** produces a board item directly: it produces the
 minimum decision that authorizes Planning to open one. It is in Planning, through the
 decomposition and boundary gates (§4.2, `WF-PLAN-03`, `WF-PLAN-05`), that the
@@ -117,7 +117,7 @@ pillar is never Implementation.
 | Pillar | Skill | Agent(s) that carry it out, today | Board level |
 | --- | --- | --- | --- |
 | Research | `workflow-research` | `product-manager` · `product-designer` · `software-architect`; gathering facts from the code: `repo-explorer` | — no item yet; leaves with the decision that authorizes one (§0.4) |
-| Planning | `workflow-planning` | `project-manager` · `software-architect` | opens and decomposes Epic → Story → Task (`template-epic.md` · `template-story.md` · `template-task.md`) |
+| Planning | `workflow-planning` | `project-manager` · `software-architect` | opens and decomposes Epic → Story → Task (`spec-epic` · `spec-story` · `spec-task`) |
 | Implementation | `workflow-implementation` | `frontend-developer` · `backend-developer` | each implementer instance executes one Task — the only level the implementer reads (`WF-IMPL-03`); independent Tasks run side by side, as a wave (`WF-CORE-10`) |
 | Validation | `workflow-validation` | `qa-engineer` · `code-reviewer` · `devops-security` (when the finding is about security) | reviews the PR (`template-pr.md`), with a one-way link back to the Task/Story |
 
@@ -377,7 +377,7 @@ Where each kind of work runs:
 | work that only reads: gathering facts, reviewing, running checks | in the shared directory, several at once | worktrees do not share the prompt cache, and homogeneous readers in one directory do ([Claude Code - Paralelismo e Escala](claude-code-paralelismo-e-escala.md) §3, §4.3) |
 | Validation of one unit and Implementation of the next | at the same time, pipelined | review time leaves the critical path |
 
-**Fan-in.** Every unit ships alone safely (`template-task.md`), so each PR merges on its own;
+**Fan-in.** Every unit ships alone safely (`spec-task`), so each PR merges on its own;
 under `pr-per-wave`, the units' commits land on one wave branch, and that PR merges once every
 unit in it closed in Validation.
 After a merge, every worktree still open rebases onto the new base, and the repository's

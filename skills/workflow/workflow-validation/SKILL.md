@@ -53,7 +53,7 @@ Contract this skill implements: [Delivery Flow — Four Pillars](../../../knowle
 | 1 | [Delivery Flow — Four Pillars](../../../knowledge-base/fluxo-de-entrega-quatro-pilares.md) §4.4 | the evidence-proportionality tree — the core of this skill |
 | 2 | Same hub, §6 `WF-CORE-*` and `WF-VAL-*` | the 16 rules this skill enforces |
 | 3 | Same hub, §0.3 | the verification × validation distinction this pillar depends on |
-| 4 | the Task's **Surface** and **Risk** lines, and the plan's **Delivery** ([`template-task.md`](../workflow-spec/references/template-task.md), [`template-tasks.md`](../workflow-spec/references/template-tasks.md)) | what the reviewer compares, which tree branch applies, and whether push and PR are authorized |
+| 4 | the Task's **Surface** and **Risk** lines, and the plan's **Delivery** (`template-task.md` and `template-plan.md` in the `spec-task` skill) | what the reviewer compares, which tree branch applies, and whether push and PR are authorized |
 
 References in this skill:
 

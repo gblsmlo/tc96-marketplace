@@ -31,7 +31,7 @@ ALVO = json.loads((raiz / "build/modelos.json").read_text(encoding="utf-8"))["cl
 # nao sai no build.
 PLUGINS = {
     "tc96-core": {
-        "familias": ["test", "http", "workflow"],
+        "familias": ["test", "http", "workflow", "spec"],
         "agentes": ["code-reviewer", "software-architect", "qa-engineer",
                     "product-manager", "product-designer", "project-manager",
                     "devops-security", "ai-engineer", "monorepo-auditor",

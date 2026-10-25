@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: prd-quote-approval
+expected_outcome: |
+  A Draft PRD with a sourced or hypothesis-labeled problem, goals with metrics, explicit non-goals, stories with Given/When/Then scenarios, the expiry edge answered or logged as a gap, and no technical design.

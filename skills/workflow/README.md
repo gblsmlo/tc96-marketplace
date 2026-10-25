@@ -36,15 +36,7 @@ workflow/
 │   ├── SKILL.md
 │   └── references/
 │       ├── project-document-set.md
-│       ├── owner-review.md
-│       ├── template-requirements.md
-│       ├── template-design.md
-│       ├── template-adr.md
-│       ├── template-user-experience.md
-│       ├── template-tasks.md
-│       ├── template-epic.md
-│       ├── template-story.md
-│       └── template-task.md
+│       └── owner-review.md        (the templates moved to skills/spec/)
 ├── workflow-implementation/
 │   ├── SKILL.md
 │   └── references/
@@ -67,13 +59,13 @@ written through `workflow-spec`, which owns the templates, reads the project's d
 (`WF-SPEC-06`); planning's drafts go together, as one bundle in one message (hub §5, "The
 planning bundle").
 
-| File | Pillar that asks | Agent that writes | Template, in `workflow-spec/references/` |
+| File | Pillar that asks | Agent that writes | Skill that carries the template, in `skills/spec/` |
 | --- | --- | --- | --- |
-| `.specs/<capability>/requirements.md` | research | `product-manager` | `template-requirements.md` |
-| `.specs/<capability>/design.md` | planning | `software-architect` | `template-design.md` |
-| `.specs/<capability>/user-experience.md` | planning | `product-designer` | `template-user-experience.md` |
-| `.specs/<capability>/tasks/NNNN-<slug>.md` | planning | `project-manager` | `template-tasks.md` |
-| `.specs/adr/NNNN-<slug>.md` | planning | `software-architect` | `template-adr.md` |
+| `.specs/<capability>/requirements.md` | research | `product-manager` | `spec-prd` |
+| `.specs/<capability>/design.md` | planning | `software-architect` | `spec-rfc` |
+| `.specs/<capability>/user-experience.md` | planning | `product-designer` | `spec-ux` |
+| `.specs/<capability>/tasks/NNNN-<slug>.md` | planning | `project-manager` | `spec-task` |
+| `.specs/adr/NNNN-<slug>.md` | planning | `software-architect` | `spec-adr` |
 
 One folder per capability, not per request: a later increment in the same capability amends
 the approved documents instead of rewriting them, and gets its own plan in `tasks/`, so the
@@ -102,7 +94,7 @@ as a subagent, instead of playing the role (`WF-CORE-06`, `CC-PAR-05`).
 
 ## Board and PR templates
 
-`workflow-spec/references/` carries the tool-neutral work-item templates — Epic, Story,
+`skills/spec/spec-epic`, `spec-story` and `spec-task` carry the tool-neutral work-item templates — Epic, Story,
 Task — and `workflow-validation/references/template-pr.md` carries the PR (change-artifact)
 template. Adapted from a real reference project, lemind (`studio-risine`), specifically its
 `docs/product/templates/{epic,story,task}.md` and `.github/pull_request_template.md`, current
