@@ -198,7 +198,7 @@ It ensures renders, Effects and scheduled updates finish before the assertions. 
 
 - [React.js](react-js.md) · [React - Rules of React](react-rules-of-react.md) · [React - Patterns](react-patterns.md)
 - [React - Server Components and Directives](react-server-components-and-directives.md) · [React - Suspense and Async](react-suspense-and-async.md) · [React - Effects and Synchronization](react-effects-and-synchronization.md)
-- `Next.js` · `TanStack Router`
+- `tanstack-router` — the skill for route-level entrypoints and code splitting
 
 ## Sources consulted
 

@@ -149,7 +149,7 @@ function useOnlineStatus() {
 }
 ```
 
-**When to extract.** The vault's criterion is in: the Hook is justified when there is a real synchronization boundary or real repetition. Extracting too early only shifts complexity around.
+**When to extract.** The house criterion is in: the Hook is justified when there is a real synchronization boundary or real repetition. Extracting too early only shifts complexity around.
 
 **Quality rules:**
 

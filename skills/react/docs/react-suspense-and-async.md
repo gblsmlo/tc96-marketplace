@@ -113,7 +113,7 @@ const Settings = lazy(() =>
 
 Where it pays off: routes, heavy modals, editors, charts. Where it does not: small components — the cost of the extra request outweighs the bundle cost.
 
-> **Bridge:** with `TanStack Router`, route-level code splitting is already handled by the router. Use `lazy` for what is **outside** the route boundary.
+> **Bridge:** with `tanstack-router`, route-level code splitting is already handled by the router. Use `lazy` for what is **outside** the route boundary.
 
 ---
 

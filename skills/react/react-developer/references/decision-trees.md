@@ -52,9 +52,9 @@ a regression, and it goes unnoticed in review because the code "works".
 
 | If the answer is… | Stop here | Do not walk the rest |
 | --- | --- | --- |
-| the data comes from the server | `TanStack Query` ([React.js](../../docs/react-js.md) § 8) | no `useState` branch applies |
+| the data comes from the server | `tanstack-query` ([React.js](../../docs/react-js.md) § 8) | no `useState` branch applies |
 | the value is derivable from what already exists | compute it in the render | there is no Hook to choose |
-| the state has to survive a refresh / be shareable by link | `TanStack Router` search params | `useState` is out of the question |
+| the state has to survive a refresh / be shareable by link | `tanstack-router` search params | `useState` is out of the question |
 | the code responds to a click, a submit, a keystroke | an event handler | it is not an Effect, it has no dependencies |
 
 Three of the four exits end **with no Hook at all**. That is the expected result:
