@@ -518,7 +518,7 @@ O corpo desta doc é Storybook fiel à fonte. Mas no meu stack várias decisões
 | Componente com `useEffect` de fetch | escrever a story em volta do defeito | o defeito é o `useEffect` — `REACT-EFFECT-06` em [React - Efeitos e Sincronização](react-efeitos-e-sincronizacao.md) |
 | Tema e tokens | `style` inline na story | decorator global de tema — `Tailwind CSS` |
 | Erro esperado (400 de validação) | lançar para o Error Boundary | é estado, e merece story própria — `REACT-ASYNC-09` |
-| Resposta do BFF tipada | duplicar o tipo no mock | reusar o tipo exportado do servidor — [Hono - Validação e RPC](hono-validacao-e-rpc.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
+| Resposta do BFF tipada | duplicar o tipo no mock | reusar o tipo exportado do servidor — [Hono - Validação e RPC](hono-validacao-e-rpc.md), `Elysia - Schema e Eden` |
 
 **A ponte que mais importa: `packages/ui` não conhece rota, e isso é o desenho.** Um componente de design system que precisa de `parameters.tanstack.router` para renderizar está acoplado a rota e deveria receber a navegação por prop. A story serve como detector desse acoplamento: se a story de um componente de `packages/ui` precisa de rota, o achado é sobre o componente, não sobre a story. Ver a direção de dependência em [Monorepo com Bun - estrutura e tooling](monorepo-com-bun-estrutura-e-tooling.md).
 

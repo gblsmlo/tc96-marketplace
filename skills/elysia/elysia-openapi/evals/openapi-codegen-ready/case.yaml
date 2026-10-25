@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: openapi-codegen-ready
+expected_outcome: |
+  Explicit, unique operationIds (the generated /users/:id × /users/byId collision resolved), a bearer security scheme
+  declared and attached to the protected routes with /health public (security: []), 401/404/422 documented where they
+  happen, the Zod body documented in its input view (mapJsonSchema for zod removed or io: 'input'), POST /users without
+  a trailing slash, docs gated by environment or protected, and a test over /openapi/json. Cites ELYSIA-TYPE-06/-07.
+context:
+  scaffold_script: place-files.sh

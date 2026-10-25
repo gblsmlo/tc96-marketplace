@@ -517,7 +517,7 @@ Derive-a de um satélite, não desta nota inteira: uma skill de cache carrega [H
 
 ## 8. Pontes com o stack
 
-O corpo desta doc é HTTP puro. Mas quase tudo que os satélites descrevem, o stack do vault ([Bun.serve](bun-http-e-servidor.md), [Hono](hono.md), [Elysia](elysia.md), [TanStack Query](tanstack-query.md)) **já resolve ou já erra por você**. Implementar à mão o que o framework embute é como a maioria dos bugs de header nasce.
+O corpo desta doc é HTTP puro. Mas quase tudo que os satélites descrevem, o stack do vault ([Bun.serve](bun-http-e-servidor.md), [Hono](hono.md), `Elysia`, [TanStack Query](tanstack-query.md)) **já resolve ou já erra por você**. Implementar à mão o que o framework embute é como a maioria dos bugs de header nasce.
 
 ### 8.1 O que `Bun.serve` faz sozinho — e o que não faz
 
@@ -529,7 +529,7 @@ O corpo desta doc é HTTP puro. Mas quase tudo que os satélites descrevem, o st
 | `Range` | suportado ao servir `Bun.file` diretamente, com `Content-Range`; `Bun.file(p).slice(a, b)` preenche `Content-Range` e `Content-Length` |
 | Transferência | `sendfile(2)` quando possível — cópia zero no kernel |
 
-E a lista do que **não** existe é o motivo de [Hono](hono.md) e [Elysia](elysia.md) existirem — verificado como ausente na doc de `Bun.serve`, ver [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7:
+E a lista do que **não** existe é o motivo de [Hono](hono.md) e `Elysia` existirem — verificado como ausente na doc de `Bun.serve`, ver [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7:
 
 - **CORS**: nada. O preflight `OPTIONS` é tratado por você, rota a rota, incluindo `Vary: Origin`.
 - **Middleware componível**: nada. Cada rota repete auth, log e headers de cache.
@@ -552,7 +552,7 @@ Hono traz built-ins no próprio pacote, em subcaminhos, verificados em [Hono - M
 | `bodyLimit` | `hono/body-limit` | `413` antes de ler o corpo inteiro | `maxSize` default `100 * 1024` |
 | `secureHeaders` | `hono/secure-headers` | headers de segurança | CSP **não** vem por default |
 
-Elysia tem `@elysia/cors`, cujos defaults são ainda mais permissivos — `origin: true` (equivalente a `*`) **e** `credentials: true`, combinação que os browsers recusam (`ELYSIA-LIFE-12`, [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) § 8). Equivalentes de `etag`, `cache` e `compress` em Elysia **não foram verificados** neste vault; ver [Elysia](elysia.md) antes de assumir que existem.
+Elysia tem `@elysia/cors`, cujos defaults são ainda mais permissivos — `origin: true` (equivalente a `*`) **e** `credentials: true`, combinação que os browsers recusam (`ELYSIA-LIFE-12`, `Elysia - Lifecycle e Plugins` § 8). Equivalentes de `etag`, `cache` e `compress` em Elysia **não foram verificados** neste vault; ver `Elysia` antes de assumir que existem.
 
 **A leitura que interessa.** O que o framework embute não isenta você da decisão — ele embute o *mecanismo*, não a *política*. `cors()` sabe montar o preflight; ele não sabe quais origens você aceita. `etag()` sabe calcular o validador; ele não sabe se aquela resposta pode ser cacheada por um cache compartilhado. Os defaults permissivos de CORS nos dois frameworks são a prova: o mecanismo veio pronto e errado para produção.
 
@@ -602,7 +602,7 @@ Regra prática de divisão: **o servidor decide por quanto tempo a resposta é v
 - · · · ·
 - · ·
 - [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) · [RFC 9700 - OAuth 2.0 Security BCP](rfc-9700-oauth-2-0-security-bcp.md) · [RFC 8725 - JWT Best Current Practices](rfc-8725-jwt-best-current-practices.md) · [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md)
-- [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Hono](hono.md) · [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) · [Hono - Validação e RPC](hono-validacao-e-rpc.md) · [Elysia](elysia.md) · [Backend no runtime Bun](backend-no-runtime-bun.md)
+- [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Hono](hono.md) · [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) · [Hono - Validação e RPC](hono-validacao-e-rpc.md) · `Elysia` · [Backend no runtime Bun](backend-no-runtime-bun.md)
 - [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) · [React.js](react-js.md) ·
 - · · · · ·
 

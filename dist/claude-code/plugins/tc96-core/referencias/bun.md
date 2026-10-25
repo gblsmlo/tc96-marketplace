@@ -543,7 +543,7 @@ Bun toca o meu stack de frontend ([React.js](react-js.md), [TanStack Query](tans
 
 ### Framework HTTP em cima do Bun
 
-`Bun.serve` cobre roteamento com params, WebSocket, cookies, TLS e streaming, e **não** cobre middleware componível, validação tipada de entrada, cliente tipado end-to-end, CORS nem mapeamento de erro de domínio para status. Essa lista de ausências é o que [Hono](hono.md) e [Elysia](elysia.md) existem para preencher — e os dois entregam a peça que mais importa para este stack: o tipo do handler chegando ao componente React sem schema duplicado.
+`Bun.serve` cobre roteamento com params, WebSocket, cookies, TLS e streaming, e **não** cobre middleware componível, validação tipada de entrada, cliente tipado end-to-end, CORS nem mapeamento de erro de domínio para status. Essa lista de ausências é o que [Hono](hono.md) e `Elysia` existem para preencher — e os dois entregam a peça que mais importa para este stack: o tipo do handler chegando ao componente React sem schema duplicado.
 
 **A escolha entre os três tem nota própria: [Backend no runtime Bun](backend-no-runtime-bun.md)**, com árvore de decisão e os cinco eixos que pesam. O que essa nota decide não cabe aqui; o que cabe é o alerta que vale para os dois frameworks: nem `hc` (Hono) nem Eden Treaty (Elysia) **lançam** em resposta de erro, e uma `queryFn` ingênua deixa a query do TanStack Query em `success` com o erro dentro de `data`.
 
@@ -553,7 +553,7 @@ Bun toca o meu stack de frontend ([React.js](react-js.md), [TanStack Query](tans
 
 - [Bun - Runtime e APIs](bun-runtime-e-apis.md) · [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) · [Bun - Testes](bun-testes.md) (hub de uma estrutura própria, com seis satélites)
 - [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Bun - Bundler e Build](bun-bundler-e-build.md) · [Bun - Dados e Persistência](bun-dados-e-persistencia.md) · [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md)
-- [Backend no runtime Bun](backend-no-runtime-bun.md) — escolher entre `Bun.serve` cru, [Hono](hono.md) e [Elysia](elysia.md)
+- [Backend no runtime Bun](backend-no-runtime-bun.md) — escolher entre `Bun.serve` cru, [Hono](hono.md) e `Elysia`
 - `Node.js` — o runtime que Bun busca substituir; a fronteira está na § 8
 - `TypeScript` ·
 - [React.js](react-js.md) · [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md) · [TanStack Router](tanstack-router.md) · `Tailwind CSS` · `Next.js`

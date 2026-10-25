@@ -1,0 +1,13 @@
+{
+  "name": "sessions",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "bun-types": "1.2.0",
+    "typescript": "^5.6.0"
+  }
+}

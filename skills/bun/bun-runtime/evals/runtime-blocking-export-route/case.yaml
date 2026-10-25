@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: runtime-blocking-export-route
+expected_outcome: |
+  Replaces the synchronous execSync/readFileSync in the HTTP handler with async Bun.$ (interpolated,
+  never concatenated) or Bun.spawn with a timeout/signal, so the event loop is not blocked and the
+  file name cannot inject a command; identifies the `$` in the .env password being expanded by Bun
+  (needs escaping) as the staging bug. Cites BUN-RT-08, BUN-SYS-01, BUN-RT-07, BUN-RT-09.
+context:
+  scaffold_script: place-files.sh

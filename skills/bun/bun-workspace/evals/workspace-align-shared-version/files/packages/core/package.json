@@ -1,0 +1,7 @@
+{
+  "name": "@acme/core",
+  "version": "1.0.0",
+  "dependencies": {
+    "zod": "^3.22.0"
+  }
+}

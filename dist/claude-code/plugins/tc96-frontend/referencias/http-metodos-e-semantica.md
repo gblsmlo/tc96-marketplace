@@ -401,7 +401,7 @@ Vale a recíproca também, e ela é menos lembrada: **um `PUT` só é retentáve
 - [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) · [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) · [HTTP - CORS](http-cors.md) · [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) · [HTTP - Specs e RFCs](http-specs-e-rfcs.md)
 - · ·
 - · ·
-- [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) · [Hono - Validação e RPC](hono-validacao-e-rpc.md) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md)
+- [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) · [Hono - Validação e RPC](hono-validacao-e-rpc.md) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) · `Elysia - Roteamento e Handler`
 - · ·
 
 ## Fontes consultadas

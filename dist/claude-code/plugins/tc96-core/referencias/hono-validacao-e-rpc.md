@@ -445,7 +445,7 @@ export const hcWithType = (...args: Parameters<typeof hc>): Client =>
 
 **6. Hono não valida a saída — só o input.** O guia de Validation cobre exclusivamente o request: os targets são `json`, `form`, `query`, `param`, `header`, `cookie`, e não há equivalente a um schema de resposta checado em runtime. A consequência é assimétrica e fácil de ler errado: o tipo da resposta que chega ao `hc` é **inferido do que o handler escreve**, não verificado contra um schema. Se o handler devolve `c.json({ pedido }, 200)` e `pedido` vem de uma query que trouxe um campo a menos, o cliente é tipado como se o campo existisse e recebe `undefined` em runtime — sem erro em lugar nenhum.
 
-Quem vem de [Elysia](elysia.md) supõe simetria e não há: `ELYSIA-TYPE-06` valida o retorno em runtime a partir de `response`, e **Hono não tem equivalente**. O que se pode fazer em Hono é parsear o resultado do domínio antes de responder — `return c.json(pedidoSchema.parse(pedido), 200)` — mas isso é código de aplicação, não um recurso do framework, e não há regra normativa aqui porque não há API a citar.
+Quem vem de `Elysia` supõe simetria e não há: `ELYSIA-TYPE-06` valida o retorno em runtime a partir de `response`, e **Hono não tem equivalente**. O que se pode fazer em Hono é parsear o resultado do domínio antes de responder — `return c.json(pedidoSchema.parse(pedido), 200)` — mas isso é código de aplicação, não um recurso do framework, e não há regra normativa aqui porque não há API a citar.
 
 | ID | Regra |
 | --- | --- |

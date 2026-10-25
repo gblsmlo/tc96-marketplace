@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: query-tagged-search
+expected_outcome: |
+  A searchPosts that filters published posts, combines optional tag/authorId/q filters with AND, and keeps a fixed statement
+  count. The tag filter restricts which POSTS are returned (exists subquery or join in the root where) while each result still
+  lists ALL of the post's tags — a where inside with on the junction would filter the tag list instead of the posts, and a
+  join-filter would drop the other tags. The title search is parameterized (ilike), the limit is capped at 50, the order is
+  publishedAt desc with id as tiebreaker. Tests prove each filter, the full tag list and the statement count.
+context:
+  scaffold_script: place-files.sh

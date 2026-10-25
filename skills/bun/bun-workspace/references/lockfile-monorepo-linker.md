@@ -25,6 +25,8 @@ And `BUN-PKG-05`, which misleads by its name: **`--production` is not cleanup.**
 | `BUN-PKG-08` | `overrides`/`resolutions` in the **root** `package.json` — Bun **ignores** those declared in a workspace |
 | `BUN-PKG-07` | `catalog:` **never** reaches a published package — publish via `bun publish` or `bun pm pack` |
 
+**A catalog aligns what is declared today; it does not prevent drift.** Nothing stops a later PR from writing a literal range back into one package, and `bun install --frozen-lockfile` passes as long as the lock matches. If the task says "make sure it can't drift again", add a CI check that fails when a workspace declares that package with anything other than `catalog:`, and prove it by re-adding a literal range and watching the check fail. A root `overrides` entry pinned to the catalog version closes the resolution side too.
+
 **`BUN-PKG-08` fails silently:** an `overrides` in a workspace package is simply ignored, and the version the author meant to pin keeps floating.
 
 **`BUN-PKG-12` is about dependency direction:** a root dependency that a package imports makes the package work by accident — it resolves through hoisting and breaks when someone moves or publishes it. See `Monorepo com Bun - estrutura e tooling`.

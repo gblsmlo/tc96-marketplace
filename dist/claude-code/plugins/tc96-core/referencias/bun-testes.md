@@ -497,7 +497,7 @@ Derive-a de **um** satélite, não desta nota inteira: uma skill de teste de com
 | **Servidor HTTP sob teste** | [Bun - HTTP e Servidor](bun-http-e-servidor.md) — `Bun.serve` em `beforeAll`, `server.stop()` em `afterAll`, porta por worker (`BUN-TEST-10`) |
 | **Banco em teste** | [Bun - Dados e Persistência](bun-dados-e-persistencia.md) — `bun:sqlite` em memória para unidade; banco por worker para integração |
 | **Instalação e pin de versão em CI** | [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) — `bun ci`, lockfile versionado |
-| **Handler de rota tipado sob teste** | [Hono - Validação e RPC](hono-validacao-e-rpc.md) · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — `app.request()` / Eden dispensam subir servidor |
+| **Handler de rota tipado sob teste** | [Hono - Validação e RPC](hono-validacao-e-rpc.md) · `Elysia - Schema e Eden` — `app.request()` / Eden dispensam subir servidor |
 | **Mutation e cache no frontend** | [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md) — `QueryClient` novo por teste, `retry: false` |
 | **Trunk-based e portão de teste** | |
 

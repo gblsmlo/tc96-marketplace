@@ -295,7 +295,7 @@ A última linha merece atenção em stack com proxy reverso, CDN ou dev server: 
 - [HTTP](http.md) — hub; § 5 tem a árvore "minha requisição foi bloqueada pelo browser — é CORS?"
 - [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) · [HTTP - Métodos e Semântica](http-metodos-e-semantica.md) · [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) · [HTTP - Negociação de Conteúdo e Range](http-negociacao-de-conteudo-e-range.md) · [HTTP - Specs e RFCs](http-specs-e-rfcs.md)
 - — Zettel conceitual · (`mode`, `credentials`)
-- [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) (`cors()`, `origin` default `*`) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7.1 (sem CORS nativo) · [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md)
+- [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md) (`cors()`, `origin` default `*`) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) § 7.1 (sem CORS nativo) · `Elysia - Lifecycle e Plugins`
 - [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) · [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) · ·
 - · · ·
 

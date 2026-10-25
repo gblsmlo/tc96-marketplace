@@ -1,0 +1,12 @@
+schema_version: "1.1"
+name: test-review-green-ci-lies
+expected_outcome: |
+  Severity-ordered review with file:line. Blocking: test/helpersTests.ts never runs (BUN-TEST-01); the
+  payment test's expect lives in a catch with no expect.assertions, so it passes when charge does not
+  throw (BUN-TEST-06) — the production bug; coverage = false in bunfig turns --coverage into a no-op,
+  and the threshold is on statements with only lcov (BUN-TEST-28/-27); bun test -u in CI (BUN-
+  TEST-05). High: committed test.only (BUN-TEST-08); spyOn without restoration (BUN-TEST-02). Also Bun
+  latest (BUN-TEST-15) and no tsc --noEmit (BUN-TEST-18). The corrected payment test is shown red
+  against the shipped bug.
+context:
+  scaffold_script: place-files.sh

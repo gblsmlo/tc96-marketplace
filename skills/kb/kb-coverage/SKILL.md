@@ -62,7 +62,7 @@ bash ${CLAUDE_PLUGIN_ROOT}/skills/kb-coverage/scripts/buscar-tema.sh "<tema>"
 
 The script greps `knowledge-base/`, `knowledge-base/` and every `skills/*/*/SKILL.md` (its `descricao:` and `fonte:` fields), and prints candidates grouped by: direct text hits, hits with a rule ID within three lines, skills whose description matches, and skills whose `fonte:` points at a matched doc. It finds **candidates** — it does not judge coverage. That judgment is Step 3.
 
-Run it more than once with different phrasings (English and Portuguese, the concept name and a concrete symptom) before concluding there is nothing — a doc titled around one word may develop a related concept under different vocabulary (e.g. "N+1" lives inside `drizzle-orm.md` under a query-pattern heading, not under a heading called "N+1").
+Run it more than once with different phrasings (English and Portuguese, the concept name and a concrete symptom) before concluding there is nothing — a doc titled around one word may develop a related concept under different vocabulary (e.g. "N+1" lives inside `skills/drizzle/docs/drizzle-reads-and-relations.md` under a decision-tree heading, not under a heading called "N+1").
 
 ---
 

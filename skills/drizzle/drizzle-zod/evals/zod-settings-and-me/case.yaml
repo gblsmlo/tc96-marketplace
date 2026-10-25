@@ -1,0 +1,11 @@
+schema_version: "1.1"
+name: zod-settings-and-me
+expected_outcome: |
+  A response schema from createSelectSchema(users).omit({ passwordHash }) applied to what getMe returns (DRZ-ZOD-03). The
+  settings validator gives the jsonb column a real Zod shape through the refinement, declared once and ideally shared with the
+  column's $type via z.infer (DRZ-ZOD-07); { theme: 42 } is rejected. The profile patch derives from createUpdateSchema,
+  narrowed, keeps bio nullable (callback refinement or .nullish(), DRZ-ZOD-05) and rejects {} (DRZ-ZOD-06). Because zod is
+  3.25.76, every file that refines or extends a generated schema imports z from 'zod/v4' — the classic 'zod' import throws
+  'expected a Zod schema'. zod stays at 3.25.x. Tests prove each.
+context:
+  scaffold_script: place-files.sh

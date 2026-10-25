@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: mutation-profile-and-cleanup
+expected_outcome: |
+  updateProfile passes null through (bio: null clears, an absent key stays), rejects or no-ops an empty patch before set()
+  (set with all-undefined throws 'No values to set'). deleteDraft scopes the delete to the author AND unpublished, by id.
+  purgeOldDrafts can no longer collapse to a filterless delete (and() of all-undefined is undefined): it requires a cutoff or
+  refuses, and only deletes unpublished posts. importTags returns early for an empty list (values([]) throws) and tolerates
+  existing/duplicate names (dedupe + onConflictDoNothing). Tests cover each. Cites DRZ-QUERY-04, DRZ-QUERY-05, DRZ-QUERY-07.
+context:
+  scaffold_script: place-files.sh

@@ -32,10 +32,10 @@ skills/<family>/
 | **tailwind** | `tailwind-setup` · `tailwind-build` · `tailwind-review` — self-contained, with its own `docs/` | [tailwind/](tailwind/README.md) |
 | **test** | `test-design` · `test-review` · `test-diagnose` | [test/](test/README.md) |
 | **playwright** | `playwright-build` · `playwright-review` · `playwright-diagnose` | [playwright/](playwright/README.md) |
-| **bun** | `bun-runtime` · `bun-workspace` · `bun-migrate` · `bun-test-build` · `bun-test-review` | [bun/](bun/README.md) |
-| **elysia** | `elysia-build` · `elysia-schema` · `elysia-diagnose` | [elysia/](elysia/README.md) |
+| **bun** | `bun-runtime` · `bun-workspace` · `bun-migrate` · `bun-test-build` · `bun-test-review` — self-contained, with its own `docs/` | [bun/](bun/README.md) |
+| **elysia** | `elysia-build` · `elysia-schema` · `elysia-eden` · `elysia-openapi` · `elysia-diagnose` — self-contained, with its own `docs/` | [elysia/](elysia/README.md) |
 | **http** | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [http/](http/README.md) |
-| **drizzle** | `drizzle-review` | [drizzle/](drizzle/README.md) |
+| **drizzle** | `drizzle-query` · `drizzle-mutation` · `drizzle-zod` · `drizzle-review` — self-contained, with its own `docs/` | [drizzle/](drizzle/README.md) |
 | **kb** | `kb-coverage` | [kb/](kb/README.md) |
 | **spec** | `spec-prd` · `spec-adr` — the two documents that stand outside a feature, each carrying its own template and rules | [spec/](spec/README.md) |
 | **sdd** | `sdd-spec-writer` · `sdd-orchestrator` · `sdd-contract-review` — the Spec Driven Development delivery flow | [sdd/](sdd/README.md) |

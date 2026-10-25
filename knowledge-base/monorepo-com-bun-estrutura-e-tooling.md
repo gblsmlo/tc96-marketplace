@@ -414,7 +414,7 @@ NUNCA:   criar pacote por simetria, sem duplicação que o justifique
 - [Fronteira do BFF - forma, jornada e regra](fronteira-do-bff-forma-jornada-e-regra.md) — quem é dono de cada decisão na fronteira
 - ·
 - [Bun](bun.md) · [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) (`BUN-PKG-08`: overrides só na raiz) · [Bun - Testes](bun-testes.md)
-- [Elysia](elysia.md) · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — a degradação para `any` e suas causas
+- `Elysia` · `Elysia - Schema e Eden` — a degradação para `any` e suas causas
 - [TanStack Router](tanstack-router.md) — rotas virtuais, quando a convenção de arquivo colide com a feature
 - [Architecture in React](architecture-in-react.md) — o roteador das decisões arquiteturais
 - `Monorepo Architecture - The Ultimate Guide for 2025` — fonte externa (blog do FSD): o mesmo

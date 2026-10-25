@@ -4,7 +4,7 @@ descricao: Migrate Node code to Bun and diagnose what does not run — `node:*` 
 tipo: skill
 familia: bun
 idioma: en
-fonte: "[Bun - Shell, FFI e Compat Node](../../../knowledge-base/bun-shell-ffi-e-compat-node.md)"
+fonte: "[Bun - Shell, FFI and Node Compat](../docs/bun-shell-ffi-and-node-compat.md)"
 docs:
   - /oven-sh/bun
 tags:
@@ -14,8 +14,8 @@ tags:
 ---
 # bun-migrate
 
-> **Source of this skill:** [Bun - Shell, FFI e Compat Node](../../../knowledge-base/bun-shell-ffi-e-compat-node.md), with the [Bun](../../../knowledge-base/bun.md) hub as the router.
-> **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
+> **Source of this skill:** [Bun - Shell, FFI and Node Compat](../docs/bun-shell-ffi-and-node-compat.md), with the [Bun](../docs/bun.md) hub as the router.
+> **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the family docs.
 
 ---
 
@@ -43,27 +43,27 @@ Compatibility is **partial and uneven**: some modules are complete, some have a 
 
 | Order | Load |
 | --- | --- |
-| 1 | [Bun](../../../knowledge-base/bun.md) § 6 — `BUN-CORE-*` and `BUN-SYS-*` |
-| 2 | [Bun - Shell, FFI e Compat Node](../../../knowledge-base/bun-shell-ffi-e-compat-node.md) |
+| 1 | [Bun](../docs/bun.md) § 6 — `BUN-CORE-*` and `BUN-SYS-*` |
+| 2 | [Bun - Shell, FFI and Node Compat](../docs/bun-shell-ffi-and-node-compat.md) |
 | 3 | the official compatibility page, for **every** enumerated module |
 
 References in this skill:
 
 | File | What for |
 | --- | --- |
-| `references/enumerar-e-lacunas.md` | the step you do not skip, and the four gaps that matter |
+| `references/enumerate-and-gaps.md` | the step you do not skip, and the four gaps that matter |
 | `references/container.md` | image, shutdown and Dockerfile |
-| `references/diagnostico-e-relatorio.md` | symptom → cause, finding format, and what is **not** an incompatibility |
-| `references/antipadroes.md` | the grid, with IDs |
-| `references/mapa-de-ids.md` | the 43 `BUN-CORE/RT/PKG/SYS-*` by satellite and section |
-| `scripts/enumerar.sh` | enumerates `node:*` in the code **and** in transitive dependencies |
+| `references/diagnosis-and-report.md` | symptom → cause, finding format, and what is **not** an incompatibility |
+| `references/antipatterns.md` | the grid, with IDs |
+| `references/id-map.md` | the 43 `BUN-CORE/RT/PKG/SYS-*` by satellite and section |
+| `scripts/enumerate.sh` | enumerates `node:*` in the code **and** in transitive dependencies |
 
 ---
 
 ## Step 1 — Enumerate, before migrating
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-migrate/scripts/enumerar.sh src
+bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-migrate/scripts/enumerate.sh src
 ```
 
 `BUN-SYS-07` is the step that **cannot be skipped**. And **the second search is the one that changes the plan**: a dependency using `async_hooks` for tracing, or `crypto` for a specific cipher, decides the feasibility of the migration — and it **does not appear in the project's own code**.
@@ -81,19 +81,24 @@ Without `node_modules` installed, the enumeration is partial — the script says
 | `worker_threads` | partial | |
 | `vm` / `cluster` | partial or absent | |
 
-Detail: `references/enumerar-e-lacunas.md`.
+Detail: `references/enumerate-and-gaps.md`.
 
 ---
 
 ## Step 3 — Container
 
-`references/container.md`: image, `--smol`, and **shutdown**. Without handling `SIGTERM`, the container exits **mid-request** — and the symptom shows up as an intermittent client error during deploy.
+`references/container.md`. Cut requests on every deploy have **two** independent causes, and both have to be fixed:
+
+1. **The signal never reaches Bun.** A shell-form `CMD bun src/index.ts` makes `/bin/sh -c` PID 1, and the orchestrator's `SIGTERM` goes to the shell. Use the exec form, `ENTRYPOINT ["bun", "run", "--no-env-file", "src/index.ts"]`. Check this **first**: a perfect listener does nothing if it never runs.
+2. **Bun does not drain.** Without a `SIGTERM` listener that awaits `server.stop()` and then calls `process.exit()`, in-flight requests are cut (`BUN-SYS-11`).
+
+Then the image: a pinned tag (not `latest`, not the floating `:1`), `--frozen-lockfile --production`, `USER bun` (`BUN-SYS-12`). `--smol` is not a container mode. Prove the drain locally with the `kill -TERM` recipe in the reference before claiming it works.
 
 ---
 
 ## Step 4 — Diagnose and report
 
-`references/diagnostico-e-relatorio.md`: symptom → cause, the finding format, and **the cut** — what is not an incompatibility but a bug in the code itself.
+`references/diagnosis-and-report.md`: symptom → cause, the finding format, and **the cut** — what is not an incompatibility but a bug in the code itself.
 
 ---
 
@@ -101,14 +106,14 @@ Detail: `references/enumerar-e-lacunas.md`.
 
 1. **Was every enumerated module checked against the official page?** If not, the plan rests on assumption (`BUN-CORE-05`).
 2. **If any is a stub that does not throw**, it is blocking — it is not "works with caveats".
-3. **If the container does not handle `SIGTERM`**, the deploy drops requests.
+3. **If the `CMD`/`ENTRYPOINT` is shell form, or the server has no draining `SIGTERM` listener**, the deploy drops requests — and say whether you proved the drain or only wrote it.
 4. **Declare what was not verified** — especially the transitive ones, if `node_modules` was not installed.
 
 ---
 
 ## Related
 
-- [Bun - Shell, FFI e Compat Node](../../../knowledge-base/bun-shell-ffi-e-compat-node.md) — source of this skill
-- [Bun](../../../knowledge-base/bun.md) § 6
+- [Bun - Shell, FFI and Node Compat](../docs/bun-shell-ffi-and-node-compat.md) — source of this skill
+- [Bun](../docs/bun.md) § 6
 - `bun-runtime` · `bun-workspace` · `bun-test-build` · `bun-test-review` — the family
 - Node.js — what is being left behind; its API surface resolves through Context7, `/nodejs/node`

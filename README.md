@@ -66,7 +66,7 @@ Agents, skills and rules for this house's stack, written once as a neutral sourc
 | `tc96-core` | HTTP contract and cache, test design and suite audit, the Spec Driven Development delivery flow (PRD, feature bundles, orchestrated runs, harness scripts), 12 cross-stack agents, the scaffold commands | always |
 | `tc96-frontend` | React, TanStack Router and Query, React Hook Form and Storybook skills, plus `frontend-developer`. The React family carries its own normative docs (`REACT-*`, `RHF-*`) in `skills/react/docs/`, and each of its six skills also packages alone | projects with a frontend |
 | `tc96-tailwind` | Tailwind CSS v4: setup, build and review skills, with their own normative docs (`TW-*`) in `skills/tailwind/docs/`. **Self-contained**: no tc96 knowledge-base note is needed | projects with Tailwind, with or without the rest of tc96 |
-| `tc96-backend` | Bun runtime and tests, Elysia and Drizzle skills, plus `backend-developer` | projects with a backend |
+| `tc96-backend` | Bun runtime and tests, Elysia and Drizzle skills, plus `backend-developer`. The Bun family carries its own normative docs (`BUN-*`, 83 IDs) in `skills/bun/docs/`, and each of its five skills also packages alone | projects with a backend |
 | `tc96-e2e` | Playwright: writing, review and diagnosis of E2E tests | projects with an E2E suite |
 
 The `kb` family (`kb-coverage`) audits this repository's own coverage and is not shipped in any plugin.
@@ -141,7 +141,9 @@ skills/                # 38 skills across 13 families (English)
 ├── http/  tanstack/  storybook/  playwright/
 ├── react/             # self-contained: its own docs/ (the REACT-* and RHF-* rules) travel with it
 ├── tailwind/          # self-contained: its own docs/ (the TW-* rules) travel with it
-├── bun/  elysia/  drizzle/
+├── bun/               # self-contained: its own docs/ (the BUN-* rules) travel with it
+├── drizzle/           # self-contained: its own docs/ (the DRZ-* rules) travel with it
+├── elysia/
 └── kb/                # Coverage audit of this repository, not shipped
 commands/              # 19 commands (English body, descricao in Portuguese)
 knowledge-base/        # 131 notes, no subfolders (the rule, and its ID; being migrated from Portuguese to English)

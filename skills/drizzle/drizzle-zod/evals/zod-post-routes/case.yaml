@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: zod-post-routes
+expected_outcome: |
+  Create and patch schemas derive from createInsertSchema/createUpdateSchema(posts), with the slug regex and title min
+  length in the second argument (DRZ-ZOD-01, DRZ-ZOD-02). The create body is narrowed with pick/omit and strict-or-stripped so
+  authorId and published cannot come from the body; authorId comes from the session (DRZ-ZOD-03). publishedAt is coerced from
+  an ISO string by the schema (createSchemaFactory coerce date or z.coerce.date in the refinement, DRZ-ZOD-04). The patch
+  schema rejects {} (DRZ-ZOD-06) and accepts publishedAt: null. Tests prove each.
+context:
+  scaffold_script: place-files.sh

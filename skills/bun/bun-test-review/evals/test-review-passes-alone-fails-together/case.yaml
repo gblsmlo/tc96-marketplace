@@ -1,0 +1,11 @@
+schema_version: "1.1"
+name: test-review-passes-alone-fails-together
+expected_outcome: |
+  Diagnoses state leaking between files through the shared globalThis / module state:
+  test/locale.test.ts sets the registry locale in beforeAll and never resets it, and
+  test/unit/formatter.test.ts assumes the default. test.serial sequences inside a file and cannot fix a
+  cross-file dependency (BUN-TEST-09); the fix is to own the setup in each file (reset in
+  afterAll/afterEach, or set explicitly in formatter's own beforeEach). Confirms with bun test
+  --randomize / --isolate before and after the fix.
+context:
+  scaffold_script: place-files.sh

@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: openapi-broken-spec
+expected_outcome: |
+  /openapi/json answers 200 with the internal routes absent (the exclude.tags crash avoided by hide or by a detail on
+  every route), each admin route keeps its own summary (the guard's detail no longer overrides the routes'), POST
+  /orders is documented at /orders (registered as ''), x-ratelimit-remaining is documented with withHeaders and still
+  set at runtime, and a test over the spec asserts all four. The response explains each root cause.
+context:
+  scaffold_script: place-files.sh

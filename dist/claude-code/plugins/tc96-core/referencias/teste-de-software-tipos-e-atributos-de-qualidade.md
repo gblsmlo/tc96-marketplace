@@ -76,7 +76,7 @@ Isto já está registrado no vault, com o exemplo completo, em — e é o ponto 
 | acessibilidade (componente) | [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) |
 | acessibilidade (página) | [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) § 5 |
 | compatibilidade de browser | projects — [Playwright - Configuração e Projects](playwright-configuracao-e-projects.md) § 3.1 |
-| performance de query | [Drizzle - Queries e Relations](drizzle-queries-e-relations.md), `PostgreSQL` |
+| performance de query | `Drizzle - Reads and Relations`, `PostgreSQL` |
 | cache e condicional HTTP | [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) |
 
 **A ressalva que vale para acessibilidade e vale para segurança:** varredura automática pega uma classe de problema e declara isso. Suíte verde no axe não é aplicação acessível, e nenhum SAST substitui revisão. É a `TS-CORE-08` aplicada a um atributo específico.
@@ -220,7 +220,7 @@ Rodar a carga esperada e concluir que o sistema "aguenta estresse". Estresse é 
 - [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) · [HTTP - CORS](http-cors.md) · [RFC 6265 - Cookies HTTP](rfc-6265-cookies-http.md) — o atributo segurança
 - [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) · [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) — o atributo acessibilidade
 - `TypeScript` · [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md) · — a camada estática e a fronteira
-- `PostgreSQL` · [Drizzle - Queries e Relations](drizzle-queries-e-relations.md) — performance de dado
+- `PostgreSQL` · `Drizzle - Reads and Relations` — performance de dado
 - — os cinco estados de um fluxo
 
 ## Fontes consultadas

@@ -80,7 +80,7 @@ Before opening a file:
 | component, Hook, `*.tsx` | `react-review` | [React - Rules of React](../knowledge-base/react-rules-of-react.md) · [React.js](../knowledge-base/react-js.md) § 6 | `REACT-*` |
 | import between features, barrel, `shared/` | `react-structure` (audit mode) | [Feature-Based Architecture](../knowledge-base/feature-based-architecture.md) § 4 | `REACT-ARCH-*` |
 | route, handler, status, header, cache | `http-review` | [HTTP](../knowledge-base/http.md) § 6 | `HTTP-*` |
-| Drizzle schema, migration, query | `drizzle-review` | [Drizzle ORM](../knowledge-base/drizzle-orm.md) § 6 | `DRZ-*` |
+| Drizzle schema, migration, query, Zod schema of a table | `drizzle-review` | `Drizzle ORM` § 6 (the drizzle family's docs) | `DRZ-*` |
 | `*.spec.ts` Playwright | `playwright-review` | [Playwright](../knowledge-base/playwright.md) § 6 | `PW-*` |
 | `*.test.ts` under `bun test` | `bun-test-review` | [Bun - Testes](../knowledge-base/bun-testes.md) § 6 | `BUN-TEST-*` |
 | `bunfig.toml`, `package.json`, lockfile | `bun-workspace` (verification) | [Bun - Gerenciador de Pacotes](../knowledge-base/bun-gerenciador-de-pacotes.md) | `BUN-PKG-*` |

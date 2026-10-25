@@ -335,7 +335,7 @@ E a distinção com `4xx` é o que fecha o ciclo do § 1: **`5xx` autoriza o cli
 - · · ·
 - · [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) ·
 - · · ·
-- [Hono - Validação e RPC](hono-validacao-e-rpc.md) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Elysia - Roteamento e Handler](elysia-roteamento-e-handler.md) ·
+- [Hono - Validação e RPC](hono-validacao-e-rpc.md) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) · `Elysia - Roteamento e Handler` ·
 
 ## Fontes consultadas
 
