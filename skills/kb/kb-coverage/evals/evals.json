@@ -4,11 +4,11 @@
     {
       "id": 1,
       "prompt": "A gente já tem skill cobrindo TanStack Query? Se sim, qual doc e qual skill exatamente cobre isso, no repositório tc96-agents?",
-      "expected_output": "Reports 'Coberto', citing knowledge-base/docs/tanstack-query.md as the hub doc and the `tanstack-query` skill as owner. Clean, unambiguous hit already in the seed index — the easy sanity case.",
+      "expected_output": "Reports 'Coberto', citing skills/tanstack/docs/tanstack-query.md as the hub doc and the `tanstack-query` skill as owner. Clean, unambiguous hit already in the seed index — the easy sanity case.",
       "files": [],
       "expectations": [
         "The report states the topic's status as Coberto (covered)",
-        "The report cites knowledge-base/docs/tanstack-query.md as the entry note / hub doc",
+        "The report cites skills/tanstack/docs/tanstack-query.md as the entry note / hub doc",
         "The report names the tanstack-query skill as the owner",
         "The report does not classify this as a gap or as partial"
       ]
