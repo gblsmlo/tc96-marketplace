@@ -351,7 +351,7 @@ Quando o servidor muda o contrato, o mock continua verde e a story documenta uma
 - [Storybook - React Vite](storybook-react-vite.md) — onde `routeOverrides` não existe e o mock de módulo o substitui
 - [React - Patterns](react-patterns.md) — de quem é a responsabilidade de buscar dado
 - [Hono - Validação e RPC](hono-validacao-e-rpc.md) · `Elysia - Schema e Eden` — os tipos que o mock deve reusar
-- [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) — o cache que o mock alimenta
+- `TanStack Query - Cache and Freshness` — o cache que o mock alimenta
 
 ## Fontes consultadas
 

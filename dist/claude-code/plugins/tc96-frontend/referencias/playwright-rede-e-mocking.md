@@ -400,7 +400,7 @@ Ver § 1.3 e [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md)
 - [Playwright - Snapshots e Visual](playwright-snapshots-e-visual.md) — por que bloquear imagem quebra screenshot
 - [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) · [HTTP - Status e Redirecionamento](http-status-e-redirecionamento.md) · [HTTP - CORS](http-cors.md) — a semântica que o mock precisa preservar
 - [Hono - Validação e RPC](hono-validacao-e-rpc.md) · `Elysia - Schema e Eden` — de onde vem o tipo da resposta
-- [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) — por que a query não refaz o fetch que o teste esperava
+- `TanStack Query - Cache and Freshness` — por que a query não refaz o fetch que o teste esperava
 - — o critério de quando mock não basta
 - [Storybook - Mocking](storybook-mocking.md) — o mesmo problema, um nível abaixo, com MSW
 

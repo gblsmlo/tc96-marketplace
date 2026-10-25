@@ -1,10 +1,10 @@
 ---
-nome: tanstack-router
-descricao: Work with routing in TanStack Router — defining and nesting routes, navigating with `<Link>`, typed and validated search params, loaders and cache integration, route context and code splitting — citing `TSR-*` IDs, with sixteen executable probes — use when the task is creating or nesting a route, building navigation, validating and reading search params, deciding between a loader and Query, guarding a route, or splitting the bundle. Do not use for the remote data itself, which is tanstack-query, nor for the inside of components, which is react-developer and react-review.
-tipo: skill
-familia: tanstack
-idioma: en
-fonte: "[TanStack Router](../../../knowledge-base/tanstack-router.md)"
+name: tanstack-router
+description: Writes TanStack Router code: routes, Link, search params, loaders, guards, lazy
+type: skill
+family: tanstack
+language: en
+source: "[TanStack Router](../docs/tanstack-router.md)"
 docs:
   - /websites/tanstack_router
 tags:
@@ -15,102 +15,45 @@ tags:
 
 # tanstack-router
 
-> **Source of this skill:** [TanStack Router](../../../knowledge-base/tanstack-router.md) and the ten satellites, loaded **one per task**.
-> This skill **does not contain** technical API procedure — it routes by task, cites the rule and says what to check.
-> **API surface:** resolve it through Context7 — `/websites/tanstack_router`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
+> **Source:** [TanStack Router](../docs/tanstack-router.md) (hub, § 5 decision trees, § 6.1 canonical IDs) and nine satellites. Rule bodies live only in the docs; this file routes and says what to check.
+> **API surface:** Context7 `/websites/tanstack_router` for signatures in the installed version.
 
-> **What changed in this version.** The previous one carried a "doc status warning" saying the satellites were **under construction**, and for that reason **cited no ID at all** — it borrowed `REACT-*`. The ten satellites exist today and add up to **102 `TSR-*` rules**. The warning is gone; every task now has a citable family, and the map is generated from the docs.
+Writes or changes routes, navigation, URL state and route loading.
 
----
-
-## When to use
-
-The question is about **routing, navigation, the URL or route loading**.
-
-| Situation | Go to |
+| The question is… | Go to |
 | --- | --- |
 | the remote data itself: freshness, invalidation, optimism | `tanstack-query` |
-| the inside of the component | `react-developer` · `react-review` |
-| where the file lives in the feature | `react-structure` |
-| a multi-step form (the **value** is the form's; the **step** is the URL's) | `react-hook-form` |
+| why existing route code misbehaves, or a review of it | `tanstack-review` |
+| the inside of a component | `react-developer` |
+| where a file lives in the feature | `react-structure` |
+| a multi-step form (the step is the URL's, the values are the form's) | `react-hook-form` |
 
----
+## Load one satellite per task
 
-## Minimum loading
+Open only the row's doc. The project's convention (file-based or code-based, `routeTree.gen.ts` or `addChildren`) decides where code goes: read one existing route before writing.
 
-1. Identify **the task** in `references/por-tarefa.md`.
-2. Load only the satellites in the "Load" column, in the order given.
-3. Walk the "Check" items before calling the task done.
+| Task | Load | Check before calling it done |
+| --- | --- | --- |
+| Define or nest a route | [Routing Concepts](../docs/tanstack-router-routing-concepts.md); [File-Based Routing](../docs/tanstack-router-file-based-routing.md) § 2 for the file grammar | route type chosen from § 8's matrix (`TSR-ROUTE-*`); file name yields the intended path (`TSR-FILE-*`) |
+| Why a URL matches | [Route Matching](../docs/tanstack-router-route-matching.md) | specificity, never declaration order (`TSR-MATCH-*`) |
+| Tree outside the folder convention | [Virtual File Routes](../docs/tanstack-router-virtual-file-routes.md) · [Route Trees](../docs/tanstack-router-route-trees.md) | `TSR-VIRTUAL-*`, `TSR-TREE-*` |
+| Navigate | [Navigation](../docs/tanstack-router-navigation.md) § 2, § 5 | `to` is a route path, params in `params`, query in `search` (`TSR-NAV-01`); a destination known at render is `<Link>` (`-02`); relative `to` has `from` (`-03`) from `Route.fullPath` (`-04`); navigation that consumes the route (post-login, post-submit) uses `replace: true` (`-09`) |
+| Search params | [Search Params](../docs/tanstack-router-search-params.md) § 2-6 | `validateSearch` on every route that reads search (`TSR-SEARCH-01`); read with `useSearch` only (`-02`); every key defines absent **and** invalid (`-03`); one-key updates use the function form with a spread (`-07`); Zod v3 `.catch` needs `fallback` (`-05`) |
+| Load route data | [Data Loading](../docs/tanstack-router-data-loading.md) § 2-8 | first-render data from `loader`, never `useEffect` (`TSR-LOAD-01`); `loaderDeps` returns only the keys the loader reads (`-03`, `-04`); `beforeLoad` holds context, guard and redirect, never screen data (`-05`); `errorComponent` per loader route or a router default (`-09`); with Query: a cache-respecting read (`ensureQueryData`, or `queryClient.query({ ...opts, staleTime: 'static' })` where the installed types deprecate it) + shared `queryOptions` + `defaultPreloadStaleTime: 0` (`-14`, `-15`, `-16`) |
+| Guard a route | hub § 5.1 · [Route Context and Code Splitting](../docs/tanstack-router-route-context-and-code-splitting.md) § 2-4 | `throw redirect(...)` in `beforeLoad`, never `navigate` in an effect (`TSR-LOAD-06`); auth reaches `beforeLoad` through router context (`TSR-CTX-*`); the return target is validated as an internal path (Search Params § 9) |
+| Split the bundle | same doc § 6-9 | split the component, never the critical `loader`; the convention the project already uses (`TSR-SPLIT-*`) |
 
-**Never load all ten satellites at once.**
+Aliases: `TSR-LOAD-01` = `REACT-EFFECT-06`, `TSR-NAV-08` = `TSR-LOAD-14`. Cite the canonical one (hub § 6.1).
 
-References in this skill:
-
-| File | What for |
-| --- | --- |
-| `references/por-tarefa.md` | the seven tasks: what to load and what to check |
-| `references/regras-por-tarefa.md` | the `TSR-*` families per task, and the rules that decide most cases |
-| `references/fronteira.md` | what belongs to React and not to the router |
-| `references/mapa-de-ids.md` | the 102 `TSR-*` by satellite and section |
-| `references/exemplo.md` | worked case |
-| `scripts/sondas.sh` | sixteen probes over routing, navigation, search and loaders |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates the map from `knowledge-base/tanstack-router*` |
-
----
-
-## Step 1 — Probe
+## Self-check, then report
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/tanstack-router/scripts/sondas.sh src
+bash ${CLAUDE_PLUGIN_ROOT}/skills/tanstack-review/scripts/probes.sh src router
+bunx tsc --noEmit
 ```
 
-**The two that pay most:**
-
-| Probe | What it reveals |
-| --- | --- |
-| **S5** — a route reading search **without `validateSearch`** | without a schema there is no type, no default and no guarantee of shape (`TSR-SEARCH-01`) |
-| **S15** — a loader using Query **without `defaultPreloadStaleTime: 0`** | two caches deciding freshness (`TSR-LOAD-14`) — the symptom shows up as "stale data with Query apparently right" |
-
-And the most frequent one in generated code: **S1**, `to` with an interpolated string (`TSR-NAV-01`) — a path param goes in `params`, a query in `search`.
-
----
-
-## Step 2 — Route by task
-
-`references/por-tarefa.md`: defining a route · understanding the match · navigating · search params · loading data · splitting the bundle · virtual tree.
-
-The families and the decisive rules of each: `references/regras-por-tarefa.md`.
-
----
-
-## Step 3 — The boundaries that decide the citation
-
-- **`TSR-LOAD-01` is an alias of `REACT-EFFECT-06`** — fetching first-render data in a `useEffect` is the same defect, seen from the router. In a review that crosses docs, cite React's canonical one.
-- **`TSR-NAV-08` is an alias of `TSR-LOAD-14`** — cite the canonical one.
-- **The wizard's step belongs to the URL** (`REACT-PAT-10`); the fields' **values** belong to the form (`react-hook-form`).
-
----
-
-## Step 4 — Closing
-
-1. **If the loader uses Query**, freshness is decided in **one** cache — `defaultPreloadStaleTime: 0`.
-2. **If the guard is in an effect**, it is in the wrong place: it is `throw redirect(...)` in `beforeLoad` (`TSR-LOAD-06`).
-3. **If the route has a `loader`**, it needs an `errorComponent` (`TSR-LOAD-09`) — otherwise the failure rises to the root.
-4. **Declare what you did not verify.** If the note the task requires is incomplete, consult the official docs, **declare the limitation** and record what was verified — do not fill a gap from memory.
-
----
+A type error on `to`, `params` or `search` is the router telling you the path or schema is wrong: fix the declaration, never cast. Treat each probe hit in a file you touched as a defect to fix or justify. Report each route decision with its ID, and what you did not verify.
 
 ## Example
 
-A listing with a filter, page and sorting in the URL: `validateSearch` with `.catch`/`.default` per key, `loaderDeps` returning **only** the keys the loader reads, `<Link>` with `params`/`search` instead of an interpolated string, and `defaultPreloadStaleTime: 0` because the loader uses Query.
-
-Full case: `references/exemplo.md`.
-
----
-
-## Related
-
-- [TanStack Router](../../../knowledge-base/tanstack-router.md) — the hub, and the ten satellites
-- `tanstack-query` — the other cache; `TSR-LOAD-14` is what reconciles them
-- `react-developer` · `react-review` · `react-structure` — what stays inside the route
-- `react-hook-form` — the wizard whose step lives in the URL
+"The invoice filter must survive refresh and the back button." `validateSearch` with `status`, `page`, `sort`, each with a default and a catch; the component reads `Route.useSearch()`; filter changes call `navigate({ search: (prev) => ({ ...prev, status, page: 1 }) })`; `loaderDeps` returns `{ status, page, sort }`; the loader warms the cache with `invoicesQuery(deps)`; the router sets `defaultPreloadStaleTime: 0`; the detail link is `<Link to="/invoices/$invoiceId" params={{ invoiceId }}>`. Cites `TSR-SEARCH-01`, `TSR-SEARCH-07`, `TSR-LOAD-03`, `TSR-LOAD-14`, `TSR-NAV-01`.

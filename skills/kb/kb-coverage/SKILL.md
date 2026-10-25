@@ -108,7 +108,7 @@ Never merge "Parcial" into "Coberto" to make a report look cleaner. A fragmented
 
 Three topics from the 2026-09-23 audit, one of each kind:
 
-- **TanStack Query** — `Coberto`. `knowledge-base/tanstack-query.md` is the hub, `tanstack-query` is the skill, `TSQ-*` are the IDs.
+- **TanStack Query** — `Coberto`. `skills/tanstack/docs/tanstack-query.md` is the hub, `tanstack-query` is the skill, `TSQ-*` are the IDs.
 - **Persistência (browser)** — `Parcial`. `react-patterns.md` § 2 has the row "Persistido no browser · precisa versão e validação" — mentioned — but no `REACT-PAT-*` ID exists for it (the range stops at 10), no example, no probe in `react-developer`/`react-review`.
 - **Clean Code** — `Gap confirmado`, and a dangling reference: `agents/code-reviewer.md` and `agents/frontend-developer.md` both cite `Clean Code - React e Node - Mapa de Fundamentos`, a hub that does not exist anywhere in `knowledge-base/` — it is a private Zettel from `_legado/snapshot-2026-09-08/` that was never migrated.
 

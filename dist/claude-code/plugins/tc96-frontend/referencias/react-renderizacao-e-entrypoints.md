@@ -198,7 +198,7 @@ Garante que renders, Effects e atualizações agendadas terminem antes das asser
 
 - [React.js](react-js.md) · [React - Rules of React](react-rules-of-react.md) · [React - Patterns](react-patterns.md)
 - [React - Server Components e Diretivas](react-server-components-e-diretivas.md) · [React - Suspense e Assincronia](react-suspense-e-assincronia.md) · [React - Efeitos e Sincronização](react-efeitos-e-sincronizacao.md)
-- · `Next.js` · [TanStack Router](tanstack-router.md)
+- · `Next.js` · `TanStack Router`
 
 ## Fontes consultadas
 

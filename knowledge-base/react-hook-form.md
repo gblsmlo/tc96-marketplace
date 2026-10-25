@@ -574,7 +574,7 @@ Derive-a de um satélite, não desta nota inteira: uma skill de acessibilidade d
 
 ## 8. Pontes com o stack
 
-O corpo desta doc é RHF puro, fiel à fonte. No meu stack ([TanStack Router](tanstack-router.md), [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md), TanStack Start, `Tailwind CSS`, `TypeScript`) várias práticas cruas mudam de dono.
+O corpo desta doc é RHF puro, fiel à fonte. No meu stack (`TanStack Router`, `TanStack Query - Fundamentals`, TanStack Start, `Tailwind CSS`, `TypeScript`) várias práticas cruas mudam de dono.
 
 | Problema | Prática crua | O que usar no stack |
 | --- | --- | --- |
@@ -582,7 +582,7 @@ O corpo desta doc é RHF puro, fiel à fonte. No meu stack ([TanStack Router](ta
 | Enviar a mutação | `fetch` dentro do `onSubmit` | `mutateAsync` do TanStack Query dentro do `handleSubmit` |
 | Invalidar cache após salvar | manual | `invalidateQueries` na mutation — |
 | Update otimista | `useOptimistic` | mutation otimista da Query — |
-| Estado de wizard entre rotas | store global | search params tipados do Router — [TanStack Router - Search Params](tanstack-router-search-params.md) |
+| Estado de wizard entre rotas | store global | search params tipados do Router — `TanStack Router - Search Params` |
 | Validação de fronteira | `if` manual | o mesmo schema Zod no cliente e no servidor — |
 | Erro do servidor na UI | `alert`/toast solto | `setError` no campo ou em `root.serverError` · `RHF-ERR-02` |
 
@@ -708,7 +708,7 @@ useForm({
 - [React.js](react-js.md) — entrada de React; `REACT-PURE-*` e `REACT-HOOK-*` valem aqui
 - [React - Formulários e Actions](react-formularios-e-actions.md) — a alternativa nativa; ver § 5.4 antes de escolher
 - · · ·
-- [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md) · [Frontend roadmap](frontend-roadmap.md)
+- `TanStack Query - Mutations and Invalidation` · [Frontend roadmap](frontend-roadmap.md)
 
 ## Fontes consultadas
 

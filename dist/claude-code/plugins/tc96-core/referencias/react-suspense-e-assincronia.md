@@ -113,7 +113,7 @@ const Settings = lazy(() =>
 
 Onde vale a pena: rotas, modais pesados, editores, gráficos. Onde não vale: componentes pequenos — o custo do request extra supera o do bundle.
 
-> **Ponte:** com [TanStack Router](tanstack-router.md), code splitting por rota já é resolvido pelo roteador. Use `lazy` para o que está **fora** da fronteira de rota.
+> **Ponte:** com `TanStack Router`, code splitting por rota já é resolvido pelo roteador. Use `lazy` para o que está **fora** da fronteira de rota.
 
 ---
 

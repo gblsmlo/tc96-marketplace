@@ -478,7 +478,7 @@ Derive-a de **um** satélite, não desta nota inteira: uma skill de endpoint nov
 
 ## 8. Pontes com o stack
 
-O stack deste vault é [React.js](react-js.md) + [TanStack Router](tanstack-router.md) + [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md) + `TypeScript` + Zod, sobre [Bun](bun.md). Hono entra como a camada HTTP — e a razão de ele estar em avaliação é uma só: **o tipo do servidor pode chegar no componente sem que ninguém escreva o contrato duas vezes.**
+O stack deste vault é [React.js](react-js.md) + `TanStack Router` + `TanStack Query - Fundamentals` + `TypeScript` + Zod, sobre [Bun](bun.md). Hono entra como a camada HTTP — e a razão de ele estar em avaliação é uma só: **o tipo do servidor pode chegar no componente sem que ninguém escreva o contrato duas vezes.**
 
 | Problema | Primitiva crua | O que usar no stack |
 | --- | --- | --- |
@@ -600,7 +600,7 @@ export const pedidoOptions = (id: string) =>
 
 As duas formas são normativas: `HONO-RPC-13` exige uma delas, e `HONO-RPC-14` exige o `{ init: { signal } }` em ambas. O corpo completo da família, com o exemplo de `useMutation` que leva erro de domínio tipado ao formulário, está em [Hono - Validação e RPC](hono-validacao-e-rpc.md) § 6.1.
 
-`DetailedError` estende `Error` e carrega `detail`, `code`, `statusCode` e `log` (todos opcionais). No React, é isso que aparece em `error` do `useQuery` — ver [TanStack Query - O que um Dev Frontend Precisa Saber](tanstack-query-o-que-um-dev-frontend-precisa-saber.md).
+`DetailedError` estende `Error` e carrega `detail`, `code`, `statusCode` e `log` (todos opcionais). No React, é isso que aparece em `error` do `useQuery` — ver `TanStack Query - Fundamentals`.
 
 **`signal` atravessa.** O segundo argumento de `$get`/`$post` aceita `{ init: RequestInit }`, e a doc mostra `signal` como caso de uso. Passar o `signal` que o TanStack Query fornece na `queryFn` faz o cancelamento chegar até a rede.
 
@@ -632,7 +632,7 @@ export function useCriarPedido() {
 
 Esta é a forma **curta**, e serve quando qualquer erro é "falhou". Ela não serve quando o formulário precisa saber qual campo falhou ou distinguir o 409 do 500: `parseResponse` colapsa todo status de erro num `DetailedError` genérico. A variante que discrimina por `res.status` e leva `campos` até o `setError` do formulário está em [Hono - Validação e RPC](hono-validacao-e-rpc.md) § 6.1.
 
-A invalidação continua sendo responsabilidade do cliente — ver [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md). O que Hono elimina é a duplicação do **formato**, não a política de cache.
+A invalidação continua sendo responsabilidade do cliente — ver `TanStack Query - Mutations and Invalidation`. O que Hono elimina é a duplicação do **formato**, não a política de cache.
 
 ### 8.4 Onde a responsabilidade muda de dono
 
@@ -659,7 +659,7 @@ Honestidade sobre os limites, porque é o que decide se essa ponte vale o custo:
 
 ### 8.6 O envelope de resposta paginada
 
-Hono não impõe formato de resposta — e é por isso que este ponto precisa ser decidido aqui, uma vez, em vez de rota a rota. O caso é concreto: o exemplo de `TSQ-PATTERN-05` em [TanStack Query - Padrões de Consulta](tanstack-query-padroes-de-consulta.md) desabilita a navegação com `disabled={isPlaceholderData || !data?.hasMore}` — lê um booleano "tem mais páginas" **do corpo da resposta**. Uma rota Hono que devolve `{ pedidos }` cru não produz esse campo. **A nota do frontend consome um campo que a do backend não emite**, e o sintoma é um botão "próxima" ativo na última página.
+Hono não impõe formato de resposta — e é por isso que este ponto precisa ser decidido aqui, uma vez, em vez de rota a rota. O caso é concreto: o exemplo de `TSQ-PATTERN-05` em `TanStack Query - Query Patterns` desabilita a navegação com `disabled={isPlaceholderData || !data?.hasMore}` — lê um booleano "tem mais páginas" **do corpo da resposta**. Uma rota Hono que devolve `{ pedidos }` cru não produz esse campo. **A nota do frontend consome um campo que a do backend não emite**, e o sintoma é um botão "próxima" ativo na última página.
 
 O envelope mínimo, para paginação por offset:
 
@@ -680,11 +680,11 @@ Três decisões que o envelope carrega, e por que cada uma:
 | `total` | contador e cálculo de páginas | a UI não sabe quantas páginas existem |
 | `hasMore` | é **do servidor**, que conhece o total | derivado no cliente a partir de `itens.length < porPagina`, erra quando a última página está cheia |
 
-**O nome do campo é contrato.** `hasMore` é o nome adotado em todo o vault, e a razão é que o consumidor veio primeiro: `TSQ-PATTERN-05`, em [TanStack Query - Padrões de Consulta](tanstack-query-padroes-de-consulta.md), lê `data?.hasMore`. Esta estrutura e a de `Elysia` emitem o mesmo nome — a convergência é deliberada, não coincidência.
+**O nome do campo é contrato.** `hasMore` é o nome adotado em todo o vault, e a razão é que o consumidor veio primeiro: `TSQ-PATTERN-05`, em `TanStack Query - Query Patterns`, lê `data?.hasMore`. Esta estrutura e a de `Elysia` emitem o mesmo nome — a convergência é deliberada, não coincidência.
 
 Se você renomear o campo em um lado só, o sintoma é silencioso: o `hc` não inventa a chave ausente, `data.hasMore` vira `undefined`, o `!` dá `true`, e o botão "próxima" fica **desabilitado sempre**. Não há erro de tipo se o envelope não estiver no `response` declarado, e não há erro de runtime nunca. É por isso que o nome vale uma linha de contrato e não uma escolha por rota.
 
-Para cursor em vez de offset, o envelope troca `pagina`/`total` por `proximoCursor: string | null`, e `hasMore` vira `proximoCursor !== null`. `useInfiniteQuery` consome exatamente isso — ver [TanStack Query - Padrões de Consulta](tanstack-query-padroes-de-consulta.md).
+Para cursor em vez de offset, o envelope troca `pagina`/`total` por `proximoCursor: string | null`, e `hasMore` vira `proximoCursor !== null`. `useInfiniteQuery` consome exatamente isso — ver `TanStack Query - Query Patterns`.
 
 Nada disto é API de Hono: é decisão de contrato desta estrutura, que Hono não tem opinião sobre. Registrada aqui porque é o ponto em que duas estruturas do vault se desencontram.
 
@@ -699,7 +699,7 @@ Nada disto é API de Hono: é decisão de contrato desta estrutura, que Hono nã
 - [Hono - Validação e RPC](hono-validacao-e-rpc.md) — validator, `AppType`, `hc`, limitações
 - [Bun](bun.md) · [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Bun - Runtime e APIs](bun-runtime-e-apis.md) · [Bun - Testes](bun-testes.md) — o runtime alvo
 - `Node.js` · · `Nest.js` — as alternativas já documentadas no vault
-- [React.js](react-js.md) · [TanStack Query - O que um Dev Frontend Precisa Saber](tanstack-query-o-que-um-dev-frontend-precisa-saber.md) · [TanStack Query - Padrões de Consulta](tanstack-query-padroes-de-consulta.md) · [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md) · [TanStack Router](tanstack-router.md) · `TypeScript`
+- [React.js](react-js.md) · `TanStack Query - Fundamentals` · `TanStack Query - Query Patterns` · `TanStack Query - Mutations and Invalidation` · `TanStack Router` · `TypeScript`
 - ·
 - · ·
 - · · ·

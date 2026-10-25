@@ -272,7 +272,7 @@ type SaidaCriada        = InferResponseType<typeof $post, 201>     // só o 201
 
 `InferRequestType<T>` é indexado pelo **target** (`['json']`, `['query']`, `['param']`, `['form']`). `InferResponseType<T>` aceita um status como segundo parâmetro para estreitar.
 
-É com esses dois tipos que a assinatura de um hook de mutation deixa de ser escrita à mão — o exemplo completo, com `useMutation` e invalidação, está em [Hono](hono.md) § 8.3 e em [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md).
+É com esses dois tipos que a assinatura de um hook de mutation deixa de ser escrita à mão — o exemplo completo, com `useMutation` e invalidação, está em [Hono](hono.md) § 8.3 e em `TanStack Query - Mutations and Invalidation`.
 
 **`parseResponse()` resolve o `res` que não lança.** `hc` devolve algo *"compatible with the fetch Response"*: um 404 chega como Promise resolvida, não como exceção. `parseResponse` parseia pelo `Content-Type`, **lança `DetailedError` se `!res.ok`**, e seu tipo de retorno já exclui 4xx/5xx — que é exatamente o contrato que uma `queryFn` do TanStack Query precisa.
 
@@ -287,7 +287,7 @@ const pedido = await parseResponse(api.pedidos[':id'].$get({ param: { id } }))
 
 ### 6.1 A ponte com TanStack Query: o contrato da `queryFn`
 
-Esta subseção é a fronteira onde a estrutura de Hono encosta na de [TanStack Query](tanstack-query-o-que-um-dev-frontend-precisa-saber.md), e é onde o defeito mais caro do stack aparece.
+Esta subseção é a fronteira onde a estrutura de Hono encosta na de `TanStack Query - Fundamentals`, e é onde o defeito mais caro do stack aparece.
 
 **O defeito.** `hc` devolve algo *"compatible with the fetch Response"*. Um 404, um 409 e um 500 chegam como Promise **resolvida**. Uma `queryFn` que faz `return res.json()` nunca aciona o estado de erro: `isError` fica `false`, `retry` não roda, o Error Boundary não pega, e a tela mostra um estado vazio em vez da mensagem de falha. É um bug que não aparece em log nem em teste de happy path.
 
@@ -390,7 +390,7 @@ const onSubmit = (valores: Entrada) =>
   })
 ```
 
-Ver [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md) e [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md).
+Ver `TanStack Query - Mutations and Invalidation` e [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md).
 
 | ID | Regra |
 | --- | --- |
@@ -501,7 +501,7 @@ Quem vem de `Elysia` supõe simetria e não há: `ELYSIA-TYPE-06` valida o retor
 - [Hono](hono.md) — hub; § 8 tem a ponte completa com React e TanStack Query
 - [Hono - Roteamento e Contexto](hono-roteamento-e-contexto.md) · [Hono - Middleware e Ciclo de Vida](hono-middleware-e-ciclo-de-vida.md)
 - · ·
-- [TanStack Query - O que um Dev Frontend Precisa Saber](tanstack-query-o-que-um-dev-frontend-precisa-saber.md) · [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md) · [TanStack Query - Padrões de Consulta](tanstack-query-padroes-de-consulta.md) · [React.js](react-js.md)
+- `TanStack Query - Fundamentals` · `TanStack Query - Mutations and Invalidation` · `TanStack Query - Query Patterns` · [React.js](react-js.md)
 - [React Hook Form - Validação e Resolvers](react-hook-form-validacao-e-resolvers.md) · [React - Formulários e Actions](react-formularios-e-actions.md)
 - · · ·
 - · `TypeScript` · ·

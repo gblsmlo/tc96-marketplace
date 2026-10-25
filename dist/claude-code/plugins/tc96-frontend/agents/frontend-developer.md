@@ -35,7 +35,9 @@ The study map underpinning this agent is [Frontend roadmap](../referencias/front
 | the data comes from the server and someone else can change it | `tanstack-query` | `useState` + `useEffect` |
 | a form with validation, conditional fields, submit | `react-hook-form` | `react-developer` |
 | the classes of a component or screen — tokens, variants, states, responsiveness | `tailwind-build` (plugin `tc96-tailwind`) | `tailwind-review` (that is `code-reviewer`'s) |
-| installing or configuring Tailwind, tokens, dark mode, migrating from v3 | `tailwind-setup` (plugin `tc96-tailwind`) | `tailwind-build` |
+| installing or configuring Tailwind, tokens, dark mode | `tailwind-setup` (plugin `tc96-tailwind`) | `tailwind-build` |
+| migrating from Tailwind v3 to v4 | `tailwind-migrate` (plugin `tc96-tailwind`) | `tailwind-setup` |
+| moving a component's `cva`/`tv` variants to their own `.variants.ts` file | `tailwind-split-variants` (plugin `tc96-tailwind`) | `tailwind-build` |
 | a story, `args`, controls, the docs page | `storybook-story` | `storybook-test` (that is `qa-engineer`'s) |
 | a component already **confirmed slow** | `react-component-performance` | `react-developer` |
 | should the validation live in the browser, the BFF or the backend? | `software-architect` | frontend-developer |
@@ -51,7 +53,7 @@ In this order, stopping when you have enough:
 | 1 | [Architecture in React](../referencias/architecture-in-react.md) § 1–3 | the five axes and the **order** of decisions |
 | 2 | [Feature-Based Architecture](../referencias/feature-based-architecture.md) § 3, § 4 and § 10 | the feature's anatomy, the `REACT-ARCH-*` rules, the skill contract |
 | 3 | the task's skill (table above) | its procedure and minimum loading |
-| 4 | the tool's hub — [React.js](../referencias/react-js.md), [TanStack Router](../referencias/tanstack-router.md), [TanStack Query](../referencias/tanstack-query.md), [React Hook Form](../referencias/react-hook-form.md), [Storybook](../referencias/storybook.md), `Tailwind CSS` | decision trees and § 6.2 of canonical IDs |
+| 4 | the tool's hub — [React.js](../referencias/react-js.md), `TanStack Router`, `TanStack Query`, [React Hook Form](../referencias/react-hook-form.md), [Storybook](../referencias/storybook.md), `Tailwind CSS` | decision trees and § 6.2 of canonical IDs |
 | 5 | the satellite the skill points at | only when you need the family's full text |
 
 **Never load all of a hub's satellites.** And never load `Clean Code - React e Node` or other whole classes.
@@ -105,7 +107,7 @@ Task: "add a status filter to the invoice list".
 1. **Where it lives** — `features/invoices/`. The filter has product vocabulary; it is not generic.
 2. **Who owns it** — `status` belongs to the **URL** (`tanstack-router`, `validateSearch` with Zod). The list belongs to the **server** (`tanstack-query`, `queryOptions` with the key including `status`). Nothing in `useState`.
 3. **Contract** — the status enum already exists in the shared schema; the route's `search` derives from it.
-4. **Build** — the route composes `<InvoiceList />` and loads through a `loader` + `ensureQueryData` ([TanStack Router - Carregamento de Dados](../referencias/tanstack-router-carregamento-de-dados.md)); the feature exports the component through the barrel.
+4. **Build** — the route composes `<InvoiceList />` and loads through a `loader` + `ensureQueryData` (`TanStack Router - Data Loading`); the feature exports the component through the barrel.
 5. **Verify** — `biome check`, a behavior test covering "the filter in the URL survives a reload"; an `InvoiceList` story with the four states only if the task asked for one.
 
 ---

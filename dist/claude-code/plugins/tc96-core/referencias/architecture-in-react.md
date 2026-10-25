@@ -75,7 +75,7 @@ cache — e vai sofrer do mesmo jeito.
 | Captura separada de validação | |
 | Extrair sincronização | |
 | Fronteira de confiança no servidor | |
-| Rota, loader e busca de dados | [TanStack Router](tanstack-router.md) |
+| Rota, loader e busca de dados | `TanStack Router` |
 
 ### Fronteiras de falha
 

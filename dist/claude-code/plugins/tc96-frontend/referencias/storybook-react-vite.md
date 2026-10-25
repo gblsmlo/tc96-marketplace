@@ -188,7 +188,7 @@ Quatro pontos:
 - **Params e query entram como string em `initialEntries`.** `'/tarefas/42?tab=detalhes'` produz `useParams()` → `{ id: '42' }` e `useSearch()` → `{ tab: 'detalhes' }`. **Sem checagem de tipo** contra o path — errar o nome do segmento não é erro de compilação, é story que renderiza errado. É o custo direto de não estar no caminho TanStack.
 - **O router é criado dentro do decorator**, uma instância por render (`SB-RV-03`).
 
-A API de árvore em código — `createRootRoute`, `createRoute`, `getParentRoute`, `addChildren` — está documentada em [TanStack Router - Route Trees](tanstack-router-route-trees.md), incluindo `TSR-TREE-06`: a raiz vem de `createRootRoute`, nunca de `createRoute` com `id` inventado.
+A API de árvore em código — `createRootRoute`, `createRoute`, `getParentRoute`, `addChildren` — está documentada em `TanStack Router - Route Trees`, incluindo `TSR-TREE-06`: a raiz vem de `createRootRoute`, nunca de `createRoute` com `id` inventado.
 
 > **A tensão do `SB-RV-03`.** Recriar o router a cada render zera o estado de navegação. Para uma story que só renderiza, isso é o que se quer. Para uma story cuja `play` clica num `<Link>` e espera continuar na tela seguinte, é problema — e esta doc **não tem solução verificada** para o caso. Está registrado em [Storybook - Pendências de revisão](storybook-pendencias-de-revisao.md).
 
@@ -322,8 +322,8 @@ Se a única razão para não usar o framework do TanStack é "o componente de de
 - [Storybook - Decorators e Contexto](storybook-decorators-e-contexto.md) — onde o decorator de router se encaixa
 - [Storybook - Mocking](storybook-mocking.md) — o substituto de `routeOverrides` deste lado
 - [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) — vale igual nos dois caminhos
-- [TanStack Router - Navegação](tanstack-router-navegacao.md) — `RouterProvider` e navegação no app real
-- [TanStack Router - Route Trees](tanstack-router-route-trees.md) — `createRootRoute`, `createRoute`, `addChildren`: a árvore que o decorator monta
+- `TanStack Router - Navigation` — `RouterProvider` e navegação no app real
+- `TanStack Router - Route Trees` — `createRootRoute`, `createRoute`, `addChildren`: a árvore que o decorator monta
 - [Storybook - Pendências de revisão](storybook-pendencias-de-revisao.md) — o que esta nota deixou em aberto
 
 ## Fontes consultadas
@@ -344,5 +344,5 @@ Verificadas diretamente em **2026-08-19**:
 - **Existem três tipos de history:** `createBrowserHistory` (default), `createHashHistory` e `createMemoryHistory`.
 - **A automigração `react-vite-to-tanstack-react` existe e é unidirecional.** Não há automigração no sentido inverso.
 - **O addon do Vitest exige um framework baseado em Vite**, e `react-vite` qualifica — a camada de teste é idêntica nos dois caminhos.
-- **A montagem de árvore mínima usa API já verificada no vault** — `createRootRoute`, `createRoute`, `getParentRoute`, `addChildren`, em [TanStack Router - Route Trees](tanstack-router-route-trees.md). **Não** é padrão prescrito pela doc do Storybook: é composição desta doc a partir de duas fontes verificadas.
+- **A montagem de árvore mínima usa API já verificada no vault** — `createRootRoute`, `createRoute`, `getParentRoute`, `addChildren`, em `TanStack Router - Route Trees`. **Não** é padrão prescrito pela doc do Storybook: é composição desta doc a partir de duas fontes verificadas.
 - **Que `initialEntries` aceita query string não foi verificado na fonte do TanStack** — a doc de history types só mostra path puro. Registrado em [Storybook - Pendências de revisão](storybook-pendencias-de-revisao.md).

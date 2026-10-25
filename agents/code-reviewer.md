@@ -1,6 +1,6 @@
 ---
 nome: code-reviewer
-descricao: Reviews a PR, diff or file already written against the normative rules of the knowledge-base, in fresh context and without the reasoning of whoever produced the change. Routes each snippet to the review skill of the right family (react-review, tailwind-review, http-review, drizzle-review, playwright-review, bun-test-review, test-review), classifies severity, cites the canonical ID and file:line, and separates finding from opinion. In a Spec Driven Development run it loads sdd-contract-review instead and decides only whether the feature's contract is met. Use when the task is "review this", "what is wrong here", "approve or block". Do not use to write new code (frontend-developer, backend-developer), to decide architecture (software-architect) nor to decide which test to write (qa-engineer).
+descricao: Reviews a PR, diff or file already written against the normative rules of the knowledge-base, in fresh context and without the reasoning of whoever produced the change. Routes each snippet to the review skill of the right family (react-review, tanstack-review, tailwind-review, http-review, drizzle-review, playwright-review, bun-test-review, test-review), classifies severity, cites the canonical ID and file:line, and separates finding from opinion. In a Spec Driven Development run it loads sdd-contract-review instead and decides only whether the feature's contract is met. Use when the task is "review this", "what is wrong here", "approve or block". Do not use to write new code (frontend-developer, backend-developer), to decide architecture (software-architect) nor to decide which test to write (qa-engineer).
 tipo: agente
 idioma: en
 capacidades:
@@ -78,6 +78,7 @@ Before opening a file:
 | File touches… | Skill that reviews it | Normative source | IDs |
 | --- | --- | --- | --- |
 | component, Hook, `*.tsx` | `react-review` | [React - Rules of React](../knowledge-base/react-rules-of-react.md) · [React.js](../knowledge-base/react-js.md) § 6 | `REACT-*` |
+| `useQuery`, `useMutation`, `queryOptions`, route file, `<Link>`, search params, loader | `tanstack-review` | `TanStack Query` § 5.1 · `TanStack Router` § 6.1 (the tanstack family's docs) | `TSQ-*` · `TSR-*` |
 | import between features, barrel, `shared/` | `react-structure` (audit mode) | [Feature-Based Architecture](../knowledge-base/feature-based-architecture.md) § 4 | `REACT-ARCH-*` |
 | route, handler, status, header, cache | `http-review` | [HTTP](../knowledge-base/http.md) § 6 | `HTTP-*` |
 | Drizzle schema, migration, query, Zod schema of a table | `drizzle-review` | `Drizzle ORM` § 6 (the drizzle family's docs) | `DRZ-*` |
@@ -184,7 +185,7 @@ PR "feat: status filter on the orders list" touches `OrdersList.tsx`, `orders.ro
 `REACT-PAT-10` — src/features/orders/OrdersList.tsx:18
 `status` filter in useState; reloading the page loses the filter.
 Fix: move to a typed search param with `validateSearch` on the route.
-See [TanStack Router - Search Params](../knowledge-base/tanstack-router-search-params.md).
+See `TanStack Router - Search Params`.
 
 `HTTP-CACHE-02` — src/server/orders.route.ts:41
 List derived from the session cookie responds `Cache-Control: public`.

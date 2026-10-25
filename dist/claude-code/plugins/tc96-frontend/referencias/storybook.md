@@ -509,10 +509,10 @@ O corpo desta doc é Storybook fiel à fonte. Mas no meu stack várias decisões
 
 | Problema dentro de uma story | O que **não** fazer | A ponte |
 | --- | --- | --- |
-| Componente busca dado remoto | mockar `fetch` na mão | `QueryClient` por story com `retry: false` — [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) |
+| Componente busca dado remoto | mockar `fetch` na mão | `QueryClient` por story com `retry: false` — `TanStack Query - Cache and Freshness` |
 | Componente usa `Link` ou `useNavigate` — **caminho tanstack-react** | embrulhar em `RouterProvider` manual | `parameters.tanstack.router` — [Storybook - TanStack React](storybook-tanstack-react.md) |
 | Componente usa `Link` ou `useNavigate` — **caminho react-vite** | esperar `parameters.tanstack` funcionar (é no-op, `SB-RV-04`) | decorator com árvore mínima — [Storybook - React Vite](storybook-react-vite.md) § 4 |
-| Componente lê search param tipado — **caminho tanstack-react** | passar prop fake | `query` + `routeOverrides.validateSearch` — [TanStack Router - Search Params](tanstack-router-search-params.md) |
+| Componente lê search param tipado — **caminho tanstack-react** | passar prop fake | `query` + `routeOverrides.validateSearch` — `TanStack Router - Search Params` |
 | Componente lê search param tipado — **caminho react-vite** | passar prop fake | query string em `initialEntries`; `validateSearch` **não é sobrescrevível** — [Storybook - React Vite](storybook-react-vite.md) § 4.2 |
 | Story de formulário complexo | disparar `change` em cada input | `play` com `userEvent` + `fn()` no `onSubmit` — [React Hook Form - Estado e Performance](react-hook-form-estado-e-performance.md) |
 | Componente com `useEffect` de fetch | escrever a story em volta do defeito | o defeito é o `useEffect` — `REACT-EFFECT-06` em [React - Efeitos e Sincronização](react-efeitos-e-sincronizacao.md) |
@@ -533,7 +533,7 @@ O corpo desta doc é Storybook fiel à fonte. Mas no meu stack várias decisões
 - [Storybook - React Vite](storybook-react-vite.md) — caminho B: o framework genérico, e o router à mão
 - [React.js](react-js.md) — o hub de React; esta doc pressupõe o modelo mental de lá
 - [React - Patterns](react-patterns.md) — decide o que é componente de design system e o que não é
-- [TanStack Query](tanstack-query.md) · [TanStack Router](tanstack-router.md) · [React Hook Form](react-hook-form.md) · `Tailwind CSS`
+- `TanStack Query` · `TanStack Router` · [React Hook Form](react-hook-form.md) · `Tailwind CSS`
 - [Bun - Testes](bun-testes.md) — o outro runner do monorepo
 - [Monorepo com Bun - estrutura e tooling](monorepo-com-bun-estrutura-e-tooling.md) — onde `apps/storybook` vive e por que é folha
 

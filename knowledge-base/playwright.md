@@ -564,7 +564,7 @@ O corpo desta doc é Playwright fiel à fonte. Mas no meu stack várias decisõe
 | --- | --- | --- |
 | `getByRole` não alcança o elemento | descer para `locator('css=…')` | o defeito é o componente sem papel/nome acessível — [React - Patterns](react-patterns.md), e a auditoria de a11y de [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) |
 | Campo só localizável por placeholder | `getByPlaceholder` e seguir a vida | falta `<label>`; é achado de acessibilidade — [React Hook Form - Registro e Controle](react-hook-form-registro-e-controle.md) |
-| Componente busca dado remoto e o teste corre demais | `waitForTimeout` | asserção web-first no estado de carregado; e o estado de erro merece teste próprio — [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) |
+| Componente busca dado remoto e o teste corre demais | `waitForTimeout` | asserção web-first no estado de carregado; e o estado de erro merece teste próprio — `TanStack Query - Cache and Freshness` |
 | Estado de erro do BFF não dispara | `try/catch` no teste | nem `hc` (Hono) nem Eden Treaty lançam em status de erro — [Hono - Validação e RPC](hono-validacao-e-rpc.md), `Elysia - Schema e Eden` |
 | Mock de resposta com shape redigitado à mão | duplicar o tipo no teste | reusar o tipo exportado do servidor — [Hono - Validação e RPC](hono-validacao-e-rpc.md), `Elysia - Schema e Eden` |
 | Preparar dado de teste pela UI | clicar 12 vezes para criar um registro | criar via `request` (API), navegar depois — [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 5 |
@@ -596,7 +596,7 @@ O que mudou: a 1.62 tornou component testing não-experimental, com um modelo de
 - [Teste de Software](teste-de-software.md) — a camada conceitual: que nível de teste, para que risco
 - [Storybook](storybook.md) — o outro lado da fronteira componente × jornada
 - ·
-- [React.js](react-js.md) · [TanStack Query](tanstack-query.md) · [TanStack Router](tanstack-router.md) · [React Hook Form](react-hook-form.md)
+- [React.js](react-js.md) · `TanStack Query` · `TanStack Router` · [React Hook Form](react-hook-form.md)
 - [HTTP](http.md) · [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) · [Github Actions](github-actions.md)
 - [Monorepo com Bun - estrutura e tooling](monorepo-com-bun-estrutura-e-tooling.md) — onde a suíte E2E vive
 

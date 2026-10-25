@@ -58,7 +58,7 @@ Hoje Hono tem `HONO-CORE-13`, `HONO-RPC-13` e `HONO-RPC-14`, a § 6.1 os carrega
 
 **2. `@hono/zod-openapi` não verificado.** É a lacuna que mais pode mudar uma decisão: o nó de OpenAPI é o que inverte a árvore do § 3 de [Backend no runtime Bun](backend-no-runtime-bun.md). A fonte indica que o pacote muda a forma de escrever as rotas, o que não é detalhe.
 
-**3. O envelope paginado é convenção deste vault, não das ferramentas.** `hasMore` foi adotado nas três estruturas porque `TSQ-PATTERN-05` em [TanStack Query - Padrões de Consulta](tanstack-query-padroes-de-consulta.md) lê `data?.hasMore`, e o consumidor veio primeiro. Nem Hono nem Elysia têm opinião sobre formato de resposta de lista. Está declarado como decisão local em `ELYSIA-TYPE-13` e na § 8.6 de [Hono](hono.md).
+**3. O envelope paginado é convenção deste vault, não das ferramentas.** `hasMore` foi adotado nas três estruturas porque `TSQ-PATTERN-05` em `TanStack Query - Query Patterns` lê `data?.hasMore`, e o consumidor veio primeiro. Nem Hono nem Elysia têm opinião sobre formato de resposta de lista. Está declarado como decisão local em `ELYSIA-TYPE-13` e na § 8.6 de [Hono](hono.md).
 
 **4. `BUN-SYS-07` ainda contém a palavra "conferir".** Hoje tem método concreto e artefato (a enumeração de módulos `node:*`, incluindo transitivos), então é falso positivo do checador — mas a redação pode ser apertada.
 

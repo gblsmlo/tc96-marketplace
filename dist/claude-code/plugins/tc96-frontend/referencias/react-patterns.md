@@ -77,7 +77,7 @@ Os filhos recebem dados prontos e não sabem que existe um filtro — continuam 
 
 Pergunta que a maioria do código pula. O estado pertence à URL quando precisa **sobreviver a um refresh**, **ser compartilhável por link** ou **funcionar com o botão voltar**. Filtro de busca, aba ativa, página, ordenação e faixa de datas quase sempre atendem a pelo menos um critério.
 
-Quando pertence, a fonte de verdade é a rota — no meu stack, os search params tipados do [TanStack Router](tanstack-router.md) — e não `useState`. Estado efêmero de UI (menu aberto, hover, foco, rascunho de campo) fica em `useState`.
+Quando pertence, a fonte de verdade é a rota — no meu stack, os search params tipados do `TanStack Router` — e não `useState`. Estado efêmero de UI (menu aberto, hover, foco, rascunho de campo) fica em `useState`.
 
 | ID | Regra |
 | --- | --- |

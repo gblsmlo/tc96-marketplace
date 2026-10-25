@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: review-orders-pr
+expected_outcome: |
+  Ten findings with file:line, severity and canonical IDs: TSQ-CACHE-01/03, TSQ-BASE-03, TSQ-BASE-05, TSQ-MUT-10, TSQ-MUT-11,
+  TSQ-MUT-02/12, TSR-SEARCH-01, TSR-LOAD-03, TSR-LOAD-14, TSR-LOAD-06; nothing reported against the clean customersQuery.ts;
+  no file modified.
+context:
+  scaffold_script: place-files.sh

@@ -61,7 +61,7 @@ In this order, stopping when you have enough:
 | 1 | [Architecture in React](../knowledge-base/architecture-in-react.md) § 1–3 | the five axes and the **order** of decisions |
 | 2 | [Feature-Based Architecture](../knowledge-base/feature-based-architecture.md) § 3, § 4 and § 10 | the feature's anatomy, the `REACT-ARCH-*` rules, the skill contract |
 | 3 | the task's skill (table above) | its procedure and minimum loading |
-| 4 | the tool's hub — [React.js](../knowledge-base/react-js.md), [TanStack Router](../knowledge-base/tanstack-router.md), [TanStack Query](../knowledge-base/tanstack-query.md), [React Hook Form](../knowledge-base/react-hook-form.md), [Storybook](../knowledge-base/storybook.md), `Tailwind CSS` | decision trees and § 6.2 of canonical IDs |
+| 4 | the tool's hub — [React.js](../knowledge-base/react-js.md), `TanStack Router`, `TanStack Query`, [React Hook Form](../knowledge-base/react-hook-form.md), [Storybook](../knowledge-base/storybook.md), `Tailwind CSS` | decision trees and § 6.2 of canonical IDs |
 | 5 | the satellite the skill points at | only when you need the family's full text |
 
 **Never load all of a hub's satellites.** And never load `Clean Code - React e Node` or other whole classes.
@@ -115,7 +115,7 @@ Task: "add a status filter to the invoice list".
 1. **Where it lives** — `features/invoices/`. The filter has product vocabulary; it is not generic.
 2. **Who owns it** — `status` belongs to the **URL** (`tanstack-router`, `validateSearch` with Zod). The list belongs to the **server** (`tanstack-query`, `queryOptions` with the key including `status`). Nothing in `useState`.
 3. **Contract** — the status enum already exists in the shared schema; the route's `search` derives from it.
-4. **Build** — the route composes `<InvoiceList />` and loads through a `loader` + `ensureQueryData` ([TanStack Router - Carregamento de Dados](../knowledge-base/tanstack-router-carregamento-de-dados.md)); the feature exports the component through the barrel.
+4. **Build** — the route composes `<InvoiceList />` and loads through a `loader` + `ensureQueryData` (`TanStack Router - Data Loading`); the feature exports the component through the barrel.
 5. **Verify** — `biome check`, a behavior test covering "the filter in the URL survives a reload"; an `InvoiceList` story with the four states only if the task asked for one.
 
 ---

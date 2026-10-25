@@ -206,7 +206,7 @@ Declaração explícita, para que ninguém reescreva o que já existe nem assuma
 | Validação de JWT: allowlist de `alg`, `iss`, `aud`, `kid`, `typ` | [RFC 8725 - JWT Best Current Practices](rfc-8725-jwt-best-current-practices.md) | completa, com checklist |
 | OAuth em SPA e padrão BFF | [OAuth 2.0 for Browser-Based Applications](oauth-2-0-for-browser-based-applications.md) | completa |
 | Sessão e autorização como checklist auditável (ASVS) | [OWASP - Sessão e Autorização](owasp-sessao-e-autorizacao.md) | completa |
-| Cache **de cliente** em app React | [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) | completa — camada diferente do cache HTTP da RFC 9111 |
+| Cache **de cliente** em app React | `TanStack Query - Cache and Freshness` | completa — camada diferente do cache HTTP da RFC 9111 |
 
 Nas notas de HTTP, `Authorization` e `WWW-Authenticate` entram como **mecanismo de protocolo** (RFC 9110 § 11: o servidor desafia, o cliente responde, `401` × `403`). Tudo que é **política** — qual grant, onde guardar o token, como rotacionar — pertence ao cluster acima e é referência, não conteúdo.
 

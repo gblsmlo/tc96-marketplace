@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: query-orders-paging-feed
+expected_outcome: |
+  Orders query keyed by page with placeholderData: keepPreviousData and controls disabled while isPlaceholderData; the feed is a
+  useInfiniteQuery with initialPageParam, getNextPageParam from nextCursor, a guarded fetchNextPage and maxPages; queryFns pass
+  the signal and throw on !res.ok; tsc passes.
+context:
+  scaffold_script: place-files.sh

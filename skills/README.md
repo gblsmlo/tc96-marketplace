@@ -27,7 +27,7 @@ skills/<family>/
 | Family | Skills | Index |
 | --- | --- | --- |
 | **react** | `react-developer` · `react-review` · `react-audit` · `react-structure` · `react-hook-form` · `react-component-performance` — self-contained, with its own `docs/` | [react/](react/README.md) |
-| **tanstack** | `tanstack-query` · `tanstack-router` | [tanstack/](tanstack/README.md) |
+| **tanstack** | `tanstack-query` · `tanstack-router` · `tanstack-review` | [tanstack/](tanstack/README.md) |
 | **storybook** | `storybook-setup` · `storybook-story` · `storybook-test` | [storybook/](storybook/README.md) |
 | **tailwind** | `tailwind-setup` · `tailwind-migrate` · `tailwind-build` · `tailwind-split-variants` · `tailwind-review` — self-contained, docs inside each skill | [tailwind/](tailwind/README.md) |
 | **test** | `test-design` · `test-review` · `test-diagnose` | [test/](test/README.md) |

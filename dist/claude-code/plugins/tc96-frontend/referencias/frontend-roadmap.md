@@ -84,8 +84,8 @@ Os Zettels acima carregam o raciocínio; a referência de API e as regras normat
 | Hub | Cobre | Entradas diretas |
 | --- | --- | --- |
 | [React.js](react-js.md) | componentes, estado, efeitos, Suspense, RSC | [React - Hooks](react-hooks.md) · [React - Patterns](react-patterns.md) · [React - Rules of React](react-rules-of-react.md) |
-| [TanStack Router](tanstack-router.md) | rotas, navegação, search params, loaders | [TanStack Router - Routing Concepts](tanstack-router-routing-concepts.md) · [TanStack Router - Search Params](tanstack-router-search-params.md) |
-| [TanStack Query](tanstack-query.md) | estado do servidor, cache, mutations | [TanStack Query - O que um Dev Frontend Precisa Saber](tanstack-query-o-que-um-dev-frontend-precisa-saber.md) · [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md) |
+| `TanStack Router` | rotas, navegação, search params, loaders | `TanStack Router - Routing Concepts` · `TanStack Router - Search Params` |
+| `TanStack Query` | estado do servidor, cache, mutations | `TanStack Query - Fundamentals` · `TanStack Query - Mutations and Invalidation` |
 
 As skills que consomem essas docs estão em `Skill/`: `react-review`, `react-build`, `tanstack-router` e `tanstack-query`.
 
@@ -107,11 +107,11 @@ Decisão de arquitetura — onde o código mora e quem pode importar quem — n�
 | React Hook Form | [React Hook Form](react-hook-form.md) |
 | Hooks | [React - Hooks](react-hooks.md) |
 | Persistência | **gap parcial** — ver observações |
-| Cache | [TanStack Query - Cache e Frescor](tanstack-query-cache-e-frescor.md) · [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) |
-| TanStack Query | [TanStack Query](tanstack-query.md) |
-| Optimistic update | [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md) |
+| Cache | `TanStack Query - Cache and Freshness` · [HTTP - Cache e Requisições Condicionais](http-cache-e-requisicoes-condicionais.md) |
+| TanStack Query | `TanStack Query` |
+| Optimistic update | `TanStack Query - Mutations and Invalidation` |
 | Server Actions | [React - Server Components e Diretivas](react-server-components-e-diretivas.md) |
-| Error handling | [React - Patterns](react-patterns.md) § 6 · [TanStack Query - Mutations e Invalidação](tanstack-query-mutations-e-invalidacao.md) |
+| Error handling | [React - Patterns](react-patterns.md) § 6 · `TanStack Query - Mutations and Invalidation` |
 
 ### Observações da revisão (2026-09-23)
 
