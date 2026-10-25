@@ -22,7 +22,7 @@ skills/<family>/
     └── scripts/       the probes, and the ID-map generator
 ```
 
-## The twelve families
+## The thirteen families
 
 | Family | Skills | Index |
 | --- | --- | --- |
@@ -37,7 +37,8 @@ skills/<family>/
 | **http** | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [http/](http/README.md) |
 | **drizzle** | `drizzle-query` · `drizzle-mutation` · `drizzle-zod` · `drizzle-review` — self-contained, with its own `docs/` | [drizzle/](drizzle/README.md) |
 | **kb** | `kb-coverage` | [kb/](kb/README.md) |
-| **workflow** | `workflow-research` · `workflow-planning` · `workflow-implementation` · `workflow-validation` · `workflow-spec` | [workflow/](workflow/README.md) |
+| **spec** | `spec-prd` · `spec-adr` — the two documents that stand outside a feature, each carrying its own template and rules | [spec/](spec/README.md) |
+| **sdd** | `sdd-spec-writer` · `sdd-orchestrator` · `sdd-contract-review` — the Spec Driven Development delivery flow | [sdd/](sdd/README.md) |
 
 All 38 are in the neutral source, in English, with `idioma: en` in the frontmatter.
 

@@ -174,7 +174,7 @@ for nome, desc, skills_do_agente in agentes:
 
 linhas += ["## Modelo e esforço por papel", "",
            "Ao delegar, use o papel pelo nome: um agente genérico herda o modelo da sessão",
-           "(`WF-CORE-06`). Runtime sem configuração de modelo por agente aplica esta tabela à mão.",
+           "(`SDD-CORE-02`). Runtime sem configuração de modelo por agente aplica esta tabela à mão.",
            "", "| Papel | Tier | Esforço |", "| --- | --- | --- |"]
 linhas += [f"| `{n}` | {m} | {e} |" for n, m, e, _c in papeis]
 linhas += ["", "`alto` é o modelo mais capaz do provedor, `medio` o intermediário, `rapido` o mais",

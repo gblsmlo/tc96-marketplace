@@ -12,7 +12,7 @@ set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="${1:-$RAIZ/dist/claude-code}"
-VERSAO="${VERSAO:-0.13.0}"   # 0.4: commands/ · 0.5: commands on bun · 0.6: phase 3 on bun test · 0.7: model and effort per role · 0.8: self-contained tc96-tailwind · 0.9: react-component-performance and bench harness · 0.10: .specs/, spec command and workflow-spec · 0.11: repo-operator, cost per point of the flow and gaps with an owner · 0.11.1: a session opened by another passes the model and calls the role as a subagent · 0.12: execution scope, workflow hub in English, no appetite gate · 0.13: small units side by side — waves, review budget, planning bundle, delta re-review
+VERSAO="${VERSAO:-0.14.0}"   # 0.4: commands/ · 0.5: commands on bun · 0.6: phase 3 on bun test · 0.7: model and effort per role · 0.8: self-contained tc96-tailwind · 0.9: react-component-performance and bench harness · 0.10: .specs/, spec command and workflow-spec · 0.11: repo-operator, cost per point of the flow and gaps with an owner · 0.11.1: a session opened by another passes the model and calls the role as a subagent · 0.12: execution scope, workflow hub in English, no appetite gate · 0.13: small units side by side — waves, review budget, planning bundle, delta re-review · 0.14: Spec Driven Development replaces the four pillars — PRD with waves, feature bundles, spec-writer, orchestrated runs, harness scripts
 
 rm -rf "$DEST"
 
@@ -31,11 +31,11 @@ ALVO = json.loads((raiz / "build/modelos.json").read_text(encoding="utf-8"))["cl
 # nao sai no build.
 PLUGINS = {
     "tc96-core": {
-        "familias": ["test", "http", "workflow"],
+        "familias": ["test", "http", "sdd", "spec"],
         "agentes": ["code-reviewer", "software-architect", "qa-engineer",
                     "product-manager", "product-designer", "project-manager",
                     "devops-security", "ai-engineer", "monorepo-auditor",
-                    "repo-explorer", "repo-operator"],
+                    "repo-explorer", "repo-operator", "spec-writer"],
         # comando e ponto de entrada nomeado, invocado pela pessoa — nao e uma
         # quarta camada da cadeia, e um quarto tipo de artefato ao lado de
         # skill e agente. Como os agentes, entra por nome, nao por familia.
@@ -48,7 +48,7 @@ PLUGINS = {
                      "scaffold-fba-01-start", "scaffold-fba-02-biome",
                      "scaffold-fba-03-bun-test", "scaffold-fba-04-git-hooks",
                      "scaffold-fba-05-fba",
-                     "configurar-antigravity", "spec"],
+                     "configurar-antigravity", "spec", "scaffold-sdd-scripts"],
         "descricao": "Teste e contrato HTTP, e os papéis que atravessam qualquer stack. "
                      "Habilite sempre.",
         "keywords": ["teste", "http", "review", "arquitetura"],

@@ -152,21 +152,21 @@ sondar("agentes com modelo e esforco mapeados em todo alvo", sem_tier)
 sondar("agentes com no máximo 2 skills pré-carregadas", preload_pesado)
 
 delegacao = []
-for skill in sorted((raiz / "skills/workflow").glob("*/SKILL.md")):
+for skill in sorted((raiz / "skills/sdd").glob("*/SKILL.md")):
     linhas = skill.read_text(encoding="utf-8").splitlines()
-    if not any("WF-CORE-06" in l for l in linhas[:30]):
+    if not any("SDD-CORE-02" in l for l in linhas[:30]):
         delegacao.append(f"{skill.relative_to(raiz)}: sem bloco de delegação no topo")
     for n, l in enumerate(linhas, 1):
         if re.search(r"\ba fresh agent\b", l, re.I):
             delegacao.append(f"{skill.relative_to(raiz)}:{n}: agente sem nome")
-sondar("pilares delegados a agente nomeado (WF-CORE-06)", delegacao)
+sondar("passos delegados a agente nomeado (SDD-CORE-02)", delegacao)
 
 sem_link = []
-for modelo in sorted((raiz / "skills/workflow").glob("*/references/template-*.md")):
+for modelo in sorted((raiz / "skills/sdd").glob("*/references/template-*.md")):
     skill = modelo.parent.parent / "SKILL.md"
     if f"references/{modelo.name}" not in skill.read_text(encoding="utf-8"):
         sem_link.append(f"{modelo.relative_to(raiz)}: não citado em {skill.relative_to(raiz)}")
-sondar("templates de workflow citados pela própria skill", sem_link)
+sondar("templates do sdd citados pela própria skill", sem_link)
 
 # --- 6. every .skill package stands alone -----------------------------------
 # Runs only when dist/skills/ exists (bash build/skill-packages.sh). Each package is

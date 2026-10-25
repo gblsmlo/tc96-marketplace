@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: prd-quote-approval
+expected_outcome: |
+  A Draft .specs/PRD.md with every section in order, a sourced or hypothesis-labeled problem, objectives with metrics, PRD-wide AC IDs in Given/When/Then, features that declare what they satisfy, provide and consume, waves that respect the providers, traceability both ways, the expiry edge answered or logged as a gap, and no technical design.
