@@ -1,6 +1,6 @@
 ---
 name: spec-adr
-description: Records one architecture decision as an ADR (architecture decision record) — context, the decision, real alternatives, consequences with their cost, and verifiable invariants — numbered in sequence, born `Proposed`, never edited once `Accepted` and superseded by a new ADR when the decision changes, citing `DOC-ADR-*` IDs. Use whenever someone asks to write, record, supersede or revise an ADR, to "document why we chose X", to log a decision that must outlive the current increment, or when an RFC or design reaches acceptance and its lasting decisions need their own record. Not for deciding what to build (spec-prd), for an open design discussion (spec-rfc), or for a decision with no real trade-off (`DOC-CORE-02`).
+description: Records one architecture decision as an ADR (architecture decision record) — context, the decision, real alternatives, consequences with their cost, and verifiable invariants — numbered in sequence, born `Proposed`, never edited once `Accepted` and superseded by a new ADR when the decision changes, citing `DOC-ADR-*` IDs. Use whenever someone asks to write, record, supersede or revise an ADR, to "document why we chose X", to log a decision that must outlive the current increment, or when a feature's spec settles a boundary that other features will depend on. Not for deciding what to build (spec-prd), for one feature's interfaces and steps (sdd-spec-writer), or for a decision with no real trade-off (`DOC-CORE-02`).
 source: "[Rules of the ADR](references/rules.md)"
 tags:
   - skill
@@ -11,7 +11,7 @@ tags:
 # spec-adr
 
 > **Self-contained.** The template is `references/template.md`; the rule text, numbering and superseding procedure are `references/rules.md`. Nothing here needs another skill to run.
-> Owner role: `software-architect` writes the content. When this skill runs in an orchestrating conversation, start that agent with the template path and the writing rules below, and keep only its path and open gaps in the conversation.
+> Owner role: `software-architect` writes the content. When this skill runs in an orchestrating conversation, start that agent as a subagent with the template path and the writing rules below, and keep only its path and open gaps in the conversation.
 
 ## Scope
 
@@ -19,16 +19,15 @@ An ADR answers one question: **what did we decide, and why, in a way that outliv
 
 | The question is... | Go to |
 | --- | --- |
-| a decision still open, with alternatives under discussion | `spec-rfc` |
+| one feature's interfaces, data shapes and steps | `sdd-spec-writer`, in the feature's `spec.md` |
 | what to build | `spec-prd` |
 | a choice with no real trade-off, easy to reverse | no document (`DOC-CORE-02`) |
 
 ## Step 1: Confirm the decision is made and lasting
 
-1. Read the project's record of kept documents if one exists (`## Specs` in `AGENTS.md`, else `.specs/README.md`). ADR marked off: do not write the file; state the decision in one line (it goes to the plan's origin) and stop.
-2. Confirm the decision is made: a decision still being debated is an RFC. Confirm it outlives the increment: a local choice that dies with the PR is not an ADR.
-3. Number it: highest number in `.specs/adr/` plus one, four digits, `0001` first. Slug the decision in kebab-case: `0003-keep-sessions-in-postgres.md`. Other files cite it as `ADR-0003`. The ADR lives in the code repository, never in a wiki.
-4. If this decision replaces an earlier one, this is a superseding ADR (Step 3), not an edit.
+1. Confirm the decision is made: a decision still being debated is not recorded yet; the owner decides it first. Confirm it outlives the feature: a local choice that dies with the PR belongs in that feature's `spec.md`, not in an ADR.
+2. Number it: highest number in `.specs/adr/` plus one, four digits, `0001` first. Slug the decision in kebab-case: `0003-keep-sessions-in-postgres.md`. Other files cite it as `ADR-0003`. The ADR lives in the code repository, never in a wiki.
+3. If this decision replaces an earlier one, this is a superseding ADR (Step 3), not an edit.
 
 ## Step 2: Write
 
@@ -42,7 +41,7 @@ Copy the template from "Body" down. Rules for the writer:
 | 4 | Consequences include the cost (indirection, types, operations, migration); recording only the gain is not allowed | `DOC-ADR-04` |
 | 5 | Each verifiable invariant names the test type that proves it at the cheapest level; an E2E-only invariant says why | the test cost repeats on every fix round |
 | 6 | Facts cite `file:line`; delete every bracketed hint | the owner verifies before accepting |
-| 7 | `status: Proposed`; the writer never accepts its own ADR | `WF-SPEC-06` |
+| 7 | `status: Proposed`; the writer never accepts its own ADR | `SDD-CORE-03` |
 
 ## Step 3: Superseding, not editing
 
@@ -74,11 +73,11 @@ Silence is not approval.
 | 4 | an `Accepted` ADR was not edited; a change is a new ADR | `DOC-ADR-02` |
 | 5 | every invariant names its test type | Step 2, rule 5 |
 | 6 | no bracketed hint survived | Step 2, rule 6 |
-| 7 | status is `Proposed` until the owner answered | `WF-SPEC-06` |
+| 7 | status is `Proposed` until the owner answered | `SDD-CORE-03` |
 
 ## Step 6: Return
 
-Report the path, the status and the one-sentence decision. When a workflow pillar called this skill, return the pillar's envelope: path in `artefato`, status in `resultado`.
+Report the path, the status and the one-sentence decision. Nothing else goes back to the orchestrating conversation. A `spec.md` that depends on the decision cites it as `ADR-NNNN`.
 
 ## Example
 
