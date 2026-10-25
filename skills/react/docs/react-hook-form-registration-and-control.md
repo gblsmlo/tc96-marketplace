@@ -13,6 +13,15 @@ verified-at: 2026-08-15
 
 # React Hook Form — Registration and Control
 
+## Contents
+
+- [1. Concept: why there are two paths](#1-concept-why-there-are-two-paths)
+- [2. `register`](#2-register)
+- [3. `Controller` and `useController`](#3-controller-and-usecontroller)
+- [4. `FormProvider` and `useFormContext`](#4-formprovider-and-useformcontext)
+- [5. Accessibility](#5-accessibility)
+- [6. Antipatterns](#6-antipatterns)
+
 > `register` · coercion · transform/parse (currency, percentage, mask) · `Controller` · `useController` · `FormProvider` / `useFormContext` · accessibility
 >
 > How a field enters the form. It is the decision that defines whether the form will be fast, accessible and typed — or none of the three.
@@ -677,24 +686,3 @@ const error = errors.name
 | `placeholder` instead of `<label>` | `label` + `htmlFor` · `RHF-A11Y-03` |
 | Error message without `aria-describedby` | tie it by `id` · `RHF-A11Y-01` |
 | `name: string` in a reusable field component | `FieldPath<T>` · `RHF-CTRL-07` |
-
----
-
-## Related
-
-- [React Hook Form](react-hook-form.md) — entry, decision trees, skill contract
-- [React Hook Form - Validation and Resolvers](react-hook-form-validation-and-resolvers.md) · [React Hook Form - State and Performance](react-hook-form-state-and-performance.md)
-- [React - Refs and DOM](react-refs-and-dom.md) — `ref` as a prop in React 19
-- [React - Utility Hooks](react-utility-hooks.md) — `useId` and `REACT-UTIL-01`
-- [React - Forms and Actions](react-forms-and-actions.md) — the same `role="alert"` / `role="status"` criterion
-
-## Sources consulted
-
-Verified on 2026-08-15:
-
-- [register](https://react-hook-form.com/docs/useform/register) — merge on re-registration, reserved names and name restrictions confirmed
-- [Controller](https://react-hook-form.com/docs/usecontroller/controller) — `exact` defaults to `true` since v7.68.0; warning about `onChange(undefined)`
-- [useController](https://react-hook-form.com/docs/usecontroller) — recommendation of one call per component
-- [useFormContext](https://react-hook-form.com/docs/useformcontext) — explicit guidance to use `useFormState` for `formState`
-- [Advanced Usage](https://react-hook-form.com/advanced-usage) — accessibility, `ConnectForm`, `FormProvider` performance, and the *Transform and Parse* section that grounds § 3.4: the `input`/`output` pattern in `Controller` and the rationale that `valueAsNumber`/`valueAsDate` leave `NaN` and `null` unhandled
-- [TypeScript](https://react-hook-form.com/ts) — `FieldPath`, `Control`, `ControllerRenderProps`

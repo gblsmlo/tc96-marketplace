@@ -1,5 +1,13 @@
 # Worked example — invoice panel
 
+## Contents
+
+- [Step 1 — the three questions, in writing](#step-1--the-three-questions-in-writing)
+- [Step 2 — the trees, one owner at a time](#step-2--the-trees-one-owner-at-a-time)
+- [Step 3 — the code](#step-3--the-code)
+- [Step 4 — what the habits table prevented](#step-4--what-the-habits-table-prevented)
+- [Step 5 — self-check](#step-5--self-check)
+
 Task: *"an invoice panel with a status filter and the total of what is selected"*.
 
 The point of this example: the intuitive version of this screen has **four** `useState` and **two**

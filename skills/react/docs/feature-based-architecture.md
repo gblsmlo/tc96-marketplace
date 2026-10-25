@@ -10,6 +10,20 @@ tags:
 ---
 # Feature-Based Architecture
 
+## Contents
+
+- [1. The problem: grouping by technical role](#1-the-problem-grouping-by-technical-role)
+- [2. The principle and the layers](#2-the-principle-and-the-layers)
+- [3. Anatomy of a feature](#3-anatomy-of-a-feature)
+- [4. Normative rules (`REACT-ARCH-*`)](#4-normative-rules-react-arch-)
+- [5. Examples in the real stack](#5-examples-in-the-real-stack)
+- [6. Antipatterns](#6-antipatterns)
+- [7. Enforcement with Biome](#7-enforcement-with-biome)
+- [8. Gradual migration](#8-gradual-migration)
+- [9. When not to use it](#9-when-not-to-use-it)
+- [10. Skill contract](#10-skill-contract)
+- [Divergences from the source](#divergences-from-the-source)
+
 > Child note of [Architecture in React](architecture-in-react.md). This is where we decide **where code lives and who may import whom**.
 > The conceptual idea in one sentence is in;
 > this note turns the idea into structure, citable rules and automated verification.
@@ -824,24 +838,3 @@ source of truth for decisions in this family. Where they diverge, and why:
 
 The article also positions itself as a simplification of Feature-Sliced Design. This note does not adopt FSD:
 no `entities/`/`widgets/`, no layer numbering.
-
----
-
-## Related
-
-- `software-architect` — the agent that decides what crosses the server boundary (`BFF-*`); this note decides where frontend code lives
-- `bun-workspace` · `monorepo-auditor` — when a layer of this note becomes its own package
-- [Architecture in React](architecture-in-react.md) — parent note: the axes of architectural decision
-- `react-structure` — the skill that implements the contract in § 10
-- [React - Patterns](react-patterns.md) — decisions inside the component
-- [React.js](react-js.md) — the React hub and § 7, the skill contract
-- `tanstack-router` — virtual file routes, when the route collides with the feature
-
-## Sources consulted
-
-- `Feature-Based Architecture in React` — source article (dev.to)
-- [Biome — `noImportCycles`](https://biomejs.dev/linter/rules/no-import-cycles/)
-- [Biome — `noRestrictedImports`](https://biomejs.dev/linter/rules/no-restricted-imports/)
-- [Biome — `noPrivateImports`](https://biomejs.dev/linter/rules/no-private-imports/)
-- [Biome — configuration and `overrides`](https://biomejs.dev/reference/configuration/)
-- the tc96 commands `scaffold-fba-02-biome` and `scaffold-fba-05-fba` — the scaffold's conventions

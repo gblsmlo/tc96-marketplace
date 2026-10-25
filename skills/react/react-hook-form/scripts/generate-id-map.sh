@@ -60,6 +60,10 @@ scan() {
   echo "> An index, not a copy: it says **where** the rule is declared, never what it says."
   echo "> Regenerate with \`bash skills/react/react-hook-form/scripts/generate-id-map.sh\`."
   echo
+  echo "## Contents"
+  echo "- [Citing across docs](#citing-across-docs)"
+  echo "- [Full index](#full-index)"
+  echo
   echo "## Citing across docs"
   echo
   echo "Inside a form review, the \`RHF-*\` ID is enough. **When citing across docs**"

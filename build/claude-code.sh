@@ -182,7 +182,7 @@ for plugin, cfg in PLUGINS.items():
     for familia in cfg["familias"]:
         doc_familia = raiz / "skills" / familia / "docs"
         if doc_familia.is_dir():
-            shutil.copytree(doc_familia, alvo / "docs" / familia)
+            shutil.copytree(doc_familia, alvo / "docs" / familia, ignore=shutil.ignore_patterns("SOURCES.md"))
 
     for origem, campos, corpo in skills:
         destino = alvo / "skills" / origem.name

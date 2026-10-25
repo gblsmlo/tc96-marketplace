@@ -39,6 +39,9 @@ work in a project that has nothing else from tc96:
 | a single `.skill` package | `docs/` inside the skill — only the notes it cites, and the notes those cite |
 | `AGENTS.md` target | `skills/react/docs/`, nested as here |
 
+Where each doc's rules came from is recorded in `docs/SOURCES.md`, for maintainers. No doc links
+to it and every build target leaves it out, so no run spends tokens on it.
+
 A layer outside the family is cited by the **skill** that owns it (`tanstack-query`,
 `storybook-test`, `playwright-build`…), by name in a code span, never by link and never by
 note: context when that skill is installed, never a dependency. `grep -rn knowledge-base skills/react` returns nothing.

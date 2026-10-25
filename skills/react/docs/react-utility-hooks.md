@@ -11,6 +11,13 @@ verified-at: 2026-08-14
 
 # React — Utility Hooks
 
+## Contents
+
+- [1. `useId`](#1-useid)
+- [2. `useSyncExternalStore`](#2-usesyncexternalstore)
+- [3. `useDebugValue`](#3-usedebugvalue)
+- [4. Antipatterns](#4-antipatterns)
+
 > `useId` · `useSyncExternalStore` · `useDebugValue`
 >
 > Three Hooks for occasional use. Each one solves a specific problem and is often used for the wrong thing.
@@ -155,18 +162,3 @@ It does not affect behavior in production and does not replace logging or tests.
 | `useSyncExternalStore` for remote data | TanStack Query |
 | `useEffect` + `useState` to subscribe to a store | `useSyncExternalStore` (avoids tearing) |
 | `useDebugValue` in every Hook | only in shared Hooks · `REACT-UTIL-06` |
-
----
-
-## Related
-
-- [React.js](react-js.md) · [React - Hooks](react-hooks.md) · [React - Patterns](react-patterns.md) · [React - Rules of React](react-rules-of-react.md)
-- [React - State and Reactivity](react-state-and-reactivity.md) · [React - Rendering and Entrypoints](react-rendering-and-entrypoints.md)
-
-## Sources consulted
-
-Verified on 2026-08-14:
-
-- [useId](https://react.dev/reference/react/useId)
-- [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore)
-- [useDebugValue](https://react.dev/reference/react/useDebugValue)

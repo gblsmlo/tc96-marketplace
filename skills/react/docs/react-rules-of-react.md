@@ -11,6 +11,15 @@ verified-at: 2026-08-14
 ---
 # React — Rules of React
 
+## Contents
+
+- [1. Why they exist](#1-why-they-exist)
+- [2. Components and Hooks must be pure](#2-components-and-hooks-must-be-pure)
+- [3. React is the one that calls components and Hooks](#3-react-is-the-one-that-calls-components-and-hooks)
+- [4. Rules of Hooks](#4-rules-of-hooks)
+- [5. Review checklist](#5-review-checklist)
+- [6. Use by an agent](#6-use-by-an-agent)
+
 > The normative base. Everything else in the doc derives from here. An agent that writes or modifies components **must** have this note loaded.
 
 Entry point: [React.js](react-js.md) · API lookup: [React - Hooks](react-hooks.md) · Structural decision: [React - Patterns](react-patterns.md)
@@ -237,19 +246,3 @@ When generating React, check the checklist in § 5 **before** delivering. When r
 > `REACT-PURE-02` — `localStorage.setItem` in the render body. Move it to an Effect or to the handler that causes the change.
 
 A violation of these rules takes **precedence over any style or organization preference**. Do not negotiate a purity break in the name of conciseness.
-
----
-
-## Related
-
-- [React.js](react-js.md) — hub, API map and decision trees
-- [React - Hooks](react-hooks.md) · [React - Patterns](react-patterns.md)
-
-## Sources consulted
-
-Verified on 2026-08-14, with the rules quoted literally:
-
-- [Rules of React](https://react.dev/reference/rules)
-- [Components and Hooks must be pure](https://react.dev/reference/rules/components-and-hooks-must-be-pure)
-- [React calls Components and Hooks](https://react.dev/reference/rules/react-calls-components-and-hooks)
-- [Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks)
