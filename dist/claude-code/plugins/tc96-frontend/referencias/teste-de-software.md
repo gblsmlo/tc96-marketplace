@@ -93,8 +93,8 @@ Esta nota decide o nível. A partir daí, o "como" está aqui — e este mapa é
 | unidade e integração (Node/Bun, backend, funções puras) | `bun test` | [Bun - Testes](bun-testes.md) |
 | componente isolado, estados de UI, a11y de componente | Storybook + addon-vitest | [Storybook - Testes e Interações](storybook-testes-e-interacoes.md) |
 | jornada de usuário atravessando rota, rede e sessão | Playwright | [Playwright](playwright.md) |
-| contrato entre cliente tipado e servidor | tipo exportado do servidor | [Hono - Validação e RPC](hono-validacao-e-rpc.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
-| validação de entrada em runtime | Zod / TypeBox | [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
+| contrato entre cliente tipado e servidor | tipo exportado do servidor | [Hono - Validação e RPC](hono-validacao-e-rpc.md), `Elysia - Schema e Eden` |
+| validação de entrada em runtime | Zod / TypeBox | [Zod - Validação de Ambiente](zod-validacao-de-ambiente.md), `Elysia - Schema e Eden` |
 | estático (tipo e lint) | TypeScript + Biome | `TypeScript` |
 | persistência e migração | Drizzle + Postgres local | `Drizzle - Schema and Migrations` |
 
@@ -359,7 +359,7 @@ NUNCA:    esta estrutura inteira para uma tarefa de escrever um teste
 | Verificar regra de negócio | escrever E2E | unidade em [Bun - Testes](bun-testes.md) (`TS-CORE-02`) |
 | Verificar estado visual de componente | E2E que navega até a tela | story em [Storybook - Stories e Args](storybook-stories-e-args.md) |
 | Verificar jornada crítica | teste de unidade que simula a jornada | [Playwright](playwright.md) |
-| Verificar o contrato com o BFF | redigitar o shape no mock | reusar o tipo do servidor — [Hono - Validação e RPC](hono-validacao-e-rpc.md), [Elysia - Schema e Eden](elysia-schema-e-eden.md) |
+| Verificar o contrato com o BFF | redigitar o shape no mock | reusar o tipo do servidor — [Hono - Validação e RPC](hono-validacao-e-rpc.md), `Elysia - Schema e Eden` |
 | Verificar entrada inválida | só o caminho feliz | valor limite + Zod na fronteira — [Teste de Software - Técnicas de Design de Caso](teste-de-software-tecnicas-de-design-de-caso.md) |
 | Preparar estado para um teste de UI | criar pela interface | criar por API — [Playwright - Rede e Mocking](playwright-rede-e-mocking.md) § 5 |
 | Isolar dado entre execuções paralelas | um banco compartilhado | schema/banco efêmero por worker — `Drizzle - Schema and Migrations` |

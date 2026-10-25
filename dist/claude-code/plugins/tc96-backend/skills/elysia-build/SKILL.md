@@ -1,7 +1,7 @@
 ---
 name: elysia-build
-description: Write routes and handlers in Elysia — method chaining, destructured context, `status`, signed cookies, streaming, error taxonomy and testing through `app.handle` — citing `ELYSIA-CORE-*` and `ELYSIA-APP-*` IDs, with an executable self-check — use when the task is creating a new route, returning an expected error in a typed way, signing a session cookie, registering a domain error with its own `code`, handling `onError`, or testing a route without starting a server. Do not use for schemas and the Eden client, which is elysia-schema, for a plugin or hook that does not affect the route, which is elysia-diagnose, nor for the HTTP contract itself, which is http-contract.
-source: "[Elysia - Roteamento e Handler](../../referencias/elysia-roteamento-e-handler.md)"
+description: Write Elysia routes, handlers and feature modules — the instance chain, destructured context, `return status(...)` for expected errors, `.error()` codes and a narrow `onError`, signed `httpOnly` session cookies, SSE, auth plugins with a declared scope, and tests through `app.handle` — citing `ELYSIA-APP-*`, `ELYSIA-CORE-*` and `ELYSIA-LIFE-*` IDs, with an AST self-check. Use when the task is creating or changing an Elysia endpoint or module, returning an error the client must see typed, adding a session or an auth guard, streaming, or testing a route without a server. Do not use for request/response schemas and coercion (elysia-schema), the typed client (elysia-eden), the API documentation (elysia-openapi), a hook that does not run (elysia-diagnose), nor for which status or header the protocol requires (http-contract).
+fonte: "[Elysia - Routing and Handler](../../docs/elysia/elysia-routing-and-handler.md)"
 docs:
   - /websites/elysiajs
 tags:
@@ -12,26 +12,24 @@ tags:
 
 # elysia-build
 
-> **Source of this skill:** [Elysia - Roteamento e Handler](../../referencias/elysia-roteamento-e-handler.md), with the [Elysia](../../referencias/elysia.md) hub as the router. The 44 rules of the `ELYSIA-*` family are declared in § 6 of the hub; the body of `CORE`, `LIFE` and `TYPE` lives in the owning satellite.
-> This skill **does not contain** the text of the rules — it says what to load, in what order to decide, and what to check before delivering.
-> **API surface:** resolve it through Context7 — `/websites/elysiajs`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
+> **Source of this skill:** [Elysia - Routing and Handler](../../docs/elysia/elysia-routing-and-handler.md) — § 0 is the error tree, and every `ELYSIA-CORE-*` rule has its body there. Plugins and auth: [Elysia - Lifecycle and Plugins](../../docs/elysia/elysia-lifecycle-and-plugins.md).
+> **API surface:** resolve it through Context7 — `/websites/elysiajs`, topics `route`, `handler`, `error handling`, `cookie`, `plugin`, `unit test`. Signatures come from there; the rule and the ID come from the family docs.
 
-Contract this skill implements: [Elysia](../../referencias/elysia.md) § 7 ("Contrato de skill").
+Elysia's type is built by the chain itself: every `.get()`, `.use()` and `.error()` returns a new type, and that type is what the handler, the schema and the Eden client see. Most Elysia bugs are therefore silent — a hook registered one line too late, an error thrown instead of returned, a chain split into statements — and the code still compiles and runs. This skill writes the shape that keeps the type and the behaviour honest, then proves it with a test.
 
 ---
 
 ## When to use
 
-Writing or editing a **route and handler**.
-
 | Situation | Go to |
 | --- | --- |
-| validation schema, `response` per status, Eden client | `elysia-schema` |
-| a hook or plugin that **does not affect** the route | `elysia-diagnose` |
-| which status, `Location`, idempotency, error body | `http-contract` — Elysia is the mechanism, not the criterion |
-| cache policy and `ETag` | `http-cache` |
-| the persistence the handler calls | `drizzle-review` |
-| the test itself, under `bun test` | `bun-test-build` |
+| `body`/`query`/`params` schemas, coercion, `response` map, `guard`, models | `elysia-schema` |
+| the frontend client: `treaty`, TanStack Query, typed errors on the client | `elysia-eden` |
+| `/openapi`, tags, security schemes, Zod in the spec | `elysia-openapi` |
+| a hook or plugin that does not run for a route | `elysia-diagnose` |
+| which status, `Location`, idempotency, error body | `http-contract` |
+| the persistence the handler calls | `drizzle-query` · `drizzle-mutation` |
+| the test runner itself (`bunfig.toml`, mocks) | `bun-test-build` |
 
 ---
 
@@ -39,103 +37,72 @@ Writing or editing a **route and handler**.
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Elysia](../../referencias/elysia.md) § 2 | **one schema declaration produces four effects** — that is the mental model |
-| 2 | [Elysia](../../referencias/elysia.md) § 3 | import boundaries, and the **two npm scopes** that coexist |
-| 3 | [Elysia](../../referencias/elysia.md) § 6 + § 6.1 + § 6.2 | rules, critical ones and canonical IDs |
-| 4 | [Elysia - Roteamento e Handler](../../referencias/elysia-roteamento-e-handler.md) | the source |
-| 5 | [Elysia](../../referencias/elysia.md) § 5 ("Como devolvo um erro?") | the error tree |
+| 1 | [Elysia - Routing and Handler](../../docs/elysia/elysia-routing-and-handler.md) | the error tree (§ 0), context, responses, errors, cookies, SSE, tests — the one doc this skill needs |
+| 2 | [Elysia - Lifecycle and Plugins](../../docs/elysia/elysia-lifecycle-and-plugins.md) § 0, § 3, § 5, § 6 | only when the task writes a plugin, a hook, `derive`/`resolve`, a macro or auth |
+| 3 | [Elysia](../../docs/elysia/elysia.md) § 3, § 6 | only when you need the import map, the runtime limits, or an `ELYSIA-APP-*` rule's text |
 
-**Never load all the satellites.**
-
-References in this skill:
+**Never load the schema, Eden or OpenAPI docs to write a route.**
 
 | File | What for |
 | --- | --- |
-| `references/instancia-e-handler.md` | the two things that date the code, the chaining, the destructured context |
-| `references/erro-cookie-e-teste.md` | the error tree, signed cookies, streaming, and testing through `app.handle` |
-| `references/autoverificacao.md` | the 15 items, and which ones the script does **not** decide |
-| `references/antipadroes.md` | 17 antipatterns with IDs |
-| `references/mapa-de-ids.md` | the 44 `ELYSIA-*`: declaration, **satellite of the body** and section |
-| `references/exemplo-rota-de-faturas.md` | worked case, from the instance to the test |
-| `scripts/autoverificar.sh` | runs the mechanical items and lists the ones that require reading |
-
-**Check § 6.2 before citing:** this family has **partial aliases** — `ELYSIA-APP-03` is an alias of `ELYSIA-CORE-02` **only** in the destructuring clause, and `ELYSIA-TYPE-11` is an alias of `ELYSIA-APP-04` **only** in the `strict` one. Outside those clauses, both are citable for what is theirs alone.
+| `references/patterns.md` | five shapes that passed a test: feature module, app-level `onError`, signed session, SSE, lazy module — plus the scoped auth plugin |
+| `references/antipatterns.md` | the grid with IDs and doc sections |
+| `references/id-map.md` | every `ELYSIA-*` ID and where its body lives |
+| `scripts/self-check.sh` | the AST scan, groups `route` and `lifecycle` |
 
 ---
 
 ## Step 0 — Two things that date the code
 
-1. **`error` no longer exists** — it is `status` since 1.4 (`ELYSIA-APP-02`). Examples using `error` still circulate.
-2. **`@elysiajs/*` is legacy**, and `@elysiajs/swagger` is discontinued — use `@elysia/openapi` (`ELYSIA-APP-07`).
+1. **`error` is gone; it is `status`** (`ELYSIA-APP-02`), as an export and on the context. Examples with `error(...)` still circulate.
+2. **`@elysia/*` is the current npm scope**; `@elysiajs/*` is the legacy one, and `@elysiajs/swagger` is discontinued (`ELYSIA-APP-07`).
+
+Check the installed line before writing: `grep -E '"(elysia|@elysia/[a-z-]+)"' package.json`.
 
 ---
 
-## Step 1 — The instance
+## Step 1 — The chain is the type
 
-**Continuous** method chaining (`ELYSIA-APP-01`), `export type App = typeof app` at the end (`ELYSIA-APP-05`), `strict: true` on both sides (`ELYSIA-APP-04`). Breaking the chaining into statements makes Eden **lose the routes with no error on the server**.
+- **One unbroken chain per instance** (`ELYSIA-APP-01`). `const app = new Elysia(); app.get(...)` runs, but `typeof app` never sees the route — and neither does Eden.
+- **A feature is an instance with a prefix**, composed with `.use()`; the root ends with `export type App = typeof app` (`ELYSIA-APP-05`).
+- **Order is application order** (`ELYSIA-CORE-01`): a hook, `.use()` or `onError` reaches only the routes registered after it. Put them first. `onRequest` is the exception — it is global.
+- **Destructure the context inline** (`ELYSIA-CORE-02`); pass values, not the context, to a service.
 
----
+## Step 2 — Errors: decide with § 0 of the doc
 
-## Step 2 — The handler
+- **Expected and part of the contract → `return status(code, body)`** (`ELYSIA-CORE-03`), declared in the route's `response` map, so the client sees that status typed. A thrown status skips the type.
+- **A recurring domain failure → a class registered with `.error({ CODE: Class })`** (`ELYSIA-CORE-08`); `status = 409` on the class is its default, `onError` narrows by `code`.
+- **Unexpected → let it throw.** The app-level `onError` logs and answers generically, never `error.message` (`ELYSIA-CORE-07`). Registered first, it runs first for every module below it, so it must answer only `UNKNOWN`/`INTERNAL_SERVER_ERROR` and return nothing for codes a module owns — otherwise it swallows them (verified, `references/patterns.md` pattern 2).
+- Validation failures are **422** by default, with no `onError` at all.
 
-Destructure the context **inline** (`ELYSIA-CORE-02`). An external function annotated with a generic `Context` erases the inference the schema produced — this is not a style preference.
+## Step 3 — Cookies, streaming, secrets
 
----
+- A session cookie is **signed** (`cookie: { secrets, sign: ['session'] }`) **and `httpOnly`** (`ELYSIA-CORE-05`); a tampered one is rejected with 400.
+- In a generator handler, every `set.headers` goes **before the first `yield`** (`ELYSIA-CORE-06`).
+- Secrets come from `env` (from `elysia`), never literals or raw `process.env` (`ELYSIA-APP-08`, `ELYSIA-APP-09`).
 
-## Step 3 — Errors
+## Step 4 — Auth and plugins (load doc 2)
 
-**Expected → `return status(code, body)`** (`ELYSIA-CORE-03`); unexpected → `throw`, which lands in `onError`. A `throw` leaves through a path **outside the route's type**, so Eden does not know that status exists.
+An auth plugin's hook is **`local` by default and does not reach the routes of the instance that `.use()`s it** (`ELYSIA-LIFE-01`). Use `resolve({ as: 'scoped' }, ...)` returning `status(401, ...)`, or a macro route by route — never `derive` for an access decision (`ELYSIA-LIFE-02`), never `throw` to deny (it becomes 500, `ELYSIA-LIFE-10`). A plugin used by more than one instance has a `name` (`ELYSIA-LIFE-03`). Validation runs before `resolve`, so an anonymous request with a bad body gets 422, not 401 — add a credential-presence check in `onRequest` when 401 must come first.
 
-`onError` **never** returns `error.message` from an `UNKNOWN` error (`ELYSIA-CORE-07`) — that is a security finding: it leaks file paths, queries and table names.
+## Step 5 — Prove it
 
----
-
-## Step 4 — Cookies and streaming
-
-A session cookie is **signed and `httpOnly`** (`ELYSIA-CORE-05`); the semantics of `SameSite` and prefixes come from [RFC 6265 - Cookies HTTP](../../referencias/rfc-6265-cookies-http.md). In a stream, `set.headers` after the first `yield` is **silently ignored** (`ELYSIA-CORE-06`) — and `Bun.serve`'s `idleTimeout` drops SSE on its own.
-
----
-
-## Step 5 — Testing
-
-`app.handle`, never over the network (`ELYSIA-CORE-09`), and **`await app.modules`** before the assertions (`ELYSIA-CORE-10`) — without it the test runs before the plugin registers the route, and turns flaky.
-
----
-
-## Step 6 — Self-check before delivering
+Test through `app.handle(new Request('http://localhost/...'))`, never a server on a port (`ELYSIA-CORE-09`); `await app.modules` first when a plugin is lazy or async (`ELYSIA-CORE-10`). Use a real host such as `localhost`: a one-label host like `http://x/path` returns 404 in Elysia 1.4.30. For an auth plugin, the test that counts hits a route of the **consuming** instance without credentials and expects 401 (`ELYSIA-LIFE-08`).
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/elysia-build/scripts/autoverificar.sh src
-tsc --noEmit # Bun transpiles without type-checking — BUN-CORE-02
+bash ${CLAUDE_PLUGIN_ROOT}/skills/elysia-build/scripts/self-check.sh .
+bunx tsc --noEmit        # Bun runs TypeScript without type-checking
+bun test
 ```
 
-The 15 items are in `references/autoverificacao.md`, marked by which ones the script decides and which require reading.
+`high` findings are the defect; `candidate` ones need reading.
 
----
+## Step 6 — Report
 
-## Step 7 — Closing
-
-1. **`tsc --noEmit`** and the test through `app.handle`.
-2. **A route with more than one status** needs `response` as a map — that is `elysia-schema` (`ELYSIA-TYPE-06`); without it Eden sees `unknown`.
-3. **A hook that does not affect the route** is scope or order — `elysia-diagnose`.
-4. **A protocol decision** (status, `Location`, `Retry-After`) is `http-contract`.
-5. **Streaming**: check `Bun.serve`'s `idleTimeout` — the framework does not work around it.
-6. **Declare what you did not verify.** The `onError` path for a genuinely unexpected error is rarely exercised.
+What the route does now, each status it can answer, the IDs behind each decision written out in full (`ELYSIA-CORE-03`, never `-03`), the commands you ran with their output, and what you did not verify — the unexpected-error path is rarely exercised, and protocol choices (which status, `Retry-After`) belong to `http-contract`.
 
 ---
 
 ## Example
 
-An invoice approval route with a limit error and a signed session: the expected error leaves through `return status(422, …)` and reaches Eden **typed**; `onError` answers generically and logs the detail; the cookie is signed and `httpOnly`; the test runs through `app.handle` after `await app.modules`.
-
-Full case: `references/exemplo-rota-de-faturas.md`.
-
----
-
-## Related
-
-- [Elysia - Roteamento e Handler](../../referencias/elysia-roteamento-e-handler.md) — source of this skill
-- [Elysia](../../referencias/elysia.md) § 2, § 5, § 6, § 7 — mental model, trees, rules, contract
-- `elysia-schema` · `elysia-diagnose` — the sibling skills
-- `http-contract` · `http-cache` — the protocol, which Elysia only implements
-- `bun-test-build` — the test itself
+"Add order creation with a stock check and a lookup by id." The module gets `prefix: '/orders'`, registers `.error({ OUT_OF_STOCK })` and its `onError` before the routes, returns `status(404, …)` from the lookup and `status(201, order)` from the creation, declares both in `response` maps, and the app-level `onError` answers only unknown errors. Tests through `app.handle` assert 201, 404, 409 and 422. Cites `ELYSIA-CORE-01`, `ELYSIA-CORE-03`, `ELYSIA-CORE-04`, `ELYSIA-CORE-07` and `ELYSIA-CORE-08`.

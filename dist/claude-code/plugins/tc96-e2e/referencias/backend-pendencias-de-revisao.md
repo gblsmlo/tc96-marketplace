@@ -11,7 +11,7 @@ verificado-em: 2026-08-15
 
 # Backend — registro de revisão
 
-> O que a revisão de [Bun](bun.md) · [Hono](hono.md) · [Elysia](elysia.md) · [Backend no runtime Bun](backend-no-runtime-bun.md) encontrou, o que foi corrigido, e o que **continua aberto**.
+> O que a revisão de [Bun](bun.md) · [Hono](hono.md) · `Elysia` · [Backend no runtime Bun](backend-no-runtime-bun.md) encontrou, o que foi corrigido, e o que **continua aberto**.
 >
 > **Por que esta nota existe.** A estrutura passou por cinco leitores sem contexto e duas auditorias adversariais em 2026-08-15. Guardar o que foi achado — e o que sobrou — é o que impede o mesmo defeito de ser redescoberto do zero na próxima edição.
 
@@ -78,5 +78,5 @@ Notas preexistentes que o caminho mínimo referencia e que estão vazias ou quas
 
 ## Relacionados
 
-- [Bun](bun.md) · [Hono](hono.md) · [Elysia](elysia.md) · [Backend no runtime Bun](backend-no-runtime-bun.md)
+- [Bun](bun.md) · [Hono](hono.md) · `Elysia` · [Backend no runtime Bun](backend-no-runtime-bun.md)
 - `README` — índice da knowledge-base

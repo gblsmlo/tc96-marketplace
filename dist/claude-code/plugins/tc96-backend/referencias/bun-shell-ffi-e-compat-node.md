@@ -450,7 +450,7 @@ O que fazer com um servidor `node:http` que já existe — manter, embrulhar ou 
 
 - [Bun](bun.md) — hub
 - [Bun - HTTP e Servidor](bun-http-e-servidor.md) · [Bun - Runtime e APIs](bun-runtime-e-apis.md) · [Bun - Bundler e Build](bun-bundler-e-build.md) · [Bun - Dados e Persistência](bun-dados-e-persistencia.md) · [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) · [Bun - Testes](bun-testes.md)
-- [Backend no runtime Bun](backend-no-runtime-bun.md) — o que fazer com um servidor `node:http` que já existe, e a decisão `Bun.serve` × [Hono](hono.md) × [Elysia](elysia.md)
+- [Backend no runtime Bun](backend-no-runtime-bun.md) — o que fazer com um servidor `node:http` que já existe, e a decisão `Bun.serve` × [Hono](hono.md) × `Elysia`
 - `Node.js` · · ·
 - ·
 - · ·

@@ -98,12 +98,12 @@ Decisão de arquitetura — onde o código mora e quem pode importar quem — n�
 | Arquitetura e responsabilidades | [Architecture in React](architecture-in-react.md) |
 | Estrutura de pastas e fronteiras | [Feature-Based Architecture](feature-based-architecture.md) |
 | Coesão por capacidade | [Feature-Based Architecture](feature-based-architecture.md) § 1 |
-| Contratos full-stack | [Elysia - Schema e Eden](elysia-schema-e-eden.md) § 7 |
+| Contratos full-stack | `Elysia - Schema e Eden` § 7 |
 | Composition | [React - Patterns](react-patterns.md) § 3 |
 | Clean Code | **gap** — ver observações |
 | Testes | [Teste de Software](teste-de-software.md) |
 | Data flow | [React - Patterns](react-patterns.md) § 7 |
-| Zod | [Elysia - Schema e Eden](elysia-schema-e-eden.md) § 2 |
+| Zod | `Elysia - Schema e Eden` § 2 |
 | React Hook Form | [React Hook Form](react-hook-form.md) |
 | Hooks | [React - Hooks](react-hooks.md) |
 | Persistência | **gap parcial** — ver observações |

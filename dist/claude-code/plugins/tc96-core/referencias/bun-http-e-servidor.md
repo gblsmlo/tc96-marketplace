@@ -12,7 +12,7 @@ verificado-em: 2026-08-15
 
 > `Bun.serve` e o handler `fetch` · o objeto `routes` (roteamento nativo, params tipados, precedência) · `Response`, `Bun.file` e streaming/SSE · cookies via `CookieMap` · WebSockets, upgrade e pub/sub · TLS, `unix`, `idleTimeout` · ciclo de vida (`reload`, `stop`, `timeout`) · o que **não** existe nativamente.
 >
-> **Não cobre:** a escolha entre `Bun.serve` cru, [Hono](hono.md) e [Elysia](elysia.md) ([Backend no runtime Bun](backend-no-runtime-bun.md)) · APIs de runtime e I/O de arquivo ([Bun - Runtime e APIs](bun-runtime-e-apis.md)) · bundling do frontend servido pelo mesmo processo ([Bun - Bundler e Build](bun-bundler-e-build.md)) · drivers de banco chamados de dentro do handler ([Bun - Dados e Persistência](bun-dados-e-persistencia.md)) · compat com `node:http` e deploy ([Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md)).
+> **Não cobre:** a escolha entre `Bun.serve` cru, [Hono](hono.md) e `Elysia` ([Backend no runtime Bun](backend-no-runtime-bun.md)) · APIs de runtime e I/O de arquivo ([Bun - Runtime e APIs](bun-runtime-e-apis.md)) · bundling do frontend servido pelo mesmo processo ([Bun - Bundler e Build](bun-bundler-e-build.md)) · drivers de banco chamados de dentro do handler ([Bun - Dados e Persistência](bun-dados-e-persistencia.md)) · compat com `node:http` e deploy ([Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md)).
 
 Entrada: [Bun](bun.md) § 5 (árvores de decisão) · § 6 (regras normativas) · Base normativa: [Bun](bun.md)
 
@@ -28,7 +28,7 @@ A consequência prática é a decisão que abre qualquer projeto novo: **o que s
 
 Escolher `Bun.serve` cru quando você precisa de middleware produz o mesmo resultado toda vez: uma função `withAuth(handler)` caseira, depois `withLogging`, depois uma composição manual das duas, e em três semanas você reimplementou metade de um framework sem os tipos. Escolher um framework quando o serviço tem seis rotas e nenhum cross-cutting concern adiciona uma dependência e uma camada de indireção por nada.
 
-O critério de desempate está na **§ 7 desta nota** — a tabela do que `Bun.serve` não tem — e, desenvolvido em cinco eixos com árvore de decisão, em [Backend no runtime Bun](backend-no-runtime-bun.md). Esta nota estabelece **onde a linha cai**, seção a seção; a nota irmã decide qual das três portas abrir ([Hono](hono.md), [Elysia](elysia.md) ou `Bun.serve` cru).
+O critério de desempate está na **§ 7 desta nota** — a tabela do que `Bun.serve` não tem — e, desenvolvido em cinco eixos com árvore de decisão, em [Backend no runtime Bun](backend-no-runtime-bun.md). Esta nota estabelece **onde a linha cai**, seção a seção; a nota irmã decide qual das três portas abrir ([Hono](hono.md), `Elysia` ou `Bun.serve` cru).
 
 ---
 
@@ -382,18 +382,18 @@ const server = Bun.serve({
 
 ---
 
-## 7. O que não existe — e é por isso que [Hono](hono.md) e [Elysia](elysia.md) existem
+## 7. O que não existe — e é por isso que [Hono](hono.md) e `Elysia` existem
 
 Ausência aqui significa *verificado como ausente na doc de `Bun.serve`*, não "impossível de fazer". **Esta tabela é o critério prometido na § 1**; a decisão desenvolvida — cinco eixos, árvore e custo de saída de cada opção — está em [Backend no runtime Bun](backend-no-runtime-bun.md).
 
 | Não existe em `Bun.serve` | Consequência de fingir que existe | Onde resolver |
 | --- | --- | --- |
-| **Middleware componível** | cada rota repete auth/log/CORS, ou nasce um `compose()` caseiro sem tipos | [Hono](hono.md) / [Elysia](elysia.md) — [Backend no runtime Bun](backend-no-runtime-bun.md) |
+| **Middleware componível** | cada rota repete auth/log/CORS, ou nasce um `compose()` caseiro sem tipos | [Hono](hono.md) / `Elysia` — [Backend no runtime Bun](backend-no-runtime-bun.md) |
 | **Validação tipada do corpo e da query** | `await req.json()` devolve `any`; o handler confia em entrada externa | ou o validador do framework |
-| **Cliente tipado end-to-end** | o tipo da resposta é redigitado no frontend e diverge em silêncio | `hono/client` ([Hono](hono.md)), Eden Treaty ([Elysia](elysia.md)) — |
+| **Cliente tipado end-to-end** | o tipo da resposta é redigitado no frontend e diverge em silêncio | `hono/client` ([Hono](hono.md)), Eden Treaty (`Elysia`) — |
 | **CORS** | preflight `OPTIONS` tratado à mão, header a header | § 7.1, abaixo — |
 | **Mapeamento de erro de domínio para status** | `throw` vira 500 genérico no `error` handler | camada própria — |
-| **Roteador aninhado / `basePath`** | prefixo repetido literalmente em cada chave de `routes` | [Hono](hono.md) / [Elysia](elysia.md) |
+| **Roteador aninhado / `basePath`** | prefixo repetido literalmente em cada chave de `routes` | [Hono](hono.md) / `Elysia` |
 | **`AbortSignal` do request propagado** | trabalho continua depois do cliente desistir | veja abaixo |
 
 Sobre o último: a doc de `Bun.serve` não documenta um `req.signal`. O que **está** documentado é o cancelamento no lado do corpo da resposta — o `finally` de um gerador assíncrono e o `cancel()` de um `ReadableStream` rodam quando o cliente desconecta. Para trabalho caro disparado por request, é ali que a limpeza tem lugar garantido. Conceito em.
@@ -405,7 +405,7 @@ CORS merece saída concreta e não só uma linha de tabela, porque é o cenário
 Há três saídas, e elas não se contradizem — resolvem em camadas diferentes:
 
 1. **Não ter CORS.** Servir o frontend pelo mesmo `Bun.serve`, via import de HTML ([Bun - Bundler e Build](bun-bundler-e-build.md) § 7), coloca página e API na mesma origem e o problema deixa de existir. É a única saída que não tem custo permanente, e é para onde o caminho fullstack de Bun aponta. Custo: você troca o dev server do Vite pelo do Bun, com o trade-off da § 10 daquele satélite.
-2. **Middleware de framework.** [Hono](hono.md) e [Elysia](elysia.md) têm CORS pronto, com preflight e credenciais tratados. Se você já ia precisar de middleware para outra coisa, CORS não é o que decide — mas conta na soma. Ver [Backend no runtime Bun](backend-no-runtime-bun.md).
+2. **Middleware de framework.** [Hono](hono.md) e `Elysia` têm CORS pronto, com preflight e credenciais tratados. Se você já ia precisar de middleware para outra coisa, CORS não é o que decide — mas conta na soma. Ver [Backend no runtime Bun](backend-no-runtime-bun.md).
 3. **À mão, em `Bun.serve` cru.** É viável e cabe em uma função, desde que você aceite fazer o preflight você mesmo. Não existe nada em Bun que faça isso por você.
 
 ```ts
@@ -501,7 +501,7 @@ O que a fonte diz sobre o app que já existe é curto e é bom: *"Express and ot
 ## Relacionados
 
 - [Bun](bun.md) — hub
-- [Backend no runtime Bun](backend-no-runtime-bun.md) — a decisão `Bun.serve` × [Hono](hono.md) × [Elysia](elysia.md), com os eixos e o custo de saída
+- [Backend no runtime Bun](backend-no-runtime-bun.md) — a decisão `Bun.serve` × [Hono](hono.md) × `Elysia`, com os eixos e o custo de saída
 - [Bun - Runtime e APIs](bun-runtime-e-apis.md) · [Bun - Bundler e Build](bun-bundler-e-build.md) · [Bun - Dados e Persistência](bun-dados-e-persistencia.md) · [Bun - Shell, FFI e Compat Node](bun-shell-ffi-e-compat-node.md) · [Bun - Gerenciador de Pacotes](bun-gerenciador-de-pacotes.md) · [Bun - Testes](bun-testes.md)
 - · · · ·
 - · ·

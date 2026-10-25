@@ -28,7 +28,7 @@ export const createPostBody = json.createInsertSchema(posts, {
 export type CreatePostBody = z.infer<typeof createPostBody>
 ```
 
-The rules live in the refinement argument (`DRZ-ZOD-02`); callbacks keep each column's nullability. `.pick()` is the allow-list: `authorId` and `published` are columns the table accepts and the caller may not send (`DRZ-ZOD-03`). `.strict()` turns an unexpected key into a 400 instead of dropping it, which surfaces client bugs.
+The rules live in the refinement argument (`DRZ-ZOD-02`); callbacks keep each column's nullability. `.pick()` is the allow-list: `authorId` and `published` are columns the table accepts and the caller may not send (`DRZ-ZOD-03`). The allow-list must still cover every **required** column the server does not fill — here the table's `slug` and `title`; a table with a required `body` picks it too, or the insert fails. `.strict()` turns an unexpected key into a 400 instead of dropping it, which surfaces client bugs.
 
 ## 3. PATCH: the update schema accepts {}, so reject it; null is the explicit "clear"
 

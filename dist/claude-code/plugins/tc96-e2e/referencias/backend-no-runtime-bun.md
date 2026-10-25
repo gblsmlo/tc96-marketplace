@@ -14,9 +14,9 @@ verificado-em: 2026-08-15
 
 # Backend no runtime Bun
 
-> Escolher entre `Bun.serve` puro, [Hono](hono.md) e [Elysia](elysia.md) · os cinco eixos que decidem · árvore de decisão · o que os três custam para sair · por que benchmark não entra nesta decisão.
+> Escolher entre `Bun.serve` puro, [Hono](hono.md) e `Elysia` · os cinco eixos que decidem · árvore de decisão · o que os três custam para sair · por que benchmark não entra nesta decisão.
 >
-> **Não cobre:** a API de cada ferramenta — isso vive em [Bun - HTTP e Servidor](bun-http-e-servidor.md), [Hono](hono.md) e [Elysia](elysia.md) e seus satélites. Esta nota decide **qual abrir**.
+> **Não cobre:** a API de cada ferramenta — isso vive em [Bun - HTTP e Servidor](bun-http-e-servidor.md), [Hono](hono.md) e `Elysia` e seus satélites. Esta nota decide **qual abrir**.
 
 Versões verificadas em 2026-08-15: **Bun 1.3.14** · **Hono 4.13.2** · **Elysia 1.4.29**.
 
@@ -40,7 +40,7 @@ A decisão errada raramente é "escolhi o framework mais lento". É "escolhi uma
 | --- | --- | --- |
 | **`Bun.serve` puro** | A fronteira HTTP nativa do runtime, sem camada. Ver [Bun - HTTP e Servidor](bun-http-e-servidor.md). | Você escreve validação, composição de middleware, tratamento de erro padronizado e cliente tipado — ou vive sem eles. |
 | **Hono** | Camada fina sobre `Request`/`Response` da Web Standards, portátil entre runtimes, com cliente RPC derivado do tipo do app. Ver [Hono](hono.md). | Validação é escolha sua (Zod, Valibot…). OpenAPI exige pacote à parte. A inferência exige encadeamento contínuo. |
-| **Elysia** | Framework Bun-first onde uma declaração de schema produz validação, tipo, documentação OpenAPI e cliente Eden. Ver [Elysia](elysia.md). | Amarra em Bun na prática. Lifecycle e escopo de plugin são poder real e a maior fonte de bug próprio da ferramenta. |
+| **Elysia** | Framework Bun-first onde uma declaração de schema produz validação, tipo, documentação OpenAPI e cliente Eden. Ver `Elysia`. | Amarra em Bun na prática. Lifecycle e escopo de plugin são poder real e a maior fonte de bug próprio da ferramenta. |
 
 ---
 
@@ -109,7 +109,7 @@ Node em infra existente, Lambda, edge?
 
 Traduzindo para a decisão: se o alvo alternativo só precisa receber requisição e devolver resposta, os dois servem. Se ele precisa das capacidades do host, Hono é quem tem a camada pronta.
 
-**Uma ressalva verificada que corta contra Elysia aqui.** O export `env` de `elysia`, que existe justamente para dar acesso a variável de ambiente independente de runtime, **devolve `{}` no Cloudflare Worker** — lá os bindings vêm de `import { env } from 'cloudflare:workers'`. Somado às limitações já declaradas (`file()`, plugin static e OpenAPI Type Gen fora), o Worker em Elysia exige código consciente do host, que é exatamente o que a portabilidade deveria evitar. Ver [Elysia](elysia.md) § 3.
+**Uma ressalva verificada que corta contra Elysia aqui.** O export `env` de `elysia`, que existe justamente para dar acesso a variável de ambiente independente de runtime, **devolve `{}` no Cloudflare Worker** — lá os bindings vêm de `import { env } from 'cloudflare:workers'`. Somado às limitações já declaradas (`file()`, plugin static e OpenAPI Type Gen fora), o Worker em Elysia exige código consciente do host, que é exatamente o que a portabilidade deveria evitar. Ver `Elysia` § 3.
 
 ### 4.2 O contrato tipado até o React
 
@@ -122,7 +122,7 @@ Os dois frameworks resolvem o mesmo problema — o tipo do handler vira o tipo d
 | Consequência numa `queryFn` ingênua | query fica `success` com o corpo de erro dentro de `data` | query fica `success` com `data: null` |
 | Saída | `parseResponse()`, que lança `DetailedError` | `throwHttpError: true`, ou lançar na `queryFn` |
 
-Este é o achado mais acionável desta nota. Uma `queryFn` que só faz `res.json()` (Hono) ou `.get()` (Elysia) **nunca aciona o estado de erro do TanStack Query** — `isError` fica `false`, o `retry` não roda, o Error Boundary não pega. O bug some do radar porque a UI mostra um estado vazio em vez de quebrar. Ver `HONO-RPC-*` em [Hono - Validação e RPC](hono-validacao-e-rpc.md) e `ELYSIA-TYPE-08`/`ELYSIA-TYPE-09` em [Elysia - Schema e Eden](elysia-schema-e-eden.md).
+Este é o achado mais acionável desta nota. Uma `queryFn` que só faz `res.json()` (Hono) ou `.get()` (Elysia) **nunca aciona o estado de erro do TanStack Query** — `isError` fica `false`, o `retry` não roda, o Error Boundary não pega. O bug some do radar porque a UI mostra um estado vazio em vez de quebrar. Ver `HONO-RPC-*` em [Hono - Validação e RPC](hono-validacao-e-rpc.md) e `ELYSIA-TYPE-08`/`ELYSIA-TYPE-09` em `Elysia - Schema e Eden`.
 
 **A falha é a mesma; a saída não é — e aqui Elysia leva vantagem.** Esta linha da tabela esconde a diferença que mais custa na prática:
 
@@ -192,7 +192,7 @@ Declarados para que a ausência não seja lida como equivalência:
 
 Nenhuma das notas desta estrutura reproduz número de performance, por decisão deliberada e por um motivo verificável em cada fonte:
 
-- Os números da página *At a glance* do Elysia são de **2023, medidos em Bun 0.7.2** — apurado durante a verificação de 2026-08-15 e registrado nas notas de verificação de [Elysia](elysia.md). Não sustentam afirmação sobre a versão corrente.
+- Os números da página *At a glance* do Elysia são de **2023, medidos em Bun 0.7.2** — apurado durante a verificação de 2026-08-15 e registrado nas notas de verificação de `Elysia`. Não sustentam afirmação sobre a versão corrente.
 - Hono não publica tabela própria: linka um repositório de benchmark de terceiro — idem, registrado em [Hono](hono.md).
 
 Os três rodam sobre o mesmo `Bun.serve`. A diferença de throughput entre eles é irrelevante perto de uma query N+1, de um `staleTime` mal calibrado ou de um middleware de autenticação registrado depois do handler caro (`HONO-MW-10`). **Se performance for o critério declarado, meça o seu caso** — e então o número é evidência, não folclore.
@@ -231,7 +231,7 @@ Os três rodam sobre o mesmo `Bun.serve`. A diferença de throughput entre eles 
 
 - [Bun](bun.md) — runtime, e a fronteira HTTP nativa em [Bun - HTTP e Servidor](bun-http-e-servidor.md)
 - [Hono](hono.md) · [Hono - Validação e RPC](hono-validacao-e-rpc.md) — o cliente RPC e seus limites
-- [Elysia](elysia.md) · [Elysia - Schema e Eden](elysia-schema-e-eden.md) — schema como fonte única e o Eden
+- `Elysia` · `Elysia - Schema e Eden` — schema como fonte única e o Eden
 - [React.js](react-js.md) · [TanStack Query - O que um Dev Frontend Precisa Saber](tanstack-query-o-que-um-dev-frontend-precisa-saber.md) — o outro lado do contrato
 - · ·
 - ·
@@ -243,7 +243,7 @@ Esta nota **não faz verificação própria**: ela sintetiza o que foi verificad
 
 - Fronteira HTTP nativa e `idleTimeout`: [Bun - HTTP e Servidor](bun-http-e-servidor.md)
 - Matriz de runtimes, `hc` e custo de tipo: [Hono](hono.md) § 3.2 e [Hono - Validação e RPC](hono-validacao-e-rpc.md)
-- Escopo de plugin, Standard Schema, Eden e os dois escopos npm: [Elysia - Lifecycle e Plugins](elysia-lifecycle-e-plugins.md) e [Elysia - Schema e Eden](elysia-schema-e-eden.md)
+- Escopo de plugin, Standard Schema, Eden e os dois escopos npm: `Elysia - Lifecycle e Plugins` e `Elysia - Schema e Eden`
 - Versões conferidas no registry npm em 2026-08-15: Bun 1.3.14 · Hono 4.13.2 · Elysia 1.4.29
 
 **Ao atualizar:** se uma das três notas de origem mudar de versão verificada, esta nota precisa ser relida — especialmente o § 4.1 (suporte a runtime do Elysia muda rápido) e o § 4.5 (a migração de escopo npm deve terminar em algum momento).
