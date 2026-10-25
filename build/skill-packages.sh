@@ -76,21 +76,26 @@ for family_docs in sorted(root.glob("skills/*/docs")):
 
         # 1. sibling scripts this skill calls, with transitive closure
         siblings = re.compile(r"(?:\$\{CLAUDE_PLUGIN_ROOT\}/skills/|\$HERE/\.\./\.\./)([a-z0-9-]+)/scripts/([A-Za-z0-9._-]+)")
+        # two siblings may ship a script with the same name: the second one is copied as <sibling>-<script>
+        copied = {}
         queue = [p for p in target.rglob("*") if p.suffix in (".md", ".sh", ".py")]
         while queue:
             file = queue.pop()
             for m in siblings.finditer(file.read_text(encoding="utf-8")):
                 sibling, script = m.group(1), m.group(2)
-                copy = target / "scripts" / script
-                if sibling != name and not copy.exists():
-                    copy.parent.mkdir(exist_ok=True)
-                    shutil.copy2(family_docs.parent / sibling / "scripts" / script, copy)
-                    queue.append(copy)
-                    # the copied script may call a neighbor from its original folder ($HERE/x)
-                    for nb in re.findall(r"\$HERE/([A-Za-z0-9._-]+\.(?:sh|py))", copy.read_text(encoding="utf-8")):
-                        if not (target / "scripts" / nb).exists() and (family_docs.parent / sibling / "scripts" / nb).exists():
-                            shutil.copy2(family_docs.parent / sibling / "scripts" / nb, target / "scripts" / nb)
-                            queue.append(target / "scripts" / nb)
+                if sibling == name or (sibling, script) in copied:
+                    continue
+                local = script if not (target / "scripts" / script).exists() else f"{sibling}-{script}"
+                copied[(sibling, script)] = local
+                copy = target / "scripts" / local
+                copy.parent.mkdir(exist_ok=True)
+                shutil.copy2(family_docs.parent / sibling / "scripts" / script, copy)
+                queue.append(copy)
+                # the copied script may call a neighbor from its original folder ($HERE/x)
+                for nb in re.findall(r"\$HERE/([A-Za-z0-9._-]+\.(?:sh|py))", copy.read_text(encoding="utf-8")):
+                    if not (target / "scripts" / nb).exists() and (family_docs.parent / sibling / "scripts" / nb).exists():
+                        shutil.copy2(family_docs.parent / sibling / "scripts" / nb, target / "scripts" / nb)
+                        queue.append(target / "scripts" / nb)
 
         # 2. the notes it cites, and the notes those cite
         notes = set()
@@ -121,7 +126,8 @@ for family_docs in sorted(root.glob("skills/*/docs")):
             if file.suffix == ".md" and file.parent.name != "docs":
                 t = t.replace("](../../docs/", "](../docs/").replace("](../docs/", "](docs/") \
                     if file.parent == target else t.replace("](../../docs/", "](../docs/")
-                t = re.sub(r"\$\{CLAUDE_PLUGIN_ROOT\}/skills/[a-z0-9-]+/scripts/", SKILL_DIR + "/scripts/", t)
+                t = re.sub(r"\$\{CLAUDE_PLUGIN_ROOT\}/skills/([a-z0-9-]+)/scripts/([A-Za-z0-9._-]+)",
+                           lambda m: f"{SKILL_DIR}/scripts/{copied.get((m.group(1), m.group(2)), m.group(2))}", t)
                 # the generator does not travel: the table row announcing it goes, and the
                 # instruction to regenerate becomes a note that the map was generated at authoring time
                 lines = []
@@ -134,7 +140,8 @@ for family_docs in sorted(root.glob("skills/*/docs")):
                             lines.append(notice)
                 t = "\n".join(lines)
             if file.suffix in (".sh", ".py"):
-                t = re.sub(r"\$HERE/\.\./\.\./[a-z0-9-]+/scripts/", "$HERE/", t)
+                t = re.sub(r"\$HERE/\.\./\.\./([a-z0-9-]+)/scripts/([A-Za-z0-9._-]+)",
+                           lambda m: "$HERE/" + copied.get((m.group(1), m.group(2)), m.group(2)), t)
                 # in the package, the docs can only be the skill's own: never look outside it
                 t = re.sub(r'^(\s*for KB in )"[^\n]*?; do$', r'\1"$HERE/../docs"; do', t, flags=re.M)
             if file.name == "SKILL.md" and file.parent == target:
