@@ -1,15 +1,25 @@
 ---
-titulo: Elysia - Schema and Validation
-Link: https://elysiajs.com/essential/validation.html
+title: Elysia - Schema and Validation
+link: https://elysiajs.com/essential/validation.html
 tags:
   - elysia
   - schema
   - agent-context
 source: "Official documentation — https://elysiajs.com/ — behaviour re-executed on elysia 1.4.30 and zod 4.6.7 on 2026-10-25"
-verificado-em: 2026-10-25
+verified-at: 2026-10-25
 ---
 
 # Elysia — Schema and Validation
+
+## Contents
+
+- [1. Concept: one declaration produces four artifacts — duplicating any of them is a regression](#1-concept-one-declaration-produces-four-artifacts--duplicating-any-of-them-is-a-regression)
+- [2. t × Standard Schema: where Zod still makes sense](#2-t--standard-schema-where-zod-still-makes-sense)
+- [3. Per-route schema and automatic coercion](#3-per-route-schema-and-automatic-coercion)
+- [4. guard, precedence and standalone; reference models](#4-guard-precedence-and-standalone-reference-models)
+- [5. response per status, and the validation error](#5-response-per-status-and-the-validation-error)
+- [Antipatterns](#antipatterns)
+- [Review checklist](#review-checklist)
 
 > `t` (TypeBox) and Standard Schema · per-route schema and automatic coercion · `guard`, precedence and `standalone` · reference models · `response` per status · validation error.
 >
@@ -337,33 +347,3 @@ Four verified production behaviors:
 - [ ] Every route with multiple statuses has a `response` map? → `ELYSIA-TYPE-06`
 - [ ] No production environment turns on `allowUnsafeValidationDetails`? → `ELYSIA-TYPE-12`
 - [ ] Every status declared in `response` is actually emitted by a `status(code, value)`? → `ELYSIA-CORE-04`
-
----
-
-## Related
-
-- [Elysia](elysia.md) — hub
-- [Elysia - Routing and Handler](elysia-routing-and-handler.md) · [Elysia - Lifecycle and Plugins](elysia-lifecycle-and-plugins.md)
-- [Elysia - OpenAPI](elysia-openapi.md) · [Elysia - Eden](elysia-eden.md) — the documentation and the typed client built from these schemas
-- `TypeScript`
-
-## Sources consulted
-
-Verified on **2026-08-15**:
-
-- [Validation](https://elysiajs.com/essential/validation.html) — per-route schema, guard, reference model, error
-- [TypeBox (Elysia.t)](https://elysiajs.com/patterns/typebox.html) — types and coercion behavior
-- [Standalone Schema](https://elysiajs.com/tutorial/patterns/standalone-schema.html) · [Validation Error](https://elysiajs.com/tutorial/patterns/validation-error.html)
-- `elysia@1.4.29` — `type-system/index.d.ts` (the exact list of Elysia's types)
-
-**What verification contradicted:**
-
-- **Elysia does not require TypeBox.** Standard Schema accepts Zod, Valibot, ArkType, Effect Schema, Yup and Joi, and schemas from different libraries coexist in the same handler and in the same standalone `guard`.
-- **`t.Uint8Array` is the real spelling** (`type-system/index.d.ts`), while the docs write `t.UInt8Array`. There are also `t.NumericEnum`, `t.ArrayString`, `t.ArrayQuery`, `t.NoValidate` and `t.String({ trusted })`, which are missing from the TypeBox page.
-- **`t.ObjectString` requires the properties as an argument** (`t.ObjectString({ state: t.String() })`), although the docs show `t.ObjectString()` with no argument.
-- **Re-executed on 1.4.30 (2026-10-25):** `t.Integer()` in a body coerces `"2"` while `t.Number()` rejects it; a `t.Number` nested in a query object is not coerced; `normalize: false` answers 422 "Unexpected property" on input and response; `response: { 201 }` with a plain `return` sends 200 unvalidated; a body breaking the 200 schema answers 422 with `on: 'response'`; the callback form of `guard` always enforces both schemas; a required `body` on a GET is silently skipped; `fileType()` resolves `true` or **rejects** on a mismatch (map it to `false` in a Zod refine); a declared-MIME mismatch is `VALIDATION` 422 while `INVALID_FILE_TYPE` comes from the content check; the production 422 still echoes the raw input in `found`; Zod 4 reaches OpenAPI without `mapJsonSchema`.
-- **Coercion does not apply to `body`** — only to `params`, `query`, `headers` and `cookie`, and never inside a nested `t.Object`.
-- **`t.Optional` at the route level differs from plain TypeBox**: it makes the whole key optional instead of marking an object field.
-- **`normalize` defaults to `true`**: properties outside the schema silently disappear from the input **and from the output**.
-- **The default validation-error status is 422**, and no page of the docs states it. It is in `ValidationError.status = 422` in the published package's `error.js`. It is sent even without `onError`, which goes against the reflex of expecting 400.
-- **`allowUnsafeValidationDetails` defaults to `false`** (Config page) and is **global**: there is no per-route granularity. Turning it on in production to debug one endpoint exposes the schema shape of every endpoint.

@@ -1,7 +1,7 @@
 ---
 name: drizzle-zod
 description: Build the Zod schemas that guard a Drizzle ORM table at the route boundary — `createInsertSchema`/`createUpdateSchema`/`createSelectSchema` and `createSchemaFactory` from drizzle-zod (or `drizzle-orm/zod` on v1), narrowing request bodies against mass assignment, response schemas without secrets, coercion of dates and query strings, refinements that keep nullability, typed `jsonb`, and PATCH bodies that reject `{}` — citing `DRZ-ZOD-*` IDs, with an AST self-check. Use when the task is validating a request body, query string or response for a Drizzle table, replacing a hand-written Zod schema that repeats the columns, "expected date, received string", a user setting their own `role` or `ownerId`, a password hash in a response, or zod 3 versus 4 errors with drizzle-zod. Do not use for the query itself (drizzle-query, drizzle-mutation), for a shape that is not a table (plain Zod), nor to audit existing code (drizzle-review).
-fonte: "[Drizzle - Zod](../../docs/drizzle/drizzle-zod.md)"
+source: "[Drizzle - Zod](../../docs/drizzle/drizzle-zod.md)"
 docs:
   - /drizzle-team/drizzle-orm-docs
   - /colinhacks/zod

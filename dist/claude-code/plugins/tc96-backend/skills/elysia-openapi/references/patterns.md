@@ -1,5 +1,14 @@
 # Patterns — OpenAPI that passed a test
 
+## Contents
+
+- [1. The plugin, once, at the root](#1-the-plugin-once-at-the-root)
+- [2. Models with names a generator keeps](#2-models-with-names-a-generator-keeps)
+- [3. A module: defaults on the constructor, specifics on the route](#3-a-module-defaults-on-the-constructor-specifics-on-the-route)
+- [4. Public and hidden routes](#4-public-and-hidden-routes)
+- [5. The docs behind a token](#5-the-docs-behind-a-token)
+- [6. The test that keeps the spec honest](#6-the-test-that-keeps-the-spec-honest)
+
 Every block passed `bun test` and `tsc --noEmit` on elysia 1.4.30, @elysia/openapi 1.4.16 and zod 4.6.7. The spec excerpts are what `/openapi/json` actually returned.
 
 ---

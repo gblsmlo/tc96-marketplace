@@ -1,7 +1,7 @@
 ---
 name: drizzle-query
 description: Write and fix Drizzle ORM reads on PostgreSQL — query builder × Relational Queries, declaring and wiring `relations()`, folding a per-item lookup (N+1) into one query, many-to-many through a junction table, aggregation, and offset or keyset pagination — citing `DRZ-QUERY-*`, `DRZ-REL-*` and `DRZ-RQB-*` IDs, with an AST self-check and a statement-count proof. Use when the task is a new or slow listing, feed, search or detail endpoint, `db.query.x.findMany` with `with`, a `select` with joins or `groupBy`, paginating, or "with throws / db.query is undefined". Do not use for insert, update, delete, upsert or transactions (drizzle-mutation), for request or response validation with Zod (drizzle-zod), nor to audit existing persistence (drizzle-review).
-fonte: "[Drizzle - Reads and Relations](../../docs/drizzle/drizzle-reads-and-relations.md)"
+source: "[Drizzle - Reads and Relations](../../docs/drizzle/drizzle-reads-and-relations.md)"
 docs:
   - /drizzle-team/drizzle-orm-docs
 tags:

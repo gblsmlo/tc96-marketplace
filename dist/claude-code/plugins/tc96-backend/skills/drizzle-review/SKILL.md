@@ -1,7 +1,7 @@
 ---
 name: drizzle-review
 description: Review an existing Drizzle ORM and PostgreSQL persistence layer — schema, migrations, repositories, queries, transactions and the Zod schemas at the route boundary — citing `DRZ-*` IDs, with executable probes (version line, client registration, snapshot chain, push in a deploy path) and an AST scan for what reading misses — use when the task is reviewing or approving a PR that touches persistence, auditing a repository's data layer, checking whether the applied migrations match the schema, or hunting N+1, a write without `where`, a lost update, raw SQL with user input, or a body schema that lets a caller set their own role. Do not use to write new code — reads are drizzle-query, writes and transactions drizzle-mutation, request and response schemas drizzle-zod.
-fonte: "[Drizzle ORM](../../docs/drizzle/drizzle-orm.md)"
+source: "[Drizzle ORM](../../docs/drizzle/drizzle-orm.md)"
 docs:
   - /drizzle-team/drizzle-orm-docs
 tags:

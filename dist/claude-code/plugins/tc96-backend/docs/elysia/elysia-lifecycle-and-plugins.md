@@ -1,15 +1,29 @@
 ---
-titulo: Elysia - Lifecycle and Plugins
-Link: https://elysiajs.com/essential/plugin.html
+title: Elysia - Lifecycle and Plugins
+link: https://elysiajs.com/essential/plugin.html
 tags:
   - elysia
   - plugins
   - agent-context
 source: "Official documentation — https://elysiajs.com/ — behaviour re-executed on elysia 1.4.30 on 2026-10-25"
-verificado-em: 2026-10-25
+verified-at: 2026-10-25
 ---
 
 # Elysia - Lifecycle and Plugins
+
+## Contents
+
+- [0. Decision trees](#0-decision-trees)
+- [1. Concept: scope is the only thing that decides whether a plugin affects a route — and the default is the most restrictive](#1-concept-scope-is-the-only-thing-that-decides-whether-a-plugin-affects-a-route--and-the-default-is-the-most-restrictive)
+- [2. The lifecycle order](#2-the-lifecycle-order)
+- [3. state × decorate × derive × resolve](#3-state--decorate--derive--resolve)
+- [4. A plugin is an instance, and use() is the only way to compose](#4-a-plugin-is-an-instance-and-use-is-the-only-way-to-compose)
+- [5. Scope: local, scoped, global and the as() method](#5-scope-local-scoped-global-and-the-as-method)
+- [6. macro: reusable hook, activated declaratively](#6-macro-reusable-hook-activated-declaratively)
+- [7. guard: schema and hooks for several routes](#7-guard-schema-and-hooks-for-several-routes)
+- [8. Official plugins in production](#8-official-plugins-in-production)
+- [Anti-patterns](#anti-patterns)
+- [Review checklist](#review-checklist)
 
 > The full lifecycle order and what each hook can do · `state` × `decorate` × `derive` × `resolve` · `macro` · plugin as an instance and `use()` · deduplication by `name`/`seed` · **`local`/`scoped`/`global` scope and `as()`** · `guard` · official production plugins.
 >
@@ -630,37 +644,3 @@ Two verified production notes: instrumentations that rely on monkey-patching (`P
 - [ ] Do macros deny access with `return status`, never `throw`? → `ELYSIA-LIFE-10`
 - [ ] Are hooks named functions where OpenTelemetry is present? → `ELYSIA-LIFE-11`
 - [ ] Does `cors()` have a restricted `origin`? → `ELYSIA-LIFE-12`
-
----
-
-## Related
-
-- [Elysia](elysia.md) — hub
-- [Elysia - Routing and Handler](elysia-routing-and-handler.md) · [Elysia - Schema and Validation](elysia-schema-and-validation.md) · [Elysia - Eden](elysia-eden.md)
-- `Bun - Runtime e APIs` — the runtime underneath the plugins
-
-## Sources consulted
-
-Verified on **2026-08-15**:
-
-- [Plugin](https://elysiajs.com/essential/plugin.html) — scope, dependency, deduplication, `as`
-- [Lifecycle](https://elysiajs.com/essential/life-cycle.html) — order, hooks, queues
-- [Key Concept](https://elysiajs.com/key-concept.html) — encapsulation, code order
-- [Extend Context](https://elysiajs.com/patterns/extends-context.html) — `state`, `decorate`, `derive`, `resolve`
-- [Macro](https://elysiajs.com/patterns/macro.html) · [Best Practice](https://elysiajs.com/essential/best-practice.html)
-- [OpenTelemetry](https://elysiajs.com/patterns/opentelemetry.html) · [CORS](https://elysiajs.com/plugins/cors.html) · [JWT](https://elysiajs.com/plugins/jwt.html) · [Static](https://elysiajs.com/plugins/static.html) · [Plugins Overview](https://elysiajs.com/plugins/overview.html)
-- `elysia@1.4.29` — `types.d.ts` (`LifeCycleType`, `GuardSchemaType`) and `index.d.ts` (`as` overloads)
-
-**What verification contradicted:**
-
-- **`.as()` has only two overloads: `'scoped'` and `'global'`.** There is no `as('local')` — `local` is the default and there is no way to "go down" to it.
-- **`scoped` goes up exactly one level.** The intuitive reading ("scoped = applies across the whole scope") is wrong; crossing two levels requires `as` on each one, or `global`.
-- **`guard` with `as` does not cover `derive` or `resolve`** — the docs state the limitation explicitly. To raise a `resolve`, use `as` inline on it or `.as()` on the instance.
-- **`onTransform` and `derive` share the same queue**, as do `onBeforeHandle` and `resolve` — the order is registration order, not by hook type.
-- **Returning from `onAfterHandle` does not stop the following `afterHandle`**, unlike `beforeHandle`, `parse` and `mapResponse`, which do stop. The asymmetry is stated in the source.
-- **`onRequest` is global by nature** and does not obey the "only applies to routes registered after it" rule — because it does not yet know which route will serve the request.
-- **The Lifecycle page enumerates the `PreContext` incompletely.** It lists `request`, `set`, `store` and decorators; the `PreContext` type in `context.d.ts` of 1.4.29 also has `status`, `redirect` and `server`. This note's enumeration (§ 2) comes from the `.d.ts` and is the canonical one for the three Elysia notes. The costliest omission is `status`: it is what allows an `onRequest` to short-circuit with a typed status instead of building a `Response` by hand.
-- **`env` from `elysia` is not a Cloudflare Worker solution.** The export is `Bun.env` on Bun, `process.env` outside it, and `{}` where neither exists (`universal/env.js` of 1.4.29). On a Worker the bindings come from `import { env } from 'cloudflare:workers'`, as the integration page itself shows. The value of `env` from `elysia` is not tying the code to `process`, not covering the Worker.
-- **A macro deduplicates the lifecycle on its own**, using the property's value as the seed, and Elysia caps recursion at 16 levels to avoid circular dependencies.
-- **Re-executed on 1.4.30 (2026-10-25):** an unnamed plugin used by two siblings runs its global hooks twice per request; the callback form of `guard` always enforces both schemas; `onRequest` has no `headers` but does have `path`; `guard({ as: 'scoped' })` lifts its own `beforeHandle` and schema but not a `derive`/`resolve` declared after it (`derive({ as: 'scoped' })` is lifted); a destructured `store` primitive is stale only against writes later in the same call; an app-level `onError` registered before `.use(module)` runs before the module's own; `cors()` reflects any `Origin` with credentials.
-- **`@elysia/cors` has `credentials: true` and `origin: true` as defaults** — more permissive than you would expect from a security plugin.

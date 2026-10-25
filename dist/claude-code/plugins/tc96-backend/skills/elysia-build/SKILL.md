@@ -1,7 +1,7 @@
 ---
 name: elysia-build
-description: Write Elysia routes, handlers and feature modules — the instance chain, destructured context, `return status(...)` for expected errors, `.error()` codes and a narrow `onError`, signed `httpOnly` session cookies, SSE, auth plugins with a declared scope, and tests through `app.handle` — citing `ELYSIA-APP-*`, `ELYSIA-CORE-*` and `ELYSIA-LIFE-*` IDs, with an AST self-check. Use when the task is creating or changing an Elysia endpoint or module, returning an error the client must see typed, adding a session or an auth guard, streaming, or testing a route without a server. Do not use for request/response schemas and coercion (elysia-schema), the typed client (elysia-eden), the API documentation (elysia-openapi), a hook that does not run (elysia-diagnose), nor for which status or header the protocol requires (http-contract).
-fonte: "[Elysia - Routing and Handler](../../docs/elysia/elysia-routing-and-handler.md)"
+description: Writes Elysia routes, handlers and feature modules — the instance chain, destructured context, `return status(...)` for expected errors, `.error()` codes and a narrow `onError`, signed `httpOnly` session cookies, SSE, auth plugins with a declared scope, and tests through `app.handle` — citing `ELYSIA-APP-*`, `ELYSIA-CORE-*` and `ELYSIA-LIFE-*` IDs, with an AST self-check. Use for creating or changing an Elysia endpoint or module, returning an error the client must see typed, adding a session or an auth guard, streaming, or testing a route without a server. Not for request/response schemas and coercion (elysia-schema), the typed client (elysia-eden), the API documentation (elysia-openapi), a hook that does not run (elysia-diagnose), or which status or header the protocol requires (http-contract).
+source: "[Elysia - Routing and Handler](../../docs/elysia/elysia-routing-and-handler.md)"
 docs:
   - /websites/elysiajs
 tags:

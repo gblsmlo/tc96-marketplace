@@ -1,7 +1,7 @@
 ---
 name: drizzle-mutation
 description: Write and fix Drizzle ORM writes on PostgreSQL — insert with `returning`, upsert with `onConflictDoNothing`/`onConflictDoUpdate`, guarded updates, PATCH semantics (`null` clears, `undefined` is ignored), scoped deletes, batch inserts, transactions, `tx.rollback()` and savepoints, and mapping constraint violations — citing `DRZ-QUERY-04`–`07` and `DRZ-TX-*` IDs, with an AST self-check. Use when the task is creating, changing or deleting rows, a double-submit or duplicate row, a negative balance or lost update, "No values to set", a write that must be atomic, idempotency keys, or a transaction that does not roll back as expected. Do not use for reads, listings or relations (drizzle-query), for validating the body with Zod (drizzle-zod), nor to audit existing persistence (drizzle-review).
-fonte: "[Drizzle - Writes and Transactions](../../docs/drizzle/drizzle-writes-and-transactions.md)"
+source: "[Drizzle - Writes and Transactions](../../docs/drizzle/drizzle-writes-and-transactions.md)"
 docs:
   - /drizzle-team/drizzle-orm-docs
 tags:

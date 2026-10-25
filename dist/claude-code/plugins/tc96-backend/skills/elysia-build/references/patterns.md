@@ -1,5 +1,14 @@
 # Patterns — routes, errors, cookies, SSE, tests, auth
 
+## Contents
+
+- [1. A feature module: an instance with a prefix](#1-a-feature-module-an-instance-with-a-prefix)
+- [2. The app: one onError for the unexpected, first in the chain](#2-the-app-one-onerror-for-the-unexpected-first-in-the-chain)
+- [3. A signed, httpOnly session cookie](#3-a-signed-httponly-session-cookie)
+- [4. SSE: headers before the first yield](#4-sse-headers-before-the-first-yield)
+- [5. Tests through app.handle](#5-tests-through-apphandle)
+- [6. An auth plugin with a declared scope (load the lifecycle doc)](#6-an-auth-plugin-with-a-declared-scope-load-the-lifecycle-doc)
+
 Every block below passed `bun test` and `tsc --noEmit` on elysia 1.4.30 before it was written here. Copy the shape, rename the domain.
 
 ---

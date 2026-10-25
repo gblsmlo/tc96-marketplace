@@ -1,7 +1,7 @@
 ---
 name: elysia-schema
-description: Declare and fix Elysia request and response schemas — `t` (TypeBox) or Zod/Valibot through Standard Schema, coercion by source, `response` as a map by status, a standalone `guard`, reference models, `normalize`, upload validation with `fileType`, and the 422 validation error — citing `ELYSIA-TYPE-*` IDs, with an AST self-check. Use when the task is validating a body, query string, params, headers, cookie or upload, typing what a route returns per status, sharing a schema between routes, a field that "is never sent" or a number that fails validation, or a field that silently disappears from a response. Do not use for the route and handler themselves (elysia-build), the Eden client (elysia-eden), the documentation output (elysia-openapi), nor a Drizzle table's schema (drizzle-zod).
-fonte: "[Elysia - Schema and Validation](../../docs/elysia/elysia-schema-and-validation.md)"
+description: Declares and fixes Elysia request and response schemas — `t` (TypeBox) or Zod/Valibot through Standard Schema, coercion by source, `response` as a map by status, a standalone `guard`, reference models, `normalize`, upload validation with `fileType`, and a 422 body that is JSON and echoes no input — citing `ELYSIA-TYPE-*` IDs, with an AST self-check. Use for validating a body, query string, params, headers, cookie or upload, typing what a route returns per status, sharing a schema between routes, a header that "is never sent", a number that fails validation, or a field that silently disappears from a response. Not for the route and handler themselves (elysia-build), the Eden client (elysia-eden), the documentation output (elysia-openapi), or a Drizzle table's schema (drizzle-zod).
+source: "[Elysia - Schema and Validation](../../docs/elysia/elysia-schema-and-validation.md)"
 docs:
   - /websites/elysiajs
 tags:
