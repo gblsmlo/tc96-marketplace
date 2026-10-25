@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: query-invoice-approval
+expected_outcome: |
+  The QueryClient lives outside render; the list key includes status; queryFns throw on !res.ok; staleTime is explicit; the
+  approve mutation runs cancelQueries -> snapshot returned from onMutate -> setQueryData -> rollback from onError's third
+  argument -> invalidation of list and summary in onSettled, returned; customers are not invalidated; tsc passes.
+context:
+  scaffold_script: place-files.sh

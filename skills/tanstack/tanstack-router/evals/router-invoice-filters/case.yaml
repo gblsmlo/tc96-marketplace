@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: router-invoice-filters
+expected_outcome: |
+  validateSearch declares status, page and sort with defaults and fallbacks; the component reads Route.useSearch(); updates use
+  the function form with a spread; loaderDeps returns only those keys; the loader calls ensureQueryData with the queryOptions the
+  component uses; the router sets defaultPreloadStaleTime: 0; the detail link uses params; an errorComponent exists; tsc passes.
+context:
+  scaffold_script: place-files.sh

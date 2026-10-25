@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: diagnose-new-order-missing
+expected_outcome: |
+  Two stacked causes: setQueryData pushes into the cached array in place (TSQ-MUT-08), and invalidateQueries uses ['order'],
+  which matches no ['orders', ...] key (TSQ-MUT-07). Both fixed; the teammate's staleTime: 0 is rejected (TSQ-CACHE-03); the
+  router's preload cache is addressed (TSR-LOAD-14); tsc passes.
+context:
+  scaffold_script: place-files.sh
