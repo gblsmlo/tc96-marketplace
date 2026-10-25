@@ -11,7 +11,7 @@
 # in the source — and dist/skills/ is not versioned (dist/* in .gitignore).
 #
 # What the package leaves out: the ID-map generators (authoring tools that write into the
-# siblings). The frontmatter comes out in the skill-spec format: name, description and
+# siblings) and evals/ (test cases, run from the source with `claude plugin eval`). The frontmatter comes out in the skill-spec format: name, description and
 # metadata — docs, fonte and tags move under metadata.
 set -euo pipefail
 
@@ -72,7 +72,7 @@ for family_docs in sorted(root.glob("skills/*/docs")):
         tmp = pathlib.Path(tempfile.mkdtemp())
         target = tmp / name
         shutil.copytree(source.parent, target,
-                        ignore=shutil.ignore_patterns("__pycache__", "*.pyc", *NOT_PACKAGED))
+                        ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "evals", *NOT_PACKAGED))
 
         # 1. sibling scripts this skill calls, with transitive closure
         siblings = re.compile(r"(?:\$\{CLAUDE_PLUGIN_ROOT\}/skills/|\$HERE/\.\./\.\./)([a-z0-9-]+)/scripts/([A-Za-z0-9._-]+)")
