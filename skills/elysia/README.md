@@ -22,9 +22,9 @@ plugins and auth, which no skill owned before — `elysia-diagnose` only diagnos
 
 ## Docs
 
-Hub [Elysia](docs/elysia.md) plus five satellites, each with a table of contents; provenance and
-verification notes live in `docs/SOURCES.md` for maintainers: routing and handler, lifecycle and plugins, schema and
-validation, OpenAPI, Eden. Each satellite carries its own decision tree, rules and antipatterns, so a
+Hub [Elysia](docs/elysia.md) plus five satellites: routing and handler, lifecycle and plugins, schema and
+validation, OpenAPI, Eden. Every doc has a table of contents; provenance and verification notes live in
+`docs/SOURCES.md`, for maintainers. Each satellite carries its own decision tree, rules and antipatterns, so a
 skill loads one of them; the hub is loaded only for the import map, the runtime limits or an
 `ELYSIA-APP-*` rule.
 
