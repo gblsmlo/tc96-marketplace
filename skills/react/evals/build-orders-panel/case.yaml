@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: build-orders-panel
+expected_outcome: |
+  New orders feature: Query for data, router search params for the filter, local state only for selection, derived totals, no fetch or setState in Effects, self-check run.
+context:
+  scaffold_script: place-files.sh
