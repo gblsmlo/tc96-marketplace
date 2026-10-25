@@ -79,7 +79,7 @@ function Submit {
 
 ## The question that decides the submission's owner
 
-If the approval **invalidates** `TanStack Query` cache, the owner is Query's mutation, and the
+If the approval **invalidates** `tanstack-query` cache, the owner is Query's mutation, and the
 form becomes an ordinary `<form>` with a handler. `useActionState` alone is enough when the
 submission is isolated. Stacking the two — and adding `useOptimistic` over data that lives in the
 cache — produces two sources of truth diverging (`REACT-FORM-07`). Criterion in

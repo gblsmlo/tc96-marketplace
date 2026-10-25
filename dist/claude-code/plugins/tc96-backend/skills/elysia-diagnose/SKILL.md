@@ -1,7 +1,7 @@
 ---
 name: elysia-diagnose
 description: Diagnose why a plugin or hook does not affect a route in Elysia, and pick the right lifecycle point — registration order, `local`/`scoped`/`global` scope, plugin `name`, `derive` × `resolve`, `state` × `decorate`, macro, tracing — citing `ELYSIA-LIFE-*` IDs, with ten executable probes — use when the task is investigating a hook that does not run, authentication that does not protect the consumer's route, a frozen `store` value, a plugin whose lifecycle runs only once, or an `anonymous` span in OpenTelemetry. Do not use to write routes and handlers, which is elysia-build, nor for schemas and Eden, which is elysia-schema.
-fonte: "[Elysia - Lifecycle e Plugins](../../referencias/elysia-lifecycle-e-plugins.md)"
+source: "[Elysia - Lifecycle e Plugins](../../referencias/elysia-lifecycle-e-plugins.md)"
 docs:
   - /websites/elysiajs
 tags:

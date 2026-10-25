@@ -1,7 +1,7 @@
 ---
 name: elysia-schema
 description: Declare schemas in Elysia and consume the API through Eden — `t`/TypeBox, coercion by source, `response` per status, standalone `guard`, OpenAPI, and the bridge with TanStack Query — citing `ELYSIA-TYPE-*` IDs, with an executable self-check — use when the task is validating body, query, params, headers or uploads, typing a route's return, assembling an Eden client, paginating a listing, generating OpenAPI documentation, or fixing `data` that comes back `null` on the client. Do not use to write the route and the handler, which is elysia-build, for a plugin that does not affect the route, which is elysia-diagnose, nor for the client cache, which is tanstack-query.
-fonte: "[Elysia - Schema e Eden](../../referencias/elysia-schema-e-eden.md)"
+source: "[Elysia - Schema e Eden](../../referencias/elysia-schema-e-eden.md)"
 docs:
   - /websites/elysiajs
 tags:

@@ -1,16 +1,23 @@
 ---
-titulo: React - State and Reactivity
-Link: https://react.dev/reference/react/useState
+title: React - State and Reactivity
+link: https://react.dev/reference/react/useState
 tags:
   - react
   - state
   - hooks
   - agent-context
 source: "Official React documentation — useState, useReducer, useContext, createContext"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — State and Reactivity
+
+## Contents
+
+- [1. Concept: state is a snapshot](#1-concept-state-is-a-snapshot)
+- [2. `useState` × `useReducer`](#2-usestate--usereducer)
+- [3. Context](#3-context)
+- [4. Antipatterns](#4-antipatterns)
 
 > `useState` · `useReducer` · `useContext` · `createContext`
 >
@@ -221,16 +228,3 @@ Five fields that always change together are an object or a reducer, not five Hoo
 ### Keeping in state what does not redraw
 
 Timer id, observer instance, value from the last render for comparison — none of this should trigger a render. It is `useRef`. See [React - Refs and DOM](react-refs-and-dom.md).
-
----
-
-## Related
-
-- [React.js](react-js.md) · [React - Hooks](react-hooks.md) · [React - Patterns](react-patterns.md) · [React - Rules of React](react-rules-of-react.md)
-
-## Sources consulted
-
-Verified on 2026-08-14:
-
-- [useState](https://react.dev/reference/react/useState) · [useReducer](https://react.dev/reference/react/useReducer)
-- [useContext](https://react.dev/reference/react/useContext) · [createContext](https://react.dev/reference/react/createContext)

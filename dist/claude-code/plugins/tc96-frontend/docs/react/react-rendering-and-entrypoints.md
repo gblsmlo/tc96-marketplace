@@ -1,16 +1,25 @@
 ---
-titulo: React - Rendering and Entrypoints
-Link: https://react.dev/reference/react-dom/client
+title: React - Rendering and Entrypoints
+link: https://react.dev/reference/react-dom/client
 tags:
   - react
   - rendering
   - ssr
   - agent-context
 source: "Official React documentation — react-dom/client, react-dom/server, react-dom/static, StrictMode, preloading"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Rendering and Entrypoints
+
+## Contents
+
+- [1. Client: `createRoot` × `hydrateRoot`](#1-client-createroot--hydrateroot)
+- [2. Server: `react-dom/server`](#2-server-react-domserver)
+- [3. `<StrictMode>`](#3-strictmode)
+- [4. Resource preloading](#4-resource-preloading)
+- [5. `act` in tests](#5-act-in-tests)
+- [6. Review checklist](#6-review-checklist)
 
 > `createRoot` · `hydrateRoot` · `react-dom/server` and `/static` APIs · `<StrictMode>` · preloading · `act`
 >
@@ -191,21 +200,3 @@ It ensures renders, Effects and scheduled updates finish before the assertions. 
 - [ ] `renderToString` in new code? → `REACT-DOM-05`
 - [ ] `<StrictMode>` present and not removed to silence warnings? → `REACT-DOM-06`
 - [ ] Preloading restricted to what is likely? → `REACT-DOM-07`
-
----
-
-## Related
-
-- [React.js](react-js.md) · [React - Rules of React](react-rules-of-react.md) · [React - Patterns](react-patterns.md)
-- [React - Server Components and Directives](react-server-components-and-directives.md) · [React - Suspense and Async](react-suspense-and-async.md) · [React - Effects and Synchronization](react-effects-and-synchronization.md)
-- `Next.js` · `TanStack Router`
-
-## Sources consulted
-
-Verified on 2026-08-14:
-
-- [react-dom/client](https://react.dev/reference/react-dom/client) — `createRoot`, `hydrateRoot`
-- [react-dom/server](https://react.dev/reference/react-dom/server) — inventory and runtime recommendations
-- [react-dom/static](https://react.dev/reference/react-dom/static)
-- [StrictMode](https://react.dev/reference/react/StrictMode) · [act](https://react.dev/reference/react/act)
-- [react-dom APIs](https://react.dev/reference/react-dom) — preloading family

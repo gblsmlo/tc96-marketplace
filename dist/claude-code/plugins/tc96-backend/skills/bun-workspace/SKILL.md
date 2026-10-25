@@ -1,7 +1,7 @@
 ---
 name: bun-workspace
 description: Manage dependencies and the workspace with Bun's package manager — `bun install`, lockfile, `trustedDependencies`, linker, catalogs, `overrides`, `bun patch` — citing `BUN-PKG-*` IDs, with eight executable probes and a JSON check of `trustedDependencies` — use when the task is adding a dependency, configuring a CI install, allowing a package's install script, aligning a shared version in a monorepo, declaring a workspace, patching a package, or assembling a production image. Do not use to write application code, which is bun-runtime, to migrate Node code, which is bun-migrate, nor for bundling and builds, which is the Bundler e Build satellite.
-fonte: "[Bun - Gerenciador de Pacotes](../../referencias/bun-gerenciador-de-pacotes.md)"
+source: "[Bun - Gerenciador de Pacotes](../../referencias/bun-gerenciador-de-pacotes.md)"
 docs:
   - /oven-sh/bun
 tags:

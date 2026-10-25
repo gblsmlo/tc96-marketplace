@@ -1,12 +1,16 @@
 ---
 generated-by: skills/react/react-hook-form/scripts/generate-id-map.sh
-generated-at: 2026-10-02
+generated-at: 2026-10-25
 ---
 
 # ID map `RHF-*`
 
 > An index, not a copy: it says **where** the rule is declared, never what it says.
 > Regenerate with `bash skills/react/react-hook-form/scripts/generate-id-map.sh`.
+
+## Contents
+- [Citing across docs](#citing-across-docs)
+- [Full index](#full-index)
 
 ## Citing across docs
 

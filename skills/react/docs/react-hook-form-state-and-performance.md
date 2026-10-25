@@ -1,6 +1,6 @@
 ---
-titulo: React Hook Form - State and Performance
-Link: https://react-hook-form.com/docs/useform/formstate
+title: React Hook Form - State and Performance
+link: https://react-hook-form.com/docs/useform/formstate
 tags:
   - react
   - forms
@@ -8,10 +8,22 @@ tags:
   - performance
   - agent-context
 source: "Official documentation — https://react-hook-form.com/docs"
-verificado-em: 2026-08-15
+verified-at: 2026-08-15
 ---
 
 # React Hook Form — State and Performance
+
+## Contents
+
+- [1. Concept: the subscription is created by the read](#1-concept-the-subscription-is-created-by-the-read)
+- [2. `formState` — the inventory](#2-formstate--the-inventory)
+- [3. The five ways to read](#3-the-five-ways-to-read)
+- [4. Writing, resetting and feeding from outside](#4-writing-resetting-and-feeding-from-outside)
+- [5. Re-render investigation order](#5-re-render-investigation-order)
+- [6. `useFieldArray`](#6-usefieldarray)
+- [7. Multi-step form](#7-multi-step-form)
+- [8. Antipatterns](#8-antipatterns)
+- [9. Review checklist](#9-review-checklist)
 
 > **Covers:** `formState` and its Proxy · the five ways to read (`getValues`, `watch`, `useWatch`, `useFormState`, `subscribe`) · `setValue`, `reset`, `getFieldState` · `defaultValues` × `values` · `shouldUnregister` and `disabled` at the form level · `useFieldArray` · multi-step forms · the re-render investigation order.
 >
@@ -853,61 +865,3 @@ In that case: `trigger(['a','b'])` to advance, `isValid` does **not** work for t
 - [ ] Does each array `name` have a single `useFieldArray`, and is it non-dynamic? → `RHF-ARRAY-05`
 - [ ] Are there two array actions in the same handler? → `RHF-ARRAY-06`
 - [ ] Did the re-render investigation follow the order of § 5 before reaching `memo`? → `REACT-PERF-01`
-
----
-
-## Related
-
-- [React Hook Form](react-hook-form.md) — entry point, tree of § 5.2, order announced in § 5.7, bridges of § 8
-- [React Hook Form - Registration and Control](react-hook-form-registration-and-control.md) — how the field enters; `RHF-CTX-01`, `RHF-CTRL-04`, `RHF-REG-05`
-- [React Hook Form - Validation and Resolvers](react-hook-form-validation-and-resolvers.md) — `isValid`, `setError` and `RHF-ERR-05`
-- [React - Performance and Concurrency](react-performance-and-concurrency.md) — `REACT-PERF-01`, measure before memoizing
-- [React - Rules of React](react-rules-of-react.md) — normative base; the Proxy does not suspend any purity rule
-- [React - State and Reactivity](react-state-and-reactivity.md) · — step 1 of § 5
-- [React - Hooks](react-hooks.md) — `useEffect` and dependencies
-- `TanStack Query - Mutations e Invalidação` — the other side of the submission, and the origin of the `values` data
-
-## Sources consulted
-
-Verified on 2026-08-15:
-
-- [formState](https://react-hook-form.com/docs/useform/formstate) — Proxy and read before render, batched update, `isDirty`/`isValid` caveats, `isReady`
-- [watch](https://react-hook-form.com/docs/useform/watch) — the four overloads, re-render at the root, `defaultValues` precedence
-- [useWatch](https://react-hook-form.com/docs/usewatch) — render isolation, `compute` (v7.61.0), ordering with `setValue`, not for use in dependencies
-- [useFormState](https://react-hook-form.com/docs/useformstate) — `name` (v7.4.0), `disabled` (v7.13.0), `exact` default `false`
-- [subscribe](https://react-hook-form.com/docs/useform/subscribe) — v7.55.0, subscription without render, `formState` keys
-- [setValue](https://react-hook-form.com/docs/useform/setvalue) — leaf field, `replace` for arrays, `shouldDirty` caveat, `delayError` (v7.82.0)
-- [reset](https://react-hook-form.com/docs/useform/reset) — `keep*`, redefinition of `defaultValues`, reset in `useEffect`, callback (v7.36.0)
-- [useForm](https://react-hook-form.com/docs/useform) — `defaultValues` × `values`, `resetOptions`, `shouldUnregister`, `disabled`
-- [getFieldState](https://react-hook-form.com/docs/useform/getfieldstate) — per-property subscription requirement
-- [useFieldArray](https://react-hook-form.com/docs/usefieldarray) — methods, full *Rules* section, `disabled` (v7.79.0)
-- [Advanced Usage](https://react-hook-form.com/advanced-usage) — virtualized lists, DevTools with `FormProvider`
-- [Migrate V7 to V8 (BETA)](https://react-hook-form.com/migrate-v7-to-v8) — consulted for the status of `watch(callback)` and `keyName`
-
-### Verification notes
-
-Points where the source contradicts what is assumed by habit — or what this doc used to state:
-
-- **The deprecation of `watch(callback)` is not from v7.0.0.** The `watch` page shows, next to the callback overload, the warning *"Deprecated: consider use or migrate to subscribe"* **and** the `Since v7.0.0` badge. The badge marks **when the overload was introduced**, as it does throughout the doc (`update` *Since v7.11.0*, `replace` *Since v7.15.0*). It is not the date of the deprecation: `subscribe` only exists since **v7.55.0**, and a deprecation cannot point to a replacement that did not exist yet. **The source does not state in which version the deprecation happened.** See the divergence recorded below.
-- **In v8 (BETA), `watch(callback)` was not removed.** The migration page says what left the public API was the exported **type** `WatchObserver`; the callback "still works at runtime". The recommendation to migrate to `subscribe` remains, as it is "the supported, fully-typed API for this pattern".
-- **In v8 (BETA), `useFieldArray` renames `id` to `key` and removes `keyName`.** `RHF-ARRAY-01` still holds in v7 with `field.id`; whoever migrates needs to rewrite the `key`.
-- **`isSubmitSuccessful` does not mean "it worked".** It means the `onSubmit` did not throw. A business error handled with `setError` keeps the flag at `true` — which is coherent, but breaks the "I reset because it saved" pattern.
-- **`isValid` does not always come from validation.** `setError` forces it to `false`, and the source says that value "is not derived from validation and will be overwritten the next time validation runs".
-- **`exact` has different defaults in the same library:** `false` in `useWatch` and `useFormState`, `true` in `Controller`/`useController`.
-- **`shouldUnregister: false` (the default) does not validate unmounted fields.** The values persist, but stay outside built-in validation — which is easy to confuse with "the field passed".
-- **`shouldUnregister` is a global configuration** and overrides the field-level configuration, rather than merely coexisting with it.
-- **`reset(x)` redefines `defaultValues`.** A later `reset()` with no argument goes back to `x`, not to the original `useForm` values.
-- **`getFieldState` requires a per-property subscription**, not a generic one: `isDirty` needs `dirtyFields` subscribed, `error` needs `errors`, and so on.
-- **An unknown name in `getFieldState` does not raise an error** — it returns default state, which lets a typo pass as a valid, clean field.
-
-### Verification note — `trigger` with a resolver and a subset of fields
-
-The `trigger` page was consulted specifically to find out whether, with a `resolver` configured, calling `trigger(['a','b'])` populates `formState.errors` with the errors of **all** fields in the schema or only of the named ones. **It does not answer** — it only deals with re-rendering ("Render-optimization isolation only applies when you target a single field").
-
-Since the whole schema runs by definition of the resolver, the safe behavior to assume is the pessimistic one: errors from the other steps **may** be in `errors`. § 7.2 recommends the architecture that does not depend on this; `RHF-STEP-05` covers whoever picks the other one.
-
-### Verification note — the version of the `watch(callback)` deprecation
-
-The `Since v7.0.0` badge on the callback overload marks its **introduction**, not its deprecation. Since the replacement indicated by the source itself (`subscribe`) only exists since v7.55.0, "deprecated since v7.0.0" is untenable.
-
-The fact remains: the overload is marked **Deprecated**, with `subscribe` as the replacement, and `RHF-PERF-02` holds. Only the version cannot be asserted — and that is why neither this note nor the hub states it.

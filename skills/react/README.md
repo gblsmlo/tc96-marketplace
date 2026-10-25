@@ -1,6 +1,6 @@
-# React skills — developer, review, structure, hook-form, component-performance
+# React skills — developer, review, audit, structure, hook-form, component-performance
 
-Five skills, one directory each, with their own `references/` and `scripts/`. The common
+Six skills, one directory each, with their own `references/` and `scripts/`. The common
 anatomy described in [Skills index](../README.md) holds; the supporting material lives in its
 own files instead of bloating the `SKILL.md`.
 
@@ -8,6 +8,7 @@ own files instead of bloating the `SKILL.md`.
 | --- | --- | --- | --- |
 | `react-developer` | writing a **new** component, Hook or feature | [React - Patterns](docs/react-patterns.md) | 4 references + 3 examples + 1 script |
 | `react-review` | is this code that **already exists** correct? | [React - Rules of React](docs/react-rules-of-react.md) | 4 references + 1 report + 2 scripts |
+| `react-audit` | how healthy is the **whole codebase**, and what do we fix first? | [React.js](docs/react-js.md) | 3 references + 2 scripts; runs the other four probe sets |
 | `react-structure` | **where** the file lives, who imports whom | [Feature-Based Architecture](docs/feature-based-architecture.md) | 3 references + 1 report + 2 scripts |
 | `react-hook-form` | forms: capture, validation, submission | [React Hook Form](docs/react-hook-form.md) | 4 references + 1 example + 2 scripts |
 | `react-component-performance` | a component **confirmed slow**: measure, fix, prove | [React - Performance Measurement](docs/react-performance-measurement.md) | 5 references + 1 harness + 1 example + 2 scripts |
@@ -18,7 +19,8 @@ two, **interior × boundary**: `react-structure` handles where the code lives an
 import whom; `react-hook-form` handles a whole capability (form capture) that has a rule
 family of its own, `RHF-*`. `react-component-performance` is a third axis, **measured ×
 assumed**: it starts only when a slowness is confirmed, and its output is a before/after
-comparison, not a review finding.
+comparison, not a review finding. `react-audit` is a fourth axis, **pattern × change**: it runs every
+probe set once over a whole app, samples to confirm, and returns a backlog instead of a verdict.
 
 **In a PR, the order is `react-structure` → `react-review`.** Moving a file can erase the
 interior finding, so reviewing the interior first is wasted work.
@@ -27,7 +29,7 @@ interior finding, so reviewing the interior first is wasted work.
 
 The normative notes — the `React.js` hub with its thirteen satellites, `React Hook Form` with its
 three, `Feature-Based Architecture` and `Architecture in React`, 207 IDs in all — live in
-[`docs/`](docs/react-js.md), not in the tc96 `knowledge-base/`. That is what lets each skill
+[`docs/`](docs/react-js.md), and nothing in the family points outside it. That is what lets each skill
 work in a project that has nothing else from tc96:
 
 | Layout | Where the docs are |
@@ -37,9 +39,12 @@ work in a project that has nothing else from tc96:
 | a single `.skill` package | `docs/` inside the skill — only the notes it cites, and the notes those cite |
 | `AGENTS.md` target | `skills/react/docs/`, nested as here |
 
-The docs and the skills cite tc96 notes outside the family (`TanStack Query`,
-`Storybook - Testes e Interações`, `Playwright`…) **by name in a code span**, never by link:
-context when tc96 is installed, never a dependency.
+Where each doc's rules came from is recorded in `docs/SOURCES.md`, for maintainers. No doc links
+to it and every build target leaves it out, so no run spends tokens on it.
+
+A layer outside the family is cited by the **skill** that owns it (`tanstack-query`,
+`storybook-test`, `playwright-build`…), by name in a code span, never by link and never by
+note: context when that skill is installed, never a dependency. `grep -rn knowledge-base skills/react` returns nothing.
 
 `bash build/skill-packages.sh` produces one `dist/skills/<skill>.skill` per skill, each with its
 docs closure and the sibling scripts it calls. `bash build/verificar.sh` then opens every package
@@ -72,6 +77,16 @@ react-review/
 └── scripts/
     ├── probes.sh                     runs the 15 probes and prints the ID to cite
     └── generate-id-map.sh            regenerates id-map.md for developer and review
+
+react-audit/
+├── SKILL.md
+├── references/
+│   ├── false-positives.md            probe overlaps and out-of-scope hits that change a verdict
+│   ├── audit-report.md               the report template: coverage, enforcement, tiered backlog
+│   └── id-map.md                     generated: the three sibling maps joined
+└── scripts/
+    ├── audit.sh                      runs the four sibling probe sets once and aggregates per probe and file
+    └── generate-id-map.sh            joins the sibling maps (run after the three generators)
 
 react-structure/
 ├── SKILL.md
@@ -120,7 +135,7 @@ a project that does.
 
 ## The ID map
 
-**`id-map.md` is generated, not written** — in all five. It indexes the IDs by satellite and
+**`id-map.md` is generated, not written** — in all six. It indexes the IDs by satellite and
 section, and never carries the rule's **text**: a rule copied inside a skill becomes an outdated
 replica. Three generators, one per rule family, because the sources and the columns differ:
 
@@ -129,6 +144,7 @@ replica. Three generators, one per rule family, because the sources and the colu
 | `react-review/scripts/generate-id-map.sh` | 114 `REACT-*` | `docs/react*` | satellite · section · aliases; also writes the scoped map of `react-component-performance` |
 | `react-structure/scripts/generate-id-map.sh` | 12 `REACT-ARCH-*` | [Feature-Based Architecture](docs/feature-based-architecture.md) | **severity** · **who enforces it** · section |
 | `react-hook-form/scripts/generate-id-map.sh` | 81 `RHF-*` | `docs/react-hook-form*` | satellite · section · cross-doc citation |
+| `react-audit/scripts/generate-id-map.sh` | all three | the three maps above | joined as generated, no new columns |
 
 After editing any note in `docs/`, run the corresponding generator and rebuild:
 
@@ -136,6 +152,7 @@ After editing any note in `docs/`, run the corresponding generator and rebuild:
 bash skills/react/react-review/scripts/generate-id-map.sh
 bash skills/react/react-structure/scripts/generate-id-map.sh
 bash skills/react/react-hook-form/scripts/generate-id-map.sh
+bash skills/react/react-audit/scripts/generate-id-map.sh
 bash build/claude-code.sh
 ```
 
@@ -150,30 +167,30 @@ decides whether a finding comes back in the next PR.
 ## The neighbors — what is **not** this family's
 
 A frontend PR is almost never only React. When the subject belongs to another layer, the
-procedure and the IDs belong to that layer's skill. The names below are tc96 notes outside this
+procedure and the IDs belong to that layer's skill. The names below are skills outside this
 family, cited by name on purpose:
 
-| Layer | Skill | Source doc |
-| --- | --- | --- |
-| remote data, cache, invalidation, optimism | `tanstack-query` | `TanStack Query` |
-| routing, navigation, search params, loader | `tanstack-router` | `TanStack Router` |
-| configuring Storybook, writing a story | `storybook-setup` · `storybook-story` | `Storybook` |
-| an interaction test in the story, the **Vitest** runner | `storybook-test` | `Storybook - Testes e Interações` § 4 |
-| the test's **level**: unit × integration × e2e | `test-design` | `Teste de Software - Níveis e Escopo` |
-| the suite as a system: does it protect? is it trustworthy? | `test-review` · `test-diagnose` | `Teste de Software` |
-| **unit and integration** in `bun test` | `bun-test-build` · `bun-test-review` | `Bun - Testes` |
-| **e2e** | `playwright-build` · `playwright-review` · `playwright-diagnose` | `Playwright` |
-| an API route, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `Elysia` |
-| persistence: schema, migration, query | `drizzle-review` | `Drizzle ORM` |
-| the HTTP contract: method, status, cache, CORS | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | `HTTP` |
-| runtime, dependencies, migrating from Node | `bun-runtime` · `bun-workspace` · `bun-migrate` | `Bun` |
+| Layer | Skill |
+| --- | --- |
+| remote data, cache, invalidation, optimism | `tanstack-query` |
+| routing, navigation, search params, loader | `tanstack-router` |
+| configuring Storybook, writing a story | `storybook-setup` · `storybook-story` |
+| an interaction test in the story, the **Vitest** runner | `storybook-test` |
+| the test's **level**: unit × integration × e2e | `test-design` |
+| the suite as a system: does it protect? is it trustworthy? | `test-review` · `test-diagnose` |
+| **unit and integration** in `bun test` | `bun-test-build` · `bun-test-review` |
+| **e2e** | `playwright-build` · `playwright-review` · `playwright-diagnose` |
+| an API route, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` |
+| persistence: schema, migration, query | `drizzle-review` |
+| the HTTP contract: method, status, cache, CORS | `http-contract` · `http-cache` · `http-diagnose` · `http-review` |
+| runtime, dependencies, migrating from Node | `bun-runtime` · `bun-workspace` · `bun-migrate` |
 
 Two boundaries that tend to be crossed in the wrong direction:
 
 - **Testing: concept before tool.** *At which level* is `test-design`; *how to write it*
   is the tool's skill. Skipping the first produces E2E by default.
 - **Vitest is not a skill here.** It appears as the runner of `@storybook/addon-vitest`,
-  running a story in a real browser through Playwright (`Storybook - Testes e Interações` § 4;
+  running a story in a real browser through Playwright (`storybook-test`;
   the cut between Vitest 3 and 4 in § 4.2). A unit test outside Storybook is `bun test`.
 
 ## Related

@@ -1,6 +1,6 @@
 ---
-titulo: React Hook Form
-Link: https://react-hook-form.com/get-started
+title: React Hook Form
+link: https://react-hook-form.com/get-started
 tags:
   - react
   - forms
@@ -9,19 +9,30 @@ tags:
   - reference
   - agent-context
 source: "Official React Hook Form documentation — react-hook-form.com"
-verificado-em: 2026-08-15
+verified-at: 2026-08-15
 ---
 
 # React Hook Form — guided reference
 
-> **What this note is.** The single entry point for React Hook Form in this vault: for me when looking things up, and for coding agents when generating or reviewing forms. It is not a linear summary of Get Started — it is a **router**. It decides what to load, offers the mental model that makes the rest make sense, and exposes citable rules that a skill or a code review can reference by ID.
+## Contents
+
+- [1. How to use this doc](#1-how-to-use-this-doc)
+- [2. Mental model](#2-mental-model)
+- [3. Package boundaries](#3-package-boundaries)
+- [4. API map](#4-api-map)
+- [5. Decision trees](#5-decision-trees)
+- [6. Normative rules](#6-normative-rules)
+- [7. Skill contract](#7-skill-contract)
+- [8. Bridges to the stack](#8-bridges-to-the-stack)
+
+> **What this note is.** The single entry point for React Hook Form in this family: for me when looking things up, and for coding agents when generating or reviewing forms. It is not a linear summary of Get Started — it is a **router**. It decides what to load, offers the mental model that makes the rest make sense, and exposes citable rules that a skill or a code review can reference by ID.
 >
 > **What it is not.** It does not replace the source. When they diverge, [react-hook-form.com](https://react-hook-form.com/docs) wins, and this note must be corrected.
 >
-> **A self-contained family.** These notes live inside the `react` skill family, not in the tc96 knowledge base, so the family can move without it. Names in code spans — `TanStack Query`, `TanStack Router`, `Storybook`, `Monorepo com Bun - estrutura e tooling` — and IDs from other families (`TSQ-*`, `TSR-*`, `SB-*`, `PW-*`) belong to the tc96 knowledge base: useful context when it is installed, never required to apply a `REACT-*`, `RHF-*` or `REACT-ARCH-*` rule.
+> **A self-contained family.** These notes live inside the `react` skill family and depend on nothing outside it. A neighboring layer is cited by the **skill** that owns it, in a code span (`tanstack-query`, `tanstack-router`, `storybook-test`), and IDs from other families (`TSQ-*`, `TSR-*`, `SB-*`, `PW-*`) belong to those skills: useful context when they are installed, never required to apply a `REACT-*`, `RHF-*` or `REACT-ARCH-*` rule.
 
 Surface verified directly on react-hook-form.com on **2026-08-15**, on the **v7** line (version references go up to v7.85.0).
-See [Sources consulted](#sources-consulted).
+Sources are recorded in the family's `docs/SOURCES.md`, which is not packaged.
 
 This doc assumes [React.js](react-js.md). RHF does not replace any React rule — it adds a layer. `REACT-PURE-*` and `REACT-HOOK-*` still apply inside every form component.
 
@@ -576,7 +587,7 @@ Derive it from a satellite, not from this whole note: a form accessibility skill
 
 ## 8. Bridges to the stack
 
-The body of this doc is pure RHF, faithful to the source. In my stack (`TanStack Router`, `TanStack Query`, TanStack Start, `Tailwind CSS`, `TypeScript`) several raw practices change owner.
+The body of this doc is pure RHF, faithful to the source. In my stack (TanStack Router, TanStack Query, TanStack Start, Tailwind CSS, TypeScript) several raw practices change owner.
 
 | Problem | Raw practice | What to use in the stack |
 | --- | --- | --- |
@@ -584,7 +595,7 @@ The body of this doc is pure RHF, faithful to the source. In my stack (`TanStack
 | Sending the mutation | `fetch` inside `onSubmit` | TanStack Query's `mutateAsync` inside `handleSubmit` |
 | Invalidating cache after saving | manual | `invalidateQueries` in the mutation — |
 | Optimistic update | `useOptimistic` | Query's optimistic mutation — |
-| Wizard state across routes | global store | the Router's typed search params — `TanStack Router - Search Params` |
+| Wizard state across routes | global store | the Router's typed search params — skill `tanstack-router` |
 | Boundary validation | manual `if` | the same Zod schema on client and server — |
 | Server error in the UI | loose `alert`/toast | `setError` on the field or in `root.serverError` · `RHF-ERR-02` |
 
@@ -697,46 +708,3 @@ useForm({
 | `RHF-BRIDGE-02` | With a Server Action, the dispatch **MUST** be called from inside `handleSubmit`; the action's state is **NEVER** copied into the form via `useEffect`. |
 | `RHF-BRIDGE-03` | Remote data **NEVER** becomes static `defaultValues` — use `values` with `resetOptions.keepDirtyValues`. |
 | `RHF-BRIDGE-04` | An optimistic update over a remote cache **NEVER** belongs to the form — it belongs to the mutation. **Canonical** — see § 6.2; `REACT-FORM-07` deals with something else and does not replace it. |
-
----
-
-## Related
-
-- [React Hook Form - Registration and Control](react-hook-form-registration-and-control.md) — connecting fields
-- [React Hook Form - Validation and Resolvers](react-hook-form-validation-and-resolvers.md) — what is valid, and what to do with an error
-- [React Hook Form - State and Performance](react-hook-form-state-and-performance.md) — reading state, lists, re-render
-- [React.js](react-js.md) — React entry point; `REACT-PURE-*` and `REACT-HOOK-*` apply here
-- [React - Forms and Actions](react-forms-and-actions.md) — the native alternative; see § 5.4 before choosing
-- `TanStack Query - Mutations e Invalidação` · `Frontend roadmap`
-
-## Sources consulted
-
-Verified directly on **2026-08-15**:
-
-- [Get Started](https://react-hook-form.com/get-started) · [API index](https://react-hook-form.com/docs)
-- [useForm](https://react-hook-form.com/docs/useform) · [register](https://react-hook-form.com/docs/useform/register) · [formState](https://react-hook-form.com/docs/useform/formstate) · [handleSubmit](https://react-hook-form.com/docs/useform/handlesubmit)
-- [watch](https://react-hook-form.com/docs/useform/watch) · [subscribe](https://react-hook-form.com/docs/useform/subscribe) · [setValue](https://react-hook-form.com/docs/useform/setvalue) · [reset](https://react-hook-form.com/docs/useform/reset) · [setError](https://react-hook-form.com/docs/useform/seterror) · [trigger](https://react-hook-form.com/docs/useform/trigger) · [getFieldState](https://react-hook-form.com/docs/useform/getfieldstate)
-- [Controller](https://react-hook-form.com/docs/usecontroller/controller) · [useController](https://react-hook-form.com/docs/usecontroller) · [useFormContext](https://react-hook-form.com/docs/useformcontext) · [useFormState](https://react-hook-form.com/docs/useformstate) · [useWatch](https://react-hook-form.com/docs/usewatch) · [useFieldArray](https://react-hook-form.com/docs/usefieldarray)
-- [`<Form>`](https://react-hook-form.com/docs/useform/form) · [useLens](https://react-hook-form.com/docs/uselens)
-- [Advanced Usage](https://react-hook-form.com/advanced-usage) · [TypeScript](https://react-hook-form.com/ts) · [FAQs](https://react-hook-form.com/faqs)
-- [@hookform/resolvers](https://github.com/react-hook-form/resolvers)
-
-### Verification notes
-
-Points where the source contradicts what is assumed out of habit:
-
-- **`watch(callback)` is marked as deprecated, but the source does not declare in which version.** The page carries the warning *"Deprecated: consider use or migrate to subscribe"* and, next to it, the badge `Since v7.0.0`. The two do not say the same thing: in this documentation `Since vX` marks **when the API was introduced** (`update` carries *Since v7.11.0*, `replace` carries *Since v7.15.0*). And the deprecation could not be from v7.0.0, because the indicated replacement, `subscribe`, only arrived in **v7.55.0** — 55 minor versions later. Treat it as "deprecated, unknown version" and prefer `subscribe` in new code.
-- **`useLens` is not core.** It comes from `@hookform/lenses`, a separate package. It appears in the official doc's API index next to the core hooks, which is misleading.
-- **`useForm`-level `validate` exists** since v7.72.0 and is **mutually exclusive with `resolver`** — the source says it does not run when a resolver is configured.
-- **`isReady` (v7.56.0)** signals that the `formState` subscription is ready. A child component that calls `setValue` on mount needs to wait for it; without it the call is silently lost.
-- **`<Form>` is BETA** since v7.44.0. The doc does not present it as the default, and neither does this note.
-- **`Controller`/`useController` have `exact` defaulting to `true`** (v7.68.0), while `useWatch` and `useFormState` have `exact` defaulting to `false`. The inconsistency is real and is in the source.
-- **Calling `register` again on the same name merges options, it does not replace them.** Removing a rule requires passing it as an explicit `false`; `undefined` or `{}` do not remove it.
-- **`handleSubmit` does not swallow exceptions** from `onSubmit`, and the returned promise resolves with `onValid`'s return since v7.84.0.
-- **The official doc has a Server Actions section** in *Advanced Usage*, and its pattern does away with `useEffect` as a bridge.
-- **Reserved field names:** `type`, `root`, `ref`, `types`, `message`, `form` collide with `FieldError`'s internal structure. Names also cannot start with a number.
-- **React's `<Activity />` is supported since v7.85.0** — RHF resynchronizes the internal subscriptions on remount.
-- **A 404 that was a URL mistake, not a missing page.** `createFormControl` lives at `/docs/createFormControl` (camelCase); `setValues` and `resetDefaultValues` have their own pages. All three are verified in § 4.3. `/docs/useform/resolver`, on the other hand, really does not exist — the resolver contract is at `/useform#resolver`, which is the real source of what [React Hook Form - Validation and Resolvers](react-hook-form-validation-and-resolvers.md) § 3.2 asserts.
-- **`register` `rules` × `resolver`:** the exclusivity is stated on the `useForm` page ("Cannot be used with built-in validators") and is the basis of `RHF-VAL-06`. The consequence for `validate` and `deps` is a direct deduction from that sentence — the source does not name them one by one. The recommended alternative (async `.refine()` with the resolver's `mode: 'async'`) has declared support in the `@hookform/resolvers` README, but **the Zod async refine + zodResolver chain was not tested end-to-end in this verification**.
-
-**On review.** This structure went through a reading test with four agents with no context (choosing between RHF and Actions, performance and re-render, server errors with Zod, reusable field component) and an audit of ID and reference consistency, on 2026-08-15. The corrections applied included: reversing the async validation guidance in § 3.3 of the Validation satellite (it was telling you to use `register`'s `validate` in a setup with a resolver, where it does not run), rewriting `RHF-STATE-04`, which contradicted `RHF-STATE-02`, fixing `RHF-PERF-01` cited as permission for what it forbids, disambiguating "number as an isolated key" against `items.0.name`, and fixing the examples that violated `RHF-A11Y-01`/`-03`. When editing this doc, repeating the test is cheaper than trusting a reread.

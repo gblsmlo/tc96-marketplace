@@ -1,7 +1,7 @@
 ---
 name: playwright-diagnose
 description: Diagnose a Playwright test that fails or fails intermittently, reading the trace before touching the code, with executable bisection and `PW-*` IDs — use when the task is investigating a flaky test, a failure that only happens in CI, a failure that only happens in parallel, a screenshot that differs for no reason, or a 30 s timeout with no apparent cause. Do not use to write a new test, which is playwright-build, to audit a whole suite with no concrete failure, which is playwright-review, nor for the suite as a system and its flakiness rate, which is test-diagnose.
-fonte: "[Playwright - Debug e Trace](../../referencias/playwright-debug-e-trace.md)"
+source: "[Playwright - Debug e Trace](../../referencias/playwright-debug-e-trace.md)"
 docs:
   - /microsoft/playwright
 tags:

@@ -1,7 +1,7 @@
 ---
 name: test-diagnose
 description: Diagnose a suite nobody trusts — measure the flakiness rate before opining, find the cause and tell a fix from an anesthetic, citing `TS-*` IDs — use when the task is investigating an unstable suite as a system, answering "why do we pass green and the defect reaches production?", assessing whether the assertions detect a break, deciding whether retry is masking a defect, or when the same test goes flaky again after being fixed. Do not use for one concrete failing test, which is playwright-diagnose or bun-test-review. Do not use to audit the shape of the suite, which is test-review, nor to decide a new test, which is test-design.
-fonte: "[Teste de Software - Confiabilidade da Suíte](../../referencias/teste-de-software-confiabilidade-da-suite.md)"
+source: "[Teste de Software - Confiabilidade da Suíte](../../referencias/teste-de-software-confiabilidade-da-suite.md)"
 tags:
   - skill
   - testing

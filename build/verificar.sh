@@ -53,7 +53,7 @@ vazados = []
 for md in mds("agents", "skills", "commands", "knowledge-base"):
     texto = md.read_text(encoding="utf-8")
     campos = re.match(r"^---\n(.*?)\n---\n", texto, re.S)
-    migrado = campos and re.search(r"^tipo: (skill|agente)$", campos.group(1), re.M)
+    migrado = campos and re.search(r"^(tipo|type): (skill|agente)$", campos.group(1), re.M)
     if md.parts[-2:][0] == "knowledge-base" or "knowledge-base" in str(md) or migrado:
         for linha_n, linha in enumerate(texto.splitlines(), 1):
             if "`" in linha:
@@ -86,6 +86,8 @@ for skill in sorted((raiz / "skills").glob("*/*/SKILL.md")):
     campos = dict(re.findall(r"^(\w+):\s*(.*)$",
                              re.match(r"^---\n(.*?)\n---\n", skill.read_text(encoding="utf-8"),
                                       re.S).group(1), re.M))
+    for en, pt in (("name", "nome"), ("description", "descricao"), ("type", "tipo"), ("family", "familia")):
+        campos.setdefault(pt, campos.get(en, ""))
     if campos.get("tipo") != "skill":
         continue  # familia nao migrada
     existentes.add(campos.get("nome", ""))

@@ -18,10 +18,10 @@ BASE="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/docs}"
 FAMILY="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DOCS="$BASE"
 
-# Title of each note, from the `heading:` field in the file itself — the link label.
+# Title of each note, from the `title:` field in the file itself — the link label.
 titles() {
   awk 'FNR == 1 { name = FILENAME; sub(/.*\//, "", name); sub(/\.md$/, "", name) }
-       /^titulo: / { print name "\t" substr($0, 9); nextfile }' "$DOCS"/*.md
+       /^title: / { print name "\t" substr($0, 8); nextfile }' "$DOCS"/*.md
 }
 
 # Rewrites a note's own relative links to how they are seen from
@@ -69,6 +69,10 @@ scan() {
   echo "> A router, not a copy: this file says **where** the rule is declared, never what it says."
   echo "> For the text, open the satellite. Regenerate with \`bash skills/react/react-review/scripts/generate-id-map.sh\`."
   echo
+  echo "## Contents"
+  echo "- [Aliases — never cite one in a review](#aliases--never-cite-one-in-a-review)"
+  echo "- [Full index](#full-index)"
+  echo
   echo "## Aliases — never cite one in a review"
   echo
   echo "From [React.js](../../docs/react-js.md) § 6.2. Always cite the canonical ID; an alias in a finding is an invalid finding."
@@ -92,7 +96,7 @@ cp "$TMP" "$OUT_REV"
 # whose ID this skill cites.
 if [ -d "$(dirname "$OUT_PERF")" ]; then
   {
-    sed -n '1,/^## Aliases/p' "$TMP" | sed '$d' \
+    sed -n '1,/^## Aliases/p' "$TMP" | sed '$d' | sed '/^## Contents$/,/^$/d' \
       | sed -e 's/^# ID map `REACT-\*` — where each rule lives$/# ID map `REACT-PERF-*` — where each rule this skill cites lives/'
     echo "Scope: every \`REACT-PERF-*\`, plus the IDs the probes and references of react-component-performance cite."
     echo "For any other \`REACT-*\`, the full map lives in react-review."

@@ -22,7 +22,7 @@ verificar = os.environ.get("MODO") == "--verificar"
 def titulo_de(p):
     m = re.match(r"^---\n(.*?)\n---\n", p.read_text(encoding="utf-8"), re.S)
     if m:
-        t = re.search(r"^titulo:\s*(.+)$", m.group(1), re.M)
+        t = re.search(r"^(?:titulo|title):\s*(.+)$", m.group(1), re.M)
         if t:
             return t.group(1).strip()
     return p.stem

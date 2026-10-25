@@ -1,7 +1,7 @@
 ---
 name: tanstack-router
 description: Work with routing in TanStack Router — defining and nesting routes, navigating with `<Link>`, typed and validated search params, loaders and cache integration, route context and code splitting — citing `TSR-*` IDs, with sixteen executable probes — use when the task is creating or nesting a route, building navigation, validating and reading search params, deciding between a loader and Query, guarding a route, or splitting the bundle. Do not use for the remote data itself, which is tanstack-query, nor for the inside of components, which is react-developer and react-review.
-fonte: "[TanStack Router](../../referencias/tanstack-router.md)"
+source: "[TanStack Router](../../referencias/tanstack-router.md)"
 docs:
   - /websites/tanstack_router
 tags:

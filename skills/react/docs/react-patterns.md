@@ -1,16 +1,28 @@
 ---
-titulo: React - Patterns
-Link: https://react.dev/learn
+title: React - Patterns
+link: https://react.dev/learn
 tags:
   - react
   - patterns
   - architecture
   - agent-context
 source: "react.dev (Learn + Reference)"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Patterns
+
+## Contents
+
+- [1. The axis that organizes everything](#1-the-axis-that-organizes-everything)
+- [2. State ownership and placement](#2-state-ownership-and-placement)
+- [3. Composition](#3-composition)
+- [4. Controlled × uncontrolled](#4-controlled--uncontrolled)
+- [5. Logic extraction](#5-logic-extraction)
+- [6. Boundaries](#6-boundaries)
+- [7. Data flow](#7-data-flow)
+- [8. Antipatterns](#8-antipatterns)
+- [9. Use by an agent](#9-use-by-an-agent)
 
 > A **decision** structure: where state lives, what to compose, what to extract, where to draw boundaries. It does not repeat the API surface — for a Hook signature, go to [React - Hooks](react-hooks.md); for the full API map, [React.js](react-js.md) § 4.
 >
@@ -77,7 +89,7 @@ The children receive ready data and do not know a filter exists — they stay re
 
 A question most code skips. State belongs in the URL when it needs to **survive a refresh**, **be shareable by link** or **work with the back button**. Search filter, active tab, page, sort order and date range almost always meet at least one criterion.
 
-When it does, the source of truth is the route — in my stack, the typed search params of `TanStack Router` — and not `useState`. Ephemeral UI state (open menu, hover, focus, field draft) stays in `useState`.
+When it does, the source of truth is the route — in my stack, the typed search params of `tanstack-router` — and not `useState`. Ephemeral UI state (open menu, hover, focus, field draft) stays in `useState`.
 
 | ID | Rule |
 | --- | --- |
@@ -145,7 +157,7 @@ Passing JSX as children avoids forwarding props through intermediate levels that
 
 ### When to extract a component
 
-The vault's criterion, in: extract when the component represents a concept, repeats, isolates relevant behavior, or reduces the parent's cognitive load. **Splitting every visual block into a file is not good design** — excessive fragmentation increases navigation and prop passing.
+The house criterion, in: extract when the component represents a concept, repeats, isolates relevant behavior, or reduces the parent's cognitive load. **Splitting every visual block into a file is not good design** — excessive fragmentation increases navigation and prop passing.
 
 For visual variants.
 
@@ -273,16 +285,3 @@ When you receive a structure task ("where do I put this", "how do I organize thi
 > `REACT-PAT-01` — `total` is derivable from `items`. Do not create state; compute it during render.
 
 When reviewing code, the table in § 8 is the checklist. When proposing a refactor, cite the section — this note carries the decision; the satellite carries the reasoning.
-
----
-
-## Related
-
-- [React.js](react-js.md) — hub, API map and decision trees
-- [React - Hooks](react-hooks.md) — API surface per Hook
-- [React - Rules of React](react-rules-of-react.md) — normative base
-- `Frontend roadmap` — study track that consumes these notes
-
-## Sources consulted
-
-- [React — Learn](https://react.dev/learn) and [Reference](https://react.dev/reference/react), verified on 2026-08-14

@@ -1,5 +1,13 @@
 # Severity, finding format and the finding × opinion cut
 
+## Contents
+
+- [Classification](#classification)
+- [A finding's format](#a-findings-format)
+- [The cut: finding × opinion](#the-cut-finding--opinion)
+- [The report's structure](#the-reports-structure)
+- [Related](#related)
+
 ---
 
 ## Classification

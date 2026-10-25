@@ -1,5 +1,14 @@
 # Self-check before delivering
 
+## Contents
+
+- [Pass 1 — the normative checklist](#pass-1--the-normative-checklist)
+- [Pass 2 — the habits table](#pass-2--the-habits-table)
+- [Pass 3 — the three closing questions](#pass-3--the-three-closing-questions)
+- [Executable probes](#executable-probes)
+- [Before the first line, not after](#before-the-first-line-not-after)
+- [Related](#related)
+
 > Three passes, in this order. None of them is optional, and the delivery does not go out with
 > a caveat: if an item fails, fix it first.
 

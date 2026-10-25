@@ -1,5 +1,12 @@
 # Worked example — a structural review in a PR
 
+## Contents
+
+- [Step 1 — probes before opening a file](#step-1--probes-before-opening-a-file)
+- [Step 2 — the reading, and what it changes](#step-2--the-reading-and-what-it-changes)
+- [Step 3 — the report](#step-3--the-report)
+- [What this example demonstrates](#what-this-example-demonstrates)
+
 PR: *"extracts invoice formatting for reuse and adds the billing screen"*.
 
 ---

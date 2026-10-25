@@ -1,16 +1,25 @@
 ---
-titulo: React - Effects and Synchronization
-Link: https://react.dev/reference/react/useEffect
+title: React - Effects and Synchronization
+link: https://react.dev/reference/react/useEffect
 tags:
   - react
   - effects
   - hooks
   - agent-context
 source: "Official React documentation — useEffect, useLayoutEffect, useInsertionEffect, useEffectEvent"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Effects and Synchronization
+
+## Contents
+
+- [1. Concept: an Effect is synchronization, not "code that runs afterwards"](#1-concept-an-effect-is-synchronization-not-code-that-runs-afterwards)
+- [2. The dependency array](#2-the-dependency-array)
+- [3. When **not** to use an Effect](#3-when-not-to-use-an-effect)
+- [4. `useEffectEvent`](#4-useeffectevent)
+- [5. The three variants](#5-the-three-variants)
+- [6. Review checklist](#6-review-checklist)
 
 > `useEffect` · `useLayoutEffect` · `useInsertionEffect` · `useEffectEvent`
 >
@@ -266,17 +275,3 @@ useLayoutEffect(() => {
 - [ ] Is there a `fetch` inside? → `REACT-EFFECT-06`
 - [ ] `useLayoutEffect` without layout measurement? → `REACT-EFFECT-10`
 - [ ] Effect Event called outside an Effect or passed along? → `REACT-EFFECT-07`
-
----
-
-## Related
-
-- [React.js](react-js.md) · [React - Hooks](react-hooks.md) · [React - Patterns](react-patterns.md) · [React - Rules of React](react-rules-of-react.md)
-
-## Sources consulted
-
-Verified on 2026-08-14:
-
-- [useEffect](https://react.dev/reference/react/useEffect) · [useLayoutEffect](https://react.dev/reference/react/useLayoutEffect) · [useInsertionEffect](https://react.dev/reference/react/useInsertionEffect)
-- [useEffectEvent](https://react.dev/reference/react/useEffectEvent) — confirmed as stable, with no experimental marking
-- [Rules of React](https://react.dev/reference/rules)

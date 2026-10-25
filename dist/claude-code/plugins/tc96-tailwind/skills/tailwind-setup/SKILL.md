@@ -1,7 +1,7 @@
 ---
 name: tailwind-setup
 description: Install, configure or migrate Tailwind CSS in a project or monorepo — discovering the line (3 or 4) and the integration before prescribing anything, the entry stylesheet, `@source` for what the scanner does not see, `@theme` tokens and dark mode, shadcn/ui on v4, and the v3 → v4 migration with its silent visual changes — citing `TW-CFG-*`, `TW-SRC-*`, `TW-THEME-*` and `TW-MIG-*` IDs, with a script that discovers the line and finds the contradictions — use when the task is adding Tailwind to a TanStack Start/Vite app, moving from PostCSS to the Vite plugin, a `tailwind.config` whose values do not reach the CSS, classes from `packages/ui` that vanished, setting up design tokens or a dark-mode toggle, fixing `components.json` for v4, or running the upgrade from v3. Do not use to write a component's classes, which is tailwind-build, nor to audit existing markup, which is tailwind-review.
-fonte: "[Tailwind CSS - Installation and Detection](../../docs/tailwind/tailwindcss-installation-and-detection.md)"
+source: "[Tailwind CSS - Installation and Detection](../../docs/tailwind/tailwindcss-installation-and-detection.md)"
 docs:
   - /tailwindlabs/tailwindcss.com
   - /shadcn-ui/ui

@@ -99,7 +99,7 @@ heading "8. forwardRef in current code" "REACT-REF-03"
 
 heading "9. Suspense without an Error Boundary in the same file" "REACT-ASYNC-08"
 "${RG[@]}" -l '<Suspense' "$TARGET" 2>/dev/null \
-  | while read -r f; do rg -q 'ErrorBoundary|errorElement' "$f" || echo "   $f"; done \
+  | while read -r f; do rg -q 'ErrorBoundary|CatchBoundary|errorElement|errorComponent' "$f" || echo "   $f"; done \
   | grep . || none_found
 
 heading "10. Mutating an array that came from props/state" "REACT-PURE-03 / REACT-PURE-05"

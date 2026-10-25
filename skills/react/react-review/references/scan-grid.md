@@ -1,5 +1,15 @@
 # Scan grid — in the order that fails most
 
+## Contents
+
+- [Level 1 — React's contract (blocking)](#level-1--reacts-contract-blocking)
+- [Level 2 — critical rules (high)](#level-2--critical-rules-high)
+- [Level 3 — structure (medium)](#level-3--structure-medium)
+- [Level 4 — the domain's satellite](#level-4--the-domains-satellite)
+- [Level 5 — style and legibility](#level-5--style-and-legibility)
+- [Two handoffs](#two-handoffs)
+- [Related](#related)
+
 > The order is not arbitrary. It goes from what **breaks React's contract** to what is
 > preference, and each level has normative precedence over the next
 > ([React.js](../../docs/react-js.md) § 7, invariant 3).

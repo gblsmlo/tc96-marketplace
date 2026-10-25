@@ -1,16 +1,25 @@
 ---
-titulo: React - Suspense and Async
-Link: https://react.dev/reference/react/Suspense
+title: React - Suspense and Async
+link: https://react.dev/reference/react/Suspense
 tags:
   - react
   - suspense
   - async
   - agent-context
 source: "Official React documentation — Suspense, lazy, use"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Suspense and Async
+
+## Contents
+
+- [1. Concept: waiting as a position in the tree](#1-concept-waiting-as-a-position-in-the-tree)
+- [2. `lazy`](#2-lazy)
+- [3. `use`](#3-use)
+- [4. Error Boundaries](#4-error-boundaries)
+- [5. Suspense + transitions](#5-suspense--transitions)
+- [6. Antipatterns](#6-antipatterns)
 
 > `<Suspense>` · `lazy` · `use` · Error Boundaries
 >
@@ -113,7 +122,7 @@ const Settings = lazy(() =>
 
 Where it pays off: routes, heavy modals, editors, charts. Where it does not: small components — the cost of the extra request outweighs the bundle cost.
 
-> **Bridge:** with `TanStack Router`, route-level code splitting is already handled by the router. Use `lazy` for what is **outside** the route boundary.
+> **Bridge:** with `tanstack-router`, route-level code splitting is already handled by the router. Use `lazy` for what is **outside** the route boundary.
 
 ---
 
@@ -277,17 +286,3 @@ General rule: **navigation and switching already-visible content must be transit
 | Fallback with a different height from the content | sized skeleton · `REACT-ASYNC-02` |
 | Suspense without an Error Boundary | mandatory pair · `REACT-ASYNC-08` |
 | Navigation without a transition, flashing the skeleton | `startTransition` · `REACT-ASYNC-10` |
-
----
-
-## Related
-
-- [React.js](react-js.md) · [React - Hooks](react-hooks.md) · [React - Patterns](react-patterns.md) · [React - Rules of React](react-rules-of-react.md)
-- [React - Performance and Concurrency](react-performance-and-concurrency.md) · [React - Server Components and Directives](react-server-components-and-directives.md)
-
-## Sources consulted
-
-Verified on 2026-08-14:
-
-- [Suspense](https://react.dev/reference/react/Suspense) · [lazy](https://react.dev/reference/react/lazy) · [use](https://react.dev/reference/react/use)
-- [Server Components](https://react.dev/reference/rsc/server-components)
