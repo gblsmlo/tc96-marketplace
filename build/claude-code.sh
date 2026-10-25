@@ -87,6 +87,22 @@ PLUGINS = {
 }
 
 
+# frontmatter keys moved to English; families not yet migrated still use the Portuguese ones
+LEGACY = {"name": "nome", "description": "descricao", "type": "tipo", "family": "familia",
+          "language": "idioma", "source": "fonte", "title": "titulo"}
+
+
+def legacy(fields):
+    for en, pt in LEGACY.items():
+        if en in fields and pt not in fields:
+            fields[pt] = fields[en]
+        if en + "__lista" in fields and pt + "__lista" not in fields:
+            fields[pt + "__lista"] = fields[en + "__lista"]
+        if en + "__list" in fields and pt + "__list" not in fields:
+            fields[pt + "__list"] = fields[en + "__list"]
+    return fields
+
+
 def partir(texto):
     m = re.match(r"^---\n(.*?)\n---\n", texto, re.S)
     if not m:
@@ -99,7 +115,7 @@ def partir(texto):
             campos[chave] = cm.group(2)
         elif chave and linha.startswith(" "):
             campos.setdefault(chave + "__lista", []).append(linha.strip().lstrip("- "))
-    return campos, texto[m.end():]
+    return legacy(campos), texto[m.end():]
 
 
 def listas(campos, chaves):
@@ -187,7 +203,7 @@ for plugin, cfg in PLUGINS.items():
                 c, corpo_arq = partir(t)
                 fm = ["---", f"name: {c['nome']}", f"description: {c['descricao']}"]
                 if c.get("fonte"):
-                    fm.append(f"fonte: {c['fonte']}")
+                    fm.append(f"source: {c['fonte']}")
                 fm += listas(c, ["docs", "tags"])
                 fm.append("---\n")
                 t = "\n".join(fm) + corpo_arq

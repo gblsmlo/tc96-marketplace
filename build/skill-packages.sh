@@ -30,6 +30,22 @@ NOT_PACKAGED = {"generate-id-map.sh"}
 LINK = re.compile(r"\[([^\]]+)\]\(([^)#:\s]+\.md)(#[^)]*)?\)")
 
 
+# frontmatter keys moved to English; families not yet migrated still use the Portuguese ones
+LEGACY = {"name": "nome", "description": "descricao", "type": "tipo", "family": "familia",
+          "language": "idioma", "source": "fonte", "title": "titulo"}
+
+
+def legacy(fields):
+    for en, pt in LEGACY.items():
+        if en in fields and pt not in fields:
+            fields[pt] = fields[en]
+        if en + "__lista" in fields and pt + "__lista" not in fields:
+            fields[pt + "__lista"] = fields[en + "__lista"]
+        if en + "__list" in fields and pt + "__list" not in fields:
+            fields[pt + "__list"] = fields[en + "__list"]
+    return fields
+
+
 def split(text):
     m = re.match(r"^---\n(.*?)\n---\n", text, re.S)
     fields, key = {}, None
@@ -40,7 +56,7 @@ def split(text):
             fields[key] = km.group(2)
         elif key and line.startswith(" "):
             fields.setdefault(key + "__list", []).append(line.strip().lstrip("- "))
-    return fields, text[m.end():]
+    return legacy(fields), text[m.end():]
 
 
 def frontmatter(f):
