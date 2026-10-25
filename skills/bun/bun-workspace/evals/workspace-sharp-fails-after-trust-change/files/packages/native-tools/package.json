@@ -1,0 +1,7 @@
+{
+  "name": "@acme/native-tools",
+  "version": "0.1.0",
+  "scripts": {
+    "postinstall": "bun run build-native.ts"
+  }
+}

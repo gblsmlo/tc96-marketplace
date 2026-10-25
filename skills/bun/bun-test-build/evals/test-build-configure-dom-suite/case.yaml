@@ -1,0 +1,12 @@
+schema_version: "1.1"
+name: test-build-configure-dom-suite
+expected_outcome: |
+  bunfig.toml with [test] preload listing a happy-dom registration file first and a Testing Library
+  setup file second (separate files, in that order); the setup registers jest-dom matchers with
+  expect.extend (import alone registers nothing), runs cleanup in afterEach and mock.restore in
+  afterEach; a Counter test with awaited userEvent; CI pins the Bun version, uses bun ci, runs tsc
+  --noEmit as its own step; coverage threshold, if any, on lines/functions with the text reporter
+  kept. Says the deps were not installed so bun test was not run. Cites BUN-TEST-25, -12, -26, -02,
+  -15, -18.
+context:
+  scaffold_script: place-files.sh

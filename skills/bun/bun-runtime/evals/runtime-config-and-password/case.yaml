@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: runtime-config-and-password
+expected_outcome: |
+  Adds a config module that validates the three variables at startup (fails fast), writes the snapshot
+  with Bun.write (directory creation, if any, through node:fs), hashes the password with Bun.password
+  (argon2id), never with createHash or Bun.hash, and points out that `--hot` on a server holding in-
+  memory sessions is the wrong flag and that CI lacks `tsc --noEmit`. Cites BUN-RT-*/BUN-CORE-* IDs.
+context:
+  scaffold_script: place-files.sh

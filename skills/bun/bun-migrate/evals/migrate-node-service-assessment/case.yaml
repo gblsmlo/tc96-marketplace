@@ -1,0 +1,12 @@
+schema_version: "1.1"
+name: migrate-node-service-assessment
+expected_outcome: |
+  Enumerates node:* usage in src AND in node_modules, finds that fake-apm (a transitive dependency,
+  not project code) relies on async_hooks createHook/executionAsyncId, which are stubs in Bun — the
+  APM would run and report nothing, so observability blocks unless replaced; flags the
+  chacha20-poly1305 cipher as absent in Bun's BoringSSL (BUN-SYS-08); notes node:cluster is partial
+  (HTTP balancing only on Linux); the missing SIGTERM drain (BUN-SYS-11) and the Dockerfile moving to
+  a pinned oven/bun tag with USER bun (BUN-SYS-12); says each module must be checked on the official
+  compatibility page (BUN-CORE-05) and declares what was not verified.
+context:
+  scaffold_script: place-files.sh
