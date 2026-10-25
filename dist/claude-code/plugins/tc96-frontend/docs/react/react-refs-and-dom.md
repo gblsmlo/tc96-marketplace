@@ -1,16 +1,25 @@
 ---
-titulo: React - Refs and DOM
-Link: https://react.dev/reference/react/useRef
+title: React - Refs and DOM
+link: https://react.dev/reference/react/useRef
 tags:
   - react
   - refs
   - dom
   - agent-context
 source: "Official React documentation — useRef, useImperativeHandle, createPortal, flushSync"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Refs and DOM
+
+## Contents
+
+- [1. `useRef`: memory that does not redraw](#1-useref-memory-that-does-not-redraw)
+- [2. `ref` as a prop (React 19)](#2-ref-as-a-prop-react-19)
+- [3. `useImperativeHandle`](#3-useimperativehandle)
+- [4. `createPortal`](#4-createportal)
+- [5. `flushSync`](#5-flushsync)
+- [6. Antipatterns](#6-antipatterns)
 
 > `useRef` · `useImperativeHandle` · `ref` as a prop · `createPortal` · `flushSync`
 >
@@ -220,19 +229,3 @@ It hurts performance and disables concurrency optimizations. Legitimate only whe
 | A modal with `createPortal` without focus and `Esc` | accessible primitive · `REACT-REF-07` |
 
 The fifth deserves a note: changing through a ref a node that React manages puts the real tree out of sync with the virtual one, and the next render may revert or break it. Direct manipulation is only safe on nodes React does **not** render.
-
----
-
-## Related
-
-- [React.js](react-js.md) · [React - Hooks](react-hooks.md) · [React - Patterns](react-patterns.md) · [React - Rules of React](react-rules-of-react.md)
-- [React - State and Reactivity](react-state-and-reactivity.md) — the state × ref decision
-
-## Sources consulted
-
-Verified on 2026-08-14:
-
-- [useRef](https://react.dev/reference/react/useRef) · [useImperativeHandle](https://react.dev/reference/react/useImperativeHandle)
-- [forwardRef](https://react.dev/reference/react/forwardRef) — deprecation banner quoted literally
-- [Common components — ref callback](https://react.dev/reference/react-dom/components/common) — ref callback cleanup quoted literally
-- [createPortal](https://react.dev/reference/react-dom/createPortal) · [flushSync](https://react.dev/reference/react-dom/flushSync)

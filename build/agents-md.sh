@@ -20,6 +20,22 @@ import json, os, re, shutil, pathlib
 raiz, dest = pathlib.Path(os.environ["RAIZ"]), pathlib.Path(os.environ["DEST"])
 
 
+# frontmatter keys moved to English; families not yet migrated still use the Portuguese ones
+LEGACY = {"name": "nome", "description": "descricao", "type": "tipo", "family": "familia",
+          "language": "idioma", "source": "fonte", "title": "titulo"}
+
+
+def legacy(fields):
+    for en, pt in LEGACY.items():
+        if en in fields and pt not in fields:
+            fields[pt] = fields[en]
+        if en + "__lista" in fields and pt + "__lista" not in fields:
+            fields[pt + "__lista"] = fields[en + "__lista"]
+        if en + "__list" in fields and pt + "__list" not in fields:
+            fields[pt + "__list"] = fields[en + "__list"]
+    return fields
+
+
 def partir(texto):
     m = re.match(r"^---\n(.*?)\n---\n", texto, re.S)
     if not m:
@@ -32,7 +48,7 @@ def partir(texto):
             campos[chave] = cm.group(2)
         elif chave and linha.startswith(" "):
             campos.setdefault(chave + "__lista", []).append(linha.strip().lstrip("- "))
-    return campos, texto[m.end():]
+    return legacy(campos), texto[m.end():]
 
 
 def sem_frontmatter(campos, corpo):
@@ -66,7 +82,7 @@ for skill_dir in sorted((raiz / "skills").glob("*/*/")):
     # doc propria da familia: o layout aninhado preserva os links relativos
     doc_familia = skill_dir.parent / "docs"
     if doc_familia.is_dir() and not (dest / "skills" / familia / "docs").exists():
-        shutil.copytree(doc_familia, dest / "skills" / familia / "docs")
+        shutil.copytree(doc_familia, dest / "skills" / familia / "docs", ignore=shutil.ignore_patterns("SOURCES.md"))
     (alvo / "SKILL.md").write_text(sem_frontmatter(campos, corpo), encoding="utf-8")
     skills.append((familia, skill_dir.name, campos["descricao"],
                    campos.get("docs__lista", [])))

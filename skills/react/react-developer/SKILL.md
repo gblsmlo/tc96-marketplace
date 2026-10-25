@@ -1,10 +1,10 @@
 ---
-nome: react-developer
-descricao: Write a new React component, custom Hook or feature — three structural questions before any code, API choice through the decision trees, a table of habits that produce violations, and an executable self-check before delivering, citing `REACT-*` IDs — use when the task is creating a component or Hook from scratch, deciding who owns the state, choosing between neighboring Hooks, extracting logic into a custom Hook, designing error and waiting boundaries, or composing instead of configuring. Do not use to review existing code, which is react-review, to decide where the file lives, which is react-structure, for a form with validation and conditional fields, which is react-hook-form, nor to diagnose a component already confirmed slow, which is react-component-performance.
-tipo: skill
-familia: react
-idioma: en
-fonte: "[React - Patterns](../docs/react-patterns.md)"
+name: react-developer
+description: Writes new React code — a component, custom Hook or feature — by answering three structural questions before any JSX, choosing each API through the decision trees instead of habit, avoiding the reflexes that produce violations, and running an executable self-check before delivering, citing `REACT-*` IDs. Use when creating a component or Hook from scratch, rewriting one until its structure is back on the table, deciding who owns a piece of state, choosing between neighboring Hooks, extracting a custom Hook, placing Error Boundaries and Suspense, or composing instead of configuring. Not for reviewing existing code (react-review), file placement (react-structure), forms with validation (react-hook-form) or a component confirmed slow (react-component-performance).
+type: skill
+family: react
+language: en
+source: "[React - Patterns](../docs/react-patterns.md)"
 docs:
   - /reactjs/react.dev
 tags:
@@ -14,184 +14,107 @@ tags:
 
 # react-developer
 
-> **Source of this skill:** [React - Patterns](../docs/react-patterns.md) (structural decisions), with [React - Rules of React](../docs/react-rules-of-react.md) as the normative base and [React.js](../docs/react-js.md) as the API router.
-> This skill **does not repeat** the rules or the API surface — it defines the order of decisions and points at what to open at each point. The text of the rules lives in the source notes; an update there propagates here.
->
-> Successor to `react-developer`, with the same procedure and the internal references that were missing.
-> **API surface:** resolve it through Context7 — `/reactjs/react.dev`. Signature, option and per-version behavior come from there; the rule and the ID come from the family's docs.
+> **Source:** [React - Patterns](../docs/react-patterns.md) for structural decisions, [React - Rules of React](../docs/react-rules-of-react.md) as the normative base, [React.js](../docs/react-js.md) as the API router (§ 7 is the skill contract). This skill orders the decisions and says what to open; rule text lives only in the docs.
+> **API surface:** Context7 `/reactjs/react.dev`. The rule and its ID come from the family's docs.
 
-Contract this skill implements: [React.js](../docs/react-js.md) § 7 ("Skill contract").
+## Scope
 
----
+New code, or a rewrite deep enough that the structure is being decided again.
 
-## When to use
-
-Writing a **new** React component, custom Hook or feature — or rewriting a passage to the point where the structural decisions come back to the table.
-
-| If the question is… | Go to |
+| The question is… | Go to |
 | --- | --- |
-| is this code that **already exists** correct? | `react-review` |
-| where does this file live, who imports whom | `react-structure` |
-| a form with validation, conditional fields, field arrays | `react-hook-form` |
-| a component **already confirmed slow**, needing a measured fix | `react-component-performance` |
-| the data comes from a server and someone else can change it | `tanstack-query` |
-| the state belongs to the URL (filter, tab, page) | `tanstack-router` |
+| is existing code correct? | `react-review` |
+| where the file lives, who imports whom | `react-structure` (decide it **before** writing the first file of a feature) |
+| a form with validation, conditionals, field arrays | `react-hook-form` |
+| a component **confirmed slow** | `react-component-performance` |
+| data from a server that someone else can change | `tanstack-query` |
+| state that belongs to the URL: filter, tab, page | `tanstack-router` |
 
----
-
-## Minimum loading
-
-Per [React.js](../docs/react-js.md) § 7:
+## Load
 
 ```
-ALWAYS: React.js § 2 (mental model)
- React.js § 5 (decision trees)
- React.js § 6 + § 6.1 (normative and critical rules)
- React - Rules of React ← required when writing/editing components
-
-BEFORE WRITING: React - Patterns § 1 to § 3
-
-ON DEMAND: the satellite for the domain touched, discovered through React.js § 4
-
-NEVER: all satellites at once
+ALWAYS        React.js § 2 (mental model), § 5 (decision trees), § 6 + § 6.1 (rules)
+              React - Rules of React, kept loaded while writing
+BEFORE CODE   React - Patterns § 1 to § 3
+ON DEMAND     the one satellite for the API touched, found through React.js § 4
+NEVER         every satellite at once
 ```
 
-References in this skill — open only the one the step asks for:
+References, each opened only by the step that names it: `decision-trees.md`, `ai-habits.md`, `self-check.md`, `id-map.md`, and three worked examples.
 
-| File | What for |
+## Step 0 — Two checks that change the code
+
+Run them before the first line, because they change what you write ([`self-check.md`](references/self-check.md) § *Before the first line*):
+
+- **React Compiler active?** If yes, do not hand-write `memo`/`useMemo`/`useCallback` (`REACT-PERF-02`).
+- **Lint net present?** `eslint-plugin-react-hooks`, or Biome with `linter.domains.react` on. Without it, say so in the delivery.
+
+## Step 1 — Three structural questions, in writing
+
+From [React - Patterns](../docs/react-patterns.md) § 1. Order matters: choosing composition before data ownership produces prop drilling.
+
+1. **Whose data is this?** → state placement (§ 2).
+2. **Who supplies the variable content?** → composition (§ 3).
+3. **Where should a failure or a wait stop?** → Error Boundary, `<Suspense>`, `'use client'`, the server (§ 6).
+   A boundary only catches what throws **below** it. When a route loader fetches the data, its failure surfaces at the route's `errorComponent`, never at an Error Boundary inside the component; put the retry UI where the throw lands (`tanstack-router`).
+
+One sentence each, before any JSX. If 1 has no answer, the data's origin is undefined, and that is the problem to raise, not to code around.
+
+## Step 2 — Choose the API through the trees
+
+Walk the tree in [React.js](../docs/react-js.md) § 5; path mistakes and short exits are in `references/decision-trees.md`.
+
+| Symptom | Tree |
 | --- | --- |
-| `references/decision-trees.md` | which tree to walk, the four path mistakes, the short exits |
-| `references/ai-habits.md` | the reflex that produces each violation, and what to do instead |
-| `references/self-check.md` | the three passes and the ten `rg` probes before delivering |
-| `references/id-map.md` | where each `REACT-*` is declared, and the list of aliases |
-| `references/example-invoice-dashboard.md` | a worked case of the happy path |
-| `references/example-server-boundary.md` | the robust variant: Server Function, validation, boundaries |
-| `references/example-antipattern-fixed.md` | the same component before and after, defect by ID |
-| `scripts/self-check.sh` | runs the ten Step 5 probes over what you just wrote |
+| "I need to store a value" | *Where do I keep a value?* — first where the data comes from, then which component |
+| "I need a side effect" | *Where does a side effect run?* — first: does it respond to an interaction? |
+| "the UI freezes" | *The UI freezes during an update* — the order is normative and does **not** start with memoization |
+| "something async" | *I need to handle something asynchronous* |
 
----
+Then confirm the API's package ([React.js](../docs/react-js.md) § 3) and open only its satellite (§ 4). Before reaching for a raw primitive, check § 8: remote data, cache, URL state, boundary validation and hot global state already have an owner in this stack.
 
-## Step 1 — The three structural questions, before any code
+## Step 3 — Write
 
-From [React - Patterns](../docs/react-patterns.md) § 1. The order matters: composition chosen before data ownership almost always produces prop drilling.
+Three anchors decide nearly everything ([React.js](../docs/react-js.md) § 2): a component is a pure function of its inputs; state is a snapshot, not a variable; an Effect synchronizes with an external system, it is not "code that runs afterwards". Write TypeScript by default.
 
-1. **Whose data is this?** → state placement. Detail in [React - Patterns](../docs/react-patterns.md) § 2.
-2. **Who supplies the variable content?** → composition. Detail in [React - Patterns](../docs/react-patterns.md) § 3.
-3. **Where should a failure or a wait stop?** → boundaries (Error Boundary, `<Suspense>`, `'use client'`, the server). Detail in [React - Patterns](../docs/react-patterns.md) § 6.
+Avoid the reflexes in `references/ai-habits.md` (seven sections). The five in almost all generated code:
 
-Answer all three **in writing**, one sentence each, before the first line of JSX. If you cannot answer 1, the problem is not the code: the data's origin has not been defined.
-
----
-
-## Step 2 — Choose the API through the decision trees
-
-Do not choose the Hook out of habit. Walk the corresponding tree in [React.js](../docs/react-js.md) § 5 — the route, the path mistakes and the four short exits are in `references/decision-trees.md`.
-
-| The task's symptom | Tree to walk |
-| --- | --- |
-| "I need to store a value" | *I need to keep a value. Where?* — first **where the data comes from**, then **in which component** |
-| "I need to run a side effect" | *I need to run a side effect. Where?* — the first question is whether it responds to an interaction |
-| "the UI freezes" | *The UI freezes during an update* — the order is normative and **does not start with memoization** |
-| "I need to deal with something async" | *I need to handle something asynchronous* |
-
-After choosing the API, confirm its source package in [React.js](../docs/react-js.md) § 3 and the satellite in [React.js](../docs/react-js.md) § 4. Open **only that** satellite.
-
-**Before using the raw primitive, check [React.js](../docs/react-js.md) § 8.** Remote data, caching, URL state, boundary validation and frequently written global state already have an answer in this stack — using `useEffect` + `useState` where the stack solves it is a regression, not simplicity.
-
----
-
-## Step 3 — Writing
-
-Keep [React - Rules of React](../docs/react-rules-of-react.md) loaded. Three anchors of the mental model ([React.js](../docs/react-js.md) § 2) decide nearly everything:
-
-- a component is a pure function of its inputs;
-- state is a snapshot, not a variable;
-- an Effect is synchronization with an external system, not "code that runs afterwards".
-
-House convention: **every example in the docs is TypeScript**. No rule depends on types, but write TS by default.
-
----
-
-## Step 4 — Do not fall into the automatic habits
-
-`references/ai-habits.md` is the full table, in seven sections: state and data, effects, composition and boundaries, performance, refs and the DOM, forms and the server, custom Hooks. It is not a review list — it is a decision to make **before** writing, because each line comes from a reflex.
-
-The five that appear in almost all generated code:
-
-| Habit | Instead of it | Rule |
+| Habit | Instead | Rule |
 | --- | --- | --- |
-| a `fetch` inside a `useEffect` | a data-fetching library ([React.js](../docs/react-js.md) § 8) | `REACT-EFFECT-06` |
-| `useState` + `useEffect` for a computable value | compute it in the render, in the state's owner | `REACT-PAT-01` |
-| `useState` for a filter, a tab, pagination | `TanStack Router` search params | `REACT-PAT-10` |
-| memoization "just in case" | measure first; and check whether the React Compiler is active | `REACT-PERF-01`, `REACT-PERF-02` |
-| an Error Boundary only at the root | a boundary at the feature level, next to every data `<Suspense>` | `REACT-PAT-06`, `REACT-ASYNC-08` |
+| `fetch` inside `useEffect` | a data-fetching library (§ 8) | `REACT-EFFECT-06` |
+| `useState` + `useEffect` for a computable value | compute in render, in the owner | `REACT-PAT-01` |
+| `useState` for filter, tab, page | the router's typed search params | `REACT-PAT-10` |
+| memoization "just in case" | measure first; check the Compiler | `REACT-PERF-01`, `REACT-PERF-02` |
+| one Error Boundary at the root | a boundary per feature, beside each data `<Suspense>` | `REACT-PAT-06`, `REACT-ASYNC-08` |
 
-When citing any ID, use the canonical one — `references/id-map.md` has the list of aliases that must **not** leave the docs.
+Cite only canonical IDs; `references/id-map.md` lists the aliases that must not leave the docs.
 
----
-
-## Step 5 — Self-check before delivering
-
-`references/self-check.md`, in full: three passes and ten `rg` probes.
+## Step 4 — Self-check before delivering
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/react-developer/scripts/self-check.sh src/features/invoices
+bash ${CLAUDE_PLUGIN_ROOT}/skills/react-developer/scripts/self-check.sh <dir-you-wrote>
 ```
 
+Any non-trivial derivation (a filter, a total, a status rule) lives in a pure function in the feature and gets a unit test, in the project's runner (`bun-test-build`). It is the cheapest proof the render logic is right, and it needs no DOM.
 
-1. **Normative checklist** — § 5 of [React - Rules of React](../docs/react-rules-of-react.md), ordered by failure frequency.
-2. **Habits table** — for each line, did the code avoid the habit?
-3. **Three closing questions** — does every `useState` survive the state tree? does every `useEffect` synchronize with a **nameable** external system? does every memoization have a measurement?
+Then the three passes in `references/self-check.md`: the normative checklist ([React - Rules of React](../docs/react-rules-of-react.md) § 5), the habits table, and three questions — does every `useState` survive the state tree, does every `useEffect` sync with a **nameable** external system, does every memoization have a measurement? A "no" is fixed before delivery, never shipped with a caveat.
 
-If any answer is "no", fix it before delivering — do not deliver with a caveat.
+Deliver with: the three Step 1 answers, the code, the self-check output pasted verbatim in a code block (a summary like "all clean" is not evidence), the test result, and anything left unverified.
 
-Two checks that change the code and therefore run **before** the first line: React Compiler active (`REACT-PERF-02`) and `eslint-plugin-react-hooks` configured. Both in `references/self-check.md` § *Before the first line, not after*.
+## When the feature leaves React
 
----
+| Layer | Skill |
+| --- | --- |
+| remote data, cache, invalidation, optimistic update | `tanstack-query` |
+| routing, search params, loader, code splitting | `tanstack-router` |
+| story · interaction test | `storybook-story` · `storybook-test` |
+| which level the test belongs to · writing it | `test-design` · `bun-test-build` / `playwright-build` |
+| API route and schema · HTTP contract | `elysia-build` · `http-contract` |
 
-## Neighbors — when the feature leaves React
+**Optimism has one owner.** Data in Query's cache → the mutation, with snapshot and rollback. `useOptimistic` only for what has no cache. Stacking both violates `REACT-FORM-07`.
 
-Before writing the raw primitive, confirm whose layer it is. [React.js](../docs/react-js.md) § 8 lists what the stack already solves; the table below says **which skill** carries the procedure.
+## Examples
 
-| The layer is… | Skill | Source doc |
-| --- | --- | --- |
-| remote data, cache, invalidation, optimistic update | `tanstack-query` | `TanStack Query` |
-| routing, navigation, search params, loader, code splitting | `tanstack-router` | `TanStack Router` |
-| a form with validation, conditional fields, field arrays | `react-hook-form` | [React Hook Form](../docs/react-hook-form.md) |
-| where the file lives and who imports whom | `react-structure` | [Feature-Based Architecture](../docs/feature-based-architecture.md) |
-| a story, args, controls, the docs page | `storybook-story` · `storybook-setup` | `Storybook - Stories e Args` |
-| an interaction test in the story, the **Vitest runner** | `storybook-test` | `Storybook - Testes e Interações` § 4 |
-| **at which level** this test goes (unit × integration × e2e) | `test-design` | `Teste de Software - Níveis e Escopo` |
-| **unit and integration** under `bun test` | `bun-test-build` · `bun-test-review` | `Bun - Testes` |
-| **e2e** — writing, auditing, diagnosing | `playwright-build` · `playwright-review` · `playwright-diagnose` | `Playwright` |
-| an API route, handler, schema and lifecycle | `elysia-build` · `elysia-schema` · `elysia-diagnose` | `Elysia` |
-| schema, migration, query, N+1 | `drizzle-review` | `Drizzle ORM` |
-| method, status, cache, CORS, the API contract | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | `HTTP` |
-
-Three boundaries that tend to be crossed in the wrong direction:
-
-- **Testing: concept before tool.** Deciding *the level* is `test-design`; writing is the tool's skill. Skipping the first produces E2E by default — the highest-cost antipattern in this stack.
-- **Vitest has no skill of its own here.** It is the *runner* of `@storybook/addon-vitest`, executing a story in a real browser through Playwright (`Storybook - Testes e Interações` § 4; the cut between Vitest 3 and 4 is in § 4.2). A unit test outside Storybook is `bun test`.
-- **Optimism has two owners.** If the data lives in Query's cache, the optimism belongs to the mutation, with a snapshot and a rollback; `useOptimistic` is for what does not live in a cache. Stacking the two violates `REACT-FORM-07`.
-
----
-
-## Example
-
-Task: *"an invoice panel with a status filter and the total of what is selected"*.
-
-Step 1 identifies **three owners** — invoices (the server), the filter (the URL), the selection (the panel) — and the total as **derivable**. Step 2 walks the state tree once per owner, and three of the four exits end with no Hook at all. One `useState` remains and no `useEffect`; the intuitive version of the same screen has four and two.
-
-Full case, with code and the scoreboard: `references/example-invoice-dashboard.md`.
-The variant with writes and a trust boundary: `references/example-server-boundary.md`.
-The same component done wrong and then fixed, defect by ID: `references/example-antipattern-fixed.md`.
-
----
-
-## Related
-
-- `react-review` — the sibling skill, for reviewing existing code
-- `react-structure` — where the file lives and who imports whom
-- [React - Patterns](../docs/react-patterns.md) — source of this skill
-- [React - Rules of React](../docs/react-rules-of-react.md) — the normative base, required when writing
-- [React.js](../docs/react-js.md) — the hub, API map, decision trees, bridges with the stack
+- `references/example-invoice-dashboard.md` — three owners (server, URL, panel), a derivable total: one `useState`, no `useEffect`, against four and two in the intuitive version.
+- `references/example-server-boundary.md` — writes, a Server Function, validation and boundaries.
+- `references/example-antipattern-fixed.md` — the same component before and after, defect by ID.

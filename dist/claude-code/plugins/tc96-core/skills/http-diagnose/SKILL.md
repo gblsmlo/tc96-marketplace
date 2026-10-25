@@ -1,7 +1,7 @@
 ---
 name: http-diagnose
 description: Diagnose a request blocked by the browser or a format disagreement between client and server — the CORS failure model, preflight, readable headers, `415` × `406`, charset — citing `HTTP-CORS-*` and `HTTP-NEG-*` IDs, with five executable `curl` probes — use when the task is investigating a CORS error in the console, a failing preflight, a header that arrives `undefined` in JavaScript, a request that works in curl and fails in the browser, broken accents, or a body in the wrong format. Do not use to design method and status, which is http-contract, for freshness policy, which is http-cache, nor to audit the whole API, which is http-review.
-fonte: "[HTTP - CORS](../../referencias/http-cors.md)"
+source: "[HTTP - CORS](../../referencias/http-cors.md)"
 tags:
   - skill
   - http

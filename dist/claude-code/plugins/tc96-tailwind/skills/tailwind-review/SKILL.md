@@ -1,7 +1,7 @@
 ---
 name: tailwind-review
 description: Audit existing Tailwind CSS usage — configuration and markup — with eleven executable probes before reading code, a scan in the order that fails most, severity classification and findings with `TW-*` IDs and file:line — use when the task is reviewing a PR, component, screen or whole repository that uses Tailwind, hunting for a class built by interpolation, two utilities fighting on one element, a v3 name that compiles to another value, a `tailwind.config` nobody loads, a token missing in dark mode, raw palette colors in the design system, `cn` hiding an internal conflict, an outline removed with no focus style, or a utility class used as a test selector. Do not use to write new classes, which is tailwind-build, nor to install, configure or migrate, which is tailwind-setup.
-fonte: "[Tailwind CSS](../../docs/tailwind/tailwindcss.md)"
+source: "[Tailwind CSS](../../docs/tailwind/tailwindcss.md)"
 docs:
   - /tailwindlabs/tailwindcss.com
   - /websites/v3_tailwindcss

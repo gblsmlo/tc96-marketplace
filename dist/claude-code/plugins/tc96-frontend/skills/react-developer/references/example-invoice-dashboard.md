@@ -1,5 +1,13 @@
 # Worked example — invoice panel
 
+## Contents
+
+- [Step 1 — the three questions, in writing](#step-1--the-three-questions-in-writing)
+- [Step 2 — the trees, one owner at a time](#step-2--the-trees-one-owner-at-a-time)
+- [Step 3 — the code](#step-3--the-code)
+- [Step 4 — what the habits table prevented](#step-4--what-the-habits-table-prevented)
+- [Step 5 — self-check](#step-5--self-check)
+
 Task: *"an invoice panel with a status filter and the total of what is selected"*.
 
 The point of this example: the intuitive version of this screen has **four** `useState` and **two**
@@ -21,8 +29,8 @@ Question 1 alone already eliminated two `useState` calls that habit would have c
 
 | Owner | Path in [React.js](../../../docs/react/react-js.md) § 5 | Exit | Rule |
 | --- | --- | --- | --- |
-| invoices | "does the data come from the server?" → yes | `TanStack Query`, not `useState` + `useEffect` | `REACT-PAT-03`, `REACT-EFFECT-06` |
-| filter | it survives a refresh, is shareable by link, respects the back button | `TanStack Router` search params | `REACT-PAT-10` |
+| invoices | "does the data come from the server?" → yes | `tanstack-query`, not `useState` + `useEffect` | `REACT-PAT-03`, `REACT-EFFECT-06` |
+| filter | it survives a refresh, is shareable by link, respects the back button | `tanstack-router` search params | `REACT-PAT-10` |
 | selection | ephemeral, dies when leaving the screen | `useState` in the **nearest** common ancestor — the panel, not the root | `REACT-PAT-02` |
 | total | derivable from invoices + selection | computed in the render, with no state and no Effect | `REACT-PAT-01` |
 

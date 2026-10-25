@@ -1,5 +1,5 @@
 ---
-titulo: Architecture in React
+title: Architecture in React
 aliases:
   - Arquitetura em React
 tags:
@@ -8,6 +8,14 @@ tags:
   - architecture
 ---
 # Architecture in React
+
+## Contents
+
+- [1. The five decision axes](#1-the-five-decision-axes)
+- [2. Map: each axis and its entry note](#2-map-each-axis-and-its-entry-note)
+- [3. Order of decisions](#3-order-of-decisions)
+- [4. The decision adopted for physical organization](#4-the-decision-adopted-for-physical-organization)
+- [5. Use by an agent](#5-use-by-an-agent)
 
 A map of the architectural decisions in a React application and of the note that answers each one. This page
 **routes**; the content lives in the notes it points to.
@@ -46,7 +54,7 @@ policy at all — and it will suffer just the same.
 | Don't store what can be computed | [React - Patterns](react-patterns.md) § 2 — `REACT-PAT-01` |
 | Separate local, remote and persisted | [React - Patterns](react-patterns.md) § 2 |
 | Server data is not global state | [React.js](react-js.md) § 8 · [React - Patterns](react-patterns.md) § 2 |
-| Freshness and invalidation policy | `TanStack Query` |
+| Freshness and invalidation policy | `tanstack-query` |
 | Data in the browser needs a version | [React - Patterns](react-patterns.md) § 2 |
 | API reference | [React - State and Reactivity](react-state-and-reactivity.md) |
 
@@ -68,14 +76,14 @@ policy at all — and it will suffer just the same.
 | --- | --- |
 | Direction of data | [React - Patterns](react-patterns.md) § 7 |
 | Verifiable contract between front end and back end | [Feature-Based Architecture](feature-based-architecture.md) § 5.1 |
-| **Who owns each decision at the server boundary** | **`Fronteira do BFF - forma, jornada e regra`** |
-| When code becomes a package, and what CI needs to verify | `Monorepo com Bun - estrutura e tooling` |
+| **Who owns each decision at the server boundary** | **`software-architect` (`BFF-*`)** |
+| When code becomes a package, and what CI needs to verify | `bun-workspace` · `monorepo-auditor` (`MONO-*`) |
 | Where to validate, and how many times | [Feature-Based Architecture](feature-based-architecture.md) § 5.2 |
 | Runtime schema | [Feature-Based Architecture](feature-based-architecture.md) § 5.1 |
 | Capture separate from validation | [Feature-Based Architecture](feature-based-architecture.md) § 5.5 · [React Hook Form](react-hook-form.md) |
 | Extract synchronization | [React - Effects and Synchronization](react-effects-and-synchronization.md) |
 | Trust boundary on the server | [React - Server Components and Directives](react-server-components-and-directives.md) § 3 |
-| Route, loader and data fetching | `TanStack Router` |
+| Route, loader and data fetching | `tanstack-router` |
 
 ### Failure boundaries
 
@@ -83,14 +91,14 @@ policy at all — and it will suffer just the same.
 | --- | --- |
 | Expected × unexpected error | [React - Suspense and Async](react-suspense-and-async.md) § 4 |
 | Isolate rendering failure | [React - Patterns](react-patterns.md) § 6 · [React - Suspense and Async](react-suspense-and-async.md) § 4 |
-| Revert an optimistic change | [React - Forms and Actions](react-forms-and-actions.md) § 5 · `TanStack Query` |
+| Revert an optimistic change | [React - Forms and Actions](react-forms-and-actions.md) § 5 · `tanstack-query` |
 | Async and loading states | [React - Suspense and Async](react-suspense-and-async.md) |
 
 ### Verification
 
 | Decision | Entry note |
 | --- | --- |
-| Test behavior, not implementation | `Teste de Software` |
+| Test behavior, not implementation | `test-review` |
 | Boundary verified by lint | [Feature-Based Architecture](feature-based-architecture.md) § 7 |
 | Normative React rules | [React - Rules of React](react-rules-of-react.md) |
 | Purity as a precondition | [React - Rules of React](react-rules-of-react.md) § 2 |
@@ -125,7 +133,7 @@ by drawing the directory tend to have pretty boundaries with inverted dependenci
 direction `routes → features → generic`, and `REACT-ARCH-*` rules verified with Biome.
 
 That is this note's child note and the **default entry** for writing or reviewing React code structure
-in the vault. It also defines the contract a structure skill carries (§ 10).
+in this family. It also defines the contract a structure skill carries (§ 10).
 
 ---
 
@@ -148,28 +156,18 @@ API LOOKUP
   → [React.js](react-js.md) § 4 (API map) → the indicated satellite
 ```
 
-The knowledge base's source hierarchy, from strongest to weakest: verified tool
+The family's source hierarchy, from strongest to weakest: verified tool
 documentation (`verificado-em` in the frontmatter) → router
 pages, like this one, that only point and have no ID. A divergence between a router page and a verified doc
-is a bug in the page. See [React.js](react-js.md) § 7, and `react-build` as an example of a skill
+is a bug in the page. See [React.js](react-js.md) § 7, and `react-developer` as an example of a skill
 that implements that contract.
 
 **Three exceptions, explicit.** [Feature-Based Architecture](feature-based-architecture.md),
-`Fronteira do BFF - forma, jornada e regra` and `Monorepo com Bun - estrutura e tooling` are
-**normative** pages: they have citable IDs (`REACT-ARCH-*`, `BFF-*` and `MONO-*`), invariants and a
+the server-boundary decision (`BFF-*`, owned by `software-architect`) and the monorepo layout (`MONO-*`, owned by `monorepo-auditor`) are
+**normative**: they have citable IDs (`REACT-ARCH-*`, `BFF-*` and `MONO-*`), invariants and a
 skill contract — unlike this page, which only routes. The difference is not where the file
 lives: it is that they don't summarize a tool's external documentation, but record a decision
 of this house, with conventions that only exist in this project. A page with a skill contract is citable
 as a rule; this page, which only routes, is not. When a tool doc contradicts one of these
 three on a verifiable fact — Biome behavior, the TanStack API — the doc wins and the normative
 page is corrected.
-
----
-
-## Related
-
-- [Feature-Based Architecture](feature-based-architecture.md) — child note: physical organization of the code
-- [React.js](react-js.md) — React hub: mental model, API map, skill contract
-- [React - Patterns](react-patterns.md) — structural decision inside the component
-- [React - Rules of React](react-rules-of-react.md) — normative base
-- `Frontend roadmap` — study track and practical evidence

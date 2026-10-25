@@ -1,5 +1,5 @@
 ---
-titulo: Feature-Based Architecture
+title: Feature-Based Architecture
 aliases:
   - FBA
   - Feature-based architecture
@@ -10,11 +10,25 @@ tags:
 ---
 # Feature-Based Architecture
 
+## Contents
+
+- [1. The problem: grouping by technical role](#1-the-problem-grouping-by-technical-role)
+- [2. The principle and the layers](#2-the-principle-and-the-layers)
+- [3. Anatomy of a feature](#3-anatomy-of-a-feature)
+- [4. Normative rules (`REACT-ARCH-*`)](#4-normative-rules-react-arch-)
+- [5. Examples in the real stack](#5-examples-in-the-real-stack)
+- [6. Antipatterns](#6-antipatterns)
+- [7. Enforcement with Biome](#7-enforcement-with-biome)
+- [8. Gradual migration](#8-gradual-migration)
+- [9. When not to use it](#9-when-not-to-use-it)
+- [10. Skill contract](#10-skill-contract)
+- [Divergences from the source](#divergences-from-the-source)
+
 > Child note of [Architecture in React](architecture-in-react.md). This is where we decide **where code lives and who may import whom**.
 > The conceptual idea in one sentence is in;
 > this note turns the idea into structure, citable rules and automated verification.
 >
-> **A self-contained family.** These notes live inside the `react` skill family, not in the tc96 knowledge base, so the family can move without it. Names in code spans — `TanStack Query`, `TanStack Router`, `Storybook`, `Monorepo com Bun - estrutura e tooling` — and IDs from other families (`TSQ-*`, `TSR-*`, `SB-*`, `PW-*`) belong to the tc96 knowledge base: useful context when it is installed, never required to apply a `REACT-*`, `RHF-*` or `REACT-ARCH-*` rule.
+> **A self-contained family.** These notes live inside the `react` skill family and depend on nothing outside it. A neighboring layer is cited by the **skill** that owns it, in a code span (`tanstack-query`, `tanstack-router`, `storybook-test`), and IDs from other families (`TSQ-*`, `TSR-*`, `SB-*`, `PW-*`) belong to those skills: useful context when they are installed, never required to apply a `REACT-*`, `RHF-*` or `REACT-ARCH-*` rule.
 
 This note is **guidance**, not a summary. It exists for two readers: me, deciding where to put a
 file, and an agent, creating or reviewing code. Section 10 is the contract an agent loads.
@@ -55,7 +69,7 @@ change for the same reason should live together — it is cohesion, applied to a
 **Group by domain, not by technical role.** Everything that belongs to a capability — UI, hooks,
 API calls, schemas, state, types — lives in a single vertical slice.
 
-The structure adopted in the vault:
+The structure adopted here:
 
 ```
 src/
@@ -257,14 +271,14 @@ until the third case reveals the real shape. It is the rule of three applied to 
 
 ### Imports between sibling features — the adopted decision
 
-> **The owner of this rule is `MONO-12`**, in `Monorepo com Bun - estrutura e tooling` § 6: the lateral
+> **The owner of this rule is `MONO-12`**, applied by the `monorepo-auditor` agent: the lateral
 > edge is the same invariant for a package and for a feature, and that is where it has an ID, severity and an
 > executable probe. This section **applies** the invariant to the React case. `REACT-ARCH-05` is the *how to
 > cross* an edge that exists, and `REACT-ARCH-08` is the *when to extract* — neither of them is the
 > permission itself, and citing them as if they were was the defect that motivated `MONO-12`.
 
 The reference article **forbids** sibling ↔ sibling imports and routes all reuse through `features/core/`.
-The vault adopts the **progressive** variant:
+This family adopts the **progressive** variant:
 
 - a sibling may import a sibling (`MONO-12`), **as long as it is through the barrel** (`REACT-ARCH-05`);
 - deep imports remain forbidden;
@@ -303,7 +317,7 @@ anyone noticing.** The warning sign is a feature appearing in three or more fore
 point `features/core/` has stopped being optional.
 
 That sign has stopped being an intention: the lateral fan-in probe of
-`Monorepo com Bun - estrutura e tooling` § 7 counts it, and three or more is a `MONO-12` finding. Until
+the `monorepo-auditor` agent counts it, and three or more is a `MONO-12` finding. Until
 it existed, this section's permission was prose without a gate — `MONO-11` against this note.
 
 ### `REACT-ARCH-09` — bench test
@@ -479,7 +493,7 @@ Four lines. The route decides **which** capability appears at that path and what
 know how an invoice is rendered (`REACT-ARCH-09`). Every import comes from the barrel (`REACT-ARCH-05`).
 
 When the router's file convention collides with the organization by feature, the way out is virtual
-routes instead of dismantling the features — see `TanStack Router - Virtual File Routes`.
+routes instead of dismantling the features — see the `tanstack-router` skill (virtual file routes).
 
 ### 5.5 Form: capture and validation kept separate
 
@@ -810,40 +824,17 @@ Cite the ID, the file and the line. Do not paraphrase the rule:
 ## Divergences from the source
 
 The `Feature-Based Architecture in React` article (dev.to) is the origin of the argument; this note is the
-source of truth for decisions in the vault. Where they diverge, and why:
+source of truth for decisions in this family. Where they diverge, and why:
 
 | Axis | Article | Here | Reason |
 | --- | --- | --- | --- |
-| Layers | `app/` `pages/` `features/` `shared/` | `routes/` `features/` + `components/` `hooks/` `libs/` `types/` | `app/` collides with Next; the generic layer is already flat in the vault's scaffold |
+| Layers | `app/` `pages/` `features/` `shared/` | `routes/` `features/` + `components/` `hooks/` `libs/` `types/` | `app/` collides with Next; the generic layer is already flat in the house scaffold |
 | Reuse core | `features/core/` from the start | only when `REACT-ARCH-08` fires | a layer without consumers becomes a dumping ground |
 | Feature ↔ sibling | forbidden | allowed through the barrel | see § 4, adopted decision |
 | Orchestration subfolder | `containers/` | `api/` + composition in the route | `containers/` is pre-hooks vocabulary; TanStack Query fills the role |
 | Naming | `UserAvatar/` PascalCase | strict kebab-case | consistency with the scaffold and with case-insensitive file systems |
-| Alias | `@/features/*` | `@features/*` | the vault's scaffold convention |
+| Alias | `@/features/*` | `@features/*` | the house scaffold convention |
 | Enforcement | `eslint-plugin-boundaries` | Biome | Biome is the single lint tool here |
 
 The article also positions itself as a simplification of Feature-Sliced Design. This note does not adopt FSD:
 no `entities/`/`widgets/`, no layer numbering.
-
----
-
-## Related
-
-- `Fronteira do BFF - forma, jornada e regra` — sibling note: this one decides where frontend code
-  lives; that one decides what crosses the server boundary and who owns each decision
-- `Monorepo com Bun - estrutura e tooling` — when a layer of this note becomes its own package
-- [Architecture in React](architecture-in-react.md) — parent note: the axes of architectural decision
-- `react-structure` — the skill that implements the contract in § 10
-- [React - Patterns](react-patterns.md) — decisions inside the component
-- [React.js](react-js.md) — the React hub and § 7, the skill contract
-- `TanStack Router - Virtual File Routes` — when the route collides with the feature
-- `Frontend roadmap` — study track
-
-## Sources consulted
-
-- `Feature-Based Architecture in React` — source article (dev.to)
-- [Biome — `noImportCycles`](https://biomejs.dev/linter/rules/no-import-cycles/)
-- [Biome — `noRestrictedImports`](https://biomejs.dev/linter/rules/no-restricted-imports/)
-- [Biome — `noPrivateImports`](https://biomejs.dev/linter/rules/no-private-imports/)
-- [Biome — configuration and `overrides`](https://biomejs.dev/reference/configuration/)
-- the tc96 commands `scaffold-fba-02-biome` and `scaffold-fba-05-fba` — the scaffold's conventions

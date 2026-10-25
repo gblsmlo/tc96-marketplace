@@ -1,16 +1,26 @@
 ---
-titulo: React - Forms and Actions
-Link: https://react.dev/reference/react/useActionState
+title: React - Forms and Actions
+link: https://react.dev/reference/react/useActionState
 tags:
   - react
   - forms
   - actions
   - agent-context
 source: "Official React documentation — useActionState, useOptimistic, useFormStatus"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Forms and Actions
+
+## Contents
+
+- [1. Concept: Action](#1-concept-action)
+- [2. `<form action>`](#2-form-action)
+- [3. `useActionState`](#3-useactionstate)
+- [4. `useFormStatus`](#4-useformstatus)
+- [5. `useOptimistic`](#5-useoptimistic)
+- [6. Bridge to the stack](#6-bridge-to-the-stack)
+- [7. Antipatterns](#7-antipatterns)
 
 > `useActionState` · `useOptimistic` · `useFormStatus` · `<form action>`
 >
@@ -293,20 +303,3 @@ Rollback is automatic: if the Action fails, the state goes back to `value`. This
 | `useState` mirroring the action's state | use `state` from `useActionState` |
 | `useOptimistic` + optimistic mutation together | pick one layer |
 | Trusting only client-side validation | validate on the server · `REACT-FORM-08` |
-
----
-
-## Related
-
-- [React.js](react-js.md) · [React - Hooks](react-hooks.md) · [React - Patterns](react-patterns.md) · [React - Rules of React](react-rules-of-react.md)
-- [React - Suspense and Async](react-suspense-and-async.md) · [React - Server Components and Directives](react-server-components-and-directives.md)
-- [React Hook Form](react-hook-form.md) — the alternative for complex forms, with the selection criterion in § 5.4
-
-## Sources consulted
-
-Verified on 2026-08-14:
-
-- [useActionState](https://react.dev/reference/react/useActionState) — caveats and framework independence confirmed
-- [useOptimistic](https://react.dev/reference/react/useOptimistic) — confirmed stable
-- [useFormStatus](https://react.dev/reference/react-dom/hooks/useFormStatus)
-- [`<form>`](https://react.dev/reference/react-dom/components/form)

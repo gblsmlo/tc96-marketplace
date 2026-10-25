@@ -1,7 +1,7 @@
 ---
 name: elysia-build
 description: Write routes and handlers in Elysia — method chaining, destructured context, `status`, signed cookies, streaming, error taxonomy and testing through `app.handle` — citing `ELYSIA-CORE-*` and `ELYSIA-APP-*` IDs, with an executable self-check — use when the task is creating a new route, returning an expected error in a typed way, signing a session cookie, registering a domain error with its own `code`, handling `onError`, or testing a route without starting a server. Do not use for schemas and the Eden client, which is elysia-schema, for a plugin or hook that does not affect the route, which is elysia-diagnose, nor for the HTTP contract itself, which is http-contract.
-fonte: "[Elysia - Roteamento e Handler](../../referencias/elysia-roteamento-e-handler.md)"
+source: "[Elysia - Roteamento e Handler](../../referencias/elysia-roteamento-e-handler.md)"
 docs:
   - /websites/elysiajs
 tags:

@@ -1,6 +1,6 @@
 ---
 generated-by: skills/react/react-review/scripts/generate-id-map.sh
-generated-at: 2026-10-03
+generated-at: 2026-10-25
 ---
 
 # ID map `REACT-PERF-*` — where each rule this skill cites lives

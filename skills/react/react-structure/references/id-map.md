@@ -1,6 +1,6 @@
 ---
 generated-by: skills/react/react-structure/scripts/generate-id-map.sh
-generated-at: 2026-10-02
+generated-at: 2026-10-25
 ---
 
 # ID map `REACT-ARCH-*`

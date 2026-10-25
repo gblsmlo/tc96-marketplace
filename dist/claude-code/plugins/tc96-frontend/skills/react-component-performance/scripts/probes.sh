@@ -30,10 +30,10 @@ heading "1. Memoization inventory" "REACT-PERF-01 — each one needs a measureme
 "${RG[@]}" -c '\bmemo\(|\buseMemo\(|\buseCallback\(' "$TARGET" || none_found
 
 heading "2. Inline object or array passed to a component" "REACT-PERF-03 — a new identity every render cancels memo"
-"${RG[@]}" -n '<[A-Z][\w.]*\b[^>]*\s[a-z]\w*=\{\s*[\{\[]' "$TARGET" || none_found
+"${RG[@]}" -n '<[A-Z][\w.]*\b(?:[^>]|=>)*\s[a-z]\w*=\{\s*[\{\[]' "$TARGET" || none_found
 
 heading "3. Inline function passed to a component" "REACT-PERF-03 — stabilize, or a latest-callback when the consumer owns it"
-"${RG[@]}" -n '<[A-Z][\w.]*\b[^>]*\s(on[A-Z]\w*|render\w*|get\w*|\w+Fn)=\{\s*(async\s+)?(\([^)]*\)|\w+)\s*=>' "$TARGET" || none_found
+"${RG[@]}" -n '<[A-Z][\w.]*\b(?:[^>]|=>)*\s(on[A-Z]\w*|render\w*|get\w*|\w+Fn)=\{\s*(async\s+)?(\([^)]*\)|\w+)\s*=>' "$TARGET" || none_found
 
 heading "4. Provider value built inline" "REACT-STATE-07 — every consumer re-renders on every provider render"
 "${RG[@]}" -n '<\w+(\.Provider)?\s[^>]*value=\{\{' "$TARGET" || none_found

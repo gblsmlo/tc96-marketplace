@@ -1,7 +1,7 @@
 ---
 name: tailwind-build
 description: Write the Tailwind classes of a new component, screen or variant — deciding where each value comes from (token, arbitrary, runtime variable) and where each style lives (utility, `@utility`, component, cva variant) before the first class, then states, responsiveness, container queries and accessibility, with an executable self-check before delivering, citing `TW-*` IDs — use when the task is styling a React component or page with Tailwind, building a design-system component with variants, composing `className` with `cn`/`clsx`, wiring a value that only exists at runtime, making a layout responsive, or adding focus, hover, dark and reduced-motion states. Do not use to install or configure Tailwind, which is tailwind-setup, nor to audit markup that already exists, which is tailwind-review.
-fonte: "[Tailwind CSS - Utilities and Variants](../../docs/tailwind/tailwindcss-utilities-and-variants.md)"
+source: "[Tailwind CSS - Utilities and Variants](../../docs/tailwind/tailwindcss-utilities-and-variants.md)"
 docs:
   - /tailwindlabs/tailwindcss.com
   - /dcastil/tailwind-merge

@@ -1,5 +1,14 @@
 # Correctness after memo — the tests a green benchmark cannot replace
 
+## Contents
+
+- [1. State read outside the memoized props](#1-state-read-outside-the-memoized-props)
+- [2. Inline callbacks from the consumer](#2-inline-callbacks-from-the-consumer)
+- [3. Props that exist only to invalidate](#3-props-that-exist-only-to-invalidate)
+- [4. The comparison itself](#4-the-comparison-itself)
+- [Checklist before delivering](#checklist-before-delivering)
+- [Related](#related)
+
 > A stale component renders *fewer* times, so the benchmark rewards it. Every memoization added for
 > performance ships with the tests below (`REACT-PERF-18` in
 > [React - Performance Measurement](../../../docs/react/react-performance-measurement.md)). Each test must

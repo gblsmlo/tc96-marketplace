@@ -1,7 +1,7 @@
 ---
 name: bun-runtime
 description: Write code that uses the Bun runtime APIs — file, `.env`, process, shell, hashing, watch — citing `BUN-RT-*` and `BUN-CORE-*` IDs, with an executable self-check — use when the task is reading or writing a file, loading and validating an environment variable, running a subprocess or external command, hashing a password, choosing between `--watch` and `--hot`, or deciding between a Bun API and a `node:*` module. Do not use to install a package or touch the workspace, which is bun-workspace, to migrate Node code that does not run, which is bun-migrate, nor to write tests, which is bun-test-build.
-fonte: "[Bun - Runtime and APIs](../../docs/bun/bun-runtime-and-apis.md)"
+source: "[Bun - Runtime and APIs](../../docs/bun/bun-runtime-and-apis.md)"
 docs:
   - /oven-sh/bun
 tags:

@@ -1,7 +1,7 @@
 ---
 name: storybook-test
 description: Turn a story into a component test in Storybook — `play`, `storybook/test`, module and network mocking, accessibility — citing `SB-TEST-*` and `SB-MOCK-*` IDs, always after discovering the project's framework path, with an executable self-check — use when the task is writing or reviewing an interaction test in a story, asserting a callback with `fn`, waiting for async data, mocking a module or the network for a story, or turning on the a11y scan. Do not use to configure Storybook from scratch, which is storybook-setup, to interpret coverage and assemble CI, which is the Cobertura e CI satellite, nor for a journey test, which is playwright-build.
-fonte: "[Storybook - Testes e Interações](../../referencias/storybook-testes-e-interacoes.md)"
+source: "[Storybook - Testes e Interações](../../referencias/storybook-testes-e-interacoes.md)"
 docs:
   - /storybookjs/storybook
 tags:

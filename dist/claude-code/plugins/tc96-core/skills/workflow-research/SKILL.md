@@ -1,7 +1,7 @@
 ---
 name: workflow-research
 description: Decide whether a task's intent is actually resolved yet — separates fact, hypothesis, decision and gap, classifies whether a change is product, architecture, or execution (a fix, refactor or technical adjustment to an already-written rule), and routes to the agent that owns that decision, citing `WF-RES-*` and `WF-CORE-*` IDs. Use when a task arrives ambiguous, when "implement X" carries an undecided product or architecture question, or when you need to know whether a decision is safe to proceed on. Do not use once the decision is already made and accepted — that is `workflow-planning`. Do not use to write the fix for a bug already understood — that is `workflow-implementation`.
-fonte: "[Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md)"
+source: "[Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md)"
 tags:
   - skill
   - workflow

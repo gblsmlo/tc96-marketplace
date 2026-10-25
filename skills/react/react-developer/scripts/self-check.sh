@@ -96,7 +96,7 @@ heading "9. The 'use client' boundary" "REACT-RSC-03 — what matters is how hig
 
 heading "10. Suspense without an Error Boundary" "REACT-ASYNC-08"
 "${RG[@]}" -l '<Suspense' "$TARGET" 2>/dev/null \
-  | while read -r f; do rg -q 'ErrorBoundary|errorElement' "$f" || echo "   $f"; done \
+  | while read -r f; do rg -q 'ErrorBoundary|CatchBoundary|errorElement|errorComponent' "$f" || echo "   $f"; done \
   | grep . || none_found
 
 printf '\n\033[1m== Done.\033[0m Passes 1 to 3 of references/self-check.md remain mandatory.\n'

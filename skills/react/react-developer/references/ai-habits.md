@@ -11,11 +11,11 @@
 
 | Habit | Why it fails | Instead of it | Rule |
 | --- | --- | --- | --- |
-| a `fetch` inside a `useEffect` to load data | it solves neither race conditions, caching, dedupe nor retry; and `<Suspense>` does not work with it | a data-fetching library — `TanStack Query`, via [React.js](../../docs/react-js.md) § 8 | `REACT-EFFECT-06`, `REACT-ASYNC-03` |
+| a `fetch` inside a `useEffect` to load data | it solves neither race conditions, caching, dedupe nor retry; and `<Suspense>` does not work with it | a data-fetching library — `tanstack-query`, via [React.js](../../docs/react-js.md) § 8 | `REACT-EFFECT-06`, `REACT-ASYNC-03` |
 | `useState` + `useEffect` for a computable value (a total, a percentage, an item by id, a filtered list) | it desynchronizes and produces an extra render | compute it in the render, **in the state's owner**, and pass it down ready | `REACT-PAT-01` |
 | Syncing a prop into state to "reset" when the entity changes | the same problem, with one more render | change the `key`: `<ProfileForm key={userId} />` | `REACT-PAT-01` |
 | Keeping the API response in `useState` as the source of truth | two sources of truth; invalidation becomes your responsibility | Query's cache is the source; `useState` only for what is the client's | `REACT-PAT-03` |
-| `useState` for a filter, a tab, pagination, sorting | it does not survive a refresh, is not shareable by link, ignores the back button | typed search params from `TanStack Router` | `REACT-PAT-10` |
+| `useState` for a filter, a tab, pagination, sorting | it does not survive a refresh, is not shareable by link, ignores the back button | typed search params from `tanstack-router` | `REACT-PAT-10` |
 | Lifting state to the root "just in case" | a global re-render and a warehouse component | the **nearest** common ancestor, and stop there | `REACT-PAT-02` |
 | `setCount(count + 1)` when the previous value matters | two `set` calls in the same handler increment once — state is a snapshot | the updater form: `setCount(c => c + 1)` | `REACT-STATE-01` |
 | Parallel booleans (`isLoading` + `isError` + `data`) | they admit impossible combinations | a discriminated union | `REACT-STATE-06` |

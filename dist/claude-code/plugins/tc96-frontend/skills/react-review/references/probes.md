@@ -1,5 +1,13 @@
 # Probes — run before reading code
 
+## Contents
+
+- [Probe 0 — environment (runs first, changes the verdict of the others)](#probe-0--environment-runs-first-changes-the-verdict-of-the-others)
+- [The two forms of the net, and the one that fails silently](#the-two-forms-of-the-net-and-the-one-that-fails-silently)
+- [The fourteen code probes](#the-fourteen-code-probes)
+- [What the probes do **not** catch](#what-the-probes-do-not-catch)
+- [Related](#related)
+
 > A review that starts with linear reading finds what was on screen and misses what was
 > in another file. The probes measure the whole repository in seconds and say
 > **where to look**. They do not produce findings: a finding requires reading the passage and a `file:line`.
@@ -10,8 +18,7 @@ Ready-made script: `scripts/probes.sh [target]` — runs all fifteen and prints 
 bash ${CLAUDE_PLUGIN_ROOT}/skills/react-review/scripts/probes.sh src
 ```
 
-Default target: `src`, or `.` when there is none. In the vault source the path is
-`${CLAUDE_PLUGIN_ROOT}/skills/react-review/scripts/probes.sh`.
+Default target: `src`, or `.` when there is none. Pass the narrowest directory the diff allows.
 
 ---
 

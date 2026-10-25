@@ -1,7 +1,7 @@
 ---
 name: test-review
 description: Audit a repository's test strategy — the shape of the suite, not the individual tests — with nine executable probes and `TS-*` IDs, answering "does this suite protect anything?" — use when the task is assessing whether risk coverage is adequate, whether the proportion across levels makes sense, whether the quality gates actually close, whether the static layer is counting, or whether there is a risk class with no test at all. Do not use to find a defect in an individual test, which is playwright-review or bun-test-review. Do not use for an unstable suite, which is test-diagnose, nor to decide a new test, which is test-design.
-fonte: "[Teste de Software](../../referencias/teste-de-software.md)"
+source: "[Teste de Software](../../referencias/teste-de-software.md)"
 tags:
   - skill
   - testing

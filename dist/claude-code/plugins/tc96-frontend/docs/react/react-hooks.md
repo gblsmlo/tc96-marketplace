@@ -1,16 +1,24 @@
 ---
-titulo: React - Hooks
-Link: https://react.dev/reference/react/hooks
+title: React - Hooks
+link: https://react.dev/reference/react/hooks
 tags:
   - react
   - hooks
   - reference
   - agent-context
 source: "Official React documentation — react.dev/reference/react/hooks"
-verificado-em: 2026-08-14
+verified-at: 2026-08-14
 ---
 
 # React — Hooks
+
+## Contents
+
+- [1. The three rules that apply to all of them](#1-the-three-rules-that-apply-to-all-of-them)
+- [2. Full index](#2-full-index)
+- [3. Quick choice](#3-quick-choice)
+- [4. Custom Hooks](#4-custom-hooks)
+- [5. Antipatterns](#5-antipatterns)
 
 > **API lookup** structure: signature, parameters, return and caveats of each Hook. To decide *which* Hook to use, go to the decision trees in [React.js](react-js.md) § 5. To decide *how to structure* the component around it, go to [React - Patterns](react-patterns.md).
 
@@ -149,7 +157,7 @@ function useOnlineStatus() {
 }
 ```
 
-**When to extract.** The vault's criterion is in: the Hook is justified when there is a real synchronization boundary or real repetition. Extracting too early only shifts complexity around.
+**When to extract.** The house criterion is in: the Hook is justified when there is a real synchronization boundary or real repetition. Extracting too early only shifts complexity around.
 
 **Quality rules:**
 
@@ -209,20 +217,3 @@ const a = useA()
 const b = useB()
 const value = condition ? a : b
 ```
-
----
-
-## Related
-
-- [React.js](react-js.md) — hub and decision trees
-- [React - Patterns](react-patterns.md) — composition and architecture patterns
-- [React - Rules of React](react-rules-of-react.md) — full normative basis
-
-## Sources consulted
-
-Verified on 2026-08-14:
-
-- [Built-in React Hooks](https://react.dev/reference/react/hooks)
-- [Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks)
-- [react-dom Hooks](https://react.dev/reference/react-dom/hooks)
-- [useOptimistic](https://react.dev/reference/react/useOptimistic)

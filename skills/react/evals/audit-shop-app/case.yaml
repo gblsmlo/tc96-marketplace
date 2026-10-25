@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: audit-shop-app
+expected_outcome: |
+  A codebase-wide audit with coverage, enforcement gaps first, sampled confirmations, a tiered backlog by ID, and at most three next actions.
+context:
+  scaffold_script: place-files.sh
