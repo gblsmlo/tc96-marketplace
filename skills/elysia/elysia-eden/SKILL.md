@@ -1,10 +1,10 @@
 ---
-nome: elysia-eden
-descricao: Consume an Elysia API from TypeScript with Eden — exporting and importing the app type, configuring `treaty` (auth headers, `parseDate`, `throwHttpError`, `onResponse`), calling routes, narrowing errors by status (422 included), wiring TanStack Query (unwrap and throw, retry only 5xx, typed mutation errors in forms), the paginated envelope, tests with `treaty(app)`, files and SSE, and fixing a client that turned `any` — citing `ELYSIA-TYPE-*` IDs, with an AST self-check and a workspace parity check. Use when the task is a frontend or another service calling an Elysia backend, a `queryFn`/`mutationFn` over Eden, an error the UI must show per status, a query that never reaches `isError`, a list that re-renders on every refetch, or Eden types that degraded to `any`. Do not use to declare the server schemas (elysia-schema), to document the API for non-TypeScript clients (elysia-openapi), nor for cache policy in general (tanstack-query).
-tipo: skill
-familia: elysia
-idioma: en
-fonte: "[Elysia - Eden](../docs/elysia-eden.md)"
+name: elysia-eden
+description: Consumes an Elysia API from TypeScript with Eden — exporting and importing the app type, configuring `treaty` (auth headers, `parseDate`, `throwHttpError`, `onResponse`), calling routes, narrowing errors by status (422 and the untyped 503 included), wiring TanStack Query (unwrap and throw, retry only 5xx, typed mutation errors in forms), the paginated envelope, tests with `treaty(app)`, files and SSE, and fixing a client that turned `any` — citing `ELYSIA-TYPE-*` IDs, with an AST self-check and a workspace parity check. Use for a frontend or another service calling an Elysia backend, a `queryFn`/`mutationFn` over Eden, an error the UI must show per status, a query that never reaches `isError`, a list that re-renders on every refetch, or Eden types that degraded to `any`. Not for declaring the server schemas (elysia-schema), documenting the API for non-TypeScript clients (elysia-openapi), or cache policy in general (tanstack-query).
+type: skill
+family: elysia
+language: en
+source: "[Elysia - Eden](../docs/elysia-eden.md)"
 docs:
   - /websites/elysiajs
 tags:

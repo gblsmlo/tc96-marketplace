@@ -1,15 +1,31 @@
 ---
-titulo: Elysia - Eden
-Link: https://elysiajs.com/eden/overview.html
+title: Elysia - Eden
+link: https://elysiajs.com/eden/overview.html
 tags:
   - elysia
   - eden
   - agent-context
 source: "Official documentation — https://elysiajs.com/ — cross-checked by executing every behaviour on elysia 1.4.30, @elysia/eden 1.4.10 and @tanstack/query-core 5.104.5"
-verificado-em: 2026-10-25
+verified-at: 2026-10-25
 ---
 
 # Elysia — Eden
+
+## Contents
+
+- [0. Decision tree — how does this client call this server?](#0-decision-tree--how-does-this-client-call-this-server)
+- [1. Concept: the type crosses, the code does not](#1-concept-the-type-crosses-the-code-does-not)
+- [2. Eden Treaty: config and call shapes](#2-eden-treaty-config-and-call-shapes)
+- [3. The return value: a union you narrow by status](#3-the-return-value-a-union-you-narrow-by-status)
+- [4. The TanStack Query bridge](#4-the-tanstack-query-bridge)
+- [5. A typed domain error reaching the form](#5-a-typed-domain-error-reaching-the-form)
+- [6. The paginated envelope](#6-the-paginated-envelope)
+- [7. Tests](#7-tests)
+- [8. Files, streams and WebSocket](#8-files-streams-and-websocket)
+- [9. Eden Fetch](#9-eden-fetch)
+- [10. When Eden returns any (or loses a route)](#10-when-eden-returns-any-or-loses-a-route)
+- [Antipatterns](#antipatterns)
+- [Review checklist](#review-checklist)
 
 > `export type App` and `import type` · Eden Treaty: config, call shapes, the return union · narrowing errors by status · the TanStack Query bridge (unwrap, retry, `parseDate`) · typed domain errors in a form · the paginated envelope · tests with `treaty(app)` · files, SSE, WebSocket · Eden Fetch · when Eden returns `any`.
 >
@@ -331,31 +347,3 @@ Not the same shape as Treaty (verified): it takes a **URL only** (route it in-pr
 - [ ] One `elysia` version, `strict: true` and TS >= 5.0 on both sides? → `ELYSIA-TYPE-11`, `ELYSIA-APP-04`
 - [ ] Paginated lists return `{ items, total, hasMore }`? → `ELYSIA-TYPE-13`
 - [ ] Tests use `treaty(app)` or a `fetcher` over `app.handle`, with `http://localhost`?
-
-## Related
-
-- [Elysia](elysia.md) — hub · [Elysia - Schema and Validation](elysia-schema-and-validation.md) — the schemas the contract is built from · [Elysia - OpenAPI](elysia-openapi.md) — the contract for non-TypeScript clients
-- `TanStack Query - Cache e Frescor` · `TanStack Query - Mutations e Invalidação` · `TanStack Query - Padrões de Consulta`
-- `React - Formulários e Actions` — the same typed error through `useActionState`
-
-## Sources consulted
-
-Verified on **2026-08-15** (docs) and **2026-10-25** (executed):
-
-- [Eden Overview](https://elysiajs.com/eden/overview.html) · [Installation](https://elysiajs.com/eden/installation.html) · [Treaty Overview](https://elysiajs.com/eden/treaty/overview.html) · [Parameters](https://elysiajs.com/eden/treaty/parameters.html) · [Response](https://elysiajs.com/eden/treaty/response.html) · [Config](https://elysiajs.com/eden/treaty/config.html) · [WebSocket](https://elysiajs.com/eden/treaty/websocket.html) · [Unit Test](https://elysiajs.com/eden/treaty/unit-test.html) · [Legacy](https://elysiajs.com/eden/treaty/legacy.html) · [Eden Fetch](https://elysiajs.com/eden/fetch.html) · [TanStack Start](https://elysiajs.com/integrations/tanstack-start.html)
-- `@elysia/eden@1.4.10` — `treaty2/types.d.ts` and the published code; `@tanstack/query-core@5.104.5` — `replaceEqualDeep` and retry behaviour
-
-**What execution contradicted or added (2026-10-25):**
-
-- **`error` is an `Error` at runtime** (`EdenFetchError`), contrary to the earlier note that it was not; only its *type* is the plain `{ status, value }` union.
-- **Every status >= 300 is an error**, redirects included.
-- **A 422 is in the error union of almost every route** (any schema or path param), while the OpenAPI document adds no 422 unless declared.
-- **A thrown `status()` is invisible to the client type unless the `response` map declares it**; a returned one is there with its literal value either way.
-- **`throwHttpError` as a function receives the `EdenFetchError`**, not the `Response`, and can be set per call.
-- **`parseDate` makes the runtime disagree with the type** — `string` in the type, `Date` at runtime — for every date-looking string, declared or not.
-- **Thrown 4xx are retried by TanStack Query**; limit `retry` to 5xx.
-- **An abort resolves** (503, `AbortError`) unless `throwHttpError` is set; `treaty(app)` ignores the signal.
-- **`onResponse` returning a value replaces `data`**; a throw there sets `error` to a 422.
-- **`edenFetch` has a different shape** from Treaty (`retry`, no `response`, URL only).
-- **A query key with a `default` is required on the client**; `t.Optional` makes it optional and widens the server type.
-- **`app.handle` needs an origin of at least 11 characters**; `http://x/...` is 404.

@@ -1,15 +1,30 @@
 ---
-titulo: Elysia - OpenAPI
-Link: https://elysiajs.com/patterns/openapi.html
+title: Elysia - OpenAPI
+link: https://elysiajs.com/patterns/openapi.html
 tags:
   - elysia
   - openapi
   - agent-context
 source: "Official documentation — https://elysiajs.com/ — cross-checked by executing every behaviour on elysia 1.4.30, @elysia/openapi 1.4.16 and zod 4.6.7"
-verificado-em: 2026-10-25
+verified-at: 2026-10-25
 ---
 
 # Elysia — OpenAPI
+
+## Contents
+
+- [0. Decision tree — what does this spec need?](#0-decision-tree--what-does-this-spec-need)
+- [1. Concept: the spec is generated from what the routes declare — nothing more](#1-concept-the-spec-is-generated-from-what-the-routes-declare--nothing-more)
+- [2. What reaches the spec from a route](#2-what-reaches-the-spec-from-a-route)
+- [3. detail: per route, per guard, per instance](#3-detail-per-route-per-guard-per-instance)
+- [4. operationId for code generators](#4-operationid-for-code-generators)
+- [5. Security schemes](#5-security-schemes)
+- [6. Zod, Valibot and other Standard Schema libraries](#6-zod-valibot-and-other-standard-schema-libraries)
+- [7. fromTypes() and withHeaders](#7-fromtypes-and-withheaders)
+- [8. Exposing the docs](#8-exposing-the-docs)
+- [9. A test that keeps the spec honest](#9-a-test-that-keeps-the-spec-honest)
+- [Antipatterns](#antipatterns)
+- [Review checklist](#review-checklist)
 
 > The `openapi()` plugin and its options · what reaches the spec from a schema, and what does not · `detail` per route, guard and instance · models as components · security schemes · `operationId` for code generators · Zod and other Standard Schema libraries · `fromTypes()` · `withHeaders` · `hide` and `exclude` · exposing the docs per environment · a test that keeps the spec honest.
 >
@@ -250,28 +265,3 @@ In a prefixed instance, register the collection route as `.post('', …)`: `.pos
 - [ ] Protected routes declare `security`; public ones in a protected document declare `[]`? → `ELYSIA-TYPE-20`
 - [ ] A test fetches `/openapi/json` and asserts ids, summaries, tags, responses and security?
 - [ ] `@elysia/openapi`, never `@elysiajs/swagger`? → `ELYSIA-APP-07`
-
-## Related
-
-- [Elysia](elysia.md) — hub · [Elysia - Schema and Validation](elysia-schema-and-validation.md) — what the spec is generated from · [Elysia - Eden](elysia-eden.md) — the TypeScript client that needs no spec
-- [Elysia - Lifecycle and Plugins](elysia-lifecycle-and-plugins.md) § 5 — the auth that `security` documents
-
-## Sources consulted
-
-Verified on **2026-08-15** (docs) and **2026-10-25** (executed):
-
-- [OpenAPI (patterns)](https://elysiajs.com/patterns/openapi.html) · [OpenAPI (plugin)](https://elysiajs.com/plugins/openapi.html) · [Swagger (deprecated)](https://elysiajs.com/plugins/swagger.html)
-- `@elysia/openapi@1.4.16` — types and published code (`index`, `openapi`, `gen` for `fromTypes`)
-
-**What execution contradicted or added (2026-10-25):**
-
-- **Zod 4 needs no `mapJsonSchema`**, contrary to the earlier rule; passing `z.toJSONSchema` makes request bodies use the output view.
-- **No 422 is documented** unless declared, although Elysia sends it and Eden types it.
-- **A route with no schema has no `responses`.**
-- **`operationId` is generated but not unique.**
-- **A guard's `detail` overrides the route's; a constructor's is only a default.**
-- **The helper is `withHeaders`** (plural), documentation only.
-- **`fromTypes()` silently does nothing without `tsc` on `PATH`.**
-- **`exclude.tags` crashes the spec route** when a route has no `detail` (1.4.16).
-- **There is no auth option**; `enabled: false` registers nothing.
-- **A prefixed `.post('/')` is documented with a trailing slash**; use `''`.

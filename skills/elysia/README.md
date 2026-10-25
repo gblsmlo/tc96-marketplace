@@ -22,7 +22,8 @@ plugins and auth, which no skill owned before — `elysia-diagnose` only diagnos
 
 ## Docs
 
-Hub [Elysia](docs/elysia.md) plus five satellites: routing and handler, lifecycle and plugins, schema and
+Hub [Elysia](docs/elysia.md) plus five satellites, each with a table of contents; provenance and
+verification notes live in `docs/SOURCES.md` for maintainers: routing and handler, lifecycle and plugins, schema and
 validation, OpenAPI, Eden. Each satellite carries its own decision tree, rules and antipatterns, so a
 skill loads one of them; the hub is loaded only for the import map, the runtime limits or an
 `ELYSIA-APP-*` rule.
@@ -83,20 +84,20 @@ the skill triggers. **Before step 1** adds the one doc the skill marks as mandat
 
 | Skill | description | `SKILL.md` | all references | before step 1 | loads |
 | --- | ---: | ---: | ---: | ---: | --- |
-| `elysia-build` | 209 | 2.327 | 6.136 | 10.448 | its satellite (8.121) |
-| `elysia-schema` | 196 | 1.892 | 5.420 | 8.155 | its satellite (6.263) |
-| `elysia-eden` | 241 | 1.962 | 5.176 | 8.459 | its satellite (6.497) |
-| `elysia-openapi` | 223 | 1.901 | 4.655 | 6.645 | its satellite (4.744) |
-| `elysia-diagnose` | 235 | 1.797 | 5.052 | 4.523 | `id-map.md` (2.726), then one satellite per finding |
+| `elysia-build` | 203 | 2.317 | 6.295 | 9.665 | its satellite (7.348) |
+| `elysia-schema` | 197 | 1.889 | 5.606 | 7.493 | its satellite (5.604) |
+| `elysia-eden` | 240 | 1.957 | 5.328 | 7.919 | its satellite (5.962) |
+| `elysia-openapi` | 219 | 1.893 | 4.799 | 6.462 | its satellite (4.569) |
+| `elysia-diagnose` | 235 | 1.793 | 5.052 | 4.519 | `id-map.md` (2.726), then one satellite per finding |
 
 The old skills told the model to load the 15.9k-token Portuguese hub plus a satellite before step 1:
 **25.641** (`elysia-build`), **29.507** (`elysia-schema`, which Eden and OpenAPI tasks also hit) and
-**27.228** (`elysia-diagnose`). The new ones need 4.5k–10.4k, a 60–85% cut.
+**27.228** (`elysia-diagnose`). The new ones need 4.5k–9.7k, a 62–85% cut.
 
-The price is the always-loaded metadata: five descriptions cost **1.104** tokens against **496** for three,
-because each now names its neighbours and its "do not use for". The six docs total 47.624 tokens (the four
-Portuguese notes were 44.682); the growth is the executed Eden and OpenAPI material, and no skill loads
-more than one doc before it starts.
+The price is the always-loaded metadata: five descriptions cost **1.094** tokens against **496** for three,
+because each now names its neighbours and its "do not use for". The six docs total 42.542 tokens (the four
+Portuguese notes were 44.682), with the upstream source lists moved to `docs/SOURCES.md`, which no
+skill links and no build target ships; no skill loads more than one doc before it starts.
 <!-- tokens:fim -->
 
 ## Related

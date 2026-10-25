@@ -1,5 +1,14 @@
 # Patterns — schemas that passed a test
 
+## Contents
+
+- [1. One schema; the type derived from it](#1-one-schema-the-type-derived-from-it)
+- [2. A query string that coerces, with defaults and bounds](#2-a-query-string-that-coerces-with-defaults-and-bounds)
+- [3. Shared models and the paginated envelope](#3-shared-models-and-the-paginated-envelope)
+- [4. A guard that adds to each route, and a response map per route](#4-a-guard-that-adds-to-each-route-and-a-response-map-per-route)
+- [5. Zod at the boundary: an upload checked by its bytes](#5-zod-at-the-boundary-an-upload-checked-by-its-bytes)
+- [6. A central validation handler: JSON, field messages, no input echoed](#6-a-central-validation-handler-json-field-messages-no-input-echoed)
+
 Every block below passed `bun test` and `tsc --noEmit` on elysia 1.4.30 and zod 4.6.7.
 
 ---

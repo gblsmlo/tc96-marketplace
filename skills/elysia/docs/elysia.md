@@ -1,14 +1,25 @@
 ---
-titulo: Elysia
-Link: https://elysiajs.com/
+title: Elysia
+link: https://elysiajs.com/
 tags:
   - elysia
   - backend
   - agent-context
 source: "Official documentation — https://elysiajs.com/"
-verificado-em: 2026-10-25
+verified-at: 2026-10-25
 ---
 # Elysia — guided reference
+
+## Contents
+
+- [1. How to use these docs](#1-how-to-use-these-docs)
+- [2. Mental model](#2-mental-model)
+- [3. Import boundaries and runtime](#3-import-boundaries-and-runtime)
+- [4. API map](#4-api-map)
+- [5. Decision trees](#5-decision-trees)
+- [6. Normative rules](#6-normative-rules)
+- [7. Skill contract](#7-skill-contract)
+- [8. Bridges with the stack](#8-bridges-with-the-stack)
 
 > **What this note is.** The single entry point for Elysia in this family: for a person looking something up, and for coding agents that generate or review Elysia servers. It is not a linear summary of the docs — it is a **router**. It decides what to load, offers the mental model that makes the rest make sense, and exposes citable rules that a skill or a code review can reference by ID.
 >
@@ -16,7 +27,7 @@ verificado-em: 2026-10-25
 
 Inventory verified on elysiajs.com and in the published package on **2026-08-15**.
 Verified version: **elysia 1.4.29** (`registry.npmjs.org/elysia/latest`), `@elysia/eden` 1.4.10, `@elysia/openapi` 1.4.15.
-See [Sources consulted](#sources-consulted).
+Upstream sources and verification notes are kept in `SOURCES.md` next to these docs, for maintainers.
 
 ---
 
@@ -137,7 +148,7 @@ The official plugins are published **under both scopes**. The current documentat
 
 Declared limitations on Cloudflare Worker: `file()` and the static plugin do not work (no `fs`), OpenAPI Type Gen does not work, and **an inline value in a route (`.get('/', 'Hello')`) throws** because a `Response` cannot be created before start. Bindings come from `import { env } from 'cloudflare:workers'`, **not** from the `env` export of `elysia` — see § 6, `ELYSIA-APP-09`.
 
-On `aot` in the Worker: up to 1.4.6 you had to pass `aot: false`, because the Worker did not allow function compilation at start. From **1.4.7** on that is no longer necessary, and the docs recommend leaving AoT on, *"for better performance and accurate plugin encapsulation"*. The default of `aot` is `true` in the published package, even though the Config page says otherwise — see [Sources consulted](#sources-consulted).
+On `aot` in the Worker: up to 1.4.6 you had to pass `aot: false`, because the Worker did not allow function compilation at start. From **1.4.7** on that is no longer necessary, and the docs recommend leaving AoT on, *"for better performance and accurate plugin encapsulation"*. The default of `aot` is `true` in the published package, even though the Config page says otherwise (verified: only `ELYSIA_AOT=false`, the literal string, turns it off).
 
 ---
 
@@ -414,44 +425,3 @@ The full Eden bridge — type export, the shape of Eden's return, the TanStack Q
 ### And Zod?
 
 Elysia 1.4 accepts Zod through Standard Schema, so the question is not "can I" — it is "where". A calibrated answer, with the verified trade-offs, is in [Elysia - Schema and Validation](elysia-schema-and-validation.md) § 2. The summary: `t` at the HTTP boundary (query/params coercion, file validation by magic number, OpenAPI with no extra configuration), Zod where the schema is already shared with the frontend or with code that already depends on it — knowing that with Zod, OpenAPI requires `mapJsonSchema: { zod: z.toJSONSchema }` and coercion becomes your job (`z.coerce.number()`).
-
----
-
-## Related
-
-- [Elysia - Routing and Handler](elysia-routing-and-handler.md) · [Elysia - Lifecycle and Plugins](elysia-lifecycle-and-plugins.md) · [Elysia - Schema and Validation](elysia-schema-and-validation.md) · [Elysia - OpenAPI](elysia-openapi.md) · [Elysia - Eden](elysia-eden.md)
-- `Bun` · `Bun - HTTP e Servidor` · `Bun - Runtime e APIs` · `Bun - Testes`
-- `React.js` · `TanStack Query - O que um Dev Frontend Precisa Saber` · `TanStack Query - Cache e Frescor` · `TanStack Router` · `TypeScript`
-- `Node.js` · `Nest.js` — the alternatives Elysia replaces in this stack
-
-## Sources consulted
-
-Verified on **2026-08-15**:
-
-- [At a glance](https://elysiajs.com/at-glance.html) · [Key Concept](https://elysiajs.com/key-concept.html) · [Quick Start](https://elysiajs.com/quick-start.html)
-- [Route](https://elysiajs.com/essential/route.html) · [Handler](https://elysiajs.com/essential/handler.html) · [Lifecycle](https://elysiajs.com/essential/life-cycle.html) · [Plugin](https://elysiajs.com/essential/plugin.html) · [Validation](https://elysiajs.com/essential/validation.html) · [Best Practice](https://elysiajs.com/essential/best-practice.html)
-- [Config](https://elysiajs.com/patterns/configuration.html) · [Error Handling](https://elysiajs.com/patterns/error-handling.html) · [Extend Context](https://elysiajs.com/patterns/extends-context.html) · [Macro](https://elysiajs.com/patterns/macro.html) · [TypeBox](https://elysiajs.com/patterns/typebox.html) · [OpenAPI](https://elysiajs.com/patterns/openapi.html) · [Cookie](https://elysiajs.com/patterns/cookie.html) · [WebSocket](https://elysiajs.com/patterns/websocket.html) · [Unit Test](https://elysiajs.com/patterns/unit-test.html)
-- [Eden Overview](https://elysiajs.com/eden/overview.html) · [Eden Treaty](https://elysiajs.com/eden/treaty/overview.html) · [Response](https://elysiajs.com/eden/treaty/response.html) · [Config](https://elysiajs.com/eden/treaty/config.html) · [Eden Fetch](https://elysiajs.com/eden/fetch.html) · [Legacy](https://elysiajs.com/eden/treaty/legacy.html)
-- [Plugins Overview](https://elysiajs.com/plugins/overview.html) · [OpenAPI](https://elysiajs.com/plugins/openapi.html) · [Swagger](https://elysiajs.com/plugins/swagger.html) · [CORS](https://elysiajs.com/plugins/cors.html) · [JWT](https://elysiajs.com/plugins/jwt.html) · [Static](https://elysiajs.com/plugins/static.html) · [OpenTelemetry](https://elysiajs.com/plugins/opentelemetry.html)
-- [Node.js](https://elysiajs.com/integrations/node.html) · [Deno](https://elysiajs.com/integrations/deno.html) · [Cloudflare Worker](https://elysiajs.com/integrations/cloudflare-worker.html) · [TanStack Start](https://elysiajs.com/integrations/tanstack-start.html)
-- `elysia@1.4.29` and `@elysia/eden@1.4.10` — `.d.ts` declarations of the published package (`index.d.ts`, `context.d.ts`, `error.d.ts`, `types.d.ts`, `type-system/index.d.ts`, `treaty2/types.d.ts`)
-- `elysia@1.4.29` — **published code**, not just the types: `index.js` (effective constructor defaults), `error.js` (default status of each error class), `universal/env.js` (what the `env` export resolves to per runtime). Where the code and the docs diverge, the notes below record both.
-
-**Verification notes** — points where the source contradicts what people assume by habit:
-
-- **Re-executed on elysia 1.4.30, @elysia/eden 1.4.10 and @elysia/openapi 1.4.16 (2026-10-25).** Every behaviour the satellites mark *verified* has a passing test in the authoring playground. What changed: Zod 4 reaches OpenAPI without `mapJsonSchema` (`ELYSIA-TYPE-07` reworded); Eden's `error` is an `Error` instance at runtime; a destructured `store` primitive is stale only within the same call (`ELYSIA-LIFE-06` reworded); with no `onError`, a thrown error's message is the 500 body even in production; `app.handle` needs an origin of at least 11 characters; `ELYSIA_AOT=false` (the literal string) is the only way to turn AOT off.
-
-- **`error` was renamed to `status` and no longer exists.** It is not among the exports of `elysia@1.4.29` nor in the `Context` type. Examples with `error` still appear on pages of the official docs (Lifecycle § Local Error, JWT) — they are residue, not live API.
-- **The plugins exist under two npm scopes at once.** `@elysia/*` (used by the current docs, newer versions) and `@elysiajs/*` (legacy, still published). `@elysia/openapi` and `@elysiajs/openapi` are both at 1.4.15; `@elysia/eden` is at 1.4.10 against 1.4.9 for `@elysiajs/eden`.
-- **`@elysiajs/swagger` is deprecated**, with an explicit notice on its own page: *"Swagger plugin is deprecated and is no longer maintained"*. It is stuck at 1.3.1 while the rest of the ecosystem is on 1.4.x.
-- **`context.response` in hooks is deprecated in favour of `context.responseValue`.** The `.d.ts` files mark `response` with `@deprecated use context.responseValue instead` in `AfterHandler`, `MapResponse` and `AfterResponseHandler`. The official docs use both names on different pages.
-- **Elysia supports Zod, Valibot, ArkType, Effect Schema, Yup and Joi** through Standard Schema, and schemas from different libraries can coexist in the same handler. This contradicts the common assumption that Elysia forces TypeBox.
-- **Eden Treaty does not throw on HTTP errors by default** (`throwHttpError: false`), and **converts date strings into `Date` by default** (`parseDate: true`). Both defaults have a direct consequence for the TanStack Query integration — see [Elysia - Eden](elysia-eden.md).
-- **`.as()` only accepts `'scoped'` and `'global'`.** There is no `as('local')` — the `.d.ts` files have exactly two overloads. `local` is the default and you do not "step down" to it.
-- **The Config page says `aot` defaults to `false`, and the published package says `true`.** The constructor of `elysia@1.4.29` (`index.js`) builds the config with `aot: env.ELYSIA_AOT !== 'false'` — that is, on by default, and switchable off with the environment variable `ELYSIA_AOT=false`. The Cloudflare Worker page corroborates the package: if the default were `false`, there would be no reason for the docs to say that "you used to have to pass `aot: false`". **Treat the default as `true`.** The `@default false` annotation on the Config page is what falls, and it is the only known divergence between docs and package in this family.
-- **`normalize` defaults to `true`**: properties outside the schema are silently removed on input and output. With `normalize: false` they become an error. Confirmed in both places — the Config page and `index.js`.
-- **The default status of a validation error is 422**, and no page of the docs states it. `ValidationError.status = 422` in `error.js`. An app **with no `onError`** already responds 422 to an invalid payload; the reflex of expecting 400 comes from other frameworks. Table per error class in [Elysia - Routing and Handler](elysia-routing-and-handler.md) § 5.
-- **The `PreContext` of `onRequest` has `status`, `redirect` and `server`**, besides `request`, `set`, `store` and decorators. The Lifecycle page lists only the first four. The absence of `status` from a second-hand enumeration is what leads someone to build a `Response` by hand to block a request. Canonical enumeration in [Elysia - Lifecycle and Plugins](elysia-lifecycle-and-plugins.md) § 2.
-- **The `env` of `elysia` does not cover Cloudflare Worker.** It is `Bun.env` on Bun, `process.env` outside it, and `{}` where neither exists. Worker bindings come from `cloudflare:workers` — two exports called `env`, different things.
-- **In `NODE_ENV=production`, validation error details are omitted by default** — deliberate behaviour so as not to leak the schema's shape. `allowUnsafeValidationDetails: true` reverts it.
-- **`edenTreaty` (Treaty 1) is legacy**; `treaty` (Treaty 2) is the current API. Both live in the same package, which makes an old example compile without warning.

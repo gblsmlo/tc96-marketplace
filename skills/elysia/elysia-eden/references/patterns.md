@@ -1,5 +1,15 @@
 # Patterns — Eden clients that passed a test
 
+## Contents
+
+- [1. The server's side of the contract](#1-the-servers-side-of-the-contract)
+- [2. The client module: configured once](#2-the-client-module-configured-once)
+- [3. Narrowing by status, 422 included](#3-narrowing-by-status-422-included)
+- [4. Query options: throw, retry only 5xx](#4-query-options-throw-retry-only-5xx)
+- [5. A mutation whose error the form can read](#5-a-mutation-whose-error-the-form-can-read)
+- [6. Pagination](#6-pagination)
+- [7. Tests: two forms](#7-tests-two-forms)
+
 Every block passed `bun test` and `tsc --noEmit` on elysia 1.4.30, @elysia/eden 1.4.10 and @tanstack/query-core 5.104.5.
 
 ---

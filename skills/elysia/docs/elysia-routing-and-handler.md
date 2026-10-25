@@ -1,15 +1,27 @@
 ---
-titulo: Elysia - Routing and Handler
-Link: https://elysiajs.com/essential/handler.html
+title: Elysia - Routing and Handler
+link: https://elysiajs.com/essential/handler.html
 tags:
   - elysia
   - http
   - agent-context
 source: "Official documentation — https://elysiajs.com/ — behaviour re-executed on elysia 1.4.30 on 2026-10-25"
-verificado-em: 2026-10-25
+verified-at: 2026-10-25
 ---
 
 # Elysia - Routing and Handler
+
+## Contents
+
+- [0. Decision tree — how do I return an error?](#0-decision-tree--how-do-i-return-an-error)
+- [1. Concept: the context is an accumulation of earlier decisions, not a fixed object](#1-concept-the-context-is-an-accumulation-of-earlier-decisions-not-a-fixed-object)
+- [2. Instance, routes and path precedence](#2-instance-routes-and-path-precedence)
+- [3. The context object](#3-the-context-object)
+- [4. Response shapes](#4-response-shapes)
+- [5. Errors: taxonomy, return × exception, and customization](#5-errors-taxonomy-return--exception-and-customization)
+- [6. Testing without starting a server](#6-testing-without-starting-a-server)
+- [Anti-patterns](#anti-patterns)
+- [Review checklist](#review-checklist)
 
 > Instance and `listen` · verbs, path params, wildcard and precedence · `group` · the context object · response shapes and coercion · `status` and `set` · reactive cookie · redirect, file, stream and SSE · `onError` and the code taxonomy · testing without starting a server.
 >
@@ -463,35 +475,3 @@ For tests with end-to-end types, `treaty(app)` takes the instance directly and m
 - [ ] Are recurring domain errors registered in `.error({...})`? → `ELYSIA-CORE-08`
 - [ ] Do tests use `app.fetch` without starting a server? → `ELYSIA-CORE-09`
 - [ ] Is there an `await app.modules` wherever an async plugin exists? → `ELYSIA-CORE-10`
-
----
-
-## Related
-
-- [Elysia](elysia.md) — hub
-- [Elysia - Lifecycle and Plugins](elysia-lifecycle-and-plugins.md) · [Elysia - Schema and Validation](elysia-schema-and-validation.md) · [Elysia - Eden](elysia-eden.md)
-- `Bun - HTTP e Servidor` — `serve`, TLS, sockets underneath `listen`
-
-## Sources consulted
-
-Verified on **2026-08-15**:
-
-- [Route](https://elysiajs.com/essential/route.html) · [Handler](https://elysiajs.com/essential/handler.html)
-- [Lifecycle — On Error](https://elysiajs.com/essential/life-cycle.html) · [Error Handling](https://elysiajs.com/patterns/error-handling.html)
-- [Reactive Cookie](https://elysiajs.com/patterns/cookie.html) · [Config](https://elysiajs.com/patterns/configuration.html)
-- [Unit Test](https://elysiajs.com/patterns/unit-test.html) · [Best Practice](https://elysiajs.com/essential/best-practice.html)
-- `elysia@1.4.29` — `context.d.ts` (exact shape of `Context` and `PreContext`) and `error.d.ts` (classes and `status`)
-
-**What the verification contradicted:**
-
-- **The context's `error` no longer exists**; it was renamed to `status`. Remaining examples in the official docs (Lifecycle § Local Error) still use the old name.
-- **`context.route` exists** and carries the **registered** path (`/orders/:id`), separate from `context.path` (the concrete URL). It is the right value for metric and log labels.
-- **`set.redirect` is deprecated** in the types, with its own JSDoc pointing to the migration to the inline `redirect`.
-- **`return status()` does not go through `onError`** — only `throw` does. It is the source of the most common confusion about error handling in Elysia.
-- **Validation error details are omitted in production by default**, deliberately, so as not to leak the shape of the schema.
-- **`strictPath` defaults to `false`**: `/name` and `/name/` resolve to the same route unless you ask otherwise.
-- **The body is ignored on GET and HEAD by default**, following RFC 2616 — a GET with a body does not reach `body`.
-- **An inline value on a route does not work on Cloudflare Worker**, because it requires building the `Response` before the server starts.
-- **The default status of a validation error is 422, not 400.** `ValidationError.status = 422` in `error.js` of 1.4.29 — no docs page states the number, and it goes out even without `onError`. `InvalidFileType` is also 422; `ParseError` and `InvalidCookieSignature` are 400; `NotFoundError`, 404.
-- **Re-executed on elysia 1.4.30 (2026-10-25):** with no `onError`, a thrown `Error`'s message is the 500 body even in production; a thrown `status(404)` reaches `onError` as `code === 404`; a `status = 409` class property works without `.error()`, and `toResponse()`'s status wins; `response: { 201 }` with a plain `return` sends **200** and is not validated, while a body that breaks the 200 schema answers **422** with `on: 'response'`; a required `body` schema on a GET is silently not enforced; routes are case-sensitive; a repeated query key keeps the last value and brackets are not parsed; any non-`undefined` return from `onBeforeHandle` — `0` and `false` included — becomes the response; a handler that returns nothing sends 200 with an empty body; `app.handle` needs an origin of at least 11 characters; an async plugin function pending at the first request leaves its route 404 for good.
-- **The `PreContext` of `onRequest` includes `status`**, even though the Lifecycle page lists only `request`, `set`, `store` and decorators. Verified in `context.d.ts`; canonical enumeration in [Elysia - Lifecycle and Plugins](elysia-lifecycle-and-plugins.md) § 2.

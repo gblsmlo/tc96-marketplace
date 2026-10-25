@@ -9,7 +9,7 @@ HUB="$DOCS/elysia.md"
 
 titles() {
   awk 'FNR == 1 { name = FILENAME; sub(/.*\//, "", name); sub(/\.md$/, "", name) }
-       /^titulo: / { print name "\t" substr($0, 9); nextfile }' "$DOCS"/elysia*.md
+       /^title: / { print name "\t" substr($0, 8); nextfile }' "$DOCS"/elysia*.md
 }
 
 scan() {
