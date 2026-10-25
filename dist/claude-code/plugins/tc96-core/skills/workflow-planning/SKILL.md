@@ -161,7 +161,7 @@ scope gets this file, including execution, and no project turns it off
 Each Task also gets its **Wave**, **Surface** and **Size** (hub §4.2 "Small units" and
 "Waves", `WF-PLAN-07`, `WF-CORE-10`); the plan's `budget` field names the review budget and
 wave width it was sized against, and its `delivery` field the mode and push-and-PR answer (hub
-§5 "Delivery"). The fields are in `template-tasks.md`. A Task whose inputs are not accepted yet
+§5 "Delivery"). The fields are in `spec-task`. A Task whose inputs are not accepted yet
 is listed, but it is not ready (`WF-SPEC-04`).
 
 **One planning bundle.** Planning collects the drafts — `design.md` and its ADRs,
@@ -207,7 +207,7 @@ Return the envelope from hub §5 (`pilar: planejamento`), with the `.specs/` pat
 | boundary itself is disputed, not just which perfil owns it | `software-architect` |
 
 **Board, when the project keeps one.** The items' text is a planning decision: `project-manager`
-writes it in the plan, under **Board items** (`template-tasks.md`). The bundle shape of
+writes it in the plan, under **Board items** (`spec-task`). The bundle shape of
 `workflow-spec` Step 4 asks for publishing, and the plan's Delivery, in the same message as the
 files (Step 5, hub §5), not after it. Once the plan is `Ready` and that answer said yes,
 publishing is a mechanical operation: `repo-operator` publishes that text word for

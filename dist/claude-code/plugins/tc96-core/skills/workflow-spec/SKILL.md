@@ -1,6 +1,6 @@
 ---
 name: workflow-spec
-description: Writes and records one spec document in `.specs/` — PRD, design or RFC, ADR, user experience, an increment's plan, or a board item (Epic, Story, Task) — from the template it owns, in the project's recorded document set, as a `Draft` the owner reviews before any status moves to approved, citing `WF-SPEC-*` and `DOC-*` IDs. Use when a pillar needs a file written, when the owner asks for an ADR or a story outside a run, or when a project has not yet decided which documents it keeps. Do not use to decide what the document says — that is the owning agent (`product-manager`, `software-architect`, `product-designer`, `project-manager`). Do not use to decide whether a document is needed at all — that is the scope from `workflow-research`.
+description: Writes and records one spec document in `.specs/` — PRD, design or RFC, ADR, user experience, an increment's plan, or a board item (Epic, Story, Task) — through the standalone skill of each document (`spec-prd`, `spec-rfc`, `spec-adr`, `spec-ux`, `spec-epic`, `spec-story`, `spec-task`), in the project's recorded document set, as a `Draft` the owner reviews before any status moves to approved, citing `WF-SPEC-*` and `DOC-*` IDs. Use when a pillar needs a file written, when the owner asks for an ADR or a story outside a run, or when a project has not yet decided which documents it keeps. Do not use to decide what the document says — that is the owning agent (`product-manager`, `software-architect`, `product-designer`, `project-manager`). Do not use to decide whether a document is needed at all — that is the scope from `workflow-research`.
 source: "[Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 e [Decision Documents — PRD, RFC and ADR](../../referencias/documentos-de-decisao-prd-rfc-adr.md)"
 tags:
   - skill
@@ -12,7 +12,7 @@ tags:
 # workflow-spec
 
 > **Source of this skill:** [Delivery Flow — Four Pillars](../../referencias/fluxo-de-entrega-quatro-pilares.md) §5 and the `WF-SPEC-*` rules in §6; [Decision Documents — PRD, RFC and ADR](../../referencias/documentos-de-decisao-prd-rfc-adr.md) §2–§5.
-> This skill **does not contain** the text of the rules — it says which file to write, from which template, by whom, and how the owner approves it.
+> This skill **does not contain** the text of the rules — it says which file to write, which spec skill carries its template, by whom, and how the owner approves it.
 
 > **Delegation, read first (`WF-CORE-06`, `WF-CORE-07`).** The content of every file is written
 > by its owning agent — `product-manager`, `software-architect`, `product-designer`,
@@ -22,11 +22,12 @@ tags:
 > ask the owner: which documents the project keeps, whether `AGENTS.md` may be written, and
 > whether a `Draft` is approved.
 
-> **Design note.** This is **not a fifth pillar**. The four pillars decide *when* a document is
-> needed and the scope decides *which* (`WF-SPEC-03`); the owning agent decides *what it says*;
-> this skill decides *form, location, status and review*. It exists so the templates, the
-> project's document set and the approval protocol live in one place, and so a person can ask
-> for one document — "write an ADR for this" — without running a pillar.
+> **Design note.** This is **not a fifth pillar**, and since the `spec` family it is a **router**.
+> Each document is a standalone skill that carries its own template, rules and review protocol
+> (`spec-prd`, `spec-rfc`, `spec-adr`, `spec-ux`, `spec-epic`, `spec-story`, `spec-task`), and a
+> person can call any one without running a pillar. What stays here is what only an
+> orchestrating conversation can do: record the project's document set once, choose which
+> skills a pillar's scope needs, and put several drafts in front of the owner as one bundle.
 
 ---
 
@@ -37,6 +38,7 @@ tags:
 | a pillar needs `requirements.md`, `design.md`, an ADR, `user-experience.md`, an amendment to one of them, or a plan in `tasks/` | this skill, called by that pillar |
 | the owner asks for one document outside a run ("record this as an ADR") | this skill, standalone |
 | the project has no record of which documents it keeps | this skill, Step 2 |
+| one document, no pillar, no bundle | the document's own skill from Step 1's table, directly |
 | the question is what the document should say | the owning agent in Step 1's table |
 | the question is whether the change needs a document at all | `workflow-research` (scope), `DOC-CORE-02` |
 | the document is a PR | `workflow-validation`, `references/template-pr.md` there |
@@ -59,13 +61,10 @@ References in this skill:
 | File | What for |
 | --- | --- |
 | `references/project-document-set.md` | the one question that records which documents the project keeps, and where the answer is saved (Step 2) |
-| `references/owner-review.md` | the status protocol: `Draft`, the owner's review, what moves a status (Step 4) |
-| `references/template-requirements.md` | `.specs/<capability>/requirements.md`, the capability's PRD |
-| `references/template-design.md` | `.specs/<capability>/design.md`, RFC or design doc |
-| `references/template-adr.md` | `.specs/adr/NNNN-<slug>.md`, one per decision that outlives the increment |
-| `references/template-user-experience.md` | `.specs/<capability>/user-experience.md` |
-| `references/template-tasks.md` | `.specs/<capability>/tasks/NNNN-<slug>.md`, one plan per increment, one Task per unit |
-| `references/template-epic.md` · `references/template-story.md` · `references/template-task.md` | tool-neutral board items, when the project keeps a tracker |
+| `references/owner-review.md` | the bundle review: one message for several drafts, what counts as the owner's answer (Step 4) |
+
+The templates and each document's rules live in the document's own skill, in
+the `spec` family (`skills/spec/`).
 
 ---
 
@@ -74,14 +73,14 @@ References in this skill:
 The caller says which file it needs; a standalone request says which question is open. One
 file, one question, one owner (`DOC-CORE-01`, `WF-SPEC-02`):
 
-| Question open | Document | File | Owner agent | Template |
+| Question open | Document | File | Owner agent | Skill that carries the template |
 | --- | --- | --- | --- | --- |
-| what to build, and why | PRD | `.specs/<capability>/requirements.md` | `product-manager` | `template-requirements.md` |
-| how to build it, boundaries and contracts | design doc or RFC | `.specs/<capability>/design.md` | `software-architect` | `template-design.md` |
-| what was decided, lasting past the increment | ADR | `.specs/adr/NNNN-<slug>.md` | `software-architect` | `template-adr.md` |
-| how the person moves through it, every screen state | UX | `.specs/<capability>/user-experience.md` | `product-designer` | `template-user-experience.md` |
-| who does what, with which acceptance, evidence and test types | plan | `.specs/<capability>/tasks/NNNN-<slug>.md` | `project-manager` | `template-tasks.md` |
-| the same, as items in the project's tracker | Epic, Story, Task | the plan's **Board items** section; `repo-operator` publishes it on the owner's answer | `project-manager` | `template-epic.md` · `template-story.md` · `template-task.md` |
+| what to build, and why | PRD | `.specs/<capability>/requirements.md` | `product-manager` | `spec-prd` |
+| how to build it, boundaries and contracts | design doc or RFC | `.specs/<capability>/design.md` | `software-architect` | `spec-rfc` |
+| what was decided, lasting past the increment | ADR | `.specs/adr/NNNN-<slug>.md` | `software-architect` | `spec-adr` |
+| how the person moves through it, every screen state | UX | `.specs/<capability>/user-experience.md` | `product-designer` | `spec-ux` |
+| who does what, with which acceptance, evidence and test types | plan | `.specs/<capability>/tasks/NNNN-<slug>.md` | `project-manager` | `spec-task` |
+| the same, as items in the project's tracker | Epic, Story, Task | the plan's **Board items** section; `repo-operator` publishes it on the owner's answer | `project-manager` | `spec-epic` · `spec-story` · `spec-task` |
 
 If no row's question is open, no document is written (`DOC-CORE-02`): say so and return. If
 the caller is a pillar, the scope it classified decides the set of files (`WF-SPEC-03`); do not
@@ -121,7 +120,7 @@ instead of a file.
 
 Start the owner agent from Step 1 with exactly four things: the envelope that produced the
 need, the paths of the spec files that already exist for this capability, the absolute path of
-the template, and the rules below. Not this conversation (`WF-CORE-06`). The agent writes the
+the template inside the document's spec skill (`skills/spec/<skill>/references/`), and the rules below. Not this conversation (`WF-CORE-06`). The agent writes the
 file with `status: Draft` and returns its path, the one-sentence problem or decision, and the
 open gaps — not the content (`WF-CORE-07`).
 
@@ -139,7 +138,7 @@ Rules the agent writes under, in the delegation prompt:
 | 8 | on an approved file, append `## Amendment NNN — YYYY-MM-DD — <one sentence>` with its own `status: Draft` and its own open gaps; never edit the text above it | `WF-SPEC-08`, `DOC-PRD-04` |
 
 An ADR takes `Proposed` instead of `Draft`, and its number is the next in `.specs/adr/`
-(`template-adr.md`, "Numbering"). A plan's number is the next in `.specs/<capability>/tasks/`.
+(`spec-adr`, "Numbering"). A plan's number is the next in `.specs/<capability>/tasks/`.
 
 ---
 
@@ -216,7 +215,7 @@ where `lacunas` holds no unapproved file it depends on (`WF-SPEC-04`).
 ## Example
 
 *`workflow-planning` needs an ADR: "sessions stay in PostgreSQL, not Redis".* Step 1: ADR,
-`software-architect`, `template-adr.md`. Step 2: the project's `AGENTS.md` has a `## Specs`
+`software-architect`, `spec-adr`. Step 2: the project's `AGENTS.md` has a `## Specs`
 section with ADR on — no question asked. Step 3: `software-architect` writes
 `.specs/adr/0004-keep-sessions-in-postgres.md`, `Proposed`, with the axis (operating cost),
 one real alternative and its cost, and returns the path. Step 4: the owner reads it and answers
