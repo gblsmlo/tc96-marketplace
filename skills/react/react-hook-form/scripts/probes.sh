@@ -38,10 +38,12 @@ heading "5. Two owners of the submission" "RHF-BRIDGE-01 — <form action> toget
   | while read -r f; do rg -q 'onSubmit=' "$f" && echo "   $f"; done | grep . || none_found
 
 heading "6. reset inside onSubmit" "RHF-STATE-02 — belongs in an Effect with isSubmitSuccessful"
-"${RG[@]}" -nU 'handleSubmit\((?s:.{0,400}?)\breset\(' "$TARGET" || none_found
+# the handler is often declared apart and passed by name: handleSubmit(onSubmit)
+"${RG[@]}" -nU '(handleSubmit\(|(const|function)\s+on[A-Z]?\w*Submit\b)(?s:.{0,400}?)\breset\(' "$TARGET" || none_found
 
 heading "7. useFieldArray key" "RHF-ARRAY-01 — key={field.id}, never the index"
-"${RG[@]}" -n 'key=\{\s*(i|idx|index)\s*\}' "$TARGET" || none_found
+"${RG[@]}" -l 'useFieldArray\(' "$TARGET" 2>/dev/null \
+  | while read -r f; do rg -n 'key=\{\s*(i|idx|index)\s*\}' "$f" | sed "s|^|$f:|"; done | grep . || none_found
 
 heading "8. Double registration" "RHF-CORE-04 — files with both Controller AND register"
 "${RG[@]}" -l '<Controller|useController\(' "$TARGET" 2>/dev/null \
