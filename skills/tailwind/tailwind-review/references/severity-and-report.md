@@ -40,7 +40,7 @@ Evidence: S2 → src/components/ui/badge.tsx:4
 [Low] `TW-UTIL-04` — order-card.tsx:14 — `[display:flex]` → `flex`.
 ```
 
-Group configuration findings and markup findings under two headings — the first are fixed once (`tailwind-setup`), the second file by file. Do not repeat the rule's text in a finding; `rule.sh` is where the reader gets it.
+Group configuration findings and markup findings under two headings — the first are fixed once (`tailwind-setup`), the second file by file. Do not repeat the rule's text in a finding; `references/rules.md` is where the reader gets it.
 
 ## The cut
 

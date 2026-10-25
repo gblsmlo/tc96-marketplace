@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: migrate-v3-dashboard
+expected_outcome: |
+  index.css imports tailwindcss; the shadow and rounded scales are migrated smallest first (shadow-sm→shadow-xs,
+  shadow→shadow-sm, rounded→rounded-sm); outline-none→outline-hidden; bg-opacity→/50, flex-grow→grow,
+  bg-[--x]→bg-(--x); brand moves to @theme and the config goes; @layer utilities becomes @utility; the Vite
+  plugin replaces PostCSS and autoprefixer; each changed default (border color, ring width, hover on touch) gets
+  a recorded decision; the visual comparison is declared not verified.
+context:
+  scaffold_script: place-files.sh

@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: 1 0 0;
+    --foreground: 0.145 0 0;
+    --muted: 0.97 0 0;
+    --warning: 0.84 0.16 84;
+  }
+  .dark {
+    --background: 0.145 0 0;
+    --foreground: 0.985 0 0;
+    --muted: 0.269 0 0;
+  }
+}
+
+@theme {
+  --color-background: oklch(var(--background));
+  --color-foreground: oklch(var(--foreground));
+  --color-muted: oklch(var(--muted));
+  --color-warning: oklch(var(--warning));
+}

@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: setup-brand-color-and-dark-toggle
+expected_outcome: |
+  The Vite plugin replaces PostCSS and autoprefixer; the brand color becomes a CSS token; tailwind.config.ts is
+  removed or loaded with @config; @theme inline maps the variables; @custom-variant dark makes the toggle work;
+  --warning gets a dark value; the theme is applied by an inline head script instead of a useEffect; the
+  stylesheet is linked with ?url; components.json leaves tailwind.config empty and tw-animate-css replaces
+  tailwindcss-animate. Cites TW-CFG-08 and TW-THEME-09.
+context:
+  scaffold_script: place-files.sh

@@ -84,7 +84,7 @@ Before opening a file:
 | `*.spec.ts` Playwright | `playwright-review` | [Playwright](../knowledge-base/playwright.md) § 6 | `PW-*` |
 | `*.test.ts` under `bun test` | `bun-test-review` | [Bun - Testes](../knowledge-base/bun-testes.md) § 6 | `BUN-TEST-*` |
 | `bunfig.toml`, `package.json`, lockfile | `bun-workspace` (verification) | [Bun - Gerenciador de Pacotes](../knowledge-base/bun-gerenciador-de-pacotes.md) | `BUN-PKG-*` |
-| `className`, entry stylesheet, `@theme`, `components.json`, Tailwind config | `tailwind-review` (plugin `tc96-tailwind`) | `Tailwind CSS` § 6, in the plugin's own docs | `TW-*` |
+| `className`, entry stylesheet, `@theme`, `components.json`, Tailwind config | `tailwind-review` (plugin `tc96-tailwind`) | `Tailwind CSS` § 6, in `tailwind-review`'s own docs | `TW-*` |
 | story, `play`, `.storybook/` | `storybook-story` · `storybook-test` | [Storybook - Stories e Args](../knowledge-base/storybook-stories-e-args.md) | `SB-*` |
 | apps × packages of the monorepo | — | [Monorepo com Bun - estrutura e tooling](../knowledge-base/monorepo-com-bun-estrutura-e-tooling.md) § 6 | `MONO-*` |
 | BFF, shape × rule | — | [Fronteira do BFF - forma, jornada e regra](../knowledge-base/fronteira-do-bff-forma-jornada-e-regra.md) § 9 | `BFF-*` |

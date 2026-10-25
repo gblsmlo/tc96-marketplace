@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: build-status-badge
+expected_outcome: |
+  A cva (or tv) component with status and size variants mapped to complete class strings over the semantic
+  tokens, className merged last through cn, a motion-safe pulsing dot, a visible text label, and an icon-only
+  copy button with an accessible name and a focus-visible style. No interpolated class names and no conflicting
+  utilities.
+context:
+  scaffold_script: place-files.sh

@@ -4,7 +4,8 @@
 #   bash build/skill-packages.sh            -> dist/skills/<skill>.skill
 #   bash build/skill-packages.sh <dest>
 #
-# A family is self-contained when it has skills/<family>/docs/. In the source, the family's
+# A family is self-contained when it has skills/<family>/docs/ or its skills carry their own
+# <skill>/docs/ (then nothing is shared but scripts). In the source, the family's
 # skills share those docs and a few scripts between siblings; in the package, each skill
 # carries its own copy: only the notes it cites (with the transitive closure between them)
 # and the sibling scripts it calls. The duplication lives in the generated artifact, never
@@ -78,8 +79,9 @@ def cited(text, base_rel):
 
 
 summary = []
-for family_docs in sorted(root.glob("skills/*/docs")):
-    family = family_docs.parent.name
+families = {p.parent for p in root.glob("skills/*/docs")} | {p.parent.parent for p in root.glob("skills/*/*/docs")}
+for family_dir in sorted(families):
+    family_docs = family_dir / "docs"
     for source in sorted(family_docs.parent.glob("*/SKILL.md")):
         fields, body = split(source.read_text(encoding="utf-8"))
         if fields.get("tipo") != "skill":

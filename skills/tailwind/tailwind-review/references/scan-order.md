@@ -4,15 +4,15 @@ Each level can erase the findings of the next: a config nobody loads explains th
 
 | # | Level | Question | IDs | Satellite |
 | --- | --- | --- | --- | --- |
-| 1 | **line and stylesheet** | which line, which integration, one entry per app, is the config loaded? | `TW-CORE-01`, `TW-CFG-01…09` | [Installation and Detection](../../docs/tailwindcss-installation-and-detection.md) |
-| 2 | **what the scanner cannot see** | interpolated names; UI packages, generated files without `@source` | `TW-SRC-01…06` | [Installation and Detection](../../docs/tailwindcss-installation-and-detection.md) |
-| 3 | **conflicts** | two utilities on one property; merge hiding an internal one | `TW-UTIL-01`, `TW-COMP-02` | [Utilities and Variants](../../docs/tailwindcss-utilities-and-variants.md) |
-| 4 | **line-3 leftovers** | removed names, renamed scale, `outline-none`, `!` first, `bg-[--x]`, variant order | `TW-MIG-*`, `TW-VAR-07` | [Migration v3 to v4](../../docs/tailwindcss-migration-v3-to-v4.md) |
-| 5 | **accessibility** | focus, names, `sr-only`, motion, forced colors, hover-only | `TW-A11Y-01…08` | [Utilities and Variants](../../docs/tailwindcss-utilities-and-variants.md) |
-| 6 | **tokens and dark mode** | raw palette in the design system, the pair, `:root` × `.dark`, `@theme inline`, the toggle | `TW-THEME-*` | [Theme and Tokens](../../docs/tailwindcss-theme-and-tokens.md) |
-| 7 | **composition** | `className` last, one `cn`, `extendTailwindMerge`, variants declared, `className` as layout | `TW-COMP-*` | [Components and Composition](../../docs/tailwindcss-components-and-composition.md) |
-| 8 | **values and custom CSS** | repeated arbitraries, static `style`, `@apply` in own CSS, utility-shaped custom names | `TW-UTIL-02…08` | [Utilities and Variants](../../docs/tailwindcss-utilities-and-variants.md) |
-| 9 | **layout and variants** | mobile-first, container queries, `peer` order, named groups, ARIA state | `TW-VAR-01…06` | [Utilities and Variants](../../docs/tailwindcss-utilities-and-variants.md) |
+| 1 | **line and stylesheet** | which line, which integration, one entry per app, is the config loaded? | `TW-CORE-01`, `TW-CFG-01…09` | `Tailwind CSS - Installation and Detection` |
+| 2 | **what the scanner cannot see** | interpolated names; UI packages, generated files without `@source` | `TW-SRC-01…06` | `Tailwind CSS - Installation and Detection` |
+| 3 | **conflicts** | two utilities on one property; merge hiding an internal one | `TW-UTIL-01`, `TW-COMP-02` | `Tailwind CSS - Utilities and Variants` |
+| 4 | **line-3 leftovers** | removed names, renamed scale, `outline-none`, `!` first, `bg-[--x]`, variant order | `TW-MIG-*`, `TW-VAR-07` | `Tailwind CSS - Migration v3 to v4` |
+| 5 | **accessibility** | focus, names, `sr-only`, motion, forced colors, hover-only | `TW-A11Y-01…08` | `Tailwind CSS - Utilities and Variants` |
+| 6 | **tokens and dark mode** | raw palette in the design system, the pair, `:root` × `.dark`, `@theme inline`, the toggle | `TW-THEME-*` | `Tailwind CSS - Theme and Tokens` |
+| 7 | **composition** | `className` last, one `cn`, `extendTailwindMerge`, variants declared, `className` as layout | `TW-COMP-*` | `Tailwind CSS - Components and Composition` |
+| 8 | **values and custom CSS** | repeated arbitraries, static `style`, `@apply` in own CSS, utility-shaped custom names | `TW-UTIL-02…08` | `Tailwind CSS - Utilities and Variants` |
+| 9 | **layout and variants** | mobile-first, container queries, `peer` order, named groups, ARIA state | `TW-VAR-01…06` | `Tailwind CSS - Utilities and Variants` |
 
 **Style is not a level.** Class order is legibility (`TW-TOOL-02`); it is mentioned only when a sorter is configured and did not run.
 
