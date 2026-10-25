@@ -1,0 +1,11 @@
+schema_version: "1.1"
+name: workspace-sharp-fails-after-trust-change
+expected_outcome: |
+  Names the cause: declaring trustedDependencies replaces Bun's default trust list, so sharp's install
+  script no longer runs and its binary is never built — the symptom is at runtime, not at install.
+  Fix: add sharp back to the same list, and attach `bun pm untrusted` output to the PR. Also flags
+  `bun install` instead of `bun ci` in CI, `bunx biome` without a pinned version, the `resolutions`
+  key inside a workspace package (ignored by Bun; `overrides` at the root is the key), and the
+  unpinned Bun version. Cites BUN-PKG-04, -03, -02, -11, -08.
+context:
+  scaffold_script: place-files.sh

@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: migrate-container-cuts-requests
+expected_outcome: |
+  Two causes, both fixed. The shell-form CMD makes /bin/sh PID 1, so SIGTERM never reaches Bun: switch
+  to an exec-form ENTRYPOINT. The server has no SIGTERM listener: add one that awaits server.stop()
+  and calls process.exit(). Dockerfile on a full-version oven/bun tag, --frozen-lockfile --production,
+  USER bun; --smol is not a container mode. The drain is proven locally with an in-flight request and
+  kill -TERM, or declared untested. Cites BUN-SYS-11, BUN-SYS-12.
+context:
+  scaffold_script: place-files.sh

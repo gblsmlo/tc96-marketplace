@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: test-build-session-expiry
+expected_outcome: |
+  A test file matching the discovery pattern, freezing time with setSystemTime (not useFakeTimers,
+  which does not swap Date in bun:test), giving the real clock back in afterEach, checking the
+  boundary at 29/30/31 minutes (or equivalent < / >= boundary), spying on audit.record with guaranteed
+  restoration, with the three commands actually run (bun test on the file, bun test --randomize, tsc
+  --noEmit) and a declaration of what was not verified. Cites BUN-TEST-20, BUN-TEST-02.
+context:
+  scaffold_script: place-files.sh

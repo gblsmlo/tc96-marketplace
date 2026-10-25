@@ -4,7 +4,7 @@ descricao: Review an existing `bun test` suite and diagnose flaky tests, citing 
 tipo: skill
 familia: bun
 idioma: en
-fonte: "[Bun - Testes](../../../knowledge-base/bun-testes.md)"
+fonte: "[Bun - Tests](../docs/bun-tests.md)"
 docs:
   - /oven-sh/bun
 tags:
@@ -16,11 +16,11 @@ tags:
 
 # bun-test-review
 
-> **Source of this skill:** [Bun - Testes](../../../knowledge-base/bun-testes.md) — the normative § 6 (`BUN-TEST-01` to `BUN-TEST-29`), § 6.1 with the seven silent-violation rules, and § 5.1 with the flakiness tree.
+> **Source of this skill:** [Bun - Tests](../docs/bun-tests.md) — the normative § 6 (`BUN-TEST-01` to `BUN-TEST-29`), § 6.1 with the seven silent-violation rules, and § 5.1 with the flakiness tree.
 > This skill **does not contain** the text of the rules — it says what to run, in what order to scan, how to classify and how to report.
-> **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
+> **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the family docs.
 
-Contract this skill implements: [Bun - Testes](../../../knowledge-base/bun-testes.md) § 7 ("Contrato de skill").
+Contract this skill implements: [Bun - Tests](../docs/bun-tests.md) § 7 ("Skill contract").
 
 ---
 
@@ -42,10 +42,10 @@ Reviewing a suite that **already exists** under `bun test`, or diagnosing a test
 
 | Order | Load | Why |
 | --- | --- | --- |
-| 1 | [Bun - Testes](../../../knowledge-base/bun-testes.md) § 2 | one `globalThis` shared by every file is the default |
-| 2 | [Bun - Testes](../../../knowledge-base/bun-testes.md) § 6 and § 6.1 | the rules, and the seven silent-violation ones |
-| 3 | `references/mapa-de-ids.md` | before citing — and to find **which satellite** holds the body |
-| 4 | [Bun - Testes](../../../knowledge-base/bun-testes.md) § 5.1 | the flakiness tree |
+| 1 | [Bun - Tests](../docs/bun-tests.md) § 2 | one `globalThis` shared by every file is the default |
+| 2 | [Bun - Tests](../docs/bun-tests.md) § 6 and § 6.1 | the rules, and the seven silent-violation ones |
+| 3 | `references/id-map.md` | before citing — and to find **which satellite** holds the body |
+| 4 | [Bun - Tests](../docs/bun-tests.md) § 5.1 | the flakiness tree |
 | 5 | the satellite for the finding | only after you have the cause |
 
 **Never load all six satellites.** And **never invent an ID** — the family runs from `BUN-TEST-01` to `BUN-TEST-29`.
@@ -54,21 +54,21 @@ References in this skill:
 
 | File | What for |
 | --- | --- |
-| `references/sondas.md` | the seven probes, the stops, and what they do not catch |
-| `references/ordem-da-varredura.md` | the nine steps, and the symptom → cause table for flakiness |
-| `references/severidade-e-relatorio.md` | classification, finding format, and the finding × opinion cut |
-| `references/antipadroes.md` | the antipattern grid with ID and satellite |
-| `references/mapa-de-ids.md` | the 29 `BUN-TEST-*`: declaration, **satellite of the body** and section |
-| `references/exemplo-revisao.md` | a whole review, from the probes to the "not verified" |
-| `scripts/sondas.sh` | runs the mechanical ones; with `--rodar`, also the ones that need the suite up |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates the map in both skills |
+| `references/probes.md` | the seven probes, the stops, and what they do not catch |
+| `references/scan-order.md` | the nine steps, and the symptom → cause table for flakiness |
+| `references/severity-and-report.md` | classification, finding format, and the finding × opinion cut |
+| `references/antipatterns.md` | the antipattern grid with ID and satellite |
+| `references/id-map.md` | the 29 `BUN-TEST-*`: declaration, **satellite of the body** and section |
+| `references/example-review.md` | a whole review, from the probes to the "not verified" |
+| `scripts/probes.sh` | runs the mechanical ones; with `--run`, also the ones that need the suite up |
+| `scripts/generate-id-map.sh` | regenerates the map in both skills |
 
 ---
 
 ## Step 1 — Probe before reading
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-test-review/scripts/sondas.sh --rodar
+bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-test-review/scripts/probes.sh --run
 ```
 
 **Two mandatory stops:**
@@ -80,11 +80,13 @@ bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-test-review/scripts/sondas.sh --rodar
 
 And one reading that names the cause by itself: **S2 fails and S3 passes** → state leaking through the shared `globalThis`. With that switched on, criticizing assertions one by one is noise.
 
+Read every probe against **S0, the plain `bun test`**: when the baseline is red, S4 and S5 fail with it, and they are not two more findings. And never conclude "no order dependence" from one `--randomize` run — the script tries eight seeds for that reason.
+
 ---
 
 ## Step 2 — Scan in the order that fails most
 
-`references/ordem-da-varredura.md`: assertion that may not have run → mock and spy leakage → isolation and order → waiting and time → marks that erase signal → snapshot → DOM and component → CI gates → configuration.
+`references/scan-order.md`: assertion that may not have run → mock and spy leakage → isolation and order → waiting and time → marks that erase signal → snapshot → DOM and component → CI gates → configuration.
 
 If a step produces a finding that invalidates the next one (the preload does not restore mocks; the suite does not pass with `--randomize`), **stop reviewing the interior**.
 
@@ -103,7 +105,7 @@ The symptom → cause table is in the same reference. Two readings that decide o
 
 ## Step 4 — Classify and report
 
-`references/severidade-e-relatorio.md`. The criterion between Blocking and High: **does the defect make CI lie?** A test that does not run and a gate that does not close produce false green — a different category from "fragile test".
+`references/severity-and-report.md`. The criterion between Blocking and High: **does the defect make CI lie?** A test that does not run and a gate that does not close produce false green — a different category from "fragile test".
 
 Four-part format, with `file:line` always, and **the probe's evidence pasted in** when the finding is about shape.
 
@@ -122,13 +124,13 @@ Four-part format, with `file:line` always, and **the probe's evidence pasted in*
 
 A monorepo with 180 tests and green CI. The probes find a file that **never ran**, a `coverageThreshold` on `statements` (which does not fail), `-u` in CI, a committed `.only`, and `--randomize` failing while `--isolate` passes — the signature of leakage through the shared global. The fix for the leakage is **one line in the preload**, not file by file.
 
-Full review: `references/exemplo-revisao.md`.
+Full review: `references/example-review.md`.
 
 ---
 
 ## Related
 
-- [Bun - Testes](../../../knowledge-base/bun-testes.md) — source of this skill: § 2, § 5.1, § 6, § 6.1, § 7
+- [Bun - Tests](../docs/bun-tests.md) — source of this skill: § 2, § 5.1, § 6, § 6.1, § 7
 - `bun-test-build` — the sibling skill
 - `test-review` · `test-diagnose` — the concept layer
 - `playwright-review` — the equivalent audit in E2E

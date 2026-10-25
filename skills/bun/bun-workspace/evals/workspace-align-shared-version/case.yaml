@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: workspace-align-shared-version
+expected_outcome: |
+  Moves the shared version into a workspace catalog in the root package.json and makes each package
+  declare `"zod": "catalog:"`; removes zod from the root dependencies and marks the root private (a
+  root dependency that a package imports works only by hoisting accident); warns that `catalog:` must
+  never reach a published package (bun publish rewrites it). Cites BUN-PKG-06, -12, -07.
+context:
+  scaffold_script: place-files.sh

@@ -1,0 +1,13 @@
+{
+  "name": "acme",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}

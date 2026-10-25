@@ -187,7 +187,8 @@ for plugin, cfg in PLUGINS.items():
     for origem, campos, corpo in skills:
         destino = alvo / "skills" / origem.name
         familia = origem.parent.name
-        shutil.copytree(origem, destino)
+        # evals/ is authoring material (claude plugin eval reads it from the source); it does not ship
+        shutil.copytree(origem, destino, ignore=shutil.ignore_patterns("evals", "*-workspace"))
         for arq in destino.rglob("*.md"):
             t = arq.read_text(encoding="utf-8")
             notas |= citadas(t)

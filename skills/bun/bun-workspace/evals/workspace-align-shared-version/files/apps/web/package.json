@@ -1,0 +1,8 @@
+{
+  "name": "@acme/web",
+  "private": true,
+  "dependencies": {
+    "zod": "^3.24.1",
+    "@acme/core": "workspace:*"
+  }
+}

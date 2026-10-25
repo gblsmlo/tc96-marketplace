@@ -1,0 +1,5 @@
+[test]
+preload = ["./test/setup.ts"]
+coverage = false
+coverageThreshold = { statements = 80 }
+coverageReporter = ["lcov"]

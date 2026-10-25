@@ -1,0 +1,9 @@
+{
+  "name": "@acme/images",
+  "private": true,
+  "dependencies": {
+    "sharp": "^0.34.1",
+    "@acme/core": "workspace:*",
+    "@acme/native-tools": "workspace:*"
+  }
+}
