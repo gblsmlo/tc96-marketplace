@@ -1,7 +1,7 @@
 ---
 name: bun-runtime
 description: Write code that uses the Bun runtime APIs — file, `.env`, process, shell, hashing, watch — citing `BUN-RT-*` and `BUN-CORE-*` IDs, with an executable self-check — use when the task is reading or writing a file, loading and validating an environment variable, running a subprocess or external command, hashing a password, choosing between `--watch` and `--hot`, or deciding between a Bun API and a `node:*` module. Do not use to install a package or touch the workspace, which is bun-workspace, to migrate Node code that does not run, which is bun-migrate, nor to write tests, which is bun-test-build.
-fonte: "[Bun - Runtime e APIs](../../referencias/bun-runtime-e-apis.md)"
+fonte: "[Bun - Runtime and APIs](../../docs/bun/bun-runtime-and-apis.md)"
 docs:
   - /oven-sh/bun
 tags:
@@ -12,9 +12,9 @@ tags:
 
 # bun-runtime
 
-> **Source of this skill:** [Bun - Runtime e APIs](../../referencias/bun-runtime-e-apis.md), with the [Bun](../../referencias/bun.md) hub as the router.
+> **Source of this skill:** [Bun - Runtime and APIs](../../docs/bun/bun-runtime-and-apis.md), with the [Bun](../../docs/bun/bun.md) hub as the router.
 > This skill **does not contain** the text of the rules nor the API surface — it says what to decide and what to check.
-> **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the knowledge base.
+> **API surface:** resolve it through Context7 — `/oven-sh/bun`. Signature, option and per-version behavior come from there; the rule and the ID come from the family docs.
 
 ---
 
@@ -35,23 +35,23 @@ Writing application code that uses the runtime.
 
 | Order | Load |
 | --- | --- |
-| 1 | [Bun](../../referencias/bun.md) § 2 (the binary is runtime, package manager, bundler and runner) |
-| 2 | [Bun](../../referencias/bun.md) § 6 — `BUN-CORE-*` |
-| 3 | [Bun - Runtime e APIs](../../referencias/bun-runtime-e-apis.md) |
+| 1 | [Bun](../../docs/bun/bun.md) § 2 (the binary is runtime, package manager, bundler and runner) |
+| 2 | [Bun](../../docs/bun/bun.md) § 6 — `BUN-CORE-*` |
+| 3 | [Bun - Runtime and APIs](../../docs/bun/bun-runtime-and-apis.md) |
 
 References in this skill:
 
 | File | What for |
 | --- | --- |
-| `references/invariantes-do-binario.md` | the five invariants that hold in any task |
-| `references/arquivo-ambiente-processo.md` | file, `.env`, process and shell |
-| `references/hash-e-watch.md` | hashing and passwords, and `--watch` × `--hot` |
-| `references/autoverificacao.md` | the checklist |
-| `references/antipadroes.md` | the grid, with IDs |
-| `references/mapa-de-ids.md` | the 43 `BUN-CORE/RT/PKG/SYS-*` by satellite and section |
-| `references/exemplo.md` | worked case |
-| `scripts/autoverificar.sh` | runs the mechanical items |
-| `scripts/gerar-mapa-de-ids.sh` | regenerates the map across the three runtime/package/migration skills |
+| `references/binary-invariants.md` | the five invariants that hold in any task |
+| `references/file-env-process.md` | file, `.env`, process and shell |
+| `references/hash-and-watch.md` | hashing and passwords, and `--watch` × `--hot` |
+| `references/self-check.md` | the checklist |
+| `references/antipatterns.md` | the grid, with IDs |
+| `references/id-map.md` | the 43 `BUN-CORE/RT/PKG/SYS-*` by satellite and section |
+| `references/example.md` | worked case |
+| `scripts/self-check.sh` | runs the mechanical items |
+| `scripts/generate-id-map.sh` | regenerates the map across the three runtime/package/migration skills |
 
 ---
 
@@ -65,7 +65,7 @@ And `BUN-CORE-03`: adding `jest`, `ts-node`, `nodemon` or `dotenv` requires **ju
 
 ## Step 2 — File, environment, process and shell
 
-`references/arquivo-ambiente-processo.md`. The recurring decision is **Bun API × `node:*` module** — and it flips when the code has to run outside the `bun` process (`BUN-CORE-01`).
+`references/file-env-process.md`. The recurring decision is **Bun API × `node:*` module** — and it flips when the code has to run outside the `bun` process (`BUN-CORE-01`).
 
 ---
 
@@ -84,7 +84,7 @@ And `BUN-CORE-03`: adding `jest`, `ts-node`, `nodemon` or `dotenv` requires **ju
 ## Step 5 — Self-check
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-runtime/scripts/autoverificar.sh src
+bash ${CLAUDE_PLUGIN_ROOT}/skills/bun-runtime/scripts/self-check.sh src
 tsc --noEmit
 ```
 
@@ -103,12 +103,12 @@ tsc --noEmit
 
 A service that reads `.env`, writes a file and hashes a password: `Bun.file`/`Bun.write` instead of `fs`, env validation at startup, `Bun.password` for the password, and `--watch` rather than `--hot` because the server has global state.
 
-Full case: `references/exemplo.md`.
+Full case: `references/example.md`.
 
 ---
 
 ## Related
 
-- [Bun - Runtime e APIs](../../referencias/bun-runtime-e-apis.md) — source of this skill
-- [Bun](../../referencias/bun.md) § 2, § 6
+- [Bun - Runtime and APIs](../../docs/bun/bun-runtime-and-apis.md) — source of this skill
+- [Bun](../../docs/bun/bun.md) § 2, § 6
 - `bun-workspace` · `bun-migrate` · `bun-test-build` · `bun-test-review` — the family
