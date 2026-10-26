@@ -1,4 +1,0 @@
-schema_version: "1.1"
-name: adr-sessions-postgres
-expected_outcome: |
-  One Proposed ADR numbered 0005 with real alternatives, consequences including cost, and no edits to existing ADRs.

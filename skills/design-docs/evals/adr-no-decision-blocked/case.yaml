@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: adr-no-decision-blocked
+expected_outcome: |
+  No ADR file is written, because no option was chosen; the reply says the ADR is blocked and asks
+  which option was chosen and by whom, without recommending one.

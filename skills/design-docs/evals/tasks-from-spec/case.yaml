@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: tasks-from-spec
+expected_outcome: |
+  A tasks.md beside the spec where every task follows the T<n> line format with the AC IDs it
+  enables, a surface taken only from the spec, a done-when, tests inside the tasks, AC-01..AC-03
+  all covered, [P] only on tasks with different surfaces, and no files outside the spec opened.
+context:
+  scaffold_script: place-files.sh

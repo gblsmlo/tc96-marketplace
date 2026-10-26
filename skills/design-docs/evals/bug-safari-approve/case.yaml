@@ -1,0 +1,7 @@
+schema_version: "1.1"
+name: bug-safari-approve
+expected_outcome: |
+  A bug body with a specific title, numbered steps, expected and actual separate, the console
+  error verbatim, Chrome as unchanged behavior, the Safari version and frequency as gaps for the
+  reporter, severity separate from priority with priority left to triage, and no asserted cause or
+  fix.

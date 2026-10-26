@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: pr-from-diff
+expected_outcome: |
+  A PR title in Conventional Commits form and a body that groups the changes by intent, links
+  #212, T2 and T3, reports the 48 passing tests and no other check as passed, leaves how-to-test
+  and the migration's rollout as gaps, and claims nothing the prompt or diff does not show.
+context:
+  scaffold_script: place-files.sh

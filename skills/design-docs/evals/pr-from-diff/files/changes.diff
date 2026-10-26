@@ -1,0 +1,26 @@
+commit 4 files changed
+ drizzle/0007_quote_status.sql            |  3 +
+ src/routes/q.$token.tsx                  | 41 +++++++--
+ src/routes/q.$token.test.tsx             | 38 ++++++++
+ src/server/quotes.route.test.ts          | 52 ++++++++++++
+ src/server/quotes.route.ts               | 47 ++++++++++-
+ 5 files changed, 175 insertions(+), 6 deletions(-)
+
+--- a/drizzle/0007_quote_status.sql
++++ b/drizzle/0007_quote_status.sql
++ALTER TABLE quotes ADD COLUMN status text NOT NULL DEFAULT 'pending';
++ALTER TABLE quotes ADD COLUMN decided_at timestamptz;
+
+--- a/src/server/quotes.route.ts
++++ b/src/server/quotes.route.ts
++  .post('/quotes/:id/decision', async ({ params, body, set }) => {
++    const quote = await getQuote(params.id)
++    if (quote.status !== 'pending') { set.status = 409; return }
++    if (isExpired(quote)) { set.status = 410; return }
++    return decide(quote, body.decision)
++  })
+
+--- a/src/routes/q.$token.tsx
++++ b/src/routes/q.$token.tsx
++  <Button onClick={() => decide('approve')}>Approve</Button>
++  <Button onClick={() => decide('reject')}>Reject</Button>
