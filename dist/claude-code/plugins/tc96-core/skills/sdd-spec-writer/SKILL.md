@@ -1,6 +1,6 @@
 ---
 name: sdd-spec-writer
-description: Turns features of an approved PRD into their bundles — `spec.md` (what the feature exposes and consumes, UX as a section when needed), `plan.md` (steps, Surface, Size, local scripts when needed) and `contract.md` (one check per acceptance criterion; met only when it proves every criterion it traces was met) — after a repo search, as `Draft` files the owner approves in one message, citing `SDD-SPEC-*` IDs. Also writes the new item that replaces a feature whose contract failed twice or that hit a gap, and the fast-lane bundle for a fix or refactor. Use when a PRD feature has no approved bundle, when the orchestrator reports a feature as split or blocked on a gap, or when someone asks to spec a fix. Not for the PRD itself (spec-prd), a lasting technical decision (spec-adr), nor running the features (sdd-orchestrator).
+description: Turns features of an approved PRD into their bundles — `spec.md` (what the feature exposes and consumes, UX as a section when needed), `plan.md` (steps, Surface, Size, local scripts when needed) and `contract.md` (one check per acceptance criterion; met only when it proves every criterion it traces was met) — after a repo search, as `Draft` files the owner approves in one message, citing `SDD-SPEC-*` IDs. Also writes the new item that replaces a feature whose contract failed twice or that hit a gap, and the fast-lane bundle for a fix or refactor. Use when a PRD feature has no approved bundle, when the orchestrator reports a feature as split or blocked on a gap, or when someone asks to spec a fix. Not for the PRD itself (doc-prd), a lasting technical decision (doc-adr), nor running the features (sdd-orchestrator).
 source: "[Delivery Flow — Spec Driven Development](../../referencias/fluxo-de-entrega-sdd.md)"
 tags:
   - skill
@@ -10,7 +10,7 @@ tags:
 
 # sdd-spec-writer
 
-> **Delegation (`SDD-CORE-02`).** This skill runs in the orchestrating conversation and writes nothing itself. The repo search goes to `repo-explorer`; each bundle goes to `spec-writer`; a lasting decision goes to `software-architect` through `spec-adr`. Each is called by name, as a subagent, so it runs on its own tier. Keep only paths, statuses and open gaps in this conversation (`SDD-CORE-04`).
+> **Delegation (`SDD-CORE-02`).** This skill runs in the orchestrating conversation and writes nothing itself. The repo search goes to `repo-explorer`; each bundle goes to `spec-writer`; a lasting decision goes to `software-architect` through `doc-adr`. Each is called by name, as a subagent, so it runs on its own tier. Keep only paths, statuses and open gaps in this conversation (`SDD-CORE-04`).
 
 Contract this skill implements: [Delivery Flow — Spec Driven Development](../../referencias/fluxo-de-entrega-sdd.md) §4.3–§4.5 and `SDD-SPEC-*`.
 
@@ -21,8 +21,8 @@ Contract this skill implements: [Delivery Flow — Spec Driven Development](../.
 | features of the approved PRD with no approved bundle | **bundle** | this skill |
 | a feature the orchestrator marked `split`, or blocked on a gap | **new item** | this skill |
 | a fix or refactor that changes no product behavior | **fast lane** | this skill |
-| a new feature, or a change to what the product promises | — | `spec-prd`, as an amendment, first |
-| a technical decision that outlives the feature | — | `spec-adr`, called from Step 4 |
+| a new feature, or a change to what the product promises | — | `doc-prd`, as an amendment, first |
+| a technical decision that outlives the feature | — | `doc-adr`, called from Step 4 |
 | running an approved bundle | — | `sdd-orchestrator` |
 
 ## Step 1: Pick what to write
@@ -83,7 +83,7 @@ What `spec-writer` must hold to, as it writes:
 
 ## Step 4: Lasting decisions
 
-For each decision `spec-writer` flagged as outliving the feature, start `software-architect` with `spec-adr`. The ADR is born `Proposed` and goes into the same owner message as the bundle; the `spec.md` that depends on it cites `ADR-NNNN`.
+For each decision `spec-writer` flagged as outliving the feature, start `software-architect` with `doc-adr`. The ADR is born `Proposed` and goes into the same owner message as the bundle; the `spec.md` that depends on it cites `ADR-NNNN`.
 
 ## Step 5: One message to the owner
 
@@ -103,7 +103,7 @@ Approve, change or reject each?
 | change one | re-draft that feature, and every bundle that consumes from it |
 | reject | stays `Draft`; the reason goes under its Open gaps |
 
-Silence approves nothing (`SDD-CORE-03`). An Out of Scope line or a gap that changes what the product promises is not answered here: it goes to `spec-prd` as an amendment.
+Silence approves nothing (`SDD-CORE-03`). An Out of Scope line or a gap that changes what the product promises is not answered here: it goes to `doc-prd` as an amendment.
 
 ## Step 6: Self-check
 

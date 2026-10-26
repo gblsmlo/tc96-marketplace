@@ -30,6 +30,11 @@
       "description": "Tailwind CSS v4: setup, migration, build, variant split and review skills, each with its own normative docs (TW-*). Self-contained: enable alone or with tc96-frontend."
     },
     {
+      "name": "tc96-design-docs",
+      "source": "./plugins/tc96-design-docs",
+      "description": "Writing-only document skills: PRD, ADR, epic, feature, story, tasks, bug, spec and PR, each with its template and model tier. Self-contained: enable with tc96-core or alone."
+    },
+    {
       "name": "tc96-e2e",
       "source": "./plugins/tc96-e2e",
       "description": "Playwright — escrita, auditoria e diagnóstico de teste E2E. Habilite em projeto com suíte E2E."

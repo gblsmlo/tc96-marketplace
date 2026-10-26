@@ -2,13 +2,14 @@
 
 The rule text this skill enforces, copied here so the skill needs no other file. IDs match the
 repository's notes (`DOC-*` from the decision-documents note, `SDD-*` from the delivery-flow
-note), so a citation resolves either way.
+note), so a citation resolves either way. `DD-*` rules are the family's
+[writing contract](../../../docs/design-docs/writing-contract.md).
 
 ## Contents
 
 - Rules
 - Lifecycle
-- Edge sweep
+- Limits in the input
 - Amendment
 
 ---
@@ -35,31 +36,17 @@ note), so a citation resolves either way.
 `Draft` -> `In review` -> `Approved`. Free to change before approval. After `Approved`, only a
 dated amendment.
 
-## Edge sweep
+## Limits in the input
 
-Before asking for approval, run each acceptance criterion through seven categories. A category
-that does not apply leaves no trace.
+The writer does not sweep for edges: finding them is the owner role's work, before the writer
+runs. It only places every limit the input states — a number, a duration, a role, a count — so the
+boundary is explicit:
 
-| Category | The question that tends to slip through |
+| The input... | Where it goes |
 | --- | --- |
-| boundary | is the value exactly at the limit in or out (`>` or `>=`)? minimum, maximum, zero, negatives, rounding? |
-| time | counted from when? expires when, in which time zone? what if events arrive out of order? |
-| empty | the empty list, the missing optional field, first use, nothing registered yet? |
-| repetition | the same action twice (double click, retry)? two people at the same time? |
-| permission | who can: which role, which resource owner, which tenant, which visitor with no session? |
-| failure | what if a dependency goes down or the operation stops halfway? what does the person see, what is undone? |
-| what already exists | data stored before the change, the client on the previous version, behavior someone depends on? |
-
-Each edge that applies ends in one of three places:
-
-| Destination | Where it lives in the PRD |
-| --- | --- |
-| answered, with a source | an acceptance criterion |
-| out | an Out of Scope line |
-| gap | **Open gaps**, with who decides |
-
-The sweep at this level is about product behavior. The Spec Writer sweeps each feature again for
-what only the code reveals; that sweep's edges become checks in `contract.md`, not PRD text.
+| states the limit and its open side | an acceptance criterion |
+| excludes it | an Out of Scope line |
+| states the limit but not its open side (inclusive? which time zone? what after?) | the criterion, plus a gap with who decides |
 
 ## Amendment
 
