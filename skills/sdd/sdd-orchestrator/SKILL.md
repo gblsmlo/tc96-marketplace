@@ -1,6 +1,6 @@
 ---
 name: sdd-orchestrator
-description: Runs approved features of the Spec Driven Development flow to merge — picks the ready ones from the PRD's waves (providers merged, bundle approved, Surfaces disjoint, a slot free), spawns each in its own worktree through the harness scripts, runs the gates, has a fresh reviewer check the contract, gives a failed review at most two fix rounds and then hands the feature to the Spec Writer as a new item, and opens the PR under the owner's authorization — holding only one state file per feature, citing `SDD-RUN-*` and `SDD-CORE-*` IDs. Use when bundles in `.specs/features/` are approved and the person asks to implement, run, deliver or continue them. Not for writing the PRD (spec-prd) or a bundle (sdd-spec-writer), nor for reviewing a diff outside a run (code-reviewer).
+description: Runs approved features of the Spec Driven Development flow to merge — picks the ready ones from the PRD's waves (providers merged, bundle approved, Surfaces disjoint, a slot free), spawns each in its own worktree through the harness scripts, runs the gates, has a fresh reviewer check the contract, gives a failed review at most two fix rounds and then hands the feature to the Spec Writer as a new item, and opens the PR under the owner's authorization — holding only one state file per feature, citing `SDD-RUN-*` and `SDD-CORE-*` IDs. Use when bundles in `.specs/features/` are approved and the person asks to implement, run, deliver or continue them. Not for writing the PRD (doc-prd) or a bundle (sdd-spec-writer), nor for reviewing a diff outside a run (code-reviewer).
 type: skill
 family: sdd
 language: en
@@ -22,7 +22,7 @@ Contract this skill implements: [Delivery Flow — Spec Driven Development](../.
 
 | Check | How | If it fails |
 | --- | --- | --- |
-| the PRD is `Approved` | the status line of `.specs/PRD.md` | stop: `spec-prd` |
+| the PRD is `Approved` | the status line of `.specs/PRD.md` | stop: `doc-prd` |
 | the harness exists | `test -x init.sh && ls scripts/` shows the five scripts and `sdd.config.sh` exists | stop: run the `scaffold-sdd-scripts` command |
 | `.sdd/` is git-ignored | `git check-ignore -q .sdd` | add `.sdd/` to `.gitignore` |
 | push and PR authorization | the owner's words, asked once: "authorize push and PR for this run, or per wave?" | ask; without it, features stop at `contract-met` |
@@ -97,7 +97,7 @@ With `authorization` set: push the branch and open the PR, body from `references
 | Case | Next |
 | --- | --- |
 | `unmet` after round 2 | run `sdd-spec-writer` in **new item** mode with the feature ID, the failing checks and the branch; the owner approves the new item (state `split`, `next` set) or drops the feature (state `dropped`) (`SDD-RUN-06`) |
-| a gap that changes what the product promises | ask the owner; the answer goes to `spec-prd` as an amendment |
+| a gap that changes what the product promises | ask the owner; the answer goes to `doc-prd` as an amendment |
 | any other gap | run `sdd-spec-writer` in **new item** mode with the gap (`SDD-RUN-07`) |
 
 There is no third fix round and no move to a higher tier.

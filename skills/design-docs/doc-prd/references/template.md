@@ -2,7 +2,7 @@
 
 Tool-neutral, saved as `.specs/PRD.md`. The product's **PRD**: its single source of truth. What
 is being built and why, which features build it, what each feature provides and consumes, and
-the order they can run in. Written by `product-manager`. Rules: `rules.md` in this folder.
+the order they can run in. Written by `doc-prd` from the decisions of `product-manager` or the product owner. Rules: `rules.md` in this folder.
 
 ## Fields
 
@@ -24,8 +24,8 @@ The file opens with these fields as YAML frontmatter, then the body.
 
 ### Problem and Opportunity
 
-Each item numbered, with its evidence and source (data, interview, ticket, `file:line`). An
-unsourced claim is labeled `hypothesis`.
+Each item numbered, with its evidence and source (data, interview, ticket, `file:line`), copied from the input. An
+unsourced claim is labeled `(hypothesis)`.
 
 - **PO-1** [the problem or opportunity in one sentence] — evidence: [...] — source: [...]
 
@@ -45,8 +45,8 @@ unsourced claim is labeled `hypothesis`.
 
 One entry per story: role, action, outcome, and three to eight acceptance criteria. Acceptance
 criteria are numbered across the whole PRD (`AC-01`, `AC-02`…), never restarted per story, and
-each is a Given / When / Then with an observable outcome. Each edge that applies (see `rules.md`,
-"Edge sweep") is an acceptance criterion, an Out of Scope line or an open gap.
+each is a Given / When / Then with an observable outcome. Each limit the input states is an acceptance criterion, an Out of Scope line or an open gap
+(see `rules.md`, "Limits in the input").
 
 1. **US-1 [title]**
    As a [role], I want [action], so that [outcome].

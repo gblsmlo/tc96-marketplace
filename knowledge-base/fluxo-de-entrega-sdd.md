@@ -65,7 +65,7 @@ project that keeps one mirrors the PRD by hand or by its own tooling.
 ### For a person
 
 Before asking an agent to "implement X", check where X stands. Not in the PRD → write or amend
-the PRD (`spec-prd`). In the PRD, with no approved bundle in `.specs/features/` → run the Spec
+the PRD (`doc-prd`). In the PRD, with no approved bundle in `.specs/features/` → run the Spec
 Writer (`sdd-spec-writer`). Bundle approved → run the orchestrator (`sdd-orchestrator`). A fix or
 refactor of something already built takes the fast lane: a bundle with no PRD amendment
 (`SDD-SPEC-09`).
@@ -121,10 +121,10 @@ script.
 
 | Step | Point | Who executes | `modelo` · `esforco` | Reads | Why |
 | --- | --- | --- | --- | --- | --- |
-| PRD | write the PRD or an amendment | `product-manager`, via `spec-prd` | alto · alto | the request, evidence, the current PRD | the file is the product decision |
+| PRD | write the PRD or an amendment | `product-manager`, via `doc-prd` | alto · alto | the request, evidence, the current PRD | the file is the product decision |
 | Spec | repo search for one feature | `repo-explorer` | rapido · baixo | the code the feature touches | every fact carries the `file:line` that proves it |
 | Spec | write the feature bundle | `spec-writer`, via `sdd-spec-writer` | alto · alto | the PRD entry, the repo-search facts, the providers' `spec.md` | decides interfaces, steps and proof once, for every round that follows |
-| Spec | a decision that outlives the feature | `software-architect`, via `spec-adr` | alto · alto | the decision in question | lasting boundary decisions get their own record |
+| Spec | a decision that outlives the feature | `software-architect`, via `doc-adr` | alto · alto | the decision in question | lasting boundary decisions get their own record |
 | Run | prepare env, migrate, spawn the worktree | `scripts/resolve-env`, `scripts/migrate-dev`, `scripts/spawn-detached` | — | — | mechanical; exit code only |
 | Run | implement, and fix rounds 1–2 | `frontend-developer` · `backend-developer`, resumed for each round | medio · medio | its feature folder, the files `plan.md` cites | most tokens; the gates and the reviewer catch its errors |
 | Run | run the gates the contract names | `scripts/run-gates` | — | — | the result is an exit code and a short summary |
@@ -500,8 +500,8 @@ NEVER:                                       this whole note inside an implement
 
 | Decision | What **not** to do | The bridge |
 | --- | --- | --- |
-| What to build and why | decide it in the bundle or the code | `product-manager`, via `spec-prd` |
-| A boundary decision that outlives the feature | bury it in one `spec.md` | `software-architect`, via `spec-adr` |
+| What to build and why | decide it in the bundle or the code | `product-manager`, via `doc-prd` |
+| A boundary decision that outlives the feature | bury it in one `spec.md` | `software-architect`, via `doc-adr` |
 | Which test level proves a check | leave it for the implementer | the gate type in `contract.md`, chosen by `TS-CORE-02`; `test-design` when it is not obvious |
 | The HTTP contract of a provided route | invent status and shape in the handler | `http-contract`, cited from `spec.md` |
 | Code quality beyond the contract | turn every review into a full audit | the family review skills, run on request or as a gate the contract names |
@@ -540,7 +540,7 @@ in full; the books were not reread on this date. Rules marked † are this proje
 
 - `agents/README.md` — the roles this flow calls, and the tier each runs on
 - `skills/sdd/` — `sdd-spec-writer`, `sdd-orchestrator`, `sdd-contract-review`
-- `skills/spec/` — `spec-prd` and `spec-adr`
+- `skills/design-docs/` — `doc-prd` and `doc-adr`, among the nine document writers
 - [Decision Documents — PRD, RFC and ADR](documentos-de-decisao-prd-rfc-adr.md) — what the PRD and
   the ADR are, and when each freezes
 - [Teste de Software](teste-de-software.md) — §4.1, the cheapest level that catches the defect,

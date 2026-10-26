@@ -44,7 +44,7 @@ escrito por extenso:
 ## Especificação
 
 [`spec`](spec.md) — planeja e para: escreve ou emenda `.specs/PRD.md` e depois o pacote de cada
-feature em `.specs/features/` (`spec.md`, `plan.md`, `contract.md`), roda `spec-prd` e
+feature em `.specs/features/` (`spec.md`, `plan.md`, `contract.md`), roda `doc-prd` e
 `sdd-spec-writer`, nesta ordem, e para antes de qualquer código.
 
 [`scaffold-sdd-scripts`](scaffold-sdd-scripts.md) — escreve na raiz do projeto os seis scripts do

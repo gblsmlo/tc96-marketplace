@@ -37,10 +37,10 @@ skills/<family>/
 | **http** | `http-contract` · `http-cache` · `http-diagnose` · `http-review` | [http/](http/README.md) |
 | **drizzle** | `drizzle-query` · `drizzle-mutation` · `drizzle-zod` · `drizzle-review` — self-contained, with its own `docs/` | [drizzle/](drizzle/README.md) |
 | **kb** | `kb-coverage` | [kb/](kb/README.md) |
-| **spec** | `spec-prd` · `spec-adr` — the two documents that stand outside a feature, each carrying its own template and rules | [spec/](spec/README.md) |
+| **design-docs** | `doc-prd` · `doc-adr` · `doc-epic` · `doc-feature` · `doc-story` · `doc-tasks` · `doc-bug` · `doc-spec` · `doc-pr` — writing-only document skills, each with its template; self-contained, with its own `docs/` | [design-docs/](design-docs/README.md) |
 | **sdd** | `sdd-spec-writer` · `sdd-orchestrator` · `sdd-contract-review` — the Spec Driven Development delivery flow | [sdd/](sdd/README.md) |
 
-All 38 are in the neutral source, in English, with `idioma: en` in the frontmatter.
+All 54 are in the neutral source, in English, with `idioma: en` in the frontmatter.
 
 The importer (`build/importar-do-plugin.py`) stays as a provenance record: it skips a skill
 with `idioma: en`, because the hermes build it came from is Portuguese-only.

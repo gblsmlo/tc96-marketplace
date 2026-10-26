@@ -57,8 +57,8 @@ do not write a document: deliver.
 ### For a coding agent
 
 When writing to `.specs/`, use §4 to know which file each decision lives in, and §3 to know
-whether the file can still change. The PRD is written through `spec-prd`, an ADR through
-`spec-adr`, and a feature's design through `sdd-spec-writer`.
+whether the file can still change. The PRD is written through `doc-prd`, an ADR through
+`doc-adr`, and a feature's design through `sdd-spec-writer`.
 
 ### Conventions
 
@@ -111,10 +111,10 @@ approves its own document (`SDD-CORE-03`, in
 
 | Document | File | Template |
 | --- | --- | --- |
-| PRD | `.specs/PRD.md`, one per product | `spec/spec-prd/references/template.md` |
+| PRD | `.specs/PRD.md`, one per product | `design-docs/doc-prd/references/template.md` |
 | Design doc | the `spec.md` of each feature, in `.specs/features/<ID>-<slug>/` | `sdd/sdd-spec-writer/references/template-spec.md` |
 | RFC | no file of its own: an open technical decision is settled by the owner before the feature's bundle, and recorded as an ADR | — |
-| ADR | `.specs/adr/NNNN-<slug>.md` | `spec/spec-adr/references/template.md` |
+| ADR | `.specs/adr/NNNN-<slug>.md` | `design-docs/doc-adr/references/template.md` |
 
 The PRD belongs to the product and changes by amendment (`SDD-PRD-06`). A feature's design is
 frozen once the feature merges; a later change is a new item with its own folder (`SDD-SPEC-08`).
@@ -228,7 +228,7 @@ its ADR template has no alternatives section (here it does, `DOC-ADR-04`).
 
 - [Delivery Flow — Spec Driven Development](fluxo-de-entrega-sdd.md) — §4, where the
   `.specs/` files enter the flow
-- `skills/spec/` — `spec-prd` and `spec-adr`, with their templates
+- `skills/design-docs/` — `doc-prd` and `doc-adr`, among the nine document writers, with their templates
 - `skills/sdd/sdd-spec-writer/` — the feature's `spec.md`, the design doc of this note
 - `agents/software-architect.md` — writes the ADRs
 - `agents/product-manager.md` — writes the PRD

@@ -45,7 +45,7 @@ who calls what it changes.
 ### Boundary decisions
 
 - [where a rule lives and why; one line each. A decision that outlives this feature becomes an
-  ADR (`spec-adr`) and is cited here as `ADR-NNNN`.]
+  ADR (`doc-adr`) and is cited here as `ADR-NNNN`.]
 
 ### UX
 

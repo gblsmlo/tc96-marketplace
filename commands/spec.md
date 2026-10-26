@@ -37,9 +37,11 @@ Read only status lines: `.specs/PRD.md` and its last amendment, and the folders 
 
 ## Phase 1: PRD
 
-Run `spec-prd` on the request. It starts `product-manager` on `.specs/PRD.md`, or on an amendment
-to it, and puts the `Draft` in front of the owner: path, summary sentence, waves, open gaps,
-"approve, change, or reject?".
+Start `product-manager` on the request: it decides the product content — problem and evidence,
+stories, each rule's edges, the feature cut — and has `doc-prd` (plugin `tc96-design-docs`) write
+it into `.specs/PRD.md`, or into an amendment to it. `doc-prd` only writes: whatever the decisions
+leave open comes back as gaps. Put the `Draft` in front of the owner: path, summary sentence,
+waves, open gaps, "approve, change, or reject?".
 
 **Gate:** the PRD, or the amendment this run wrote, is `Approved` before Phase 2, and only the
 owner's answer sets it (`SDD-CORE-03`). No answer: the run ends here, with the path and its open
@@ -77,7 +79,7 @@ when its bundle is approved and its providers have merged (`SDD-RUN-01`).
 
 ## Checklist
 
-- [ ] `spec-prd` and `sdd-spec-writer` passed their self-checks.
+- [ ] `doc-prd` and `sdd-spec-writer` passed their self-checks.
 - [ ] A repo search ran before every bundle (`SDD-SPEC-01`).
 - [ ] Phase 2 put its bundles in front of the owner as one message, not one per feature.
 - [ ] Every contract has a check for each acceptance criterion it traces and a **Met when** line

@@ -2,7 +2,8 @@
 
 The rule text this skill enforces, copied here so the skill needs no other file. IDs match the
 repository's notes (`DOC-*` from the decision-documents note, `SDD-*` from the delivery-flow
-note), so a citation resolves either way.
+note), so a citation resolves either way. `DD-*` rules are the family's
+[writing contract](../../docs/writing-contract.md).
 
 ## Contents
 

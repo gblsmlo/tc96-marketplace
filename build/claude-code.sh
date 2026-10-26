@@ -31,7 +31,7 @@ ALVO = json.loads((raiz / "build/modelos.json").read_text(encoding="utf-8"))["cl
 # nao sai no build.
 PLUGINS = {
     "tc96-core": {
-        "familias": ["test", "http", "sdd", "spec"],
+        "familias": ["test", "http", "sdd"],
         "agentes": ["code-reviewer", "software-architect", "qa-engineer",
                     "product-manager", "product-designer", "project-manager",
                     "devops-security", "ai-engineer", "monorepo-auditor",
@@ -77,6 +77,15 @@ PLUGINS = {
                      "normative docs (TW-*). Self-contained: enable alone or with tc96-frontend.",
         "keywords": ["tailwind", "css", "design-system", "frontend"],
     },
+    # Autocontida: o contrato de escrita mora em skills/design-docs/docs/ e nenhuma skill cita
+    # nota da knowledge-base por link. O fluxo SDD do tc96-core chama doc-prd e doc-adr por nome.
+    "tc96-design-docs": {
+        "familias": ["design-docs"],
+        "agentes": [],
+        "descricao": "Writing-only document skills: PRD, ADR, epic, feature, story, tasks, bug, spec and PR, "
+                     "each with its template and model tier. Self-contained: enable with tc96-core or alone.",
+        "keywords": ["prd", "adr", "user-story", "spec", "documentation"],
+    },
     "tc96-e2e": {
         "familias": ["playwright"],
         "agentes": [],
@@ -89,7 +98,8 @@ PLUGINS = {
 
 # frontmatter keys moved to English; families not yet migrated still use the Portuguese ones
 LEGACY = {"name": "nome", "description": "descricao", "type": "tipo", "family": "familia",
-          "language": "idioma", "source": "fonte", "title": "titulo"}
+          "language": "idioma", "source": "fonte", "title": "titulo",
+          "model": "modelo", "effort": "esforco"}
 
 
 def legacy(fields):
@@ -207,6 +217,11 @@ for plugin, cfg in PLUGINS.items():
                 fm = ["---", f"name: {c['nome']}", f"description: {c['descricao']}"]
                 if c.get("fonte"):
                     fm.append(f"source: {c['fonte']}")
+                # a skill that declares its tier runs on it while active; one that does not inherits
+                if c.get("modelo"):
+                    fm.append(f"model: {ALVO['modelo'][c['modelo']]}")
+                if c.get("esforco"):
+                    fm.append(f"effort: {ALVO['esforco'][c['esforco']]}")
                 fm += listas(c, ["docs", "tags"])
                 fm.append("---\n")
                 t = "\n".join(fm) + corpo_arq

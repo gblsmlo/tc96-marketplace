@@ -1,12 +1,12 @@
 # sdd skills — Spec Driven Development
 
 Three skills that run the delivery flow of this house: plan big, once, on the high tier; execute
-small, per feature, on the mid tier, driven by scripts. The PRD itself is written by `spec-prd`,
-in the [spec family](../spec/README.md); lasting technical decisions by `spec-adr`.
+small, per feature, on the mid tier, driven by scripts. The PRD itself is written by `doc-prd`,
+in the [design-docs family](../design-docs/README.md); lasting technical decisions by `doc-adr`.
 
 | Skill | The question it answers | Runs in | Calls |
 | --- | --- | --- | --- |
-| `sdd-spec-writer` | what does each feature expose, how is it built, and how do we prove it? | the orchestrating conversation | `repo-explorer` · `spec-writer` · `software-architect` (`spec-adr`) |
+| `sdd-spec-writer` | what does each feature expose, how is it built, and how do we prove it? | the orchestrating conversation | `repo-explorer` · `spec-writer` · `software-architect` (`doc-adr`) |
 | `sdd-orchestrator` | which features run now, and is each one done? | the orchestrating conversation | the harness scripts · the implementer role, detached · `code-reviewer` · `devops-security` · `sdd-spec-writer` |
 | `sdd-contract-review` | is this feature's contract met? | a new `code-reviewer` instance | — |
 
@@ -38,8 +38,8 @@ sdd/
 
 | File | Written by | Through |
 | --- | --- | --- |
-| `.specs/PRD.md` | `product-manager` | `spec-prd` |
-| `.specs/adr/NNNN-<slug>.md` | `software-architect` | `spec-adr` |
+| `.specs/PRD.md` | `product-manager` | `doc-prd` |
+| `.specs/adr/NNNN-<slug>.md` | `software-architect` | `doc-adr` |
 | `.specs/features/<ID>-<slug>/spec.md`, `plan.md`, `contract.md` | `spec-writer` | `sdd-spec-writer` |
 | `.sdd/state/<ID>-<slug>.md` | the orchestrating session | `sdd-orchestrator` |
 | `.sdd/logs/`, `.sdd/run/` | the harness scripts | `scaffold-sdd-scripts` |

@@ -114,7 +114,7 @@ Each agent declares in its final step who it hands off to, and the arrow is alwa
 
 Independent features run side by side, in the PRD's waves: each implementer works in its own worktree, started by the harness scripts, while reviewers, which only read, share the main directory ([Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) §5.1, `SDD-RUN-01`).
 
-This flowchart has a formal procedure in `skills/sdd/` and `skills/spec/` — the PRD (`spec-prd`), the feature bundle (`sdd-spec-writer`), the run (`sdd-orchestrator`) and the contract review (`sdd-contract-review`) — citing rules by ID in [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md). The diagram above remains the source of **who**; the note is the source of **when**.
+This flowchart has a formal procedure in `skills/sdd/` and `skills/design-docs/` — the PRD (`doc-prd`), the feature bundle (`sdd-spec-writer`), the run (`sdd-orchestrator`) and the contract review (`sdd-contract-review`) — citing rules by ID in [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md). The diagram above remains the source of **who**; the note is the source of **when**.
 
 ## Model and effort per role
 
