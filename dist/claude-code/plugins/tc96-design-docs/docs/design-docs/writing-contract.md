@@ -40,9 +40,9 @@ in `docs/meeting.md`", "this branch's diff". It does not include the code those 
 one command a writer may run is the read of a named diff (`git log` and `git diff` of the range the
 caller named, in `doc-pr`): the diff is the input, and it says *what* changed, never *why*.
 
-A document the input mentions without giving it ("see F01's spec") is not hunted for — no `grep`,
-no `find` over the project: what the writer needs from it is a gap ("the shape of F01's token —
-decides: whoever holds F01's spec"). A listing of the target folder, to number or to check a path
+A document the input mentions without giving it ("see the link spec") is not hunted for — no
+`grep`, no `find` over the project: what the writer needs from it is a gap ("the shape of the link
+token — decides: whoever holds the link spec"). A listing of the target folder, to number or to check a path
 the caller named exists, is the only look around the writer takes.
 
 A `file:line` or link in the document is copied from the input. The writer never looks one up,
@@ -55,7 +55,7 @@ supplied it.
 | The writer owns (structure) | The input owns (substance) |
 | --- | --- |
 | section order, headings, tables | facts, numbers, sources, evidence |
-| IDs and numbering (`AC-01`, `F02`, `T3`, `0005`) | decisions, and the alternatives that were weighed |
+| IDs and numbering (`AC-01`, `CAP-2`, `T3`, `0005`) | decisions, and the alternatives that were weighed |
 | rewording a stated need as a story or as Given / When / Then | scope, non-goals, priorities |
 | splitting stated needs into stories, criteria, tasks | targets, deadlines, owners |
 | deriving an order from stated dependencies | severity, risk, who is affected |
@@ -149,7 +149,7 @@ document needs, not how important it is. Each skill declares its tier in the fro
 
 | Skill | Model | Effort | Why |
 | --- | --- | --- | --- |
-| `doc-prd` | `medio` | `alto` | most structure: stories, criteria, features, waves, traceability both ways |
+| `doc-prd` | `medio` | `alto` | most structure: stories, criteria, capabilities, traceability both ways |
 | `doc-spec` | `medio` | `alto` | shapes a consumer codes against; a vague shape costs every downstream feature |
 | `doc-adr` | `rapido` | `medio` | one decision, a fixed template |
 | `doc-epic` · `doc-feature` · `doc-story` | `rapido` | `medio` | rewording into a fixed format, with criteria to keep observable |
@@ -179,7 +179,7 @@ With no shell, `doc-pr` reads the diff from a file the caller writes and names.
 
 | ID | Born in | Example |
 | --- | --- | --- |
-| `PO-n`, `OBJ-n`, `US-n`, `AC-NN`, `F<NN>` | `doc-prd` | `AC-07`, `F03` |
+| `PO-n`, `OBJ-n`, `US-n`, `AC-NN`, `CAP-n` | `doc-prd` | `AC-07`, `CAP-3` |
 | `ADR-NNNN` | `doc-adr` | `ADR-0005` |
 | `EPIC-<slug>` | `doc-epic` | `EPIC-quote-approval` |
 | `T<n>` | `doc-tasks` | `T4` |

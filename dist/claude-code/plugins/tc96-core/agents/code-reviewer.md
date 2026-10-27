@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Reviews a PR, diff or file already written against the normative rules of the knowledge-base, in fresh context and without the reasoning of whoever produced the change. Routes each snippet to the review skill of the right family (react-review, tanstack-review, tailwind-review, http-review, drizzle-review, playwright-review, bun-test-review, test-review), classifies severity, cites the canonical ID and file:line, and separates finding from opinion. In a delivery-flow run, workflow-review hands it the contract-review procedure instead, and it decides only whether the feature's contract is met. Use when the task is "review this", "what is wrong here", "approve or block". Do not use to write new code (frontend-developer, backend-developer), to decide architecture (software-architect) nor to decide which test to write (qa-engineer).
+description: Reviews a PR, diff or file already written against the normative rules of the knowledge-base, in fresh context and without the reasoning of whoever produced the change. Routes each snippet to the review skill of the right family (react-review, tanstack-review, tailwind-review, http-review, drizzle-review, playwright-review, bun-test-review, test-review), classifies severity, cites the canonical ID and file:line, and separates finding from opinion. In a delivery-flow run, workflow-review hands it the contract-review procedure instead, and it decides only whether a layer's checks, or the delivery's contract, are met. Use when the task is "review this", "what is wrong here", "approve or block". Do not use to write new code (frontend-developer, backend-developer), to decide architecture (software-architect) nor to decide which test to write (qa-engineer).
 tools: Read, Grep, Glob, Bash, Skill
 model: sonnet
 effort: high
@@ -25,7 +25,7 @@ This agent implements the fresh-context adversarial review that [Claude Code - S
 | The question is… | Agent / skill | Explicitly **not** it |
 | --- | --- | --- |
 | is this code **that already exists** correct? | **code-reviewer** | — |
-| is this feature's contract met? (an SDD run) | **code-reviewer** with `workflow-review`'s contract-review procedure | the family review skills, unless a check names one |
+| are this layer's checks, or this delivery's contract, met? (an SDD run) | **code-reviewer** with `workflow-review`'s contract-review procedure | the family review skills, unless a check names one |
 | writing a **new** component, route, test | `frontend-developer` · `backend-developer` · `qa-engineer` | code-reviewer |
 | where the file lives, who imports whom, module boundary | `software-architect` (via `react-structure`) | code-reviewer |
 | does the **suite** protect anything? | `qa-engineer` (via `test-review`) | code-reviewer only calls the skill when the PR touches the suite |
@@ -36,7 +36,7 @@ This agent implements the fresh-context adversarial review that [Claude Code - S
 
 ## Input
 
-**In an SDD run**, `workflow-review` hands over the feature's contract, its Surface, the diff and the gate summary, with the absolute path of its `references/contract-review.md`. Read that procedure and follow it instead of Steps 0–5: the question is whether the contract is met, not a full audit (`SDD-RUN-04`, [Delivery Flow — Spec Driven Development](../docs/workflow/delivery-flow.md) § 5.3).
+**In an SDD run**, `workflow-review` hands over the layer file (its checks, rules and Surface), the diff against the delivery's feature branch and the gate summary — or, to validate the whole delivery, `contract.md`, the layer files it points to, the diff against the trunk and the gate summary — with the absolute path of its `references/contract-review.md`. Read that procedure and follow it instead of Steps 0–5: the question is whether the checks or the contract are met, not a full audit (`SDD-RUN-04`, [Delivery Flow — Spec Driven Development](../docs/workflow/delivery-flow.md) § 5.3).
 
 **Outside a run**, the caller hands over these inputs, and nothing else:
 

@@ -1,8 +1,10 @@
 # Template: PRD
 
 Tool-neutral, saved as `.specs/PRD.md`. The product's **PRD**: its single source of truth. What
-is being built and why, which features build it, what each feature provides and consumes, and
-the order they can run in. Written by `doc-prd` from the decisions of `product-manager` or the product owner. Rules: `rules.md` in this folder.
+is being built and why, which capabilities it offers, and the acceptance criteria that prove each
+one. It carries no delivery cut: layers, order and size belong to the delivery plan. Written by
+`doc-prd` from the decisions of `product-manager` or the product owner. Rules: `rules.md` in this
+folder.
 
 ## Fields
 
@@ -52,46 +54,33 @@ each is a Given / When / Then with an observable outcome. Each limit the input s
    As a [role], I want [action], so that [outcome].
    - **AC-01** Given [...], when [...], then [...].
 
-### Functionalities
+### Capabilities
 
-One row per feature. A feature is the smallest slice someone can build and prove alone; it fits
-one review (by default at most 300 changed lines, tests included). Provides and consumes name
-interfaces, data or capabilities in product words, not code.
+One row per capability: what a person can do with the product, in one sentence. Each names the
+acceptance criteria that prove it, and every `AC-*` belongs to at least one capability. A
+capability is not a unit of work: it crosses every layer of the code, and how it is built, in what
+order and in what size is the delivery plan's.
 
-| ID | Feature | Satisfies | Provides | Consumes (from) | Priority |
-| --- | --- | --- | --- | --- | --- |
-| F01 | [name — one sentence] | AC-01, AC-02 | [what other features can rely on] | — | P0 |
-| F02 | [...] | AC-03 | [...] | [item] (F01) | P1 |
+| ID | Capability | Satisfies | Priority |
+| --- | --- | --- | --- |
+| CAP-1 | [what a person can do — one sentence] | AC-01, AC-02 | P0 |
+| CAP-2 | [...] | AC-03 | P1 |
+
+**Priority levels:** `P0` the product does not work without it · `P1` should ship · `P2` could
+ship. Priority says what a delivery may leave out, never how or in what order it is built.
 
 ### Out of Scope
 
 - [what someone might expect from this product and is deliberately left out, and why]
 
-### Dependency Graph
-
-**Foundation Features:** [the features that consume nothing]
-
-**Execution Waves:**
-
-| Wave | Features | Waits for |
-| --- | --- | --- |
-| W0 | F01, … | — |
-| W1 | F02, … | F01 |
-
-A feature sits in the first wave after all of its providers. No cycles: a cycle is broken by
-extracting the shared part into its own provider feature.
-
-**Priority levels:** `P0` the product does not work without it · `P1` should ship · `P2` could
-ship. Priority orders features inside a wave; it never moves a feature ahead of its providers.
-
 ### Traceability
 
-| Item | Features (role) |
+| Item | Capabilities |
 | --- | --- |
-| PO-1 | F01 (provider), F02 (consumer) |
-| OBJ-1 | F02 (consumer) |
+| PO-1 | CAP-1, CAP-2 |
+| OBJ-1 | CAP-1 |
 
-Every `PO-*` and `OBJ-*` lists at least one feature; every feature appears at least once.
+Every `PO-*` and `OBJ-*` lists at least one capability; every capability appears at least once.
 
 ### Open gaps
 
@@ -104,17 +93,17 @@ Every `PO-*` and `OBJ-*` lists at least one feature; every feature appears at le
 - Every claim has a source or is labeled `hypothesis`.
 - Every objective has a metric and a target; every acceptance criterion has an `AC-NN` ID and an
   observable outcome.
-- Every feature names what it satisfies, provides and consumes, and every consumed item names one
-  provider.
-- The waves respect the providers; there is no cycle.
-- Every `PO-*` and `OBJ-*` traces to a feature, and every feature traces to one of them.
+- Every capability names the `AC-*` it satisfies and its priority, and every `AC-*` belongs to at
+  least one capability.
+- No layer, order, size or provides/consumes cut appears: that is the delivery plan's.
+- Every `PO-*` and `OBJ-*` traces to a capability, and every capability traces to one of them.
 - Open gaps is empty, and the status is `Approved`.
 
 ### Out of this file
 
 | Belongs in | What |
 | --- | --- |
-| the feature's `spec.md` | interfaces, data shapes, schema, API contract, UX states |
-| the feature's `plan.md` | steps, files, commands |
-| the feature's `contract.md` | the checks that prove each `AC-*` |
-| an ADR | a technical decision that outlives a feature |
+| the delivery plan's index (`plan.md`) | actors and doors, vocabulary, the layers and their order |
+| a layer file (`plans/<layer>-<slug>.md`) | the seams between layers — schema, API contract, data shapes — the rules each layer holds, and its checks |
+| the delivery plan's `contract.md` | which checks prove each `AC-*` |
+| an ADR | a technical decision that outlives the delivery |

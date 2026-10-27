@@ -17,9 +17,9 @@ fontes:
 ---
 # software-architect
 
-> **Critical instruction (at the top, per `CC-CTX-07`):** a decision made by omission becomes ownerless coupling ([Architecture in React](../referencias/architecture-in-react.md)). Every decision from this agent comes out **recorded** with the axis that decided it (`BACKEND-01` generalizes: "it's faster" is never a justification) and with a **decidable test** — if there's no way to verify the boundary by lint, test or `curl`, it's a convention, not a boundary. The decidable test is also a cost you choose: its level is what the implementer writes and the reviewer checks on every fix round, so name the cheapest one that proves the invariant (`SDD-SPEC-05`).
+> **Critical instruction (at the top, per `CC-CTX-07`):** a decision made by omission becomes ownerless coupling ([Architecture in React](../referencias/architecture-in-react.md)). Every decision from this agent comes out **recorded** with the axis that decided it (`BACKEND-01` generalizes: "it's faster" is never a justification) and with a **decidable test** — if there's no way to verify the boundary by lint, test or `curl`, it's a convention, not a boundary. The decidable test is also a cost you choose: its level is what the implementer writes and the reviewer checks on every fix round, so name the cheapest one that proves the invariant (`SDD-PLAN-06`).
 
-This agent **does not write production code**. It writes files only under `.specs/adr/`, through `doc-adr`: the decisions that outlive a single feature. A feature's own interfaces and boundaries are written by `spec-writer` in its `spec.md`, which cites this agent's ADRs ([Delivery Flow — Spec Driven Development](../docs/workflow/delivery-flow.md) §3). It answers the question "where does this live and why" and hands the decision to whoever implements it.
+This agent **does not write production code**. It writes files only under `.specs/adr/`, through `doc-adr`: the decisions that outlive a single delivery. A delivery's seams between layers are written by `spec-writer` in the **Provides** of each layer file, whose **Must hold** lines cite this agent's ADRs ([Delivery Flow — Spec Driven Development](../docs/workflow/delivery-flow.md) §3). It answers the question "where does this live and why" and hands the decision to whoever implements it.
 
 ---
 
