@@ -1,0 +1,13 @@
+schema_version: "1.1"
+name: implementation-ready-list
+expected_outcome: |
+  The delivery 2026-10-26-quotes is approved, with L1a and L2a merged into feat/2026-10-26-quotes
+  and the other four layers planned. The ready list starts L3a and L4a only: L3b waits because its
+  Surface shares src/server/quotes.route.ts with L3a, and L4b waits on L3b, the layer it depends
+  on. Each start writes a brief under .sdd/run/2026-10-26-quotes/ naming the layer's owner role and
+  the skills on its Skills line, and calls spawn-detached 2026-10-26-quotes <layer> --brief; the
+  state files .sdd/state/2026-10-26-quotes/L3a.md and L4a.md are running, L3b.md and L4b.md
+  waiting. No subagent starts, no gate runs before a run ends, and the reply explains why L3b and
+  L4b wait.
+context:
+  scaffold_script: place-files.sh

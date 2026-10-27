@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Stand-in: starts or resumes a layer's implementer and returns only when that run has ended.
+# Usage: spawn-detached <delivery> <layer> --brief <file> [--resume]
+set -eu
+delivery="${1:?usage: spawn-detached <delivery> <layer> --brief <file> [--resume]}"
+layer="${2:?usage: spawn-detached <delivery> <layer> --brief <file> [--resume]}"; shift 2
+brief=""; mode="started"
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --brief) brief="${2:-}"; shift 2 ;;
+    --resume) mode="resumed"; shift ;;
+    *) echo "spawn-detached: fail — unknown argument $1"; exit 2 ;;
+  esac
+done
+[ -n "$brief" ] && [ -f "$brief" ] || { echo "spawn-detached: fail — no brief"; exit 2; }
+echo "spawn-detached: $mode — $delivery $layer pid 4243 in ../.worktrees/$delivery-$layer; run ended: done (.sdd/run/$delivery/$layer.exit 0, .sdd/run/$delivery/$layer.result done)"

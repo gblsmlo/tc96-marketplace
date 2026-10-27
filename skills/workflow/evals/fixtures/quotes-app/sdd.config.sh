@@ -1,0 +1,18 @@
+# Commands the SDD harness runs. Empty means the step or gate type does not exist here.
+SDD_TRUNK="main"
+SDD_WORKTREES="../.worktrees"
+SDD_INSTALL="bun install"
+SDD_MIGRATE="bunx drizzle-kit migrate"
+SDD_ENV_FILE=".env.sdd"
+SDD_PORT_BASE=3100
+SDD_DB_PREFIX="quotes_dev"
+SDD_DATABASE_URL_TEMPLATE="postgres://localhost:5432/{db}"
+SDD_DB_CREATE="createdb {db}"
+SDD_GATE_STATIC="bun run lint && bunx tsc --noEmit"
+SDD_GATE_UNIT="bun test"
+SDD_GATE_CONTRACT=""
+SDD_GATE_INTEGRATION="bun test src/server src/db"
+SDD_GATE_COMPONENT="bun test src/routes"
+SDD_GATE_E2E="bun run e2e"
+SDD_AGENT="claude -p --model sonnet --permission-mode acceptEdits"
+SDD_AGENT_RESUME="claude -p --continue --model sonnet --permission-mode acceptEdits"

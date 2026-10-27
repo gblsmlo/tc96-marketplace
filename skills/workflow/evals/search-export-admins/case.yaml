@@ -1,0 +1,13 @@
+schema_version: "1.1"
+name: search-export-admins
+expected_outcome: |
+  A triage file under .specs/triage/ that splits the request into product, backend and frontend
+  slices (and the admin-only rule), answers the product slice from the PRD's Out of Scope line as a
+  product decision for an amendment, answers admin-only from ADR-0002 as already existing, gives the
+  backend and frontend slices code facts with file:line from repo-explorer and a build verdict, and
+  a route that puts the amendment first and the backend endpoint before the frontend button, any
+  inferred order marked (proposed). Code questions go to repo-explorer in one round; the session
+  reads no source file itself, writes no delivery plan under .specs/delivery/, and stops after the
+  triage.
+context:
+  scaffold_script: place-files.sh

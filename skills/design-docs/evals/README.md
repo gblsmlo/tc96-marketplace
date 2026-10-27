@@ -7,7 +7,7 @@ shape, nothing invented, gaps with who decides, and no investigation.
 
 | Case | Skill | What it stresses |
 | --- | --- | --- |
-| `prd-quote-approval` | `doc-prd` | sections, AC IDs, waves, traceability; a target the prompt never gave |
+| `prd-quote-approval` | `doc-prd` | sections, AC IDs, capabilities and no delivery cut, traceability; a target the prompt never gave |
 | `adr-sessions-postgres` | `doc-adr` | one decision, a cost marked `(proposed)`, invariants left as a gap |
 | `adr-no-decision-blocked` | `doc-adr` | two options and no choice: `blocked`, no file, no recommendation |
 | `epic-quote-approval` | `doc-epic` | hypothesis with its target as a gap, no scope creep |

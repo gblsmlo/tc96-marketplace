@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Stand-in. Usage: stop <delivery> <layer> [--clean] | --all
+set -eu
+first="${1:?usage: stop <delivery> <layer> [--clean] | --all}"
+if [ "$first" = "--all" ]; then echo "stop: stopped — all"; exit 0; fi
+echo "stop: stopped — $first ${2:?usage: stop <delivery> <layer> [--clean]}"

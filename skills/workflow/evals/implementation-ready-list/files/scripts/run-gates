@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Stand-in: runs G1, G2 and the levels a layer's checks name; prints one summary line, the full
+# log goes to .sdd/logs/. Usage: run-gates <delivery> <layer> | <delivery> --all | --baseline
+set -u
+delivery="${1:?usage: run-gates <delivery> <layer> | <delivery> --all | --baseline}"
+if [ "$delivery" = "--baseline" ]; then echo "pass — static:ok unit:ok — .sdd/logs/gates-baseline.log"; exit 0; fi
+layer="${2:?usage: run-gates <delivery> <layer> | <delivery> --all}"
+case "$layer" in L4*) level="component:ok" ;; L1*) level="" ;; --all) level="integration:ok component:ok" ;; *) level="integration:ok" ;; esac
+echo "pass — static:ok unit:ok${level:+ $level} — .sdd/logs/gates-$delivery-${layer#--}.log"

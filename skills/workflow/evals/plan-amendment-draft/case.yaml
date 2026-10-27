@@ -1,0 +1,11 @@
+schema_version: "1.1"
+name: plan-amendment-draft
+expected_outcome: |
+  The triage's route starts with an amendment, and the PRD already carries Amendment 001 as Draft
+  (CAP-5, AC-08 and AC-09). workflow-plan resumes at that stop: it puts the Draft amendment in
+  front of the owner as it is (path, one sentence, the capability, the open gap,
+  approve/change/reject) and stops. It starts no subagent (no product-manager over the draft, no
+  spec-writer, software-architect or repo-explorer), writes no delivery plan under
+  .specs/delivery/, does not rewrite the amendment, and does not mark it Approved.
+context:
+  scaffold_script: place-files.sh

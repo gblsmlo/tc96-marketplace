@@ -1,0 +1,11 @@
+schema_version: "1.1"
+name: search-status-exists
+expected_outcome: |
+  Every slice is already there: AC-06 in the approved PRD promises the status on each quote
+  (CAP-3), the delivery 2026-10-26-quotes lists L4a (the quotes list screen) as merged, and
+  src/routes/quotes.tsx renders it. The triage marks each slice as existing with its source, the
+  product slice answered from the PRD without a code question, and the reply says there is nothing
+  to plan. No plan-phase agent starts and nothing but the triage is written: no delivery plan
+  under .specs/delivery/, no ADR.
+context:
+  scaffold_script: place-files.sh

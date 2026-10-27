@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: spec-approval-route
 expected_outcome: |
   A Draft spec.md with the route and event shapes exactly as given, the auth on the route as a
-  gap, the F01 token consumed with its source, the schema fact with its file:line, the signed-
+  gap, the quote-link token consumed with its source, the schema fact with its file:line, the signed-
   links decision flagged for an ADR, partial approval as a non-goal, and no file under src/ read.
 context:
   scaffold_script: place-files.sh

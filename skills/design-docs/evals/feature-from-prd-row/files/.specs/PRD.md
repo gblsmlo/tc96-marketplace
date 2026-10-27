@@ -23,9 +23,14 @@ Customers approve quotes online.
    - **AC-03** Given a quote sent more than 30 days ago, when the customer opens its link, then they see it expired and cannot decide.
    - **AC-04** Given an approval, when it is saved, then the sales rep who sent the quote is notified.
 
-### Functionalities
-| ID | Feature | Satisfies | Provides | Consumes (from) | Priority |
-| --- | --- | --- | --- | --- | --- |
-| F01 | Quote link — a signed link to one quote | — | a signed link to one quote | — | P0 |
-| F02 | Approval — approve or reject from the link | AC-01, AC-02, AC-03 | approved quote event | signed link (F01) | P0 |
-| F03 | Sales notification | AC-04 | — | approved quote event (F02) | P1 |
+### Capabilities
+| ID | Capability | Satisfies | Priority |
+| --- | --- | --- | --- |
+| CAP-1 | The customer approves or rejects a quote from its link | AC-01, AC-02, AC-03 | P0 |
+| CAP-2 | The sales rep is notified when a quote is approved | AC-04 | P1 |
+
+### Traceability
+| Item | Capabilities |
+| --- | --- |
+| PO-1 | CAP-1, CAP-2 |
+| OBJ-1 | CAP-1 |

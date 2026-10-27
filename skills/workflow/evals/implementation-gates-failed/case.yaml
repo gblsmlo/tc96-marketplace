@@ -1,0 +1,13 @@
+schema_version: "1.1"
+name: implementation-gates-failed
+expected_outcome: |
+  In the delivery 2026-10-26-quotes, L1a and L2a are merged, L3a is in review, and L4a's detached
+  run has ended with `done` (.sdd/run/2026-10-26-quotes/L4a.exit and .result). The phase runs
+  run-gates 2026-10-26-quotes L4a, which fails on G1: L4a becomes gates-failed with round still 0,
+  and its implementer is resumed (spawn-detached 2026-10-26-quotes L4a --brief … --resume) with a
+  fix-round brief that lists only G1. When the resumed run is over, the gates run again and pass,
+  and L4a becomes in-review, round 0. No gate log is read, no subagent starts, L3b stays waiting on
+  the Surface it shares with L3a (in review), L4b stays waiting on L3b, and the reply names
+  workflow-review next.
+context:
+  scaffold_script: place-files.sh

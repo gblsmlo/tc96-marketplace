@@ -3,7 +3,7 @@ name: prd-quote-approval
 expected_outcome: |
   A Draft .specs/PRD.md with every section in order, the 3-day claim sourced to support,
   objectives with a metric whose target is a gap (the prompt gives none) rather than an invented
-  number, PRD-wide AC IDs in Given/When/Then, features that declare what they satisfy, provide and
-  consume (marked proposed, since the prompt did not cut them), waves that respect the providers,
-  traceability both ways, the 30-day limit placed with its open side as a gap, and no technical
-  design.
+  number, PRD-wide AC IDs in Given/When/Then, capabilities that name the AC IDs they satisfy and
+  a priority (marked proposed, since the prompt did not cut them), no delivery cut (no waves,
+  layers or provides/consumes), traceability both ways, the 30-day limit placed with its open side
+  as a gap, and no technical design.

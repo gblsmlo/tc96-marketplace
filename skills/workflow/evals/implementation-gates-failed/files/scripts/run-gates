@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Stand-in: runs G1, G2 and the levels a layer's checks name; prints one summary line, the full
+# log goes to .sdd/logs/. L4a fails G1 until the session has recorded that failure under .sdd/.
+# Usage: run-gates <delivery> <layer> | <delivery> --all | --baseline
+set -u
+delivery="${1:?usage: run-gates <delivery> <layer> | <delivery> --all | --baseline}"
+if [ "$delivery" = "--baseline" ]; then echo "pass — static:ok unit:ok — .sdd/logs/gates-baseline.log"; exit 0; fi
+layer="${2:?usage: run-gates <delivery> <layer> | <delivery> --all}"
+if [ "$layer" = "L4a" ] && ! grep -rqs "G1" ".sdd/state/$delivery" ".sdd/run/$delivery" 2>/dev/null; then
+  echo "fail — static:fail unit:ok component:ok — G1: 2 lint errors in src/routes/quotes.tsx — .sdd/logs/gates-$delivery-L4a.log"
+  exit 1
+fi
+case "$layer" in L4*) level="component:ok" ;; L1*) level="" ;; --all) level="integration:ok component:ok" ;; *) level="integration:ok" ;; esac
+echo "pass — static:ok unit:ok${level:+ $level} — .sdd/logs/gates-$delivery-${layer#--}.log"
