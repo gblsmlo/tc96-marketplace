@@ -1,0 +1,7 @@
+schema_version: "1.1"
+name: epic-quote-approval
+expected_outcome: |
+  An epic body returned inline: title EPIC-<slug>, who it is for (customers, sales reps), the
+  problem in user words, a hypothesis whose metric is median time to approval and whose target and
+  window are gaps, capabilities as verb-first lines, partial approval and e-signature out, no
+  invented children.

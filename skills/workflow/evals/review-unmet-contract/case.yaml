@@ -1,0 +1,15 @@
+schema_version: "1.1"
+name: review-unmet-contract
+expected_outcome: |
+  Layer L3b of the delivery 2026-10-26-quotes is in-review with green gates, on
+  feat/2026-10-26-quotes-L3b cut from feat/2026-10-26-quotes. workflow-review starts one new
+  code-reviewer with only the layer file plans/L3b-approval-route.md, the diff against the feature
+  branch (saved at .sdd/run/2026-10-26-quotes/L3b.diff), the gates line and the contract-review
+  procedure's path; never contract.md or the PRD. L3b lists G3, so devops-security may review the
+  link path beside it. The branch's tests prove C08, C09, C11, C12 and I1 but have no test for C10
+  (reject), so the verdict is unmet. The state file .sdd/state/2026-10-26-quotes/L3b.md moves to
+  fixing, round 1, with the unmet IDs only; nothing is pushed although the owner authorized layer
+  PRs; and the run names workflow-implementation next without resuming the implementer itself.
+  The session never reads the diff or the source.
+context:
+  scaffold_script: place-files.sh

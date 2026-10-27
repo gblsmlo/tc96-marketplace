@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Stand-in: the real script writes the checkout's ports and database to .env.sdd.
+echo "resolve-env: kept — .env.sdd"

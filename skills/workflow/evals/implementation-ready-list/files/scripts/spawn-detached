@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Stand-in: the real script cuts feat/<delivery> from the trunk when missing, then the layer's
+# worktree on feat/<delivery>-<layer>, and starts the implementer detached. This one only checks
+# its arguments and prints the start. Usage: spawn-detached <delivery> <layer> --brief <file> [--resume]
+set -eu
+delivery="${1:?usage: spawn-detached <delivery> <layer> --brief <file> [--resume]}"
+layer="${2:?usage: spawn-detached <delivery> <layer> --brief <file> [--resume]}"; shift 2
+brief=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --brief) brief="${2:-}"; shift 2 ;;
+    --resume) shift ;;
+    *) echo "spawn-detached: fail — unknown argument $1"; exit 2 ;;
+  esac
+done
+[ -n "$brief" ] && [ -f "$brief" ] || { echo "spawn-detached: fail — no brief"; exit 2; }
+echo "spawn-detached: started — $delivery $layer pid 4242 on feat/$delivery-$layer in ../.worktrees/$delivery-$layer — .sdd/logs/run-$delivery-$layer.log; the run writes .sdd/run/$delivery/$layer.exit when it ends"

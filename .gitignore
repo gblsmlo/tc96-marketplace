@@ -7,3 +7,6 @@ skills/kb/kb-coverage-workspace/
 
 # bytecode do Python dos scripts das skills
 __pycache__/
+
+# eval runs: raw results stay local
+skills/*/evals/results/

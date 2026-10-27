@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: story-approve-quote
+expected_outcome: |
+  One user story whose so-that is a gap (the prompt gives no reason), with Given/When/Then
+  criteria with IDs for approving, the expiry and the email, the 30-day boundary's open side as a
+  gap, and no invented permission or refusal rules.

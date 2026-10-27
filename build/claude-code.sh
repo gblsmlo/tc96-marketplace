@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Projeta a fonte neutra para um plugin do Claude Code, em dist/claude-code/.
+# Projects the neutral source onto Claude Code plugins, in dist/claude-code/.
 #
-# O que este adaptador acrescenta, e que a fonte neutra nao tem:
+# What this adapter adds, which the neutral source does not have:
 #   - frontmatter: nome->name, descricao->description, capacidades->tools, modelo->model,
-#     esforco->effort (mapa em build/modelos.json)
+#     esforco->effort (map in build/modelos.json)
 #   - .claude-plugin/plugin.json
-#   - layout achatado: skills/<familia>/<skill>/ -> skills/<skill>/
+#   - flattened layout: skills/<familia>/<skill>/ -> skills/<skill>/
 #   - knowledge-base/ -> referencias/
-#   - commands/ -> commands/ (so os declarados em PLUGINS)
+#   - commands/ -> commands/ (only those declared in PLUGINS)
 set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -23,22 +23,24 @@ raiz, dest = pathlib.Path(os.environ["RAIZ"]), pathlib.Path(os.environ["DEST"])
 versao = os.environ["VERSAO"]
 
 FERR = {"ler": ["Read"], "escrever": ["Write"], "editar": ["Edit"],
-        "buscar": ["Grep", "Glob"], "executar": ["Bash"], "usar-skill": ["Skill"]}
-# a lista explicita em `tools:` so libera a Skill tool se ela estiver nomeada
+        "buscar": ["Grep", "Glob"], "listar": ["Glob"], "executar": ["Bash"],
+        "usar-skill": ["Skill"]}
+# listar: Glob alone, for an agent that may list a folder but never search contents.
+# The explicit `tools:` list only allows the Skill tool when it is named.
 ALVO = json.loads((raiz / "build/modelos.json").read_text(encoding="utf-8"))["claude-code"]
 
-# Um plugin por recorte habilitavel em projeto. Familia sem plugin declarado
-# nao sai no build.
+# One plugin per slice a project can enable. A family with no declared plugin
+# is left out of the build.
 PLUGINS = {
     "tc96-core": {
-        "familias": ["test", "http", "sdd", "spec", "design-docs", "workflow"],
+        "familias": ["test", "http", "workflow"],
         "agentes": ["code-reviewer", "software-architect", "qa-engineer",
                     "product-manager", "product-designer", "project-manager",
                     "devops-security", "ai-engineer", "monorepo-auditor",
                     "repo-explorer", "repo-operator", "spec-writer"],
-        # comando e ponto de entrada nomeado, invocado pela pessoa — nao e uma
-        # quarta camada da cadeia, e um quarto tipo de artefato ao lado de
-        # skill e agente. Como os agentes, entra por nome, nao por familia.
+        # a command is a named entry point the person invokes — not a fourth
+        # layer of the chain but a fourth kind of artifact beside skill and
+        # agent. Like agents, it enters by name, not by family.
         "comandos": ["scaffold-projeto",
                      "scaffold-01-tanstack-start", "scaffold-02-biome",
                      "scaffold-03-bun-test", "scaffold-04-git-hooks",
@@ -49,27 +51,27 @@ PLUGINS = {
                      "scaffold-fba-03-bun-test", "scaffold-fba-04-git-hooks",
                      "scaffold-fba-05-fba",
                      "configurar-antigravity", "spec", "scaffold-sdd-scripts"],
-        "descricao": "Teste e contrato HTTP, e os papéis que atravessam qualquer stack. "
-                     "Habilite sempre.",
-        "keywords": ["teste", "http", "review", "arquitetura"],
+        "descricao": "Testing and HTTP contract, the delivery flow in four phases, and the roles "
+                     "that cross any stack. Always enable.",
+        "keywords": ["testing", "http", "review", "architecture"],
     },
     "tc96-frontend": {
         "familias": ["react", "tanstack", "storybook"],
         "agentes": ["frontend-developer"],
-        "descricao": "React, TanStack Router e Query, React Hook Form e Storybook no stack "
-                     "desta casa — escrita, estrutura e revisão de interface. "
-                     "Habilite em projeto com frontend.",
+        "descricao": "React, TanStack Router and Query, React Hook Form and Storybook in this "
+                     "house's stack — writing, structure and review of interfaces. "
+                     "Enable in a project with a frontend.",
         "keywords": ["react", "tanstack", "storybook", "frontend"],
     },
     "tc96-backend": {
         "familias": ["bun", "elysia", "drizzle"],
         "agentes": ["backend-developer"],
-        "descricao": "Runtime Bun, Elysia e Drizzle — serviço HTTP, persistência e "
-                     "dependências. Habilite em projeto com backend.",
+        "descricao": "Bun runtime, Elysia and Drizzle — HTTP service, persistence and "
+                     "dependencies. Enable in a project with a backend.",
         "keywords": ["bun", "elysia", "drizzle", "backend"],
     },
-    # Autocontida: cada skill traz a propria doc em skills/tailwind/<skill>/docs/ e nao
-    # cita nota da knowledge-base, para poder ser habilitada sem o resto do tc96.
+    # Self-contained: each skill carries its own docs in skills/tailwind/<skill>/docs/ and
+    # cites no knowledge-base note, so it can be enabled without the rest of tc96.
     "tc96-tailwind": {
         "familias": ["tailwind"],
         "agentes": [],
@@ -77,19 +79,30 @@ PLUGINS = {
                      "normative docs (TW-*). Self-contained: enable alone or with tc96-frontend.",
         "keywords": ["tailwind", "css", "design-system", "frontend"],
     },
+    # Self-contained: the writing contract lives in skills/design-docs/docs/ and no skill cites
+    # a knowledge-base note by link. The SDD flow in tc96-core calls doc-prd and doc-adr by name.
+    "tc96-design-docs": {
+        "familias": ["design-docs"],
+        "agentes": ["doc-writer", "doc-writer-deep"],
+        "descricao": "Writing-only document skills: PRD, ADR, epic, feature, story, tasks, bug, spec and PR, "
+                     "each with its template and model tier, and the doc-writer agents that run them in a "
+                     "fresh context with no search or shell. Self-contained: enable with tc96-core or alone.",
+        "keywords": ["prd", "adr", "user-story", "spec", "documentation"],
+    },
     "tc96-e2e": {
         "familias": ["playwright"],
         "agentes": [],
-        "descricao": "Playwright — escrita, auditoria e diagnóstico de teste E2E. "
-                     "Habilite em projeto com suíte E2E.",
-        "keywords": ["playwright", "e2e", "teste"],
+        "descricao": "Playwright — writing, auditing and diagnosing E2E tests. "
+                     "Enable in a project with an E2E suite.",
+        "keywords": ["playwright", "e2e", "testing"],
     },
 }
 
 
 # frontmatter keys moved to English; families not yet migrated still use the Portuguese ones
 LEGACY = {"name": "nome", "description": "descricao", "type": "tipo", "family": "familia",
-          "language": "idioma", "source": "fonte", "title": "titulo"}
+          "language": "idioma", "source": "fonte", "title": "titulo",
+          "model": "modelo", "effort": "esforco"}
 
 
 def legacy(fields):
@@ -135,12 +148,12 @@ def neutro(caminho, tipo):
 
 
 def citadas(texto):
-    """Quais notas da knowledge-base este arquivo referencia."""
+    """Which knowledge-base notes this file references."""
     return {n for n in re.findall(r"knowledge-base/([^)\s]+\.md)", texto) if n != "MANIFESTO.md"}
 
 
 def citadas_entre_notas(caminho):
-    """Links de uma nota para outra dentro da knowledge-base: sempre irma no mesmo diretorio."""
+    """Links from one note to another inside the knowledge-base: always a sibling in the same directory."""
     return {alvo for alvo in re.findall(r"\]\(([^)#:]+\.md)\)", caminho.read_text(encoding="utf-8"))
             if "/" not in alvo}
 
@@ -153,7 +166,7 @@ for plugin, cfg in PLUGINS.items():
         for skill_md in sorted((raiz / "skills" / familia).glob("*/SKILL.md")):
             campos, corpo = neutro(skill_md, "skill")
             if not campos:
-                continue  # familia ainda no formato antigo
+                continue  # family still in the old format
             skills.append((skill_md.parent, campos, corpo))
 
     for nome in cfg["agentes"]:
@@ -173,12 +186,12 @@ for plugin, cfg in PLUGINS.items():
             comandos.append((nome, campos, corpo))
 
     if not skills and not agentes and not comandos:
-        continue  # nada migrado ainda para este recorte
+        continue  # nothing migrated yet for this slice
 
     alvo = dest / "plugins" / plugin
     (alvo / ".claude-plugin").mkdir(parents=True, exist_ok=True)
 
-    # doc propria da familia (skills/<familia>/docs/) -> <plugin>/docs/<familia>/
+    # the family's own docs (skills/<familia>/docs/) -> <plugin>/docs/<familia>/
     for familia in cfg["familias"]:
         doc_familia = raiz / "skills" / familia / "docs"
         if doc_familia.is_dir():
@@ -193,12 +206,12 @@ for plugin, cfg in PLUGINS.items():
         for arq in destino.rglob("*.md"):
             t = arq.read_text(encoding="utf-8")
             notas |= citadas(t)
-            # a doc da familia sobe para docs/<familia>/ na raiz do plugin;
-            # references/ primeiro, porque "../../docs/" contem "../docs/"
+            # the family's docs move up to docs/<familia>/ at the plugin root;
+            # references/ first, because "../../docs/" contains "../docs/"
             if doc_na_familia:
                 t = t.replace("](../../docs/", f"](../../../docs/{familia}/")
                 t = t.replace("](../docs/", f"](../../docs/{familia}/")
-            # a familia sai do caminho: uma subida a menos
+            # the family leaves the path: one level up fewer
             t = t.replace("../../../knowledge-base/", "../../referencias/")
             t = t.replace("../../../../knowledge-base/", "../../../referencias/")
             t = t.replace("](../README.md)", "](../../skills/)")
@@ -207,19 +220,24 @@ for plugin, cfg in PLUGINS.items():
                 fm = ["---", f"name: {c['nome']}", f"description: {c['descricao']}"]
                 if c.get("fonte"):
                     fm.append(f"source: {c['fonte']}")
+                # a skill that declares its tier runs on it while active; one that does not inherits
+                if c.get("modelo"):
+                    fm.append(f"model: {ALVO['modelo'][c['modelo']]}")
+                if c.get("esforco"):
+                    fm.append(f"effort: {ALVO['esforco'][c['esforco']]}")
                 fm += listas(c, ["docs", "tags"])
                 fm.append("---\n")
                 t = "\n".join(fm) + corpo_arq
             arq.write_text(t, encoding="utf-8")
         for sh in destino.rglob("*.sh"):
             s = sh.read_text(encoding="utf-8")
-            # os scripts sobem ate a raiz do plugin, nao ate a raiz da fonte
+            # scripts climb to the plugin root, not to the source root
             s = s.replace('/../../../.." && pwd)/knowledge-base',
                           '/../../.." && pwd)/referencias')
-            # e o link que ELES escrevem tem de ter a mesma profundidade que o
-            # adaptador deu aos .md — senao regenerar o mapa quebra os links
+            # and the link THEY write must have the depth the adapter gave the
+            # .md files — otherwise regenerating the map breaks the links
             s = s.replace("../../../../knowledge-base/", "../../../referencias/")
-            # a doc propria da familia mora em <plugin>/docs/<familia>/ no alvo
+            # the family's own docs live in <plugin>/docs/<familia>/ in the target
             if doc_na_familia:
                 s = s.replace('/../.." && pwd)/docs}', f'/../../.." && pwd)/docs/{familia}}}')
                 s = s.replace("](../../docs/", f"](../../../docs/{familia}/")
@@ -244,6 +262,9 @@ for plugin, cfg in PLUGINS.items():
         texto = ("\n".join(fm) + corpo)
         texto = texto.replace("../knowledge-base/", "../referencias/")
         texto = texto.replace("](../skills/README.md)", "](../skills/)")
+        # the family's own docs live in <plugin>/docs/<familia>/ in the target
+        for familia in cfg["familias"]:
+            texto = texto.replace(f"](../skills/{familia}/docs/", f"](../docs/{familia}/")
         (alvo / "agents").mkdir(exist_ok=True)
         (alvo / "agents" / f"{nome}.md").write_text(texto, encoding="utf-8")
 
@@ -253,11 +274,14 @@ for plugin, cfg in PLUGINS.items():
         fm += listas(campos, ["tags"])
         fm.append("---\n")
         texto = ("\n".join(fm) + corpo).replace("../knowledge-base/", "../referencias/")
+        # the family's own docs live in <plugin>/docs/<familia>/ in the target
+        for familia in cfg["familias"]:
+            texto = texto.replace(f"](../skills/{familia}/docs/", f"](../docs/{familia}/")
         (alvo / "commands").mkdir(exist_ok=True)
         (alvo / "commands" / f"{nome}.md").write_text(texto, encoding="utf-8")
 
-    # fecho transitivo: as notas se citam entre si, e link quebrado no plugin
-    # e pior que nota a mais
+    # transitive closure: notes cite each other, and a broken link in the plugin
+    # is worse than one note too many
     fila = list(notas)
     while fila:
         atual = fila.pop()
@@ -286,21 +310,21 @@ for plugin, cfg in PLUGINS.items():
 
     publicados.append({"name": plugin, "source": f"./plugins/{plugin}",
                        "description": cfg["descricao"]})
-    resumo.append(f"  {plugin}: {len(skills)} skills · {len(agentes)} agente(s) · "
-                  + (f"{len(comandos)} comando(s) · " if comandos else "")
-                  + f"{len(notas)} notas")
+    resumo.append(f"  {plugin}: {len(skills)} skills · {len(agentes)} agent(s) · "
+                  + (f"{len(comandos)} command(s) · " if comandos else "")
+                  + f"{len(notas)} notes")
 
 (dest / ".claude-plugin").mkdir(parents=True, exist_ok=True)
 (dest / ".claude-plugin/marketplace.json").write_text(json.dumps({
     "name": "tc96-marketplace",
     "owner": {"name": "Gabriel Melo", "email": "gblsmlo@gmail.com"},
-    "metadata": {"description": "Agentes, skills e regra do stack desta casa.",
+    "metadata": {"description": "Agents, skills and rules for this house's stack.",
                  "version": versao},
     "plugins": publicados,
 }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-# Manifesto na raiz do repositorio: e o que `/plugin marketplace add gblsmlo/tc96-marketplace`
-# le. Os plugins continuam em dist/, entao cada source aponta para la.
+# Manifest at the repository root: it is what `/plugin marketplace add gblsmlo/tc96-marketplace`
+# reads. The plugins stay in dist/, so each source points there.
 if dest.is_relative_to(raiz):
     rel = dest.relative_to(raiz).as_posix()
     (raiz / ".claude-plugin").mkdir(exist_ok=True)
@@ -309,7 +333,7 @@ if dest.is_relative_to(raiz):
     (raiz / ".claude-plugin/marketplace.json").write_text(json.dumps({
         "name": "tc96-marketplace",
         "owner": {"name": "Gabriel Melo", "email": "gblsmlo@gmail.com"},
-        "metadata": {"description": "Agentes, skills e regra do stack desta casa.",
+        "metadata": {"description": "Agents, skills and rules for this house's stack.",
                      "version": versao},
         "plugins": raiz_plugins,
     }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

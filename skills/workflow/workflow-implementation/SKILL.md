@@ -1,113 +1,108 @@
 ---
 name: workflow-implementation
-description: Runs phase 3 of the delivery flow v2 — starts each approved feature in the order of the PRD's provider → consumer graph, the design lane as soon as the bundle is approved and the code lanes only once every provider has merged, splits the feature's work into the lanes its contract marks (design, frontend, backend, AI, DevOps, tooling, QA), gives the small lanes to one feature implementer and each large lane to its discipline agent, runs them in one worktree through the harness scripts, and hands the feature to Review only with `run-gates` green, citing handoffs `H7`–`H12` and `SDD-RUN-01`–`SDD-RUN-03`. Holds one state file per feature. In a project on the delivery flow v2 (`story.md` bundles), use when bundles are approved and someone asks to implement, build, run, start or continue the features, or asks which feature can start now. Not for writing a bundle (workflow-plan), checking the contract (workflow-review), nor writing the code itself (the lane agents).
+description: Runs the layers of an approved delivery until their gates are green — picks the ready ones from the plan's index (delivery approved, the layers they depend on merged into the feature branch, no open gap, Surfaces disjoint, a slot free), spawns each in its own worktree on a branch cut from the delivery's feature branch through the harness scripts, has the layer's owner load the skills the layer names and build it, runs the gates, sends a failing gate back without spending a fix round, resumes the implementer for each fix round the review asks for, and keeps the index's Status column — holding only one state file per layer, citing `SDD-RUN-*`, `SDD-PLAN-11`, `SDD-CORE-*` and `SDD-FLOW-*` IDs. Use when a delivery in `.specs/delivery/` is approved and the person asks to implement, run or continue it, or when workflow-review leaves a layer in `fixing`. Not for writing the plan (workflow-plan), deciding whether a layer or the delivery is met, nor delivering (workflow-review).
 type: skill
 family: workflow
 language: en
-source: "workflow/foundations/phases.md §3 (Draft, 2026-10-26)"
+source: "[Delivery Flow — Spec Driven Development](../docs/delivery-flow.md)"
 tags:
   - skill
   - workflow
+  - implementation
   - orchestration
 ---
 
 # workflow-implementation
 
-> **Delegation (`SDD-CORE-02`).** This skill routes; it writes no code. Each code run is detached in the feature's worktree through `scripts/spawn-detached` and `references/template-lane-brief.md`; the design lane goes to `product-designer` as a subagent. Everything mechanical is a script (`SDD-CORE-05`).
-> **Context (`SDD-CORE-04`).** Hold one state file per feature (`template-state.md` of `sdd-orchestrator`, plus the `lanes` and `run` fields below) and nothing else: never code, a diff or a gate log.
-> **Status.** Draft. Implements `workflow/foundations/phases.md` §3 and `workflow/foundations/handoffs.md` `H7`–`H12`.
+> **Delegation (`SDD-CORE-02`).** This phase routes; it writes no code and judges nothing. Each layer's implementer runs detached, in its own worktree, calling its owner role as a subagent through `references/template-brief.md`. Everything mechanical is a script (`SDD-CORE-05`).
+> **Context (`SDD-CORE-04`, `SDD-FLOW-03`).** Hold one state file per layer (`references/template-state.md`) and the index's Status column, and nothing else: never a diff, a gate log or a review report. Scripts print a short summary; the run leaves one result line. The state file is the only thing this phase passes to `workflow-review`.
+
+Rules this phase implements: [Delivery Flow — Spec Driven Development](../docs/delivery-flow.md) §3, §5.1, §5.2 steps 1–3, §6, `SDD-RUN-01`–`SDD-RUN-03`, `SDD-RUN-05`, `SDD-RUN-07`, `SDD-PLAN-11`, `SDD-FLOW-03`.
+
+## Scope
+
+| The state is... | Go to |
+| --- | --- |
+| an approved delivery with layers that have no state file, or `waiting` | this phase, Step 1 |
+| `running`, `gates-failed` or `fixing` | this phase, Step 3 or Step 4 |
+| `in-review`, `checks-met`, a blocking note, or every layer `merged` | `workflow-review` |
+| a delivery that is not `Approved` | `workflow-plan` |
 
 ## Step 0: Preconditions
 
 | Check | How | If it fails |
 | --- | --- | --- |
-| the PRD is `Approved` | its status line | stop: `workflow-search` |
-| the harness exists | `test -x init.sh && ls scripts/` shows the five scripts, and `sdd.config.sh` exists | stop: run the `scaffold-sdd-scripts` command |
+| the delivery is `Approved` | the status line of `.specs/delivery/<id>/plan.md` | stop: `workflow-plan` |
+| the harness exists | `test -x init.sh && ls scripts/` shows the five scripts and `sdd.config.sh` exists | stop: run the `scaffold-sdd-scripts` command |
 | `.sdd/` is git-ignored | `git check-ignore -q .sdd` | add `.sdd/` to `.gitignore` |
 
 ## Step 1: Build the ready list
 
-Read the PRD's **Functionalities** and **Dependency Graph** only, each approved bundle's `contract.md` frontmatter, and every file in `.sdd/state/`. Create a `waiting` state file for each approved folder that has none, with:
+Read the index's frontmatter and layers table only (`.specs/delivery/<id>/plan.md`), and every file in `.sdd/state/<id>/`. Create a `waiting` state file for each layer row that has none.
 
-```yaml
-lanes: { design: small, frontend: small, backend: large, ai: none, devops: none, tooling: none, qa: small }
-runs: [backend, frontend+qa]   # the code runs, in order (Step 3)
-run: 0                         # index of the current code run
-design: ""                     # waiting | running | done, or none
-```
+A layer is ready when all hold (`SDD-RUN-01`):
 
-Two start conditions per feature (`H7`, `H8`):
+1. the delivery is `Approved`;
+2. every layer in its **Depends on** cell is `merged`;
+3. its state file has no open `gaps` and no `blocking` entry;
+4. the Surface of its layer file shares no path with a `running`, `fixing` or `in-review` layer;
+5. fewer than the width (default 4, or the project's recorded value) are `running` or `fixing`.
 
-| Lane | Starts when |
-| --- | --- |
-| design (not `none`) | the bundle is `Approved` |
-| code lanes | the bundle is `Approved`; every feature it consumes from is `merged` (`SDD-RUN-01`); no open `gaps` or `blocking`; its `surface` shares no path with a `running`, `fixing` or `in-review` feature; fewer than the wave width (default 4) are `running` or `fixing` |
+Ready layers start in the index's order. A ready layer never waits for an unrelated one.
 
-Ready features start in PRD priority order. A ready feature in `W2` does not wait for an unrelated `W1` feature. While a provider is in a fix round, its consumers' code waits; if it becomes a new item, they wait for that item to merge.
-
-## Step 2: Design lane (`H7`, `H9`)
-
-Start `product-designer` as a subagent with the feature's `story.md`, the UX section of `spec.md`, and the instruction to return screens and states (loading, empty, error, success) for this feature only. Default D8: it writes `.sdd/design/<ID>-<slug>.md`. Set `design: done` when it returns. A gap goes to Step 5.
-
-## Step 3: Group the code lanes into runs
-
-Default D2: the code lanes run in sequence in one worktree, in this order: backend, AI, DevOps, tooling, frontend, QA. Default D3: one worktree and one PR per feature.
-
-1. Drop every lane marked `none`.
-2. Each `large` lane is its own run, with its discipline agent.
-3. Consecutive `small` lanes form one run, with the feature implementer (the contract's `owner`).
-
-| Lane | Agent when `large` |
-| --- | --- |
-| backend | `backend-developer` |
-| AI | `ai-engineer` |
-| DevOps | `devops-security` |
-| tooling | never large (default D5) |
-| frontend | `frontend-developer` |
-| QA | `qa-engineer` |
-
-Write the order to `runs`. A frontend run starts only with `design: done` when the design lane is not `none`.
-
-## Step 4: Start a run
-
-Write the brief from `references/template-lane-brief.md` for run `runs[run]`, then:
+## Step 2: Start a layer
 
 ```bash
-scripts/spawn-detached F03-invitations --brief .sdd/run/F03-invitations.brief.md
+scripts/spawn-detached 2026-10-27-quote-approval L2a --brief .sdd/run/2026-10-27-quote-approval/L2a.brief.md
 ```
 
-The first run creates the worktree and branch from the contract's `base` and runs `init.sh` inside it (`SDD-RUN-02`, `SDD-SCR-03`); later runs reuse the same worktree. Set the state to `running`. When the frontend run starts, copy `.sdd/design/<ID>-<slug>.md` into the brief's read list; the run commits it as `.specs/features/<ID>-<slug>/design.md`, so it is reviewed with the PR.
+Write the brief from `references/template-brief.md`, first-run body, with the layer's `owner` and the skill names on its **Skills** line, verbatim, then run the script. It creates the delivery's feature branch from the trunk when it does not exist yet, then the layer's worktree on `feat/<delivery>-<layer>` cut from the feature branch, runs `init.sh` inside it (which resolves the environment and migrates its own database, `SDD-SCR-03`), starts the agent detached and records its pid (`SDD-RUN-02`). Set the state to `running` and `started` to now.
 
-## Step 5: When a run ends
+**The index's progress (`SDD-PLAN-11`).** This phase is the only writer of the index's Status column while layers run: `running` when a layer starts, `in-review` when its gates pass, `gates-failed`, `fixing` or `waiting` as its state file says. Each change is one cell, committed on the feature branch. A layer run never touches `plan.md`.
 
-The run is over when `.sdd/run/<ID>.exit` exists. Read only `.sdd/run/<ID>.result`:
+## Step 3: When a run ends
+
+The run is over when `.sdd/run/<id>/<layer>.exit` exists. Read only `.sdd/run/<id>/<layer>.result`:
 
 | `.result` | Next |
 | --- | --- |
-| `done`, more runs left | `run` + 1; Step 4 |
-| `done`, last run | `scripts/run-gates <ID>`; its one-line summary goes to `gates` |
-| `gap: <question>` | state `waiting`, the question under `gaps` (`H10`): a product change goes to the owner, then `workflow-search`; any other gap to `workflow-plan`, new item mode |
+| `done` | `scripts/run-gates <id> <layer>`; write its one-line summary to `gates` |
+| `gap: <question>` | state `waiting`, the question under `gaps`; hand it to `workflow-plan` as a new layer from a gap, or to the owner when it changes what the product promises (`SDD-RUN-07`) |
 | missing, or `.exit` non-zero | state `waiting`; tell the owner the run failed and give the log path, not its content |
 
-Gates `fail` → state `gates-failed`; resume the run that owns the failing gate's files with `--resume` and only the failing gates (`H11`). This is not a fix round (`SDD-RUN-03`). Gates `pass` → state `in-review`; the next step is `workflow-review` (`H12`).
+| Gates | Next |
+| --- | --- |
+| `fail` | state `gates-failed`; resume the implementer with the fix-round brief, listing only the failing gates. This does **not** count as a fix round, and `round` does not change (`SDD-RUN-03`) |
+| `pass` | state `in-review`. The layer now belongs to `workflow-review` |
 
-## Step 6: Report
+## Step 4: A fix round
 
-When nothing is ready and nothing is running, report one line per feature: ID, status, current run, open gaps. Nothing else.
+`workflow-review` leaves a layer in `fixing` with `round` already raised and the failing checks and broken rules in `review`. Write the fix-round brief with exactly those IDs, verbatim, and resume the same implementer:
+
+```bash
+scripts/spawn-detached 2026-10-27-quote-approval L2a --brief .sdd/run/2026-10-27-quote-approval/L2a.brief.md --resume
+```
+
+When its `.result` says `done`, go back to Step 3: gates first, then `in-review`. This phase never raises `round` and never decides how many rounds are left; the review does (`SDD-RUN-05`, `SDD-FLOW-03`).
+
+## Step 5: Hand off
+
+When at least one layer is `in-review`, every layer is `merged`, or nothing is `running`, the next phase is `workflow-review`. When it hands layers back as `fixing`, or merges a layer so that others become ready, this phase runs again from Step 1. Do not load another phase from inside this one (`SDD-FLOW-04`).
+
+Report one line per layer that changed: layer, status, and the next phase.
 
 ## Self-check
 
 | # | Check | Rule |
 | --- | --- | --- |
-| 1 | no code run started before every provider merged; design started on approval | `SDD-RUN-01`, `H7`, `H8` |
-| 2 | every lane with checks ran, under its agent; no agent ran for a `none` lane | — |
-| 3 | every code run of a feature ran in its one worktree, started by `spawn-detached` | `SDD-RUN-02` |
-| 4 | gates ran before Review; a gate failure never counted as a fix round | `SDD-RUN-03` |
-| 5 | every gap stopped the feature and went to Plan or the owner | `SDD-RUN-07` |
-| 6 | this conversation holds state files, not diffs, logs or design content | `SDD-CORE-04` |
+| 1 | no layer started before every layer it depends on merged into the feature branch | `SDD-RUN-01` |
+| 2 | every layer ran in its own worktree, on a branch cut from the feature branch by `spawn-detached`, with a brief naming its skills | `SDD-RUN-02` |
+| 3 | gates ran after every implement and fix run; a gate failure never counted as a round | `SDD-RUN-03` |
+| 4 | a fix-round brief listed only the IDs the review wrote to the state file | `SDD-RUN-05` |
+| 5 | an implementer's question became a gap, not an answer this phase picked | `SDD-RUN-07` |
+| 6 | only this phase and the review wrote the index's Status cells; no layer run edited `plan.md` | `SDD-PLAN-11` |
+| 7 | this conversation holds state files, not diffs, logs or reports | `SDD-CORE-04`, `SDD-FLOW-03` |
 
 ## Example
 
-F01 and F02 merged; F03 approved with `backend: large`, `frontend: small`, `qa: small`, `design: small`. Step 1: F03's code is ready; its design lane too. Step 2: `product-designer` returns invite dialog states. Step 3: `runs: [backend, frontend+qa]`; the implementer is `frontend-developer`. Step 4: run 0, `backend-developer` writes C1, C2, C4. Step 5: `done`; run 1, `frontend-developer` writes the dialog, C3 and the QA checks, and commits `design.md`. Last run `done`; `run-gates` → `pass — 4 checks, 2 gates`; state `in-review`.
-
-**Anti-pattern.** Starting F04's backend because F03's backend run finished. Corrected: F04's code waits for F03 to merge after Review; only F04's design lane may start early.
+Delivery `2026-10-27-quote-approval` approved; index rows `L1a` (—), `L2a` (L1a), `L3a` (L2a), `L4a` (L1a, L3a). Step 0 passes. Step 1: `L1a` is ready; the others wait. Step 2: `spawn-detached 2026-10-27-quote-approval L1a`; the script cuts `feat/2026-10-27-quote-approval` from `main`, then `feat/2026-10-27-quote-approval-L1a` from it; the brief names `tc96-backend:drizzle-mutation` and `tc96-backend:bun-test-build`; the index's `L1a` Status becomes `running`. Step 3: `.result` says `done`, and `run-gates` reports `fail — static:fail unit:ok`; state `gates-failed`, the implementer is resumed with G1 only, `round` stays 0. Its next `.result` says `done`, and `run-gates` reports `pass`; state and Status `in-review`. Step 5: the next phase is `workflow-review`. After `L1a` merges into the feature branch there, this phase runs again: `L2a` is ready.

@@ -19,7 +19,7 @@ verificado-em: 2026-10-07
 > as interchangeable: PRD, RFC and ADR.
 >
 > **What it is not.** It is not the delivery flow: the *when* of each document is
-> [Delivery Flow — Spec Driven Development](fluxo-de-entrega-sdd.md), and that note is the one that says which
+> `Delivery Flow — Spec Driven Development` (`skills/workflow/docs/delivery-flow.md`), and that doc is the one that says which
 > step writes which file in `.specs/`. This note says what each document **is**.
 >
 > **Why it exists.** A decision that exists only in the conversation or in the code gets reconstructed backwards
@@ -57,8 +57,8 @@ do not write a document: deliver.
 ### For a coding agent
 
 When writing to `.specs/`, use §4 to know which file each decision lives in, and §3 to know
-whether the file can still change. The PRD is written through `spec-prd`, an ADR through
-`spec-adr`, and a feature's design through `sdd-spec-writer`.
+whether the file can still change. The PRD is written through `doc-prd`, an ADR through
+`doc-adr`, and a delivery's design — its layer files — through `workflow-plan`, after `workflow-search` triaged the request.
 
 ### Conventions
 
@@ -103,7 +103,7 @@ why the obvious alternative was discarded.
 
 The owner is the one who moves the status, with an explicit answer in the conversation; the agent that wrote it never
 approves its own document (`SDD-CORE-03`, in
-[Delivery Flow — Spec Driven Development](fluxo-de-entrega-sdd.md) §5.6).
+`Delivery Flow — Spec Driven Development` (`skills/workflow/docs/delivery-flow.md`) §5.6).
 
 ---
 
@@ -111,17 +111,18 @@ approves its own document (`SDD-CORE-03`, in
 
 | Document | File | Template |
 | --- | --- | --- |
-| PRD | `.specs/PRD.md`, one per product | `spec/spec-prd/references/template.md` |
-| Design doc | the `spec.md` of each feature, in `.specs/features/<ID>-<slug>/` | `sdd/sdd-spec-writer/references/template-spec.md` |
-| RFC | no file of its own: an open technical decision is settled by the owner before the feature's bundle, and recorded as an ADR | — |
-| ADR | `.specs/adr/NNNN-<slug>.md` | `spec/spec-adr/references/template.md` |
+| PRD | `.specs/PRD.md`, one per product | `design-docs/doc-prd/references/template.md` |
+| Design doc | the delivery plan's layer files, one per layer, in `.specs/delivery/<date>-<slug>/plans/` | `workflow/workflow-plan/references/template-layer.md` |
+| RFC | no file of its own: an open technical decision is settled by the owner before the delivery plan, and recorded as an ADR | — |
+| ADR | `.specs/adr/NNNN-<slug>.md` | `design-docs/doc-adr/references/template.md` |
 
-The PRD belongs to the product and changes by amendment (`SDD-PRD-06`). A feature's design is
-frozen once the feature merges; a later change is a new item with its own folder (`SDD-SPEC-08`).
-The ADR stays outside the feature folders because an architecture decision usually applies to more
-than one feature, and the numbering is a single one for the repository (`DOC-ADR-03`). A feature's
-`plan.md` and `contract.md` are not decision documents of this note; their owner and their moment
-are in [Delivery Flow — Spec Driven Development](fluxo-de-entrega-sdd.md) §4.3.
+The PRD belongs to the product and changes by amendment (`SDD-PRD-06`). A layer file is frozen
+once its layer merges: it is never rewritten, and a later change is a new layer file with its own
+row in the index (`SDD-PLAN-09`). The ADR stays outside the delivery folders because an
+architecture decision usually applies to more than one delivery, and the numbering is a single one
+for the repository (`DOC-ADR-03`). The delivery's index (`plan.md`) and `contract.md` are not
+decision documents of this note; their owner and their moment are in `Delivery Flow — Spec Driven
+Development` (`skills/workflow/docs/delivery-flow.md`) §4.3.
 
 ---
 
@@ -182,7 +183,7 @@ Convention: `MUST`/`NEVER` are normative. **†** marks a decision of this doc.
 
 ```
 WHEN WRITING the PRD:              § 0, § 3 + DOC-CORE-*, DOC-PRD-*
-WHEN WRITING a feature's spec.md:  § 0, § 2, § 3 + DOC-CORE-*, DOC-RFC-03
+WHEN WRITING a layer file:         § 0, § 2, § 3 + DOC-CORE-*, DOC-RFC-03
 WHEN WRITING or SUPERSEDING an ADR: § 3, § 4 + DOC-ADR-*
 NEVER:                             this note for an execution task (a fix, refactor or technical adjustment)
                                    (it does not open a decision document, DOC-CORE-02)
@@ -201,7 +202,7 @@ NEVER:                             this note for an execution task (a fix, refac
 
 | Decision | What **not** to do | The bridge |
 | --- | --- | --- |
-| When each `.specs/` file is written, and by which step | decide it here | [Delivery Flow — Spec Driven Development](fluxo-de-entrega-sdd.md) §4, `SDD-*` |
+| When each `.specs/` file is written, and by which step | decide it here | `Delivery Flow — Spec Driven Development` (`skills/workflow/docs/delivery-flow.md`) §4, `SDD-*` |
 | The format of the architecture decision | invent another one | `software-architect`, "Output format": the ADR inherits axis, invariants and cost |
 | The format of the product decision | invent another one | `product-manager`, "Writing a spec / PRD" |
 | Acceptance criterion for a requirement | write prose | an `AC-NN` in the PRD, Given / When / Then (`SDD-PRD-03`) |
@@ -226,9 +227,9 @@ its ADR template has no alternatives section (here it does, `DOC-ADR-04`).
 
 ## Related
 
-- [Delivery Flow — Spec Driven Development](fluxo-de-entrega-sdd.md) — §4, where the
+- `Delivery Flow — Spec Driven Development` (`skills/workflow/docs/delivery-flow.md`) — §4, where the
   `.specs/` files enter the flow
-- `skills/spec/` — `spec-prd` and `spec-adr`, with their templates
-- `skills/sdd/sdd-spec-writer/` — the feature's `spec.md`, the design doc of this note
+- `skills/design-docs/` — `doc-prd` and `doc-adr`, among the nine document writers, with their templates
+- `skills/workflow/workflow-plan/` — the delivery plan's layer files, the design doc of this note
 - `agents/software-architect.md` — writes the ADRs
 - `agents/product-manager.md` — writes the PRD

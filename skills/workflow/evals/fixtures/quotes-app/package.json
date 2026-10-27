@@ -1,0 +1,12 @@
+{
+  "name": "quotes-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/server/index.ts",
+    "lint": "biome check src",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "e2e": "playwright test"
+  }
+}

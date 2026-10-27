@@ -1,84 +1,109 @@
 ---
 name: workflow-review
-description: Runs phase 4 of the delivery flow v2 — for a feature whose gates are green, starts a new `code-reviewer` with `sdd-contract-review` and only the contract, the Surface, the diff and the gate summary, decides met or unmet by `AC-*`, sends a failing check back to the lane that owns it for at most two fix rounds, turns a feature still failing into a new item for Plan, escalates a security defect or a regression of a merged contract to the owner, and on met opens the PR under the owner's authorization and marks the merge so consumers can start, citing handoffs `H12`–`H17` and `SDD-RUN-03`–`SDD-RUN-08`. In a project on the delivery flow v2 (`story.md` bundles), use when a feature's state is `in-review`, or someone asks to review, approve, merge or close a feature of the run. Not for a general code review outside a run (the family review skills), the reviewer's own checklist (sdd-contract-review), nor writing the new item (workflow-plan).
+description: Decides whether each layer in review met its checks, delivers it into the delivery's feature branch, and, once every layer is merged there, validates the whole delivery and opens its one pull request into the trunk — a new code-reviewer instance checks a layer with only its layer file, the diff against the feature branch and the gate summary; devops-security joins for a security-class layer; a met layer becomes a PR into `feat/<delivery>` under the owner's authorization; an unmet one goes back to workflow-implementation for at most two fix rounds and then to workflow-plan as a new layer; the final review checks `contract.md` on the feature branch before the PR into the trunk the owner approves — holding only one state file per layer, citing `SDD-RUN-04`–`SDD-RUN-08`, `SDD-PLAN-07`, `SDD-PLAN-11` and `SDD-FLOW-*` IDs. Use when a layer's state is `in-review`, when every layer of a delivery is merged, when the person asks to review, deliver or open the PR of a run, or for the run's final report. Not for a general code review outside a run (code-reviewer with the family review skills), implementing a fix (workflow-implementation), nor writing the new layer (workflow-plan).
 type: skill
 family: workflow
 language: en
-source: "workflow/foundations/phases.md §4 (Draft, 2026-10-26)"
+source: "[Delivery Flow — Spec Driven Development](../docs/delivery-flow.md)"
 tags:
   - skill
   - workflow
   - review
+  - orchestration
 ---
 
 # workflow-review
 
-> **Delegation (`SDD-CORE-02`).** This skill routes; it reviews nothing itself. The verdict comes from a new `code-reviewer` instance with `sdd-contract-review`; a security-class feature adds `devops-security`; a fix goes back to the run that owns the failing check through `workflow-implementation`'s lane brief; a new item goes to `workflow-plan`.
-> **Context (`SDD-CORE-04`).** Hold the state file only. Verdicts come back as IDs.
-> **Status.** Draft. Review is unchanged from the SDD flow; this skill implements `workflow/foundations/phases.md` §4 and `workflow/foundations/handoffs.md` `H12`–`H17`.
+> **Delegation (`SDD-CORE-02`).** This phase routes; it reviews nothing itself. Each review goes to a new `code-reviewer` instance, called by name as a subagent, with the procedure in `references/contract-review.md`; a security-class layer adds `devops-security`; a PR body that needs reading the plan goes to `repo-operator`.
+> **Context (`SDD-CORE-04`, `SDD-FLOW-03`).** Hold one state file per layer and the index's Status column, and nothing else: never a diff, a gate log or a review report. The reviewer returns a verdict; only its IDs reach the state file, and the state file is the only thing this phase passes back to `workflow-implementation`.
 
-## Step 0: Preconditions
+Rules this phase implements: [Delivery Flow — Spec Driven Development](../docs/delivery-flow.md) §4.3 "The checks", §5.2 steps 4–5, §5.3, §5.4, §5.7, `SDD-PLAN-07`, `SDD-PLAN-11`, `SDD-RUN-04`–`SDD-RUN-08`, `SDD-FLOW-02`, `SDD-FLOW-03`.
 
-| Check | If it fails |
+## Scope
+
+| The state is... | Go to |
 | --- | --- |
-| state `in-review` and `gates: pass` | back to `workflow-implementation`; a red gate never reaches review (`SDD-RUN-03`) |
-| push and PR authorization, asked once: "authorize push and PR for this run, or per wave?" | ask; without it, features stop at `contract-met` (`SDD-RUN-08`) |
+| a layer `in-review` with gates `pass` | this phase, Step 1 |
+| a layer `checks-met` | this phase, Step 3 |
+| every layer of the index `merged` | this phase, Step 4 |
+| a `blocking` entry, or `unmet` after round 2 | this phase, Step 5 |
+| `waiting`, `running`, `gates-failed` or `fixing` | `workflow-implementation` |
+| a review of code outside a run | `code-reviewer`, with the family review skills |
 
-## Step 1: Review against the contract (`H12`)
+## Step 0: Push and PR authorization
 
-Start a **new** `code-reviewer` instance, never one that saw this feature, with `sdd-contract-review` and exactly these inputs (`SDD-RUN-04`):
+Ask once per delivery, before the first layer PR: "authorize push and the layer PRs into `feat/<delivery>` for this delivery?". Quote the owner's words in each state file's `authorization`. Without them, layers stop at `checks-met`. Merging a layer PR on the owner's behalf is covered only if the owner said so in those words. The delivery's PR into the trunk is never covered: the owner approves it on the PR (`SDD-RUN-08`).
+
+## Step 1: Review a layer
+
+For each layer in `in-review`, start a **new** `code-reviewer` instance — never one that saw this layer before — with exactly these inputs (`SDD-RUN-04`):
 
 | Input | Value |
 | --- | --- |
-| contract | `.specs/features/<ID>-<slug>/contract.md` |
-| Surface | the `surface` list of `contract.md`'s frontmatter (default D1) |
-| diff | `git -C <worktree> diff <base>...HEAD` (the reviewer runs it) |
+| procedure | the absolute path of `references/contract-review.md`, from this skill's base directory |
+| layer file | `.specs/delivery/<id>/plans/<layer>-<slug>.md`: its **Checks**, **Must hold** and **Surface** |
+| diff | `git -C <worktree> diff feat/<delivery>...HEAD` (the reviewer runs it; you pass the command) |
 | gates | the state file's `gates` line |
-| open findings | delta re-review only: the state file's `review` line |
+| open findings | on a delta re-review only: the state file's `review` line |
 
-`design.md` is in the diff and in the Surface; the reviewer checks it only through the contract checks that cite it. For `risk: security`, start `devops-security` at the same time on the sensitive path; its result is G3.
+For a layer that lists G3, start `devops-security` at the same time on the sensitive path; its result is G3. Reviews of different layers go out side by side; they only read.
 
-## Step 2: Route the verdict
+## Step 2: Write the verdict
+
+Write the verdict to the state file as IDs only, and the same status to the index's row (`SDD-PLAN-11`):
 
 | Verdict | State | Next |
 | --- | --- | --- |
-| `met`, G3 clean when listed | `contract-met` | Step 4 |
-| `unmet`, `round` < 2 | `fixing`, `round` + 1 | Step 3 (`H13`) |
-| `unmet`, `round` = 2 | stop fixing (`SDD-RUN-05`) | Step 5 (`H14`) |
-| a `blocking` note | `waiting`, the note under `blocking` | ask the owner whether it becomes a new item before merge (`H15`) |
+| `met`, and G3 clean when listed | `checks-met` | Step 3 |
+| `unmet`, `round` < 2 | `fixing`, `round` + 1; the failing checks and broken rules under `review`, verbatim | `workflow-implementation`, Step 4; after its gates, back here for a delta re-review with the open findings |
+| `unmet`, `round` = 2 | stop fixing (`SDD-RUN-05`) | Step 5 |
+| any `blocking` note | `waiting`, the note under `blocking` | ask the owner whether it becomes a new layer before merge |
 
-Non-blocking notes go under `notes`; they never fail the review.
+Non-blocking notes go under `notes`; they never fail the review. This phase owns `round`: it raises it, and it is the only phase that reads it to decide (`SDD-FLOW-03`).
 
-## Step 3: Fix round (`H13`)
+## Step 3: Deliver a layer into the feature branch
 
-1. Group the failing checks by the lane tag in `contract.md`; an unmet `AC-*` with no failing check goes to the lane of its checks.
-2. For each code run in `runs` that owns a failing check, write the fix-round brief of `template-lane-brief.md` (in `workflow-implementation`) with only its checks, verbatim, and start it with `scripts/spawn-detached <ID> --brief <path> --resume`.
-3. When every fix run is `done`, run `scripts/run-gates <ID>`; then a new reviewer, with the open findings (delta re-review). Back to Step 2.
+With `authorization` set, push `feat/<delivery>-<layer>` and open its PR **into `feat/<delivery>`**, never into the trunk, its body from `references/template-pr.md`, layer body, filled from the state file and the layer's checks. Run one known command each, here; use `repo-operator` when the body needs reading the plan. Merge it only if the owner's words cover it; otherwise report the PR link. Then `scripts/stop <delivery> <layer>`, state `merged`, `pr` and `finished` set, and the index's row `merged` with the PR link, committed on the feature branch. Layers that depend on this one may now be ready: that is `workflow-implementation`'s Step 1.
 
-A fix never widens the contract. There is no third round and no move to a higher tier.
+## Step 4: Validate the delivery and open its PR into the trunk
 
-## Step 4: Deliver (`H16`, `H17`)
+When every row of the index is `merged`:
 
-With `authorization` set: push the branch and open the PR, body from `template-pr.md` of `sdd-orchestrator`, filled from the state file and the contract's **Met when** line. One known command each, run here; or `repo-operator` when the body needs reading the bundle. Merge only if the owner's words cover it; otherwise report the PR link. Then `scripts/stop <ID>`, state `merged`, `finished` to now. Every consumer of this feature now re-checks its code start in `workflow-implementation` Step 1.
+1. `scripts/run-gates <delivery> --all` on the feature branch. `fail` → the failing levels go to Step 5 as a new layer; nothing is reviewed on a red branch.
+2. Start a **new** `code-reviewer` with the procedure, `contract.md`, the layer files its rows point to, `git diff <trunk>...feat/<delivery>` as a command, and that gate line. It answers whether the contract is met: every `AC-*` row with all its checks proved and green (`SDD-PLAN-07`).
+3. `met` → push `feat/<delivery>` and open the delivery's PR **into the trunk**, its body from `references/template-pr.md`, delivery body, listing every `AC-*` with the checks and layers that proved it. Report the link and stop: it merges only on the owner's approval on that PR (`SDD-RUN-08`).
+4. `unmet` → the failing rows go to Step 5 as a new layer.
 
-## Step 5: New item (`H14`)
+## Step 5: New layer or gap
 
-Run `workflow-plan` in **new item** mode with the feature ID, the failing checks verbatim and the failing branch. The owner approves the new item (state `split`, `next` set; its consumers keep waiting for it) or drops the feature (state `dropped`) (`SDD-RUN-06`).
+Nothing goes back to search, and no merged file is reopened (`SDD-FLOW-02`):
+
+| Case | Next |
+| --- | --- |
+| `unmet` after round 2 | hand `workflow-plan` a **new layer**: the layer ID, the failing checks and the branch. The owner approves it (state `split`, `next` set) or drops the layer (state `dropped`) (`SDD-RUN-06`) |
+| the delivery's final review `unmet` | the same, with the failing `AC-*` rows and the feature branch |
+| a blocking note the owner turns into a new layer | the same, with the note as the input |
+| a gap that changes what the product promises | ask the owner; the answer goes to `workflow-plan` as a PRD amendment |
+
+There is no third fix round and no move to a higher tier.
+
+## Step 6: Report and hand off
+
+When nothing is `in-review` or `checks-met`, report one line per layer: layer, status, PR link or `next`; then the delivery's PR link once opened, and the open owner questions. Nothing else. Then name the next phase: `workflow-implementation` when layers are `fixing` or newly ready, `workflow-plan` when a new layer is waiting to be written. Do not load another phase from inside this one (`SDD-FLOW-04`).
 
 ## Self-check
 
 | # | Check | Rule |
 | --- | --- | --- |
-| 1 | gates were green before every review | `SDD-RUN-03` |
-| 2 | every review ran in a new instance with only the four inputs | `SDD-RUN-04` |
-| 3 | every fix went only to the runs that own a failing check | `H13` |
-| 4 | no feature got a third fix round | `SDD-RUN-05` |
-| 5 | a feature failing round 2 became a new item or was dropped by the owner | `SDD-RUN-06` |
-| 6 | nothing merged without its contract met and the owner's authorization | `SDD-RUN-08` |
-| 7 | this conversation holds state files, not diffs or reports | `SDD-CORE-04` |
+| 1 | every review ran in a new instance with only its inputs and the procedure | `SDD-RUN-04` |
+| 2 | a layer counted as met only when every check and rule in its file was proved | `SDD-RUN-04` |
+| 3 | the delivery counted as met only when every `AC-*` row of `contract.md` was proved on the feature branch | `SDD-PLAN-07` |
+| 4 | no layer got a third fix round | `SDD-RUN-05` |
+| 5 | a layer failing round 2 became a new layer or was dropped by the owner; nothing went back to search | `SDD-RUN-06`, `SDD-FLOW-02` |
+| 6 | every layer PR went into the feature branch; only the validated delivery's PR went into the trunk, and nothing merged there without the owner | `SDD-RUN-08` |
+| 7 | the index's Status and PR cells changed only here and in `workflow-implementation` | `SDD-PLAN-11` |
+| 8 | only IDs and one-line verdicts reached the state file | `SDD-CORE-04`, `SDD-FLOW-03` |
 
 ## Example
 
-F03 `in-review`, `gates: pass`, runs `[backend, frontend+qa]`. Step 1: reviewer returns `unmet — AC-03 unproved, C4 failing`. Step 2: round 1. Step 3: C4 is tagged `backend`; only the backend run resumes, with C4 verbatim. Gates pass; a new reviewer on the delta returns `met`. Step 4: the owner authorized PRs per wave; push, PR, the owner merges; F03 `merged`. F04 and F05 re-check their start.
-
-**Anti-pattern.** Resuming every run of the feature with the whole review report. Corrected: only the run that owns C4, with C4 alone; the others keep their commits untouched.
+Step 0: the owner answers "pode abrir e mergear os PRs das camadas", quoted in each state file. `L1a` is `in-review` with `pass — static:ok unit:ok`. Step 1: a new `code-reviewer` with the procedure path, `L1a`'s file, the diff command against `feat/2026-10-27-quote-approval` and the gates line. It says `met`. Step 3: PR into `feat/2026-10-27-quote-approval`, merged under the owner's words; `L1a` `merged`, the index updated; next phase `workflow-implementation`, where `L2a` becomes ready. Later, `L2a`'s first review: `unmet — C7 unproved`; state `fixing`, `round` 1. The delta re-review after the fix: `met`. When every row is `merged`, Step 4: `run-gates --all` passes, the final review finds `AC-01`–`AC-05` proved, and the delivery's PR into `main` is opened and reported. The owner approves and merges it.

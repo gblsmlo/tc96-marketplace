@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: adr-sessions-postgres
+expected_outcome: |
+  One Proposed ADR numbered 0005 recording the one decision, Redis as the discarded alternative
+  with the prompt's reason, a cost that is either the prompt's or marked proposed, and invariants
+  the prompt did not give left as a gap instead of invented.

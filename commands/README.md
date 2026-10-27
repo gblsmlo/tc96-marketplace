@@ -1,110 +1,112 @@
-# Comandos — pontos de entrada nomeados
+# Commands — named entry points
 
-Um comando é o que **a pessoa invoca**: `/scaffold-projeto`, `/configurar-antigravity`.
-Não é uma quarta camada da cadeia — papel → procedimento → regra continua sendo a
-cadeia, e um comando roteia para as mesmas skills e para a mesma regra.
+A command is what **the person invokes**: `/scaffold-projeto`, `/configurar-antigravity`.
+It is not a fourth layer of the chain — role → procedure → rule is still the chain, and a
+command routes to the same skills and the same rules.
 
-A diferença em relação a um agente: o agente recebe uma tarefa em contexto próprio e
-decide o que carregar; o comando é um roteiro fixo, com fases numeradas e portões.
+The difference from an agent: an agent receives a task in its own context and decides what
+to load; a command is a fixed script, with numbered phases and gates.
 
-## Scaffold de projeto TanStack Start
+## TanStack Start project scaffold
 
-O orquestrador, que chama as fases: [`scaffold-projeto`](scaffold-projeto.md) —
-orquestra o scaffold completo de um projeto TanStack Start, fase a fase.
+The orchestrator, which calls the phases: [`scaffold-projeto`](scaffold-projeto.md) —
+orchestrates the full scaffold of a TanStack Start project, phase by phase.
 
-As 10 fases, executáveis uma a uma:
+The 10 phases, each runnable on its own:
 
-| Fase | O que faz |
+| Phase | What it does |
 | --- | --- |
-| [`scaffold-01-tanstack-start`](scaffold-01-tanstack-start.md) | Fase 1 — base TanStack Start com TypeScript, Tailwind e Vite |
-| [`scaffold-02-biome`](scaffold-02-biome.md) | Fase 2 — Biome como lint e formatter |
-| [`scaffold-03-bun-test`](scaffold-03-bun-test.md) | Fase 3 — `bun test`, happy-dom e Testing Library |
-| [`scaffold-04-git-hooks`](scaffold-04-git-hooks.md) | Fase 4 — git hooks e portões de commit |
-| [`scaffold-05-fba`](scaffold-05-fba.md) | Fase 5 — estrutura de diretórios Feature-Based Architecture |
-| [`scaffold-06-shadcn`](scaffold-06-shadcn.md) | Fase 6 — shadcn/ui e tokens de design |
-| [`scaffold-07-workos-authkit`](scaffold-07-workos-authkit.md) | Fase 7 — autenticação com WorkOS AuthKit |
-| [`scaffold-08-scripts`](scaffold-08-scripts.md) | Fase 8 — scripts de package e tarefas do projeto |
-| [`scaffold-09-feature-exemplo`](scaffold-09-feature-exemplo.md) | Fase 9 — feature de exemplo ponta a ponta |
-| [`scaffold-10-verificacao`](scaffold-10-verificacao.md) | Fase 10 — verificação final do scaffold |
+| [`scaffold-01-tanstack-start`](scaffold-01-tanstack-start.md) | Phase 1 — TanStack Start base with TypeScript, Tailwind and Vite |
+| [`scaffold-02-biome`](scaffold-02-biome.md) | Phase 2 — Biome as linter and formatter |
+| [`scaffold-03-bun-test`](scaffold-03-bun-test.md) | Phase 3 — `bun test`, happy-dom and Testing Library |
+| [`scaffold-04-git-hooks`](scaffold-04-git-hooks.md) | Phase 4 — git hooks and commit gates |
+| [`scaffold-05-fba`](scaffold-05-fba.md) | Phase 5 — Feature-Based Architecture directory structure |
+| [`scaffold-06-shadcn`](scaffold-06-shadcn.md) | Phase 6 — shadcn/ui and design tokens |
+| [`scaffold-07-workos-authkit`](scaffold-07-workos-authkit.md) | Phase 7 — authentication with WorkOS AuthKit |
+| [`scaffold-08-scripts`](scaffold-08-scripts.md) | Phase 8 — package scripts and project tasks |
+| [`scaffold-09-feature-exemplo`](scaffold-09-feature-exemplo.md) | Phase 9 — end-to-end example feature |
+| [`scaffold-10-verificacao`](scaffold-10-verificacao.md) | Phase 10 — final scaffold verification |
 
-## Variante FBA
+## FBA variant
 
-Cinco fases com o mesmo recorte, mais detalhadas e com o teste de fronteira de
-[Feature-Based Architecture](../knowledge-base/feature-based-architecture.md)
-escrito por extenso:
+Five phases with the same cut, in more detail, with the boundary test of
+[Feature-Based Architecture](../knowledge-base/feature-based-architecture.md) written out
+in full:
 
-| Fase | O que faz |
+| Phase | What it does |
 | --- | --- |
-| [`scaffold-fba-01-start`](scaffold-fba-01-start.md) | Variante FBA — fase 1, base do projeto |
-| [`scaffold-fba-02-biome`](scaffold-fba-02-biome.md) | Variante FBA — fase 2, Biome |
-| [`scaffold-fba-03-bun-test`](scaffold-fba-03-bun-test.md) | Variante FBA — fase 3, `bun test` e Testing Library |
-| [`scaffold-fba-04-git-hooks`](scaffold-fba-04-git-hooks.md) | Variante FBA — fase 4, git hooks |
-| [`scaffold-fba-05-fba`](scaffold-fba-05-fba.md) | Variante FBA — fase 5, estrutura de diretórios |
+| [`scaffold-fba-01-start`](scaffold-fba-01-start.md) | FBA variant — phase 1, project base |
+| [`scaffold-fba-02-biome`](scaffold-fba-02-biome.md) | FBA variant — phase 2, Biome |
+| [`scaffold-fba-03-bun-test`](scaffold-fba-03-bun-test.md) | FBA variant — phase 3, `bun test` and Testing Library |
+| [`scaffold-fba-04-git-hooks`](scaffold-fba-04-git-hooks.md) | FBA variant — phase 4, git hooks |
+| [`scaffold-fba-05-fba`](scaffold-fba-05-fba.md) | FBA variant — phase 5, directory structure |
 
-## Especificação
+## Specification
 
-[`spec`](spec.md) — planeja e para: escreve ou emenda `.specs/PRD.md` e depois o pacote de cada
-feature em `.specs/features/` (`spec.md`, `plan.md`, `contract.md`), roda `spec-prd` e
-`sdd-spec-writer`, nesta ordem, e para antes de qualquer código.
+[`spec`](spec.md) — searches, plans and stops: runs `workflow-search` to triage the request,
+then `workflow-plan` to write or amend `.specs/PRD.md`, the ADRs and the delivery plan in
+`.specs/delivery/<date>-<slug>/` (the index `plan.md`, one `plans/<layer>-<slug>.md` per layer,
+`contract.md`), and stops before any code.
 
-[`scaffold-sdd-scripts`](scaffold-sdd-scripts.md) — escreve na raiz do projeto os seis scripts do
-harness do fluxo SDD (`init.sh` e `scripts/`) e o `sdd.config.sh`.
+[`scaffold-sdd-scripts`](scaffold-sdd-scripts.md) — writes the six harness scripts of the
+delivery flow (`init.sh` and `scripts/`) and `sdd.config.sh` at the project root.
 
-## Ambiente
+## Environment
 
-[`configurar-antigravity`](configurar-antigravity.md) — configura o agente do Antigravity com as regras desta casa.
+[`configurar-antigravity`](configurar-antigravity.md) — configures the Antigravity agent with
+this house's rules.
 
-## Anatomia
+## Anatomy
 
-| Campo | Para quê |
+| Field | What it is for |
 | --- | --- |
-| `nome:` | igual ao arquivo; é o que vira `/nome` no runtime |
-| `descricao:` | a linha que a pessoa lê na lista de comandos |
-| `tipo: comando` | o que faz o adaptador emitir este arquivo |
-| `idioma:` | `en` — o corpo veio assim do build anterior, e não foi traduzido |
-| `tags:` | quando o comando original trazia |
+| `nome:` | same as the file; it is what becomes `/nome` at runtime |
+| `descricao:` | the line the person reads in the command list |
+| `tipo: comando` | what makes the adapter emit this file |
+| `idioma:` | `en` — the body came that way from the previous build and was not translated |
+| `tags:` | when the original command carried them |
 
-Quem emite: `build/claude-code.sh` escreve `commands/<nome>.md` com `description:`,
-para os comandos declarados em `PLUGINS`; `build/agents-md.sh` escreve a tabela
-**Comandos** no `AGENTS.md` e copia o corpo sem frontmatter.
+Who emits them: `build/claude-code.sh` writes `commands/<nome>.md` with `description:` for the
+commands declared in `PLUGINS`; `build/agents-md.sh` writes the **Commands** table in
+`AGENTS.md` and copies the body without frontmatter.
 
-## Bun, desde 2026-09-22
+## Bun, since 2026-09-22
 
-O gerenciador e o runner são **Bun**, não pnpm. O que a migração fixou, por regra:
+The package manager and runner are **Bun**, not pnpm. What the migration fixed, by rule:
 
-| Regra | O que entrou |
+| Rule | What came in |
 | --- | --- |
-| `BUN-CORE-06` | script do `package.json` é chamado na forma longa `bun run <script>` |
-| `BUN-CORE-02` | `typecheck: tsc --noEmit` nos scripts, e `bunx tsc --noEmit` no portão da fase 10 — o runtime transpila **sem** checar tipo |
-| `BUN-PKG-01/02` | o checklist final cobra `bun.lock` commitado, e `bun ci` no CI |
+| `BUN-CORE-06` | a `package.json` script is called in the long form `bun run <script>` |
+| `BUN-CORE-02` | `typecheck: tsc --noEmit` in the scripts, and `bunx tsc --noEmit` in the phase 10 gate — the runtime transpiles **without** type-checking |
+| `BUN-PKG-01/02` | the final checklist requires a committed `bun.lock`, and `bun ci` in CI |
 
-Equivalências usadas: `pnpm add -D` → `bun add -d` · `pnpm dlx`/`pnpm exec`/`npx` → `bunx`
-· `node -e` → `bun -e` com `Bun.file`/`Bun.write` · `pnpm-lock.yaml` → `bun.lock`.
+Equivalents used: `pnpm add -D` → `bun add -d` · `pnpm dlx`/`pnpm exec`/`npx` → `bunx`
+· `node -e` → `bun -e` with `Bun.file`/`Bun.write` · `pnpm-lock.yaml` → `bun.lock`.
 
-**As fases 3 rodam em `bun test`**, não em Vitest — `scaffold-03-bun-test` e
-`scaffold-fba-03-bun-test`. O `vitest.config.ts` sumiu junto: `bun test` lê
-`compilerOptions.paths` do `tsconfig.json` (verificado no bun 1.3.14), e o mapa de alias
-duplicado — cuja divergência com o `tsconfig` era o modo de falha documentado da fase —
-deixou de existir. O que se perde é o `test:ui`, que o `bun test` não tem.
+**Phase 3 runs on `bun test`**, not Vitest — `scaffold-03-bun-test` and
+`scaffold-fba-03-bun-test`. `vitest.config.ts` went with it: `bun test` reads
+`compilerOptions.paths` from `tsconfig.json` (verified on bun 1.3.14), and the duplicated alias
+map — whose drift from `tsconfig` was the phase's documented failure mode — no longer exists.
+What is lost is `test:ui`, which `bun test` does not have.
 
-`bunx @tanstack/create-start@latest` em vez de `bun create @tanstack/start@latest`: o
-`bun create <t>` roda `bunx create-<t>`, e essa regra não resolve pacote com escopo. O
-pacote real é [`@tanstack/create-start`](https://www.npmjs.com/package/@tanstack/create-start).
+`bunx @tanstack/create-start@latest` instead of `bun create @tanstack/start@latest`:
+`bun create <t>` runs `bunx create-<t>`, and that rule does not resolve a scoped package. The
+real package is [`@tanstack/create-start`](https://www.npmjs.com/package/@tanstack/create-start).
 
-**Um passo desapareceu.** A fase `scaffold-fba-02-biome` carregava um laço com `node -e`
-para conferir se cada pacote era dependência antes de removê-lo — contorno de `pnpm`, que
-sai com 1 em nome ausente. `bun remove` aceita vários nomes, remove o que existe e sai 0
-(verificado no bun 1.3.14), então o laço virou uma linha.
+**One step disappeared.** The `scaffold-fba-02-biome` phase carried a `node -e` loop to check
+whether each package was a dependency before removing it — a workaround for `pnpm`, which exits
+1 on a missing name. `bun remove` accepts several names, removes what exists and exits 0
+(verified on bun 1.3.14), so the loop became one line.
 
-## O que está declarado, e não conferido
+## What is declared, and not checked
 
-Estes 17 arquivos vieram do build anterior **sem revisão de conteúdo**. O que a migração
-para Bun encostou, e não resolveu:
+These 17 files came from the previous build **without a content review**. What the Bun
+migration touched, and did not resolve:
 
-- **`vinxi` nos scripts `dev`/`build`/`start`.** É o driver antigo do TanStack Start; as
-  versões atuais rodam sobre Vite direto.
-- **`biome.json` com `$schema` da 1.9.4**, e no formato da v1 (`organizeImports` na raiz).
-  O `bun add -d @biomejs/biome` instala hoje a **2.5.14**, onde essa chave mudou de lugar.
-  E o valor do `$schema` está escrito como link markdown, não como URL.
-- `scaffold-01…10` e `scaffold-fba-01…05` cobrem o mesmo terreno com detalhe diferente,
-  e nada declara qual dos dois é o caminho corrente.
+- **`vinxi` in the `dev`/`build`/`start` scripts.** It is TanStack Start's old driver; current
+  versions run on Vite directly.
+- **`biome.json` with the 1.9.4 `$schema`**, in the v1 format (`organizeImports` at the root).
+  `bun add -d @biomejs/biome` installs **2.5.14** today, where that key moved. And the
+  `$schema` value is written as a markdown link, not a URL.
+- `scaffold-01…10` and `scaffold-fba-01…05` cover the same ground with different detail, and
+  nothing declares which of the two is the current path.

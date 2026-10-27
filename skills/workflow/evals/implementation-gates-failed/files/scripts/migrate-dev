@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Stand-in: the real script migrates the checkout's own development database.
+echo "migrate-dev: pass — .sdd/logs/migrate.log"

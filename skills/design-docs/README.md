@@ -1,46 +1,96 @@
-# design-docs skills — a feature's interfaces and proof
+# design-docs skills — writers for every document the delivery touches
 
-> **Status:** Draft, 2026-10-26. Written for the delivery flow v2 (`workflow/README.md`, itself a
-> draft).
+Nine skills, one per document. Each is a **writer**: it takes what was already decided and puts it
+on the page in the house template. None of them searches the codebase, investigates the problem,
+researches or decides scope — that work happens before the writer runs, and its result is the
+writer's input. A workflow calls them at its edges; a person can call any one alone.
 
-Three skills, one per design document a feature keeps in its folder. Each follows the layout of the
-[spec family](../spec/README.md): **self-contained**, with its own template, the text of the rules
-it enforces, the defaults it applies, and an executable self-check, so it works without loading
-the knowledge base or another skill.
-
-| Skill | The question it answers | Writer | File |
+| Skill | The question the document answers | Default output | Model · effort |
 | --- | --- | --- | --- |
-| `story-write` | who is this feature for, and which acceptance criteria does it deliver? | `spec-writer` | `.specs/features/<ID>-<slug>/story.md` |
-| `spec-write` | what does this feature expose and consume? | `spec-writer` | `.specs/features/<ID>-<slug>/spec.md` |
-| `contract-write` | how do we prove this feature works? | `spec-writer` | `.specs/features/<ID>-<slug>/contract.md` |
+| `doc-prd` | what are we building, why, as which capabilities, proved by which criteria? | `.specs/PRD.md` | `medio` · `alto` |
+| `doc-adr` | what did we decide that outlives this change? | `.specs/adr/NNNN-<slug>.md` | `rapido` · `medio` |
+| `doc-epic` | which capability, for whom, and how do we know it paid off? | inline (tracker) | `rapido` · `medio` |
+| `doc-feature` | what slice ships next, and how do we know it works? | inline (tracker) | `rapido` · `medio` |
+| `doc-story` | what can one user do, and how is it proved? | inline (tracker) | `rapido` · `medio` |
+| `doc-tasks` | in what order is it built, in provable pieces? | `tasks.md` beside the source | `rapido` · `medio` |
+| `doc-bug` | what fails, where, and how does someone see it fail? | inline (tracker) | `rapido` · `medio` |
+| `doc-spec` | what does the feature expose and consume, and how at its boundaries? | the path the caller names, or inline | `medio` · `alto` |
+| `doc-pr` | what does the change do, why, and how is it checked? | inline | `rapido` · `medio` |
 
-`workflow-plan` calls the three, in this order, for each feature of an approved PRD:
-`story.md` → `spec.md` → `contract.md`, because the contract proves the invariants the spec
-declares and traces the `AC-*` the story lists.
+The contract all nine follow — what a writer may read, structure versus substance, the gap marker,
+the anchor, status, the return block and the tier table — is
+[docs/writing-contract.md](docs/writing-contract.md) (`DD-*`).
 
 ```
 design-docs/
 ├── README.md
-└── <skill>/
-    ├── SKILL.md              inputs, steps, self-check, examples
-    ├── references/
-    │   ├── template.md       the document's body
-    │   └── rules.md          the rule text, the v2 defaults and the lifecycle
-    └── scripts/
-        └── self-check.sh     structural probes; exit 1 on any FAIL
+├── docs/
+│   ├── writing-contract.md   the DD-* rules every skill links to
+│   └── SOURCES.md            what the templates were compared against (not shipped)
+├── evals/                    test cases, run with `claude plugin eval`, and model-cost.py (not shipped)
+└── doc-<type>/
+    ├── SKILL.md              scope, anchor, steps, self-check, example
+    └── references/
+        ├── template.md       the document's fields and body
+        └── rules.md          doc-prd and doc-adr only: the DOC-* and SDD-* rule text, lifecycle, amendment
 ```
 
-## Why the spec family is the base, and the `spec` command is not
+## How the documents connect
 
-| Candidate | What it is | Used as |
-| --- | --- | --- |
-| `skills/spec/` (`spec-prd`, `spec-adr`) | one self-contained skill per document: template, rules copied in, owner review, self-check, evals | the layout and the decisions of this family |
-| `commands/spec.md` | an orchestration command: PRD, then `sdd-spec-writer`, then stop | not a base: it orders writers, it writes nothing; `workflow-plan` plays that role in v2 |
+```
+PRD ──► Epic ──► Feature ──► Story ──► Tasks ──► PR
+ │                  │                    ▲         ▲
+ │                  └──► Spec ───────────┘         │
+ └──► ADR ◄── Spec                     Bug ────────┘
+```
+
+IDs born in one document are cited, not copied, by the next: a story traces `AC-03`, a task
+enables it, a PR closes the task (contract §8).
 
 ## Decisions
 
-1. **Rule text is copied into each skill**, as in the spec family, with the IDs kept so a citation
-   still resolves. A v2 change to a rule is written after the rule, not over it.
-2. **Every document is born a draft.** The writer never approves its own file (`SDD-CORE-03`).
-3. **Self-checks are scripts.** What a script can prove (an `AC-*` without a check, a lane with no
-   check, a consumed item its provider does not provide) is not left to reading.
+1. **Writers, not investigators** (`DD-CORE-01`, `DD-CORE-02`). Popular document skills either
+   interview the user (snarktank `create-prd`, BMAD's coaching PRD, Anthropic's `doc-coauthoring`)
+   or research (BMAD discovery, spec-kit `/plan`, Kiro's bugfix design). Both stall or leak inside
+   a workflow. This family follows the "record, don't invent" line — BMAD's headless mode, phuryn's
+   `create-prd`, this repository's own former `spec-prd`: an unknown goes to a named gap with who
+   decides it, and the writer never guesses to fill it. spec-kit's `[NEEDS CLARIFICATION]` cap of
+   three was not adopted: a writer that cannot guess must not be forced to.
+2. **One anchor per document** (`DD-CORE-06`). Missing the anchor returns `blocked` with the
+   questions, instead of a file of placeholders that passes for progress.
+3. **Structure is the writer's, substance is the input's** (`DD-CORE-03`, `DD-CORE-04`). Splitting
+   needs into stories or tasks, numbering, Given / When / Then and an order derived from stated dependencies are the writer's job;
+   a cut or order it derived is marked `(proposed)`. Numbers, targets, reasons and decisions come
+   from the input or become gaps.
+4. **The tier follows the structuring, not the importance.** The content is decided upstream, so
+   no writer runs on the top tier. Measured on the eval cases (2026-10-26,
+   [evals/README.md](evals/README.md)): Haiku with the skill passed 97–99% of the checks against
+   Sonnet's 100%, at about a seventeenth of the cost, and lost real points only on `doc-prd` and
+   `doc-spec`, which stay on `medio` · `alto`. The other seven run on `rapido` · `medio`. Without the
+   skill, the pass rate was 40%.
+5. **Absorbs the former `spec` family.** `spec-prd` and `spec-adr` became `doc-prd` and `doc-adr`,
+   keeping their `DOC-*` and `SDD-*` rule text and their house formats, so the delivery flow reads
+   the same files. They lost the analysis they did (the PRD edge sweep, the ADR's own `file:line`
+   lookups): that is the owner role's work before the writer runs.
+6. **The spec is a standalone design doc.** Its Consumes and Provides sections hold the same kind
+   of seam the delivery flow writes in a layer file, adding Summary, Goals and non-goals,
+   Alternatives and Cross-cutting from Google-style design docs. The delivery flow itself does not
+   call `doc-spec`: its seams live in the delivery plan's layer files, written by `spec-writer`.
+
+## Registered under
+
+Its own plugin, `tc96-design-docs`, in `build/claude-code.sh`. Self-contained: it carries its docs
+and cites no knowledge-base note by link, so it can be enabled without the rest of tc96. The
+delivery flow in `tc96-core` calls `doc-prd` and `doc-adr` by name when both plugins are enabled.
+
+The plugin also ships two agents that run the writers in a fresh context, on their declared tier,
+with only `Read`, `Write`, `Glob` and `Skill`: `doc-writer` (`rapido` · `medio`) for seven skills
+and `doc-writer-deep` (`medio` · `alto`) for `doc-prd` and `doc-spec` (contract §7). Neither has
+`Bash`: a plugin agent cannot limit it to `git diff` (Claude Code ignores `hooks` and
+`permissionMode` in plugin agents, and `tools` takes no command pattern), so `doc-pr` under
+`doc-writer` reads the diff from a file the caller names.
+
+## Related
+
+- [Skills index](../README.md)
+- [Writing contract](docs/writing-contract.md)

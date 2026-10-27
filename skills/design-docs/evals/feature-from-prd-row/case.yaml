@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: feature-from-prd-row
+expected_outcome: |
+  A feature body for CAP-1 that cites AC-01..AC-03 by the PRD's IDs, invents no dependency the
+  PRD does not state, takes its benefit measure from OBJ-1, invents no new criteria, and has no
+  technical design.
+context:
+  scaffold_script: place-files.sh

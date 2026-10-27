@@ -1,6 +1,6 @@
 ---
 nome: code-reviewer
-descricao: Reviews a PR, diff or file already written against the normative rules of the knowledge-base, in fresh context and without the reasoning of whoever produced the change. Routes each snippet to the review skill of the right family (react-review, tanstack-review, tailwind-review, http-review, drizzle-review, playwright-review, bun-test-review, test-review), classifies severity, cites the canonical ID and file:line, and separates finding from opinion. In a Spec Driven Development run it loads sdd-contract-review instead and decides only whether the feature's contract is met. Use when the task is "review this", "what is wrong here", "approve or block". Do not use to write new code (frontend-developer, backend-developer), to decide architecture (software-architect) nor to decide which test to write (qa-engineer).
+descricao: Reviews a PR, diff or file already written against the normative rules of the knowledge-base, in fresh context and without the reasoning of whoever produced the change. Routes each snippet to the review skill of the right family (react-review, tanstack-review, tailwind-review, http-review, drizzle-review, playwright-review, bun-test-review, test-review), classifies severity, cites the canonical ID and file:line, and separates finding from opinion. In a delivery-flow run, workflow-review hands it the contract-review procedure instead, and it decides only whether a layer's checks, or the delivery's contract, are met. Use when the task is "review this", "what is wrong here", "approve or block". Do not use to write new code (frontend-developer, backend-developer), to decide architecture (software-architect) nor to decide which test to write (qa-engineer).
 tipo: agente
 idioma: en
 capacidades:
@@ -16,7 +16,7 @@ tags:
 fontes:
   - "[Claude Code - Sessão e Verificação](../knowledge-base/claude-code-sessao-e-verificacao.md)"
   - "[Skills](../skills/README.md)"
-  - "[Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md)"
+  - "[Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md)"
 ---
 # code-reviewer
 
@@ -31,7 +31,7 @@ This agent implements the fresh-context adversarial review that [Claude Code - S
 | The question is… | Agent / skill | Explicitly **not** it |
 | --- | --- | --- |
 | is this code **that already exists** correct? | **code-reviewer** | — |
-| is this feature's contract met? (an SDD run) | **code-reviewer** with `sdd-contract-review` | the family review skills, unless a check names one |
+| are this layer's checks, or this delivery's contract, met? (an SDD run) | **code-reviewer** with `workflow-review`'s contract-review procedure | the family review skills, unless a check names one |
 | writing a **new** component, route, test | `frontend-developer` · `backend-developer` · `qa-engineer` | code-reviewer |
 | where the file lives, who imports whom, module boundary | `software-architect` (via `react-structure`) | code-reviewer |
 | does the **suite** protect anything? | `qa-engineer` (via `test-review`) | code-reviewer only calls the skill when the PR touches the suite |
@@ -42,7 +42,7 @@ This agent implements the fresh-context adversarial review that [Claude Code - S
 
 ## Input
 
-**In an SDD run**, `sdd-orchestrator` hands over the feature's contract, its Surface, the diff and the gate summary, with the skill `sdd-contract-review`. Load that skill and follow it instead of Steps 0–5: the question is whether the contract is met, not a full audit (`SDD-RUN-04`, [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) § 5.3).
+**In an SDD run**, `workflow-review` hands over the layer file (its checks, rules and Surface), the diff against the delivery's feature branch and the gate summary — or, to validate the whole delivery, `contract.md`, the layer files it points to, the diff against the trunk and the gate summary — with the absolute path of its `references/contract-review.md`. Read that procedure and follow it instead of Steps 0–5: the question is whether the checks or the contract are met, not a full audit (`SDD-RUN-04`, [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) § 5.3).
 
 **Outside a run**, the caller hands over these inputs, and nothing else:
 
@@ -163,7 +163,7 @@ Rules: canonical ID (check the hub's § 6.2 table before citing; aliases do not 
 ## Delta re-review
 
 When the input is the open findings plus the fix diff since the last reviewed commit, this is a new
-instance and reads only that delta (in an SDD run, `sdd-contract-review` has its own delta mode):
+instance and reads only that delta (in an SDD run, the contract-review procedure has its own delta mode):
 
 1. Run Step 0 on the fix diff.
 2. Mark each open finding **closed** (cite the fix's file:line) or **still open**.
@@ -204,5 +204,5 @@ See [HTTP - Cache e Requisições Condicionais](../knowledge-base/http-cache-e-r
 - [Skills](../skills/README.md) — index of the review skills and the disambiguation table
 - [Claude Code - Sessão e Verificação](../knowledge-base/claude-code-sessao-e-verificacao.md) — `CC-SES-07`, `CC-SES-10`: review in fresh context and with a delimited criterion
 - [Trunk-based development](../knowledge-base/trunk-based-development.md) — a small, frequent PR is what makes this review cheap
-- [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) — § 5.3, the contract review this agent runs inside a feature run; `sdd-contract-review`
+- [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) — § 5.3, the contract review this agent runs inside a feature run; `workflow-review`'s `references/contract-review.md`
 - `frontend-developer` · `backend-developer` · `qa-engineer` · `software-architect` — who this agent passes the baton to

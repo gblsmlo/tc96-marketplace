@@ -1,0 +1,11 @@
+schema_version: "1.1"
+name: search-negative-discount
+expected_outcome: |
+  A triage file whose route is the fast lane: the request restores behavior AC-07 already promises
+  (discount between 0% and 50%, total never above the list price), so there is no product decision
+  and no amendment, even though the delivery 2026-10-26-quotes lists L3a (the discount rule) as
+  merged. The backend slice carries the fact that applyDiscount in src/quotes/discount.ts does not
+  clamp, with file:line, from one repo-explorer question. No frontend slice is invented, no
+  delivery plan is written under .specs/delivery/, and the run stops after the triage.
+context:
+  scaffold_script: place-files.sh

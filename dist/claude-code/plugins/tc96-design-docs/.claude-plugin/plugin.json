@@ -1,0 +1,15 @@
+{
+  "name": "tc96-design-docs",
+  "version": "0.15.0",
+  "description": "Writing-only document skills: PRD, ADR, epic, feature, story, tasks, bug, spec and PR, each with its template and model tier, and the doc-writer agents that run them in a fresh context with no search or shell. Self-contained: enable with tc96-core or alone.",
+  "author": {
+    "name": "Gabriel Melo"
+  },
+  "keywords": [
+    "prd",
+    "adr",
+    "user-story",
+    "spec",
+    "documentation"
+  ]
+}

@@ -1,139 +1,132 @@
 ---
 name: workflow-search
-description: Runs phase 1 of the delivery flow v2 — breaks the owner's prompt into claims (problems, hypotheses, objectives), checks each against the codebase, the web, the product docs and the decision memory, marks it confirmed, refuted or unverified with its evidence, and has `product-manager` write the PRD from the confirmed claims only, as a `Draft` the owner approves together with the evidence file, citing handoffs `H1`–`H4` and `SDD-PRD-*`. Also gathers the repo facts per feature that Plan needs, so Plan does not search again. In a project on the delivery flow v2 (`story.md` bundles), use when someone brings a new product, a new capability or a change to what the product promises, says "research this before we build it", or asks to validate a problem or hypothesis before the PRD. Not for writing a feature's bundle (workflow-plan), a fix or refactor that changes no product behavior (workflow-plan, fast lane), nor a lasting technical decision (spec-adr).
+description: Opens every delivery request — splits it into one-sentence slices on five axes (product, frontend, backend, tooling, stack), reads the record before the code (PRD, ADRs, delivery plans, project docs, memory), sends only the slices the record did not answer to `repo-explorer`, one question each in a single round, and writes a triage file that gives each slice a verdict and a next step and the request one route into plan, citing `SDD-FLOW-*` and `SDD-PLAN-01`. Use first, whenever someone asks to build, add, change, fix or spec something, before any PRD, ADR or delivery plan is written. Internal only, with no web pages or library docs. Not for deciding scope or design (workflow-plan), running layers (workflow-implementation), nor reviewing a diff (workflow-review).
 type: skill
 family: workflow
 language: en
-source: "workflow/foundations/phases.md §1 (Draft, 2026-10-26)"
+source: "[Delivery Flow — Spec Driven Development](../docs/delivery-flow.md)"
 tags:
   - skill
   - workflow
-  - prd
-  - research
+  - search
+  - triage
 ---
 
 # workflow-search
 
-> **Delegation (`SDD-CORE-02`).** This skill runs in the orchestrating conversation and writes only the evidence file. Code questions go to `repo-explorer`, web questions to `web-researcher`, the PRD to `product-manager` with `spec-prd`. Each is called by name, as a subagent. Keep claims, verdicts and paths in this conversation, never file contents or page text (`SDD-CORE-04`).
-> **Status.** Draft. Implements `workflow/foundations/phases.md` §1 and `workflow/foundations/handoffs.md` `H1`–`H4`.
+> **Delegation (`SDD-CORE-02`).** This phase runs in the main session. It splits the request and reads the record itself — status lines, titles and the one section a slice points to — and hands every code question to `repo-explorer`, called by name as a subagent. It decides nothing: each slice leaves with a verdict and a next step, and plan decides (`SDD-FLOW-05`).
+> **Context (`SDD-CORE-04`).** Keep slices, sources and one-line answers. Never paste a whole document, a diff or an explorer's full reply into this conversation; the triage file keeps the facts.
+
+Rules this phase implements: [Delivery Flow — Spec Driven Development](../docs/delivery-flow.md) §2, §4.4 "Triage", `SDD-FLOW-01`, `SDD-FLOW-05`, `SDD-FLOW-06`, `SDD-PLAN-01`.
 
 ## Scope
 
 | The request is... | Go to |
 | --- | --- |
-| a new product, a new capability, or a change to what the product promises | this skill |
-| an approved PRD that needs a feature added or a promise changed | this skill, amendment mode |
-| a fix or refactor that changes no product behavior | `workflow-plan`, fast lane |
-| a feature already in an approved PRD | `workflow-plan` |
-| a technical decision that outlives a feature | `spec-adr` |
+| anything to build, add, change, fix or spec | this phase, first |
+| a triage already exists for this request and plan has not run | `workflow-plan` |
+| an approved delivery to run | `workflow-implementation` |
+| a layer in `in-review` | `workflow-review` |
+| a new layer after a failed review | `workflow-plan` — never back here (`SDD-FLOW-02`) |
+| research outside the codebase: a library's API, a market, users | not this flow |
 
-## Step 1: Read the starting point (`H1`)
+## Step 1: Split
 
-1. Read only the status line of `.specs/PRD.md` and of its last amendment.
+Rewrite the request as slices, one sentence each, on the five axes. Note the entities and capabilities each slice touches.
 
-| `.specs/PRD.md` | Mode |
+| Axis | What belongs there |
 | --- | --- |
-| missing | new PRD |
-| `Draft` or `In review` | revision of that draft |
-| `Approved` | amendment: the approved text is never rewritten (`SDD-PRD-06`) |
+| `product` | promised behavior, rules, who uses it and what they see |
+| `frontend` | screens, routes, guards, client state |
+| `backend` | endpoints, data, sessions, server-side rules |
+| `tooling` | tests, scripts, CI, environment variables, the harness |
+| `stack` | libraries, providers, versions: the decisions that last |
 
-2. Restate the prompt as a numbered claim list, one claim per line, before any search:
+1. A slice sits on one axis. A sentence that names two capabilities is two slices.
+2. An axis the request does not touch has no slice.
+3. A need the request implies is a slice: "when authenticated" implies a guard. Mark it `(inferred)`. A nice-to-have nobody asked for is not a slice.
+4. A one-line request is still triaged: one row costs nothing, and it records where the request went.
 
-| Kind | ID | Example |
+## Step 2: Read the record first
+
+For each slice, read these in order and stop at the first that answers it. Read titles and the one matching section, never a whole document.
+
+| # | Source | It answers |
 | --- | --- | --- |
-| problem | `CL-P1` | "admins add teammates by hand, one at a time" |
-| hypothesis | `CL-H1` | "an invite link cuts the time to a full team" |
-| objective | `CL-O1` | "a new workspace has three members within a day" |
+| 1 | `.specs/PRD.md` and its amendments: Capabilities, Out of Scope, Open gaps | is it promised, excluded, or already asked? |
+| 2 | `.specs/adr/`: the titles, then the one ADR whose title matches | is the lasting technical decision made? |
+| 3 | `.specs/delivery/`: each index's layers table, then the matching layer file's **Provides** | is it already planned, or built? |
+| 4 | the project's docs: `CLAUDE.md`, `AGENTS.md`, `docs/`, READMEs | conventions and constraints of this codebase |
+| 5 | the agent memory the project keeps | decisions recorded outside `.specs/` |
 
-A sentence that holds two claims becomes two lines. A claim with no observable consequence is sent back to the owner as a question, not searched.
+An answer found sets the slice's **Answer** and **Source** (`record: <path>`), and the slice never reaches the code (`SDD-FLOW-06`).
 
-## Step 2: Check each claim against four sources (`H2a`–`H2d`)
+## Step 3: Ask the code, once
 
-Send the questions out side by side; they only read. One bounded question per agent call.
+For each slice still open, start `repo-explorer` with `references/question.md`. All of them go out side by side in one message; they only read. Each reply is at most 30 lines of facts with `file:line`.
 
-| Source | Agent | Question shape | Evidence kept |
-| --- | --- | --- | --- |
-| Codebase | `repo-explorer` | "Does `<claim>` hold in the code? Return what exists, its callers and its tests, with file:line, at most 30 lines." | `file:line` |
-| Web | `web-researcher` | "How do products like this solve `<claim>`? Return at most 5 sources with URL and access date." | URL and date |
-| Docs | read here, by path | earlier PRDs and amendments, merged bundles in `.specs/features/` | path and section |
-| Decision memory | read here, by path | ADRs in `.specs/adr/`, decisions recorded in `AGENTS.md` | ADR ID or decision date |
+- A question the reply does not answer becomes a gap with who decides it. There is no second round and no follow-up question (`SDD-FLOW-06`).
+- No web page, no library documentation, no external source.
 
-Skip a source that cannot answer the claim, and write `n/a` with the reason. A claim checked against no source is `unverified`.
+## Step 4: Triage
 
-## Step 3: Decide each claim
+Give each slice one verdict, and the verdict names its next step:
 
-| Verdict | When | Goes to |
+| Verdict | When | Next step |
 | --- | --- | --- |
-| confirmed | at least one source supports it and none contradicts it | the PRD |
-| refuted | a source contradicts it | out of the PRD; listed in the evidence file with the source |
-| unverified | no source answers it, or sources disagree | the PRD's Open gaps, with who decides |
+| `exists` | the record or the code already does it | nothing; cite the source |
+| `product-decision` | the behavior is not promised, or a rule is open | plan · `product-manager`, PRD amendment |
+| `technical-decision` | a lasting choice is not recorded (a provider, a boundary, a data model shared across the product) | plan · `software-architect`, ADR |
+| `build` | promised or clearly implied, and the facts say what is missing | plan · `spec-writer`, delivery plan |
+| `no-behavior-change` | a fix or refactor of something built | plan · fast lane (`SDD-PLAN-10`) |
+| `untraced` | it traces to nothing in the PRD and the request does not make it a product change | a question for the owner |
 
-The verdict cites the evidence that decided it. Inference is labeled as such and never makes a claim `confirmed`.
+Then write the request's **route**, the order plan follows:
 
-## Step 4: Repo facts per feature, for Plan (`H4`)
+1. a `product-decision` amendment comes before the delivery plan that depends on it;
+2. a `technical-decision` ADR comes before the delivery plan that cites it;
+3. the `build` slices go to one delivery plan, listed by axis. Which layer builds each, and in what order, is plan's: write any order you infer as `(proposed)`.
 
-Once the claims point to features, ask `repo-explorer` one question per likely feature:
+The triage classifies and routes. Scope, layers and design are plan's, and the owner's (`SDD-FLOW-05`).
 
-```
-Feature <name> would provide <items> and consume <items>.
-Return, with file:line: what already exists for each item; every caller of anything it would
-change; the tests around it; the conventions of that layer. Facts only, at most 30 lines.
-```
+## Step 5: Write and hand off
 
-These facts are what Plan cites in `spec.md` (`SDD-SPEC-01`). Plan only searches again for a fact missing here.
+Write `.specs/triage/<YYYY-MM-DD>-<slug>.md` from `references/template-triage.md`. The file is never edited after plan reads it; a later request gets its own file.
 
-## Step 5: Write the evidence file
-
-Default D6 (open in `workflow/README.md`): `.specs/search/<YYYY-MM-DD>-<slug>.md`, from `references/template-evidence.md`, `status: Draft`. It holds the claim list, each verdict with its evidence, and the repo facts per feature.
-
-## Step 6: Write the PRD
-
-Start `product-manager` with the skill `spec-prd` and only:
-
-| Input | Value |
-| --- | --- |
-| mode | new, revision or amendment, from Step 1 |
-| confirmed claims | the `CL-*` lines marked confirmed, each with its evidence |
-| unverified claims | as Open gaps, each with who decides |
-| repo facts | the evidence file path, section "Repo facts" |
-
-The PRD premises the agent must hold, beyond `spec-prd`'s own rules:
-
-| # | Premise | Rule |
-| --- | --- | --- |
-| 1 | every feature states what it provides and what it consumes; every consumed item has exactly one provider | `SDD-PRD-02` |
-| 2 | each `AC-NN` is observable in Given / When / Then | `SDD-PRD-03` |
-| 3 | the Dependency Graph has no cycle; `W0` consumes nothing | `SDD-PRD-04` |
-| 4 | each `PO-*` and `OBJ-*` comes from a confirmed claim and names its `CL-*` | — |
-| 5 | Traceability and Open gaps stay, after the Dependency Graph (default D7) | `SDD-PRD-01` |
-| 6 | the file is `status: Draft` | `SDD-CORE-03` |
-
-## Step 7: One message to the owner (`H3`)
+Report, and nothing else:
 
 ```
-Search done (Draft):
-- .specs/PRD.md — <features count> features in <waves count> waves
-- .specs/search/<date>-<slug>.md — <n> confirmed, <n> refuted, <n> unverified
-Refuted: <CL-* and one-line reason each>
-Open gaps: <verbatim, each with who decides>
-Approve, change or reject the PRD?
+Triage: .specs/triage/2026-10-26-login-redirect.md
+Slices: 5 — exists 1 · product-decision 1 · build 3
+Route: amendment (S1) → delivery plan (S3 backend, S4 frontend, S5 tooling)
+Gaps: <each verbatim, with who decides>
+Next: workflow-plan
 ```
 
-Silence approves nothing. On approval, the PRD becomes `Approved` and the next step is `workflow-plan` (`H4`).
+When a gap decided by the owner blocks the route's first stop, ask it now, in the same message. Otherwise continue with `workflow-plan`, unless the person asked for search only. Do not load another phase from inside this one (`SDD-FLOW-04`).
 
 ## Self-check
 
 | # | Check | Rule |
 | --- | --- | --- |
-| 1 | every claim has a verdict and the evidence that decided it | — |
-| 2 | no refuted claim reached the PRD; every unverified one is an Open gap | — |
-| 3 | every feature in the PRD has repo facts, or a line saying none exist | `SDD-SPEC-01` |
-| 4 | every consumed item has exactly one provider; the graph has no cycle | `SDD-PRD-02`, `SDD-PRD-04` |
-| 5 | the PRD and the evidence file are `Draft` until the owner answered | `SDD-CORE-03` |
-| 6 | this conversation holds claims, verdicts and paths, not page text or code | `SDD-CORE-04` |
+| 1 | every slice sits on one axis, in one sentence, with its entities and capabilities | `SDD-FLOW-05` |
+| 2 | the record was read before the code; no slice the record answered went to `repo-explorer` | `SDD-FLOW-06` |
+| 3 | one question per open slice, all in one round; nothing external was read | `SDD-FLOW-06` |
+| 4 | every slice has a verdict and a next step; the route orders amendment, ADR, then the delivery plan | `SDD-FLOW-05` |
+| 5 | every code fact in the triage carries `file:line` | `SDD-PLAN-01` |
+| 6 | nothing in the triage decides scope, layers or design; an inferred order is `(proposed)` | `SDD-FLOW-05` |
+| 7 | this conversation holds slices, sources and one-line answers, not file content | `SDD-CORE-04` |
 
 ## Example
 
-Prompt: "admins waste time adding people; an invite link would fix it; we want full teams in a day". Step 1: no PRD; claims `CL-P1`, `CL-H1`, `CL-O1`. Step 2: `repo-explorer` returns "members are inserted only by `POST /members`, admin-only — src/members/route.ts:22"; `web-researcher` returns three products with invite links. Step 3: `CL-P1` confirmed, `CL-H1` confirmed, `CL-O1` unverified (no usage data). Step 4: facts for F01 session, F02 email, F03 invitations. Step 6: `product-manager` writes six features in four waves; `CL-O1` becomes Open gap "target for full team: owner decides". Step 7: one message; the owner approves.
+Request: "a login page that takes the user to the dashboard when already authenticated".
 
-**Anti-pattern.** Writing "users want invite links" into the PRD from the prompt alone. Corrected: the claim is `CL-H1`, checked against the web and the code, and enters the PRD only as confirmed, with its sources.
+Step 1: five slices. S1 product: an authenticated user goes to the dashboard and an anonymous one sees the login. S2 stack: the authentication provider. S3 backend: a way to ask "who am I" for the session `(inferred)`. S4 frontend: the `/login` route, the redirecting guard and the dashboard route. S5 tooling: an E2E check of the flow and the provider's variables per worktree `(inferred)`.
+
+Step 2: the PRD promises no login flow, so S1 is answered by the record: nothing promised. `.specs/adr/0002-auth-provider.md` answers S2. `sdd.config.sh` answers half of S5: E2E runs on `bun run e2e`, and there are no auth variables.
+
+Step 3: two `repo-explorer` calls, side by side, for S3 and S4. S3: "`authMiddleware` sets `ctx.user` — src/server/auth.ts:14; no route returns the current user". S4: "`/dashboard` has no `beforeLoad` — src/routes/dashboard.tsx:3".
+
+Step 4: S1 `product-decision`, S2 `exists`, S3 `build`, S4 `build`, S5 `build` as gates. Route: amendment (S1), then the delivery plan for S3, S4 and S5, with S4 needing S3's "current user" `(proposed)`. Gap: "after login, back to the page first asked for, or always the dashboard? — decides: owner".
+
+Step 5: the triage file is written. The gap does not block the amendment, which can carry it as an open gap, so the phase continues with `workflow-plan`.
