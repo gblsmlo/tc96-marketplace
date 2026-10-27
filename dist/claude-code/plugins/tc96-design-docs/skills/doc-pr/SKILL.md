@@ -28,7 +28,7 @@ A PR description answers one question: **what does this change do, why, and how 
 
 ## Step 1: Gather the input
 
-1. The **what**: the diff or commit range the caller named, read as above; or the caller's summary.
+1. The **what**: the diff or commit range the caller named, read as above; a diff file the caller wrote (`git diff <base>..<head> > <file>`), read as a named file; or the caller's summary. With no shell (the `doc-writer` agent), a range with no file is `blocked`, asking for the file.
 2. The **why**: only from the caller — the request, a linked issue, task or bug it names. The diff says what changed, never why: a reason the caller did not give is a gap with `decides: author`.
 3. The **proof**: test results, a contract, a state file the caller names. A check the caller did not report as run is listed as "not run", never as passed.
 

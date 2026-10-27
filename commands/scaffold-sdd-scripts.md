@@ -10,7 +10,7 @@ tags:
 # SDD harness scripts
 
 **Objective:** give the project the six global scripts the delivery flow runs instead of an agent
-(`SDD-CORE-05`, `SDD-SCR-*` in [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) §6).
+(`SDD-CORE-05`, `SDD-SCR-*` in [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) §6).
 **Constraint:** preserve an existing `sdd.config.sh`; overwrite the scripts, which carry no
 project-specific content. A script only one feature needs does not belong here: it lives in that
 feature's `plan.md`.

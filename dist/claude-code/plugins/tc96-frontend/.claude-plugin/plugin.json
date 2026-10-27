@@ -1,7 +1,7 @@
 {
   "name": "tc96-frontend",
   "version": "0.15.0",
-  "description": "React, TanStack Router e Query, React Hook Form e Storybook no stack desta casa — escrita, estrutura e revisão de interface. Habilite em projeto com frontend.",
+  "description": "React, TanStack Router and Query, React Hook Form and Storybook in this house's stack — writing, structure and review of interfaces. Enable in a project with a frontend.",
   "author": {
     "name": "Gabriel Melo"
   },

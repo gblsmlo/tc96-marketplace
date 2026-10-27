@@ -82,6 +82,13 @@ Its own plugin, `tc96-design-docs`, in `build/claude-code.sh`. Self-contained: i
 and cites no knowledge-base note by link, so it can be enabled without the rest of tc96. The
 delivery flow in `tc96-core` calls `doc-prd` and `doc-adr` by name when both plugins are enabled.
 
+The plugin also ships two agents that run the writers in a fresh context, on their declared tier,
+with only `Read`, `Write`, `Glob` and `Skill`: `doc-writer` (`rapido` · `medio`) for seven skills
+and `doc-writer-deep` (`medio` · `alto`) for `doc-prd` and `doc-spec` (contract §7). Neither has
+`Bash`: a plugin agent cannot limit it to `git diff` (Claude Code ignores `hooks` and
+`permissionMode` in plugin agents, and `tools` takes no command pattern), so `doc-pr` under
+`doc-writer` reads the diff from a file the caller names.
+
 ## Related
 
 - [Skills index](../README.md)

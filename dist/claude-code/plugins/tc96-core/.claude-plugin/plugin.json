@@ -1,14 +1,14 @@
 {
   "name": "tc96-core",
   "version": "0.15.0",
-  "description": "Teste e contrato HTTP, e os papéis que atravessam qualquer stack. Habilite sempre.",
+  "description": "Testing and HTTP contract, the delivery flow in four phases, and the roles that cross any stack. Always enable.",
   "author": {
     "name": "Gabriel Melo"
   },
   "keywords": [
-    "teste",
+    "testing",
     "http",
     "review",
-    "arquitetura"
+    "architecture"
   ]
 }

@@ -5,24 +5,24 @@
     "email": "gblsmlo@gmail.com"
   },
   "metadata": {
-    "description": "Agentes, skills e regra do stack desta casa.",
+    "description": "Agents, skills and rules for this house's stack.",
     "version": "0.15.0"
   },
   "plugins": [
     {
       "name": "tc96-core",
       "source": "./plugins/tc96-core",
-      "description": "Teste e contrato HTTP, e os papéis que atravessam qualquer stack. Habilite sempre."
+      "description": "Testing and HTTP contract, the delivery flow in four phases, and the roles that cross any stack. Always enable."
     },
     {
       "name": "tc96-frontend",
       "source": "./plugins/tc96-frontend",
-      "description": "React, TanStack Router e Query, React Hook Form e Storybook no stack desta casa — escrita, estrutura e revisão de interface. Habilite em projeto com frontend."
+      "description": "React, TanStack Router and Query, React Hook Form and Storybook in this house's stack — writing, structure and review of interfaces. Enable in a project with a frontend."
     },
     {
       "name": "tc96-backend",
       "source": "./plugins/tc96-backend",
-      "description": "Runtime Bun, Elysia e Drizzle — serviço HTTP, persistência e dependências. Habilite em projeto com backend."
+      "description": "Bun runtime, Elysia and Drizzle — HTTP service, persistence and dependencies. Enable in a project with a backend."
     },
     {
       "name": "tc96-tailwind",
@@ -32,12 +32,12 @@
     {
       "name": "tc96-design-docs",
       "source": "./plugins/tc96-design-docs",
-      "description": "Writing-only document skills: PRD, ADR, epic, feature, story, tasks, bug, spec and PR, each with its template and model tier. Self-contained: enable with tc96-core or alone."
+      "description": "Writing-only document skills: PRD, ADR, epic, feature, story, tasks, bug, spec and PR, each with its template and model tier, and the doc-writer agents that run them in a fresh context with no search or shell. Self-contained: enable with tc96-core or alone."
     },
     {
       "name": "tc96-e2e",
       "source": "./plugins/tc96-e2e",
-      "description": "Playwright — escrita, auditoria e diagnóstico de teste E2E. Habilite em projeto com suíte E2E."
+      "description": "Playwright — writing, auditing and diagnosing E2E tests. Enable in a project with an E2E suite."
     }
   ]
 }

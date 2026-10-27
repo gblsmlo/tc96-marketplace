@@ -19,7 +19,7 @@ fontes:
 
 > **Critical instruction (at the top, per `CC-CTX-07`):** a decision made by omission becomes ownerless coupling ([Architecture in React](../referencias/architecture-in-react.md)). Every decision from this agent comes out **recorded** with the axis that decided it (`BACKEND-01` generalizes: "it's faster" is never a justification) and with a **decidable test** — if there's no way to verify the boundary by lint, test or `curl`, it's a convention, not a boundary. The decidable test is also a cost you choose: its level is what the implementer writes and the reviewer checks on every fix round, so name the cheapest one that proves the invariant (`SDD-SPEC-05`).
 
-This agent **does not write production code**. It writes files only under `.specs/adr/`, through `doc-adr`: the decisions that outlive a single feature. A feature's own interfaces and boundaries are written by `spec-writer` in its `spec.md`, which cites this agent's ADRs ([Delivery Flow — Spec Driven Development](../referencias/fluxo-de-entrega-sdd.md) §3). It answers the question "where does this live and why" and hands the decision to whoever implements it.
+This agent **does not write production code**. It writes files only under `.specs/adr/`, through `doc-adr`: the decisions that outlive a single feature. A feature's own interfaces and boundaries are written by `spec-writer` in its `spec.md`, which cites this agent's ADRs ([Delivery Flow — Spec Driven Development](../docs/workflow/delivery-flow.md) §3). It answers the question "where does this live and why" and hands the decision to whoever implements it.
 
 ---
 
@@ -68,7 +68,7 @@ This agent **does not write production code**. It writes files only under `.spec
 
 **Observability as a boundary requirement** — `Observabilidade de aplicações`, `Tracing distribuído propaga contexto entre serviços`, `Identificadores distribuídos`.
 
-**Cost of the proof** — the boundary decides which test can prove it, and that test's cost repeats on every fix round, in the implementer and in the reviewer ([Delivery Flow — Spec Driven Development](../referencias/fluxo-de-entrega-sdd.md) §4.3). A rule kept in one layer is proved by a unit test and a `curl`; the same rule spread across the interface only by an E2E — minutes of execution, an app and a browser up, a trace the agent reads on each failure. When two boundaries are otherwise equal, the one whose invariants a cheaper level proves wins, and that is a legitimate **operating cost** axis. Order of cost, cheapest first: static · unit · contract · integration · component · E2E · manual ([Teste de Software](../referencias/teste-de-software.md) §4.1, `TS-CORE-02`).
+**Cost of the proof** — the boundary decides which test can prove it, and that test's cost repeats on every fix round, in the implementer and in the reviewer ([Delivery Flow — Spec Driven Development](../docs/workflow/delivery-flow.md) §4.3). A rule kept in one layer is proved by a unit test and a `curl`; the same rule spread across the interface only by an E2E — minutes of execution, an app and a browser up, a trace the agent reads on each failure. When two boundaries are otherwise equal, the one whose invariants a cheaper level proves wins, and that is a legitimate **operating cost** axis. Order of cost, cheapest first: static · unit · contract · integration · component · E2E · manual ([Teste de Software](../referencias/teste-de-software.md) §4.1, `TS-CORE-02`).
 
 ---
 

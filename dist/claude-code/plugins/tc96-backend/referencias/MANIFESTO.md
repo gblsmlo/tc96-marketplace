@@ -7,7 +7,7 @@ A single layer: each note lives directly in `knowledge-base/`, with no
 subfolder. Each note's title comes from the `titulo:` field in the file
 itself — the label skills use when linking to it.
 
-Notes: 108
+Notes: 107
 
 | File | Title | sha256 |
 | --- | --- | --- |
@@ -37,10 +37,9 @@ Notes: 108
 | `claude-code-paralelismo-e-escala.md` | Claude Code - Paralelismo e Escala | `856d326ba215` |
 | `claude-code-sessao-e-verificacao.md` | Claude Code - Sessão e Verificação | `47ee1777ce7e` |
 | `claude-code.md` | Claude Code | `3609d626d6e7` |
-| `documentos-de-decisao-prd-rfc-adr.md` | Decision Documents — PRD, RFC and ADR | `a4ee8aa4423f` |
+| `documentos-de-decisao-prd-rfc-adr.md` | Decision Documents — PRD, RFC and ADR | `178359a5f0ec` |
 | `feature-based-architecture.md` | Feature-Based Architecture | `926247f36bd2` |
 | `feature-flags-modelo-visual-do-fluxo.md` | Feature Flags — modelo visual do fluxo | `fc1e90735a7c` |
-| `fluxo-de-entrega-sdd.md` | Delivery Flow — Spec Driven Development | `b2e849e9f03e` |
 | `forward-deployed-engineering.md` | Forward Deployed Engineering | `5522c590ec21` |
 | `fronteira-do-bff-forma-jornada-e-regra.md` | Fronteira do BFF - forma, jornada e regra | `21d5a0ccd231` |
 | `frontend-roadmap.md` | Frontend roadmap | `e895b76f3b74` |

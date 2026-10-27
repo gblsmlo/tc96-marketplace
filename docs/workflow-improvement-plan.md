@@ -1,6 +1,6 @@
 # Workflow improvement plan — small units, parallel by default
 
-> **Status:** Superseded on 2026-10-25 by [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md), which removed the four-pillar flow. Kept as a record. Approved by the owner on 2026-10-16, with the §9 defaults. Written on `refactor/workflow-execution-scope` (0.12.0).
+> **Status:** Superseded on 2026-10-25 by [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md), which removed the four-pillar flow. Kept as a record. Approved by the owner on 2026-10-16, with the §9 defaults. Written on `refactor/workflow-execution-scope` (0.12.0).
 > **Scope:** the four-pillar flow (`workflow-research`, `workflow-planning`, `workflow-implementation`,
 > `workflow-validation`), `workflow-spec`, the `spec` command, `code-reviewer`, `project-manager`, and the
 > hub `Delivery Flow — Four Pillars`.

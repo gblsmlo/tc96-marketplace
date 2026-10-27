@@ -1,6 +1,6 @@
 ---
 nome: repo-explorer
-descricao: Read-only fact gatherer for the Spec Writer's repo search — answers a bounded question about the existing code ("where is X", "what calls Y", "what does Z do today") with facts and file:line, never with file contents, opinions or fixes. Use when `sdd-spec-writer` runs the repo search before a feature's bundle (SDD-SPEC-01), or when any agent needs a wide read kept out of its own context. Do not use to decide scope or intent (product-manager, software-architect), to review a change (code-reviewer), nor to write code (frontend-developer, backend-developer).
+descricao: Read-only fact gatherer for the delivery flow's search — answers one bounded question about one slice of a request, or about the existing code ("where is X", "what calls Y", "what does Z do today"), with facts and file:line, never with file contents, opinions or fixes. Use when `workflow-search` sends a slice the record did not answer (SDD-FLOW-06, SDD-SPEC-01), when `workflow-plan` asks about a new item's failing branch, or when any agent needs a wide read kept out of its own context. Do not use to decide scope or intent (product-manager, software-architect), to review a change (code-reviewer), nor to write code (frontend-developer, backend-developer).
 tipo: agente
 idioma: en
 capacidades:
@@ -15,7 +15,7 @@ tags:
   - exploration
 fontes:
   - "[Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)"
-  - "[Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md)"
+  - "[Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md)"
 ---
 # repo-explorer
 
@@ -76,7 +76,7 @@ Self-check before returning: every fact has `file:line`; no code block copied fr
 
 ## Example
 
-Question from `sdd-spec-writer`: "Where is the checkout discount applied, and is there any approval check?"
+Question from `workflow-search`, slice S3 (backend): "Where is the checkout discount applied, and is there any approval check?"
 
 ```
 ## Answer
@@ -95,6 +95,6 @@ The discount is applied in one function, with no approval check anywhere.
 
 ## Related
 
-- [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) — §4.4, the repo search that calls this agent; `SDD-SPEC-01`, `SDD-CORE-04`
+- [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) — §4.4 "Triage", the search that calls this agent; `SDD-FLOW-06`, `SDD-SPEC-01`, `SDD-CORE-04`
 - [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) — why a wide read belongs in a subagent
 - `product-manager` · `software-architect` — who decides with these facts

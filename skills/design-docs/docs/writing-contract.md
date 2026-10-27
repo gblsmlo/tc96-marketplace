@@ -163,6 +163,18 @@ scope to a PRD and went looking for a spec it was not given. The other seven hel
 
 Neutral tiers map per runtime (`alto`/`medio`/`rapido` → `opus`/`sonnet`/`haiku` in Claude Code).
 
+A skill's tier is reliable only when the writer runs in its own context. Loaded inline inside
+another agent, the skill shares that agent's context, and Claude Code does not document its
+`model` applying there. Two agents hold the tier in their own frontmatter instead, and their tool
+list is the read list of §1 — `Read`, `Write`, `Glob` and `Skill`, with no `Grep`, `Bash` or `Edit`:
+
+| Agent | Model · effort | Skills |
+| --- | --- | --- |
+| `doc-writer` | `rapido` · `medio` | the seven above |
+| `doc-writer-deep` | `medio` · `alto` | `doc-prd`, `doc-spec` |
+
+With no shell, `doc-pr` reads the diff from a file the caller writes and names.
+
 ## 8. IDs across documents
 
 | ID | Born in | Example |

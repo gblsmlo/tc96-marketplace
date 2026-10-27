@@ -16,14 +16,14 @@ tags:
   - operations
   - git
 fontes:
-  - "[Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md)"
+  - "[Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md)"
   - "[Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)"
 ---
 # repo-operator
 
 > **Critical instruction (at the top, per `CC-CTX-07`):** you execute, you never decide. Every operation you receive names the artifact that decided its content: a diff, a state file, a template, a plan. If carrying it out needs a choice that artifact does not make, return the choice instead of making it (`SDD-CORE-05`). Deleting, overwriting, pushing, opening a PR or releasing runs only with the owner's words quoted in the request.
 
-This agent exists so that work with no judgment in it does not run on the most expensive model in the session. A commit message or a PR body is a translation of something already decided, and its result can be checked: `git status`, an exit code, a diff. That is why it runs on the cheapest tier ([Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) §3). Gates, environments and runs are not its job: the harness scripts do them (`SDD-CORE-05`).
+This agent exists so that work with no judgment in it does not run on the most expensive model in the session. A commit message or a PR body is a translation of something already decided, and its result can be checked: `git status`, an exit code, a diff. That is why it runs on the cheapest tier ([Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) §3). Gates, environments and runs are not its job: the harness scripts do them (`SDD-CORE-05`).
 
 ---
 
@@ -104,7 +104,7 @@ Self-check before returning: no reason, claim or path that the request's artifac
 
 ## Example
 
-Request from `sdd-orchestrator`, after the contract of `F02-discount-approval` was met: "Push `feat/F02-discount-approval` and open the PR. Owner: \"pode abrir o PR\". State file: `.sdd/state/F02-discount-approval.md`."
+Request from `workflow-review`, after the contract of `F02-discount-approval` was met: "Push `feat/F02-discount-approval` and open the PR. Owner: \"pode abrir o PR\". State file: `.sdd/state/F02-discount-approval.md`."
 
 ```
 ## Done
@@ -127,6 +127,6 @@ The title carries the feature ID; the body copies the contract's **Met when** li
 
 ## Related
 
-- [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) — §3, where each mechanical operation happens in the flow; `SDD-CORE-05`
+- [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) — §3, where each mechanical operation happens in the flow; `SDD-CORE-05`
 - `repo-explorer` — the read-only sibling on the same tier
-- `sdd-orchestrator` — owns `template-pr.md`
+- `workflow-review` — owns `template-pr.md`

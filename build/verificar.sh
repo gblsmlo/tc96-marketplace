@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Verifica a fonte neutra e, se existirem, os alvos em dist/.
+# Checks the neutral source and, when they exist, the targets in dist/.
 #
 #   bash build/verificar.sh
 #
-# Checa o que a leitura nao pega: link relativo que nao resolve, sintaxe de vault
-# que sobreviveu, caminho apontando para fora do repositorio, frontmatter incompleto,
-# e skill declarada por agente que nao existe. Sai != 0 no primeiro grupo com falha.
+# Checks what reading misses: a relative link that does not resolve, surviving vault
+# syntax, a path pointing outside the repository, incomplete frontmatter, and a skill an
+# agent declares that does not exist. Exits != 0 when any group fails.
 set -uo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -18,7 +18,7 @@ falhas = []
 
 
 def sondar(titulo, achados, detalhe=8):
-    marca = "ok  " if not achados else "FALHA"
+    marca = "ok  " if not achados else "FAIL"
     print(f"[{marca}] {titulo}: {len(achados)}")
     for a in achados[:detalhe]:
         print(f"         {a}")
@@ -34,8 +34,8 @@ def mds(*raizes):
                 yield md
 
 
-# --- 1. links relativos ----------------------------------------------------
-for escopo, pastas in [("fonte", ("agents", "skills", "commands", "knowledge-base")),
+# --- 1. relative links ------------------------------------------------------
+for escopo, pastas in [("source", ("agents", "skills", "commands", "knowledge-base")),
                        ("dist/claude-code", ("dist/claude-code",)),
                        ("dist/agents-md", ("dist/agents-md",))]:
     if not any((raiz / p).exists() for p in pastas):
@@ -46,9 +46,9 @@ for escopo, pastas in [("fonte", ("agents", "skills", "commands", "knowledge-bas
             total += 1
             if not (md.parent / m.group(1)).resolve().exists():
                 quebrados.append(f"{md.relative_to(raiz)} -> {m.group(1)}")
-    sondar(f"links que resolvem em {escopo} (de {total})", quebrados)
+    sondar(f"links that resolve in {escopo} (of {total})", quebrados)
 
-# --- 2. sintaxe de vault que sobreviveu ------------------------------------
+# --- 2. surviving vault syntax ---------------------------------------------
 vazados = []
 for md in mds("agents", "skills", "commands", "knowledge-base"):
     texto = md.read_text(encoding="utf-8")
@@ -57,19 +57,19 @@ for md in mds("agents", "skills", "commands", "knowledge-base"):
     if md.parts[-2:][0] == "knowledge-base" or "knowledge-base" in str(md) or migrado:
         for linha_n, linha in enumerate(texto.splitlines(), 1):
             if "`" in linha:
-                continue  # wikilink dentro de code span e citacao, nao link
+                continue  # a wikilink inside a code span is a citation, not a link
             if re.search(r"\[\[[^\]]+\]\]", linha):
                 vazados.append(f"{md.relative_to(raiz)}:{linha_n}")
-sondar("wikilinks [[...]] fora de code span", vazados)
+sondar("wikilinks [[...]] outside a code span", vazados)
 
 zettels = [f"{md.relative_to(raiz)}" for md in mds("agents", "skills", "commands", "knowledge-base")
            if "Zettels/" in md.read_text(encoding="utf-8")
            and "MANIFESTO" not in md.name and "README" not in md.name]
-sondar("citacoes a Zettels/ (devem ter saido)", sorted(set(zettels)))
+sondar("citations of Zettels/ (should be gone)", sorted(set(zettels)))
 
-# --- 2b. nada aponta para fora do projeto ----------------------------------
-# sintaxe de pasta de vault e caminho absoluto de maquina. `~/.claude` fica de
-# fora de proposito: e caminho real do runtime, documentado, nao link da fonte.
+# --- 2b. nothing points outside the project --------------------------------
+# vault folder syntax and absolute machine paths. `~/.claude` is left out on
+# purpose: it is a real, documented runtime path, not a source link.
 FORA = re.compile(r"(?<![\w/])(?:Docs|Pages|Zettels|Classroom|Weblink)/"
                   r"|(?<![\w])/home/")
 de_fora = []
@@ -78,9 +78,9 @@ for md in mds("agents", "skills", "commands", "knowledge-base"):
         m = FORA.search(linha)
         if m:
             de_fora.append(f"{md.relative_to(raiz)}:{linha_n}: {m.group(0)}")
-sondar("caminhos para fora do projeto", de_fora)
+sondar("paths outside the project", de_fora)
 
-# --- 3. frontmatter neutro completo ----------------------------------------
+# --- 3. complete neutral frontmatter ---------------------------------------
 faltando, declaradas, existentes = [], {}, set()
 for skill in sorted((raiz / "skills").glob("*/*/SKILL.md")):
     campos = dict(re.findall(r"^(\w+):\s*(.*)$",
@@ -89,14 +89,14 @@ for skill in sorted((raiz / "skills").glob("*/*/SKILL.md")):
     for en, pt in (("name", "nome"), ("description", "descricao"), ("type", "tipo"), ("family", "familia")):
         campos.setdefault(pt, campos.get(en, ""))
     if campos.get("tipo") != "skill":
-        continue  # familia nao migrada
+        continue  # family not migrated
     existentes.add(campos.get("nome", ""))
     for chave in ("nome", "descricao", "tipo", "familia"):
         if not campos.get(chave):
-            faltando.append(f"{skill.relative_to(raiz)}: sem `{chave}`")
+            faltando.append(f"{skill.relative_to(raiz)}: missing `{chave}`")
     if campos.get("nome") != skill.parent.name:
-        faltando.append(f"{skill.relative_to(raiz)}: nome != diretório")
-sondar("frontmatter neutro completo nas skills", faltando)
+        faltando.append(f"{skill.relative_to(raiz)}: name != directory")
+sondar("complete neutral frontmatter in skills", faltando)
 
 falta_cmd = []
 for cmd in sorted((raiz / "commands").glob("*.md")):
@@ -105,16 +105,16 @@ for cmd in sorted((raiz / "commands").glob("*.md")):
     m = re.match(r"^---\n(.*?)\n---\n", cmd.read_text(encoding="utf-8"), re.S)
     campos = dict(re.findall(r"^(\w+):\s*(.*)$", m.group(1), re.M)) if m else {}
     if campos.get("tipo") != "comando":
-        falta_cmd.append(f"{cmd.relative_to(raiz)}: sem `tipo: comando`")
+        falta_cmd.append(f"{cmd.relative_to(raiz)}: missing `tipo: comando`")
         continue
     for chave in ("nome", "descricao"):
         if not campos.get(chave):
-            falta_cmd.append(f"{cmd.relative_to(raiz)}: sem `{chave}`")
+            falta_cmd.append(f"{cmd.relative_to(raiz)}: missing `{chave}`")
     if campos.get("nome") != cmd.stem:
-        falta_cmd.append(f"{cmd.relative_to(raiz)}: nome != arquivo")
-sondar("frontmatter neutro completo nos comandos", falta_cmd)
+        falta_cmd.append(f"{cmd.relative_to(raiz)}: name != file")
+sondar("complete neutral frontmatter in commands", falta_cmd)
 
-# --- 4. agente declara skill que existe ------------------------------------
+# --- 4. an agent declares a skill that exists ------------------------------
 orfas = []
 for agente in sorted((raiz / "agents").glob("*.md")):
     m = re.match(r"^---\n(.*?)\n---\n", agente.read_text(encoding="utf-8"), re.S)
@@ -126,10 +126,10 @@ for agente in sorted((raiz / "agents").glob("*.md")):
     for linha in bloco.group(1).splitlines():
         nome = linha.strip().lstrip("- ").strip()
         if nome not in existentes:
-            orfas.append(f"{agente.relative_to(raiz)}: declara `{nome}`, que não existe")
-sondar("skills declaradas por agente que existem", orfas)
+            orfas.append(f"{agente.relative_to(raiz)}: declares `{nome}`, which does not exist")
+sondar("skills declared by agents that exist", orfas)
 
-# --- 5. custo por papel ------------------------------------------------------
+# --- 5. cost per role --------------------------------------------------------
 import json
 mapa = json.loads((raiz / "build/modelos.json").read_text(encoding="utf-8"))
 tiers = set.intersection(*(set(a["modelo"]) for a in mapa.values()))
@@ -147,26 +147,26 @@ for agente in sorted((raiz / "agents").glob("*.md")):
     bloco = re.search(r"^skills:\n((?:  - .*\n)+)", m.group(1) + "\n", re.M)
     if bloco and len(bloco.group(1).splitlines()) > 2:
         preload_pesado.append(f"{agente.relative_to(raiz)}: "
-                              f"{len(bloco.group(1).splitlines())} skills pré-carregadas")
-sondar("agentes com modelo e esforco mapeados em todo alvo", sem_tier)
-sondar("agentes com no máximo 2 skills pré-carregadas", preload_pesado)
+                              f"{len(bloco.group(1).splitlines())} preloaded skills")
+sondar("agents with model and effort mapped in every target", sem_tier)
+sondar("agents with at most 2 preloaded skills", preload_pesado)
 
 delegacao = []
-for skill in sorted((raiz / "skills/sdd").glob("*/SKILL.md")):
+for skill in sorted((raiz / "skills/workflow").glob("*/SKILL.md")):
     linhas = skill.read_text(encoding="utf-8").splitlines()
     if not any("SDD-CORE-02" in l for l in linhas[:30]):
-        delegacao.append(f"{skill.relative_to(raiz)}: sem bloco de delegação no topo")
+        delegacao.append(f"{skill.relative_to(raiz)}: no delegation block at the top")
     for n, l in enumerate(linhas, 1):
         if re.search(r"\ba fresh agent\b", l, re.I):
-            delegacao.append(f"{skill.relative_to(raiz)}:{n}: agente sem nome")
-sondar("passos delegados a agente nomeado (SDD-CORE-02)", delegacao)
+            delegacao.append(f"{skill.relative_to(raiz)}:{n}: unnamed agent")
+sondar("steps delegated to a named agent (SDD-CORE-02)", delegacao)
 
 sem_link = []
-for modelo in sorted((raiz / "skills/sdd").glob("*/references/template-*.md")):
+for modelo in sorted((raiz / "skills/workflow").glob("*/references/template-*.md")):
     skill = modelo.parent.parent / "SKILL.md"
     if f"references/{modelo.name}" not in skill.read_text(encoding="utf-8"):
-        sem_link.append(f"{modelo.relative_to(raiz)}: não citado em {skill.relative_to(raiz)}")
-sondar("templates do sdd citados pela própria skill", sem_link)
+        sem_link.append(f"{modelo.relative_to(raiz)}: not cited in {skill.relative_to(raiz)}")
+sondar("workflow templates cited by their own skill", sem_link)
 
 # --- 6. every .skill package stands alone -----------------------------------
 # Runs only when dist/skills/ exists (bash build/skill-packages.sh). Each package is
@@ -221,11 +221,11 @@ if pacotes:
             if re.search(r"No such file|command not found|timed out", err):
                 isolado.append(f"{pacote.name}: scripts/{sh.name} on an empty project: {err.strip().splitlines()[-1][:120]}")
         shutil.rmtree(tmp)
-    sondar(f"pacotes .skill que funcionam sozinhos (de {len(pacotes)})", isolado)
+    sondar(f".skill packages that stand alone (of {len(pacotes)})", isolado)
 
 print()
 if falhas:
-    print(f"{len(falhas)} grupo(s) com falha: " + ", ".join(falhas))
+    print(f"{len(falhas)} failing group(s): " + ", ".join(falhas))
     sys.exit(1)
-print("tudo verde")
+print("all green")
 PYEOF

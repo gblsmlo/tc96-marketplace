@@ -21,7 +21,7 @@ These are three links, not four: the reasoning layer was cut on 2026-09-22 and i
 
 **The API surface doesn't live here.** A library's signature, options, and version-specific behavior resolve through Context7, using the library ID the skill declares in `docs:`. The knowledge base answers what's correct and which ID to cite in a review — not what a function accepts in this minor version.
 
-## The fourteen agents
+## The sixteen agents
 
 | Agent | Role | Skills it loads | Main sources |
 | --- | --- | --- | --- |
@@ -36,13 +36,15 @@ These are three links, not four: the reasoning layer was cut on 2026-09-22 and i
 | `product-designer` | Persona, journey, flow, the four states of every screen, components, and catalog level | — | `Product Design` · `Product Team` · [Storybook estruturado por Atomic Design](../knowledge-base/storybook-estruturado-por-atomic-design.md) |
 | `project-manager` | Scope, schedule, cost, risk, communication, and change as a system | — | `Gestão de Projetos - Mapa de Fundamentos` |
 | `monorepo-auditor` | Audits the layers of an already-written monorepo: dependency direction, public surface, who opens a transaction, which boundary is verifiable | `bun-workspace` · `drizzle-review` · `react-structure` | [Monorepo com Bun - estrutura e tooling](../knowledge-base/monorepo-com-bun-estrutura-e-tooling.md) `MONO-*` · [Architecture in React](../knowledge-base/architecture-in-react.md) · [Fronteira do BFF - forma, jornada e regra](../knowledge-base/fronteira-do-bff-forma-jornada-e-regra.md) |
-| `spec-writer` | Writes one feature's bundle — `spec.md`, `plan.md`, `contract.md` — from the approved PRD and the repo-search facts; the contract is the reviewer's only checklist | — | [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) `SDD-SPEC-*` · [Teste de Software](../knowledge-base/teste-de-software.md) |
-| `repo-explorer` | Gathers facts from existing code for the Spec Writer's repo search: a bounded question in, facts with file:line out, no file contents | — | [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) · [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) `SDD-SPEC-01` |
-| `repo-operator` | Executes mechanical operations another artifact already decided: commit, PR body, push, move or delete files; never decides content | — | [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) §3, `SDD-CORE-05` |
+| `spec-writer` | Writes one feature's bundle — `spec.md`, `plan.md`, `contract.md` — from the approved PRD and the repo-search facts; the contract is the reviewer's only checklist | — | [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) `SDD-SPEC-*` · [Teste de Software](../knowledge-base/teste-de-software.md) |
+| `repo-explorer` | Gathers facts for the delivery flow's search: one bounded question per open slice in, facts with file:line out, no file contents | — | [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) · [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) `SDD-SPEC-01`, `SDD-FLOW-06` |
+| `repo-operator` | Executes mechanical operations another artifact already decided: commit, PR body, push, move or delete files; never decides content | — | [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) §3, `SDD-CORE-05` |
+| `doc-writer` | Writes an ADR, epic, feature, story, task list, bug report or PR description from decided input, in a fresh context with no search and no shell | on demand: `doc-adr` · `doc-epic` · `doc-feature` · `doc-story` · `doc-tasks` · `doc-bug` · `doc-pr` | [Writing contract](../skills/design-docs/docs/writing-contract.md) `DD-*` |
+| `doc-writer-deep` | Writes a PRD or a feature's spec from decided input, in a fresh context with no search and no shell | on demand: `doc-prd` · `doc-spec` | [Writing contract](../skills/design-docs/docs/writing-contract.md) `DD-*` |
 
 ## Common anatomy
 
-All fourteen share the same shape, checkable by script, and it extends the anatomy from [Skills](../skills/README.md) with the fields a Claude Code subagent reads ([Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) § 7):
+All sixteen share the same shape, checkable by script, and it extends the anatomy from [Skills](../skills/README.md) with the fields a Claude Code subagent reads ([Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) § 7):
 
 | Element | Rule |
 | --- | --- |
@@ -77,6 +79,8 @@ All fourteen share the same shape, checkable by script, and it extends the anato
 | what does this feature expose, how is it built, how do we prove it | `spec-writer` | `product-manager` · `software-architect` |
 | where is X, what calls Y, what does Z do **today** | `repo-explorer` | whoever decides with those facts |
 | commit, PR body, push, move, rename or delete files | `repo-operator` | whoever decides what they say |
+| write a PRD or spec whose content is decided | `doc-writer-deep` | whoever decides it · `repo-explorer` |
+| write an ADR, epic, feature, story, task list, bug report or PR description whose content is decided | `doc-writer` | whoever decides it · `repo-explorer` |
 
 Two axes separate most of the pairs. **New × already exists** separates those who write from `code-reviewer` — the same axis as in [Skills](../skills/README.md). **Decide × execute** separates `software-architect`, `product-manager`, `product-designer`, `project-manager` and `spec-writer` from the three that write code: the five that decide never write code and deliver a recorded decision (`software-architect` writes only under `.specs/adr/`, `spec-writer` only under `.specs/features/`); those that execute receive the decision and return code with evidence.
 
@@ -112,9 +116,9 @@ flowchart LR
 
 Each agent declares in its final step who it hands off to, and the arrow is always accompanied by an artifact: spec, recorded decision, flow with states, code with evidence, findings report.
 
-Independent features run side by side, in the PRD's waves: each implementer works in its own worktree, started by the harness scripts, while reviewers, which only read, share the main directory ([Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) §5.1, `SDD-RUN-01`).
+Independent features run side by side, in the PRD's waves: each implementer works in its own worktree, started by the harness scripts, while reviewers, which only read, share the main directory ([Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) §5.1, `SDD-RUN-01`).
 
-This flowchart has a formal procedure in `skills/sdd/` and `skills/design-docs/` — the PRD (`doc-prd`), the feature bundle (`sdd-spec-writer`), the run (`sdd-orchestrator`) and the contract review (`sdd-contract-review`) — citing rules by ID in [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md). The diagram above remains the source of **who**; the note is the source of **when**.
+This flowchart has a formal procedure in `skills/workflow/` and `skills/design-docs/` — four phases: the triage (`workflow-search`), the PRD and the bundles (`workflow-plan`, with `doc-prd`), the run (`workflow-implementation`) and the contract review and delivery (`workflow-review`) — citing rules by ID in [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md). The diagram above remains the source of **who**; that doc is the source of **when**.
 
 ## Model and effort per role
 
@@ -132,6 +136,8 @@ The tier follows the task, not the role's prestige. Four properties decide it: h
 | `frontend-developer` · `backend-developer` · `qa-engineer` | medio | medio | most tokens, and validation catches their errors |
 | `repo-explorer` | rapido | baixo | every fact carries the line that proves it |
 | `repo-operator` | rapido | baixo | the content was decided upstream; the result is an exit code or a diff (`SDD-CORE-05`) |
+| `doc-writer-deep` | medio | alto | the content was decided upstream, but the PRD and the spec are the most structuring; the fast tier lost points on both in the evals |
+| `doc-writer` | rapido | medio | the content was decided upstream; the fast tier held 99% on these seven in the evals |
 
 A feature whose review fails gets at most two fix rounds, on the implementer's declared tier, and then becomes a new item for `spec-writer`; no round moves a tier up (`SDD-RUN-05`, `SDD-RUN-06`).
 
@@ -144,7 +150,7 @@ The tiers are neutral; [`build/modelos.json`](../build/modelos.json) maps them p
 | agent spawned with no role | set `CLAUDE_CODE_SUBAGENT_MODEL=haiku` in your environment; a role's own `model` still wins over it, and a plugin cannot set it for you | `[agents] default_subagent_model` in `.codex/config.toml`, emitted by the build |
 | session opened by another (the desktop app's `start_session`) | inherits the opener's model and effort and adopts no agent, so no frontmatter applies; pass `model` (`claude-sonnet-5-5`) and `effort` (`medium`) on a `fresh` start, same tier or cheaper only, and have the brief call the role as a subagent — the only way up a tier ([`CC-PAR-05`](../knowledge-base/claude-code-paralelismo-e-escala.md)) | not covered here |
 
-Delegating a step to a generic agent, or to a new session told to act "as" a role, skips all of this: both run on the model of whoever opened them (`SDD-CORE-02`). Which tier runs each point of the flow — and which points are scripts, with no model at all — is in [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) §3.
+Delegating a step to a generic agent, or to a new session told to act "as" a role, skips all of this: both run on the model of whoever opened them (`SDD-CORE-02`). Which tier runs each point of the flow — and which points are scripts, with no model at all — is in [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) §3.
 
 ### What each Claude tier is, today
 
@@ -173,7 +179,7 @@ Sessions it opens inherit that choice unless it sets `model` and `effort` when o
 
 **Invoking.** *"use code-reviewer on this diff"*, *"ask software-architect to decide where the CPF validation lives"*. The lead agent also delegates on its own when the `description` matches the task — which is why `description` carries **when not to use** and names the neighboring agent.
 
-**Review in fresh context.** In an SDD run, `code-reviewer` receives **only the feature's `contract.md`, its Surface, the diff and the gate summary**, never the conversation that produced the change (`CC-SES-07`), and the prompt must bound what counts as a finding (`CC-SES-10`). After a fix, a new instance re-reviews only the delta: the open findings and the diff since the last reviewed commit (`sdd-contract-review`, delta re-review). Fanning out several homogeneous reviewers (same model, effort, and tools) shares the cache ([Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)).
+**Review in fresh context.** In an SDD run, `code-reviewer` receives **only the feature's `contract.md`, its Surface, the diff and the gate summary**, never the conversation that produced the change (`CC-SES-07`), and the prompt must bound what counts as a finding (`CC-SES-10`). After a fix, a new instance re-reviews only the delta: the open findings and the diff since the last reviewed commit (`workflow-review`, delta re-review). Fanning out several homogeneous reviewers (same model, effort, and tools) shares the cache ([Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)).
 
 ## What these notes are
 
@@ -181,12 +187,12 @@ Created on 2026-09-01 from already-existing material, and extracted into this re
 
 **Inherited gaps, stated openly.** There is no build skill for Drizzle or for Hono — `backend-developer` reads the hub directly and reviews with `drizzle-review`. The OAuth, session, and RBAC cluster has no skill — `devops-security` works through the [OWASP - Sessão e Autorização](../knowledge-base/owasp-sessao-e-autorizacao.md) checklist item by item. The product and management agents derive from course maps that **have not** been extracted into this repository: they appear in a code span, by name. They have no rule ID to cite, and that is stated plainly, not hidden.
 
-**Criterion for a new agent.** A role someone actually performs, with a question none of the fourteen already answers, and material in the knowledge base to answer it. An agent with no source note is packaged opinion — it doesn't get in.
+**Criterion for a new agent.** A role someone actually performs, with a question none of the sixteen already answers, and material in the knowledge base to answer it. An agent with no source note is packaged opinion — it doesn't get in.
 
 ## Related
 
 - [Skills](../skills/README.md) — skill index, common anatomy, and disambiguation
-- [Delivery Flow — Spec Driven Development](../knowledge-base/fluxo-de-entrega-sdd.md) — the formal procedure for "how agents hand off," with `SDD-*` rules
+- [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) — the formal procedure for "how agents hand off," with `SDD-*` rules
 - `Docs` — index of documentation structures and "which structures have a skill"
 - [Claude Code - Configuração do Repositório](../knowledge-base/claude-code-configuracao-do-repositorio.md) — § 7, custom subagents
 - [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) — subagents, fan-out, shared cache

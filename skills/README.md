@@ -38,7 +38,7 @@ skills/<family>/
 | **drizzle** | `drizzle-query` · `drizzle-mutation` · `drizzle-zod` · `drizzle-review` — self-contained, with its own `docs/` | [drizzle/](drizzle/README.md) |
 | **kb** | `kb-coverage` | [kb/](kb/README.md) |
 | **design-docs** | `doc-prd` · `doc-adr` · `doc-epic` · `doc-feature` · `doc-story` · `doc-tasks` · `doc-bug` · `doc-spec` · `doc-pr` — writing-only document skills, each with its template; self-contained, with its own `docs/` | [design-docs/](design-docs/README.md) |
-| **sdd** | `sdd-spec-writer` · `sdd-orchestrator` · `sdd-contract-review` — the Spec Driven Development delivery flow | [sdd/](sdd/README.md) |
+| **workflow** | `workflow-search` · `workflow-plan` · `workflow-implementation` · `workflow-review` — the Spec Driven Development delivery flow in four phases, with its own docs (`SDD-*`) | [workflow/](workflow/README.md) |
 
 All 54 are in the neutral source, in English, with `idioma: en` in the frontmatter.
 
