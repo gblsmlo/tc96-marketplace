@@ -52,7 +52,7 @@ From `template-spec.md`. For each item the PRD says the feature provides, write 
 
 ## Step 3 — `plan.md`
 
-From `template-plan.md`. One owner role, never "fullstack". The Surface lists every path the feature touches. Size estimates changed lines, tests included, and the review families; above the budget (default 300 lines, two families) the feature does not fit: return the gap "split F<NN> in the PRD by acceptance criterion" instead of writing a plan that cannot be reviewed (`SDD-SPEC-04`). Steps are ordered and each names the check it makes pass. A script only this feature needs goes under **Local scripts**.
+From `template-plan.md`. One owner role, never "fullstack". The Surface lists every path the feature touches. Size estimates changed lines, tests included, and the review families; above the budget (default 300 lines, two families) the feature does not fit: return the gap "split F<NN> in the PRD by acceptance criterion" instead of writing a plan that cannot be reviewed (`SDD-SPEC-04`). Stories and tasks are headings: one story per `AC-*` slice, never per layer; each task names its Surface, what it consumes and provides, and exactly one check, ordered after every task it consumes from. A script only this feature needs goes under **Local scripts**.
 
 ---
 

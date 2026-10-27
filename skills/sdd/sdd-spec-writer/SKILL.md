@@ -76,6 +76,7 @@ What `spec-writer` must hold to, as it writes:
 | 1 | each file answers only its question; a fact lives in one file and the others link to it | `SDD-SPEC-02` |
 | 2 | `spec.md` gives each provided item a shape a consumer can code against; UX section only when the feature has an interface that needs one | `SDD-SPEC-03` |
 | 3 | `plan.md` names the Surface, Size and base branch, one owner role, and fits the review budget; a feature above it goes back as a gap: "split F<NN> in the PRD" | `SDD-SPEC-04` |
+| 3a | `plan.md` breaks the feature into story and task headings: every traced `AC-*` in exactly one story, every task with exactly one check, tasks after the tasks they consume from | `SDD-SPEC-04` |
 | 4 | `contract.md` has a check for every `AC-*` the feature traces, each with its gate type, plus the non-functional gates, and closes with **Met when** per `AC-*` | `SDD-SPEC-05`, `SDD-SPEC-06` |
 | 5 | each `AC-*` and rule goes through the seven edge categories once; each applicable edge becomes a check, a gap, or a proposed Out of Scope line for the PRD | `SDD-SPEC-07` |
 | 6 | a new item traces the same `AC-*`, starts from the failing branch, and holds only what the failing checks need | `SDD-RUN-06` |

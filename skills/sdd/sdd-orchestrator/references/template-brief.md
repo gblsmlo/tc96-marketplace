@@ -17,11 +17,11 @@ Give the subagent exactly this:
 
 - Read `.specs/features/[ID]-[slug]/spec.md`, `plan.md` and `contract.md`, and the files
   `plan.md` cites. Read nothing else from `.specs/`.
-- Write the code and the checks `contract.md` lists, following `plan.md`'s steps, inside its
-  Surface.
+- Write the code and the checks `contract.md` lists, following `plan.md`'s tasks in order, each
+  inside its own Surface.
 - A question these files do not answer is a gap: stop, and return it in one sentence. Do not
   choose an answer (`SDD-RUN-07`).
-- Commit your own diff when done.
+- Commit once per task, when its check is green.
 
 When the subagent returns, write its result to `[result-file]`, one line:
 `done` · `gap: <the question>`. Do not run the gates; the orchestrator does.

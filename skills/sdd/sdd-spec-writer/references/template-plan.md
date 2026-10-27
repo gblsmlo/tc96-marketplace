@@ -32,12 +32,29 @@ with this list first; a file outside it is a finding.
   another)
 - **Review families touched:** [at most two, e.g. React, HTTP]
 
-### Steps
+### Stories and tasks
 
-Ordered. Each step names what it produces and, when it has one, the check in `contract.md` it
-makes pass.
+One `####` heading per story, one `#####` heading per task under it. A story is the slice of the
+feature that satisfies its `AC-*`; split by acceptance criterion, never by layer. Every `AC-*` in
+`contract.md`'s `traces` belongs to exactly one story. The Given / When / Then stays in the PRD;
+the story cites it.
 
-1. [step] — produces [...] — makes [C1] pass
+A task is one step the implementer finishes and commits alone. It names a part of the Surface,
+what it consumes (an earlier task, or a provider feature from `contract.md`'s Interface), what it
+provides, and exactly one check from `contract.md`. Each check belongs to exactly one task. Tasks
+are ordered so that each comes after every task it consumes from.
+
+- **Task done:** its check is green and its commit stays inside its Surface.
+- **Story done:** every task under it is done and every check citing its `AC-*` is green.
+
+#### S1 · [story name] (AC-NN)
+
+##### S1.T1 · [task name]
+
+- **Surface:** [paths, a subset of the Surface above]
+- **Consumes:** [item ← S1.T0 or F<NN>], or `none`
+- **Provides:** [item], or `none`
+- **Check:** [C1]
 
 ### Commands
 
