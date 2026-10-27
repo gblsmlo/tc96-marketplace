@@ -98,8 +98,14 @@ below records what a run found.
 > the owner instead of a fix round. The link now requires `LINK_KEY`. In a rerun with two runs
 > ($0.76), one run passed every grader and the other missed only `10-session-read-no-diff`, the
 > same miss as the earlier runs. `search-status-exists` missed `02-session-read-no-source`: the
-> session read `src/` itself instead of leaving it to `repo-explorer`. Sonnet and Opus are not
-> re-run yet.
+> session read `src/` itself instead of leaving it to `repo-explorer`.
+>
+> **Sonnet 5.5, one run per case ($2.23).** 4 of 7 cases passed, score 95%. The three misses did
+> not repeat on rerun: `search-negative-discount` skipped `repo-explorer` once and then passed 2/2
+> ($0.37), and `implementation-ready-list` made one Bash call naming L3b beside `spawn-detached` and
+> then passed 1/1 ($0.20). `plan-amendment-draft` started `product-manager` instead of putting the
+> Draft amendment already in `.specs/PRD.md` in front of the owner, the same miss as one of two runs
+> before the migration. Opus is not re-run yet.
 
 ### 2026-10-27, Claude Code 2.1.310
 

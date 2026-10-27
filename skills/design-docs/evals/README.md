@@ -45,6 +45,23 @@ and an uncached list-price cost per model, per case and in total. The token coun
 cumulative total with no input/output split, so the dollars are an upper bound; the ratio between
 the models is the number to read.
 
+### Results — 2026-10-27, the four cases migrated to capabilities
+
+`prd-quote-approval`, `feature-from-prd-row`, `spec-approval-route` and `tasks-from-spec` re-run
+after the PRD moved to capabilities and the spec to a standalone path, one run each.
+
+| Model | Cases passed | Score | Cost |
+| --- | --- | --- | --- |
+| Sonnet 5.5 | 3/4 | 95% | $0.71 |
+| Haiku 5.5 | 1/4 | 83% | $0.36 |
+
+The capabilities table, its `(proposed)` marks and the absence of a delivery cut passed on both
+models. Sonnet's misses are in the sections the migration left alone: two objectives whose metric
+was a gap (the judges split), and an "already approved" criterion and three Out of Scope lines
+added without `(proposed)`. Haiku repeated its known misses — a `doc-prd` user group without
+`(proposed)`, `doc-spec` opening the decoy `src/` files — and one `doc-tasks` run marked no task
+`[P]`.
+
 ### Results — 2026-10-26
 
 **Iteration 2**: every case, the skill on each model, one run each.
