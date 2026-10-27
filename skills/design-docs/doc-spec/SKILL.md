@@ -29,7 +29,7 @@ A spec answers one question: **what does this feature expose and consume, and ho
 
 **Anchor:** what the feature provides or changes (`DD-CORE-06`).
 
-**Default path:** `.specs/features/<ID>-<slug>/spec.md` when the caller gives a feature ID; otherwise the path the caller names, or inline.
+**Default path:** the path the caller names, or inline. In the delivery flow, the seams between layers live in the delivery plan's layer files, written by `spec-writer`, not in a `spec.md`.
 
 ## Step 1: Sort the input
 
@@ -68,4 +68,4 @@ The return block of the [writing contract](../docs/writing-contract.md) §5 — 
 
 ## Example
 
-*"Spec for F02 approval. Provides: POST /quotes/:id/decision with body {decision: 'approve'|'reject'}, 200 with the quote, 410 if expired, 409 if already decided; emits `quote.approved` with quoteId and approvedAt. Consumes the signed link token from F01 (see F01 spec §Provides). Facts: quotes table has no status column (src/db/schema.ts:40). Decision: links are signed, not stored — we want that for every future link."* Provides: the route with its body and three statuses, the event with its payload; the auth on the route is not stated → `[GAP: who may call it — anyone with the token, or a session too? — decides: software-architect]`. Consumes: the token from F01. Existing: the schema fact with its line. Boundary: "links are signed, not stored" → ADR. Outcome `partial`; return lists the ADR flag.
+*"Spec for quote approval. Provides: POST /quotes/:id/decision with body {decision: 'approve'|'reject'}, 200 with the quote, 410 if expired, 409 if already decided; emits `quote.approved` with quoteId and approvedAt. Consumes the signed link token from the quote-link spec (`docs/specs/quote-link/spec.md` §Provides). Facts: quotes table has no status column (src/db/schema.ts:40). Decision: links are signed, not stored — we want that for every future link."* Provides: the route with its body and three statuses, the event with its payload; the auth on the route is not stated → `[GAP: who may call it — anyone with the token, or a session too? — decides: software-architect]`. Consumes: the token, from the quote-link spec. Existing: the schema fact with its line. Boundary: "links are signed, not stored" → ADR. Outcome `partial`; return lists the ADR flag.

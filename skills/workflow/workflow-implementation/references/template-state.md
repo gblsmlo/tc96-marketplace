@@ -1,30 +1,31 @@
 # Template: the state file
 
-Saved as `.sdd/state/<ID>-<slug>.md`, git-ignored. The whole view of one feature that
+Saved as `.sdd/state/<delivery>/<layer>.md`, git-ignored. The whole view of one layer that
 `workflow-implementation` and `workflow-review` share, and the only thing that passes between
 them (`SDD-CORE-04`, `SDD-FLOW-03`): each reads and writes this file and nothing else about the
-feature. Every value is
-an ID, a status or one line; never a log, a diff or a review report.
+layer. Every value is an ID, a status or one line; never a log, a diff or a review report. The
+index's Status column mirrors `status`, written by the orchestrator (`SDD-PLAN-11`).
 
 ## Body (copy from here down)
 
 ---
 
 ```yaml
-feature: F02-approval
-status: waiting      # waiting | running | gates-failed | in-review | fixing | contract-met | merged | split | dropped
-wave: W1
+delivery: 2026-10-27-quote-approval
+layer: L2a
+status: waiting      # waiting | running | gates-failed | in-review | fixing | checks-met | merged | split | dropped
 role: backend-developer
-branch: feat/F02-approval
-worktree: ../.worktrees/F02-approval
+branch: feat/2026-10-27-quote-approval-L2a
+worktree: ../.worktrees/2026-10-27-quote-approval-L2a
 round: 0             # fix rounds used; at most 2 (SDD-RUN-05)
 gates: ""            # pass | fail — one line from run-gates
-review: ""           # met | unmet — the unmet AC-* and failing check IDs, nothing else
+review: ""           # met | unmet — the failing check IDs and broken rules, nothing else
 notes: []            # non-blocking reviewer notes, one line each, for the owner if asked
-blocking: []         # security defect or regression of a merged contract, one line each
+blocking: []         # security defect or regression of a merged layer, one line each
 gaps: []             # questions the implementer returned, one sentence each
-next: ""             # the new item's ID, when status is split
-authorization: ""    # the owner's push-and-PR words, quoted, and their scope (run or wave)
+next: ""             # the new layer's ID, when status is split
+pr: ""               # the layer's PR into the feature branch, once opened
+authorization: ""    # the owner's push-and-PR words, quoted
 started: ""          # ISO 8601
 finished: ""         # ISO 8601
 ```
@@ -34,14 +35,14 @@ finished: ""         # ISO 8601
 | From | Event | To |
 | --- | --- | --- |
 | waiting | start conditions hold (`SDD-RUN-01`), `spawn-detached` exits 0 | running |
-| running | `.sdd/run/<ID>.exit` exists and `.sdd/run/<ID>.result` says `done` | gates run: pass → in-review; fail → gates-failed |
-| running | `.sdd/run/<ID>.result` says `gap: …` | waiting, with `gaps` filled |
-| running | `.sdd/run/<ID>.exit` is non-zero, or `.result` is missing | waiting; tell the owner the run failed, with the log path |
+| running | `.sdd/run/<delivery>/<layer>.exit` exists and `.result` says `done` | gates run: pass → in-review; fail → gates-failed |
+| running | `.result` says `gap: …` | waiting, with `gaps` filled |
+| running | `.exit` is non-zero, or `.result` is missing | waiting; tell the owner the run failed, with the log path |
 | gates-failed | implementer resumed with the failing gates | running (round unchanged) |
-| in-review | reviewer: met | contract-met |
+| in-review | reviewer: met | checks-met |
 | in-review | reviewer: unmet, round < 2 | fixing, round + 1 |
-| in-review | reviewer: unmet, round = 2 | split, `next` set after the owner approves the new item |
+| in-review | reviewer: unmet, round = 2 | split, `next` set after the owner approves the new layer |
 | in-review | reviewer: blocking note | waiting, with `blocking` filled, until the owner decides |
 | fixing | the fix run's `.result` says `done` | gates run, as from running |
-| contract-met | push, PR and merge done under `authorization` | merged |
-| any | the owner drops the feature | dropped |
+| checks-met | PR into the feature branch opened and merged under `authorization` | merged |
+| any | the owner drops the layer | dropped |

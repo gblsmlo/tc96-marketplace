@@ -9,9 +9,9 @@ when filled.
 
 | Field | Meaning |
 | --- | --- |
-| `title` | `[F<NN> · ]<what it delivers, verb-first>` |
+| `title` | `[<ID> · ]<what it delivers, verb-first>` — the ID is the PRD's `CAP-n` or the tracker's, when the input gives one |
 | `parent` | the epic, by ID, when the input names one; otherwise delete |
-| `prd` | `F<NN>` and the `AC-*` it satisfies, when it comes from a PRD; otherwise delete |
+| `prd` | `CAP-n` and the `AC-*` it satisfies, when it comes from a PRD; otherwise delete |
 
 ## Body (copy from here down)
 

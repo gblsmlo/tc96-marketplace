@@ -7,14 +7,14 @@ writer's input. A workflow calls them at its edges; a person can call any one al
 
 | Skill | The question the document answers | Default output | Model · effort |
 | --- | --- | --- | --- |
-| `doc-prd` | what are we building, why, in which features and order? | `.specs/PRD.md` | `medio` · `alto` |
+| `doc-prd` | what are we building, why, as which capabilities, proved by which criteria? | `.specs/PRD.md` | `medio` · `alto` |
 | `doc-adr` | what did we decide that outlives this change? | `.specs/adr/NNNN-<slug>.md` | `rapido` · `medio` |
 | `doc-epic` | which capability, for whom, and how do we know it paid off? | inline (tracker) | `rapido` · `medio` |
 | `doc-feature` | what slice ships next, and how do we know it works? | inline (tracker) | `rapido` · `medio` |
 | `doc-story` | what can one user do, and how is it proved? | inline (tracker) | `rapido` · `medio` |
 | `doc-tasks` | in what order is it built, in provable pieces? | `tasks.md` beside the source | `rapido` · `medio` |
 | `doc-bug` | what fails, where, and how does someone see it fail? | inline (tracker) | `rapido` · `medio` |
-| `doc-spec` | what does the feature expose and consume, and how at its boundaries? | `.specs/features/<ID>-<slug>/spec.md` | `medio` · `alto` |
+| `doc-spec` | what does the feature expose and consume, and how at its boundaries? | the path the caller names, or inline | `medio` · `alto` |
 | `doc-pr` | what does the change do, why, and how is it checked? | inline | `rapido` · `medio` |
 
 The contract all nine follow — what a writer may read, structure versus substance, the gap marker,
@@ -59,7 +59,7 @@ enables it, a PR closes the task (contract §8).
 2. **One anchor per document** (`DD-CORE-06`). Missing the anchor returns `blocked` with the
    questions, instead of a file of placeholders that passes for progress.
 3. **Structure is the writer's, substance is the input's** (`DD-CORE-03`, `DD-CORE-04`). Splitting
-   needs into stories or tasks, numbering, Given / When / Then and wave order are the writer's job;
+   needs into stories or tasks, numbering, Given / When / Then and an order derived from stated dependencies are the writer's job;
    a cut or order it derived is marked `(proposed)`. Numbers, targets, reasons and decisions come
    from the input or become gaps.
 4. **The tier follows the structuring, not the importance.** The content is decided upstream, so
@@ -72,9 +72,10 @@ enables it, a PR closes the task (contract §8).
    keeping their `DOC-*` and `SDD-*` rule text and their house formats, so the delivery flow reads
    the same files. They lost the analysis they did (the PRD edge sweep, the ADR's own `file:line`
    lookups): that is the owner role's work before the writer runs.
-6. **The spec template keeps the delivery flow's section names** (Consumes, Provides, What already
-   exists, Boundary decisions, UX, Open gaps), adding Summary, Goals and non-goals, Alternatives and
-   Cross-cutting from Google-style design docs, so one file serves both uses.
+6. **The spec is a standalone design doc.** Its Consumes and Provides sections hold the same kind
+   of seam the delivery flow writes in a layer file, adding Summary, Goals and non-goals,
+   Alternatives and Cross-cutting from Google-style design docs. The delivery flow itself does not
+   call `doc-spec`: its seams live in the delivery plan's layer files, written by `spec-writer`.
 
 ## Registered under
 

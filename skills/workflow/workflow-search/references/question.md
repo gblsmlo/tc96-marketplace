@@ -9,7 +9,7 @@ one question, one round (`SDD-FLOW-06`). Fill the brackets; send nothing else.
 
 Slice [S-number], axis [axis]: [the slice, in one sentence].
 Entities and capabilities: [list].
-The record already says: [what the PRD, ADRs, bundles, docs or memory answered, or "nothing"].
+The record already says: [what the PRD, ADRs, delivery plans, docs or memory answered, or "nothing"].
 Likely place in the code: [paths from the request's wording or the record, or "unknown"].
 
 Answer with facts only, each with file:line, at most 30 lines:

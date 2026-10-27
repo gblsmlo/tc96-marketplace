@@ -25,7 +25,7 @@ An epic answers one question: **which capability are we building, for whom, and 
 | --- | --- |
 | one slice that ships alone, with a benefit and acceptance | `doc-feature` |
 | one user-facing behavior with Given / When / Then | `doc-story` |
-| the whole product's problem, stories, features and waves | `doc-prd` |
+| the whole product's problem, stories and capabilities | `doc-prd` |
 
 **Anchor:** the capability, and who uses it (`DD-CORE-06`).
 

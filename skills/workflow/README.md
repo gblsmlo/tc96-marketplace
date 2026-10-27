@@ -8,13 +8,13 @@ The foundation they implement is [docs/delivery-flow.md](docs/delivery-flow.md) 
 | # | Skill | The question it answers | Hands work to | Leaves with |
 | --- | --- | --- | --- | --- |
 | 1 | `workflow-search` | what does the request touch, what already exists, and where does each part go? | the main session splits; `repo-explorer` answers open slices | `.specs/triage/<date>-<slug>.md` |
-| 2 | `workflow-plan` | what do we build, in which order, and how do we prove it? | `product-manager` (`doc-prd`) · `spec-writer` · `software-architect` (`doc-adr`) | PRD, ADRs and bundles, `Approved` by the owner |
-| 3 | `workflow-implementation` | build each ready feature until its gates are green | the harness scripts · `frontend-developer` / `backend-developer`, detached | a branch with green gates; state `in-review` |
-| 4 | `workflow-review` | is the contract met, and if so, deliver | `code-reviewer` · `devops-security` · `repo-operator` | a PR the owner merges; `fixing`; or a new item |
+| 2 | `workflow-plan` | what do we build, which layer gives what to the next, and how do we prove it? | `product-manager` (`doc-prd`) · `spec-writer` · `software-architect` (`doc-adr`) | PRD, ADRs and one delivery plan (index, layer files, contract), `Approved` by the owner |
+| 3 | `workflow-implementation` | build each ready layer until its gates are green | the harness scripts · the layer's owner with the skills it names, detached | a layer branch with green gates; state `in-review` |
+| 4 | `workflow-review` | are the layer's checks met, and then is the delivery's contract met? | `code-reviewer` · `devops-security` · `repo-operator` | a layer PR into the feature branch; `fixing`; a new layer; at the end, the delivery PR into the trunk |
 
 **The order is search → plan → implementation → review, and it only moves forward**
 (`SDD-FLOW-01`, `SDD-FLOW-02`). The review is the only phase with a way back: a fix round to
-implementation, at most twice, or a new item, in its own folder, to plan. No failure re-enters
+implementation, at most twice, or a new layer file to plan. No failure re-enters
 search. Between implementation and review, only the state file passes (`SDD-FLOW-03`).
 
 ```
@@ -30,19 +30,19 @@ workflow/
 ├── workflow-plan/
 │   ├── SKILL.md
 │   └── references/
-│       ├── template-spec.md           what the feature exposes and consumes; UX section when needed
-│       ├── template-plan.md           steps, Surface, Size, base branch, local scripts
-│       └── template-contract.md       one check per AC-*; met only when every traced AC-* is proved
+│       ├── template-delivery-plan.md  the index: outside in, vocabulary, layers table with progress, order, branches
+│       ├── template-layer.md          one layer: seams, rules with sources, exact skills, checks
+│       └── template-acceptance.md     the contract: which checks prove each AC-*
 ├── workflow-implementation/
 │   ├── SKILL.md
 │   └── references/
 │       ├── template-brief.md          the prompt spawn-detached hands to the implementer
-│       └── template-state.md          the one file per feature both run phases share
+│       └── template-state.md          the one file per layer both run phases share
 └── workflow-review/
     ├── SKILL.md
     └── references/
         ├── contract-review.md         the reviewer's procedure, read by a new code-reviewer
-        └── template-pr.md             the PR of a feature whose contract is met
+        └── template-pr.md             the layer PR into the feature branch, and the delivery PR into the trunk
 ```
 
 ## Files in `.specs/` and `.sdd/`
@@ -52,8 +52,9 @@ workflow/
 | `.specs/triage/<date>-<slug>.md` | the main session | search |
 | `.specs/PRD.md` | `product-manager`, through `doc-prd` | plan |
 | `.specs/adr/NNNN-<slug>.md` | `software-architect`, through `doc-adr` | plan |
-| `.specs/features/<ID>-<slug>/spec.md`, `plan.md`, `contract.md` | `spec-writer` | plan |
-| `.sdd/state/<ID>-<slug>.md` | the main session | implementation and review |
+| `.specs/delivery/<date>-<slug>/plan.md`, `plans/<layer>-<slug>.md`, `contract.md` | `spec-writer` | plan |
+| the index's Status and PR cells | the main session | implementation and review |
+| `.sdd/state/<delivery>/<layer>.md` | the main session | implementation and review |
 | `.sdd/logs/`, `.sdd/run/` | the harness scripts | implementation |
 
 Every `.specs/` decision file is born `Draft` (an ADR `Proposed`) and moves only on the owner's
@@ -84,15 +85,26 @@ Everything they hand out goes to a named agent on its own tier, or to a script
    stays with `repo-explorer`.
 4. **Absorbs the former `sdd` family.** `sdd-spec-writer` became `workflow-plan`;
    `sdd-orchestrator` became `workflow-implementation` and `workflow-review`; `sdd-contract-review`
-   became the reviewer's procedure under `workflow-review`. The rule IDs did not change, so every
-   `SDD-*` citation still holds. The hub moved from the knowledge base into `docs/`.
+   became the reviewer's procedure under `workflow-review`. The hub moved from the knowledge base
+   into `docs/`.
+5. **One delivery, layered outside in (2026-10-27).** A PRD is planned as one delivery: an index
+   that keeps progress, one file per layer — contracts, repository, backend, frontend, tests,
+   gates — and a contract mapping each `AC-*` to its checks. The plan decides the seams and the
+   rules; each layer's owner builds the inside with the skills the layer names. Each layer's PR
+   goes into `feat/<delivery>`; only the validated delivery goes into the trunk. Measured on the
+   users-crud test round: one owner gate instead of four, and a layer run reading 37% less
+   (`SDD-PLAN-*`).
 
 ## What this family deliberately does not have
 
 - **No board.** Registering work on a tracker is outside the flow (`SDD-CORE-06`).
-- **No research phase.** Product decisions are the PRD; specification decisions are the bundle.
+- **No research phase.** Product decisions are the PRD; delivery decisions are the plan.
   Search reports facts and routes; it never decides.
-- **No third fix round, no tier escalation.** Two rounds, then a new item (`SDD-RUN-05`).
+- **No third fix round, no tier escalation.** Two rounds, then a new layer (`SDD-RUN-05`).
+- **No step-by-step plan.** The plan decides seams and rules; the inside of a layer is its
+  owner's, with its skills (`SDD-PLAN-04`).
+- **No layer merged into the trunk.** Layers merge into the feature branch; the trunk receives
+  the validated delivery only (`SDD-RUN-08`).
 - **No phase inside a phase.** A phase never loads another as a sub-orchestrator
   (`SDD-FLOW-04`).
 

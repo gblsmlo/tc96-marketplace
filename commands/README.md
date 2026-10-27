@@ -44,8 +44,9 @@ in full:
 ## Specification
 
 [`spec`](spec.md) — searches, plans and stops: runs `workflow-search` to triage the request,
-then `workflow-plan` to write or amend `.specs/PRD.md`, the ADRs and each feature's bundle in
-`.specs/features/` (`spec.md`, `plan.md`, `contract.md`), and stops before any code.
+then `workflow-plan` to write or amend `.specs/PRD.md`, the ADRs and the delivery plan in
+`.specs/delivery/<date>-<slug>/` (the index `plan.md`, one `plans/<layer>-<slug>.md` per layer,
+`contract.md`), and stops before any code.
 
 [`scaffold-sdd-scripts`](scaffold-sdd-scripts.md) — writes the six harness scripts of the
 delivery flow (`init.sh` and `scripts/`) and `sdd.config.sh` at the project root.

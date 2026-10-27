@@ -1,9 +1,8 @@
 # Template: Spec
 
-Saved as `.specs/features/<ID>-<slug>/spec.md`, or where the caller names. A spec answers one
-question: **what does this feature expose and consume, and how is it built at its boundaries?** Its
-sections from Consumes to Open gaps keep the names the delivery flow's `spec.md` uses, so the same
-file serves a standalone design doc and a feature bundle. Hints in brackets are deleted when filled.
+Saved where the caller names, or returned inline. A spec answers one question: **what does this
+feature expose and consume, and how is it built at its boundaries?** Hints in brackets are deleted
+when filled.
 
 ## Fields
 
@@ -11,8 +10,8 @@ The file opens with these fields as YAML frontmatter, then the body.
 
 | Field | Meaning |
 | --- | --- |
-| `feature` | `<ID>-<slug>`, or the change's name |
-| `prd` | `F<NN>` and the `AC-*` it satisfies, when it comes from a PRD; otherwise delete |
+| `feature` | the feature's or the change's name, as a slug |
+| `prd` | the `CAP-*` and `AC-*` it serves, when it comes from a PRD; otherwise delete |
 | `status` | `Draft` · `Approved`; born `Draft`, moved only on the owner's reply |
 
 ## Body (copy from here down)

@@ -22,7 +22,7 @@ prose that merely uses capital letters and hyphens.
 | test (strategy) | `TS-*` | `docs/teste-de-software*.md` |
 | playwright | `PW-*` | `docs/playwright*.md` |
 | storybook | `SB-CFG-*`, `SB-CORE-*`, `SB-CSF-*`, `SB-CTX-*`, `SB-TEST-*`, `SB-MOCK-*` | `docs/storybook*.md` |
-| workflow (delivery flow) | `SDD-CORE-*`, `SDD-PRD-*`, `SDD-SPEC-*`, `SDD-RUN-*`, `SDD-SCR-*`, `SDD-FLOW-*` | `skills/workflow/docs/delivery-flow.md` |
+| workflow (delivery flow) | `SDD-CORE-*`, `SDD-PRD-*`, `SDD-PLAN-*`, `SDD-RUN-*`, `SDD-SCR-*`, `SDD-FLOW-*` | `skills/workflow/docs/delivery-flow.md` |
 | normative pages (not `docs/`) | `REACT-ARCH-*`, `BFF-*`, `MONO-*` | `pages/feature-based-architecture.md`, `pages/fronteira-do-bff-forma-jornada-e-regra.md`, `pages/monorepo-com-bun-estrutura-e-tooling.md` — `architecture-in-react.md` § 5 explains why these three pages carry IDs when the rest of `pages/` does not |
 
 ## What is not an ID

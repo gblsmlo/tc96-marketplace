@@ -58,7 +58,7 @@ do not write a document: deliver.
 
 When writing to `.specs/`, use §4 to know which file each decision lives in, and §3 to know
 whether the file can still change. The PRD is written through `doc-prd`, an ADR through
-`doc-adr`, and a feature's design through `workflow-plan`, after `workflow-search` triaged the request.
+`doc-adr`, and a delivery's design — its layer files — through `workflow-plan`, after `workflow-search` triaged the request.
 
 ### Conventions
 
@@ -112,16 +112,17 @@ approves its own document (`SDD-CORE-03`, in
 | Document | File | Template |
 | --- | --- | --- |
 | PRD | `.specs/PRD.md`, one per product | `design-docs/doc-prd/references/template.md` |
-| Design doc | the `spec.md` of each feature, in `.specs/features/<ID>-<slug>/` | `workflow/workflow-plan/references/template-spec.md` |
-| RFC | no file of its own: an open technical decision is settled by the owner before the feature's bundle, and recorded as an ADR | — |
+| Design doc | the delivery plan's layer files, one per layer, in `.specs/delivery/<date>-<slug>/plans/` | `workflow/workflow-plan/references/template-layer.md` |
+| RFC | no file of its own: an open technical decision is settled by the owner before the delivery plan, and recorded as an ADR | — |
 | ADR | `.specs/adr/NNNN-<slug>.md` | `design-docs/doc-adr/references/template.md` |
 
-The PRD belongs to the product and changes by amendment (`SDD-PRD-06`). A feature's design is
-frozen once the feature merges; a later change is a new item with its own folder (`SDD-SPEC-08`).
-The ADR stays outside the feature folders because an architecture decision usually applies to more
-than one feature, and the numbering is a single one for the repository (`DOC-ADR-03`). A feature's
-`plan.md` and `contract.md` are not decision documents of this note; their owner and their moment
-are in `Delivery Flow — Spec Driven Development` (`skills/workflow/docs/delivery-flow.md`) §4.3.
+The PRD belongs to the product and changes by amendment (`SDD-PRD-06`). A layer file is frozen
+once its layer merges: it is never rewritten, and a later change is a new layer file with its own
+row in the index (`SDD-PLAN-09`). The ADR stays outside the delivery folders because an
+architecture decision usually applies to more than one delivery, and the numbering is a single one
+for the repository (`DOC-ADR-03`). The delivery's index (`plan.md`) and `contract.md` are not
+decision documents of this note; their owner and their moment are in `Delivery Flow — Spec Driven
+Development` (`skills/workflow/docs/delivery-flow.md`) §4.3.
 
 ---
 
@@ -182,7 +183,7 @@ Convention: `MUST`/`NEVER` are normative. **†** marks a decision of this doc.
 
 ```
 WHEN WRITING the PRD:              § 0, § 3 + DOC-CORE-*, DOC-PRD-*
-WHEN WRITING a feature's spec.md:  § 0, § 2, § 3 + DOC-CORE-*, DOC-RFC-03
+WHEN WRITING a layer file:         § 0, § 2, § 3 + DOC-CORE-*, DOC-RFC-03
 WHEN WRITING or SUPERSEDING an ADR: § 3, § 4 + DOC-ADR-*
 NEVER:                             this note for an execution task (a fix, refactor or technical adjustment)
                                    (it does not open a decision document, DOC-CORE-02)
@@ -229,6 +230,6 @@ its ADR template has no alternatives section (here it does, `DOC-ADR-04`).
 - `Delivery Flow — Spec Driven Development` (`skills/workflow/docs/delivery-flow.md`) — §4, where the
   `.specs/` files enter the flow
 - `skills/design-docs/` — `doc-prd` and `doc-adr`, among the nine document writers, with their templates
-- `skills/workflow/workflow-plan/` — the feature's `spec.md`, the design doc of this note
+- `skills/workflow/workflow-plan/` — the delivery plan's layer files, the design doc of this note
 - `agents/software-architect.md` — writes the ADRs
 - `agents/product-manager.md` — writes the PRD

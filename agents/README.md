@@ -36,11 +36,11 @@ These are three links, not four: the reasoning layer was cut on 2026-09-22 and i
 | `product-designer` | Persona, journey, flow, the four states of every screen, components, and catalog level | — | `Product Design` · `Product Team` · [Storybook estruturado por Atomic Design](../knowledge-base/storybook-estruturado-por-atomic-design.md) |
 | `project-manager` | Scope, schedule, cost, risk, communication, and change as a system | — | `Gestão de Projetos - Mapa de Fundamentos` |
 | `monorepo-auditor` | Audits the layers of an already-written monorepo: dependency direction, public surface, who opens a transaction, which boundary is verifiable | `bun-workspace` · `drizzle-review` · `react-structure` | [Monorepo com Bun - estrutura e tooling](../knowledge-base/monorepo-com-bun-estrutura-e-tooling.md) `MONO-*` · [Architecture in React](../knowledge-base/architecture-in-react.md) · [Fronteira do BFF - forma, jornada e regra](../knowledge-base/fronteira-do-bff-forma-jornada-e-regra.md) |
-| `spec-writer` | Writes one feature's bundle — `spec.md`, `plan.md`, `contract.md` — from the approved PRD and the repo-search facts; the contract is the reviewer's only checklist | — | [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) `SDD-SPEC-*` · [Teste de Software](../knowledge-base/teste-de-software.md) |
-| `repo-explorer` | Gathers facts for the delivery flow's search: one bounded question per open slice in, facts with file:line out, no file contents | — | [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) · [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) `SDD-SPEC-01`, `SDD-FLOW-06` |
+| `spec-writer` | Writes the delivery plan of an approved PRD or amendment, outside in — the index `plan.md`, one `plans/<layer>-<slug>.md` per layer (seams, rules, skills, checks) and `contract.md` (`AC-*` → checks) — from the PRD and the repo-search facts; each layer file is its reviewer's checklist | — | [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) `SDD-PLAN-*` · [Teste de Software](../knowledge-base/teste-de-software.md) |
+| `repo-explorer` | Gathers facts for the delivery flow's search: one bounded question per open slice in, facts with file:line out, no file contents | — | [Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md) · [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) `SDD-PLAN-01`, `SDD-FLOW-06` |
 | `repo-operator` | Executes mechanical operations another artifact already decided: commit, PR body, push, move or delete files; never decides content | — | [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) §3, `SDD-CORE-05` |
 | `doc-writer` | Writes an ADR, epic, feature, story, task list, bug report or PR description from decided input, in a fresh context with no search and no shell | on demand: `doc-adr` · `doc-epic` · `doc-feature` · `doc-story` · `doc-tasks` · `doc-bug` · `doc-pr` | [Writing contract](../skills/design-docs/docs/writing-contract.md) `DD-*` |
-| `doc-writer-deep` | Writes a PRD or a feature's spec from decided input, in a fresh context with no search and no shell | on demand: `doc-prd` · `doc-spec` | [Writing contract](../skills/design-docs/docs/writing-contract.md) `DD-*` |
+| `doc-writer-deep` | Writes a PRD or a standalone spec from decided input, in a fresh context with no search and no shell | on demand: `doc-prd` · `doc-spec` | [Writing contract](../skills/design-docs/docs/writing-contract.md) `DD-*` |
 
 ## Common anatomy
 
@@ -82,7 +82,7 @@ All sixteen share the same shape, checkable by script, and it extends the anatom
 | write a PRD or spec whose content is decided | `doc-writer-deep` | whoever decides it · `repo-explorer` |
 | write an ADR, epic, feature, story, task list, bug report or PR description whose content is decided | `doc-writer` | whoever decides it · `repo-explorer` |
 
-Two axes separate most of the pairs. **New × already exists** separates those who write from `code-reviewer` — the same axis as in [Skills](../skills/README.md). **Decide × execute** separates `software-architect`, `product-manager`, `product-designer`, `project-manager` and `spec-writer` from the three that write code: the five that decide never write code and deliver a recorded decision (`software-architect` writes only under `.specs/adr/`, `spec-writer` only under `.specs/features/`); those that execute receive the decision and return code with evidence.
+Two axes separate most of the pairs. **New × already exists** separates those who write from `code-reviewer` — the same axis as in [Skills](../skills/README.md). **Decide × execute** separates `software-architect`, `product-manager`, `product-designer`, `project-manager` and `spec-writer` from the three that write code: the five that decide never write code and deliver a recorded decision (`software-architect` writes only under `.specs/adr/`, `spec-writer` only under `.specs/delivery/`); those that execute receive the decision and return code with evidence.
 
 ## How agents hand off
 
@@ -92,9 +92,9 @@ flowchart LR
  PM -->|spec, hypothesis| PD[product-designer]
  RE[repo-explorer] -->|facts| SW
  SW -->|lasting decision| SA
- SW -->|spec, plan, contract| FE
- SW -->|spec, plan, contract| BE
- SW -->|contract| CR
+ SW -->|index, layer file| FE
+ SW -->|index, layer file| BE
+ SW -->|layer checks, contract| CR
  PM -->|scope, priority| PJ[project-manager]
  PD -->|flow, states| FE[frontend-developer]
  PM -->|feasible?| SA[software-architect]
@@ -111,14 +111,14 @@ flowchart LR
  AI[ai-engineer] -->|tool, MCP| BE
  AI -->|API key, deploy| DS
  PJ -->|cadence, DORA| DS
- CR -->|contract met: PR body, push| RO[repo-operator]
+ CR -->|checks met: PR body, push| RO[repo-operator]
 ```
 
 Each agent declares in its final step who it hands off to, and the arrow is always accompanied by an artifact: spec, recorded decision, flow with states, code with evidence, findings report.
 
-Independent features run side by side, in the PRD's waves: each implementer works in its own worktree, started by the harness scripts, while reviewers, which only read, share the main directory ([Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) §5.1, `SDD-RUN-01`).
+Independent layers of a delivery run side by side, in the index's order: each implementer works in its own worktree, started by the harness scripts, while reviewers, which only read, share the main directory ([Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md) §5.1, `SDD-RUN-01`).
 
-This flowchart has a formal procedure in `skills/workflow/` and `skills/design-docs/` — four phases: the triage (`workflow-search`), the PRD and the bundles (`workflow-plan`, with `doc-prd`), the run (`workflow-implementation`) and the contract review and delivery (`workflow-review`) — citing rules by ID in [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md). The diagram above remains the source of **who**; that doc is the source of **when**.
+This flowchart has a formal procedure in `skills/workflow/` and `skills/design-docs/` — four phases: the triage (`workflow-search`), the PRD and the delivery plan (`workflow-plan`, with `doc-prd` and `spec-writer`), the run (`workflow-implementation`) and the contract review and delivery (`workflow-review`) — citing rules by ID in [Delivery Flow — Spec Driven Development](../skills/workflow/docs/delivery-flow.md). The diagram above remains the source of **who**; that doc is the source of **when**.
 
 ## Model and effort per role
 
@@ -127,7 +127,7 @@ The tier follows the task, not the role's prestige. Four properties decide it: h
 | Role | `modelo` | `esforco` | Why |
 | --- | --- | --- | --- |
 | `product-manager` · `software-architect` | alto | alto | ambiguous, few tokens, nothing checks it later |
-| `spec-writer` | alto | alto | every fix round, gate and review inherits its choices; the contract is the only check |
+| `spec-writer` | alto | alto | every layer, fix round, gate and review inherits its seams; the layer's checks are the only check |
 | `devops-security` | alto | alto | a missed finding costs more than the tokens |
 | `monorepo-auditor` · `ai-engineer` | alto | medio | rare, wide judgment |
 | `code-reviewer` | medio | alto | it is the check; nothing reviews it |
@@ -139,7 +139,7 @@ The tier follows the task, not the role's prestige. Four properties decide it: h
 | `doc-writer-deep` | medio | alto | the content was decided upstream, but the PRD and the spec are the most structuring; the fast tier lost points on both in the evals |
 | `doc-writer` | rapido | medio | the content was decided upstream; the fast tier held 99% on these seven in the evals |
 
-A feature whose review fails gets at most two fix rounds, on the implementer's declared tier, and then becomes a new item for `spec-writer`; no round moves a tier up (`SDD-RUN-05`, `SDD-RUN-06`).
+A layer whose review fails gets at most two fix rounds, on the implementer's declared tier, and then becomes a new layer file for `spec-writer`; no round moves a tier up (`SDD-RUN-05`, `SDD-RUN-06`).
 
 The tiers are neutral; [`build/modelos.json`](../build/modelos.json) maps them per provider, and the lever differs:
 
@@ -179,7 +179,7 @@ Sessions it opens inherit that choice unless it sets `model` and `effort` when o
 
 **Invoking.** *"use code-reviewer on this diff"*, *"ask software-architect to decide where the CPF validation lives"*. The lead agent also delegates on its own when the `description` matches the task — which is why `description` carries **when not to use** and names the neighboring agent.
 
-**Review in fresh context.** In an SDD run, `code-reviewer` receives **only the feature's `contract.md`, its Surface, the diff and the gate summary**, never the conversation that produced the change (`CC-SES-07`), and the prompt must bound what counts as a finding (`CC-SES-10`). After a fix, a new instance re-reviews only the delta: the open findings and the diff since the last reviewed commit (`workflow-review`, delta re-review). Fanning out several homogeneous reviewers (same model, effort, and tools) shares the cache ([Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)).
+**Review in fresh context.** In an SDD run, `code-reviewer` receives **only the layer file (its checks, rules and Surface), the diff against the delivery's feature branch and the gate summary** — and, for the final validation, `contract.md` and the layer files it points to — never the conversation that produced the change (`CC-SES-07`), and the prompt must bound what counts as a finding (`CC-SES-10`). After a fix, a new instance re-reviews only the delta: the failing checks and the diff since the last reviewed commit (`workflow-review`, delta re-review). Fanning out several homogeneous reviewers (same model, effort, and tools) shares the cache ([Claude Code - Paralelismo e Escala](../knowledge-base/claude-code-paralelismo-e-escala.md)).
 
 ## What these notes are
 

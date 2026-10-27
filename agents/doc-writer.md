@@ -30,7 +30,7 @@ This agent exists so a writer runs the way the [writing contract](../skills/desi
 | The caller needs… | Agent | Explicitly **not** it |
 | --- | --- | --- |
 | an ADR, epic, feature, story, task list, bug report or PR description written from decided input | **doc-writer** | — |
-| a PRD or a feature's spec | `doc-writer-deep` | doc-writer |
+| a PRD or a standalone spec | `doc-writer-deep` | doc-writer |
 | what the document should say: scope, a decision, a priority | `product-manager` · `software-architect` | doc-writer |
 | facts about the existing code | `repo-explorer`, before this agent runs | doc-writer |
 | a review of the change the PR describes | `code-reviewer` | doc-writer |
