@@ -37,7 +37,7 @@ Notes: 107
 | `claude-code-paralelismo-e-escala.md` | Claude Code - Paralelismo e Escala | `856d326ba215` |
 | `claude-code-sessao-e-verificacao.md` | Claude Code - Sessão e Verificação | `47ee1777ce7e` |
 | `claude-code.md` | Claude Code | `3609d626d6e7` |
-| `documentos-de-decisao-prd-rfc-adr.md` | Decision Documents — PRD, RFC and ADR | `178359a5f0ec` |
+| `documentos-de-decisao-prd-rfc-adr.md` | Decision Documents — PRD, RFC and ADR | `631ddc20a262` |
 | `feature-based-architecture.md` | Feature-Based Architecture | `926247f36bd2` |
 | `feature-flags-modelo-visual-do-fluxo.md` | Feature Flags — modelo visual do fluxo | `fc1e90735a7c` |
 | `forward-deployed-engineering.md` | Forward Deployed Engineering | `5522c590ec21` |
