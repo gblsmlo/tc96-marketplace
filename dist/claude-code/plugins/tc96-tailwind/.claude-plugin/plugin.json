@@ -1,6 +1,6 @@
 {
   "name": "tc96-tailwind",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Tailwind CSS v4: setup, migration, build, variant split and review skills, each with its own normative docs (TW-*). Self-contained: enable alone or with tc96-frontend.",
   "author": {
     "name": "Gabriel Melo"

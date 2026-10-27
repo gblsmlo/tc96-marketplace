@@ -1,6 +1,6 @@
 {
   "name": "tc96-core",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Testing and HTTP contract, the delivery flow in four phases, and the roles that cross any stack. Always enable.",
   "author": {
     "name": "Gabriel Melo"

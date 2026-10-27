@@ -1,6 +1,6 @@
 {
   "name": "tc96-backend",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Bun runtime, Elysia and Drizzle — HTTP service, persistence and dependencies. Enable in a project with a backend.",
   "author": {
     "name": "Gabriel Melo"
